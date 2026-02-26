@@ -1,0 +1,28 @@
+:root {
+  --font-press-start-2p: 'Press Start 2P', cursive;
+}
+
+@font-face {
+  font-family: 'iconfont';
+  src:
+    url('/iconfont/iconfont.woff2?t=1772024036100') format('woff2'),
+    url('/iconfont/iconfont.woff?t=1772024036100') format('woff'),
+    url('/iconfont/iconfont.ttf?t=1772024036100') format('truetype');
+}
+
+.iconfont {
+  font-family: 'iconfont' !important;
+  font-size: 30px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  height: 100dvh;
+  width: 100dvw;
+}
