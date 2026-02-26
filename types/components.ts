@@ -1,3 +1,7 @@
+export interface ConfigProviderParams {
+  children: React.ReactNode;
+}
+
 export interface ButtonParams {
   text: string;
   icon: React.ReactNode;

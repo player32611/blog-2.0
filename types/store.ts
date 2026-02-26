@@ -12,7 +12,7 @@ export type SoundStore = {
   setMusicVolume: (volume: number) => void;
 };
 
-export type Theme = 'undertale' | 'dark';
+export type Theme = 'undertale' | 'touhou';
 
 export type ThemeStore = {
   theme: Theme;

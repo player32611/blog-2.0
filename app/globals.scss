@@ -1,16 +1,17 @@
-:root {
-  --font-press-start-2p: 'Press Start 2P', cursive;
-}
+// :root {
+//   --font-press-start-2p: 'Press Start 2P', cursive;
+//   --font-mars-needs-cunnilingus: 'Mars Needs Cunnilingus', cursive;
+// }
 
 @font-face {
   font-family: 'iconfont';
   src:
-    url('/iconfont/iconfont.woff2?t=1772024036100') format('woff2'),
-    url('/iconfont/iconfont.woff?t=1772024036100') format('woff'),
-    url('/iconfont/iconfont.ttf?t=1772024036100') format('truetype');
+    url('/icons/iconfont.woff2?t=1772024036100') format('woff2'),
+    url('/icons/iconfont.woff?t=1772024036100') format('woff'),
+    url('/icons/iconfont.ttf?t=1772024036100') format('truetype');
 }
 
-.iconfont {
+.icon {
   font-family: 'iconfont' !important;
   font-size: 30px;
   font-style: normal;

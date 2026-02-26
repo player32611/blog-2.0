@@ -3,25 +3,24 @@ $base-width: 110px;
 
 button {
   user-select: none;
-}
+  &.large {
+    height: $base-height * 2;
+    width: $base-width * 2;
+    font-size: 2em;
+  }
 
-button.large {
-  height: $base-height * 2;
-  width: $base-width * 2;
-  font-size: 2em;
-}
+  &.undertale {
+    background: #000000;
+    color: #ff7f27;
+    text-align: right;
+    font-weight: 900;
+    font-family: var(--font-press-start-2p);
+    border: 0.2em solid #ff7f27;
+    cursor: pointer;
+  }
 
-button.undertale {
-  background: #000000;
-  color: #ff7f27;
-  text-align: right;
-  font-weight: 900;
-  font-family: var(--font-press-start-2p);
-  border: 0.2em solid #ff7f27;
-  cursor: pointer;
-}
-
-button.undertale:hover {
-  color: #ffff00;
-  border: 0.2em solid #ffff00;
+  &.undertale:hover {
+    color: #ffff00;
+    border: 0.2em solid #ffff00;
+  }
 }

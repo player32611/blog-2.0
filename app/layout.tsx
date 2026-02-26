@@ -1,7 +1,7 @@
-'use client';
-
+import ConfigProviderWrapper from '@/components/provider/ConfigProvider';
 import Loading from '@/components/ui/Loading';
-import { pressStart2P } from '@/lib/fonts';
+
+import { marsNeedsCunnilingus, pressStart2P } from '@/lib/fonts';
 import './globals.scss';
 
 export default function RootLayout({
@@ -10,10 +10,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={pressStart2P.variable}>
+    <html lang="zh-CN" className={`${pressStart2P.variable} ${marsNeedsCunnilingus.variable}`}>
       <body>
-        <Loading />
-        {children}
+        <ConfigProviderWrapper>
+          <Loading />
+          {children}
+        </ConfigProviderWrapper>
       </body>
     </html>
   );

@@ -1,4 +1,19 @@
 .uibox {
   position: absolute;
-  bottom: 0;
+  bottom: 5px;
+  padding: 0 10%;
+  width: 80%;
+
+  &.undertale {
+    color: #ff7f27;
+  }
+
+  > .userState {
+    font-size: 2em;
+    font-family: var(--font-mars-needs-cunnilingus);
+
+    > .userHp {
+      font-size: 0.7em;
+    }
+  }
 }
