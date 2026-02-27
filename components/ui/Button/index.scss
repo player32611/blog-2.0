@@ -2,6 +2,7 @@ $base-height: 42px;
 $base-width: 110px;
 
 button {
+  font-size: 1px;
   user-select: none;
   &.large {
     height: $base-height * 2;

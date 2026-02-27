@@ -12,7 +12,7 @@ export default function UiBox() {
   const { theme } = useThemeStore();
   return (
     <Flex className={`uibox ${theme}`} vertical={true}>
-      <Flex align="center" className="userState">
+      <Flex align="center" className="userState" justify="space-between">
         <Flex align="center" className="userName" justify="center">
           FRISK
         </Flex>
@@ -37,7 +37,7 @@ export default function UiBox() {
           <div>92</div>
         </Flex>
       </Flex>
-      <Flex justify="space-evenly">
+      <Flex justify="space-between">
         <Button
           text="blog"
           size="large"

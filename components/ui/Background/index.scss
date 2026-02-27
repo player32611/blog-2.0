@@ -1,0 +1,12 @@
+.viewBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  user-select: none;
+  img {
+    cursor: pointer;
+  }
+}
