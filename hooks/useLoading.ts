@@ -14,9 +14,11 @@ export const useLoading = () => {
     (target?: string) => {
       loadingRef?.classList.remove('loading_out');
       setLoading(true);
-      if (target) {
-        router.push(target);
-      }
+      setTimeout(() => {
+        if (target) {
+          router.push(target);
+        }
+      }, 1000);
     },
     [loadingRef, setLoading, router]
   );

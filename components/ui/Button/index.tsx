@@ -17,7 +17,7 @@ import './index.scss';
  * @param {React.ReactNode} props.icon - 按钮的图标
  * @param {() => void} props.onClick - 按钮点击事件处理函数
  **/
-const Button = ({ text, size, icon, onClick }: ButtonParams) => {
+const Button = ({ text, size, icon, onClick, style }: ButtonParams) => {
   const [hasInteracted, setHasInteracted] = useState(false);
   const { theme } = useThemeStore();
   const { effectsVolume } = useSoundStore();
@@ -44,7 +44,12 @@ const Button = ({ text, size, icon, onClick }: ButtonParams) => {
   };
 
   return (
-    <button className={`${theme} ${size}`} onClick={handleClick} onMouseEnter={handleMouseEnter}>
+    <button
+      className={`${theme} ${size}`}
+      onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      style={style}
+    >
       <Flex justify="space-evenly" align="center">
         {icon}
         {text

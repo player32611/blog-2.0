@@ -2,8 +2,13 @@ $base-height: 42px;
 $base-width: 110px;
 
 button {
-  font-size: 1px;
+  font-size: 1em;
   user-select: none;
+  &.small {
+    height: $base-height;
+    width: $base-width;
+    font-size: 1em;
+  }
   &.large {
     height: $base-height * 2;
     width: $base-width * 2;

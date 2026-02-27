@@ -54,20 +54,24 @@ export default function UiBox() {
           size="large"
           icon={<span className="icon">&#xe99c;</span>}
           onClick={() => {
-            loadingIn('/blog');
+            loadingIn('/blogs');
           }}
         ></Button>
         <Button
           text="music"
           size="large"
           icon={<span className="icon">&#xe99a;</span>}
-          onClick={() => {}}
+          onClick={() => {
+            loadingIn('/musics');
+          }}
         ></Button>
         <Button
           text="image"
           size="large"
           icon={<span className="icon">&#xe997;</span>}
-          onClick={() => {}}
+          onClick={() => {
+            loadingIn('/images');
+          }}
         ></Button>
       </Flex>
     </Flex>

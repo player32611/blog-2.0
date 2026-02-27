@@ -7,6 +7,7 @@ export interface ButtonParams {
   icon: React.ReactNode;
   size: 'small' | 'medium' | 'large';
   onClick: () => void;
+  style?: React.CSSProperties;
 }
 
 export interface LoadingParams {
