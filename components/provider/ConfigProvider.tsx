@@ -14,7 +14,8 @@ export default function ConfigProviderWrapper({ children }: ConfigProviderParams
             colorBgContainer: '#C00000',
             colorText: '#ff7f27',
             colorTextHeading: '#ff7f27',
-            fontFamily: 'Mars Needs Cunnilingus',
+            fontFamily: 'var(--font-mars-needs-cunnilingus)',
+            fontSize: 40,
           },
         };
       case 'touhou':

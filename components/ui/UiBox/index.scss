@@ -3,16 +3,19 @@
   bottom: 0;
   padding: 5px 10%;
   width: 80%;
+  font-size: 1em;
+  text-align: center;
 
   &.undertale {
     color: #ff7f27;
   }
 
-  > .userState {
+  .userState {
+    margin: 5px;
     font-size: 2em;
     font-family: var(--font-mars-needs-cunnilingus);
 
-    > .userHp {
+    .userHp {
       font-size: 0.7em;
     }
   }
