@@ -4,27 +4,27 @@
 // }
 
 @font-face {
-  font-family: 'iconfont';
-  src:
-    url('/icons/iconfont.woff2?t=1772024036100') format('woff2'),
-    url('/icons/iconfont.woff?t=1772024036100') format('woff'),
-    url('/icons/iconfont.ttf?t=1772024036100') format('truetype');
+	font-family: "iconfont";
+	src:
+		url("/icons/iconfont.woff2?t=1772024036100") format("woff2"),
+		url("/icons/iconfont.woff?t=1772024036100") format("woff"),
+		url("/icons/iconfont.ttf?t=1772024036100") format("truetype");
 }
 
 .icon {
-  font-family: 'iconfont' !important;
-  font-size: 1em;
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	font-family: "iconfont" !important;
+	font-size: 1em;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 html,
 body {
-  position: relative;
-  margin: 0;
-  padding: 0;
-  height: 100dvh;
-  width: 100dvw;
-  overflow: hidden;
+	position: relative;
+	margin: 0;
+	padding: 0;
+	height: 100dvh;
+	width: 100dvw;
+	// overflow: hidden;
 }

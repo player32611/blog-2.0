@@ -1,10 +1,16 @@
-import type { NextConfig } from 'next';
+import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
-  sassOptions: {
-    includePaths: ['./styles'],
-    modules: true,
-  },
+	pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+	sassOptions: {
+		includePaths: ["./styles"],
+		modules: true,
+	},
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+	extension: /\.(md|mdx)$/,
+});
+
+export default withMDX(nextConfig);
