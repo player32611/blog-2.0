@@ -2,37 +2,103 @@
 
 import { useLoadingStore } from "@/stores/loadingStore";
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
+import { gsap } from "gsap";
 
 export const useLoading = () => {
 	const pathname = usePathname();
 	const router = useRouter();
+	const blocksAd = useRef<GSAPAnimation>(null);
 
-	const { loading, setLoading, loadingRef, setLoadingRef } = useLoadingStore();
+	const { loading, setLoading, loadingRef, setLoadingRef, blocksRef, setBlocksRef } =
+		useLoadingStore();
 
 	const loadingIn = useCallback(
 		(target?: string) => {
-			loadingRef?.classList.remove("loading_out");
 			setLoading(true);
+			// if (blocksAd.current) blocksAd.current.kill();
+			blocksAd.current = gsap
+				.timeline()
+				.set(blocksRef, {
+					"stroke-dashoffset": () => {
+						return Math.random() > 0.5 ? -100 : 100;
+					},
+				})
+				.to(blocksRef, {
+					"stroke-dashoffset": 1,
+					"stroke-opacity": 1,
+					duration: 0.5,
+					ease: "power4.out",
+					stagger: {
+						from: "random",
+						each: 0.0015,
+					},
+				})
+				.to(
+					blocksRef,
+					{
+						scale: 1,
+						opacity: 1,
+						duration: 0.5,
+						ease: "power2.out",
+						stagger: {
+							from: "center",
+							each: 0.003,
+						},
+					},
+					"<0.2",
+				);
 			setTimeout(() => {
 				if (target) {
 					router.push(target);
 				}
-			}, 1000);
+			}, 1500);
 		},
-		[loadingRef, setLoading, router],
+		[setLoading, blocksRef, router],
 	);
 
 	const loadingOut = useCallback(() => {
-		loadingRef?.classList.add("loading_out");
 		setLoading(false);
-	}, [loadingRef, setLoading]);
+		// if (blocksAd.current) blocksAd.current.kill();
+		blocksAd.current = gsap
+			.timeline()
+			.set(blocksRef, {
+				"stroke-dashoffset": () => {
+					return Math.random() > 0.5 ? -100 : 100;
+				},
+			})
+			.to(blocksRef, {
+				"stroke-dashoffset": 1,
+				"stroke-opacity": 1,
+				duration: 0.5,
+				ease: "power4.out",
+				stagger: {
+					from: "random",
+					each: 0.0015,
+				},
+			})
+			.to(
+				blocksRef,
+				{
+					scale: 0,
+					opacity: 0,
+					duration: 0.5,
+					ease: "power2.out",
+					stagger: {
+						from: "center",
+						each: 0.003,
+					},
+				},
+				"<0.2",
+			);
+	}, [setLoading, blocksRef]);
 
 	const loadingInit = useCallback(
-		(loadingRef: SVGSVGElement) => {
+		(loadingRef: SVGSVGElement, blocksRef: SVGUseElement[]) => {
 			setLoadingRef(loadingRef);
+			setBlocksRef(blocksRef);
 		},
-		[setLoadingRef],
+		[setLoadingRef, setBlocksRef],
 	);
 
 	useEffect(() => {
