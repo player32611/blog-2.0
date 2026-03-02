@@ -5,7 +5,6 @@ import { Result, Skeleton } from "antd";
 export default function BlogProvider({ slug }: BlogProviderParams) {
 	const get = async () => {
 		try {
-			console.log(`@/app/blogs/${slug}.md`);
 			const { default: BlogContent } = await import(`@/app/blogs/${slug}/page.md`);
 			return <BlogContent />;
 		} catch {

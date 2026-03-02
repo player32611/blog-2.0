@@ -1,10 +1,10 @@
 "use client";
 
 import { useThemeStore } from "@/stores/themeStore";
-import type { ConfigProviderParams } from "@/types/components";
+import type { ThemeProviderParams } from "@/types/components";
 import { ConfigProvider } from "antd";
 
-export default function ConfigProviderWrapper({ children }: ConfigProviderParams) {
+export default function ThemeProvider({ children }: ThemeProviderParams) {
 	const { theme } = useThemeStore();
 	const getAvailableTheme = () => {
 		switch (theme) {

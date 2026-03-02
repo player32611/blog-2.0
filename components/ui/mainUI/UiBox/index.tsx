@@ -1,15 +1,15 @@
 "use client";
 
-import { useLoading } from "@/hooks/useLoading";
 import { useThemeStore } from "@/stores/themeStore";
+import { useRouter } from "next/navigation";
 
 import { Col, Flex, Progress, Row } from "antd";
 import Button from "@/components/ui/Button";
 import "./index.scss";
 
 export default function UiBox() {
-	const { loadingIn } = useLoading();
 	const { theme } = useThemeStore();
+	const router = useRouter();
 	return (
 		<Flex className={`uibox ${theme}`} vertical={true}>
 			<Row className="userState" justify="center" align="middle">
@@ -54,7 +54,7 @@ export default function UiBox() {
 					size="large"
 					icon={<span className="icon">&#xe99c;</span>}
 					onClick={() => {
-						loadingIn("/blogs");
+						router.push("/blogs");
 					}}
 				></Button>
 				<Button
@@ -62,7 +62,7 @@ export default function UiBox() {
 					size="large"
 					icon={<span className="icon">&#xe99a;</span>}
 					onClick={() => {
-						loadingIn("/musics");
+						router.push("/musics");
 					}}
 				></Button>
 				<Button
@@ -70,7 +70,7 @@ export default function UiBox() {
 					size="large"
 					icon={<span className="icon">&#xe997;</span>}
 					onClick={() => {
-						loadingIn("/images");
+						router.push("/images");
 					}}
 				></Button>
 			</Flex>

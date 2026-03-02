@@ -2,7 +2,11 @@ export interface BlogProviderParams {
 	slug: string;
 }
 
-export interface ConfigProviderParams {
+export interface RouterProviderParams {
+	children: React.ReactNode;
+}
+
+export interface ThemeProviderParams {
 	children: React.ReactNode;
 }
 

@@ -1,13 +1,13 @@
 "use client";
 
-import { useLoading } from "@/hooks/useLoading";
+import { useRouter } from "next/navigation";
 
 import Button from "@/components/ui/Button";
 import BlogProvider from "@/components/provider/BlogProvider";
 import "./index.scss";
 
 export default function Page() {
-	const { loadingIn } = useLoading();
+	const router = useRouter();
 	return (
 		<div className="blogs">
 			<div>blogs</div>
@@ -16,7 +16,7 @@ export default function Page() {
 				icon={<span className="icon">&#xeaf1;</span>}
 				size="small"
 				onClick={() => {
-					loadingIn("/");
+					router.push("/");
 				}}
 				style={{
 					position: "fixed",

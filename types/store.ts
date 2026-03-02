@@ -5,6 +5,9 @@ export type LoadingStore = {
 	setLoading: (loading: boolean) => void;
 	setLoadingRef: (ref: SVGSVGElement | null) => void;
 	setBlocksRef: (ref: SVGUseElement[]) => void;
+	loadingIn: (next: () => void) => void;
+	loadingOut: () => void;
+	checkLoading: () => void;
 };
 
 export type SoundStore = {

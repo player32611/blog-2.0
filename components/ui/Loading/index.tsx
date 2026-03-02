@@ -1,7 +1,8 @@
 "use client";
 
-import { useLoading } from "@/hooks/useLoading";
-import { useEffect, useRef } from "react";
+import { createLoadingStore } from "@/stores/loadingStore";
+import { useCallback, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import "./index.scss";
 
 export default function Loading() {
@@ -9,9 +10,10 @@ export default function Loading() {
 	const line = useRef<number>(15);
 	const loadingRef = useRef<SVGSVGElement>(null);
 	const blocksRef = useRef<SVGUseElement[]>([]);
-	const { loadingInit } = useLoading();
+	const { setLoadingRef, setBlocksRef, checkLoading } = createLoadingStore();
+	const searchParams = useSearchParams();
 
-	const createBlocks = () => {
+	const createBlocks = useCallback(() => {
 		for (let l = 0; l < line.current; l++) {
 			const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
 			for (let r = 0; r < row.current; r++) {
@@ -26,12 +28,19 @@ export default function Loading() {
 			}
 			loadingRef.current!.appendChild(g);
 		}
-	};
+		setLoadingRef(loadingRef.current);
+		setBlocksRef(blocksRef.current);
+	}, [setLoadingRef, setBlocksRef]);
 
 	useEffect(() => {
-		loadingInit(loadingRef.current!, blocksRef.current!);
 		createBlocks();
-	}, [loadingInit]);
+	}, [createBlocks]);
+
+	useEffect(() => {
+		if (searchParams) {
+			checkLoading();
+		}
+	}, [searchParams, checkLoading]);
 
 	return (
 		<svg className="loading" viewBox="0 0 1000 1000" ref={loadingRef}>
