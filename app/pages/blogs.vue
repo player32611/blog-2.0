@@ -1,12 +1,13 @@
 <script setup lang='ts'>
-import Button from "@/components/ui/Button.vue";
-import { useBlogPage } from "@/composables/useBlogPages";
+import BlogBackGround from "~/components/ui/blogUI/BlogBackGround.vue";
+import Button from "~/components/ui/Button.vue";
 
 const { page } = await useBlogPage("/front-end/html");
 
 </script>
 
 <template>
+  <BlogBackGround></BlogBackGround>
   <div class="blogs">
     <Button :text="'back'" :icon="'&#xeaf1;'" :size="'small'" @click="navigateTo('/')" :style="{
       position: 'fixed',
@@ -20,4 +21,6 @@ const { page } = await useBlogPage("/front-end/html");
   </div>
 </template>
 
-<style scoped lang='scss'></style>
+<style lang='scss'>
+@import "~/styles/blogs.scss"
+</style>

@@ -3,6 +3,15 @@ export default defineNuxtConfig({
 	modules: ["@nuxt/content", "@pinia/nuxt", "@nuxt/fonts"],
 	devtools: { enabled: true },
 	compatibilityDate: "2024-04-03",
+	components: {
+		dirs: [
+			{
+				path: "~/components/content",
+				prefix: "Prose",
+				global: true,
+			},
+		],
+	},
 	fonts: {
 		providers: {
 			google: false,

@@ -1,14 +1,14 @@
-export interface BlogProviderParams {
-	slug: string;
-}
+// export interface BlogProviderParams {
+// 	slug: string;
+// }
 
-export interface RouterProviderParams {
-	children: any;
-}
+// export interface RouterProviderParams {
+// 	children: any;
+// }
 
-export interface ThemeProviderParams {
-	children: any;
-}
+// export interface ThemeProviderParams {
+// 	children: any;
+// }
 
 export interface ButtonParams {
 	text: string;

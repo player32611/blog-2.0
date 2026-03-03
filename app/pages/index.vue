@@ -1,10 +1,10 @@
 <script setup lang='ts'>
-import Background from '@/components/ui/mainUI/Background.vue';
+import MainBackGround from '@/components/ui/mainUI/MainBackGround.vue';
 import UiBox from '@/components/ui/mainUI/UiBox.vue';
 </script>
 
 <template>
-  <Background />
+  <MainBackGround />
   <UiBox />
 </template>
 

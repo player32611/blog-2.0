@@ -1,6 +1,5 @@
 <script setup lang='ts'>
 import { ref, } from "vue";
-import { useRouter } from "vue-router";
 import { gsap } from "gsap";
 import type { LoadingParams } from "~/types/components";
 
@@ -9,6 +8,7 @@ const line = 15;
 const loadingRef = ref<SVGSVGElement | null>(null);
 const blocks = ref<SVGUseElement[]>([]);
 const props = defineProps<LoadingParams>();
+const isLoading = ref(true);
 
 const createBlocks = () => {
   if (!loadingRef.value) return;
@@ -16,7 +16,7 @@ const createBlocks = () => {
   for (let l = 0; l < line; l++) {
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
     for (let r = 0; r < row; r++) {
-      const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+      let use = document.createElementNS("http://www.w3.org/2000/svg", "use");
       use.setAttribute("class", "loading_block");
       use.setAttribute("href", "#loading_hexagon");
       use.setAttribute("x", `${(l % 2 ? 86.5 * r : 86.5 * r + 43.3)}`);
@@ -30,7 +30,7 @@ const createBlocks = () => {
 }
 
 const loadingIn = (next: () => void) => {
-  console.log("loadingIn");
+  isLoading.value = true;
   gsap
     .timeline()
     .set(blocks.value, {
@@ -65,12 +65,10 @@ const loadingIn = (next: () => void) => {
 };
 
 const loadingOut = () => {
-  gsap
-    .timeline()
+  isLoading.value = false;
+  gsap.timeline()
     // .set(blocks.value, {
-    //   "stroke-dashoffset": () => {
-    //     return Math.random() > 0.5 ? -100 : 100;
-    //   },
+    //   "stroke-dashoffset": "random(-100, 100)",
     // })
     .to(blocks.value, {
       "stroke-dashoffset": 0,
@@ -91,7 +89,7 @@ const loadingOut = () => {
         from: "center",
         each: 0.004,
       },
-    });
+    }, "<0.2");
 };
 
 onMounted(() => {
@@ -108,25 +106,27 @@ defineExpose({
 </script>
 
 <template>
-  <svg class="loading_blocks" viewBox="0 0 1000 1000" ref="loadingRef">
+  <svg :class="isLoading ? 'loading_blocks' : 'loading_blocks  loading_out'" viewBox="0 0 1000 1000" ref="loadingRef">
     <defs>
       <polygon id="loading_hexagon" points="0,-50 43.3,-25 43.3,25 0,50 -43.3,25 -43.3,-25" fill="#171717" />
     </defs>
   </svg>
 </template>
 
-<style lang='scss'>
+<style scoped lang='scss'>
 .loading_blocks {
   position: absolute;
   top: 0;
   left: 0;
   height: auto;
   width: 100%;
-  pointer-events: none;
   z-index: 9999;
-  overflow: hidden;
 
-  .loading_block {
+  &.loading_out {
+    pointer-events: none;
+  }
+
+  :deep(.loading_block) {
     stroke: #17f700;
     stroke-width: 0.8;
     stroke-dasharray: 100;
