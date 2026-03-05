@@ -53,7 +53,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100dvh;
-  width: 100dvw;
-  overflow: hidden;
+  width: 100%;
+  // overflow: hidden;
 }
 </style>

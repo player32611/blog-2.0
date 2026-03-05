@@ -3,7 +3,7 @@ import { ref, } from "vue";
 import { gsap } from "gsap";
 import type { LoadingParams } from "~/types/components";
 
-const row = 15;
+const row = 22;
 const line = 15;
 const loadingRef = ref<SVGSVGElement | null>(null);
 const blocks = ref<SVGUseElement[]>([]);
@@ -19,7 +19,7 @@ const createBlocks = () => {
       let use = document.createElementNS("http://www.w3.org/2000/svg", "use");
       use.setAttribute("class", "loading_block");
       use.setAttribute("href", "#loading_hexagon");
-      use.setAttribute("x", `${(l % 2 ? 86.5 * r : 86.5 * r + 43.3)}`);
+      use.setAttribute("x", `${(l % 2 ? 86.5 * r : 86.5 * r + 43.3) - 450}`);
       use.setAttribute("y", `${74.5 * l}`);
       use.setAttribute("transform-origin", "50 50");
       g.appendChild(use);
@@ -115,10 +115,10 @@ defineExpose({
 
 <style scoped lang='scss'>
 .loading_blocks {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  height: auto;
+  height: 100dvh;
   width: 100%;
   z-index: 9999;
 

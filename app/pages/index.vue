@@ -4,8 +4,14 @@ import UiBox from '@/components/ui/mainUI/UiBox.vue';
 </script>
 
 <template>
-  <MainBackGround />
-  <UiBox />
+  <div class="home">
+    <MainBackGround />
+    <UiBox />
+  </div>
 </template>
 
-<style scoped lang='scss'></style>
+<style scoped lang='scss'>
+.home {
+  overflow: hidden;
+}
+</style>

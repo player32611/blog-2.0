@@ -77,12 +77,13 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener("mousemove", handleMouseMove)
   window.removeEventListener("resize", resize)
+  if (containerRef.value) containerRef.value.innerHTML = ""
 })
 
 </script>
 
 <template>
-  <svg class="container" ref="containerRef">
+  <svg class="blog_background" ref="containerRef">
 
   </svg>
 </template>
@@ -94,11 +95,11 @@ onUnmounted(() => {
   font-size: 1vmin;
 }
 
-.container {
-  position: absolute;
+.blog_background {
+  position: fixed;
   top: 0;
   left: 0;
-  height: 100dvh;
+  height: 100%;
   width: 100%;
   background-color: #1C1C2D;
   z-index: -1;

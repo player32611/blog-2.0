@@ -19,11 +19,18 @@ export interface ButtonParams {
 }
 
 export interface LoadingParams {
-	// ref: SVGSVGElement | null;
 	checkLoading?: () => void;
 }
 
 export interface LoadingInstance {
 	loadingIn: (next: () => void) => void;
 	loadingOut: () => void;
+}
+
+export interface BlogMaskInstance {
+	changeMask: () => void;
+}
+
+export interface BlogMenuInstance {
+	changeMenu: () => void;
 }
