@@ -54,6 +54,9 @@ body {
   padding: 0;
   height: 100dvh;
   width: 100%;
-  // overflow: hidden;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 </style>
