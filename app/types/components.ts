@@ -1,14 +1,21 @@
-// export interface BlogProviderParams {
-// 	slug: string;
-// }
+import type { BlogCollections, BlogContent } from "./store";
 
-// export interface RouterProviderParams {
-// 	children: any;
-// }
+export interface BlogMaskInstance {
+	changeMask: () => void;
+}
 
-// export interface ThemeProviderParams {
-// 	children: any;
-// }
+export interface BlogMenuInstance {
+	changeMenu: () => void;
+}
+
+export interface BlogMenuSelecterParams {
+	collections: BlogCollections;
+}
+
+export interface BlogMenuSelectionParams {
+	collections: BlogCollections;
+	contentPath: BlogContent;
+}
 
 export interface ButtonParams {
 	text: string;
@@ -25,12 +32,4 @@ export interface LoadingParams {
 export interface LoadingInstance {
 	loadingIn: (next: () => void) => void;
 	loadingOut: () => void;
-}
-
-export interface BlogMaskInstance {
-	changeMask: () => void;
-}
-
-export interface BlogMenuInstance {
-	changeMenu: () => void;
 }

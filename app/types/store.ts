@@ -1,18 +1,25 @@
-export type LoadingStore = {
-	loading: boolean;
-	loadingRef: SVGSVGElement | null;
-	blocksRef: SVGUseElement[];
-	setLoading: (loading: boolean) => void;
-	setLoadingRef: (ref: SVGSVGElement | null) => void;
-	setBlocksRef: (ref: SVGUseElement[]) => void;
-	loadingIn: (next: () => void) => void;
-	loadingOut: () => void;
-	checkLoading: () => void;
+export type BlogCollections = "front_end" | "back_end" | "gms2" | "algorithm" | "deep_learning";
+
+export type BlogContent = string;
+
+export type BlogState = {
+	activeBlogCollection: Ref<BlogCollections>;
+	activeBlogContent: Ref<BlogContent>;
+};
+
+export type BlogGetter = {
+	activePath: ComputedRef<string>;
+};
+
+export type BlogActions = {
+	setActiveBlogCollection: (newCollection: BlogCollections) => void;
+	setActiveBlogContent: (newContent: BlogContent) => void;
+	useBlogContent: () => Ref<any>;
 };
 
 export type SoundState = {
-	effectsVolume: globalThis.Ref<number>;
-	musicVolume: globalThis.Ref<number>;
+	effectsVolume: Ref<number>;
+	musicVolume: Ref<number>;
 };
 
 export type SoundGetter = {};
@@ -25,7 +32,7 @@ export type SoundActions = {
 export type Theme = "undertale" | "touhou";
 
 export type ThemeState = {
-	theme: globalThis.Ref<Theme>;
+	theme: Ref<Theme>;
 };
 
 export type ThemeGetter = {};

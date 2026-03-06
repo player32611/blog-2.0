@@ -34,7 +34,7 @@ export default defineNuxtConfig({
 		],
 	},
 	ssr: false, // 根据需要选择 true 或 false
-	app: {
-		baseURL: "/blog-2.0/", // GitHub Pages 需要这个配置
-	},
+	// app: {
+	// 	baseURL: "/blog-2.0/", // GitHub Pages 需要这个配置
+	// },
 });

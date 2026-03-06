@@ -1,4 +1,5 @@
 <script setup lang='ts'>
+import MenuSelecter from './MenuSelecter.vue';
 import gsap from 'gsap';
 
 const menuRef = ref<HTMLDivElement | null>(null);
@@ -41,7 +42,7 @@ defineExpose({
 
 <template>
   <div class="blog_menu" ref="menuRef">
-
+    <MenuSelecter collections="front_end" />
   </div>
 </template>
 
@@ -49,8 +50,10 @@ defineExpose({
 .blog_menu {
   position: fixed;
   top: -100%;
-  height: 100dvh;
-  width: 100%;
-  background-color: #FFFFFF;
+  margin: 50px;
+  padding: 50px;
+  height: 80dvh;
+  width: 60%;
+  border: 5px solid #FFFFFF;
 }
 </style>

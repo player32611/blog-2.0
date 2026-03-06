@@ -6,13 +6,14 @@ import BlogMask from "~/components/ui/blogUI/BlogMask.vue";
 import BlogMenu from "~/components/ui/blogUI/BlogMenu.vue";
 import Button from "~/components/ui/Button.vue";
 
-const { page } = await useBlogPage("/front-end/html");
+const { useBlogContent } = useBlogStore();
 const maskRef = ref<BlogMaskInstance | null>(null);
 const menuRef = ref<BlogMenuInstance | null>(null);
+const page = useBlogContent();
 
-onMounted(() => {
+// onMounted(() => {
 
-});
+// });
 
 </script>
 
