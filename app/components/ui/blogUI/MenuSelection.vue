@@ -21,6 +21,9 @@ const handleClick = () => {
 .menu_selection {
   height: 50px;
   width: 100px;
-  background: red;
+  color: #FFFFFF;
+  font-family: "方正基础像素体";
+  background-color: rgb(0, 0, 0, 0);
+  border: 5px solid #000000;
 }
 </style>

@@ -1,10 +1,14 @@
 <script setup lang='ts'>
-import MenuSelecter from './MenuSelecter.vue';
 import gsap from 'gsap';
+import type { BlogCollections } from '~/types/store';
+
+import MenuSelecter from './MenuSelecter.vue';
 
 const menuRef = ref<HTMLDivElement | null>(null);
 const menuState = ref<"in" | "out">("in");
 const time = 0.75;
+const blogCollections: BlogCollections[] = ["front_end", "back_end", "gms2", "algorithm", "deep_learning"];
+
 
 const menuIn = () => {
   gsap.timeline().to(menuRef.value, {
@@ -42,7 +46,9 @@ defineExpose({
 
 <template>
   <div class="blog_menu" ref="menuRef">
-    <MenuSelecter collections="front_end" />
+    <div class="menu_selecter_box">
+      <MenuSelecter v-for="collection in blogCollections" :key="collection" :collections="collection" />
+    </div>
   </div>
 </template>
 
