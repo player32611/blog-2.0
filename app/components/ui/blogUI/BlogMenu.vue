@@ -46,6 +46,7 @@ defineExpose({
 
 <template>
   <div class="blog_menu" ref="menuRef">
+    <div class="menu_card">11</div>
     <div class="menu_selecter_box">
       <MenuSelecter v-for="collection in blogCollections" :key="collection" :collections="collection" />
     </div>
@@ -56,10 +57,27 @@ defineExpose({
 .blog_menu {
   position: fixed;
   top: -100%;
-  margin: 50px;
-  padding: 50px;
-  height: 80dvh;
-  width: 60%;
-  border: 5px solid #FFFFFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100dvh;
+  width: 100%;
+  background-color: #FFFFFF;
+
+  .menu_card {
+    height: 100%;
+    width: 40%;
+    overflow-y: hidden;
+  }
+
+  .menu_selecter_box {
+    max-height: 80dvh;
+    width: 40%;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
 </style>

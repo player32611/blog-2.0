@@ -15,6 +15,7 @@ export interface BlogMenuSelecterParams {
 export interface BlogMenuSelectionParams {
 	collections: BlogCollections;
 	contentPath: BlogContent;
+	contentTitle?: string;
 }
 
 export interface ButtonParams {

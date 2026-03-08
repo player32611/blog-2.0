@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import type { BlogMenuSelectionParams } from '~/types/components';
 
-const { collections, contentPath } = defineProps<BlogMenuSelectionParams>()
+const { collections, contentPath, contentTitle } = defineProps<BlogMenuSelectionParams>()
 const { setActiveBlogCollection, setActiveBlogContent } = useBlogStore()
 
 const handleClick = () => {
@@ -13,17 +13,20 @@ const handleClick = () => {
 
 <template>
   <button class="menu_selection" @click="handleClick">
-    {{ contentPath }}
+    {{ contentTitle || contentPath }}
   </button>
 </template>
 
 <style scoped lang='scss'>
 .menu_selection {
-  height: 50px;
-  width: 100px;
-  color: #FFFFFF;
+  margin: 5px 0;
+  min-height: 50px;
+  width: 100%;
+  color: #000000;
   font-family: "方正基础像素体";
+  text-align: left;
   background-color: rgb(0, 0, 0, 0);
   border: 5px solid #000000;
+  cursor: pointer;
 }
 </style>

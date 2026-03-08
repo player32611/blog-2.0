@@ -1,4 +1,7 @@
 <script setup lang='ts'>
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
 import type { BlogMaskInstance, BlogMenuInstance } from "~/types/components";
 
 import BlogBackGround from "~/components/ui/blogUI/BlogBackGround.vue";
@@ -6,21 +9,37 @@ import BlogMask from "~/components/ui/blogUI/BlogMask.vue";
 import BlogMenu from "~/components/ui/blogUI/BlogMenu.vue";
 import Button from "~/components/ui/Button.vue";
 
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
 const { useBlogContent } = useBlogStore();
 const maskRef = ref<BlogMaskInstance | null>(null);
 const menuRef = ref<BlogMenuInstance | null>(null);
 const page = useBlogContent();
+const smoother = ref<ScrollSmoother | null>(null);
 
-// onMounted(() => {
 
-// });
+onMounted(() => {
+  smoother.value = ScrollSmoother.create({
+    wrapper: ".blog_content",
+    content: ".blog_content_container",
+    smooth: 1,
+  });
+});
+
+onUnmounted(() => {
+  smoother.value?.kill();
+});
 
 </script>
 
 <template>
   <div class="blogs">
     <div class="blog_content">
-      <ContentRenderer v-if="page" :value="page" />
+      <div class="blog_content_container">
+        <div class="blog_content_container_text">
+          <ContentRenderer v-if="page" :value="page" />
+        </div>
+      </div>
     </div>
     <BlogBackGround></BlogBackGround>
     <BlogMenu ref="menuRef"></BlogMenu>
@@ -43,20 +62,23 @@ const page = useBlogContent();
 // @import "~/styles/blogs.scss";
 
 .blogs {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
   height: auto;
   width: 100%;
 
   .blog_content {
-    margin: 50px;
-    padding: 50px;
     height: auto;
     width: 60%;
-    color: #FFFFFF;
-    border: 5px solid #FFFFFF;
-    font-family: "方正基础像素体";
+
+    .blog_content_container_text {
+      margin: 0 20% 0;
+      padding: 50px;
+      color: #FFFFFF;
+      border: 5px solid #FFFFFF;
+      font-family: "方正基础像素体";
+    }
   }
 }
 </style>
