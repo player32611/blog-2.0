@@ -6,7 +6,7 @@ const { page } = defineProps<BlogNavigationParams>();
 const boxRef = ref<HTMLDivElement | null>(null);
 const time = ref<number>(1);
 const headings = ref<Array<{ id: string; text: string }>>([])
-
+const activeHeadingId = ref<string | null>(null)
 
 const handleMouseEnter = () => {
   gsap.to(boxRef.value, {
@@ -28,10 +28,10 @@ const handleClick = (id: string) => {
   const element = document.getElementById(id)
   if (element) {
     element.scrollIntoView({ behavior: 'smooth' })
-    handleMouseLeave() // 点击后自动收起导航
+    activeHeadingId.value = id
   }
 }
-const getHeadings = () => {
+const getAllHeadings = () => {
   headings.value = []
   const h2Elements = document.querySelectorAll('h2[id]')
   h2Elements.forEach((el) => {
@@ -43,13 +43,40 @@ const getHeadings = () => {
   })
 }
 
+const getActiveHeading = () => {
+  let currentActiveId = ''
+  for (let i = headings.value.length - 1; i >= 0; i--) {
+    const heading = headings.value[i]
+    if (!heading) continue
+    const element = document.getElementById(heading.id)
+    if (element) {
+      const rect = element.getBoundingClientRect()
+      if (rect.top <= 100) {
+        currentActiveId = heading.id
+        break
+      }
+    }
+  }
+  activeHeadingId.value = currentActiveId || null
+}
+
+
 onMounted(() => {
-  getHeadings()
+  getAllHeadings()
+  getActiveHeading()
   watch(() => page, () => {
     setTimeout(() => {
-      getHeadings()
+      getAllHeadings()
+      getActiveHeading()
     }, 100)
   })
+  window.addEventListener('scroll', getActiveHeading)
+  window.addEventListener('resize', getActiveHeading)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', getActiveHeading)
+  window.removeEventListener('resize', getActiveHeading)
 })
 
 </script>
@@ -58,7 +85,8 @@ onMounted(() => {
   <div class="blog_navigation_box" ref='boxRef' @mouseenter='handleMouseEnter' @mouseleave='handleMouseLeave'>
     <div class="navigation_title">在此页面上</div>
     <div class="navigation_links" v-if="headings.length > 0">
-      <div v-for="heading in headings" :key="heading.id" class="navigation_link" @click="handleClick(heading.id)">
+      <div v-for="heading in headings" :key="heading.id" class="navigation_link"
+        :class="{ active: activeHeadingId === heading.id }" @click="handleClick(heading.id)">
         {{ heading.text }}
       </div>
     </div>
@@ -76,18 +104,33 @@ onMounted(() => {
   padding: 50px 40px;
   height: calc(80dvh - 50px*2 - 5px*2);
   width: 240px;
-  color: #FFFFFF;
   background-color: #000000;
   border: 5px solid #FFFFFF;
   font-family: "方正基础像素体";
 
   .navigation_title {
+    color: #FFFFFF;
     font-weight: 600;
   }
 
-  .navigation_link {
-    margin: 10px 0;
-    cursor: pointer;
+  .navigation_links {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin-top: 20px;
+
+    .navigation_link {
+      margin: 10px 0;
+      width: auto;
+      color: rgba($color: #FFFFFF, $alpha: 0.5);
+      transition: color 0.2s ease-in-out;
+      cursor: pointer;
+
+      &.active {
+        color: #FFFFFF;
+      }
+    }
   }
+
 }
 </style>

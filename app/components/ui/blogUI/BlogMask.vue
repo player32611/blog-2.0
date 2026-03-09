@@ -3,7 +3,7 @@ import gsap from 'gsap';
 
 const maskRef = ref<HTMLDivElement | null>(null);
 const maskState = ref<"in" | "out">("in");
-const time = ref<number>(0.75);
+const time = ref<number>(0.8);
 
 const maskIn = () => {
   gsap.timeline().to(maskRef.value, {

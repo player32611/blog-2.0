@@ -2,6 +2,7 @@
 import gsap from 'gsap';
 import type { BlogCollections } from '~/types/store';
 
+import BlogMenuBackGround from './BlogMenuBackGround.vue';
 import MenuSelecter from './MenuSelecter.vue';
 
 const menuRef = ref<HTMLDivElement | null>(null);
@@ -45,6 +46,7 @@ defineExpose({
 
 <template>
   <div class="blog_menu" ref="menuRef">
+    <BlogMenuBackGround />
     <div class="menu_card">11</div>
     <div class="menu_selecter_box">
       <MenuSelecter v-for="collection in blogCollections" :key="collection" :collections="collection" />
