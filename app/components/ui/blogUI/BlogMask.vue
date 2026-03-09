@@ -3,12 +3,12 @@ import gsap from 'gsap';
 
 const maskRef = ref<HTMLDivElement | null>(null);
 const maskState = ref<"in" | "out">("in");
-const time = 0.75;
+const time = ref<number>(0.75);
 
 const maskIn = () => {
   gsap.timeline().to(maskRef.value, {
     "top": "100%",
-    duration: time,
+    duration: time.value,
     ease: "power1.inOut"
   })
 }
@@ -16,7 +16,7 @@ const maskIn = () => {
 const maskOut = () => {
   gsap.to(maskRef.value, {
     "top": "-100px",
-    duration: time,
+    duration: time.value,
     ease: "power1.inOut"
   })
 }
@@ -32,11 +32,11 @@ const changeMask = () => {
   }
   gsap.timeline().to(maskRef.value, {
     "transform": "scaleY(300%)",
-    duration: time / 4,
+    duration: time.value / 4,
     ease: "power2.out"
   }).to(maskRef.value, {
     "transform": "scaleY(-100%)",
-    duration: time * 3 / 4,
+    duration: time.value * 3 / 4,
     ease: "power2.in"
   })
   maskState.value = maskState.value === "in" ? "out" : "in";

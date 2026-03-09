@@ -37,6 +37,7 @@ onMounted(() => {
     url("/icons/iconfont.woff2?t=1772024036100") format("woff2"),
     url("/icons/iconfont.woff?t=1772024036100") format("woff"),
     url("/icons/iconfont.ttf?t=1772024036100") format("truetype");
+  font-display: swap;
 }
 
 .icon {

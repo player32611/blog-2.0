@@ -18,6 +18,10 @@ export interface BlogMenuSelectionParams {
 	contentTitle?: string;
 }
 
+export interface BlogNavigationParams {
+	page: globalThis.Ref<any, any>;
+}
+
 export interface ButtonParams {
 	text: string;
 	icon?: any;

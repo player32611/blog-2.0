@@ -6,14 +6,13 @@ import MenuSelecter from './MenuSelecter.vue';
 
 const menuRef = ref<HTMLDivElement | null>(null);
 const menuState = ref<"in" | "out">("in");
-const time = 0.75;
+const time = ref<number>(0.75);
 const blogCollections: BlogCollections[] = ["front_end", "back_end", "gms2", "algorithm", "deep_learning"];
-
 
 const menuIn = () => {
   gsap.timeline().to(menuRef.value, {
     "top": "0",
-    duration: time,
+    duration: time.value,
     ease: "power1.inOut"
   })
 }
@@ -21,7 +20,7 @@ const menuIn = () => {
 const menuOut = () => {
   gsap.to(menuRef.value, {
     "top": "-100%",
-    duration: time,
+    duration: time.value,
     ease: "power1.inOut"
   })
 }

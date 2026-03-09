@@ -14,4 +14,10 @@
   </details>
 </template>
 
-<style scoped lang='scss'></style>
+<style scoped lang='scss'>
+.details.custom-block {
+  summary {
+    cursor: pointer;
+  }
+}
+</style>

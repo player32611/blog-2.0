@@ -8,12 +8,12 @@
   </code>
 </template>
 
-<style lang='scss'>
-$code-bg: rgba(142, 150, 170, .14);
-
+<style scoped lang='scss'>
 code {
   padding: 3px 6px;
+  color: #FFFFFF;
   border-radius: 4px;
-  background-color: $code-bg;
+  background-color: rgba(142, 150, 170, .14);
+  transition: color .25s, background-color .5s;
 }
 </style>
