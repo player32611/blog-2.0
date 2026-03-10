@@ -8,6 +8,7 @@ import BlogBackGround from "~/components/ui/blogUI/BlogBackGround.vue";
 import BlogMask from "~/components/ui/blogUI/BlogMask.vue";
 import BlogMenu from "~/components/ui/blogUI/BlogMenu.vue";
 import BlogNavigation from "~/components/ui/blogUI/BlogNavigation.vue";
+import BlogScrollBar from "~/components/ui/blogUI/BlogScrollBar.vue";
 import Button from "~/components/ui/Button.vue";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
@@ -42,10 +43,11 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
-    <BlogBackGround></BlogBackGround>
-    <BlogNavigation :page="page"></BlogNavigation>
-    <BlogMenu ref="menuRef"></BlogMenu>
-    <BlogMask ref="maskRef"></BlogMask>
+    <BlogBackGround />
+    <BlogScrollBar />
+    <BlogNavigation :page="page" />
+    <BlogMenu ref="menuRef" />
+    <BlogMask ref="maskRef" />
     <Button :text="'back'" :icon="'&#xeaf1;'" :size="'small'" @click="navigateTo('/')" :style="{
       position: 'fixed',
       left: '20px', top: '20px',

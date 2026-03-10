@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 import { gsap } from 'gsap';
+import { ScrollSmoother } from 'gsap/ScrollSmoother';
 import type { BlogNavigationParams } from '~/types/components';
 
 const { page } = defineProps<BlogNavigationParams>();
@@ -27,7 +28,16 @@ const handleMouseLeave = () => {
 const handleClick = (id: string) => {
   const element = document.getElementById(id)
   if (element) {
-    element.scrollIntoView({ behavior: 'smooth' })
+    const smoother = ScrollSmoother.get()
+    if (smoother) {
+      // 获取元素相对于内容容器的位置
+      const rect = element.getBoundingClientRect()
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+      const elementTop = rect.top + scrollTop
+
+      // 使用 ScrollSmoother 的 scrollTo 方法
+      smoother.scrollTo(elementTop, true)
+    }
     activeHeadingId.value = id
   }
 }
@@ -107,6 +117,11 @@ onUnmounted(() => {
   background-color: #000000;
   border: 5px solid #FFFFFF;
   font-family: "方正基础像素体";
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   .navigation_title {
     color: #FFFFFF;

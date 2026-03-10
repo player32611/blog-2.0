@@ -27,6 +27,11 @@ const handleClick = () => {
   text-align: left;
   background-color: rgb(0, 0, 0, 0);
   border: 5px solid #000000;
+  transition: background-color 0.2s ease-in-out;
   cursor: pointer;
+
+  &:hover {
+    background-color: rgb(255, 255, 255, 0.5);
+  }
 }
 </style>

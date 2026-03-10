@@ -5,7 +5,6 @@ import type { BlogMenuSelecterParams } from '~/types/components';
 import MenuSelection from './MenuSelection.vue';
 
 const isactive = ref<boolean>(false);
-const selecterRef = ref<HTMLElement | null>(null);
 const arrowRef = ref<SVGAElement | null>(null);
 const containerRef = ref<HTMLElement | null>(null);
 const { collections } = defineProps<BlogMenuSelecterParams>();
@@ -23,24 +22,6 @@ const getContentPath = (file: any): string => {
 const getContentTitle = (file: any, path: string): string => {
   return file.title || path;
 };
-
-// const handleMouseEnter = () => {
-//   gsap.to(selecterRef.value, {
-//     duration: 0.5,
-//     color: "#000000",
-//     backgroundColor: "#FFFFFF",
-//     ease: 'power2.out',
-//   });
-// };
-
-// const handleMouseLeave = () => {
-//   gsap.to(selecterRef.value, {
-//     duration: 0.5,
-//     color: "#FFFFFF",
-//     backgroundColor: "rgba(#000000, 0.5)",
-//     ease: 'power2.out',
-//   });
-// };
 
 const handleClick = () => {
   isactive.value = isactive.value === true ? false : true
@@ -72,11 +53,11 @@ const handleClick = () => {
 </script>
 
 <template>
-  <div class="menu_selecter" ref="selecterRef">
+  <div class="menu_selecter">
     <div role="button" class="selecter_title" @click="handleClick">{{
       getCollectionTitle(collections) }}
       <svg class="selecter_arrow" width="20" height="20" viewBox="0 0 100 100" ref="arrowRef">
-        <polygon points="20,20 80,50 20,80" fill="#000000" />
+        <polygon points="20,20 80,50 20,80" fill="#FFFFFF80" />
       </svg>
     </div>
     <div class="selecter_container" ref="containerRef">
