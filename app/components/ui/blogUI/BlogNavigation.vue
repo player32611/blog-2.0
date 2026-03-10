@@ -30,12 +30,10 @@ const handleClick = (id: string) => {
   if (element) {
     const smoother = ScrollSmoother.get()
     if (smoother) {
-      // 获取元素相对于内容容器的位置
       const rect = element.getBoundingClientRect()
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop
       const elementTop = rect.top + scrollTop
 
-      // 使用 ScrollSmoother 的 scrollTo 方法
       smoother.scrollTo(elementTop, true)
     }
     activeHeadingId.value = id

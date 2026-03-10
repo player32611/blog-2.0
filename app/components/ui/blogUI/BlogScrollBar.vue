@@ -1,22 +1,18 @@
 <script setup lang='ts'>
-import { gsap } from 'gsap';
 import { ScrollSmoother } from 'gsap/ScrollSmoother';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const scrollProgress = ref<number>(0)
-const scrollBarRef = ref<HTMLDivElement | null>(null)
 const scrollTriggerInstance = ref<globalThis.ScrollTrigger | null>(null)
 const smoother = ref<globalThis.ScrollSmoother | undefined>(undefined)
 
 const updateScrollProgress = () => {
   if (smoother.value) {
-    // 获取 ScrollSmoother 的滚动位置和内容高度
     const scrollTop = smoother.value.scrollTop()
     console.log(scrollTop)
     const contentHeight = smoother.value.content().offsetHeight
     const viewportHeight = window.innerHeight
 
-    // 计算滚动进度 (0 到 1 之间)
     const progress = contentHeight > viewportHeight
       ? scrollTop / (contentHeight - viewportHeight)
       : 0
@@ -85,7 +81,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="blog_scrollbar" ref="scrollBarRef">
+  <div class="blog_scrollbar">
     <div class="scroll-progress" :style="{ height: scrollProgress * 100 + '%' }"></div>
   </div>
 </template>
