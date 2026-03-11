@@ -23,12 +23,12 @@ export interface BlogNavigationParams {
 }
 
 export interface ImageData {
-	node: HTMLElement;
+	img: CanvasImageSource;
 	x: number;
 	y: number;
-	mov_x: number;
-	mov_y: number;
-	ani: GSAPAnimation | null;
+	targetX: number;
+	targetY: number;
+	animation: GSAPAnimation | null;
 }
 
 export interface ButtonParams {
