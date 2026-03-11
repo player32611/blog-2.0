@@ -22,6 +22,15 @@ export interface BlogNavigationParams {
 	page: globalThis.Ref<any, any>;
 }
 
+export interface ImageData {
+	node: HTMLElement;
+	x: number;
+	y: number;
+	mov_x: number;
+	mov_y: number;
+	ani: GSAPAnimation | null;
+}
+
 export interface ButtonParams {
 	text: string;
 	icon?: any;

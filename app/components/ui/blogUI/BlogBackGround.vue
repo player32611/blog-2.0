@@ -53,7 +53,7 @@ const handleMouseMove = (e: MouseEvent) => {
       const dx = boxsOriPos.value[idx].x - mouseX
       const dy = boxsOriPos.value[idx].y - mouseY
       const distance = Math.sqrt(dx ** 2 + dy ** 2)
-      if (distance <= mouseRadius.value) {
+      if (distance <= mouseRadius.value && Math.random() >= 0.9) {
         box.setAttribute("fill", "#red")
         gsap.timeline().to(box, {
           "stroke": "#1778A7",

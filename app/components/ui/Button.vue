@@ -33,7 +33,8 @@ const handleClick = () => {
 </script>
 
 <template>
-  <button :class="`${theme} ${size}`" @click="handleClick" @mouseenter="handleMouseEnter" :style="style">
+  <button :class="`${theme} ${size}`" @click="handleClick" @mouseenter="handleMouseEnter" :style="style"
+    draggable="false">
     <div class="container">
       <span class="icon">{{ icon }}</span>
       <span v-for="(char, index) in text.toUpperCase().split('')" :key="index">{{ char }}</span>

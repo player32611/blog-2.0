@@ -86,7 +86,7 @@ onUnmounted(() => {
   <div className="viewBox" ref="viewBoxRef" @mousedown="handleMouseDown" @mouseup="handleMouseUp"
     @mouseleave="handleMouseUp" @mousemove="handleMouseMove">
     <img :src="'/sprites/background/undertale.jpg'" alt="background" :width="6016 / 2" :height="3541 / 2"
-      :draggable="false" ref="imageRef"></img>
+      draggable="false" ref="imageRef"></img>
   </div>
 </template>
 
