@@ -89,7 +89,6 @@ const moveImgs = (x: number, y: number) => {
       ease: 'power4.out',
     })
   })
-  gsap.ticker.add(drawFrame)
 }
 
 const checkImg = (x: number, y: number) => {
@@ -124,6 +123,7 @@ onMounted(() => {
   totalHeight.value = lineMax.value * (imageHeight.value + imageMargin.value) - imageMargin.value;
   allImagePath.value = getAllImages();
   resize();
+  gsap.ticker.add(drawFrame)
   window.addEventListener('resize', resize);
   createImgDatas();
 })

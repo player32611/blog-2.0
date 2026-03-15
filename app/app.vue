@@ -48,11 +48,6 @@ onMounted(() => {
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-}
-
 html,
 body {
   position: relative;
