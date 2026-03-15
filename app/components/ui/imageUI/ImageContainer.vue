@@ -1,5 +1,4 @@
 <script setup lang='ts'>
-import { gsap } from 'gsap';
 import type { ImageData } from '~/types/components';
 
 const canvasRef = ref<HTMLCanvasElement | null>(null);
@@ -14,24 +13,36 @@ const imageMargin = ref<number>(200);
 const totalWidth = ref<number>(0);
 const totalHeight = ref<number>(0);
 const imageDatas = ref<ImageData[]>([]);
-const ifMovable = ref<boolean>(false);
+
+// 物理模型参数
+const isDragging = ref<boolean>(false);
+const velocityX = ref<number>(0);
+const velocityY = ref<number>(0);
+const acceleration = ref<number>(0.1); // 加速度系数
+const friction = ref<number>(0.95); // 摩擦力系数
+const mouseSensitivity = ref<number>(0.5); // 鼠标灵敏度
 
 const handleMouseDown = () => {
-  ifMovable.value = true;
+  isDragging.value = true;
+  velocityX.value = 0;
+  velocityY.value = 0;
 }
 
 const handleMouseup = (e: MouseEvent) => {
-  ifMovable.value = false;
+  isDragging.value = false;
   checkImg(e.x, e.y);
 }
 
 const handleMouseLeave = () => {
-  ifMovable.value = false;
+  isDragging.value = false;
 }
 
 const handleMouseMove = (e: MouseEvent) => {
-  if (!ifMovable.value) return;
-  moveImgs(e.movementX, e.movementY);
+  if (!isDragging.value) return;
+
+  // 鼠标移动时给予加速度
+  velocityX.value += e.movementX * mouseSensitivity.value * acceleration.value;
+  velocityY.value += e.movementY * mouseSensitivity.value * acceleration.value;
 }
 
 const createImgDatas = () => {
@@ -57,9 +68,23 @@ const createImgDatas = () => {
   }
 }
 
-const drawFrame = () => {
-  if (canvasRef.value) content.value?.clearRect(0, 0, canvasRef.value?.width, canvasRef.value?.height);
+const updatePosition = () => {
+  // 应用摩擦力
+  if (!isDragging.value) {
+    velocityX.value *= friction.value;
+    velocityY.value *= friction.value;
+
+    // 当速度很小时停止，避免无限计算
+    if (Math.abs(velocityX.value) < 0.1) velocityX.value = 0;
+    if (Math.abs(velocityY.value) < 0.1) velocityY.value = 0;
+  }
+
+  // 更新所有图片位置
   imageDatas.value.forEach(img => {
+    img.x += velocityX.value;
+    img.y += velocityY.value;
+
+    // 无限循环边界处理
     if (img.x > totalWidth.value - imageWidth.value) {
       img.x -= totalWidth.value + imageMargin.value;
     }
@@ -72,49 +97,48 @@ const drawFrame = () => {
     if (img.y < -imageHeight.value) {
       img.y += totalHeight.value + imageMargin.value;
     }
-    content.value?.drawImage(img.img, img.x, img.y, imageWidth.value, imageHeight.value)
-  })
+  });
 }
 
+const drawFrame = () => {
+  if (canvasRef.value) {
+    content.value?.clearRect(0, 0, canvasRef.value?.width, canvasRef.value?.height);
+  }
 
-const moveImgs = (x: number, y: number) => {
+  updatePosition();
+
   imageDatas.value.forEach(img => {
-    img.targetX = img.x + x * 20;
-    img.targetY = img.y + y * 20;
-    if (img.animation) img.animation.kill();
-    img.animation = gsap.to(img, {
-      x: img.targetX,
-      y: img.targetY,
-      duration: 1,
-      ease: 'power4.out',
-    })
+    content.value?.drawImage(img.img, img.x, img.y, imageWidth.value, imageHeight.value)
   })
+
+  // 继续动画循环
+  requestAnimationFrame(drawFrame);
 }
 
 const checkImg = (x: number, y: number) => {
-  let img = imageDatas.value.find(img => x >= img.x && x < img.x + imageWidth.value && y >= img.y && y < img.y + imageHeight.value)
+  let img = imageDatas.value.find(img =>
+    x >= img.x &&
+    x < img.x + imageWidth.value &&
+    y >= img.y &&
+    y < img.y + imageHeight.value
+  )
   if (img) console.log(img, img.img)
 }
+
 const resize = () => {
   if (!canvasRef.value) return;
 
-  // 高清屏适配
   const dpr = window.devicePixelRatio || 1;
   const rect = canvasRef.value.getBoundingClientRect();
 
   canvasRef.value.width = rect.width * dpr;
   canvasRef.value.height = rect.height * dpr;
 
-  // 缩放 Context 以匹配 CSS 像素
   const ctx = canvasRef.value.getContext('2d');
   if (ctx) {
     ctx.scale(dpr, dpr);
     content.value = ctx;
   }
-
-  // 重新计算布局（如果需要响应式重排）
-  // 这里简单起见，只重绘，不重排网格，因为网格大小是固定的
-  drawFrame();
 };
 
 onMounted(() => {
@@ -123,13 +147,14 @@ onMounted(() => {
   totalHeight.value = lineMax.value * (imageHeight.value + imageMargin.value) - imageMargin.value;
   allImagePath.value = getAllImages();
   resize();
-  gsap.ticker.add(drawFrame)
-  window.addEventListener('resize', resize);
   createImgDatas();
+
+  // 开始动画循环
+  drawFrame();
+  window.addEventListener('resize', resize);
 })
 
 onUnmounted(() => {
-  gsap.ticker.remove(drawFrame);
   window.removeEventListener('resize', resize);
 })
 
