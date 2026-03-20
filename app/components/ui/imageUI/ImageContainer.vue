@@ -16,6 +16,8 @@ const imageDatas = ref<ImageData[]>([]);
 
 // 添加 animationFrameId 引用来存储 requestAnimationFrame 的 ID
 const animationFrameId = ref<number | null>(null);
+// 添加加载状态
+const isLoaded = ref<boolean>(false);
 
 // 物理模型参数
 const isDragging = ref<boolean>(false);
@@ -26,9 +28,14 @@ const friction = ref<number>(0.95); // 摩擦力系数
 const mouseSensitivity = ref<number>(0.5); // 鼠标灵敏度
 
 const handleMouseDown = () => {
+  if (!isLoaded.value) return;
   isDragging.value = true;
   velocityX.value = 0;
   velocityY.value = 0;
+  // 如果动画循环未运行，启动它
+  if (animationFrameId.value === null) {
+    animationFrameId.value = requestAnimationFrame(drawFrame);
+  }
 }
 
 const handleMouseup = (e: MouseEvent) => {
@@ -46,29 +53,49 @@ const handleMouseMove = (e: MouseEvent) => {
   // 鼠标移动时给予加速度
   velocityX.value += e.movementX * mouseSensitivity.value * acceleration.value;
   velocityY.value += e.movementY * mouseSensitivity.value * acceleration.value;
+
+  // 如果动画循环未运行，启动它
+  if (animationFrameId.value === null) {
+    animationFrameId.value = requestAnimationFrame(drawFrame);
+  }
 }
 
-const createImgDatas = () => {
+const createImgDatas = async () => {
   imageDatas.value = [];
+  const loadPromises: Promise<void>[] = [];
+
   for (let i = 0; i < imageTotal.value; i++) {
-    let img = new window.Image();
+    const img = new window.Image();
+    const colIndex = i % rowMax.value;
+    const lineIndex = Math.floor(i / rowMax.value);
+    const x = colIndex * (imageWidth.value + imageMargin.value);
+    const y = lineIndex * (imageHeight.value + imageMargin.value);
+
+    const loadPromise = new Promise<void>((resolve) => {
+      img.onload = () => {
+        imageDatas.value.push({
+          img,
+          x,
+          y,
+          targetX: x,
+          targetY: y,
+          animation: null
+        });
+        resolve();
+      };
+      img.onerror = () => {
+        // 即使加载失败也要 resolve，避免阻塞其他图片
+        console.error(`Failed to load image: ${allImagePath.value[i]}`);
+        resolve();
+      };
+    });
+
     img.src = allImagePath.value[i]!;
-    img.onload = () => {
-      let colIndex = i % rowMax.value;
-      let lineIndex = Math.floor(i / rowMax.value);
-      let x = colIndex * (imageWidth.value + imageMargin.value);
-      let y = lineIndex * (imageHeight.value + imageMargin.value);
-      imageDatas.value.push({
-        img,
-        x,
-        y,
-        targetX: x,
-        targetY: y,
-        animation: null
-      });
-      content.value?.drawImage(img, x, y, imageWidth.value, imageHeight.value)
-    }
+    loadPromises.push(loadPromise);
   }
+
+  // 等待所有图片加载完成
+  await Promise.all(loadPromises);
 }
 
 const updatePosition = () => {
@@ -102,8 +129,8 @@ const updatePosition = () => {
     }
   });
 }
+
 const drawFrame = () => {
-  console.log('drawFrame');
   if (canvasRef.value) {
     content.value?.clearRect(0, 0, canvasRef.value?.width, canvasRef.value?.height);
   }
@@ -114,8 +141,12 @@ const drawFrame = () => {
     content.value?.drawImage(img.img, img.x, img.y, imageWidth.value, imageHeight.value)
   })
 
-  // 继续动画循环
-  animationFrameId.value = requestAnimationFrame(drawFrame);
+  // 只在有速度或正在拖动时继续动画循环
+  if (isDragging.value || Math.abs(velocityX.value) > 0 || Math.abs(velocityY.value) > 0) {
+    animationFrameId.value = requestAnimationFrame(drawFrame);
+  } else {
+    animationFrameId.value = null;
+  }
 }
 
 const checkImg = (x: number, y: number) => {
@@ -134,49 +165,100 @@ const resize = () => {
   const dpr = window.devicePixelRatio || 1;
   const rect = canvasRef.value.getBoundingClientRect();
 
-  canvasRef.value.width = rect.width * dpr;
-  canvasRef.value.height = rect.height * dpr;
+  // 只有当尺寸确实改变时才重新设置
+  if (canvasRef.value.width !== rect.width * dpr || canvasRef.value.height !== rect.height * dpr) {
+    canvasRef.value.width = rect.width * dpr;
+    canvasRef.value.height = rect.height * dpr;
 
-  const ctx = canvasRef.value.getContext('2d');
-  if (ctx) {
-    ctx.scale(dpr, dpr);
-    content.value = ctx;
+    const ctx = canvasRef.value.getContext('2d');
+    if (ctx) {
+      ctx.scale(dpr, dpr);
+      content.value = ctx;
+
+      // 如果已经加载完成，重新渲染一次
+      if (isLoaded.value) {
+        content.value?.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height);
+        imageDatas.value.forEach(img => {
+          content.value?.drawImage(img.img, img.x, img.y, imageWidth.value, imageHeight.value)
+        })
+      }
+    }
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
   content.value = canvasRef.value?.getContext('2d');
   totalWidth.value = rowMax.value * (imageWidth.value + imageMargin.value) - imageMargin.value;
   totalHeight.value = lineMax.value * (imageHeight.value + imageMargin.value) - imageMargin.value;
   allImagePath.value = getAllImages();
   resize();
-  createImgDatas();
 
-  // 开始动画循环
-  drawFrame();
+  // 等待所有图片加载完成
+  await createImgDatas();
+
+  // 标记为已加载
+  isLoaded.value = true;
+
+  // 初始渲染一次，不启动持续动画循环
+  if (canvasRef.value) {
+    content.value?.clearRect(0, 0, canvasRef.value?.width, canvasRef.value?.height);
+    imageDatas.value.forEach(img => {
+      content.value?.drawImage(img.img, img.x, img.y, imageWidth.value, imageHeight.value)
+    })
+  }
+
   window.addEventListener('resize', resize);
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', resize);
+
+  // 取消动画循环
   if (animationFrameId.value !== null) {
     cancelAnimationFrame(animationFrameId.value);
     animationFrameId.value = null;
   }
+
+  // 清理图片引用，避免内存泄漏
+  imageDatas.value = [];
+  allImagePath.value = [];
 })
 
 </script>
 
 <template>
-  <canvas class="image_container" ref="canvasRef" @mousedown="handleMouseDown" @mouseup="handleMouseup"
-    @mouseleave="handleMouseLeave" @mousemove="handleMouseMove"></canvas>
+  <div class="image_container_wrapper">
+    <canvas class="image_container" ref="canvasRef" @mousedown="handleMouseDown" @mouseup="handleMouseup"
+      @mouseleave="handleMouseLeave" @mousemove="handleMouseMove"></canvas>
+    <div v-if="!isLoaded" class="loading_indicator">
+      加载中...
+    </div>
+  </div>
 </template>
 
 <style scoped lang='scss'>
+.image_container_wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
 .image_container {
   position: absolute;
   width: 100%;
   height: 100%;
   cursor: pointer;
+}
+
+.loading_indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  color: white;
+  font-family: "Mars Needs Cunnilingus", "方正基础像素体", sans-serif;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
 }
 </style>
