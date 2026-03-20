@@ -11,7 +11,7 @@ const setLinesRef = (el: Element | ComponentPublicInstance | null) => {
 }
 
 const getWavesData = async (length: number, points: number) => {
-  const response = await fetch("/sounds/musics/bgm_Traveler_at_Sunset.ogg");
+  const response = await fetch("/sounds/musics/03.ogg");
   const arrayBuffer = await response.arrayBuffer();
   const audioBuffer = await new AudioContext().decodeAudioData(arrayBuffer);
   const rate = audioBuffer.sampleRate;

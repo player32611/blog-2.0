@@ -1,5 +1,11 @@
 import type { BlogCollections } from "~/types/store";
 
+/**
+ * 根据博客集合标识获取对应的中文标题
+ *
+ * @param collection - 博客集合标识，类型为 BlogCollections
+ * @returns 对应的中文标题字符串，如果未找到匹配项则返回原始的 collection 值
+ */
 export const getCollectionTitle = (collection: BlogCollections) => {
 	const collectionTitleMap: Record<string, string> = {
 		front_end: "前端开发",

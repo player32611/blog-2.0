@@ -14,6 +14,9 @@ const totalWidth = ref<number>(0);
 const totalHeight = ref<number>(0);
 const imageDatas = ref<ImageData[]>([]);
 
+// 添加 animationFrameId 引用来存储 requestAnimationFrame 的 ID
+const animationFrameId = ref<number | null>(null);
+
 // 物理模型参数
 const isDragging = ref<boolean>(false);
 const velocityX = ref<number>(0);
@@ -99,8 +102,8 @@ const updatePosition = () => {
     }
   });
 }
-
 const drawFrame = () => {
+  console.log('drawFrame');
   if (canvasRef.value) {
     content.value?.clearRect(0, 0, canvasRef.value?.width, canvasRef.value?.height);
   }
@@ -112,7 +115,7 @@ const drawFrame = () => {
   })
 
   // 继续动画循环
-  requestAnimationFrame(drawFrame);
+  animationFrameId.value = requestAnimationFrame(drawFrame);
 }
 
 const checkImg = (x: number, y: number) => {
@@ -156,6 +159,10 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', resize);
+  if (animationFrameId.value !== null) {
+    cancelAnimationFrame(animationFrameId.value);
+    animationFrameId.value = null;
+  }
 })
 
 </script>

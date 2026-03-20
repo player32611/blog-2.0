@@ -17,9 +17,22 @@ export type BlogActions = {
 	useBlogContent: () => Ref<any>;
 };
 
+/**
+ * 音乐文件信息接口
+ */
+export interface MusicInfo {
+	/** 文件名（不带扩展名） */
+	name: string;
+	/** 文件路径 */
+	path: string;
+}
+
 export type SoundState = {
 	effectsVolume: Ref<number>;
 	musicVolume: Ref<number>;
+	musicCurrent: Ref<MusicInfo | null>;
+	musicList: Ref<MusicInfo[]>;
+	isPlaying: Ref<boolean>;
 };
 
 export type SoundGetter = {};
@@ -27,6 +40,11 @@ export type SoundGetter = {};
 export type SoundActions = {
 	setEffectsVolume: (volume: number) => void;
 	setMusicVolume: (volume: number) => void;
+	setMusicCurrent: (music: MusicInfo) => void;
+	setMusicList: (list: MusicInfo[]) => void;
+	setIsPlaying: (playing: boolean) => void;
+	previousMusic: () => void;
+	nextMusic: () => void;
 };
 
 export type Theme = "undertale" | "touhou";
