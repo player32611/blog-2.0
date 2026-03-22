@@ -1,21 +1,26 @@
 {
-  "name": "blog-2-0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview"
-  },
-  "dependencies": {
-    "@nuxt/content": "^3.11.2",
-    "@nuxt/fonts": "^0.14.0",
-    "@pinia/nuxt": "^0.11.3",
-    "better-sqlite3": "^12.6.2",
-    "gsap": "^3.14.2",
-    "nuxt": "^4.3.1",
-    "pinia": "^3.0.4",
-    "sass": "^1.97.3"
-  }
+	"name": "blog-2-0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "nuxt build",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview"
+	},
+	"dependencies": {
+		"@nuxt/content": "^3.11.2",
+		"@nuxt/fonts": "^0.14.0",
+		"@pinia/nuxt": "^0.11.3",
+		"better-sqlite3": "^12.8.0",
+		"gsap": "^3.14.2",
+		"matter-js": "^0.20.0",
+		"nuxt": "^4.3.1",
+		"pinia": "^3.0.4",
+		"sass": "^1.97.3"
+	},
+	"devDependencies": {
+		"@types/matter-js": "^0.20.2",
+		"prettier": "^3.8.1"
+	}
 }
