@@ -31,6 +31,12 @@ export interface ImageData {
 	animation: GSAPAnimation | null;
 }
 
+export interface ItemParams {
+	x: number;
+	y: number;
+	angle: number;
+}
+
 export interface ButtonParams {
 	text: string;
 	icon?: any;
