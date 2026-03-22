@@ -2,18 +2,18 @@
 import type { ItemParams } from "~/types/components";
 
 const { x, y, angle } = defineProps<ItemParams>();
-const cardRef = ref<HTMLDivElement | null>(null);
+const itemRef = ref<HTMLDivElement | null>(null);
 </script>
 
 <template>
 	<div
-		class="switch-card"
+		class="item_switch"
 		:style="{
-			left: x - (cardRef ? cardRef.offsetWidth / 2 : 0) + 'px',
-			top: y - (cardRef ? cardRef.offsetHeight / 2 : 0) + 'px',
+			left: x - (itemRef ? itemRef.offsetWidth / 2 : 0) + 'px',
+			top: y - (itemRef ? itemRef.offsetHeight / 2 : 0) + 'px',
 			rotate: angle + 'rad',
 		}"
-		ref="cardRef"
+		ref="itemRef"
 	>
 		<div class="joy-con left">
 			<div class="minus button"></div>
@@ -84,7 +84,7 @@ const cardRef = ref<HTMLDivElement | null>(null);
 </template>
 
 <style scoped lang="scss">
-.switch-card {
+.item_switch {
 	position: absolute;
 	display: flex;
 	align-items: stretch;

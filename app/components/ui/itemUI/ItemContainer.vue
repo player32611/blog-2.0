@@ -1,29 +1,20 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
 import Matter, { Engine, Render, World, Bodies, Mouse, MouseConstraint, Runner } from "matter-js";
+import type { ItemParams } from "~/types/components";
 
+import ItemPhoneCard from "./ItemPhoneCard.vue";
 import ItemSwitchCard from "./ItemSwitchCard.vue";
 
 const containerRef = ref<HTMLDivElement>();
+const ItemPhoneCardRef = ref<InstanceType<typeof ItemPhoneCard> | null>(null);
 const ItemSwitchCardRef = ref<InstanceType<typeof ItemSwitchCard> | null>(null);
-const boxPosition = ref({ x: 0, y: 0, angle: 0 });
+const boxPositions = ref<Map<string, ItemParams> | null>(null);
+const boxes = ref<Map<string, Matter.Body> | null>(null);
 
 let engine: Engine;
 let render: Render;
 let runner: Runner;
-let boxes: Matter.Body[] = [];
-
-// 方法2：获取单个方块的坐标
-function getBoxCoordinate(index: number) {
-	if (boxes[index]) {
-		return {
-			x: boxes[index].position.x,
-			y: boxes[index].position.y,
-			angle: boxes[index].angle,
-		};
-	}
-	return null;
-}
 
 const init = () => {
 	if (!containerRef.value) return;
@@ -77,15 +68,17 @@ const init = () => {
 const createBoxes = () => {
 	if (!containerRef.value) return;
 
+	if (!boxPositions.value) boxPositions.value = new Map();
+
 	const width = containerRef.value.clientWidth;
 	const height = containerRef.value.clientHeight;
 
-	// 创建彩色方块
-	const colors = ["#e94560", "#0f3460", "#533483", "#e63946", "#f1faee", "#a8dadc"];
-	const boxes: Matter.Body[] = [];
+	if (!boxes.value) boxes.value = new Map();
+	boxes.value.clear();
 
 	if (ItemSwitchCardRef.value)
-		boxes.push(
+		boxes.value.set(
+			"ItemSwitchCard",
 			Bodies.rectangle(
 				width / 2,
 				height / 2,
@@ -101,17 +94,41 @@ const createBoxes = () => {
 			),
 		);
 
-	World.add(engine.world, boxes);
+	if (ItemPhoneCardRef.value)
+		boxes.value.set(
+			"ItemPhoneCard",
+			Bodies.rectangle(
+				width / 2,
+				height / 2,
+				ItemPhoneCardRef.value.$el.offsetWidth,
+				ItemPhoneCardRef.value.$el.offsetHeight,
+				{
+					restitution: 0.6,
+					friction: 0.5,
+					render: {
+						fillStyle: "rgba(0, 0, 0, 0)",
+					},
+				},
+			),
+		);
+
+	World.add(engine.world, Array.from(boxes.value.values()));
 
 	// 在更新事件中监听坐标变化
 	Matter.Events.on(engine, "afterUpdate", () => {
-		// 更新第一个方块的位置到ref中，供模板使用
-		if (boxes[0]) {
-			boxPosition.value = {
-				x: boxes[0].position.x,
-				y: boxes[0].position.y,
-				angle: boxes[0].angle,
-			};
+		if (boxes.value?.get("ItemSwitchCard")) {
+			boxPositions.value?.set("ItemSwitchCard", {
+				x: boxes.value.get("ItemSwitchCard")?.position.x ?? 0,
+				y: boxes.value.get("ItemSwitchCard")?.position.y ?? 0,
+				angle: boxes.value.get("ItemSwitchCard")?.angle ?? 0,
+			});
+		}
+		if (boxes.value?.get("ItemPhoneCard")) {
+			boxPositions.value?.set("ItemPhoneCard", {
+				x: boxes.value.get("ItemPhoneCard")?.position.x ?? 0,
+				y: boxes.value.get("ItemPhoneCard")?.position.y ?? 0,
+				angle: boxes.value.get("ItemPhoneCard")?.angle ?? 0,
+			});
 		}
 	});
 };
@@ -157,10 +174,16 @@ onUnmounted(() => {
 </script>
 
 <template>
+	<ItemPhoneCard
+		:x="boxPositions?.get('ItemPhoneCard')?.x ?? 0"
+		:y="boxPositions?.get('ItemPhoneCard')?.y ?? 0"
+		:angle="boxPositions?.get('ItemPhoneCard')?.angle ?? 0"
+		ref="ItemPhoneCardRef"
+	/>
 	<ItemSwitchCard
-		:x="boxPosition.x"
-		:y="boxPosition.y"
-		:angle="boxPosition.angle"
+		:x="boxPositions?.get('ItemSwitchCard')?.x ?? 0"
+		:y="boxPositions?.get('ItemSwitchCard')?.y ?? 0"
+		:angle="boxPositions?.get('ItemSwitchCard')?.angle ?? 0"
 		ref="ItemSwitchCardRef"
 	/>
 	<div ref="containerRef" class="item-container"></div>
