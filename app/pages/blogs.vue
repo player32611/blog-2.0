@@ -1,4 +1,4 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -19,65 +19,79 @@ const menuRef = ref<BlogMenuInstance | null>(null);
 const page = useBlogContent();
 const smoother = ref<ScrollSmoother | null>(null);
 
-
 onMounted(() => {
-  smoother.value = ScrollSmoother.create({
-    wrapper: ".blog_content",
-    content: ".blog_content_container",
-    smooth: 1,
-  });
+	smoother.value = ScrollSmoother.create({
+		wrapper: ".blog_content",
+		content: ".blog_content_container",
+		smooth: 1,
+	});
 });
 
 onUnmounted(() => {
-  smoother.value?.kill();
+	smoother.value?.kill();
 });
-
 </script>
 
 <template>
-  <div class="blogs">
-    <div class="blog_content">
-      <div class="blog_content_container">
-        <div class="blog_content_container_text">
-          <ContentRenderer v-if="page" :value="page" />
-        </div>
-      </div>
-    </div>
-    <BlogBackGround />
-    <BlogScrollBar />
-    <BlogNavigation :page="page" />
-    <BlogMenu ref="menuRef" />
-    <BlogMask ref="maskRef" />
-    <Button :text="'back'" :icon="'&#xeaf1;'" :size="'small'" @click="navigateTo('/')" :style="{
-      position: 'fixed',
-      left: '20px', top: '20px',
-    }"></Button>
-    <Button :text="'menu'" :icon="'&#xeaf1;'" :size="'small'" @click="() => {
-      maskRef?.changeMask()
-      menuRef?.changeMenu()
-    }" :style="{
-      position: 'fixed', right: '20px',
-      top: '20px',
-    }"></Button>
-  </div>
+	<div class="blogs">
+		<div class="blog_content">
+			<div class="blog_content_container">
+				<div class="blog_content_container_text">
+					<ContentRenderer v-if="page" :value="page" />
+				</div>
+			</div>
+		</div>
+		<BlogBackGround />
+		<BlogScrollBar />
+		<BlogNavigation :page="page" />
+		<BlogMenu ref="menuRef" />
+		<BlogMask ref="maskRef" />
+		<Button
+			:text="'back'"
+			:icon="'&#xeaf1;'"
+			:size="'small'"
+			@click="navigateTo('/')"
+			:style="{
+				position: 'fixed',
+				left: '20px',
+				top: '20px',
+			}"
+		></Button>
+		<Button
+			:text="'menu'"
+			:icon="'&#xeaf1;'"
+			:size="'small'"
+			@click="
+				() => {
+					maskRef?.changeMask();
+					menuRef?.changeMenu();
+				}
+			"
+			:style="{
+				position: 'fixed',
+				right: '20px',
+				top: '20px',
+			}"
+		></Button>
+	</div>
 </template>
 
-<style lang='scss'>
+<style lang="scss">
 .blogs {
-  height: auto;
-  width: 100%;
+	height: auto;
+	width: 100%;
 
-  .blog_content {
-    height: auto;
-    width: 60%;
+	.blog_content {
+		height: auto;
+		width: 60%;
 
-    .blog_content_container_text {
-      margin: 0 20% 0;
-      padding: 50px;
-      color: #FFFFFF;
-      border: 5px solid #FFFFFF;
-      font-family: "方正基础像素体";
-    }
-  }
+		.blog_content_container_text {
+			margin: 0 20% 0;
+			padding: 50px;
+			color: #ffffff;
+			border: 5px solid #ffffff;
+			font-family: "方正基础像素体";
+		}
+	}
 }
 </style>
