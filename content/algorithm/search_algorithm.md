@@ -93,15 +93,59 @@ int main() {
 
 例题：[B3623 枚举排列（递归实现排列型枚举）](https://www.luogu.com.cn/problem/B3623)
 
-::: danger 警告
-该部分尚未完工!
-:::
+```c++
+#include<bits/stdc++.h>
+using namespace std;
+string path;
+int n,k;
+
+void dfs(){
+    if(path.size()==k){
+        for(auto i :path)cout<<i<<" ";
+        cout<<endl;
+        return;
+    }
+    for(int i =1;i<=n;i++){
+        if(path.find('0'+i)!=-1)continue;
+        path.push_back('0'+i);
+        dfs();
+        path.pop_back();
+    }
+}
+
+int main(){
+    cin>>n>>k;
+    dfs();
+}
+```
 
 例题：[P1706 全排列问题](https://www.luogu.com.cn/problem/P1706)
 
-::: danger 警告
-该部分尚未完工!
-:::
+```c++
+#include<bits/stdc++.h>
+using namespace std;
+string path;
+int n;
+
+void dfs(){
+    if(path.size()==n){
+        for(auto i :path)cout<<"    "<<i;
+        cout<<endl;
+        return;
+    }
+    for(int i =1;i<=n;i++){
+        if(path.find('0'+i)!=-1)continue;
+        path.push_back('0'+i);
+        dfs();
+        path.pop_back();
+    }
+}
+
+int main(){
+    cin>>n;
+    dfs();
+}
+```
 
 ### DFS
 

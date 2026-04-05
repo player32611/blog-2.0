@@ -1,7 +1,9 @@
 # 算法基础
 
 ::: danger 警告
+
 该页面尚未完工!
+
 :::
 
 ::: details 目录
@@ -941,11 +943,53 @@ int main() {
 
 例题：[P1638 逛画展](https://www.luogu.com.cn/problem/P1638)
 
-::: danger 警告
+```c++
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+const int N = 1e6+10;
 
-:::
+int n,m;
+int a[N];
+int x,y;
+unordered_map<int,int> mp;
+int res = INT_MAX;
+
+bool isAll(){
+    for(auto i : mp)if(i.second<=0)return false;
+    return true;
+}
+
+int main(){
+    cin>>n>>m;
+    for(int i = 1;i<=n;i++)cin>>a[i];
+    for(int i = 1;i<=m;i++)mp.insert({i,0});
+    int l = 1,r =1;
+    while(r<=n){
+        if(isAll())break;
+        mp[a[r]]++;
+        r++;
+    }
+    if(r>n){
+        cout<<l<<" "<<r-1<<endl;
+        return 0;
+    }
+    while(r<=n){
+        while(mp[a[l]]>1){
+            mp[a[l]]--;
+            l++;
+        }
+        if(res>r-l+1){
+            res = r-l+1;
+            x = l;
+            y = r - 1;
+        }
+        mp[a[r]]++;
+        r++;
+    }
+    cout<<x<<" "<<y;
+}
+```
 
 例题：[P14171 【MX-X23-T1】丢手绢](https://www.luogu.com.cn/problem/P14171)
 
@@ -1094,11 +1138,47 @@ int main(){
 
 例题：[P1678 烦恼的高考志愿](https://www.luogu.com.cn/problem/P1678)
 
-::: danger 警告
+```c++
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+const int N = 1e5+10;
 
-:::
+int m,n;
+int a[N];
+
+
+int main(){
+    cin>>m>>n;
+    memset(a,0x3F,sizeof(a));
+    for(int i =1;i<=m;i++)cin>>a[i];
+    sort(a+1,a+m+1);
+    long long sum=0;
+    for(int i =1;i<=n;i++){
+        int b;
+        cin>>b;
+        int l=1,r=m;
+        while(l<r){
+            int mid = (l+r)/2;
+            if(a[mid]==b){
+                l=mid;
+                r=mid;
+                break;
+            }
+            else if(a[mid]>b){
+                r=mid;
+            } else{
+                l=mid+1;
+            }
+        }
+        int res;
+        if(a[l]<b)res=min(abs(a[l]-b),abs(a[l+1]-b));
+        else res=min(abs(a[l-1]-b),abs(a[l]-b));
+        sum+=res;
+    }
+    cout<<sum;
+}
+```
 
 ### 二分答案
 
@@ -1148,11 +1228,43 @@ int main() {
 
 例题：[P1873 [COCI 2011/2012 #5] EKO / 砍树](https://www.luogu.com.cn/problem/P1873)
 
-::: danger 警告
+```c++
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+typedef long long ll;
 
-:::
+const int N = 1e6+10;
+
+int n,m;
+int a[N];
+ll small = LLONG_MAX;
+ll big = 0;
+
+ll getAll(ll mi){
+    ll res = 0;
+    for(int i = 1;i<=n;i++){
+        if(a[i]-mi>0)res+=(a[i]-mi);
+    }
+    return res;
+}
+
+int main(){
+    cin>>n>>m;
+    for(int i = 1;i<=n;i++){
+        cin>>a[i];
+        if(a[i]<small)small = a[i];
+        if(a[i]>big)big = a[i];
+    }
+    while(small<big){
+        ll mid = (small+big+1)/2;
+        ll res = getAll(mid);
+        if(res<m)big = mid - 1;
+        else small = mid;
+    }
+    cout<<small<<endl;
+}
+```
 
 例题：[P2678 [NOIP 2015 提高组] 跳石头](https://www.luogu.com.cn/problem/P2678)
 
@@ -1573,19 +1685,129 @@ int main() {
 
 例题：[P10457 占卜DIY](https://www.luogu.com.cn/problem/P10457)
 
-::: danger 警告
+```c++
+#include<bits/stdc++.h>
+using namespace std;
+typedef pair<bool, char> pbc;
 
-该部分尚未完工!
+deque<pbc> de[13];
 
-:::
+void solve(char ch){
+    if(ch=='A'){
+        de[0].push_front({true,'A'});
+        char newch = de[0].back().second;
+        de[0].pop_back();
+        solve(newch);
+    } else if(ch-'0'>=1&&ch-'0'<=9){
+        int idx = ch-'0' - 1;
+        de[idx].push_front({true,ch});
+        char newch = de[idx].back().second;
+        de[idx].pop_back();
+        solve(newch);
+    } else if(ch=='0'){
+        de[9].push_front({true,'0'});
+        char newch = de[9].back().second;
+        de[9].pop_back();
+        solve(newch);
+    } else if(ch=='J'){
+        de[10].push_front({true,'J'});
+        char newch = de[10].back().second;
+        de[10].pop_back();
+        solve(newch);
+    } else if(ch=='Q'){
+        de[11].push_front({true,'Q'});
+        char newch = de[11].back().second;
+        de[11].pop_back();
+        solve(newch);
+    } else if(ch=='K'){
+        return;
+    }
+}
+
+int main(){
+    for(int i = 0;i<13;i++){
+        for(int j = 0;j<4;j++){
+            char a;
+            cin>>a;
+            de[i].push_back({false,a});
+        }
+    }
+    for(int i = 0;i<4;i++){
+        char ch = de[12].front().second;
+        de[12].pop_front();
+        if(ch=='K')continue;
+        solve(ch);
+    }
+    int res = 0;
+    for(int i = 0;i<12;i++){
+        bool sign = true;
+        char flag;
+        switch(i){
+            case 0:
+                flag = 'A';
+                break;
+            case 9:
+                flag = '0';
+                break;
+            case 10:
+                flag = 'J';
+                break;
+            case 11:
+                flag = 'Q';
+                break;
+            default:
+                flag = '1'+i;
+                break;
+        }
+        for(auto j : de[i]){
+            if(!j.first||j.second!=flag)sign = false;
+        }
+        if(sign)res++;
+    }
+    cout<<res<<endl;
+}
+```
 
 例题：[P1087 [NOIP 2004 普及组] FBI 树](https://www.luogu.com.cn/problem/P1087)
 
-::: danger 警告
+```c++
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+struct node{
+    char type;
+    int lchild;
+    int rchild;
+};
 
-:::
+vector<node> li;
+string str;
+int length;
+int n;
+
+int make(string s){
+    if(s.size()==1){
+        li.push_back({s=="0"?'B':'I',-1,-1});
+        length++;
+        return length-1;
+    }
+    int left = make(s.substr(0,s.size()/2));
+    int right = make(s.substr(s.size()/2,s.size()-1));
+    char type = li[left].type == li[right].type ? li[left].type: 'F';
+    li.push_back({type,left,right});
+    length++;
+    return length - 1;
+}
+
+int main(){
+    cin>>n;
+    cin>>str;
+    make(str);
+    for(auto i: li){
+        cout<<i.type;
+    }
+}
+```
 
 ## 分治
 
@@ -1639,11 +1861,59 @@ int main() {
 
 例题：[P1923 【深基9.例4】求第 k 小的数](https://www.luogu.com.cn/problem/P1923)
 
-::: danger 警告
+```c++
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+typedef long long ll;
 
-:::
+const int N = 5e6+10;
+
+int n,k;
+ll a[N];
+ll mi[N];
+
+void sort(int l,int r){
+    if(l==r)return;
+    int mid = (l+r)/2;
+    sort(l,mid);
+    sort(mid+1,r);
+    int lptr=l,rptr = mid+1,idx = l;
+    while(lptr<=mid&&rptr<=r){
+        if(a[lptr]<=a[rptr]){
+            mi[idx] = a[lptr];
+            lptr++;
+        } else{
+            mi[idx] = a[rptr];
+            rptr++;
+        }
+        idx++;
+    }
+    while(lptr<=mid){
+        mi[idx]=a[lptr];
+        idx++;
+        lptr++;
+    }
+    while(rptr<=r){
+        mi[idx]=a[rptr];
+        idx++;
+        rptr++;
+    }
+    for(int i = l;i<=r;i++)a[i] = mi[i];
+}
+
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    cin>>n>>k;
+    for(int i=1;i<=n;i++){
+        cin>>a[i];
+    }
+    sort(1,n);
+    cout<<a[k+1]<<endl;
+}
+```
 
 例题：[P1115 最大子段和](https://www.luogu.com.cn/problem/P1115)
 

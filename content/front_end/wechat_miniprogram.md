@@ -104,11 +104,11 @@ https://developers.weixin.qq.com/miniprogram/dev/devtools/stable.html
 
 ```json
 {
-  "pages": [
-    "pages/index/index",
-    "pages/logs/logs",
-    "pages/list/list" //新增的页面路径
-  ]
+	"pages": [
+		"pages/index/index",
+		"pages/logs/logs",
+		"pages/list/list" //新增的页面路径
+	]
 }
 ```
 
@@ -239,9 +239,9 @@ sitemap 的索引提示默认是开启的，如需要关闭 sitemap 的索引提
 
 ```html
 <view class="container">
-  <view>A</view>
-  <view>B</view>
-  <view>C</view>
+	<view>A</view>
+	<view>B</view>
+	<view>C</view>
 </view>
 ```
 
@@ -251,9 +251,9 @@ sitemap 的索引提示默认是开启的，如需要关闭 sitemap 的索引提
 
 ```html
 <scroll-view class="container" scroll-y>
-  <view>A</view>
-  <view>B</view>
-  <view>C</view>
+	<view>A</view>
+	<view>B</view>
+	<view>C</view>
 </scroll-view>
 ```
 
@@ -273,15 +273,15 @@ sitemap 的索引提示默认是开启的，如需要关闭 sitemap 的索引提
 
 ```html
 <swiper class="swiper1">
-  <swiper-item>
-    <view class="swiper1-item">A</view>
-  </swiper-item>
-  <swiper-item>
-    <view class="swiper1-item">B</view>
-  </swiper-item>
-  <swiper-item>
-    <view class="swiper1-item">C</view>
-  </swiper-item>
+	<swiper-item>
+		<view class="swiper1-item">A</view>
+	</swiper-item>
+	<swiper-item>
+		<view class="swiper1-item">B</view>
+	</swiper-item>
+	<swiper-item>
+		<view class="swiper1-item">C</view>
+	</swiper-item>
 </swiper>
 ```
 
@@ -392,10 +392,10 @@ WXML 中`<navigator url="/pagea/home/home"></navigator>`
 
 ```javascript
 Page({
-  data: {
-    info: "init data",
-    msgList: [{ msg: "hello" }, { msg: "world" }],
-  },
+	data: {
+		info: "init data",
+		msgList: [{ msg: "hello" }, { msg: "world" }],
+	},
 });
 ```
 
@@ -462,15 +462,15 @@ btnTapHandler(e){//按钮的 tap 事件处理函数
 
 ```javascript
 Page({
-  data: {
-    count: 0,
-  },
-  //修改count的值
-  changeCount() {
-    this.setData({
-      count: this.data.count + 1,
-    });
-  },
+	data: {
+		count: 0,
+	},
+	//修改count的值
+	changeCount() {
+		this.setData({
+			count: this.data.count + 1,
+		});
+	},
 });
 ```
 
@@ -534,8 +534,8 @@ inputHandler(e:any){
 
 ```html
 <block wx:if="{{condition}}">
-  <view>条件为真时渲染</view>
-  <view>条件为真时渲染</view>
+	<view>条件为真时渲染</view>
+	<view>条件为真时渲染</view>
 </block>
 ```
 
@@ -571,7 +571,7 @@ inputHandler(e:any){
 
 ```html
 <view wx:for="{{array}}" wx:for-index="idx" wx:for-item="itemName">
-  索引是：{{idx}} 当前项是：{{itemName}}
+	索引是：{{idx}} 当前项是：{{itemName}}
 </view>
 ```
 
@@ -920,9 +920,9 @@ onLoad(options) {
 
 ```json
 {
-  //...
-  "enablePullDownRefresh": true
-  //...
+	//...
+	"enablePullDownRefresh": true
+	//...
 }
 ```
 
@@ -961,9 +961,9 @@ onReachBottom() {
 
 ```json
 {
-  //...
-  "onReachBottomDistance": 200
-  //...
+	//...
+	"onReachBottomDistance": 200
+	//...
 }
 ```
 
@@ -1076,9 +1076,9 @@ onReachBottom() {
 
 ```json [index.json]
 {
-  "usingComponents": {
-    "my-test1": "/components/test/test"
-  }
+	"usingComponents": {
+		"my-test1": "/components/test/test"
+	}
 }
 ```
 
@@ -1116,7 +1116,7 @@ Component({
 ```json [index.json]
 //或在组件的 .json 文件中新增如下配置
 {
-  "styleIsolation": "isolated"
+	"styleIsolation": "isolated"
 }
 ```
 
@@ -1136,9 +1136,9 @@ styleIsolation 的可选值有：
 
 ```javascript
 Component({
-  data: {
-    count: 0,
-  },
+	data: {
+		count: 0,
+	},
 });
 ```
 
@@ -1146,23 +1146,23 @@ Component({
 
 ```javascript
 Component({
-  // 组件的方法列表
-  methods: {
-    // 事件处理函数
-    addCount() {
-      this.setData({
-        count: this.data.count + 1,
-      });
-      // 通过 this 直接调用自定义方法
-      this._showCount();
-    },
-    // 自定义方法建议以 _ 开头
-    _showCount() {
-      wx.showToast({
-        title: "count:" + this.data.count,
-      });
-    },
-  },
+	// 组件的方法列表
+	methods: {
+		// 事件处理函数
+		addCount() {
+			this.setData({
+				count: this.data.count + 1,
+			});
+			// 通过 this 直接调用自定义方法
+			this._showCount();
+		},
+		// 自定义方法建议以 _ 开头
+		_showCount() {
+			wx.showToast({
+				title: "count:" + this.data.count,
+			});
+		},
+	},
 });
 ```
 
@@ -1172,15 +1172,15 @@ Component({
 
 ```javascript [index.js]
 Component({
-  properties: {
-    // 简化定义属性的方式[不需指定属性默认值时，可以使用简化方法]
-    min: Number,
-    // 完整定义属性的方式[当需要指定属性默认值时，建议使用此方式]
-    max: {
-      type: Number, //属性值的数据类型
-      value: 10, //属性默认值
-    },
-  },
+	properties: {
+		// 简化定义属性的方式[不需指定属性默认值时，可以使用简化方法]
+		min: Number,
+		// 完整定义属性的方式[当需要指定属性默认值时，建议使用此方式]
+		max: {
+			type: Number, //属性值的数据类型
+			value: 10, //属性默认值
+		},
+	},
 });
 ```
 
@@ -1204,11 +1204,11 @@ Component({
 
 ```javascript
 Component({
-  methods: {
-    addCount() {
-      this.setData({ max: this.properties.max + 1 }); // 使用 setData 修改属性的值
-    },
-  },
+	methods: {
+		addCount() {
+			this.setData({ max: this.properties.max + 1 }); // 使用 setData 修改属性的值
+		},
+	},
 });
 ```
 
@@ -1218,19 +1218,19 @@ Component({
 
 ```javascript
 Component({
-  //数据节点
-  data: {
-    n1: 0,
-    n2: 0,
-    sum: 0,
-  },
-  //数据监听节点
-  observers: {
-    //监听 n1 和 n2 数据的变化
-    "n1, n2": function (newn1, newn2) {
-      this.setData({ sum: newn1 + newn2 });
-    },
-  },
+	//数据节点
+	data: {
+		n1: 0,
+		n2: 0,
+		sum: 0,
+	},
+	//数据监听节点
+	observers: {
+		//监听 n1 和 n2 数据的变化
+		"n1, n2": function (newn1, newn2) {
+			this.setData({ sum: newn1 + newn2 });
+		},
+	},
 });
 ```
 
@@ -1238,14 +1238,14 @@ Component({
 
 ```javascript
 Component({
-  observers: {
-    "obj.a, obj.b": function (newa, newb) {
-      // 触发此监听器的 3 中情况：
-      // [为属性a赋值]使用 setData 设置 this.data.obj.a 时触发
-      // [为属性b赋值]使用 setData 设置 this.data.obj.b 时触发
-      // [直接为对象赋值]使用 setData 赋值 this.data.obj 时触发
-    },
-  },
+	observers: {
+		"obj.a, obj.b": function (newa, newb) {
+			// 触发此监听器的 3 中情况：
+			// [为属性a赋值]使用 setData 设置 this.data.obj.a 时触发
+			// [为属性b赋值]使用 setData 设置 this.data.obj.b 时触发
+			// [直接为对象赋值]使用 setData 赋值 this.data.obj 时触发
+		},
+	},
 });
 ```
 
@@ -1265,14 +1265,14 @@ observers: {
 
 ```javascript
 Component({
-  options: {
-    // 指定所有 _ 开头的数据字段为纯数据字段
-    pureDataPattern: /^_/,
-  },
-  data: {
-    a: true, // 普通数据字段
-    _b: true, // 纯数据字段
-  },
+	options: {
+		// 指定所有 _ 开头的数据字段为纯数据字段
+		pureDataPattern: /^_/,
+	},
+	data: {
+		a: true, // 普通数据字段
+		_b: true, // 纯数据字段
+	},
 });
 ```
 
@@ -1317,14 +1317,14 @@ Component({
 
 ```javascript
 Component({
-  // 推荐用法
-  lifetimes: {
-    attached() {},
-    detached() {},
-  },
-  //以下是旧式的定义方式
-  attached() {},
-  detached() {},
+	// 推荐用法
+	lifetimes: {
+		attached() {},
+		detached() {},
+	},
+	//以下是旧式的定义方式
+	attached() {},
+	detached() {},
 });
 ```
 
@@ -1344,11 +1344,11 @@ Component({
 
 ```javascript
 Component({
-  pageLifetimes: {
-    show() {},
-    hide() {},
-    resize(size) {},
-  },
+	pageLifetimes: {
+		show() {},
+		hide() {},
+		resize(size) {},
+	},
 });
 ```
 
@@ -1370,9 +1370,9 @@ Component({
 
 ```javascript
 Component({
-  options: {
-    multipleSlots: true,
-  },
+	options: {
+		multipleSlots: true,
+	},
 });
 ```
 
@@ -1385,8 +1385,8 @@ Component({
 
 <!-- 组件的使用者 -->
 <my-test1>
-  <view slot="slot1">插槽内的内容</view>
-  <text slot="slot2">插槽内的内容</text>
+	<view slot="slot1">插槽内的内容</view>
+	<text slot="slot2">插槽内的内容</text>
 </my-test1>
 ```
 
@@ -1512,11 +1512,11 @@ behaviors 是小程序中，**用于实现组件间代码共享**的特性，类
 ```javascript
 // miniprogram/behaviors/behavior.js
 module.exports = Behavior({
-  data: {
-    count: 0,
-  },
-  properties: {},
-  methods: {},
+	data: {
+		count: 0,
+	},
+	properties: {},
+	methods: {},
 });
 ```
 
@@ -1606,17 +1606,17 @@ npm install --save mobx-miniprogram mobx-miniprogram-bindings
 import { observable, action } from "mobx-miniprogram";
 
 export const store = observable({
-  //数据字段
-  numA: 1,
-  numB: 2,
-  //计算属性
-  get sum() {
-    return this.numA + this.numB;
-  },
-  //方法，用来修改 store 中的数据
-  addNumA: action(function () {
-    this.numA += 1;
-  }),
+	//数据字段
+	numA: 1,
+	numB: 2,
+	//计算属性
+	get sum() {
+		return this.numA + this.numB;
+	},
+	//方法，用来修改 store 中的数据
+	addNumA: action(function () {
+		this.numA += 1;
+	}),
 });
 ```
 
@@ -1665,25 +1665,25 @@ import { storeBindingsBehavior } from "mobx-miniprogram-bindings";
 import { store } from "./store";
 
 Component({
-  behaviors: [storeBindingsBehavior], // 添加这个 behavior
-  storeBindings: {
-    store, // 指定要绑定的 store 实例对象
-    fields: {
-      // 指定要绑定的 store 字段数据
-      numA: () => store.numA, // 绑定字段的第一种方式
-      numB: (store) => store.numB, // 绑定字段的第二种方式
-      sum: "sum", // 绑定字段的第三种方式
-    },
-    actions: {
-      //指定要绑定的方法
-      buttonTap: "update",
-    },
-  },
-  methods: {
-    myMethod() {
-      this.data.sum; // 来自于 MobX store 的字段
-    },
-  },
+	behaviors: [storeBindingsBehavior], // 添加这个 behavior
+	storeBindings: {
+		store, // 指定要绑定的 store 实例对象
+		fields: {
+			// 指定要绑定的 store 字段数据
+			numA: () => store.numA, // 绑定字段的第一种方式
+			numB: store => store.numB, // 绑定字段的第二种方式
+			sum: "sum", // 绑定字段的第三种方式
+		},
+		actions: {
+			//指定要绑定的方法
+			buttonTap: "update",
+		},
+	},
+	methods: {
+		myMethod() {
+			this.data.sum; // 来自于 MobX store 的字段
+		},
+	},
 });
 ```
 
@@ -1803,18 +1803,18 @@ postData(){
 
 ```javascript
 App({
-  //当小程序初始化完成时，会触发 onLaunch（全局只触发一次）
-  onLaunch() {
-    console.log("小程序初始化完成");
-  },
-  //当小程序启动，或从后台进入前台显示，会触发 onShow
-  onShow(opts) {
-    console.log(opts.query);
-  },
-  //当小程序从前台进入后台，会触发 onHide
-  onHide() {
-    console.log("小程序进入后台");
-  },
+	//当小程序初始化完成时，会触发 onLaunch（全局只触发一次）
+	onLaunch() {
+		console.log("小程序初始化完成");
+	},
+	//当小程序启动，或从后台进入前台显示，会触发 onShow
+	onShow(opts) {
+		console.log(opts.query);
+	},
+	//当小程序从前台进入后台，会触发 onHide
+	onHide() {
+		console.log("小程序进入后台");
+	},
 });
 ```
 
@@ -1824,11 +1824,11 @@ App({
 
 ```javascript
 Page({
-  onLoad() {}, //监听页面加载，一个页面只调用1次
-  onShow() {}, //监听页面显示
-  onReady() {}, //监听页面初次渲染完成，一个页面只调用1次
-  onHide() {}, //监听页面隐藏
-  onUnload() {}, //监听页面卸载，一个页面只调用1次
+	onLoad() {}, //监听页面加载，一个页面只调用1次
+	onShow() {}, //监听页面显示
+	onReady() {}, //监听页面初次渲染完成，一个页面只调用1次
+	onHide() {}, //监听页面隐藏
+	onUnload() {}, //监听页面卸载，一个页面只调用1次
 });
 ```
 
@@ -1922,31 +1922,31 @@ onLoad(){
 
 ```json
 {
-  "pages": [
-    // 主包的所有页面
-    "pages/index/index",
-    "pages/logs/logs"
-  ],
-  "subpackages": [
-    // 通过 subpackages 节点，声明的分包的结构
-    {
-      "root": "packageA", // 第一个分包的根目录
-      "pages": [
-        // 当前分包下，所有页面的相对存放路径
-        "packageA/pages/pageA1",
-        "packageA/pages/pageA2"
-      ]
-    },
-    {
-      "root": "packageB", // 第二个分包的根目录
-      "name": "pack2", // 分包的别名
-      "pages": [
-        // 当前分包下，所有页面的相对存放路径
-        "packageB/pages/pageB1",
-        "packageB/pages/pageB2"
-      ]
-    }
-  ]
+	"pages": [
+		// 主包的所有页面
+		"pages/index/index",
+		"pages/logs/logs"
+	],
+	"subpackages": [
+		// 通过 subpackages 节点，声明的分包的结构
+		{
+			"root": "packageA", // 第一个分包的根目录
+			"pages": [
+				// 当前分包下，所有页面的相对存放路径
+				"packageA/pages/pageA1",
+				"packageA/pages/pageA2"
+			]
+		},
+		{
+			"root": "packageB", // 第二个分包的根目录
+			"name": "pack2", // 分包的别名
+			"pages": [
+				// 当前分包下，所有页面的相对存放路径
+				"packageB/pages/pageB1",
+				"packageB/pages/pageB2"
+			]
+		}
+	]
 }
 ```
 
@@ -1960,19 +1960,19 @@ onLoad(){
 
 ```json
 {
-  "pages": ["pages/index/index", "pages/logs/logs"],
-  "subpackages": [
-    {
-      "root": "packageA",
-      "pages": ["packageA/pages/pageA1", "packageA/pages/pageA2"]
-    },
-    {
-      "root": "packageB",
-      "name": "pack2",
-      "pages": ["packageB/pages/pageB1", "packageB/pages/pageB2"],
-      "independent": true // 通过此节点，声明当前分包为“独立分包”
-    }
-  ]
+	"pages": ["pages/index/index", "pages/logs/logs"],
+	"subpackages": [
+		{
+			"root": "packageA",
+			"pages": ["packageA/pages/pageA1", "packageA/pages/pageA2"]
+		},
+		{
+			"root": "packageB",
+			"name": "pack2",
+			"pages": ["packageB/pages/pageB1", "packageB/pages/pageB2"],
+			"independent": true // 通过此节点，声明当前分包为“独立分包”
+		}
+	]
 }
 ```
 
@@ -2002,14 +2002,14 @@ onLoad(){
 
 ```json
 {
-  "preloadRule": {
-    // 分包预下载的规则
-    "pages/index/index": {
-      // 触发分包预下载的页面路径
-      "network": "all", // 表示在指定的网络模式下进行预下载
-      "packages": ["packageA"] // 表示进入页面后，预下载那些分包
-    }
-  }
+	"preloadRule": {
+		// 分包预下载的规则
+		"pages/index/index": {
+			// 触发分包预下载的页面路径
+			"network": "all", // 表示在指定的网络模式下进行预下载
+			"packages": ["packageA"] // 表示进入页面后，预下载那些分包
+		}
+	}
 }
 ```
 

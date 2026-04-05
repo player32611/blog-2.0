@@ -613,19 +613,56 @@ int main() {
 
 例题：[P1048 [NOIP 2005 普及组] 采药](https://www.luogu.com.cn/problem/P1048)
 
-::: danger 警告
+```c++
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+const int N = 1010;
 
-:::
+int t,m;
+int f[N][N];
+int a[N];
+int b[N];
+
+int main(){
+    cin>>t>>m;
+    for(int i =1;i<=m;i++)cin>>a[i]>>b[i];
+    for(int i=1;i<=m;i++){
+        for(int j=1;j<=t;j++){
+            f[i][j]=f[i-1][j];
+            if(j-a[i]>=0)f[i][j]=max(f[i][j],f[i-1][j-a[i]]+b[i]);
+        }
+    }
+    cout<<f[m][t]<<endl;
+}
+```
 
 例题：[P1164 小A点菜](https://www.luogu.com.cn/problem/P1164)
 
-::: danger 警告
+```c++
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+const int N = 110;
+const int M = 1e5+10;
 
-:::
+int n,m;
+int f[N][M];
+int a[N];
+
+int main(){
+    cin>>n>>m;
+    for(int i = 1;i <= n;i++)cin>>a[i];
+    for(int i = 0;i <= n;i++)f[i][0] = 1;
+    for(int i = 1;i <= n;i++){
+        for(int j = 1;j <= m;j++){
+            f[i][j] += f[i-1][j];
+            if(j>=a[i])f[i][j] += f[i-1][j-a[i]];
+        }
+    }
+    cout<<f[n][m]<<endl;
+}
+```
 
 例题：[P2946 [USACO09MAR] Cow Frisbee Team S](https://www.luogu.com.cn/problem/P2946)
 
