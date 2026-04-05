@@ -13,7 +13,7 @@ import Button from "~/components/ui/Button.vue";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-const { useBlogContent } = useBlogStore();
+const { useBlogContent, setBlogInstance, changeBlogMenuState } = useBlogStore();
 const maskRef = ref<BlogMaskInstance | null>(null);
 const menuRef = ref<BlogMenuInstance | null>(null);
 const page = useBlogContent();
@@ -25,10 +25,12 @@ onMounted(() => {
 		content: ".blog_content_container",
 		smooth: 1,
 	});
+	setBlogInstance(maskRef.value, menuRef.value);
 });
 
 onUnmounted(() => {
 	smoother.value?.kill();
+	setBlogInstance(null, null);
 });
 </script>
 
@@ -48,30 +50,17 @@ onUnmounted(() => {
 		<BlogMask ref="maskRef" />
 		<Button
 			:text="'back'"
-			:icon="'&#xeaf1;'"
+			:icon="'&#xeb09;'"
 			:size="'small'"
 			@click="navigateTo('/')"
-			:style="{
-				position: 'fixed',
-				left: '20px',
-				top: '20px',
-			}"
+			:style="{ position: 'fixed', left: '20px', top: '20px' }"
 		></Button>
 		<Button
 			:text="'menu'"
-			:icon="'&#xeaf1;'"
+			:icon="'&#xeaf8;'"
 			:size="'small'"
-			@click="
-				() => {
-					maskRef?.changeMask();
-					menuRef?.changeMenu();
-				}
-			"
-			:style="{
-				position: 'fixed',
-				right: '20px',
-				top: '20px',
-			}"
+			@click="changeBlogMenuState"
+			:style="{ position: 'fixed', right: '20px', top: '20px' }"
 		></Button>
 	</div>
 </template>

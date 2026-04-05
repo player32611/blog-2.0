@@ -1,4 +1,4 @@
-import type { BlogCollections } from "~/types/store";
+import type { BlogCollections } from "~/types/config";
 
 /**
  * 根据博客集合标识获取对应的中文标题

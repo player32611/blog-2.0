@@ -1,4 +1,5 @@
-import type { BlogCollections, BlogContent } from "./store";
+import type { BlogCollections } from "./config";
+import type { BlogContent, MusicInfo } from "./store";
 
 export interface BlogMaskInstance {
 	changeMask: () => void;
@@ -35,6 +36,14 @@ export interface ItemParams {
 	x: number;
 	y: number;
 	angle: number;
+}
+
+export interface MusicFolderParams {
+	name: string;
+}
+
+export interface MusicItemParams {
+	info: MusicInfo;
 }
 
 export interface ButtonParams {

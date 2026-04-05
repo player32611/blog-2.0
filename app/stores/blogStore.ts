@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import type { BlogMaskInstance, BlogMenuInstance } from "~/types/components";
 import type {
 	BlogCollections,
 	BlogContent,
@@ -10,6 +11,8 @@ import type {
 export const useBlogStore = defineStore("blog", (): BlogState & BlogGetter & BlogActions => {
 	const activeBlogCollection = ref<BlogCollections>("front_end");
 	const activeBlogContent = ref<BlogContent>("html");
+	const maskInstance = ref<BlogMaskInstance | null>(null);
+	const menuInstance = ref<BlogMenuInstance | null>(null);
 
 	const activePath = computed(() => {
 		return `/${activeBlogCollection.value}/${activeBlogContent.value}`;
@@ -51,12 +54,28 @@ export const useBlogStore = defineStore("blog", (): BlogState & BlogGetter & Blo
 		);
 		return page;
 	}
+
+	function setBlogInstance(mask: BlogMaskInstance | null, menu: BlogMenuInstance | null) {
+		maskInstance.value = mask;
+		menuInstance.value = menu;
+	}
+
+	function changeBlogMenuState() {
+		if (maskInstance.value && menuInstance.value) {
+			maskInstance.value.changeMask();
+			menuInstance.value.changeMenu();
+		}
+	}
 	return {
 		activeBlogCollection,
 		activeBlogContent,
+		maskInstance,
+		menuInstance,
 		activePath,
 		setActiveBlogCollection,
 		setActiveBlogContent,
 		useBlogContent,
+		setBlogInstance,
+		changeBlogMenuState,
 	};
 });

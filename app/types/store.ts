@@ -1,10 +1,13 @@
-export type BlogCollections = "front_end" | "back_end" | "gms2" | "algorithm" | "deep_learning";
+import type { BlogCollections, Theme } from "./config";
+import type { BlogMaskInstance, BlogMenuInstance } from "./components";
 
 export type BlogContent = string;
 
 export type BlogState = {
 	activeBlogCollection: Ref<BlogCollections>;
 	activeBlogContent: Ref<BlogContent>;
+	maskInstance: Ref<BlogMaskInstance | null>;
+	menuInstance: Ref<BlogMenuInstance | null>;
 };
 
 export type BlogGetter = {
@@ -15,6 +18,8 @@ export type BlogActions = {
 	setActiveBlogCollection: (newCollection: BlogCollections) => void;
 	setActiveBlogContent: (newContent: BlogContent) => void;
 	useBlogContent: () => Ref<any>;
+	setBlogInstance: (mask: BlogMaskInstance | null, menu: BlogMenuInstance | null) => void;
+	changeBlogMenuState: () => void;
 };
 
 /**
@@ -23,16 +28,18 @@ export type BlogActions = {
 export interface MusicInfo {
 	/** 文件名（不带扩展名） */
 	name: string;
-	/** 文件路径 */
 	path: string;
+	folder: string;
 }
 
 export type SoundState = {
 	effectsVolume: Ref<number>;
-	musicVolume: Ref<number>;
+	musicAudio: Ref<HTMLAudioElement | null>;
 	musicCurrent: Ref<MusicInfo | null>;
-	musicList: Ref<MusicInfo[]>;
-	isPlaying: Ref<boolean>;
+	musicListCurrent: Ref<MusicInfo[]>;
+	musicListNameCurrent: Ref<string | null>;
+	musicVolume: Ref<number>;
+	playingMusic: Ref<boolean>;
 };
 
 export type SoundGetter = {};
@@ -40,14 +47,13 @@ export type SoundGetter = {};
 export type SoundActions = {
 	setEffectsVolume: (volume: number) => void;
 	setMusicVolume: (volume: number) => void;
-	setMusicCurrent: (music: MusicInfo) => void;
-	setMusicList: (list: MusicInfo[]) => void;
-	setIsPlaying: (playing: boolean) => void;
-	previousMusic: () => void;
-	nextMusic: () => void;
+	initAudio: (music: MusicInfo) => void;
+	play: (music: MusicInfo) => void;
+	pause: () => void;
+	toggle: () => void;
+	previous: () => void;
+	next: () => void;
 };
-
-export type Theme = "undertale" | "touhou";
 
 export type ThemeState = {
 	theme: Ref<Theme>;

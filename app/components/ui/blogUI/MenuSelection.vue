@@ -2,11 +2,12 @@
 import type { BlogMenuSelectionParams } from "~/types/components";
 
 const { collections, contentPath, contentTitle } = defineProps<BlogMenuSelectionParams>();
-const { setActiveBlogCollection, setActiveBlogContent } = useBlogStore();
+const { setActiveBlogCollection, setActiveBlogContent, changeBlogMenuState } = useBlogStore();
 
 const handleClick = () => {
 	setActiveBlogCollection(collections);
 	setActiveBlogContent(contentPath);
+	changeBlogMenuState();
 };
 </script>
 

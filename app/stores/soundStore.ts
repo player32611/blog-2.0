@@ -2,73 +2,131 @@ import { defineStore } from "pinia";
 import type { MusicInfo } from "@/types/store";
 import type { SoundState, SoundGetter, SoundActions } from "@/types/store";
 
+/**
+  创建并返回一个用于管理音效与背景音乐状态的 Pinia store。
+  该 store 提供了对音效音量、背景音乐播放器实例、当前播放的音乐信息、
+  音乐播放列表及其名称、音乐音量以及播放状态的响应式管理能力。
+  @returns 包含音效状态（SoundState）、获取器（SoundGetter）和操作方法（SoundActions）的对象 
+**/
 export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter & SoundActions => {
-	// 状态
-	const effectsVolume = ref<number>(0.7);
-	const musicVolume = ref<number>(0.7);
-	const musicCurrent = ref<MusicInfo | null>(null);
-	const musicList = ref<MusicInfo[]>([]);
-	const isPlaying = ref<boolean>(false);
+	const effectsVolume = ref<number>(0.7); // 音效音量
+	const musicAudio = ref<HTMLAudioElement | null>(null); // 音乐播放器
+	const musicCurrent = ref<MusicInfo | null>(null); // 当前音乐信息
+	const musicListCurrent = ref<MusicInfo[]>([]); // 当前音乐播放列表
+	const musicListNameCurrent = ref<string | null>(null); // 当前音乐播放列表名称
+	const musicVolume = ref<number>(0.7); // 音乐音量
+	const playingMusic = ref<boolean>(false); // 音乐播放状态
 
-	// 设置方法
+	/**
+    设置音效音量。
+    @param volume - 音效音量值，将被限制在 [0, 1] 范围内。0 表示静音，1 表示最大音量。
+  **/
 	function setEffectsVolume(volume: number) {
 		effectsVolume.value = Math.max(0, Math.min(1, volume));
 	}
 
+	/**
+    设置背景音乐的音量。
+    该函数将音量值限制在 [0, 1] 范围内，并同步更新全局音乐音量状态和音频元素的音量（如果存在）。
+    @param volume - 目标音量值，预期范围为 0（静音）到 1（最大音量）。超出范围的值将被自动裁剪。 
+  **/
 	function setMusicVolume(volume: number) {
 		musicVolume.value = Math.max(0, Math.min(1, volume));
+		if (musicAudio.value) musicAudio.value.volume = volume;
 	}
 
-	function setMusicCurrent(music: MusicInfo) {
-		musicCurrent.value = music;
-	}
+	function initAudio(music: MusicInfo) {
+		if (!musicAudio.value) {
+			musicAudio.value = new Audio(music.path);
+			musicAudio.value.volume = musicVolume.value;
+		} else if (extractPathPart(musicAudio.value.src) !== music.path) {
+			musicAudio.value.src = music.path;
+			musicAudio.value.load();
+		}
 
-	function setMusicList(list: MusicInfo[]) {
-		musicList.value = list;
-	}
-
-	function setIsPlaying(playing: boolean) {
-		isPlaying.value = playing;
-	}
-
-	function previousMusic() {
-		if (musicList.value.length === 0) return;
-
-		const index = musicList.value.indexOf(musicCurrent.value!);
-		if (index === -1 && musicList.value.length > 0) {
-			musicCurrent.value = musicList.value[0]!;
-		} else {
-			musicCurrent.value =
-				musicList.value[(index - 1 + musicList.value.length) % musicList.value.length]!;
+		if (musicListNameCurrent.value !== music.folder) {
+			musicListNameCurrent.value = music.folder;
+			musicListCurrent.value = getMusicsByFolder(music.folder);
 		}
 	}
 
-	function nextMusic() {
-		if (musicList.value.length === 0) return;
+	function play(music: MusicInfo) {
+		initAudio(music);
 
-		const index = musicList.value.indexOf(musicCurrent.value!);
-		if (index === -1) {
-			musicCurrent.value = musicList.value[0]!;
+		if (musicAudio.value) {
+			if (musicCurrent.value !== music) {
+				musicCurrent.value = music;
+			}
+			musicAudio.value.play();
+			playingMusic.value = true;
+		}
+	}
+
+	function pause() {
+		if (musicAudio.value) {
+			musicAudio.value.pause();
+			playingMusic.value = false;
+		}
+	}
+
+	function toggle() {
+		if (!musicCurrent.value || !musicAudio.value) return;
+		console.log(musicListCurrent.value);
+		if (playingMusic.value) {
+			pause();
 		} else {
-			musicCurrent.value = musicList.value[(index + 1) % musicList.value.length]!;
+			play(musicCurrent.value);
+		}
+	}
+
+	function previous() {
+		if (musicListCurrent.value.length === 0) return;
+		if (!musicCurrent.value) return;
+		const index = musicListCurrent.value.indexOf(musicCurrent.value);
+		if (index === -1 && musicListCurrent.value.length > 0 && musicListCurrent.value[0]) {
+			musicCurrent.value = musicListCurrent.value[0];
+		} else {
+			musicCurrent.value =
+				musicListCurrent.value[
+					(index - 1 + musicListCurrent.value.length) % musicListCurrent.value.length
+				]!;
+		}
+		if (musicCurrent.value) {
+			initAudio(musicCurrent.value);
+			if (playingMusic.value && musicAudio.value) musicAudio.value.play();
+		}
+	}
+
+	function next() {
+		if (musicListCurrent.value.length === 0) return;
+		if (!musicCurrent.value) return;
+		const index = musicListCurrent.value.indexOf(musicCurrent.value!);
+		if (index === -1 && musicListCurrent.value.length > 0 && musicListCurrent.value[0]) {
+			musicCurrent.value = musicListCurrent.value[0];
+		} else {
+			musicCurrent.value = musicListCurrent.value[(index + 1) % musicListCurrent.value.length]!;
+		}
+		if (musicCurrent.value) {
+			initAudio(musicCurrent.value);
+			if (playingMusic.value && musicAudio.value) musicAudio.value.play();
 		}
 	}
 
 	return {
-		// 状态
 		effectsVolume,
-		musicVolume,
+		musicAudio,
 		musicCurrent,
-		musicList,
-		isPlaying,
-
-		// 方法
+		musicListCurrent,
+		musicListNameCurrent,
+		musicVolume,
+		playingMusic,
 		setEffectsVolume,
 		setMusicVolume,
-		setMusicCurrent,
-		setMusicList,
-		setIsPlaying,
-		previousMusic,
-		nextMusic,
+		initAudio,
+		play,
+		pause,
+		toggle,
+		previous,
+		next,
 	};
 });

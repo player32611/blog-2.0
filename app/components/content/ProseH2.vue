@@ -1,7 +1,7 @@
 <template>
-  <h2 tabindex="-1">
-    <slot></slot>
-  </h2>
+	<h2 tabindex="-1">
+		<slot></slot>
+	</h2>
 </template>
 
-<style scoped lang='scss'></style>
+<style scoped lang="scss"></style>

@@ -3,17 +3,17 @@ import { useSoundEffect } from "@/composables/useSoundEffect";
 import { useThemeStore } from "@/stores/themeStore";
 import { useSoundStore } from "@/stores/soundStore";
 import type { ButtonParams } from "@/types/components";
-import { ref } from "vue";
 
-const hasInteracted = ref(false);
 const { theme } = useThemeStore();
 const { effectsVolume } = useSoundStore();
 const { text, size, icon, onClick, style } = defineProps<ButtonParams>();
 
 const undertaleSound = useSoundEffect("/sounds/effects/undertale-button.wav");
 // const touhouSound = useSoundEffect('/sounds/touhou-button.mp3')
-const handleMouseEnter = () => {
-	if (hasInteracted) {
+
+const handleClick = () => {
+	if (onClick) {
+		onClick();
 		if (effectsVolume) {
 			if (theme === "undertale") undertaleSound.play();
 			// else
@@ -21,25 +21,10 @@ const handleMouseEnter = () => {
 		}
 	}
 };
-
-const handleClick = () => {
-	// 标记用户已交互
-	if (!hasInteracted.value) {
-		hasInteracted.value = true;
-	}
-	// 执行原始点击处理
-	if (onClick) onClick();
-};
 </script>
 
 <template>
-	<button
-		:class="`${theme} ${size}`"
-		@click="handleClick"
-		@mouseenter="handleMouseEnter"
-		:style="style"
-		draggable="false"
-	>
+	<button :class="`${theme} ${size}`" @click="handleClick" :style="style" draggable="false">
 		<div class="container">
 			<span class="icon">{{ icon }}</span>
 			<span v-for="(char, index) in text.toUpperCase().split('')" :key="index">{{ char }}</span>

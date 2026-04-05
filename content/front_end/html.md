@@ -1,8 +1,10 @@
 # HTML
 
-::: danger 警告
+:: danger 警告
+
 该页面尚未完工!
-:::
+
+::
 
 ::: details 目录
 
@@ -53,10 +55,10 @@ dl标签定义了描述列表（又称定义列表，definition list），与dt�
 
 ```html
 <dl>
-  <dt>计算机</dt>
-  <dd>用来计算的仪器 ... ...</dd>
-  <dt>显示器</dt>
-  <dd>以视觉方式显示信息的装置 ... ...</dd>
+	<dt>计算机</dt>
+	<dd>用来计算的仪器 ... ...</dd>
+	<dt>显示器</dt>
+	<dd>以视觉方式显示信息的装置 ... ...</dd>
 </dl>
 ```
 
@@ -66,8 +68,8 @@ form标签用于为接收用户输入创建 HTML 表单，元素可以包含以�
 
 ```html
 <form>
-  <label></label>
-  <input />
+	<label></label>
+	<input />
 </form>
 ```
 
@@ -89,8 +91,8 @@ ol标签定义有序列表，有序列表可以是数字或字母顺序。使用
 
 ```html
 <ol>
-  <li>有序</li>
-  <li>列表</li>
+	<li>有序</li>
+	<li>列表</li>
 </ol>
 ```
 
@@ -100,10 +102,10 @@ select元素用于创建下拉列表，使用option标签定义下拉列表中�
 
 ```html
 <select>
-  <option></option>
-  <option></option>
-  <option></option>
-  <option></option>
+	<option></option>
+	<option></option>
+	<option></option>
+	<option></option>
 </select>
 ```
 
@@ -123,14 +125,14 @@ table标签定义了 HTML 表格。
 
 ```html
 <table>
-  <tr>
-    <th>月份</th>
-    <th>储蓄</th>
-  </tr>
-  <tr>
-    <td>一月</td>
-    <td>￥3400</td>
-  </tr>
+	<tr>
+		<th>月份</th>
+		<th>储蓄</th>
+	</tr>
+	<tr>
+		<td>一月</td>
+		<td>￥3400</td>
+	</tr>
 </table>
 ```
 
@@ -138,26 +140,26 @@ HTML 表格还可以包含以下元素：caption、colgroup、thead、tfoot、tb
 
 ```html
 <table>
-  <caption></caption>
-  <thead>
-    <tr>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-  </tbody>
+	<caption></caption>
+	<thead>
+		<tr>
+			<th></th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</tbody>
 </table>
 ```
 
@@ -175,9 +177,9 @@ ul标签定义无序（带项目符号）列表，使用li标签作为列表的�
 
 ```html
 <ul>
-  <li></li>
-  <li></li>
-  <li></li>
+	<li></li>
+	<li></li>
+	<li></li>
 </ul>
 ```
 

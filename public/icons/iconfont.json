@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "5387538",
+      "name": "列表",
+      "font_class": "liebiao",
+      "unicode": "eaf8",
+      "unicode_decimal": 60152
+    },
+    {
+      "icon_id": "5387584",
+      "name": "箭头_向左",
+      "font_class": "jiantou_xiangzuo",
+      "unicode": "eb09",
+      "unicode_decimal": 60169
+    },
+    {
+      "icon_id": "18267941",
+      "name": "全领域规模",
+      "font_class": "quanlingyuguimo",
+      "unicode": "e994",
+      "unicode_decimal": 59796
+    },
+    {
       "icon_id": "5387521",
       "name": "菜单",
       "font_class": "caidan",

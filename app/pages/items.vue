@@ -8,14 +8,10 @@ import Button from "~/components/ui/Button.vue";
 		<ItemContainer />
 		<Button
 			:text="'back'"
-			:icon="'&#xeaf1;'"
+			:icon="'&#xeb09;'"
 			:size="'small'"
 			@click="navigateTo('/')"
-			:style="{
-				position: 'fixed',
-				left: '20px',
-				top: '20px',
-			}"
+			:style="{ position: 'fixed', left: '20px', top: '20px' }"
 		></Button>
 	</div>
 </template>
