@@ -1,10 +1,13 @@
 # 微信小程序
 
-::: details 目录
+::detail
 
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## 起步
 
@@ -213,13 +216,13 @@ sitemap 的索引提示默认是开启的，如需要关闭 sitemap 的索引提
 
 如果某些小程序页面想要拥有特殊的窗口表现，此时，页面级别的 `.json` 配置文件，就可以实现这种需求。
 
-::: warning 注意
+::warning
 
 - 当页面配置于全局配置冲突时，根据就近原则，最终的效果以页面配置为准。
 
 - 页面配置文件中关于 **tabBar** 配置项，不包含在 **window** 配置项中。
 
-:::
+::
 
 ## 组件
 
@@ -261,11 +264,11 @@ sitemap 的索引提示默认是开启的，如需要关闭 sitemap 的索引提
 
 **scroll-x**:允许横向滚动
 
-::: warning 警告
+::warning
 
 滚动区域高度(宽度)必须设置，否则滚动效果无效
 
-:::
+::
 
 ### swiper 和 swiper-item 组件的基本使用
 
@@ -450,11 +453,11 @@ btnTapHandler(e){//按钮的 tap 事件处理函数
 |    touches     |   Array    | 触摸事件，当前停留在屏幕中的触摸点信息的数组 |
 | changedTouches |   Array    |     触摸事件，当前变化的触摸点信息的数组     |
 
-::: tip 提示
+::tip
 
 **target** 是触发该事件的源头组件，而 **currentTarget** 则是当前事件所绑定的组件。
 
-:::
+::
 
 ### 数据修改
 
@@ -539,11 +542,11 @@ inputHandler(e:any){
 </block>
 ```
 
-::: tip 提示
+::tip
 
 `block` 并不是一个组件，它只是一个包裹性质的容器，不会在页面中做任何渲染。
 
-:::
+::
 
 直接使用 **hidden** 也能控制元素的显示与隐藏
 
@@ -551,13 +554,16 @@ inputHandler(e:any){
 <view hidden="{{condition}}">条件为真时渲染</view>
 ```
 
-::: info **wx:if** 与 **hidden** 的对比
+::detail
 
+#title
+**wx:if** 与 **hidden** 的对比
+#default
 **wx:if**以动态创建的移除元素的方式，控制元素的展示与隐藏；**hidden** 以切换样式的方式(display:none/block;)，控制元素的显示与隐藏。
 
 频繁切换时，建议使用 **hidden**；控制条件复杂时，建议使用 **wx:if** 搭配 **wx:elif**、**wx:else** 进行展示与隐藏的切换。
 
-:::
+::
 
 ### 列表渲染
 
@@ -570,16 +576,13 @@ inputHandler(e:any){
 使用 **wx:for-index** 可以指定**当前循环项的索引**的变量名；使用 **wx:for-item** 可以指定**当前项**的变量名。
 
 ```html
-<view wx:for="{{array}}" wx:for-index="idx" wx:for-item="itemName">
-	索引是：{{idx}} 当前项是：{{itemName}}
-</view>
+<view wx:for="{{array}}" wx:for-index="idx" wx:for-item="itemName"> 索引是：{{idx}} 当前项是：{{itemName}} </view>
 ```
 
 小程序在实现列表渲染时，建议为渲染出来的列表项指定唯一的 **key** 值，从而提高渲染的效率
 
 ```html
-<view wx:for="{{array}}" wx:key="id">使用数组项的id属性作为key</view>
-<view wx:for="{{array}}" wx:key="index">使用数组项的索引作为key</view>
+<view wx:for="{{array}}" wx:key="id">使用数组项的id属性作为key</view> <view wx:for="{{array}}" wx:key="index">使用数组项的索引作为key</view>
 ```
 
 ## WXSS 模板样式
@@ -600,11 +603,11 @@ rpx (responsive pixel)是微信小程序独有的，用来解决屏适配的尺�
 
 rpx 的实现原理非常简单：鉴于不同设备屏幕的大小不同，为了实现屏幕的自动适配，rpx 把所有设备的屏幕在宽度上等分为 750 份(即：当前屏幕的总宽度为 750rpx)。在较小的设备上，1rpx 所代表的宽度较小；在较大的设备上，1rpx 所代表的宽度较大。
 
-::: tip 提示
+::tip
 
 官方建议：开发微信小程序时，设计师可以用 iPhone6 作为视觉稿的标准。在 iPhone6 上如果要绘制宽 100px，高 20px 的盒子，换算成 rpx 单位，宽高分别为 200rpx 和 40rpx。
 
-:::
+::
 
 ### 样式导入
 
@@ -624,13 +627,13 @@ rpx 的实现原理非常简单：鉴于不同设备屏幕的大小不同，为�
 
 在页面的 `.wxss` 文件中定义的样式为局部样式，只作用于当前页面。
 
-::: warning 注意
+::warning
 
 - 当局部样式和全局样式冲突时，根据就近原则，局部样式会覆盖全局样式
 
 - 当局部样式的权重大于或等于全局样式的权重时，才会覆盖全局的样式
 
-:::
+::
 
 ## WXS 脚本
 
@@ -693,7 +696,7 @@ module.exports = {
 <wxs src="../../utils/tools.wxs" module="m2"></wxs>
 ```
 
-::: warning 注意
+::warning
 
 在 wxs 中定义的函数不能作为组件的事件回调函数。例如，下面的用法是错误的：
 
@@ -701,9 +704,9 @@ module.exports = {
 <button bind:tap="m2.toLower">按钮</button>
 ```
 
-:::
+::
 
-::: warning 注意
+::warning
 
 wxs 的运行环境和其它的 JavaScript 代码是隔离的。体现在如下两个方面：
 
@@ -711,15 +714,18 @@ wxs 的运行环境和其它的 JavaScript 代码是隔离的。体现在如下�
 
 - wxs 不能调用小程序提供的 API
 
-:::
+::
 
-::: details wxs 的优点
+::detail
 
-- 在 iOS 设备上，小程序内的 WXS 会比 JavaScript 代码快 2~20 倍
+#title
+wxs 的优点
+#default
+在 iOS 设备上，小程序内的 WXS 会比 JavaScript 代码快 2~20 倍
 
-- 在 android 设备上，二者的运行效率无差异
+在 android 设备上，二者的运行效率无差异
 
-:::
+::
 
 ## 页面导航
 
@@ -786,11 +792,11 @@ gotoLogs(){
 <navigator url="/pages/hidden/hidden" open-type="navigate">点击跳转</navigator>
 ```
 
-::: warning 注意
+::warning
 
 为了简便，在导航到非 tabBar 页面时，**open-type=navigate** 属性可以省略
 
-:::
+::
 
 或是调用 **wx.navigateTo()** 方法，可以跳转到非 tabBar 页面。其中 Object 参数对象的属性列表如下：
 
@@ -829,11 +835,11 @@ goToHidden(){
 <navigator open-type="navigateBack" delta="1">返回</navigator>
 ```
 
-::: warning 注意
+::warning
 
 为了简便，如果只是后退到上一页面，则可以省略 **delta** 属性，因为其默认值就是 1。
 
-:::
+::
 
 或是调用 **wx.navigateBack()** 方法，可以返回上一页面或多级页面。其中 Object 参数对象可选的属性列表如下：
 
@@ -971,13 +977,13 @@ onReachBottom() {
 
 **tabBar** 是移动端应用常见的页面效果，用于实现多页面的快速切换。小程序中通常将其分为底部 tabBar 和顶部 tabBar
 
-::: warning 注意
+::warning
 
 - tabBar 中只能配置最少 2 个、最多 5 个 tab 页签
 
 - 当渲染顶部 tabBar 时，不显示 icon，只显示文本
 
-:::
+::
 
 ### tabBar 的 6 个组成部分
 
@@ -1052,11 +1058,11 @@ onReachBottom() {
 
 3.键入组件的名称之后回车，会自动生成对应的 4 个文件，后缀名分别为`.js`、`.json`、`.wxml`、`.wxss`
 
-::: warning 注意
+::warning
 
 为了保证目录结构的清晰，建议把不同的组件，存放到单独目录中
 
-:::
+::
 
 ### 引用组件
 
@@ -1090,7 +1096,7 @@ onReachBottom() {
 
 默认情况下，自定义组件的样式只对当前组件生效，不会影响到组件之外的 UI 结构。
 
-::: warning 注意
+::warning
 
 - `app.wxss` 中的全局样式对组件无效
 
@@ -1098,7 +1104,7 @@ onReachBottom() {
 
 **建议**: 在组件和引用组件的页面中建议使用 class 选择器，不要使用 id、属性、标签选择器！
 
-:::
+::
 
 但有时，我们希望在外界能够控制组件内部的样式，此时，可以通过 **styleIsolation** 修改组件的样式隔离选项，用法如下：
 
@@ -1190,15 +1196,18 @@ Component({
 
 :::
 
-::: tip **data** 和 **properties** 的区别
+::detail
 
+#title
+**data** 和 **properties** 的区别
+#default
 在小程序的组件中，properties 属性和 data 数据的用法相同，它们都是可读可写的，只不过：
 
-- data 更倾向于**存储组件的私有数据**
+data 更倾向于**存储组件的私有数据**
 
-- properties 更倾向于**存储外界传递到组件中的数据**
+properties 更倾向于**存储外界传递到组件中的数据**
 
-:::
+::
 
 由于 **data 数据** 和 **properties 属性** 在本质上没有任何区别，因此 properties 属性的只也可以用于页面渲染，或使用 **setData()** 为 properties 中的属性重新赋值，示例代码如下：
 
@@ -1289,29 +1298,41 @@ Component({
 | **detached** |    **无**    |   **在组件实例被从页面节点树移除时执行**   |
 |    error     | Object Error |         每当组件方法抛出错误时执行         |
 
-::: tip created 生命周期函数
+::detail
 
-- 不能调用 setData()
+#title
+created 生命周期函数
+#default
 
-- 通常在这个生命周期函数中，只应该用于给组件的 this 添加一些自定义的属性字段
+不能调用 `setData()`
 
-:::
+通常在这个生命周期函数中，只应该用于给组件的 this 添加一些自定义的属性字段
 
-::: tip attached 生命周期函数
+::
+
+::detail attached 生命周期函数
+
+#title
+attached 生命周期函数
+#default
 
 - 此时，this.data 已被初始化完毕
 
 - 绝大多数初始化的工作可以在这个时机进行(例如发请求获取初始数据)
 
-:::
+::
 
-::: tip detached 生命周期函数
+::detail
 
-- 退出一个页面时，会触发页面内每个自定义组件的 detached 生命周期函数
+#title
+detached 生命周期函数
+#default
 
-- 此时适合做一些清理性质的工作
+退出一个页面时，会触发页面内每个自定义组件的 detached 生命周期函数
 
-:::
+此时适合做一些清理性质的工作
+
+::
 
 生命周期函数可以直接定义在 Component 构造器的第一级参数中，也可以在 **lifetimes** 字段内进行声明(**这是推荐的方式，其优先级最高**)。示例代码如下：
 
@@ -1434,11 +1455,11 @@ properties: {
 
 :::
 
-::: warning 注意
+::warning
 
 此时在子组件中修改子组件接受到的数据不会同步到父组件中!
 
-:::
+::
 
 ---
 
@@ -1552,11 +1573,11 @@ behavior 中所有可用的节点包括：
 |     moved      |   Function   |    否    |    生命周期函数     |
 |    detached    |   Function   |    否    |    生命周期函数     |
 
-::: tip 同名字段的覆盖和组合规则
+::tip
 
-参考小程序官方文档给出的说明：https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/behaviors.html
+关于同名字段的覆盖和组合规则，请参考小程序官方文档给出的说明：https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/behaviors.html
 
-:::
+::
 
 ### 组件和页面的区别
 
@@ -1654,8 +1675,7 @@ Page({
 页面中可以直接使用 store 中的数据或方法。
 
 ```html
-<view>store里的numA:{{numA}}、numB:{{numB}}、sum:{{sum}}</view>
-<button bind:tap="addStoreNumA">store里的numA++</button>
+<view>store里的numA:{{numA}}、numB:{{numB}}、sum:{{sum}}</view> <button bind:tap="addStoreNumA">store里的numA++</button>
 ```
 
 ### 将 Store 中的成员绑定到组件中
@@ -1695,7 +1715,7 @@ Component({
 
 ## 网络请求
 
-::: warning 注意
+::warning
 
 出于安全性方面的考虑，小程序官方对数据接口的请求做出了如下两个限制：
 
@@ -1703,7 +1723,7 @@ Component({
 
 - 必须将接口的域名添加到信任列表中
 
-:::
+::
 
 ### 配置 request 合法域名
 
@@ -1711,7 +1731,7 @@ Component({
 
 2.在管理->开发管理->开发设置->服务器域名
 
-::: warning 注意
+::warning
 
 - 域名只支持 https 协议
 
@@ -1721,17 +1741,17 @@ Component({
 
 - 服务器域名一个月内最多可申请 5 次修改
 
-:::
+::
 
 ### 跳过 request 合法域名校验
 
 如果后端程序员仅仅提供了 http 协议的接口、暂时没有提供 https 协议的接口。此时为了不耽误开发的进度，我们可以在微信开发者工具中，临时开启 [**不校验合法域名、web-view（业务域名）、TLS 版本以及 HTTPS 证书**] 选项，跳过 request 合法域名的校验。
 
-::: warning 注意
+::warning
 
 跳过 request 合法域名校验的选项，仅限在开发与调试阶段使用！
 
-:::
+::
 
 ### 关于跨域与 Ajax 的说明
 
@@ -1976,23 +1996,26 @@ onLoad(){
 }
 ```
 
-::: tip 独立分包和普通分包的区别
+::detail
 
+#title
+独立分包和普通分包的区别
+#default
 最主要的区别：**是否依赖于主包才能运行**
 
 - 普通分包必须依赖于主包才能运行
 
 - 独立分包可以在不下载主包的情况下，独立运行
 
-:::
+::
 
-::: warning 注意
+::warning
 
 - 一个小程序中可以有多个独立分包
 
 - 独立分包中不能引用主包内的公共资源
 
-:::
+::
 
 ### 分包预下载
 
@@ -2013,11 +2036,11 @@ onLoad(){
 }
 ```
 
-::: tip 限制
+::tip
 
 同一个分包中的页面享有**共同的预下载大小限额 2M**
 
-:::
+::
 
 ## uni-app
 

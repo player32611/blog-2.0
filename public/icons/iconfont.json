@@ -6,18 +6,46 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "5387514",
+      "name": "帮助",
+      "font_class": "bangzhu",
+      "unicode": "eaef",
+      "unicode_decimal": 60143
+    },
+    {
+      "icon_id": "5387523",
+      "name": "关于",
+      "font_class": "guanyu",
+      "unicode": "eaf2",
+      "unicode_decimal": 60146
+    },
+    {
+      "icon_id": "5387535",
+      "name": "警告",
+      "font_class": "jinggao",
+      "unicode": "eaf7",
+      "unicode_decimal": 60151
+    },
+    {
+      "icon_id": "5387551",
+      "name": "提示",
+      "font_class": "tishi",
+      "unicode": "eafe",
+      "unicode_decimal": 60158
+    },
+    {
+      "icon_id": "5387581",
+      "name": "按钮_箭头向左",
+      "font_class": "anniu_jiantouxiangzuo",
+      "unicode": "eb06",
+      "unicode_decimal": 60166
+    },
+    {
       "icon_id": "5387538",
       "name": "列表",
       "font_class": "liebiao",
       "unicode": "eaf8",
       "unicode_decimal": 60152
-    },
-    {
-      "icon_id": "5387584",
-      "name": "箭头_向左",
-      "font_class": "jiantou_xiangzuo",
-      "unicode": "eb09",
-      "unicode_decimal": 60169
     },
     {
       "icon_id": "18267941",

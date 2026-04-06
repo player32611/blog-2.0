@@ -1,14 +1,19 @@
 # JavaScript
 
-::: danger 警告
+::danger
+
 该页面尚未完工!
-:::
 
-::: details 目录
+::
 
+::detail
+
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## 什么是 JavaScript
 
@@ -74,9 +79,11 @@ var x = "中国是瓷器的故乡，因此 china 与\"China（中国）\"同名�
 
 **lastIndexOf()** 方法 : 返回指定文本在字符串中最后一次出现的索引
 
-::: info 信息
+::tip
+
 如果未找到文本， indexOf() 和 lastIndexOf() 均返回 -1。
-:::
+
+::
 
 **search()** 方法 : 搜索特定值的字符串，并返回匹配的位置
 
@@ -280,11 +287,11 @@ delete person.age;   // 或 delete person["age"];
 
 CommonJS 和 ES 模块（ESM）是 JavaScript 的两种模块系统，它们在语法、加载时机、特性等方面有明显区别。
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## TypeScript
 

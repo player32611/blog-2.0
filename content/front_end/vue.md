@@ -1,10 +1,13 @@
 # Vue
 
-::: details 目录
+::detail
 
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## 什么是 Vue
 
@@ -28,7 +31,7 @@
 
 ### 使用 create vue 搭建开发环境
 
-```
+```bash
 npm create vue@latest
 ```
 
@@ -54,17 +57,17 @@ npm create vue@latest
 
 ```html
 <body>
-  <div id="app">{{message}}</div>
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <script>
-    const app = Vue.createApp({
-      data() {
-        return {
-          message: "this is a test",
-        };
-      },
-    }).mount("#app");
-  </script>
+	<div id="app">{{message}}</div>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script>
+		const app = Vue.createApp({
+			data() {
+				return {
+					message: "this is a test",
+				};
+			},
+		}).mount("#app");
+	</script>
 </body>
 ```
 
@@ -105,17 +108,17 @@ createApp(App).mount('#app')
 ```html [index.html]
 <!DOCTYPE html>
 <html lang="">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
-  </head>
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Vite App</title>
+	</head>
 
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+	<body>
+		<div id="app"></div>
+		<script type="module" src="/src/main.js"></script>
+	</body>
 </html>
 ```
 
@@ -159,17 +162,17 @@ createApp(App).mount('#app')
 
 ```vue
 <template>
-  <div :style="[fontSize, backgroundColor]">123</div>
+	<div :style="[fontSize, backgroundColor]">123</div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      fontSize: "font-size:100px",
-      backgroundColor: "background-color:red",
-    };
-  },
+	data() {
+		return {
+			fontSize: "font-size:100px",
+			backgroundColor: "background-color:red",
+		};
+	},
 };
 </script>
 ```
@@ -178,49 +181,49 @@ export default {
 
 ```vue
 <template>
-  <div :class="[one, two]">112233</div>
-  <div :class="actives">112233</div>
-  <div :class="{ one: isone, two: istwo }">112233</div>
-  <div :class="{ isone, istwo }">112233</div>
-  <div :class="getStyleArr()">112233</div>
-  <div :class="getStyleObj()">112233</div>
+	<div :class="[one, two]">112233</div>
+	<div :class="actives">112233</div>
+	<div :class="{ one: isone, two: istwo }">112233</div>
+	<div :class="{ isone, istwo }">112233</div>
+	<div :class="getStyleArr()">112233</div>
+	<div :class="getStyleObj()">112233</div>
 </template>
 
 <script>
 export default {
-  name: "App",
-  data() {
-    return {
-      one: "one",
-      two: "two",
-      actives: ["one", "two"],
-      isone: true,
-      istwo: true,
-    };
-  },
-  methods: {
-    getStyleArr() {
-      return [this.one, this.two];
-    },
-    getStyleObj() {
-      return { one: this.isone, two: this.istwo };
-    },
-  },
+	name: "App",
+	data() {
+		return {
+			one: "one",
+			two: "two",
+			actives: ["one", "two"],
+			isone: true,
+			istwo: true,
+		};
+	},
+	methods: {
+		getStyleArr() {
+			return [this.one, this.two];
+		},
+		getStyleObj() {
+			return { one: this.isone, two: this.istwo };
+		},
+	},
 };
 </script>
 
 <style scoped>
 .one {
-  font-size: 100px;
+	font-size: 100px;
 }
 .two {
-  background-color: pink;
+	background-color: pink;
 }
 .isone {
-  font-size: 50px;
+	font-size: 50px;
 }
 .istwo {
-  background-color: blue;
+	background-color: blue;
 }
 </style>
 ```
@@ -234,25 +237,25 @@ export default {
 ```vue
 <script>
 export default {
-  name: "App",
-  data() {
-    return {
-      name: "123",
-      slogen: "666",
-    };
-  },
-  computed: {
-    title: {
-      set(values) {
-        let arr = values.split(" - ");
-        this.name = arr[0];
-        this.slogen = arr[1];
-      },
-      get() {
-        return this.name + "-" + this.slogen;
-      },
-    },
-  },
+	name: "App",
+	data() {
+		return {
+			name: "123",
+			slogen: "666",
+		};
+	},
+	computed: {
+		title: {
+			set(values) {
+				let arr = values.split(" - ");
+				this.name = arr[0];
+				this.slogen = arr[1];
+			},
+			get() {
+				return this.name + "-" + this.slogen;
+			},
+		},
+	},
 };
 </script>
 ```
@@ -269,33 +272,33 @@ export default {
 
 ```vue
 <template>
-  <div>
-    <button v-on:click="num--">-</button>
-    <input type="text" size="2" v-model="num" />
-    <button @click="num++">+</button>
-    <br />
-    <button v-on:click="sub()">-</button>
-    <input type="text" size="2" v-model="num" />
-    <button @click="add">+</button>
-  </div>
+	<div>
+		<button v-on:click="num--">-</button>
+		<input type="text" size="2" v-model="num" />
+		<button @click="num++">+</button>
+		<br />
+		<button v-on:click="sub()">-</button>
+		<input type="text" size="2" v-model="num" />
+		<button @click="add">+</button>
+	</div>
 </template>
 
 <script>
 export default {
-  name: "App",
-  data() {
-    return {
-      num: 0,
-    };
-  },
-  methods: {
-    sub() {
-      this.num--;
-    },
-    add() {
-      this.num++;
-    },
-  },
+	name: "App",
+	data() {
+		return {
+			num: 0,
+		};
+	},
+	methods: {
+		sub() {
+			this.num--;
+		},
+		add() {
+			this.num++;
+		},
+	},
 };
 </script>
 ```
@@ -312,9 +315,11 @@ export default {
 | .prevent |   `<a href="url" @click.prevent = "a()"></a>`   |               阻止默认事件               |
 |  .once   |  `<button @click.once = "button()"></button>`   |              事件只触发一次              |
 
-::: tip 提示
+::tip
+
 事件修饰符号可叠加使用`<button @click.self.stop = "button()"></button>`
-:::
+
+::
 
 ### 条件判断
 
@@ -324,24 +329,24 @@ export default {
 
 ```vue
 <template>
-  <button @click="isshow = !isshow">切换</button>
-  <div v-if="isshow">
-    {{ msg }}
-  </div>
-  <div v-show="isshow">
-    {{ msg }}
-  </div>
+	<button @click="isshow = !isshow">切换</button>
+	<div v-if="isshow">
+		{{ msg }}
+	</div>
+	<div v-show="isshow">
+		{{ msg }}
+	</div>
 </template>
 
 <script>
 export default {
-  name: "App",
-  data() {
-    return {
-      msg: "message",
-      isshow: true,
-    };
-  },
+	name: "App",
+	data() {
+		return {
+			msg: "message",
+			isshow: true,
+		};
+	},
 };
 </script>
 ```
@@ -350,25 +355,25 @@ export default {
 
 ```vue
 <template>
-  <button @click="isshow = !isshow">切换</button>
-  <div v-if="isshow">
-    {{ msg }}
-  </div>
-  <div v-else>
-    {{ msg2 }}
-  </div>
+	<button @click="isshow = !isshow">切换</button>
+	<div v-if="isshow">
+		{{ msg }}
+	</div>
+	<div v-else>
+		{{ msg2 }}
+	</div>
 </template>
 
 <script>
 export default {
-  name: "App",
-  data() {
-    return {
-      msg: "message",
-      msg2: "message2",
-      isshow: true,
-    };
-  },
+	name: "App",
+	data() {
+		return {
+			msg: "message",
+			msg2: "message2",
+			isshow: true,
+		};
+	},
 };
 </script>
 ```
@@ -418,29 +423,27 @@ export default {
 
 ```vue
 <template>
-  <ul>
-    <li v-for="(item, index) in books">
-      {{ index + 1 }}-{{ item.name }}:{{ item.price }}
-    </li>
-  </ul>
-  <template>
-    <script>
-      export default {
-        name: "App",
-        data() {
-          return {
-            books: [
-              { id: 1, name: "11", price: 111 },
-              { id: 2, name: "22", price: 222 },
-              { id: 3, name: "33", price: 333 },
-              { id: 4, name: "44", price: 444 },
-              { id: 5, name: "55", price: 555 },
-            ],
-          };
-        },
-      };
-    </script></template
-  >
+	<ul>
+		<li v-for="(item, index) in books">{{ index + 1 }}-{{ item.name }}:{{ item.price }}</li>
+	</ul>
+	<template>
+		<script>
+			export default {
+				name: "App",
+				data() {
+					return {
+						books: [
+							{ id: 1, name: "11", price: 111 },
+							{ id: 2, name: "22", price: 222 },
+							{ id: 3, name: "33", price: 333 },
+							{ id: 4, name: "44", price: 444 },
+							{ id: 5, name: "55", price: 555 },
+						],
+					};
+				},
+			};
+		</script></template
+	>
 </template>
 ```
 
@@ -484,19 +487,19 @@ export default {
 
 ```vue
 <template>
-  <div>
-    <h1>{{ msg }}</h1>
-  </div>
+	<div>
+		<h1>{{ msg }}</h1>
+	</div>
 </template>
 
 <script>
 export default {
-  name: "HelloWorld",
-  data() {
-    return {
-      msg: "HelloWorld",
-    };
-  },
+	name: "HelloWorld",
+	data() {
+		return {
+			msg: "HelloWorld",
+		};
+	},
 };
 </script>
 
@@ -509,39 +512,39 @@ export default {
 
 ```vue
 <template>
-  <div>
-    <input type="text" v-model="msg" />
-    <br />
-    {{ msg }}
-    <HelloWorld></HelloWorld>
-  </div>
+	<div>
+		<input type="text" v-model="msg" />
+		<br />
+		{{ msg }}
+		<HelloWorld></HelloWorld>
+	</div>
 </template>
 
 <script>
 import HelloWorld from "./components/HelloWorld.vue";
 export default {
-  name: "App",
-  data() {
-    return {
-      msg: "msg",
-    };
-  },
-  components: {
-    HelloWorld,
-  },
+	name: "App",
+	data() {
+		return {
+			msg: "msg",
+		};
+	},
+	components: {
+		HelloWorld,
+	},
 };
 </script>
 
 <style scoped></style>
 ```
 
-::: tip 提示
+::tip
 
 父组件中定义的样式可在子类中使用。若不想在子组件内生效，则需在 `style` 后加上关键词 `scoped`
 
 若想使用 scss 语法，则需加上 `lang="scss"`
 
-:::
+::
 
 ### 组件间通信
 
@@ -553,24 +556,24 @@ export default {
 
 ```vue [App.vue]
 <template>
-  <div>
-    <HelloWorld :msg="app_msg" :ary="app_ary"></HelloWorld>
-  </div>
+	<div>
+		<HelloWorld :msg="app_msg" :ary="app_ary"></HelloWorld>
+	</div>
 </template>
 
 <script>
 import HelloWorld from "./components/HelloWorld.vue";
 export default {
-  name: "App",
-  data() {
-    return {
-      app_msg: "this is app msg",
-      app_ary: ["11", "22", "33"],
-    };
-  },
-  components: {
-    HelloWorld,
-  },
+	name: "App",
+	data() {
+		return {
+			app_msg: "this is app msg",
+			app_ary: ["11", "22", "33"],
+		};
+	},
+	components: {
+		HelloWorld,
+	},
 };
 </script>
 
@@ -579,21 +582,21 @@ export default {
 
 ```vue [HelloWorld.vue]
 <template>
-  <div>
-    <h1>{{ msg }}</h1>
-    <ul>
-      <li v-for="item in ary">{{ item }}</li>
-    </ul>
-  </div>
+	<div>
+		<h1>{{ msg }}</h1>
+		<ul>
+			<li v-for="item in ary">{{ item }}</li>
+		</ul>
+	</div>
 </template>
 
 <script>
 export default {
-  name: "HelloWorld",
-  props: ["msg", "ary"],
-  data() {
-    return {};
-  },
+	name: "HelloWorld",
+	props: ["msg", "ary"],
+	data() {
+		return {};
+	},
 };
 </script>
 
@@ -605,8 +608,7 @@ export default {
 `props` 也可使用对象的方式书写：
 
 ```vue
-props:{ msg:{ type:String, default:'########', required:true }, ary:{
-type:Array, default:['aa','bb','cc'] } },
+props:{ msg:{ type:String, default:'########', required:true }, ary:{ type:Array, default:['aa','bb','cc'] } },
 ```
 
 `type` : 数据类型
@@ -623,30 +625,30 @@ type:Array, default:['aa','bb','cc'] } },
 
 ```vue [App.vue]
 <template>
-  <div>
-    <div>{{ count }}</div>
-    <HelloWorld @myChangeEvent="myAppEvent"></HelloWorld>
-    <HelloWorld @myChangeEvent="myAppEvent"></HelloWorld>
-  </div>
+	<div>
+		<div>{{ count }}</div>
+		<HelloWorld @myChangeEvent="myAppEvent"></HelloWorld>
+		<HelloWorld @myChangeEvent="myAppEvent"></HelloWorld>
+	</div>
 </template>
 
 <script>
 import HelloWorld from "./components/HelloWorld.vue";
 export default {
-  name: "App",
-  data() {
-    return {
-      count: 0,
-    };
-  },
-  components: {
-    HelloWorld,
-  },
-  methods: {
-    myAppEvent(data) {
-      this.count += data;
-    },
-  },
+	name: "App",
+	data() {
+		return {
+			count: 0,
+		};
+	},
+	components: {
+		HelloWorld,
+	},
+	methods: {
+		myAppEvent(data) {
+			this.count += data;
+		},
+	},
 };
 </script>
 
@@ -655,23 +657,23 @@ export default {
 
 ```vue [HelloWorld.vue] {16}
 <template>
-  <div>
-    <button @click="change(1)">+1</button>
-    <button @click="change(2)">+2</button>
-  </div>
+	<div>
+		<button @click="change(1)">+1</button>
+		<button @click="change(2)">+2</button>
+	</div>
 </template>
 
 <script>
 export default {
-  name: "HelloWorld",
-  data() {
-    return {};
-  },
-  methods: {
-    change(num) {
-      this.$emit("myChangeEvent", num);
-    },
-  },
+	name: "HelloWorld",
+	data() {
+		return {};
+	},
+	methods: {
+		change(num) {
+			this.$emit("myChangeEvent", num);
+		},
+	},
 };
 </script>
 
@@ -690,35 +692,35 @@ export default {
 
 ```vue [App.vue]
 <template>
-  <div>
-    <div>{{ count }}</div>
-    <HelloWorld @addEvent="addAppNum"></HelloWorld>
-    <HelloWorld @addEvent="addAppNum"></HelloWorld>
-  </div>
+	<div>
+		<div>{{ count }}</div>
+		<HelloWorld @addEvent="addAppNum"></HelloWorld>
+		<HelloWorld @addEvent="addAppNum"></HelloWorld>
+	</div>
 </template>
 
 <script>
 import HelloWorld from "./components/HelloWorld.vue";
 export default {
-  name: "App",
-  data() {
-    return {
-      count: 0,
-    };
-  },
-  components: {
-    HelloWorld,
-  },
-  methods: {
-    addAppNum(data) {
-      this.count += data;
-      console.log("addAppNum");
-    },
-    setAppNum(num) {
-      this.count = num;
-      console.log("setAppNum");
-    },
-  },
+	name: "App",
+	data() {
+		return {
+			count: 0,
+		};
+	},
+	components: {
+		HelloWorld,
+	},
+	methods: {
+		addAppNum(data) {
+			this.count += data;
+			console.log("addAppNum");
+		},
+		setAppNum(num) {
+			this.count = num;
+			console.log("setAppNum");
+		},
+	},
 };
 </script>
 
@@ -727,27 +729,27 @@ export default {
 
 ```vue [HelloWorld.vue] {17}
 <template>
-  <div>
-    <button @click="add(1)">+1</button>
-    <button @click="add(2)">+2</button>
-    <button @click="set(0)">0</button>
-  </div>
+	<div>
+		<button @click="add(1)">+1</button>
+		<button @click="add(2)">+2</button>
+		<button @click="set(0)">0</button>
+	</div>
 </template>
 
 <script>
 export default {
-  name: "HelloWorld",
-  data() {
-    return {};
-  },
-  methods: {
-    add(num) {
-      this.$emit("addEvent", num);
-    },
-    set(num) {
-      this.$parent.setAppNum(num);
-    },
-  },
+	name: "HelloWorld",
+	data() {
+		return {};
+	},
+	methods: {
+		add(num) {
+			this.$emit("addEvent", num);
+		},
+		set(num) {
+			this.$parent.setAppNum(num);
+		},
+	},
 };
 </script>
 
@@ -764,34 +766,34 @@ export default {
 
 ```vue [App.vue] {5,6,24,27}
 <template>
-  <div>
-    <button @click="addOne(1)">One+1</button>
-    <button @click="setOne(0)">One=0</button>
-    <HelloWorld ref="one"></HelloWorld>
-    <HelloWorld ref="two"></HelloWorld>
-  </div>
+	<div>
+		<button @click="addOne(1)">One+1</button>
+		<button @click="setOne(0)">One=0</button>
+		<HelloWorld ref="one"></HelloWorld>
+		<HelloWorld ref="two"></HelloWorld>
+	</div>
 </template>
 
 <script>
 import HelloWorld from "./components/HelloWorld.vue";
 export default {
-  name: "App",
-  data() {
-    return {
-      count: 0,
-    };
-  },
-  components: {
-    HelloWorld,
-  },
-  methods: {
-    addOne(num) {
-      this.$refs.one.addHelloWorld(num);
-    },
-    setOne(num) {
-      this.$refs.one.setHelloWorld(num);
-    },
-  },
+	name: "App",
+	data() {
+		return {
+			count: 0,
+		};
+	},
+	components: {
+		HelloWorld,
+	},
+	methods: {
+		addOne(num) {
+			this.$refs.one.addHelloWorld(num);
+		},
+		setOne(num) {
+			this.$refs.one.setHelloWorld(num);
+		},
+	},
 };
 </script>
 
@@ -800,27 +802,27 @@ export default {
 
 ```vue [HelloWorld.vue]
 <template>
-  <div>HelloWorldCount: {{ count }}</div>
+	<div>HelloWorldCount: {{ count }}</div>
 </template>
 
 <script>
 export default {
-  name: "HelloWorld",
-  data() {
-    return {
-      count: 0,
-    };
-  },
-  methods: {
-    addHelloWorld(num) {
-      this.count += num;
-      console.log("addHelloWorldNum");
-    },
-    setHelloWorld(num) {
-      this.count = num;
-      console.log("setHelloWorldNum");
-    },
-  },
+	name: "HelloWorld",
+	data() {
+		return {
+			count: 0,
+		};
+	},
+	methods: {
+		addHelloWorld(num) {
+			this.count += num;
+			console.log("addHelloWorldNum");
+		},
+		setHelloWorld(num) {
+			this.count = num;
+			console.log("setHelloWorldNum");
+		},
+	},
 };
 </script>
 
@@ -839,27 +841,27 @@ export default {
 
 ```vue [App.vue] {5,8}
 <template>
-  <div>
-    <HelloWorld></HelloWorld>
-    <HelloWorld>
-      <template v-slot:one><a href="">aaaa</a></template>
-    </HelloWorld>
-    <HelloWorld>
-      <template v-slot:two><button>bbbb</button></template>
-    </HelloWorld>
-  </div>
+	<div>
+		<HelloWorld></HelloWorld>
+		<HelloWorld>
+			<template v-slot:one><a href="">aaaa</a></template>
+		</HelloWorld>
+		<HelloWorld>
+			<template v-slot:two><button>bbbb</button></template>
+		</HelloWorld>
+	</div>
 </template>
 
 <script>
 import HelloWorld from "./components/HelloWorld.vue";
 export default {
-  name: "App",
-  data() {
-    return {};
-  },
-  components: {
-    HelloWorld,
-  },
+	name: "App",
+	data() {
+		return {};
+	},
+	components: {
+		HelloWorld,
+	},
 };
 </script>
 
@@ -868,26 +870,26 @@ export default {
 
 ```vue [HelloWorld.vue] {5,10}
 <template>
-  <div>
-    <span>
-      Hello-
-      <slot name="one">####</slot>
-      -World
-    </span>
-    <span>
-      World-
-      <slot name="two">####</slot>
-      -Hello
-    </span>
-  </div>
+	<div>
+		<span>
+			Hello-
+			<slot name="one">####</slot>
+			-World
+		</span>
+		<span>
+			World-
+			<slot name="two">####</slot>
+			-Hello
+		</span>
+	</div>
 </template>
 
 <script>
 export default {
-  name: "HelloWorld",
-  data() {
-    return {};
-  },
+	name: "HelloWorld",
+	data() {
+		return {};
+	},
 };
 </script>
 
@@ -906,29 +908,29 @@ export default {
 
 ```vue [App.vue] {3-11}
 <template>
-  <div>
-    <HelloWorld>
-      <template v-slot:default="children">{{ children.children }}</template>
-    </HelloWorld>
-    <HelloWorld>
-      <template v-slot:one="children">{{ children.children }}</template>
-    </HelloWorld>
-    <HelloWorld>
-      <template v-slot:two="children">{{ children.children }}</template>
-    </HelloWorld>
-  </div>
+	<div>
+		<HelloWorld>
+			<template v-slot:default="children">{{ children.children }}</template>
+		</HelloWorld>
+		<HelloWorld>
+			<template v-slot:one="children">{{ children.children }}</template>
+		</HelloWorld>
+		<HelloWorld>
+			<template v-slot:two="children">{{ children.children }}</template>
+		</HelloWorld>
+	</div>
 </template>
 
 <script>
 import HelloWorld from "./components/HelloWorld.vue";
 export default {
-  name: "App",
-  data() {
-    return {};
-  },
-  components: {
-    HelloWorld,
-  },
+	name: "App",
+	data() {
+		return {};
+	},
+	components: {
+		HelloWorld,
+	},
 };
 </script>
 
@@ -937,25 +939,21 @@ export default {
 
 ```vue [HelloWorld.vue] {3-5}
 <template>
-  <div>
-    <span>Hello-<slot :children="childrenData">####</slot>-World</span>
-    <span
-      >Hello-<slot name="one" :children="childrenData">####</slot>-World</span
-    >
-    <span
-      >Hello-<slot name="two" :children="childrenData">####</slot>-World</span
-    >
-  </div>
+	<div>
+		<span>Hello-<slot :children="childrenData">####</slot>-World</span>
+		<span>Hello-<slot name="one" :children="childrenData">####</slot>-World</span>
+		<span>Hello-<slot name="two" :children="childrenData">####</slot>-World</span>
+	</div>
 </template>
 
 <script>
 export default {
-  name: "HelloWorld",
-  data() {
-    return {
-      childrenData: "childrenData",
-    };
-  },
+	name: "HelloWorld",
+	data() {
+		return {
+			childrenData: "childrenData",
+		};
+	},
 };
 </script>
 
@@ -971,13 +969,13 @@ export default {
 ```vue
 <script>
 export default {
-  name: "HelloWorld",
-  data() {
-    return {};
-  },
-  beforeCreate() {
-    console.log("创建实例之前自动调用 beforeCreate");
-  },
+	name: "HelloWorld",
+	data() {
+		return {};
+	},
+	beforeCreate() {
+		console.log("创建实例之前自动调用 beforeCreate");
+	},
 };
 </script>
 ```
@@ -994,22 +992,22 @@ export default {
 <script>
 import axios from "axios";
 export default {
-  name: "Axios",
-  data() {
-    return {
-      data: {},
-    };
-  },
-  mounted() {
-    axios
-      .get(url)
-      .then((res) => {
-        this.data = res.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  },
+	name: "Axios",
+	data() {
+		return {
+			data: {},
+		};
+	},
+	mounted() {
+		axios
+			.get(url)
+			.then(res => {
+				this.data = res.data;
+			})
+			.catch(err => {
+				console.log(err);
+			});
+	},
 };
 </script>
 ```
@@ -1050,21 +1048,21 @@ export function del(url) {
 <script>
 import { get } from "@/network/request";
 export default {
-  name: "Axios",
-  data() {
-    return {
-      data: {},
-    };
-  },
-  mounted() {
-    get(url)
-      .then((res) => {
-        this.data = res.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  },
+	name: "Axios",
+	data() {
+		return {
+			data: {},
+		};
+	},
+	mounted() {
+		get(url)
+			.then(res => {
+				this.data = res.data;
+			})
+			.catch(err => {
+				console.log(err);
+			});
+	},
 };
 </script>
 ```
@@ -1153,11 +1151,11 @@ app.mount('#app')
 
 ```vue
 <template>
-  <div class="wrapper">
-    <RouterLink to="/">Home</RouterLink>
-    <RouterLink to="/about">About</RouterLink>
-  </div>
-  <RouterView />
+	<div class="wrapper">
+		<RouterLink to="/">Home</RouterLink>
+		<RouterLink to="/about">About</RouterLink>
+	</div>
+	<RouterView />
 </template>
 ```
 
@@ -1174,9 +1172,11 @@ app.mount('#app')
 
 `num` : 正数为前进一定页面，负数为后退一定页面
 
-::: tip 提示
+::tip
+
 `$router`表示一整个路由，`$route`表示当前页面路由
-:::
+
+::
 
 ### 路由页面视图
 
@@ -1187,9 +1187,8 @@ app.mount('#app')
 在`index.js`中配置 children 属性即可设置嵌套路由。嵌套路由的地址为父地址与子地址组合
 
 ```vue
-{ path: '/home', name: 'home', component: HomeView, children: [ { path: 'home1',
-component: () => import('../views/Home1.vue') }, { path: 'home2', component: ()
-=> import('../views/Home2.vue') } ] },
+{ path: '/home', name: 'home', component: HomeView, children: [ { path: 'home1', component: () => import('../views/Home1.vue') }, { path: 'home2',
+component: () => import('../views/Home2.vue') } ] },
 ```
 
 `path` : 子路由地址，设置为 ' ' 时表示默认路由
@@ -1229,9 +1228,7 @@ component: () => import('../views/Home1.vue') }, { path: 'home2', component: ()
 
 ```vue
 <RouterLink to="/home/home1?msg=message111&num=111">Home1</RouterLink>
-<RouterLink
-  :to="{ path: '/home/home2', query: { msg: 'message222', num: 222 } }"
->Home2</RouterLink>
+<RouterLink :to="{ path: '/home/home2', query: { msg: 'message222', num: 222 } }">Home2</RouterLink>
 ```
 
 2、参数接收: 使用`$route`中的 query 属性获取传递的参数
@@ -1256,8 +1253,7 @@ component: () => import('../views/Home1.vue') }, { path: 'home2', component: ()
 ```
 
 ```vue {4}
-{ path: '/home', name: 'home', redirect: to => { return { path: 'About'
-},query:{msg:'message',num:to.params.id} }, component: HomeView, }
+{ path: '/home', name: 'home', redirect: to => { return { path: 'About' },query:{msg:'message',num:to.params.id} }, component: HomeView, }
 ```
 
 以上写法均可
@@ -1352,15 +1348,11 @@ router.afterEach((to, from, failure) => {
 **组件内导航守卫**
 
 ```vue
-beforeRouteEnter(to, from) { // 在渲染该组件的对应路由被验证前调用 //
-不能获取组件实例 `this` ！ // 因为当守卫执行时，组件实例还没被创建！ },
-beforeRouteUpdate(to, from) { // 在当前路由改变，但是该组件被复用时调用 //
-举例来说，对于一个带有动态参数的路径 `/users/:id`，在 `/users/1` 和 `/users/2`
-之间跳转的时候， // 由于会渲染同样的 `UserDetails`
-组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。 //
-因为在这种情况发生的时候，组件已经挂载好了，导航守卫可以访问组件实例 `this` },
-beforeRouteLeave(to, from) { // 在导航离开渲染该组件的对应路由时调用 // 与
-`beforeRouteUpdate` 一样，它可以访问组件实例 `this` },
+beforeRouteEnter(to, from) { // 在渲染该组件的对应路由被验证前调用 // 不能获取组件实例 `this` ！ // 因为当守卫执行时，组件实例还没被创建！ },
+beforeRouteUpdate(to, from) { // 在当前路由改变，但是该组件被复用时调用 // 举例来说，对于一个带有动态参数的路径 `/users/:id`，在 `/users/1` 和
+`/users/2` 之间跳转的时候， // 由于会渲染同样的 `UserDetails` 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。 //
+因为在这种情况发生的时候，组件已经挂载好了，导航守卫可以访问组件实例 `this` }, beforeRouteLeave(to, from) { // 在导航离开渲染该组件的对应路由时调用 //
+与 `beforeRouteUpdate` 一样，它可以访问组件实例 `this` },
 ```
 
 ### `KeepAlive`和 VueRouter结合使用
@@ -1407,49 +1399,46 @@ beforeRouteLeave(to, from) { // 在导航离开渲染该组件的对应路由时
 
 ```vue [App.vue]
 <template>
-  //...
-  <RouterView v-slot="{ Component }">
-    <transition>
-      <KeepAlive>
-        <component :is="Component"></component>
-      </KeepAlive>
-    </transition>
-  </RouterView>
+	//...
+	<RouterView v-slot="{ Component }">
+		<transition>
+			<KeepAlive>
+				<component :is="Component"></component>
+			</KeepAlive>
+		</transition>
+	</RouterView>
 </template>
 ```
 
 ```vue [HomeView.vue] {19,22-27}
 <template>
-  <h1>This is a home page</h1>
-  <RouterLink to="/home/home1?msg=message111&num=111">Home1</RouterLink>
-  <RouterLink
-    :to="{ path: '/home/home2', query: { msg: 'message222', num: 222 } }"
-    >Home2</RouterLink
-  >
-  <RouterView v-slot="{ Component }">
-    <transition>
-      <KeepAlive
-        >h
-        <component :is="Component"></component>
-      </KeepAlive>
-    </transition>
-  </RouterView>
+	<h1>This is a home page</h1>
+	<RouterLink to="/home/home1?msg=message111&num=111">Home1</RouterLink>
+	<RouterLink :to="{ path: '/home/home2', query: { msg: 'message222', num: 222 } }">Home2</RouterLink>
+	<RouterView v-slot="{ Component }">
+		<transition>
+			<KeepAlive
+				>h
+				<component :is="Component"></component>
+			</KeepAlive>
+		</transition>
+	</RouterView>
 </template>
 
 <script>
 export default {
-  name: "HomeView",
-  data() {
-    return {
-      path: "/home",
-    };
-  },
-  activated() {
-    this.$router.push(this.path);
-  },
-  beforeRouteLeave(to, from) {
-    this.path = from.fullPath;
-  },
+	name: "HomeView",
+	data() {
+		return {
+			path: "/home",
+		};
+	},
+	activated() {
+		this.$router.push(this.path);
+	},
+	beforeRouteLeave(to, from) {
+		this.path = from.fullPath;
+	},
 };
 </script>
 ```
@@ -1533,12 +1522,12 @@ const counterStore = useCounterStore();
 </script>
 
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-    <div>count: {{ counterStore.count }}</div>
-    <div>doubleCount: {{ counterStore.doubleCount }}</div>
-    <button @click="counterStore.increment()">increment</button>
-  </div>
+	<div class="about">
+		<h1>This is an about page</h1>
+		<div>count: {{ counterStore.count }}</div>
+		<div>doubleCount: {{ counterStore.doubleCount }}</div>
+		<button @click="counterStore.increment()">increment</button>
+	</div>
 </template>
 ```
 
@@ -1553,9 +1542,8 @@ const counterStore = useCounterStore() const { count, name } = useCounterStore
 但这样解构出的数据并不是响应式的，需要做 ref 相应式代理。正确的方法如下:
 
 ```vue
-//... impot { storeToRefs } from 'pinia' //... //... const counterStore =
-useCounterStore() //... //... const { count, name } = storeToRefs(counterStore)
-//...
+//... impot { storeToRefs } from 'pinia' //... //... const counterStore = useCounterStore() //... //... const { count, name } =
+storeToRefs(counterStore) //...
 ```
 
 ### 状态更新和 Actions
@@ -1575,8 +1563,7 @@ counterStore.$patch({ count: counterStore.count + 1 name: 'name' })
 也可`$patch`一个函数:
 
 ```vue
-counterStore.$patch(state => { state.count++ state.name = 'name'
-state.arr.push(4) })
+counterStore.$patch(state => { state.count++ state.name = 'name' state.arr.push(4) })
 ```
 
 对于复杂逻辑，通常封装在方法中:
@@ -1589,9 +1576,11 @@ actions: {
 },
 ```
 
-::: warning 警告
+::warning
+
 不能使用箭头函数定义 action
-:::
+
+::
 
 ### gatters 使用
 
@@ -1619,35 +1608,37 @@ gatters: {
 
 ## 组合式 API (Composition API)
 
-::: warning 警告
+::warning
+
 以下大部分 API 都需要在使用前导入
-:::
+
+::
 
 组合式 API 是为了实现基于函数的逻辑复用机制而产生的。主要思想是我们将它们定义为新的 setup 函数返回的 JavaScript 变量，而不是将组件的功能（例如 state、methods、comouted等）定义为对象属性。其具体写法如下:
 
 ```vue
 <template>
-  <div class="about">
-    <h3>count: {{ data.count }}</h3>
-    <h3>double: {{ data.double }}</h3>
-    <button @click="add()">+</button>
-  </div>
+	<div class="about">
+		<h3>count: {{ data.count }}</h3>
+		<h3>double: {{ data.double }}</h3>
+		<button @click="add()">+</button>
+	</div>
 </template>
 
 <script>
 import { computed, reactive } from "vue";
 
 export default {
-  setup() {
-    const data = reactive({
-      count: 0, //data数据
-      double: computed(() => data.count * 2), //计算属性
-    });
-    function add() {
-      data.count++;
-    } //方法
-    return { data, add };
-  },
+	setup() {
+		const data = reactive({
+			count: 0, //data数据
+			double: computed(() => data.count * 2), //计算属性
+		});
+		function add() {
+			data.count++;
+		} //方法
+		return { data, add };
+	},
 };
 </script>
 ```
@@ -1658,11 +1649,11 @@ export default {
 <script setup>
 import { computed, reactive } from "vue";
 const data = reactive({
-  count: 0,
-  double: computed(() => data.count * 2),
+	count: 0,
+	double: computed(() => data.count * 2),
 });
 function add() {
-  data.count++;
+	data.count++;
 }
 </script>
 ```
@@ -1703,9 +1694,9 @@ defineProps({ title: String, likes: Number })
 
 ```vue {3,8,11,14}
 <template>
-  //...
-  <h3>num: {{ num }}</h3>
-  //...
+	//...
+	<h3>num: {{ num }}</h3>
+	//...
 </template>
 
 <script>
@@ -1735,9 +1726,9 @@ defineExpose({ childDom });
 </script>
 
 <template>
-  <div class="children1">
-    <div ref="childDom">count: {{ data.count }}</div>
-  </div>
+	<div class="children1">
+		<div ref="childDom">count: {{ data.count }}</div>
+	</div>
 </template>
 ```
 
@@ -1746,13 +1737,13 @@ defineExpose({ childDom });
 import children1 from "@/components/children1.vue";
 import { ref } from "vue";
 function show() {
-  console.log(childDom.value.childDom);
+	console.log(childDom.value.childDom);
 }
 const childDom = ref(null);
 </script>
 
 <template>
-  <children1 ref="childDom"></children1>
+	<children1 ref="childDom"></children1>
 </template>
 ```
 
@@ -1789,15 +1780,13 @@ let fullname = computed(()=>{ return "namea"+"-"+"name2" })
 `watch()`函数用来监视某些数据项的变化，从而触发某些特定的操作。
 
 ```vue
-let a = ref(0) watch(a,(newA,oldA)=>{ console.log(oldA+'->'+newA)
-},{immediate:true})
+let a = ref(0) watch(a,(newA,oldA)=>{ console.log(oldA+'->'+newA) },{immediate:true})
 ```
 
 也可以同时监听多个值:
 
 ```vue
-let a = ref(0) let b = ref(0) watch([a,b],([newA,newB],[oldA,oldB])=>{
-console.log(oldA+'->'+newA+','+oldB+'->'+newB) },{immediate:false})
+let a = ref(0) let b = ref(0) watch([a,b],([newA,newB],[oldA,oldB])=>{ console.log(oldA+'->'+newA+','+oldB+'->'+newB) },{immediate:false})
 ```
 
 `immediate` : 创建时是否自动执行
@@ -1805,15 +1794,13 @@ console.log(oldA+'->'+newA+','+oldB+'->'+newB) },{immediate:false})
 可以监听由`reactive()`创建的对象。
 
 ```vue
-const data = reactive({ num1:1, num2:2, count:0, }) watch(data,()=>{
-console.log(data) })
+const data = reactive({ num1:1, num2:2, count:0, }) watch(data,()=>{ console.log(data) })
 ```
 
 单独监听对象里的某个值时，需使用回调函数。
 
 ```vue
-const data = reactive({ num1:1, num2:2, count:0, })
-watch(()=>data.num2,(newNum,oldNum)=>{ console.log(oldNum+'=>'+newNum) })
+const data = reactive({ num1:1, num2:2, count:0, }) watch(()=>data.num2,(newNum,oldNum)=>{ console.log(oldNum+'=>'+newNum) })
 ```
 
 `watchEffect()`立即执行传入的一个函数，并响应式追踪其依赖，并在其依赖变更时重新运行该函数。
@@ -1827,8 +1814,7 @@ watchEffect(()=>{ console.log("a"+a.value) })
 在新版的生命周期函数，可以按需导入到组件中，且只能在`setup()`函数中使用。
 
 ```vue
-onMounted(()=>{ console.log('onMounted...') }) onUpdated(()=>{
-console.log('onUpdated...') })
+onMounted(()=>{ console.log('onMounted...') }) onUpdated(()=>{ console.log('onUpdated...') })
 ```
 
 ### 在组合 API 中 provide 和 inject 使用
@@ -1840,8 +1826,7 @@ provide 就相当于加强版父组件 prop ,可以跨越中间组件， inject 
 **在祖先组件中定义:**
 
 ```vue
-export default{ data(){ return{ title:"root" } }, provide(){ return{
-title:this.title } }, }
+export default{ data(){ return{ title:"root" } }, provide(){ return{ title:this.title } }, }
 ```
 
 **在后代组件中接受:**
@@ -1855,8 +1840,7 @@ export default{ inject:['title'] }
 **祖先组件中:**
 
 ```vue
-setup(props,context){ let title = ref('root') provide("title",title) return
-{title} }
+setup(props,context){ let title = ref('root') provide("title",title) return {title} }
 ```
 
 **后代组件中:**

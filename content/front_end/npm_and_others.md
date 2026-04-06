@@ -1,16 +1,19 @@
 # npm 与其他
 
-::: danger 警告
+::danger
 
 该页面尚未完工!
 
-:::
+::
 
-::: details 目录
+::detail
 
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## npm 与包
 
@@ -22,13 +25,16 @@ Node.js 中的第三方模块又叫做**包**。
 
 不同于 Node.js 中的内置模块与自定义模块，包是由第三方个人或团队开发出来的，免费供所有人使用。
 
-::: details 为什么需要包
+::detail
 
+#title
+为什么需要包
+#default
 由于 Node.js 的内置模块仅提供了一些底层的 API，导致在基于内置模块进行项目开发时，效率很低。
 
 包是基于内置模块封装出来的，提供了更高级、更方便的 API，极大的提高了开发效率。
 
-:::
+::
 
 ### 包的语义化版本规范
 
@@ -54,11 +60,11 @@ npm 规定，在项目根目录中，必须提供一个叫做 package.json 的�
 
 - 哪些包在开发和部署时都需要用到
 
-::: warning 注意
+::warning
 
-今后在项目开发中，一定要把 node_modules 文件加，添加到 .gitignore 忽略文件中
+今后在项目开发中，一定要把 node_modules 文件夹添加到 .gitignore 忽略文件中
 
-:::
+::
 
 ### 包的分类
 
@@ -74,13 +80,13 @@ npm 规定，在项目根目录中，必须提供一个叫做 package.json 的�
 
 在执行 npm install 命令时，如果提供了 -g 参数，则会把包安装为全局包。全局包会被安装到 C:\Users\用户目录\AppData\Roaming\npm\node_modules 目录下。
 
-::: warning 注意
+::warning
 
 - 只有工具性质的包，才有全局安装的必要性，因为它们提供了好用的终端命令
 
 - 判断某个包是否需要全局安装后才能使用，可以参考官方提供的使用说明即可
 
-:::
+::
 
 ### 规范的包结构
 
@@ -98,7 +104,7 @@ npm 规定，在项目根目录中，必须提供一个叫做 package.json 的�
 
 `version`：包的版本号
 
-::: tip 提示
+::tip
 
 package.json 文件中版本号的说明，安装的时候代表不同的含义:
 
@@ -108,7 +114,7 @@ package.json 文件中版本号的说明，安装的时候代表不同的含义:
 
 "^5.0.5" 表示安装5.X.X中最新的版本
 
-:::
+::
 
 `description`：包的描述
 
@@ -154,13 +160,13 @@ package.json 文件中版本号的说明，安装的时候代表不同的含义:
 
 `npm init`：生成 package.json 配置文件
 
-::: warning 注意
+::warning
 
 - 该命令只能在英文的目录下成功运行！所以，项目文件夹的名词一定要使用英文命名，不要使用中文，不能出现空格
 
 - 运行 npm istall 命令安装包的时候，npm 包管理工具会自动把包的名称和版本号，记录到 package.json 中
 
-:::
+::
 
 `npm config get registry`：查看当前的下包镜像源
 
@@ -180,11 +186,11 @@ npm install -g nrm
 
 ### 发布包
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 解决 ES6 语法兼容性问题
 
@@ -194,14 +200,14 @@ npm install -g nrm
 
 ```json
 {
-  "presets": ["es2015", "stage-2"], //设置转码规则
-  "plugins": ["transform-runtime"] //设置转码插件
+	"presets": ["es2015", "stage-2"], //设置转码规则
+	"plugins": ["transform-runtime"] //设置转码插件
 }
 ```
 
 3. 这里我们需要转换成 es2015 ，安装我们需要的库：
 
-```
+```bash
 npm install babel-core babel-preset-es2015 babel-plugin-transform-runtime babel-preset-stage-2 --save -dev
 ```
 

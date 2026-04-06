@@ -9,7 +9,6 @@ const smoother = ref<globalThis.ScrollSmoother | undefined>(undefined);
 const updateScrollProgress = () => {
 	if (smoother.value) {
 		const scrollTop = smoother.value.scrollTop();
-		console.log(scrollTop);
 		const contentHeight = smoother.value.content().offsetHeight;
 		const viewportHeight = window.innerHeight;
 
@@ -44,9 +43,12 @@ const resize = () => {
 	setTimeout(updateScrollProgress, 100);
 };
 
-watch([smoother.value?.scrollTop()], () => {
-	updateScrollProgress();
-});
+watch(
+	() => smoother.value?.scrollTop(),
+	() => {
+		updateScrollProgress();
+	},
+);
 
 onMounted(() => {
 	const initTimer = setTimeout(initScrollListener, 100);

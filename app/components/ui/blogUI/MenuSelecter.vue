@@ -4,7 +4,7 @@ import type { BlogMenuSelecterParams } from "~/types/components";
 
 import MenuSelection from "./MenuSelection.vue";
 
-const isactive = ref<boolean>(false);
+const isActive = ref<boolean>(false);
 const arrowRef = ref<SVGAElement | null>(null);
 const containerRef = ref<HTMLElement | null>(null);
 const { collections } = defineProps<BlogMenuSelecterParams>();
@@ -23,8 +23,8 @@ const getContentTitle = (file: any, path: string): string => {
 };
 
 const handleClick = () => {
-	isactive.value = isactive.value === true ? false : true;
-	if (isactive.value) {
+	isActive.value = isActive.value === true ? false : true;
+	if (isActive.value) {
 		gsap.to(arrowRef.value, { duration: 0.5, rotate: 90, ease: "power2.out" });
 		gsap.to(containerRef.value, { duration: 0.5, height: "auto", ease: "power2.out" });
 	} else {

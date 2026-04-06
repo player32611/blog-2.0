@@ -1,10 +1,13 @@
 # React
 
-::: details 目录
+::detail
 
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## 什么是 React
 
@@ -62,9 +65,11 @@ export default
 export default function Profile() {}
 ```
 
-::: warning 警告
+::warning
+
 React 组件是常规的 JavaScript 函数，但 组件的名称必须以大写字母开头，否则它们将无法运行！
-:::
+
+::
 
 **第三步：添加标签**
 
@@ -174,7 +179,7 @@ React 组件基础的样式控制有两种方式：
 
 ```css [index.css]
 .foo {
-  color: red;
+	color: red;
 }
 ```
 
@@ -494,13 +499,13 @@ const useCountStore = create((set) => {
 export default useCountStore//导出 store
 ```
 
-::: tip 提示
+::tip
 
 函数参数必须返回一个对象，对象内部编写状态数据和方法
 
 set() 是用来修改数据的专门方法，必须调用它来修改数据
 
-:::
+::
 
 ### 绑定 store 到组件
 
@@ -1166,9 +1171,11 @@ export default Tab3;
 
 ## TypeScript 使用调整
 
-::: tip 提示
+::tip
+
 每个包含 JSX 的文件都必须使用`.tsx`文件扩展名。这是一个 TypeScript 特定的扩展，告诉 TypeScript 该文件包含 JSX。
-:::
+
+::
 
 ### TypeScript 对组件的调整
 

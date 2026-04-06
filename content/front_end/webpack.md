@@ -1,10 +1,13 @@
 # webpack
 
-::: details 目录
+::detail
 
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## 什么是 webpack
 
@@ -24,7 +27,7 @@ bundel：bundle是最后打包后的文件，最终文件可以和 chunk 长得�
 
 **使用 npm :**
 
-```
+```bash
 npm i webpack webpack-cli --save-dev
 ```
 
@@ -32,19 +35,19 @@ npm i webpack webpack-cli --save-dev
 
 **使用默认设置打包**
 
-```
+```bash
 npx webpack
 ```
 
 **以开发模式打包**
 
-```
+```bash
 npx webpack --mode development
 ```
 
 **以生产模式打包**
 
-```
+```bash
 npx webpack --mode production
 ```
 
@@ -106,7 +109,7 @@ entry: {
 
 **1、下载安装插件**
 
-```
+```bash
 npm i html-webpack-plugin -D
 ```
 
@@ -161,7 +164,7 @@ plugins:[
 
 需要使用 npm 下载安装两个 loader 帮我们完成打包
 
-```
+```bash
 npm i css-loader style-loader -D
 ```
 
@@ -194,21 +197,23 @@ console.log(demo)
 
 :::
 
-::: warning 警告
+::warning
+
 打包前无法看到 css 样式生效
-:::
+
+::
 
 ### 打包 less 或 sass 资源
 
 Less 需要使用 npm 下载 less 包和 less-loader
 
-```
+```bash
 npm i less less-loader -D
 ```
 
 Sass 需要使用 npm 下载 sass 包和 sass-loader
 
-```
+```bash
 npm i sass sass-loader -D
 ```
 
@@ -242,7 +247,7 @@ console.log(demo)
 
 css 内容是打包在 js 文件中的，可以使用`mini-css-extract-plugin`插件提取成单独的 css 文件
 
-```
+```bash
 npm i mini-css-extract-plugin -D
 ```
 
@@ -272,7 +277,7 @@ plugins: [
 
 需要使用 postcss 处理，下载两个包:`post-loader`和`postcss-preset-env`
 
-```
+```bash
 npm i postcss-loader postcss-preset-env -D
 ```
 
@@ -315,7 +320,7 @@ module: {
 
 使用 css-minimizer-webpack-plugin 插件压缩 css 内容
 
-```
+```bash
 npm i css-minimizer-webpack-plugin -D
 ```
 
@@ -338,7 +343,7 @@ plugins: [
 
 需下载 url-loader 和 file-loader 两个包
 
-```
+```bash
 npm i url-loader file-loader -D
 ```
 

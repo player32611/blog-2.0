@@ -50,7 +50,7 @@ onUnmounted(() => {
 		<BlogMask ref="maskRef" />
 		<Button
 			:text="'back'"
-			:icon="'&#xeb09;'"
+			:icon="'&#xeb06;'"
 			:size="'small'"
 			@click="navigateTo('/')"
 			:style="{ position: 'fixed', left: '20px', top: '20px' }"
@@ -65,7 +65,7 @@ onUnmounted(() => {
 	</div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .blogs {
 	height: auto;
 	width: 100%;

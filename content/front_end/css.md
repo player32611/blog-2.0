@@ -1,14 +1,19 @@
 # CSS
 
-::: danger 警告
+::danger
+
 该页面尚未完工!
-:::
 
-::: details 目录
+::
 
+::detail
+
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## 选择器
 
@@ -16,15 +21,11 @@
 
 CSS 选择器用于“查找”（或选取）要设置样式的 HTML 元素。我们可以将 CSS 选择器分为五类：
 
-    简单选择器（根据名称、id、类来选取元素）
-
-    组合器选择器（根据它们之间的特定关系来选取元素）
-
-    伪类选择器（根据特定状态选取元素）
-
-    伪元素选择器（选取元素的一部分并设置其样式）
-
-    属性选择器（根据属性或属性值来选取元素）
+- 简单选择器（根据名称、id、类来选取元素）
+- 组合器选择器（根据它们之间的特定关系来选取元素）
+- 伪类选择器（根据特定状态选取元素）
+- 伪元素选择器（选取元素的一部分并设置其样式）
+- 属性选择器（根据属性或属性值来选取元素）
 
 ### 简单选择器
 
@@ -38,14 +39,14 @@ CSS 选择器用于“查找”（或选取）要设置样式的 HTML 元素。�
 |      element       |     p      |        选取所有 p 元素。         |
 | element,element,.. |   div, p   | 选取所有 div 元素和所有 p 元素。 |
 
-::: info 备注
+::tip
 
 对于您还可以指定只有特定的 HTML 元素会受类的影响。在这个例子中，只有具有 class="center" 的 p 元素会居中对齐：
 
 ```css
 p.center {
-  text-align: center;
-  color: red;
+	text-align: center;
+	color: red;
 }
 ```
 
@@ -55,7 +56,7 @@ HTML 元素也可以引用多个类。在这个例子中，p 元素将根据 cla
 <p class="center large">这个段落引用两个类。</p>
 ```
 
-:::
+::
 
 ### 组合器选择器
 
@@ -98,7 +99,7 @@ CSS 伪元素用于设置元素指定部分的样式，它可用于：
 
 ```css
 selector::pseudo-element {
-  property: value;
+	property: value;
 }
 ```
 
@@ -382,9 +383,9 @@ Flex 是 Flexible Box 的缩写，意为"弹性布局"，用来为盒状模型�
 
 ```html
 <div>
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
+	<div>1</div>
+	<div>2</div>
+	<div>3</div>
 </div>
 ```
 
@@ -486,15 +487,15 @@ Grid 布局由一个父元素以及一个或多个子元素组成。当 HTML 元
 
 ```html
 <div class="grid-container">
-  <div></div>
-  <div></div>
-  <div></div>
+	<div></div>
+	<div></div>
+	<div></div>
 </div>
 ```
 
 ```css
 .grid-container {
-  display: grid;
+	display: grid;
 }
 ```
 

@@ -1,9 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-	<div class="custom-block danger">
+	<div class="custom-block warning">
 		<span>
-			<span class="icon">&#xeaf7;</span>
+			<span class="icon">&#xeafe;</span>
 			<div class="content">
 				<slot />
 			</div>
@@ -12,26 +12,24 @@
 </template>
 
 <style scoped lang="scss">
-.custom-block.danger {
-	margin: 20px 0;
-	height: fit-content;
-	width: auto;
+.custom-block.warning {
 	padding-right: 10px;
-	background: lightgrey;
+	width: auto;
+	height: fit-content;
 	border-left-style: solid;
-	border-left-color: red;
+	border-left-color: yellow;
 	border-left-width: 5px;
 	border-radius: 15px;
 	border-top-left-radius: 0px;
 	border-bottom-left-radius: 0px;
-	background: linear-gradient(to right, #f7575756, #f7575725 50%, #f7575738);
+	background: linear-gradient(to right, #e6e4ad6e, #e6e4ad4e 50%, #e6e4ad3e);
 
 	span {
 		display: flex;
 		align-items: start;
-		color: red;
-		font-size: 1em;
+		color: yellow;
 		word-break: break-all;
+		font-size: 1em;
 
 		.icon {
 			margin: 10px;
@@ -40,9 +38,9 @@
 
 		p {
 			float: left;
-			margin-left: 5px;
 			padding-top: 13px;
 			padding-left: 10px;
+			color: white;
 			font-size: 15px;
 		}
 	}
