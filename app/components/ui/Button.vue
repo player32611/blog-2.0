@@ -8,7 +8,7 @@ const { theme } = useThemeStore();
 const { effectsVolume } = useSoundStore();
 const { text, size, icon, onClick, style } = defineProps<ButtonParams>();
 
-const undertaleSound = useSoundEffect("/sounds/effects/undertale-button.wav");
+const undertaleSound = useSoundEffect("sounds/effects/undertale-button.wav");
 // const touhouSound = useSoundEffect('/sounds/touhou-button.mp3')
 
 const handleClick = () => {
