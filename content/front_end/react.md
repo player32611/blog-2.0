@@ -19,7 +19,7 @@ React 让你可以通过组件来构建用户界面。你可以创建像 Thumbna
 
 **执行命令：**
 
-```
+```bash
 npx create-react-app react-basic
 ```
 
@@ -27,19 +27,19 @@ npx create-react-app react-basic
 
 **Next.js**
 
-```
+```bash
 npx create-next-app@latest
 ```
 
 **React Router (v7)**
 
-```
+```bash
 npx create-react-router@latest
 ```
 
 **Expo**
 
-```
+```bash
 npx create-expo-app@latest
 ```
 
@@ -53,7 +53,7 @@ npx create-expo-app@latest
 
 export default 前缀是一种 JavaScript 标准语法（非 React 的特性）。它允许你导出一个文件中的主要函数以便你以后可以从其他文件引入它。
 
-```JavaScript
+```js
 export default
 ```
 
@@ -61,7 +61,7 @@ export default
 
 使用 function Profile() { } 定义名为 Profile 的 JavaScript 函数。
 
-```JavaScript
+```js
 export default function Profile() {}
 ```
 
@@ -75,28 +75,23 @@ React 组件是常规的 JavaScript 函数，但 组件的名称必须以大写�
 
 这个组件返回一个带有 src 和 alt 属性的 img 标签。img 写得像 HTML，但实际上是 JavaScript！这种语法被称为 JSX，它允许你在 JavaScript 中嵌入标签。
 
-```JavaScript
+```js
 export default function Profile() {
-  return (
-    <img
-      src="https://i.imgur.com/MK3eW3Am.jpg"
-      alt="Katherine Johnson"
-    />
-  )
+	return <img src="https://i.imgur.com/MK3eW3Am.jpg" alt="Katherine Johnson" />;
 }
 ```
 
 从 React 19 开始，你现在可以在函数组件中将 ref 作为 prop 进行访问：
 
-```JavaScript
-function Children1({placeholder, ref}) {
-  return <input placeholder={placeholder} ref={ref} />
+```js
+function Children1({ placeholder, ref }) {
+	return <input placeholder={placeholder} ref={ref} />;
 }
 ```
 
 在其它组件中，可以通过 `useRef` 获取到绑定了 ref 的 DOM 元素
 
-```JavaScript
+```js
 const sonRef = useRef(null)
 //...
 <Children1 ref={sonRef} />
@@ -119,43 +114,51 @@ const sonRef = useRef(null)
 
 ::: code-group
 
-```JavaScript [App.js]
+```js [App.js]
 import { useState } from "react";
-import Children1 from './Children1.js'
+import Children1 from "./Children1.js";
 
 function App() {
-  const [num, setNum] = useState(0)
-  function click(num) {
-    setNum(num)
-  }
-  return (
-    <div className="App">
-      <div>{num}</div>
-      <div><button onClick={() => click(1)}>1</button></div>
-      <div><button onClick={() => click(2)}>2</button></div>
-      <Children1 />
-    </div>
-  );
+	const [num, setNum] = useState(0);
+	function click(num) {
+		setNum(num);
+	}
+	return (
+		<div className="App">
+			<div>{num}</div>
+			<div>
+				<button onClick={() => click(1)}>1</button>
+			</div>
+			<div>
+				<button onClick={() => click(2)}>2</button>
+			</div>
+			<Children1 />
+		</div>
+	);
 }
 
 export default App;
 ```
 
-```JavaScript [Children1.js]
+```js [Children1.js]
 import { useState } from "react";
 
 function Children1() {
-    const [msg, setMsg] = useState("msg")
-    function click(msg) {
-        setMsg(msg)
-    }
-    return (
-        <div className="Children1">
-            <div>{msg}</div>
-            <div><button onClick={() => click("message1")}>1</button></div>
-            <div><button onClick={() => click("message2")}>2</button></div>
-        </div>
-    );
+	const [msg, setMsg] = useState("msg");
+	function click(msg) {
+		setMsg(msg);
+	}
+	return (
+		<div className="Children1">
+			<div>{msg}</div>
+			<div>
+				<button onClick={() => click("message1")}>1</button>
+			</div>
+			<div>
+				<button onClick={() => click("message2")}>2</button>
+			</div>
+		</div>
+	);
 }
 
 export default Children1;
@@ -183,15 +186,15 @@ React 组件基础的样式控制有两种方式：
 }
 ```
 
-```JavaScript [App.js]
-import './index.css'
+```js [App.js]
+import "./index.css";
 
-function App () {
-    return (
-        <div>
-            <span className='foo'>this is span</span>
-        </div>
-    )
+function App() {
+	return (
+		<div>
+			<span className="foo">this is span</span>
+		</div>
+	);
 }
 ```
 
@@ -201,51 +204,51 @@ function App () {
 
 当需要进行父子组件间通信时，子组件通过 props 参数接收数据
 
-```JavaScript
-function Son(props){
-    //...
+```js
+function Son(props) {
+	//...
 }
 ```
 
 父组件在使用子组件时，需传入数据名与数据值
 
-```JavaScript
-function App(){
-    //...
-    return(
-        <Son name={name} />
-    )
+```js
+function App() {
+	//...
+	return <Son name={name} />;
 }
 ```
 
 当父组件把内容嵌套在子组件标签中时，父组件会自动在名为 children 的 prop 属性中接收该内容
 
-```JavaScript
+```js
 //...
-<Son><span>this is span</span></Son>
+<Son>
+	<span>this is span</span>
+</Son>
 ```
 
 ### 组件子传父通信
 
 子组件需要传递数据给父组件时，需要调用父组件传过来的函数
 
-```JavaScript
-function Son({onGetMsg}){
-    const sonMsg = "this is son msg"
-    return(
-        <div>
-            <button onClick={()=>onGetMsg(sonMsg)}>send</button>
-        </div>
-    )
+```js
+function Son({ onGetMsg }) {
+	const sonMsg = "this is son msg";
+	return (
+		<div>
+			<button onClick={() => onGetMsg(sonMsg)}>send</button>
+		</div>
+	);
 }
 
-function App(){
-    const getMsg = (msg) => console.log(msg)
-    return(
-        <div>
-            <Son onGetMsg={getMsg} />
-        </div>
-    )
+function App() {
+	const getMsg = msg => console.log(msg);
+	return (
+		<div>
+			<Son onGetMsg={getMsg} />
+		</div>
+	);
 }
 ```
 
@@ -257,7 +260,7 @@ function App(){
 
 你可以用 useState 为组件添加状态。useState 让你声明一个状态变量。它接收初始状态并返回一对值：当前状态，以及一个让你更新状态的设置函数。
 
-```JavaScript
+```js
 const [index, setIndex] = useState(0);
 const [showMore, setShowMore] = useState(false);
 ```
@@ -268,21 +271,25 @@ const [showMore, setShowMore] = useState(false);
 
 调用函数时，则传入一个函数引用
 
-```JavaScript
+```js
 import { useState } from "react";
 
 function App() {
-  const [num, setNum] = useState(0)
-  function click(num) {
-    setNum(num)
-  }
-  return (
-    <div className="App">
-      <div>{num}</div>
-      <div><button onClick={() => click(1)}>1</button></div>
-      <div><button onClick={() => click(2)}>2</button></div>
-    </div>
-  );
+	const [num, setNum] = useState(0);
+	function click(num) {
+		setNum(num);
+	}
+	return (
+		<div className="App">
+			<div>{num}</div>
+			<div>
+				<button onClick={() => click(1)}>1</button>
+			</div>
+			<div>
+				<button onClick={() => click(2)}>2</button>
+			</div>
+		</div>
+	);
 }
 
 export default App;
@@ -292,37 +299,37 @@ export default App;
 
 **状态不可变** : 在 React 中，状态被认为是只读的，我们应该始终替换它而不是修改它，直接修改状态不能引发视图更新。
 
-```JavaScript
-let [count, setCount] = useState(0)
+```js
+let [count, setCount] = useState(0);
 const handleClick = () => {
-    count++//直接修改无法引发视图更新 // [!code warning]
-    console.log(count)
-}
+	count++; //直接修改无法引发视图更新 // [!code warning]
+	console.log(count);
+};
 ```
 
 **修改对象状态** : 对于对象类型的状态变量，应该始终传给 set 方法一个全新的对象来进行修改。
 
-```JavaScript
+```js
 const [form, setForm] = useState({
-    name: 'jack'
-})
+	name: "jack",
+});
 const handleChangeName = () => {
-    form.name = 'john'//直接修改原对象，不引发视图变化 // [!code warning]
-}
+	form.name = "john"; //直接修改原对象，不引发视图变化 // [!code warning]
+};
 ```
 
 **正确方法:**
 
-```JavaScript
+```js
 const [form, setForm] = useState({
-    name: 'jack'
-})
+	name: "jack",
+});
 const handleChangeName = () => {
-    setForm({
-        ...form,
-        name: 'john',
-    })
-}
+	setForm({
+		...form,
+		name: "john",
+	});
+};
 ```
 
 ## Redux 集中状态管理
@@ -351,42 +358,43 @@ npm i @reduxjs/toolkit react-redux
 
 ::: code-group
 
-```JavaScript [counterStore.js]
-
-import { createSlice } from "@reduxjs/toolkit"
+```js [counterStore.js]
+import { createSlice } from "@reduxjs/toolkit";
 
 const counterStore = createSlice({
-    name: 'counter',//模块名称
-    initialState: {//初始化的状态
-        count: 0
-    },
-    reducers: {//修改数据的同步方法
-        increment (state) {
-            state.count++
-        },
-        decrement (state) {
-            state.count--
-        },
-    }
-})
+	name: "counter", //模块名称
+	initialState: {
+		//初始化的状态
+		count: 0,
+	},
+	reducers: {
+		//修改数据的同步方法
+		increment(state) {
+			state.count++;
+		},
+		decrement(state) {
+			state.count--;
+		},
+	},
+});
 
-const { increment, decrement } = counterStore.actions//解构出创建action对象的函数
-const counterReducer = counterStore.reducer//获取reducer函数
-export { increment, decrement }
-export default counterReducer
+const { increment, decrement } = counterStore.actions; //解构出创建action对象的函数
+const counterReducer = counterStore.reducer; //获取reducer函数
+export { increment, decrement };
+export default counterReducer;
 ```
 
-```JavaScript [store/index.js]
-import { configureStore } from "@reduxjs/toolkit"
-import counterReducer from "./modules/counterStore"
+```js [store/index.js]
+import { configureStore } from "@reduxjs/toolkit";
+import counterReducer from "./modules/counterStore";
 
 const store = configureStore({
-    reducer: {
-        counter: counterReducer
-    }
-})
+	reducer: {
+		counter: counterReducer,
+	},
+});
 
-export default store
+export default store;
 ```
 
 :::
@@ -395,34 +403,30 @@ export default store
 
 react-redux 负责把 Redux 和 React 链接起来，内置 Provider 组件通过 store 参数把创建好的 store 实例注入到应用中，链接正式建立
 
-```JavaScript
+```js
 //index.js
-import store from './store'
-import { Provider } from 'react-redux'
+import store from "./store";
+import { Provider } from "react-redux";
 
-const root = ReactDOM.createRoot(document.getElementById('root'))
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <Provider store={store}>
-        <App />
-    </Provider>
-)
+	<Provider store={store}>
+		<App />
+	</Provider>,
+);
 ```
 
 **3. React 组件使用 store 中的数据**
 
 在 React 组件中使用 store 中的数据，需要用到一个钩子函数 `useSelect` ，它的作用是把 store 中的数据映射到组件中
 
-```JavaScript
+```js
 //App.js
-import { useSelector } from "react-redux"
+import { useSelector } from "react-redux";
 
 function App() {
-    const { count } = useSelcet(state => state.counter)
-    return (
-        <div className="App">
-            {count}
-        </div>
-    );
+	const { count } = useSelcet(state => state.counter);
+	return <div className="App">{count}</div>;
 }
 
 export default App;
@@ -432,20 +436,20 @@ export default App;
 
 React 组件中修改 store 中的数据需要借助另外一个 hook 函数 `useDispatch` ，它的作用是生成提交 action 对象的 dispatch 函数
 
-```JavaScript
+```js
 //App.js
-import { useDispatch, useSelector } from 'react-redux'
-import { decrement, increment } from './store/modules/counterStore'
-function App () {
-    const { count } = useSelect(state => state.counter)
-    const dispatch = useDispatch()
-    return (
-        <div className="App">
-            <button onClick={() => dispatch(decrement())}>-</button>
-            <span>{count}</span>
-            <button onClick={() => dispatch(increment())}>+</button>
-        </div>
-    )
+import { useDispatch, useSelector } from "react-redux";
+import { decrement, increment } from "./store/modules/counterStore";
+function App() {
+	const { count } = useSelect(state => state.counter);
+	const dispatch = useDispatch();
+	return (
+		<div className="App">
+			<button onClick={() => dispatch(decrement())}>-</button>
+			<span>{count}</span>
+			<button onClick={() => dispatch(increment())}>+</button>
+		</div>
+	);
 }
 ```
 
@@ -455,13 +459,13 @@ function App () {
 
 ::: code-group
 
-```JavaScript [counterStore.js]
+```js [counterStore.js]
 addToNum (state, action) {
     state.count = action.payload
 }
 ```
 
-```JavaScript [App.js]
+```js [App.js]
 <button onClick={() => dispatch(addToNum(10))}>add to 10</button>
 ```
 
@@ -481,22 +485,22 @@ npm install zustand
 
 创建的 store 是一个 hook，你可以放任何东西到里面：基础变量，对象、函数，状态必须不可改变地更新，set 函数合并状态以实现状态更新。
 
-```JavaScript
+```js
 //countStore.js
-import { create } from 'zustand'
+import { create } from "zustand";
 
-const useCountStore = create((set) => {
-    return {
-        count: 0,//状态数据
-        inc: () => {
-            set((state) => ({
-                count: state.count + 1
-            }))
-        }//修改状态数据的方法
-    }
-})
+const useCountStore = create(set => {
+	return {
+		count: 0, //状态数据
+		inc: () => {
+			set(state => ({
+				count: state.count + 1,
+			}));
+		}, //修改状态数据的方法
+	};
+});
 
-export default useCountStore//导出 store
+export default useCountStore; //导出 store
 ```
 
 ::tip
@@ -511,17 +515,19 @@ set() 是用来修改数据的专门方法，必须调用它来修改数据
 
 可以在任何地方使用钩子，不需要提供 provider。基于 selector 获取您的目标状态，组件将在状态更改时重新渲染。
 
-```JavaScript
-import useCountStore from "./store/countStore"
+```js
+import useCountStore from "./store/countStore";
 
 function Children1() {
-    const { count, inc } = useCountStore()
-    return (
-        <div>
-            <div>{count}</div>
-            <div><button onClick={inc}>+</button></div>
-        </div>
-    );
+	const { count, inc } = useCountStore();
+	return (
+		<div>
+			<div>{count}</div>
+			<div>
+				<button onClick={inc}>+</button>
+			</div>
+		</div>
+	);
 }
 
 export default Children1;
@@ -531,26 +537,26 @@ export default Children1;
 
 对于异步的支持不需要特殊的操作，直接在函数中编写异步逻辑，最后只需要调用 `set()` 方法传入新状态即可
 
-```JavaScript
-const useStore = create((set)=>{
-    return{
-        channelList:[],
-        fetchChannelList:async()=>{
-            const res = await fetch(url)
-            const jsonData = await res.json()
-            set({
-                channelList: jsonData.data.channels
-            })
-        }
-    }
-})
+```js
+const useStore = create(set => {
+	return {
+		channelList: [],
+		fetchChannelList: async () => {
+			const res = await fetch(url);
+			const jsonData = await res.json();
+			set({
+				channelList: jsonData.data.channels,
+			});
+		},
+	};
+});
 ```
 
 ### 切片模式
 
 当单个 store 比较大的时候，可以采用切片模式进行模块拆分组合，类似于模块化
 
-```JavaScript
+```js
 import { create } from 'zustand'
 
 const createCountStore = create((set) => {
@@ -607,41 +613,37 @@ npx create-react-router@latest
 
 ::: code-group
 
-```JavaScript [App.js]
+```js [App.js]
 function App() {
-  return (
-    <div className="App">
-      App
-    </div >
-  );
-}//页面级组件
+	return <div className="App">App</div>;
+} //页面级组件
 
 export default App;
 ```
 
-```JavaScript [router.js]
-import App from '../App'//引入你需要的页面级组件配置
+```js [router.js]
+import App from "../App"; //引入你需要的页面级组件配置
 
-import { createBrowserRouter } from "react-router"
+import { createBrowserRouter } from "react-router";
 
 const router = createrBrowserRouter([
-    {
-        path: '/',
-        element: <App />
-    }
-])
+	{
+		path: "/",
+		element: <App />,
+	},
+]);
 
-export default router//导出路由配置
+export default router; //导出路由配置
 ```
 
-```JavaScript [index.js]
+```js [index.js]
 //应用入口文件渲染
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import router from './router/router';
-import { RouterProvider } from 'react-router';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import router from "./router/router";
+import { RouterProvider } from "react-router";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<RouterProvider router={router} />);
 ```
 
@@ -649,19 +651,19 @@ root.render(<RouterProvider router={router} />);
 
 路由配置也可以采用以下写法:
 
-```JavaScript
-import App from '../App'//引入你需要的页面级组件配置
+```js
+import App from "../App"; //引入你需要的页面级组件配置
 
-import { createBrowserRouter } from "react-router"
+import { createBrowserRouter } from "react-router";
 
 const router = createrBrowserRouter([
-    {
-        path: '/',
-        Component: App
-    }
-])
+	{
+		path: "/",
+		Component: App,
+	},
+]);
 
-export default router//导出路由配置
+export default router; //导出路由配置
 ```
 
 ### 路由导航
@@ -670,27 +672,27 @@ export default router//导出路由配置
 
 **声明式导航** : 在模板中通过`<Link/>`组件描述处要跳转到哪里去
 
-```JavaScript
-import {Link} from 'react-router-dom'
+```js
+import { Link } from "react-router-dom";
 //...
-<Link to="/article">文章</Link>
+<Link to="/article">文章</Link>;
 ```
 
 通过给组件的 to 属性指定要跳转到路由 path，组件会被渲染为浏览器支持的 a 链接，如果需要传参直接通过字符串拼接的当时拼接参数即可
 
 **编程式导航** : 通过`useNavigate`钩子得到导航方法，然后通过调用方法以命令式的形式进行路由跳转
 
-```JavaScript
-import { useNavigate } from "react-routerdom"
+```js
+import { useNavigate } from "react-routerdom";
 const Login = () => {
-    const navigate = useNavigate()
-    return(
-        <div>
-            我是登录页
-            <button onClick={() => navigate('/article')}>跳转至文章</button>
-        </div>
-    )
-}
+	const navigate = useNavigate();
+	return (
+		<div>
+			我是登录页
+			<button onClick={() => navigate("/article")}>跳转至文章</button>
+		</div>
+	);
+};
 ```
 
 通过调用 navigate 方法传入地址 path 实现跳转
@@ -703,39 +705,39 @@ const Login = () => {
 
 在源路由中调用`navigate()`方法时在目标路由后添加参数与参数值，用`?`将路由名与参数隔开，用`&`将参数隔开
 
-```JavaScript
-navigate('/article?id=1001&name=jack')
+```js
+navigate("/article?id=1001&name=jack");
 ```
 
 在目标路由中使用`useSearchParams()`接收参数
 
-```JavaScript
-const [params] = useSearchParams()
-let id = params.get('id')
+```js
+const [params] = useSearchParams();
+let id = params.get("id");
 ```
 
 **params 传参**
 
 在路由配置文件中提前设置需要传递的参数名，参数名前需添加`:`
 
-```JavaScript
+```js
 {
-    path: '/article/:id/:name'
-    element: <Article />
+	path: "/article/:id/:name";
+	element: <Article />;
 }
 ```
 
 在源路由中调用`navigate()`方法时在目标路由后添加参数与参数值，用`/`分割路由名与参数
 
-```JavaScript
-navigate('/article/1001')
+```js
+navigate("/article/1001");
 ```
 
 最后在目标路由中使用`useParams`方法接收参数
 
-```JavaScript
-const params = useParams()
-let id = params.id
+```js
+const params = useParams();
+let id = params.id;
 ```
 
 ### 嵌套路由配置
@@ -746,7 +748,7 @@ let id = params.id
 
 1.使用 children 属性配置路由嵌套关系
 
-```JavaScript
+```js
 {
     path: '/',
     element: <Layout />,
@@ -765,19 +767,19 @@ let id = params.id
 
 2.使用 `<Outlet/>` 组件配置二级路由渲染位置
 
-```JavaScript
+```js
 const Layout = () => {
-    return(
-        <div>
-            <div>我是Layout</div>
-            <Link to="/board">面板</Link>
-            <Link to="/about">关于</Link>
+	return (
+		<div>
+			<div>我是Layout</div>
+			<Link to="/board">面板</Link>
+			<Link to="/about">关于</Link>
 
-            {/* 二级路由出口 */}
-            <Outlet />
-        </div>
-    )
-}
+			{/* 二级路由出口 */}
+			<Outlet />
+		</div>
+	);
+};
 ```
 
 ### 默认二级路由
@@ -786,17 +788,17 @@ const Layout = () => {
 
 只需要在二级路由的位置去掉 path ，设置 index 属性为 true 。
 
-```JavaScript
-children:[
-    {
-        index: true,
-        element: <Board />,
-    },
-    {
-        path: 'about',
-        element: <About />,
-    },
-]
+```js
+children: [
+	{
+		index: true,
+		element: <Board />,
+	},
+	{
+		path: "about",
+		element: <About />,
+	},
+];
 ```
 
 ### 404 路由配置
@@ -807,16 +809,16 @@ children:[
 
 1.准备一个 NotFound 组件
 
-```JavaScript
+```js
 const NotFound = () => {
-    return <div>this is NotFound</div>
-}
-export default NotFound
+	return <div>this is NotFound</div>;
+};
+export default NotFound;
 ```
 
 2.在路由表数组的末尾，以 \* 号作为路由 path 配置路由
 
-```JavaScript
+```js
 {
     path: '*',
     element: <NotFound />
@@ -835,42 +837,46 @@ Hook 可以帮助在组件中使用不同的 React 功能。你可以使用内�
 
 1、定义一个 reducer 函数(根据不同的 action 返回不同的新状态)
 
-```JavaScript
+```js
 function reducer(state, action) {
-  switch (action.type) {
-    case 'INC':
-      return state + 1
-    case 'DEC':
-      return state - 1
-    default:
-      return state
-  }
+	switch (action.type) {
+		case "INC":
+			return state + 1;
+		case "DEC":
+			return state - 1;
+		default:
+			return state;
+	}
 }
 ```
 
 2、在组件中调用 useReducer ，并传入 reducer 函数和状态的初始值
 
-```JavaScript
+```js
 function App() {
-  const [state, dispatch] = useReducer(reducer, 0)
-  //...
+	const [state, dispatch] = useReducer(reducer, 0);
+	//...
 }
 ```
 
 3、事件发生时，通过 dispatch 函数分派一个 action 对象(通知 reducer 要返回那个新状态并渲染 UI)
 
-```JavaScript
+```js
 function App() {
-  const [state, dispatch] = useReducer(reducer, 0)
-  //...
-  return (
-    <div className="App">
-        {/* //... */}
-        <div>{state}</div>
-        <div><button onClick={() => dispatch({ type: 'INC' })}>INC</button></div>
-        <div><button onClick={() => dispatch({ type: 'DEC' })}>DEC</button></div>
-    </div >
-  );
+	const [state, dispatch] = useReducer(reducer, 0);
+	//...
+	return (
+		<div className="App">
+			{/* //... */}
+			<div>{state}</div>
+			<div>
+				<button onClick={() => dispatch({ type: "INC" })}>INC</button>
+			</div>
+			<div>
+				<button onClick={() => dispatch({ type: "DEC" })}>DEC</button>
+			</div>
+		</div>
+	);
 }
 ```
 
@@ -880,20 +886,26 @@ function App() {
 
 dispatch 除了可以传递状态 type ，还可以传递参数:
 
-```JavaScript
+```js
 function App() {
-  const [state, dispatch] = useReducer(reducer, 0)
-  //...
-  return (
-    <div className="App">
-        {/* //... */}
-        <div>{state}</div>
-        <div><button onClick={() => dispatch({ type: 'INC' })}>INC</button></div>
-        <div><button onClick={() => dispatch({ type: 'DEC' })}>DEC</button></div>
-        <div><button onClick={() => dispatch({ type: 'SET', payload: 100 })}>SET</button></div>
-        <Children1 />
-    </div >
-  );
+	const [state, dispatch] = useReducer(reducer, 0);
+	//...
+	return (
+		<div className="App">
+			{/* //... */}
+			<div>{state}</div>
+			<div>
+				<button onClick={() => dispatch({ type: "INC" })}>INC</button>
+			</div>
+			<div>
+				<button onClick={() => dispatch({ type: "DEC" })}>DEC</button>
+			</div>
+			<div>
+				<button onClick={() => dispatch({ type: "SET", payload: 100 })}>SET</button>
+			</div>
+			<Children1 />
+		</div>
+	);
 }
 ```
 
@@ -901,10 +913,10 @@ function App() {
 
 作用：在组件每次重新渲染的时候缓存计算的结果，用于提高性能
 
-```JavaScript
-const result = useMemo(()=>{
-    return add(count1)
-},[count1])
+```js
+const result = useMemo(() => {
+	return add(count1);
+}, [count1]);
 ```
 
 使用 useMemo 做缓存之后可以保证只有依赖项发生变化时才会重新计算
@@ -913,7 +925,7 @@ const result = useMemo(()=>{
 
 作用：允许组件在 props 没有改变的情况下跳过渲染
 
-```JavaScript
+```js
 const MemoComponent = memo(function Children1(props)){
     //...
 }
@@ -925,8 +937,8 @@ const MemoComponent = memo(function Children1(props)){
 
 作用：在组件多次重新渲染的时候缓存函数
 
-```JavaScript
-const changeHandler = useCallback((value) => console.log(value),[])
+```js
+const changeHandler = useCallback(value => console.log(value), []);
 ```
 
 使用 useCallback 包裹函数之后，函数可以保证在 App 重新渲染的时候保持引用稳定
@@ -937,29 +949,27 @@ const changeHandler = useCallback((value) => console.log(value),[])
 
 ::: code-group
 
-```JavaScript [Children1.js]
+```js [Children1.js]
 function click() {
-    //...
+	//...
 }
 useImperativeHandle(ref, () => {
-    return {
-        click
-    }
-})
-return (
-    <div className="Children1"></div>
-);
+	return {
+		click,
+	};
+});
+return <div className="Children1"></div>;
 ```
 
-```JavaScript [App.js]
+```js [App.js]
 function App() {
-  const sonRef = useRef(null)
-  //...
-  return (
-    <div className="App">
-      <Children1 ref={sonRef} />
-    </div >
-  );
+	const sonRef = useRef(null);
+	//...
+	return (
+		<div className="App">
+			<Children1 ref={sonRef} />
+		</div>
+	);
 }
 ```
 
@@ -973,15 +983,15 @@ function App() {
 
 在你的组件内，调用 `useRef` Hook 并传入你想要引用的初始值作为唯一参数。
 
-```JavaScript
+```js
 const ref = useRef(0);
 ```
 
 useRef 返回一个这样的对象:
 
-```JavaScript
+```js
 {
-  current: 0 // 你向 useRef 传入的值
+	current: 0; // 你向 useRef 传入的值
 }
 ```
 
@@ -993,10 +1003,10 @@ useRef 返回一个这样的对象:
 
 `useEffect`接受两个参数；参数 1 是一个函数，可以把它叫做副作用函数，在函数内部可以放置要执行的操作；参数 2 是一个数组(可选参)，在数组里放置依赖项，不同依赖项会影响第一个参数函数的执行，当是一个空数组的时候，副作用函数只会在组件渲染完毕之后执行一次。
 
-```JavaScript
-useEffect(()=>{
-    //副作用操作逻辑
-},[])
+```js
+useEffect(() => {
+	//副作用操作逻辑
+}, []);
 ```
 
 |     依赖项     |        副作用函数执行时机         |
@@ -1007,13 +1017,13 @@ useEffect(()=>{
 
 在`useEffect`中编写的由渲染本身引起的对接组件外部的操作，社区也经常把它叫做副作用操作，比如在`useEffect`中开启了一个定时器，我们想在组件卸载时把这个定时器再清理掉，这个过程就是清理副作用。
 
-```JavaScript
+```js
 useEffect(() => {
-    //副作用逻辑
-    return() => {
-        //清除副作用逻辑
-    }
-},[])
+	//副作用逻辑
+	return () => {
+		//清除副作用逻辑
+	};
+}, []);
 ```
 
 ### useContext
@@ -1022,26 +1032,22 @@ useEffect(() => {
 
 先使用`createContext`方法创建一个上下文对象
 
-```JavaScript
-const MsgContext = createContext()
+```js
+const MsgContext = createContext();
 ```
 
 再在顶层组件通过 Provider 组件提供数据
 
-```JavaScript
+```js
 //...
-return (
-    <MsgContext.Provider calue={msg}>
-    {/* //... */}
-    </MsgContext.Provider>
-)
+return <MsgContext.Provider calue={msg}>{/* //... */}</MsgContext.Provider>;
 ```
 
 最后在底层组件中使用`useContext`钩子函数接收数据
 
-```JavaScript
+```js
 //...
-const msg = useContext(JavaScript)
+const msg = useContext(JavaScript);
 ```
 
 ## 封装 axios 网络请求

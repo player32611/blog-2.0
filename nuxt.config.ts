@@ -3,14 +3,18 @@ export default defineNuxtConfig({
 	modules: ["@nuxt/content", "@pinia/nuxt", "@nuxt/fonts"],
 	devtools: { enabled: true },
 	compatibilityDate: "2024-04-03",
-	components: {
-		dirs: [
-			{
-				path: "~/components/content",
-				prefix: "Prose",
-				global: true,
+	content: {
+		build: {
+			markdown: {
+				highlight: {
+					theme: "github-light",
+				},
+				toc: {
+					depth: 2,
+					searchDepth: 2,
+				},
 			},
-		],
+		},
 	},
 	fonts: {
 		providers: {
@@ -23,7 +27,7 @@ export default defineNuxtConfig({
 		families: [
 			{
 				name: "Mars Needs Cunnilingus",
-				src: "/fonts/Mars_Needs_Cunnilingus.ttf", // 相对于 public 目录
+				src: "/fonts/Mars_Needs_Cunnilingus.ttf",
 				weight: 500,
 			},
 			{
@@ -33,7 +37,7 @@ export default defineNuxtConfig({
 			},
 		],
 	},
-	ssr: false, // 根据需要选择 true 或 false
+	ssr: false,
 	// app: {
 	// 	baseURL: "/blog-2.0/", // GitHub Pages 需要这个配置
 	// },

@@ -31,13 +31,13 @@ CSS 选择器用于“查找”（或选取）要设置样式的 HTML 元素。�
 
 **所有简单的 CSS 选择器**
 
-|       选择器       |    示例    |             示例描述             |
-| :----------------: | :--------: | :------------------------------: |
-|       .class       |   .intro   | 选取所有 class="intro" 的元素。  |
-|        #id         | #firstname | 选取 id="firstname" 的那个元素。 |
-|         \*         |     \*     |          选取所有元素。          |
-|      element       |     p      |        选取所有 p 元素。         |
-| element,element,.. |   div, p   | 选取所有 div 元素和所有 p 元素。 |
+|        选择器        |     示例     |             示例描述             |
+| :------------------: | :----------: | :------------------------------: |
+|       `.class`       |   `.intro`   | 选取所有 class="intro" 的元素。  |
+|        `#id`         | `#firstname` | 选取 id="firstname" 的那个元素。 |
+|         `*`          |     `*`      |          选取所有元素。          |
+|      `element`       |     `p`      |        选取所有 p 元素。         |
+| `element,element,..` |   `div, p`   | 选取所有 div 元素和所有 p 元素。 |
 
 ::tip
 
@@ -62,12 +62,12 @@ HTML 元素也可以引用多个类。在这个例子中，p 元素将根据 cla
 
 **所有 CSS 组合选择器**
 
-|      选择器       |  示例   |                示例描述                |
-| :---------------: | :-----: | :------------------------------------: |
-|  element element  |  div p  |     选择 div 元素内的所有 p 元素。     |
-|  element>element  | div > p | 选择其父元素是 div 元素的所有 p 元素。 |
-|  element+element  | div + p |  选择所有紧随 div 元素之后的 p 元素。  |
-| element1~element2 | p ~ ul  |   选择前面有 p 元素的每个 ul 元素。    |
+|       选择器        |   示例    |                示例描述                |
+| :-----------------: | :-------: | :------------------------------------: |
+|  `element element`  |  `div p`  |     选择 div 元素内的所有 p 元素。     |
+|  `element>element`  | `div > p` | 选择其父元素是 div 元素的所有 p 元素。 |
+|  `element+element`  | `div + p` |  选择所有紧随 div 元素之后的 p 元素。  |
+| `element1~element2` | `p ~ ul`  |   选择前面有 p 元素的每个 ul 元素。    |
 
 ### 伪类选择器
 
@@ -81,12 +81,12 @@ HTML 元素也可以引用多个类。在这个例子中，p 元素将根据 cla
 
 **常用的 CSS 伪类选择器**
 
-|  选择器  |    示例     |          示例描述           |
-| :------: | :---------: | :-------------------------: |
-|  :focus  | input:focus | 选择获得焦点的 input 元素。 |
-|  :hover  |   a:hover   |  选择鼠标悬停其上的链接。   |
-|  :link   |   a:link    |  选择所有未被访问的链接。   |
-| :visited |  a:visited  |   选择所有已访问的链接。    |
+|   选择器   |     示例      |          示例描述           |
+| :--------: | :-----------: | :-------------------------: |
+|  `:focus`  | `input:focus` | 选择获得焦点的 input 元素。 |
+|  `:hover`  |   `a:hover`   |  选择鼠标悬停其上的链接。   |
+|  `:link`   |   `a:link`    |  选择所有未被访问的链接。   |
+| `:visited` |  `a:visited`  |   选择所有已访问的链接。    |
 
 ### 伪元素选择器
 
@@ -103,15 +103,15 @@ selector::pseudo-element {
 }
 ```
 
-**::first-line** : 用于向文本的首行添加特殊样式。（只能应用于块级元素）
+**`::first-line`** : 用于向文本的首行添加特殊样式。（只能应用于块级元素）
 
-**::first-letter** : 用于向文本的首字母添加特殊样式。（只适用于块级元素）
+**`::first-letter`** : 用于向文本的首字母添加特殊样式。（只适用于块级元素）
 
-**::before** : 用于在元素内容之前插入一些内容。
+**`::before`** : 用于在元素内容之前插入一些内容。
 
-**::after** : 用于在元素内容之后插入一些内容。
+**`::after`** : 用于在元素内容之后插入一些内容。
 
-**::selection** : 伪元素匹配用户选择的元素部分。
+**`::selection`** : 伪元素匹配用户选择的元素部分。
 
 ## 常用属性
 
@@ -141,16 +141,16 @@ border-radius 属性定义元素角的半径，可以接受一到四个值。
 
 ```css
 {
-    border-radius: 15px 50px 30px 5px;//依次分别用于：左上角、右上角、右下角、左下角
+    border-radius: 15px 50px 30px 5px; //依次分别用于：左上角、右上角、右下角、左下角
 }
 {
-    border-radius: 15px 50px 30px;//第一个值用于左上角，第二个值用于右上角和左下角，第三个用于右下角
+    border-radius: 15px 50px 30px; //第一个值用于左上角，第二个值用于右上角和左下角，第三个用于右下角
 }
 {
-    border-radius: 15px 50px;//第一个值用于左上角和右下角，第二个值用于右上角和左下角
+    border-radius: 15px 50px; //第一个值用于左上角和右下角，第二个值用于右上角和左下角
 }
 {
-    border-radius: 15px;//该值用于所有四个角，圆角都是一样的
+    border-radius: 15px; //该值用于所有四个角，圆角都是一样的
 }
 ```
 
@@ -246,16 +246,16 @@ margin 简写属性在一个声明中设置所有外边距属性。该属性可�
 
 ```css
 {
-    margin:10px 5px 15px 20px;//上外边距是10px，右外边距是5px，下外边距是15px，左外边距是20px。
+    margin:10px 5px 15px 20px; //上外边距是10px，右外边距是5px，下外边距是15px，左外边距是20px。
 }
 {
-    margin:10px 5px 15px;//上外边距是 10px，右外边距和左外边距是 5px，下外边距是 15px。
+    margin:10px 5px 15px; //上外边距是 10px，右外边距和左外边距是 5px，下外边距是 15px。
 }
 {
-    margin:10px 5px;//上外边距和下外边距是 10px，右外边距和左外边距是 5px。
+    margin:10px 5px; //上外边距和下外边距是 10px，右外边距和左外边距是 5px。
 }
 {
-    margin:10px;//所有 4 个外边距都是 10px。
+    margin:10px; //所有 4 个外边距都是 10px。
 }
 ```
 
@@ -557,10 +557,10 @@ Grid 布局由一个父元素以及一个或多个子元素组成。当 HTML 元
 
 ```css
 {
-    grid-area: 1 / 2 / 5 / 6;//从 row-line 1 和 column-line 2 开始，在 row-line 5 和 column line 6 结束
+    grid-area: 1 / 2 / 5 / 6; //从 row-line 1 和 column-line 2 开始，在 row-line 5 和 column line 6 结束
 }
 {
-    grid-area: 2 / 1 / span 2 / span 3;//从 row-line 2 和 column-line 开始，并跨越 2 行和 3 列
+    grid-area: 2 / 1 / span 2 / span 3; //从 row-line 2 和 column-line 开始，并跨越 2 行和 3 列
 }
 ```
 
@@ -574,7 +574,7 @@ Sass 是一款强化 CSS 的辅助工具，它在 CSS 语法的基础上增加�
 
 使用 npm :
 
-```
+```bash
 npm install -D sass-embedded
 ```
 
@@ -588,7 +588,7 @@ npm install -D sass-embedded
 
 使用 npm :
 
-```
+```bash
 npm install less -D
 ```
 

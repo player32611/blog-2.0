@@ -33,7 +33,6 @@ const handleClick = (id: string) => {
 			const rect = element.getBoundingClientRect();
 			const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 			const elementTop = rect.top + scrollTop;
-
 			smoother.scrollTo(elementTop, true);
 		}
 		activeHeadingId.value = id;
@@ -91,12 +90,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div
-		class="blog_navigation_box"
-		ref="boxRef"
-		@mouseenter="handleMouseEnter"
-		@mouseleave="handleMouseLeave"
-	>
+	<div class="blog_navigation_box" ref="boxRef" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
 		<div class="navigation_title">在此页面上</div>
 		<div class="navigation_links" v-if="headings.length > 0">
 			<div
@@ -146,6 +140,7 @@ onUnmounted(() => {
 			width: auto;
 			color: rgba($color: #ffffff, $alpha: 0.5);
 			transition: color 0.2s ease-in-out;
+			user-select: none;
 			cursor: pointer;
 
 			&.active {

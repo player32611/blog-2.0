@@ -56,6 +56,11 @@ body {
 	height: 100dvh;
 	width: 100%;
 
+	pre.shiki code .sgsFI,
+	code.shiki .sgsFI {
+		--shiki-default: #ffffff !important; /* 改为纯黑色 */
+	}
+
 	&::-webkit-scrollbar {
 		display: none;
 	}
