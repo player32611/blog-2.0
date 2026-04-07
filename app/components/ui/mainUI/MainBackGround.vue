@@ -93,7 +93,14 @@ onUnmounted(() => {
 		@mouseleave="handleMouseUp"
 		@mousemove="handleMouseMove"
 	>
-		<img :src="'images/background/undertale.jpg'" alt="background" :width="6016 / 2" :height="3541 / 2" draggable="false" ref="imageRef" />
+		<img
+			src="../../../assets/images/background/undertale.jpg"
+			alt="background"
+			:width="6016 / 2"
+			:height="3541 / 2"
+			draggable="false"
+			ref="imageRef"
+		/>
 	</div>
 </template>
 

@@ -7,7 +7,7 @@
  * @returns {string[]} 包含所有匹配图片资源 URL 的字符串数组
  */
 export const getAllImages = (): string[] => {
-	const imageModules = import.meta.glob("~/assets/*.{png,jpg,jpeg,webp,gif}", {
+	const imageModules = import.meta.glob("~/assets/images/normal/*.{png,jpg,jpeg,webp,gif}", {
 		eager: true, // 立即导入所有模块，而不是返回异步函数
 		import: "default", // 只导入默认导出（即图片的 URL 字符串）
 	});
