@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import type { Theme, ThemeState, ThemeGetter, ThemeActions } from "@/types/store";
+import type { Theme } from "~/types/config";
+import type { ThemeState, ThemeGetter, ThemeActions } from "@/types/store";
 
 export const useThemeStore = defineStore("theme", (): ThemeState & ThemeGetter & ThemeActions => {
 	const theme = ref<Theme>("undertale");

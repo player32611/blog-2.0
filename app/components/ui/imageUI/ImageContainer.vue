@@ -150,10 +150,7 @@ const drawFrame = () => {
 };
 
 const checkImg = (x: number, y: number) => {
-	let img = imageDatas.value.find(
-		img =>
-			x >= img.x && x < img.x + imageWidth.value && y >= img.y && y < img.y + imageHeight.value,
-	);
+	let img = imageDatas.value.find(img => x >= img.x && x < img.x + imageWidth.value && y >= img.y && y < img.y + imageHeight.value);
 	if (img) console.log(img, img.img);
 };
 

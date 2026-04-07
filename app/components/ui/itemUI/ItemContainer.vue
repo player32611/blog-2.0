@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
 import Matter, { Engine, Render, World, Bodies, Mouse, MouseConstraint, Runner } from "matter-js";
 import type { ItemParams } from "~/types/components";
 
@@ -79,37 +78,25 @@ const createBoxes = () => {
 	if (ItemSwitchCardRef.value)
 		boxes.value.set(
 			"ItemSwitchCard",
-			Bodies.rectangle(
-				width / 2,
-				height / 2,
-				ItemSwitchCardRef.value.$el.offsetWidth,
-				ItemSwitchCardRef.value.$el.offsetHeight,
-				{
-					restitution: 0.6,
-					friction: 0.5,
-					render: {
-						fillStyle: "rgba(0, 0, 0, 0)",
-					},
+			Bodies.rectangle(width / 2, height / 2, ItemSwitchCardRef.value.$el.offsetWidth, ItemSwitchCardRef.value.$el.offsetHeight, {
+				restitution: 0.6,
+				friction: 0.5,
+				render: {
+					fillStyle: "rgba(0, 0, 0, 0)",
 				},
-			),
+			}),
 		);
 
 	if (ItemPhoneCardRef.value)
 		boxes.value.set(
 			"ItemPhoneCard",
-			Bodies.rectangle(
-				width / 2,
-				height / 2,
-				ItemPhoneCardRef.value.$el.offsetWidth,
-				ItemPhoneCardRef.value.$el.offsetHeight,
-				{
-					restitution: 0.6,
-					friction: 0.5,
-					render: {
-						fillStyle: "rgba(0, 0, 0, 0)",
-					},
+			Bodies.rectangle(width / 2, height / 2, ItemPhoneCardRef.value.$el.offsetWidth, ItemPhoneCardRef.value.$el.offsetHeight, {
+				restitution: 0.6,
+				friction: 0.5,
+				render: {
+					fillStyle: "rgba(0, 0, 0, 0)",
 				},
-			),
+			}),
 		);
 
 	World.add(engine.world, Array.from(boxes.value.values()));

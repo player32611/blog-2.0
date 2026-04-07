@@ -100,13 +100,7 @@ const itemRef = ref<HTMLDivElement | null>(null);
 		justify-content: center;
 		border-radius: 2px;
 		background: rgb(71, 77, 79);
-		background: linear-gradient(
-			180deg,
-			rgba(71, 77, 79, 1) 0%,
-			rgba(90, 97, 100, 1) 3%,
-			rgba(46, 50, 51, 1) 5%,
-			rgba(46, 50, 51, 1) 100%
-		);
+		background: linear-gradient(180deg, rgba(71, 77, 79, 1) 0%, rgba(90, 97, 100, 1) 3%, rgba(46, 50, 51, 1) 5%, rgba(46, 50, 51, 1) 100%);
 
 		.screen-border {
 			border-top: 17px solid black;
@@ -122,12 +116,7 @@ const itemRef = ref<HTMLDivElement | null>(null);
 			.screen {
 				border-radius: 2px;
 				background: rgb(38, 39, 43);
-				background: linear-gradient(
-					135deg,
-					rgba(38, 39, 43, 1) 0%,
-					rgba(49, 52, 62, 1) 49%,
-					rgba(38, 39, 43, 1) 100%
-				);
+				background: linear-gradient(135deg, rgba(38, 39, 43, 1) 0%, rgba(49, 52, 62, 1) 49%, rgba(38, 39, 43, 1) 100%);
 				flex: 1;
 				overflow: hidden;
 				cursor: pointer;

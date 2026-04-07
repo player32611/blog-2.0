@@ -34,30 +34,10 @@ const hp = ref(92);
 			</div>
 		</div>
 		<div class="buttons">
-			<Button
-				:text="'blog'"
-				:size="'large'"
-				:icon="'&#xe99c;'"
-				@click="navigateTo('/blogs')"
-			></Button>
-			<Button
-				:text="'music'"
-				:size="'large'"
-				:icon="'&#xe99a;'"
-				@click="navigateTo('/musics')"
-			></Button>
-			<Button
-				:text="'items'"
-				:size="'large'"
-				:icon="'&#xe994;'"
-				@click="navigateTo('/items')"
-			></Button>
-			<Button
-				:text="'image'"
-				:size="'large'"
-				:icon="'&#xe997;'"
-				@click="navigateTo('/images')"
-			></Button>
+			<Button :text="'blog'" :size="'large'" :icon="'&#xe99c;'" @click="navigateTo('/blogs')"></Button>
+			<Button :text="'music'" :size="'large'" :icon="'&#xe99a;'" @click="navigateTo('/musics')"></Button>
+			<Button :text="'items'" :size="'large'" :icon="'&#xe994;'" @click="navigateTo('/items')"></Button>
+			<Button :text="'image'" :size="'large'" :icon="'&#xe997;'" @click="navigateTo('/images')"></Button>
 		</div>
 	</div>
 </template>

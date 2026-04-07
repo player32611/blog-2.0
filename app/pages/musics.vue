@@ -2,13 +2,11 @@
 import MusicBackground from "~/components/ui/musicUI/MusicBackground.vue";
 import MusicController from "~/components/ui/musicUI/MusicController.vue";
 import MusicList from "~/components/ui/musicUI/MusicList.vue";
-import MusicWave from "~/components/ui/musicUI/MusicWave.vue";
 import Button from "~/components/ui/Button.vue";
 </script>
 
 <template>
 	<div class="musics">
-		<!-- <MusicWave /> -->
 		<MusicBackground />
 		<MusicList />
 		<MusicController />

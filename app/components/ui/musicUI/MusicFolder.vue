@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { MusicFolderParams } from "~/types/components";
 import { gsap } from "gsap";
+import type { MusicFolderParams } from "~/types/components";
 
 import MusicItem from "./MusicItem.vue";
 

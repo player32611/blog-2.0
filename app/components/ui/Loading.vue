@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { gsap } from "gsap";
 import type { LoadingParams } from "~/types/components";
 
@@ -32,26 +31,19 @@ const createBlocks = () => {
 const loadingIn = (next: () => void) => {
 	isLoading.value = true;
 	gsap
-		.timeline()
+		.timeline({
+			onComplete: () => {
+				next();
+				props.checkLoading?.();
+			},
+		})
 		.set(
 			blocks.value,
 			{
-				"stroke-dashoffset": () => {
-					return "random(-100, 100)";
-				},
+				"stroke-dashoffset": 0,
 			},
 			0,
 		)
-		.to(blocks.value, {
-			"stroke-dashoffset": 1,
-			"stroke-opacity": 1,
-			duration: 0.5,
-			ease: "power4.out",
-			stagger: {
-				from: "random",
-				each: 0.0015,
-			},
-		})
 		.to(blocks.value, {
 			scale: 1,
 			opacity: 1,
@@ -62,19 +54,12 @@ const loadingIn = (next: () => void) => {
 				each: 0.003,
 			},
 		});
-	setTimeout(() => {
-		next();
-		props.checkLoading?.();
-	}, 2000);
 };
 
 const loadingOut = () => {
 	isLoading.value = false;
 	gsap
 		.timeline()
-		// .set(blocks.value, {
-		//   "stroke-dashoffset": "random(-100, 100)",
-		// })
 		.to(blocks.value, {
 			"stroke-dashoffset": 0,
 			"stroke-opacity": 1,
@@ -115,17 +100,9 @@ defineExpose({
 </script>
 
 <template>
-	<svg
-		:class="isLoading ? 'loading_blocks' : 'loading_blocks  loading_out'"
-		viewBox="0 0 1000 1000"
-		ref="loadingRef"
-	>
+	<svg :class="isLoading ? 'loading_blocks' : 'loading_blocks  loading_out'" viewBox="0 0 1000 1000" ref="loadingRef">
 		<defs>
-			<polygon
-				id="loading_hexagon"
-				points="0,-50 43.3,-25 43.3,25 0,50 -43.3,25 -43.3,-25"
-				fill="#171717"
-			/>
+			<polygon id="loading_hexagon" points="0,-50 43.3,-25 43.3,25 0,50 -43.3,25 -43.3,-25" fill="#171717" />
 		</defs>
 	</svg>
 </template>
