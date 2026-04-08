@@ -29,7 +29,6 @@ const props = defineProps({
 const copied = ref(false);
 
 const copyCode = async () => {
-	console.log(props);
 	await navigator.clipboard.writeText(props.code);
 	copied.value = true;
 	setTimeout(() => (copied.value = false), 2000);
@@ -50,7 +49,7 @@ const copyCode = async () => {
 					v-html="getLangIcon(language)"
 					:style="{ color: getLangIconColor(language) }"
 				></span>
-				{{ filename ? filename : language }}
+				{{ language }}
 			</div>
 		</div>
 		<div class="code_editor">
