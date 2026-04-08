@@ -25,14 +25,14 @@ JavaScript 字符串用于存储和操作文本。
 
 您能够使用单引号或双引号定义字符串。
 
-```JavaScript
+```javascript
 var carname = "Porsche 911";
-var carname = 'Porsche 911';
+var carname = "Porsche 911";
 ```
 
 您可以在字符串中使用引号，只要不匹配围绕字符串的引号即可：
 
-```JavaScript
+```javascript
 var answer = "It's good to see you again!";
 var answer = "He is called 'Bill'";
 var answer = 'He is called "Bill"';
@@ -42,7 +42,7 @@ var answer = 'He is called "Bill"';
 
 由于字符串必须由引号包围，JavaScript 会误解这段字符串：
 
-```JavaScript
+```javascript
 var y = "中国是瓷器的故乡，因此 china 与"China（中国）"同名。"
 ```
 
@@ -56,8 +56,8 @@ var y = "中国是瓷器的故乡，因此 china 与"China（中国）"同名。
 
 更改后如下所示：
 
-```JavaScript
-var x = "中国是瓷器的故乡，因此 china 与\"China（中国）\"同名。"
+```javascript
+var x = '中国是瓷器的故乡，因此 china 与"China（中国）"同名。';
 ```
 
 其他六个 JavaScript 中有效但在 HTML 中没有任何意义的转义序列：
@@ -91,15 +91,15 @@ var x = "中国是瓷器的故乡，因此 china 与\"China（中国）\"同名�
 
 这个例子裁剪字符串中位置 7 到位置 13 的片段：
 
-```JavaScript
+```javascript
 var str = "Apple, Banana, Mango";
-var res = str.slice(7,13);
+var res = str.slice(7, 13);
 ```
 
 res 的结果是：
 
-```JavaScript
-Banana
+```javascript
+Banana;
 ```
 
 **substring()** 方法 : 类似于 slice() ，不同之处在于 substring() 无法接受负的索引。
@@ -108,7 +108,7 @@ Banana
 
 **replace()** 方法 : 用另一个值替换在字符串中指定的值，不会改变调用它的字符串。它返回的是新字符串。默认地，replace() 只替换首个匹配。
 
-```JavaScript
+```javascript
 str = "Please visit Microsoft!";
 var n = str.replace("Microsoft", "W3School");
 ```
@@ -119,9 +119,9 @@ var n = str.replace("Microsoft", "W3School");
 
 **concat()** 方法 : 连接两个或多个字符串。下面两行是等效的:
 
-```JavaScript
+```javascript
 var text = "Hello" + " " + "World!";
-var text = "Hello".concat(" ","World!");
+var text = "Hello".concat(" ", "World!");
 ```
 
 **trim()** 方法 : 删除字符串两端的空白符
@@ -132,11 +132,11 @@ var text = "Hello".concat(" ","World!");
 
 **split()** 方法 : 将字符串转换为数组。如果省略分隔符，被返回的数组将包含 index [0] 中的整个字符串。如果分隔符是 ""，被返回的数组将是间隔单个字符的数组：
 
-```JavaScript
-var txt = "a,b,c,d,e";   // 字符串
-txt.split(",");          // 用逗号分隔
-txt.split(" ");          // 用空格分隔
-txt.split("|");          // 用竖线分隔
+```javascript
+var txt = "a,b,c,d,e"; // 字符串
+txt.split(","); // 用逗号分隔
+txt.split(" "); // 用空格分隔
+txt.split("|"); // 用竖线分隔
 ```
 
 ## 数组
@@ -145,7 +145,7 @@ txt.split("|");          // 用竖线分隔
 
 定义数组可用两种方法，这两种方法效果完全一样。
 
-```JavaScript
+```javascript
 var array-name = [item1, item2, ...];
 var array-name = new Array(item1, item2, ...);
 ```
@@ -158,8 +158,8 @@ var array-name = new Array(item1, item2, ...);
 
 **join()** : 可将所有数组元素结合为一个字符串，但是您还可以规定分隔符
 
-```JavaScript
-var fruits = ["Banana", "Orange","Apple", "Mango"];
+```javascript
+var fruits = ["Banana", "Orange", "Apple", "Mango"];
 document.getElementById("demo").innerHTML = fruits.join(" * ");
 ```
 
@@ -173,7 +173,7 @@ document.getElementById("demo").innerHTML = fruits.join(" * ");
 
 **splice()** : 用于向数组添加新项，返回一个包含已删除项的数组
 
-```JavaScript
+```javascript
 var fruits = ["Banana", "Orange", "Apple", "Mango"];
 fruits.splice(2, 0, "Lemon", "Kiwi");
 ```
@@ -186,11 +186,11 @@ fruits.splice(2, 0, "Lemon", "Kiwi");
 
 **concat()** : 合并（连接）现有数组来创建一个新数组，不会更改现有数组。它总是返回一个新数组，并可以使用任意数量的数组参数
 
-```JavaScript
+```javascript
 var arr1 = ["Cecilie", "Lone"];
 var arr2 = ["Emil", "Tobias", "Linus"];
 var arr3 = ["Robin", "Morgan"];
-var myChildren = arr1.concat(arr2, arr3);   // 将arr1、arr2 与 arr3 连接在一起
+var myChildren = arr1.concat(arr2, arr3); // 将arr1、arr2 与 arr3 连接在一起
 ```
 
 **slice()** : 用数组的某个片段切出新数组并创建新数组，它不会从源数组中删除任何元素。可接受两个参数，从开始参数选取元素，直到结束参数（不包括）为止。如果结束参数被省略，则会切出数组的剩余部分
@@ -203,23 +203,23 @@ var myChildren = arr1.concat(arr2, arr3);   // 将arr1、arr2 与 arr3 连接在
 
 **find()** : 返回通过测试函数的第一个数组元素的值
 
-```JavaScript
+```javascript
 const numbers = [4, 9, 16, 25, 29];
 let first = numbers.find(myFunction);
 
 function myFunction(value, index, array) {
-    return value > 18;
+	return value > 18;
 }
 ```
 
 **findIndex()** : 返回通过测试函数的第一个数组元素的索引
 
-```JavaScript
+```javascript
 const numbers = [4, 9, 16, 25, 29];
 let first = numbers.findIndex(myFunction);
 
 function myFunction(value, index, array) {
-    return value > 18;
+	return value > 18;
 }
 ```
 
@@ -235,24 +235,24 @@ function myFunction(value, index, array) {
 
 **forEach()** : 为每个数组元素调用一次函数（回调函数），接受 3 个参数：项目值、项目索引、数组本身
 
-```JavaScript
+```javascript
 var txt = "";
 var numbers = [45, 4, 9, 16, 25];
 numbers.forEach(myFunction);
 
 function myFunction(value, index, array) {
-    txt = txt + value + "<br>";
+	txt = txt + value + "<br>";
 }
 ```
 
 **map()** : 通过对每个数组元素执行函数来创建新数组，不会对没有值的数组元素执行函数，不会更改原始数组
 
-```JavaScript
+```javascript
 var numbers1 = [45, 4, 9, 16, 25];
 var numbers2 = numbers1.map(myFunction);
 
 function myFunction(value, index, array) {
-  return value * 2;
+	return value * 2;
 }
 ```
 
@@ -262,25 +262,25 @@ function myFunction(value, index, array) {
 
 访问对象属性的语法为以下三种：
 
-```JavaScript
-objectName.property           // person.age
-objectName["property"]       // person["age"]
-objectName[expression]       // x = "age"; person[x]
+```javascript
+objectName.property; // person.age
+objectName["property"]; // person["age"]
+objectName[expression]; // x = "age"; person[x]
 ```
 
 **添加新属性** : 可以通过简单的赋值，向已存在的对象添加新属性
 
 假设 person 对象已存在 - 那么您可以为其添加新属性：
 
-```JavaScript
+```javascript
 person.nationality = "English";
 ```
 
 **删除属性** : delete 关键词从对象中删除属性
 
-```JavaScript
-var person = {firstName:"Bill", lastName:"Gates", age:62, eyeColor:"blue"};
-delete person.age;   // 或 delete person["age"];
+```javascript
+var person = { firstName: "Bill", lastName: "Gates", age: 62, eyeColor: "blue" };
+delete person.age; // 或 delete person["age"];
 ```
 
 ## Common JS 与 ES 模块

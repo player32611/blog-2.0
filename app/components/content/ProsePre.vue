@@ -29,6 +29,7 @@ const props = defineProps({
 const copied = ref(false);
 
 const copyCode = async () => {
+	console.log(props);
 	await navigator.clipboard.writeText(props.code);
 	copied.value = true;
 	setTimeout(() => (copied.value = false), 2000);
@@ -38,12 +39,19 @@ const copyCode = async () => {
 <template>
 	<div class="custom_pre_wrapper">
 		<div class="mac_header">
-			<span class="red"></span>
-			<span class="yellow"></span>
-			<span class="green"></span>
-		</div>
-		<div v-if="language" class="language_tag">
-			{{ language }}
+			<div class="points">
+				<span class="red"></span>
+				<span class="yellow"></span>
+				<span class="green"></span>
+			</div>
+			<div class="language">
+				<span
+					class="icon"
+					v-html="getLangIcon(language)"
+					:style="{ color: getLangIconColor(language) }"
+				></span>
+				{{ filename ? filename : language }}
+			</div>
 		</div>
 		<div class="code_editor">
 			<button class="copy_btn" @click="copyCode">
@@ -108,14 +116,21 @@ const copyCode = async () => {
 	.mac_header {
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		justify-content: space-between;
 		margin-bottom: 15px;
 
-		span {
-			display: inline-block;
-			width: 12px;
-			height: 12px;
-			border-radius: 50%;
+		.points,
+		.language {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+
+			span {
+				float: left;
+				width: 12px;
+				height: 12px;
+				border-radius: 50%;
+			}
 		}
 
 		.red {

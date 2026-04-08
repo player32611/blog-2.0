@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 5129219 */
-  src: url('iconfont.woff2?t=1775454894447') format('woff2'),
-       url('iconfont.woff?t=1775454894447') format('woff'),
-       url('iconfont.ttf?t=1775454894447') format('truetype');
+  src: url('iconfont.woff2?t=1775647387906') format('woff2'),
+       url('iconfont.woff?t=1775647387906') format('woff'),
+       url('iconfont.ttf?t=1775647387906') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,58 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-py:before {
+  content: "\e653";
+}
+
+.icon-cpp:before {
+  content: "\e61a";
+}
+
+.icon-css:before {
+  content: "\e61e";
+}
+
+.icon-html:before {
+  content: "\e632";
+}
+
+.icon-java:before {
+  content: "\e639";
+}
+
+.icon-json:before {
+  content: "\e63a";
+}
+
+.icon-js:before {
+  content: "\e63b";
+}
+
+.icon-jsx:before {
+  content: "\e63c";
+}
+
+.icon-sql:before {
+  content: "\e65b";
+}
+
+.icon-ts:before {
+  content: "\e664";
+}
+
+.icon-yaml:before {
+  content: "\e680";
+}
+
+.icon-yml:before {
+  content: "\e681";
+}
+
+.icon-bash:before {
+  content: "\e693";
 }
 
 .icon-bangzhu:before {

@@ -16,3 +16,103 @@ export const getCollectionTitle = (collection: BlogCollections) => {
 	};
 	return collectionTitleMap[collection] || collection;
 };
+
+/**
+ * 根据编程语言获取对应的图标 Unicode 字符
+ *
+ * @param language - 编程语言名称，类型为 string
+ * @returns 对应语言的图标 Unicode 字符，如果未找到匹配项则返回 undefined
+ */
+export const getLangIcon = (language: string) => {
+	switch (language) {
+		case "bash":
+			return "&#xe693;";
+		case "css":
+			return "&#xe61e;";
+		case "c++":
+		case "C++":
+			return "&#xe61a;";
+		case "htm":
+		case "html":
+		case "HTML":
+			return "&#xe632;";
+		case "java":
+		case "Java":
+			return "&#xe639;";
+		case "js":
+		case "JS":
+		case "javascript":
+		case "JavaScript":
+			return "&#xe63b;";
+		case "jsx":
+			return "&#xe63c;";
+		case "json":
+		case "JSON":
+			return "&#xe63a;";
+		case "py":
+		case "python":
+		case "Python":
+			return "&#xe653;";
+		case "sql":
+		case "SQL":
+			return "&#xe65b;";
+		case "ts":
+		case "TS":
+		case "typescript":
+		case "TypeScript":
+			return "&#xe664;";
+		case "yml":
+		case "yaml":
+			return "&#xe680;";
+	}
+};
+
+/**
+ * 根据编程语言获取对应的颜色值
+ *
+ * @param language - 编程语言名称，类型为 string
+ * @returns 对应语言的颜色十六进制值，如果未找到匹配项则返回 undefined
+ */
+export const getLangIconColor = (language: string) => {
+	switch (language) {
+		case "bash":
+			return "#BABABA";
+		case "css":
+			return "#2196F3";
+		case "c++":
+		case "C++":
+			return "#1D88E5";
+		case "htm":
+		case "html":
+		case "HTML":
+			return "#FC490B";
+		case "java":
+		case "Java":
+			return "#FF0000";
+		case "js":
+		case "JS":
+		case "javascript":
+		case "JavaScript":
+			return "#F4DE51";
+		case "jsx":
+			return "#5DD4FA";
+		case "json":
+		case "JSON":
+			return "#BABABA";
+		case "py":
+		case "python":
+		case "Python":
+			return "#BABABA";
+		case "sql":
+		case "SQL":
+			return "#00CCFF";
+		case "ts":
+		case "TS":
+		case "typescript":
+		case "TypeScript":
+			return "#0090E0";
+		case "yml":
+		case "yaml":
+			return "#FFFF05";
+	}
+};
