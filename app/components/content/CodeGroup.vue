@@ -4,18 +4,31 @@ import { gsap } from "gsap/gsap-core";
 const slots = useSlots();
 const activeTab = ref<number>(0);
 const tabs = ref<Array<{ label: string; code?: string; language?: string; filename?: string }>>([]);
-const tabsRef = ref<Array<HTMLElement | null>>([]);
+const tabsRef = ref<Array<HTMLElement>>([]);
 const barRef = ref<HTMLDivElement | null>(null);
+const blocksRef = ref<Array<HTMLElement>>([]);
+const blockContainerRef = ref<HTMLDivElement | null>(null);
 
 const handleClickTab = (index: number) => {
+	if (index === activeTab.value) return;
 	if (!tabsRef.value[index]) return;
+	const activeBlock = blocksRef.value[activeTab.value];
+	if (!activeBlock) return;
+	const newBlock = blocksRef.value[index];
+	if (!newBlock) return;
 	activeTab.value = index;
 	gsap.to(barRef.value, {
 		left: `${tabsRef.value[index].offsetLeft + tabsRef.value[index].offsetWidth * 0.1}`,
 		width: `${tabsRef.value[index].offsetWidth * 0.8}px`,
-		duration: 0.2,
+		duration: 0.5,
 		ease: "power1.out",
 	});
+	gsap
+		.timeline()
+		.to(blockContainerRef.value, { height: 0, duration: 0.5, ease: "power1.out" })
+		.set(activeBlock, { height: 0 })
+		.set(newBlock, { height: "auto" })
+		.to(blockContainerRef.value, { height: "auto", duration: 0.5, ease: "power1.out" });
 };
 
 onMounted(async () => {
@@ -31,11 +44,14 @@ onMounted(async () => {
 	}
 	await nextTick();
 	const firstTab = tabsRef.value[0];
-	if (firstTab && barRef.value) {
+	const firstBlock = blocksRef.value[0];
+	if (firstTab && firstBlock) {
 		gsap.set(barRef.value, {
 			left: `${firstTab.offsetLeft + firstTab.offsetWidth * 0.1}px`,
 			width: `${firstTab.offsetWidth * 0.8}px`,
 		});
+		gsap.set(firstBlock, { height: "auto" });
+		gsap.set(blockContainerRef.value, { height: `${firstBlock.offsetHeight}px` });
 	}
 });
 </script>
@@ -61,13 +77,18 @@ onMounted(async () => {
 		<div class="bar_container">
 			<div class="bar" ref="barRef"></div>
 		</div>
-		<div class="blocks">
+		<div class="blocks" ref="blockContainerRef">
 			<template v-if="$slots.default">
 				<div
 					v-for="(vnode, index) in $slots.default()"
 					:key="index"
 					class="block"
 					:class="{ active: activeTab === index }"
+					:ref="
+						el => {
+							if (el) blocksRef[index] = el as HTMLElement;
+						}
+					"
 				>
 					<component :is="vnode" />
 				</div>
@@ -132,18 +153,20 @@ onMounted(async () => {
 
 	.blocks {
 		position: relative;
+		margin-top: 1rem;
+		border-bottom: 2.5px solid #ffffff;
+		overflow: hidden;
 
 		.block {
-			display: none;
+			height: 0px;
+			width: 100%;
 
 			&.active {
 				display: block;
 			}
 
-			:deep(pre) {
+			:deep(.custom_pre_wrapper) {
 				margin: 0;
-				border-radius: 0;
-				border: none;
 			}
 		}
 	}

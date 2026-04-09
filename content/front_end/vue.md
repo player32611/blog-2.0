@@ -73,7 +73,7 @@ npm create vue@latest
 
 ### 开发环境使用案例
 
-::: code-group
+::code-group
 
 ```vue[App.vue]
 <template>
@@ -98,11 +98,11 @@ npm create vue@latest
 </style>
 ```
 
-```JavaScript [main.js]
-import { createApp } from 'vue'
-import App from './App.vue'
+```js [main.js]
+import { createApp } from "vue";
+import App from "./App.vue";
 
-createApp(App).mount('#app')
+createApp(App).mount("#app");
 ```
 
 ```html [index.html]
@@ -122,7 +122,7 @@ createApp(App).mount('#app')
 </html>
 ```
 
-:::
+::
 
 ## vue 模板基础语法
 
@@ -552,7 +552,7 @@ export default {
 
 `props` : 用于父传子通信。在子组件中添加 `props` 属性并设置形参，并在父组件中为使用的子组件的对应形参传值。
 
-::: code-group
+::code-group
 
 ```vue [App.vue]
 <template>
@@ -603,12 +603,13 @@ export default {
 <style scoped></style>
 ```
 
-:::
+::
 
 `props` 也可使用对象的方式书写：
 
 ```vue
-props:{ msg:{ type:String, default:'########', required:true }, ary:{ type:Array, default:['aa','bb','cc'] } },
+props:{ msg:{ type:String, default:'########', required:true }, ary:{ type:Array,
+default:['aa','bb','cc'] } },
 ```
 
 `type` : 数据类型
@@ -621,7 +622,7 @@ props:{ msg:{ type:String, default:'########', required:true }, ary:{ type:Array
 
 `$emit` : 子组件通过触发事件的方式传递数据给父组件，调用 `$emit` 并设定事件名称与传递数据，在父组件中接收事件并触发父组件事件
 
-::: code-group
+::code-group
 
 ```vue [App.vue]
 <template>
@@ -680,7 +681,7 @@ export default {
 <style scoped></style>
 ```
 
-:::
+::
 
 **子组件调用父组件的方法**
 
@@ -688,7 +689,7 @@ export default {
 
 `$root` : 用于访问根组件
 
-::: code-group
+::code-group
 
 ```vue [App.vue]
 <template>
@@ -756,13 +757,13 @@ export default {
 <style scoped></style>
 ```
 
-:::
+::
 
 **父组件调用子组件的方法**
 
 `$refs` 用于访问所有子组件，用 `ref` 设置子组件别名
 
-::: code-group
+::code-group
 
 ```vue [App.vue] {5,6,24,27}
 <template>
@@ -829,7 +830,7 @@ export default {
 <style scoped></style>
 ```
 
-:::
+::
 
 ### 插槽 slot
 
@@ -837,7 +838,7 @@ export default {
 
 在子组件中需要插入的位置添加 `slot` 标签并设置插槽名称，在父组件中使用 `templat` 标签并在 `v-slot` 属性中设置需要插入的插槽。`slot` 标签内部的值为默认值。
 
-::: code-group
+::code-group
 
 ```vue [App.vue] {5,8}
 <template>
@@ -896,7 +897,7 @@ export default {
 <style scoped></style>
 ```
 
-:::
+::
 
 插槽中可正常使用父组件中的属性。
 
@@ -904,7 +905,7 @@ export default {
 
 先在插槽中定义属性代表的数据，再在父组件中设置子组件名称，用 js 语法访问数据。
 
-::: code-group
+::code-group
 
 ```vue [App.vue] {3-11}
 <template>
@@ -960,7 +961,7 @@ export default {
 <style scoped></style>
 ```
 
-:::
+::
 
 ### 生命周期函数
 
@@ -1016,27 +1017,25 @@ export default {
 
 新建 js 文件并在其中写入网络请求的逻辑
 
-```JavaScript
+```js
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'baseurl'
-})
+	baseURL: "baseurl",
+});
 
 export function get(url, params) {
-    return instance.get(url, {
-        params
-    })
+	return instance.get(url, {
+		params,
+	});
 }
 
 export function post(url, params) {
-    return instance.post(url, params, {
-
-    })
+	return instance.post(url, params, {});
 }
 
 export function del(url) {
-    return instance.delete(url)
+	return instance.delete(url);
 }
 ```
 
@@ -1095,39 +1094,39 @@ npm install vue-router@4
 
 5、在主入口文件中使用路由
 
-::: code-group
+::code-group
 
-```JavaScript [index.js]
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+```js [index.js]
+import { createRouter, createWebHistory } from "vue-router";
+import HomeView from "../views/HomeView.vue";
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView,
-    },
-  ],
-})
+	history: createWebHistory(import.meta.env.BASE_URL),
+	routes: [
+		{
+			path: "/",
+			name: "home",
+			component: HomeView,
+		},
+	],
+});
 
-export default router
+export default router;
 ```
 
-```JavaScript [main.js]
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
+```js [main.js]
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.use(router)
+app.use(router);
 
-app.mount('#app')
+app.mount("#app");
 ```
 
-:::
+::
 
 `path` : 路径
 
@@ -1137,7 +1136,7 @@ app.mount('#app')
 
 也可使用懒加载方式加载组件，此种方法无需提前导入
 
-```JavaScript
+```js
 {
     path: '/about',
     name: 'about',
@@ -1187,8 +1186,9 @@ app.mount('#app')
 在`index.js`中配置 children 属性即可设置嵌套路由。嵌套路由的地址为父地址与子地址组合
 
 ```vue
-{ path: '/home', name: 'home', component: HomeView, children: [ { path: 'home1', component: () => import('../views/Home1.vue') }, { path: 'home2',
-component: () => import('../views/Home2.vue') } ] },
+{ path: '/home', name: 'home', component: HomeView, children: [ { path: 'home1', component: () =>
+import('../views/Home1.vue') }, { path: 'home2', component: () => import('../views/Home2.vue') } ]
+},
 ```
 
 `path` : 子路由地址，设置为 ' ' 时表示默认路由
@@ -1201,7 +1201,7 @@ component: () => import('../views/Home2.vue') } ] },
 
 1、设置参数: 在`index.js`中配置传递参数的名字
 
-```JavaScript {2}
+```js {2}
 {
     path: 'home1/:num',
     component: () => import('../views/Home1.vue')
@@ -1253,7 +1253,8 @@ component: () => import('../views/Home2.vue') } ] },
 ```
 
 ```vue {4}
-{ path: '/home', name: 'home', redirect: to => { return { path: 'About' },query:{msg:'message',num:to.params.id} }, component: HomeView, }
+{ path: '/home', name: 'home', redirect: to => { return { path: 'About'
+},query:{msg:'message',num:to.params.id} }, component: HomeView, }
 ```
 
 以上写法均可
@@ -1274,20 +1275,18 @@ component: () => import('../views/Home2.vue') } ] },
 
 **全局前置导航守卫** : 在`index.js`中的路由外层添加
 
-```JavaScript
+```js
 router.beforeEach((to, from) => {
-  return false
-})
-
+	return false;
+});
 ```
 
 此时阻止任何跳转
 
-```JavaScript
+```js
 router.beforeEach((to, from) => {
-  return true
-})
-
+	return true;
+});
 ```
 
 此时允许跳转
@@ -1298,16 +1297,16 @@ router.beforeEach((to, from) => {
 
 利用导航守卫打印地址:
 
-```JavaScript
+```js
 router.beforeEach((to, from) => {
-  console.log(from.fullPath);
-  console.log(to.fullPath);
-})
+	console.log(from.fullPath);
+	console.log(to.fullPath);
+});
 ```
 
 利用导航守卫设置页面标题:
 
-```JavaScript [index.js] {5-7}
+```js [index.js] {5-7}
 //...
     {
       path: '/home',
@@ -1326,17 +1325,17 @@ router.beforeEach((to, from) => {
 
 **全局后置导航守卫**
 
-```JavaScript
+```js
 router.afterEach((to, from, failure) => {
-  //...
-})
+	//...
+});
 ```
 
 `failure` : 导航是否失败
 
 **路由独享导航守卫**
 
-```JavaScript {5}
+```js {5}
 {
     path: '/home',
     name: 'home',
@@ -1348,11 +1347,14 @@ router.afterEach((to, from, failure) => {
 **组件内导航守卫**
 
 ```vue
-beforeRouteEnter(to, from) { // 在渲染该组件的对应路由被验证前调用 // 不能获取组件实例 `this` ！ // 因为当守卫执行时，组件实例还没被创建！ },
-beforeRouteUpdate(to, from) { // 在当前路由改变，但是该组件被复用时调用 // 举例来说，对于一个带有动态参数的路径 `/users/:id`，在 `/users/1` 和
-`/users/2` 之间跳转的时候， // 由于会渲染同样的 `UserDetails` 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。 //
-因为在这种情况发生的时候，组件已经挂载好了，导航守卫可以访问组件实例 `this` }, beforeRouteLeave(to, from) { // 在导航离开渲染该组件的对应路由时调用 //
-与 `beforeRouteUpdate` 一样，它可以访问组件实例 `this` },
+beforeRouteEnter(to, from) { // 在渲染该组件的对应路由被验证前调用 // 不能获取组件实例 `this` ！ //
+因为当守卫执行时，组件实例还没被创建！ }, beforeRouteUpdate(to, from) { //
+在当前路由改变，但是该组件被复用时调用 // 举例来说，对于一个带有动态参数的路径 `/users/:id`，在
+`/users/1` 和 `/users/2` 之间跳转的时候， // 由于会渲染同样的 `UserDetails`
+组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。 //
+因为在这种情况发生的时候，组件已经挂载好了，导航守卫可以访问组件实例 `this` }, beforeRouteLeave(to,
+from) { // 在导航离开渲染该组件的对应路由时调用 // 与 `beforeRouteUpdate` 一样，它可以访问组件实例
+`this` },
 ```
 
 ### `KeepAlive`和 VueRouter结合使用
@@ -1395,7 +1397,7 @@ beforeRouteUpdate(to, from) { // 在当前路由改变，但是该组件被复�
 
 **与组件内导航守卫结合使用实现保留页面访问地址:**
 
-::: code-group
+::code-group
 
 ```vue [App.vue]
 <template>
@@ -1414,7 +1416,9 @@ beforeRouteUpdate(to, from) { // 在当前路由改变，但是该组件被复�
 <template>
 	<h1>This is a home page</h1>
 	<RouterLink to="/home/home1?msg=message111&num=111">Home1</RouterLink>
-	<RouterLink :to="{ path: '/home/home2', query: { msg: 'message222', num: 222 } }">Home2</RouterLink>
+	<RouterLink :to="{ path: '/home/home2', query: { msg: 'message222', num: 222 } }"
+		>Home2</RouterLink
+	>
 	<RouterView v-slot="{ Component }">
 		<transition>
 			<KeepAlive
@@ -1443,8 +1447,7 @@ export default {
 </script>
 ```
 
-s
-:::
+::
 
 ## Pinia 状态管理
 
@@ -1462,55 +1465,56 @@ npm install pinia
 
 1、**创建 pinia 实例** (根 store) 并将其传递给应用。在`main.js`中配置以下代码：
 
-```JavaScript {2,6,10}
+```js {2,6,10}
 //...
-import { createPinia } from 'pinia'
-//...
-
-//...
-const pinia = createPinia()
+import { createPinia } from "pinia";
 //...
 
 //...
-app.use(pinia)
+const pinia = createPinia();
+//...
+
+//...
+app.use(pinia);
 //...
 ```
 
 2、**定义 Store** 。在`src/stores`中创建你想要的数据并配置，最后导出:
 
-```JavaScript
+```js
 //counter.js
-import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'//导入定义容器的方法
+import { ref, computed } from "vue";
+import { defineStore } from "pinia"; //导入定义容器的方法
 
-export const useCounterStore = defineStore('counter', () => {//容器 ID 必须唯一
-  const count = ref(0)//数据
-  const name = ref("counter")
-  const doubleCount = computed(() => count.value * 2)//计算属性
-  function increment() {
-    count.value++
-  }//方法
+export const useCounterStore = defineStore("counter", () => {
+	//容器 ID 必须唯一
+	const count = ref(0); //数据
+	const name = ref("counter");
+	const doubleCount = computed(() => count.value * 2); //计算属性
+	function increment() {
+		count.value++;
+	} //方法
 
-  return { count, name, doubleCount, increment }
-})
+	return { count, name, doubleCount, increment };
+});
 ```
 
 也可使用另一种方式定义 Store
 
-```JavaScript
-import { defineStore } from 'pinia'
+```js
+import { defineStore } from "pinia";
 
-export const useCounterStore = defineStore('counter', {
-  state: () => ({ count: 0, name: 'counter' }),
-  getters: {
-    doubleCount: (state) => state.count * 2,
-  },
-  actions: {
-    increment() {
-      this.count++
-    },
-  },
-})
+export const useCounterStore = defineStore("counter", {
+	state: () => ({ count: 0, name: "counter" }),
+	getters: {
+		doubleCount: state => state.count * 2,
+	},
+	actions: {
+		increment() {
+			this.count++;
+		},
+	},
+});
 ```
 
 3、**使用 Store** 。在组件中导入 Store 并使用:
@@ -1542,8 +1546,8 @@ const counterStore = useCounterStore() const { count, name } = useCounterStore
 但这样解构出的数据并不是响应式的，需要做 ref 相应式代理。正确的方法如下:
 
 ```vue
-//... impot { storeToRefs } from 'pinia' //... //... const counterStore = useCounterStore() //... //... const { count, name } =
-storeToRefs(counterStore) //...
+//... impot { storeToRefs } from 'pinia' //... //... const counterStore = useCounterStore() //...
+//... const { count, name } = storeToRefs(counterStore) //...
 ```
 
 ### 状态更新和 Actions
@@ -1568,7 +1572,7 @@ counterStore.$patch(state => { state.count++ state.name = 'name' state.arr.push(
 
 对于复杂逻辑，通常封装在方法中:
 
-```JavaScript
+```js
 actions: {
     increment(data) {
         //业务逻辑
@@ -1586,7 +1590,7 @@ actions: {
 
 gatters 类似于组件的 computed，用来封装计算属性，有缓存的功能
 
-```JavaScript
+```js
 gatters: {
     count10 (state) {
         return state.count + 10
@@ -1598,7 +1602,7 @@ gatters: {
 
 如果在 gatters 中使用了 this 则必须手动指定返回值的类型，否则类型推导不出来:
 
-```JavaScript
+```js
 gatters: {
     count10 (): number {
         return this.count + 10
@@ -1716,7 +1720,7 @@ export default{
 
 与`defineExpose()`结合使用可以传递DOM元素给父组件。以下代码中的`childDom.value.childDom`就代表了子组件中的 div 。
 
-::: code-group
+::code-group
 
 ```vue [Children1.vue]
 <script setup>
@@ -1747,7 +1751,7 @@ const childDom = ref(null);
 </template>
 ```
 
-:::
+::
 
 `reactive()` : 返回一个对象的响应式代理
 
@@ -1786,7 +1790,8 @@ let a = ref(0) watch(a,(newA,oldA)=>{ console.log(oldA+'->'+newA) },{immediate:t
 也可以同时监听多个值:
 
 ```vue
-let a = ref(0) let b = ref(0) watch([a,b],([newA,newB],[oldA,oldB])=>{ console.log(oldA+'->'+newA+','+oldB+'->'+newB) },{immediate:false})
+let a = ref(0) let b = ref(0) watch([a,b],([newA,newB],[oldA,oldB])=>{
+console.log(oldA+'->'+newA+','+oldB+'->'+newB) },{immediate:false})
 ```
 
 `immediate` : 创建时是否自动执行
@@ -1800,7 +1805,8 @@ const data = reactive({ num1:1, num2:2, count:0, }) watch(data,()=>{ console.log
 单独监听对象里的某个值时，需使用回调函数。
 
 ```vue
-const data = reactive({ num1:1, num2:2, count:0, }) watch(()=>data.num2,(newNum,oldNum)=>{ console.log(oldNum+'=>'+newNum) })
+const data = reactive({ num1:1, num2:2, count:0, }) watch(()=>data.num2,(newNum,oldNum)=>{
+console.log(oldNum+'=>'+newNum) })
 ```
 
 `watchEffect()`立即执行传入的一个函数，并响应式追踪其依赖，并在其依赖变更时重新运行该函数。

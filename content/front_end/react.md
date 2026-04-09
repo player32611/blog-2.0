@@ -112,7 +112,7 @@ const sonRef = useRef(null)
 
 对于跨文件使用组件，则需先导入。以下两个文件在同一目录下:
 
-::: code-group
+::code-group
 
 ```js [App.js]
 import { useState } from "react";
@@ -164,7 +164,7 @@ function Children1() {
 export default Children1;
 ```
 
-:::
+::
 
 ### 组件样式控制
 
@@ -178,7 +178,7 @@ React 组件基础的样式控制有两种方式：
 
 **class 类名控制** :
 
-::: code-group
+::code-group
 
 ```css [index.css]
 .foo {
@@ -198,7 +198,7 @@ function App() {
 }
 ```
 
-:::
+::
 
 ### 组件父传子通信
 
@@ -356,7 +356,7 @@ npm i @reduxjs/toolkit react-redux
 
 **1.使用 React Toolkit 创建 counterStore**
 
-::: code-group
+::code-group
 
 ```js [counterStore.js]
 import { createSlice } from "@reduxjs/toolkit";
@@ -397,7 +397,7 @@ const store = configureStore({
 export default store;
 ```
 
-:::
+::
 
 **2.为 React 注入 store**
 
@@ -457,7 +457,7 @@ function App() {
 
 在 reducers 的同步修改方法中添加 action 对象参数，在调用 actionCreater 的时候传递参数，参数会被传递到 action 对象 payload 属性上
 
-::: code-group
+::code-group
 
 ```js [counterStore.js]
 addToNum (state, action) {
@@ -469,7 +469,7 @@ addToNum (state, action) {
 <button onClick={() => dispatch(addToNum(10))}>add to 10</button>
 ```
 
-:::
+::
 
 ## Zustand 集中状态管理
 
@@ -611,7 +611,7 @@ npx create-react-router@latest
 
 ### 抽象路由模块
 
-::: code-group
+::code-group
 
 ```js [App.js]
 function App() {
@@ -647,7 +647,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<RouterProvider router={router} />);
 ```
 
-:::
+::
 
 路由配置也可以采用以下写法:
 
@@ -947,7 +947,7 @@ const changeHandler = useCallback(value => console.log(value), []);
 
 作用：让父组件访问子组件中的方法
 
-::: code-group
+::code-group
 
 ```js [Children1.js]
 function click() {
@@ -973,7 +973,7 @@ function App() {
 }
 ```
 
-:::
+::
 
 此时 sonRef 中就可以访问 `click()`方法
 

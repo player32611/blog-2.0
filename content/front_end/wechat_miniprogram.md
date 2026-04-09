@@ -427,7 +427,7 @@ Page({
 | input  |  bindinput 或 bind:input  |                文本框的输入事件                 |
 | change | bindchange 或 bind:change |                 状态改变时触发                  |
 
-::: code-group
+::code-group
 
 ```html [index.wxml]
 <button bind:tap="btnTapHandler">按钮</button>
@@ -439,7 +439,7 @@ btnTapHandler(e){//按钮的 tap 事件处理函数
 }
 ```
 
-:::
+::
 
 当事件回调触发的时候，会受到一个事件对象 **event** ，他的详细属性如下表所示：
 
@@ -487,7 +487,7 @@ Page({
 
 可以为组件提供 **data-\*** 自定义属性传参，其中 \* 代表的是参数的名字。在事件处理函数中，通过 **event.target.dataset.参数名** 即可获取到具体参数的值。
 
-::: code-group
+::code-group
 
 ```html [index.wxml]
 <button bind:tap="addNum" data-info="{{2}}">+</button>
@@ -501,13 +501,13 @@ addNum(e){
 },
 ```
 
-:::
+::
 
 ### 文本框绑定
 
 在小程序中，通过 **input** 事件来响应文本框的输入内容。通过 **bindinput**，可以为文本框绑定输入事件;通过 **model:value**，为文本框实现数据双向绑定。
 
-::: code-group
+::code-group
 
 ```html [index.wxml]
 <input bindinput="inputHandler" />
@@ -521,7 +521,7 @@ inputHandler(e:any){
 },
 ```
 
-:::
+::
 
 ### 条件渲染
 
@@ -576,13 +576,16 @@ inputHandler(e:any){
 使用 **wx:for-index** 可以指定**当前循环项的索引**的变量名；使用 **wx:for-item** 可以指定**当前项**的变量名。
 
 ```html
-<view wx:for="{{array}}" wx:for-index="idx" wx:for-item="itemName"> 索引是：{{idx}} 当前项是：{{itemName}} </view>
+<view wx:for="{{array}}" wx:for-index="idx" wx:for-item="itemName">
+	索引是：{{idx}} 当前项是：{{itemName}}
+</view>
 ```
 
 小程序在实现列表渲染时，建议为渲染出来的列表项指定唯一的 **key** 值，从而提高渲染的效率
 
 ```html
-<view wx:for="{{array}}" wx:key="id">使用数组项的id属性作为key</view> <view wx:for="{{array}}" wx:key="index">使用数组项的索引作为key</view>
+<view wx:for="{{array}}" wx:key="id">使用数组项的id属性作为key</view>
+<view wx:for="{{array}}" wx:key="index">使用数组项的索引作为key</view>
 ```
 
 ## WXSS 模板样式
@@ -764,7 +767,7 @@ tabBar 页面指的是被配置为 tabBar 中的项的页面。
 
 示例代码如下：
 
-::: code-group
+::code-group
 
 ```html[lists.wxml]
 <button bind:tap="gotoLogs">点击查看日志</button>
@@ -778,7 +781,7 @@ gotoLogs(){
 },
 ```
 
-:::
+::
 
 ### 导航到非 tabBar 页面
 
@@ -807,7 +810,7 @@ gotoLogs(){
 |   fail   | function |    否    |               接口调用失败的回调函数               |
 | complete | function |    否    |  接口调用结束的回调函数（调用成功、失败都会执行）  |
 
-::: code-group
+::code-group
 
 ```html[lists.wxml]
 <button bind:tap="goToHidden">点击跳转</button>
@@ -821,7 +824,7 @@ goToHidden(){
 },
 ```
 
-:::
+::
 
 ### 后退导航
 
@@ -850,7 +853,7 @@ goToHidden(){
 |   fail   | function |        |    否    |                接口调用失败的回调函数                 |
 | complete | function |        |    否    |   接口调用结束的回调函数（调用成功、失败都会执行）    |
 
-::: code-group
+::code-group
 
 ```html[hidden.wxml]
 <button bind:tap="goToBack">返回</button>
@@ -862,7 +865,7 @@ goToBack(){
 },
 ```
 
-:::
+::
 
 ### 导航传参
 
@@ -880,7 +883,7 @@ goToBack(){
 
 对于编程式导航，调用 **wx.navigateTo()** 方法跳转页面时，也可以携带参数。
 
-::: code-group
+::code-group
 
 ```html[lists.wxml]
 <button bind:tap="goToHiddenWithParameter">传递参数</button>
@@ -894,7 +897,7 @@ goToHiddenWithParameter(){
 },
 ```
 
-:::
+::
 
 ### 接收导航参数
 
@@ -1074,7 +1077,7 @@ onReachBottom() {
 
 在页面的 `.json` 配置文件中引用组件的方式，叫做**局部引用**。示例代码如下：
 
-::: code-group
+::code-group
 
 ```html [index.wxml]
 <my-test></my-test>
@@ -1088,7 +1091,7 @@ onReachBottom() {
 }
 ```
 
-:::
+::
 
 在 `app.json` 全局配置文件中引用组件的方式，叫做**全局引用**。使用方法同上。
 
@@ -1108,7 +1111,7 @@ onReachBottom() {
 
 但有时，我们希望在外界能够控制组件内部的样式，此时，可以通过 **styleIsolation** 修改组件的样式隔离选项，用法如下：
 
-::: code-group
+::code-group
 
 ```javascript [index.js]
 // 在组件的 .js 文件中新增如下配置
@@ -1126,7 +1129,7 @@ Component({
 }
 ```
 
-:::
+::
 
 styleIsolation 的可选值有：
 
@@ -1174,7 +1177,7 @@ Component({
 
 在小程序组件中，**properties** 是组件的对外属性，用来接受外界传递到组件中的数据，示例代码如下：
 
-::: code-group
+::code-group
 
 ```javascript [index.js]
 Component({
@@ -1194,7 +1197,7 @@ Component({
 <my-test1 max="8"></my-test1>
 ```
 
-:::
+::
 
 ::detail
 
@@ -1425,7 +1428,7 @@ Component({
 
 **属性绑定**用于实现父向子传值，而且**只能传递普通类型的数据**，无法将方法传递给子组件。父组件的示例代码如下:
 
-::: code-group
+::code-group
 
 ```javascript[parent.js]
 data: {
@@ -1437,11 +1440,11 @@ data: {
 <my-test1 count="{{count}}"></my-test1>
 ```
 
-:::
+::
 
 子组件在 **properties** 节点中**声明对应的属性并使用**：
 
-::: code-group
+::code-group
 
 ```javascript[child.js]
 properties: {
@@ -1453,7 +1456,7 @@ properties: {
 <text>{{count}}</text>
 ```
 
-:::
+::
 
 ::warning
 
@@ -1473,7 +1476,7 @@ properties: {
 
 4. 在**父组件**的 `.js` 中，通过 **e.detail** 获取到子组件传递过来的数据
 
-::: code-group
+::code-group
 
 ```javascript[parent.js]
 addHidden(e){
@@ -1499,13 +1502,13 @@ methods: {
 }
 ```
 
-:::
+::
 
 ---
 
 想要获取组件实例，可在父组件里调用 **this.selectComponent("id 或 class 选择器")** ，获取子组件实例对象，从而直接访问子组件的任意数据何方法。调用时需要传入一个**选择器**，例如 **this.selectComponent(".my-test")**。
 
-::: code-group
+::code-group
 
 ```html[parent.wxml]
 <my-test class="customA" id="cA"></my-test>
@@ -1518,7 +1521,7 @@ getChild(){
 }
 ```
 
-:::
+::
 
 ### behaviors
 
@@ -1543,7 +1546,7 @@ module.exports = Behavior({
 
 在组件中，使用 **require()** 方法导入需要的 behavior ，**挂载后即可访问 behavior 中的数据或方法**。
 
-::: code-group
+::code-group
 
 ```javascript[index.js]
 const myBehavior = require("../../behaviors/behavior.js");
@@ -1557,7 +1560,7 @@ Component({
 <view>{{count}}</view>
 ```
 
-:::
+::
 
 behavior 中所有可用的节点包括：
 
@@ -1675,7 +1678,8 @@ Page({
 页面中可以直接使用 store 中的数据或方法。
 
 ```html
-<view>store里的numA:{{numA}}、numB:{{numB}}、sum:{{sum}}</view> <button bind:tap="addStoreNumA">store里的numA++</button>
+<view>store里的numA:{{numA}}、numB:{{numB}}、sum:{{sum}}</view>
+<button bind:tap="addStoreNumA">store里的numA++</button>
 ```
 
 ### 将 Store 中的成员绑定到组件中

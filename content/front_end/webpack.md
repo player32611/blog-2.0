@@ -174,7 +174,7 @@ npm i css-loader style-loader -D
 
 进行以下配置：
 
-::: code-group
+::code-group
 
 ```JavaScript [webpack.config.cjs]
 //...
@@ -195,7 +195,7 @@ import './index.css'
 console.log(demo)
 ```
 
-:::
+::
 
 ::warning
 
@@ -219,7 +219,7 @@ npm i sass sass-loader -D
 
 使用方法与 css 类似
 
-::: code-group
+::code-group
 
 ```JavaScript [webpack.config.cjs]
 //...
@@ -241,7 +241,7 @@ import './index.scss'
 console.log(demo)
 ```
 
-:::
+::
 
 ### 提取 css 为单独文件
 
