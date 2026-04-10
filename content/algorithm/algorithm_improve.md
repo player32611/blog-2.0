@@ -1,16 +1,19 @@
 # 算法提高
 
-::: danger 警告
+::danger
 
 该页面尚未完工!
 
-:::
+::
 
-::: details 目录
+::detail
 
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## 线段树
 
@@ -42,13 +45,16 @@
 
 线段树类似堆的存储方式，用结构体数组来存储。
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 以数组 $a=[5,1,3,0,2,2,7,4,5,8]$ 为例，如果查询的是区间和，我们会创建出来这样一棵树来维护信息：
 
 ![线段树](/images/algorithm/algorithm-improve/segment-tree.png)
 
-:::
+::
 
 根据构建方式，可以得到以下性质：
 
@@ -62,7 +68,9 @@
 
 - 线段树的空间，需要开最大区间的 4 倍。
 
-::: tip 推导过程
+::tip
+
+**推导过程**：
 
 设数组的大小为 $n$，则：
 
@@ -70,9 +78,9 @@
 
 线段树节点的个数：$N=2^h-1=4n-1$
 
-:::
+::
 
-```c++
+```cpp
 #define lc p << 1 // 相当于 p * 2
 #define rc p << 1 | 1 // 相当于 p * 2 + 1
 
@@ -119,7 +127,7 @@ void build(int p, int l, int r) {
 
 4. 如果右区间有重叠，去右子树上找结果；
 
-```c++
+```cpp
 // 区间查询
 LL query(int p, int x, int y) {
 	LL l = tr[p].l, r = tr[p].r; // 当前结点维护的信息
@@ -141,15 +149,18 @@ LL query(int p, int x, int y) {
 
 2. 然后一路向上回溯，修改所有路径上的结点信息，使得维护的信息为修改之后的信息。
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 以数组 $a=[5,1,3,0,2,2,7,4,5,8]$ 为例，如果将 $x=6$ 位置上的元素增加 3，维护的信息如下：
 
 ![线段树单点修改](/images/algorithm/algorithm-improve/segment-tree-single-point-modify.png)
 
-:::
+::
 
-```c++
+```cpp
 // 单点修改
 void modify(int p, int x, LL k) {
 	int l = tr[p].l, r = tr[p].r;
@@ -166,7 +177,7 @@ void modify(int p, int x, LL k) {
 
 [P3374 【模板】树状数组 1](https://www.luogu.com.cn/problem/P3374)
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -244,9 +255,9 @@ int main() {
 
 这样，就可以把时间控制的与查询时间一致，都是 $O(\log n)$。
 
-::: code-group
+::code-group
 
-```c++ [结点维护信息]
+```cpp [结点维护信息]
 // 线段树的结点
 struct node {
 	int l, r;
@@ -254,7 +265,7 @@ struct node {
 }tr[N * 4];
 ```
 
-```c++ [创建线段树]
+```cpp [创建线段树]
 // 创建线段树
 void build(int p, int l, int r) {
 	tr[p] = { l,r,a[l],0 }; // 初始化
@@ -266,7 +277,7 @@ void build(int p, int l, int r) {
 }
 ```
 
-```c++ [懒标记下放]
+```cpp [懒标记下放]
 // 接收到修改任务，修改完毕之后，把修改信息懒下来
 void lazy(int p, LL add) {
 	int l = tr[p].l, r = tr[p].r;
@@ -284,7 +295,7 @@ void pushdown(int p) {
 }
 ```
 
-```c++ [区间查询]
+```cpp [区间查询]
 // 区间查询
 LL query(int p, int x, int y) {
 	LL l = tr[p].l, r = tr[p].r; // 当前结点维护的信息
@@ -297,7 +308,7 @@ LL query(int p, int x, int y) {
 }
 ```
 
-```c++ [区间修改]
+```cpp [区间修改]
 // 区间修改
 void modify(int p, int x, int y, LL k) {
 	LL l = tr[p].l, r = tr[p].r; // 当前结点维护的信息
@@ -313,11 +324,11 @@ void modify(int p, int x, int y, LL k) {
 }
 ```
 
-:::
+::
 
 例题：[P3372 【模板】线段树 1](https://www.luogu.com.cn/problem/P3372)
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -404,7 +415,7 @@ int main() {
 
 例题：[P3368 【模板】树状数组 2](https://www.luogu.com.cn/problem/P3368)
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -524,229 +535,229 @@ int main() {
 
 例题：[P1816 忠诚](https://www.luogu.com.cn/problem/P1816)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P3870 [TJOI2009] 开关](https://www.luogu.com.cn/problem/P3870)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P2184 贪婪大陆](https://www.luogu.com.cn/problem/P2184)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P1438 无聊的数列](https://www.luogu.com.cn/problem/P1438)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 多个区间操作
 
 例题：[P3373 【模板】线段树 2](https://www.luogu.com.cn/problem/P3373)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P1253 扶苏的问题](https://www.luogu.com.cn/problem/P1253)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 线段树 + 分治
 
 例题：[P4513 小白逛公园](https://www.luogu.com.cn/problem/P4513)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P2572 [SCOI2010] 序列操作](https://www.luogu.com.cn/problem/P2572)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 线段树 + 剪枝
 
 例题：[P4145 上帝造题的七分钟 2 / 花神游历各国](https://www.luogu.com.cn/problem/P4145)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 权值线段树 + 离散化
 
 例题：[P1908 逆序对](https://www.luogu.com.cn/problem/P1908)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 线段树 + 数学
 
 例题：[P5142 区间方差](https://www.luogu.com.cn/problem/P5142)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P10463 Interval GCD](https://www.luogu.com.cn/problem/P10463)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 树状数组
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## ST 表
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 树形 dp
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 状压 dp
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 数位 dp
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 双向搜索
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 迭代加深搜索
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 树的重心与直径
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 树上前缀和与差分
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 树上倍增与 LCA
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 差分约束
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 同余最短路
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 欧拉回路
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 分层树
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 01 分数规划
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## kmp
 
@@ -756,18 +767,18 @@ int main() {
 
 - **字符串**：用字符构成的序列就是字符串
 
-::: tip 提示
+::tip
 
 在字符串匹配问题中，我们会i让字符串的下标从 1 开始，这样便于我们处理一些边界问题。因此，在输入字符串时，我们一般会在前面加上一个空格，这样字符就从 1 开始计数了。
 
-```c++
+```cpp
 string s;
 cin >> s;
 int n = s.size();
 s = ' ' + s;
 ```
 
-:::
+::
 
 - **子串**：选取字符串中连续的一段
 
@@ -781,38 +792,49 @@ s = ' ' + s;
 
 - **真公共前后缀（border）**：字符串 s 的真公共前后缀为 s 的一个子串 t，满足 t 即是 s 的真前缀，又是 s 的真后缀，又称为字符串 s 的 border
 
-::: tip 性质
+::tip
+
+**性质**：
 
 - **传递性**：字符串 s 的 border 的 border 也是字符串 s 的 border
 
-:::
+::
 
 - **最长真公共前后缀（$\pi$）**：在一个字符串中，最长的真公共前后缀的长度用 $\pi$ 表示
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 例如，字符串 `aabaaba` 的真公共前后缀有：`a`、`aaba`。
 
 字符串 `abaaba` 的 border 有：`a`、`aba`，因此 $\pi$ 值为 3。
 
 字符串 `aaaaaa` 的 border 有：`a`、`aa`、`aaa`、`aaaa`、`aaaaa`，因此 $\pi$ 值为 5。
 
-:::
+::
 
 - **字符串匹配（模式匹配）**：给定两个字符串 $S$ 和 $T$，需要在主串 $S$ 中找到模式串 $T$
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 主串 `S = "abcdefcde"`，模式串 `T="cde"`。如果下标从 1 开始计数，模式串会在主串 3，7 位置出现
 
-:::
+::
 
 ### 前缀函数
 
 **前缀函数**：字符串每一个前缀子串的 $\pi$ 值
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 以字符串 `aabaab` 为例，$\pi[i]$ 表示：字符串 s 长度为 i 的前缀，最长的 border 长度（最长真公共前后缀）。
 
 |   下标   |  1  |  2  |  3  |  4   |   5   |   6    |
@@ -820,12 +842,15 @@ s = ' ' + s;
 | 前缀子串 |  a  | aa  | aab | aaba | aabaa | aabaab |
 |  $\pi$   |  0  |  1  |  0  |  1   |   2   |   3    |
 
-:::
+::
 
 前缀函数可以用于从大到小枚举字符串 s 某个前缀的所有的 border。
 
-::: details 证明
+::detail
 
+#title
+证明
+#default
 假设我们此时生成了一个字符串 s 的前缀表，我们可以利用这张表，从大到小拿到某个前缀所有的 border。
 
 原理就是 border 的传递性：字符串 border 的 border 还是 border。
@@ -838,9 +863,9 @@ s = ' ' + s;
 
 - 因此，整个过程一定能够不重不漏的将所有的 border 从大到小枚举出来。
 
-:::
+::
 
-```c++
+```cpp
 string s;
 int pi[N]; // 假设已经生成好了前缀函数
 
@@ -864,8 +889,11 @@ void get_border(int i) {
 
 <p><font color="blue">状态转移方程：f[i][j] = min(f[i + 1][j - 1], f[i + 1][j] + 1, f[i][j - 1] + 1)</font></p>
 
-::: details 推导状态转移方程
+::detail
 
+#title
+推导状态转移方程
+#default
 我们发现，如果，如果将长度为 i 的前缀中的 border 删去最后一个字符，就变成了长度为 i - 1 的前缀中的 border。
 
 那么，我们就可以从大到小枚举长度为 i - 1 的前缀中所有的 border，然后判断这个 border 的下一个字符是否和 s[i] 相等：
@@ -876,11 +904,11 @@ void get_border(int i) {
 
 - 如果不相等，那就继续判断下一个 border，直到将所有的 border 验证完毕。
 
-:::
+::
 
-::: code-group
+::code-group
 
-```c++
+```cpp
 string s;
 int pi[N];
 
@@ -898,7 +926,7 @@ void get_pi() {
 }
 ```
 
-```c++ [优化]
+```cpp [优化]
 string s;
 int pi[N];
 
@@ -916,7 +944,7 @@ void get_pi() {
 }
 ```
 
-:::
+::
 
 时间复杂度：$O(n)$
 
@@ -938,7 +966,7 @@ void get_pi() {
 
 例题：[P3375 【模板】KMP](https://www.luogu.com.cn/problem/P3375)
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -974,7 +1002,7 @@ int main() {
 
 - 在暴力匹配的过程中，用生成的 bext 数组，加速匹配。当第一次匹配失败的时候，前面已经匹配的字符串的信息我们是已知的。此时，可以利用前面已经匹配的字符串的 border，来加速匹配。
 
-```c++
+```cpp
 string s, t;
 int n, m;
 int ne[N];
@@ -1003,42 +1031,42 @@ void kmp() {
 
 例题：[UVA10298 Power Strings](https://www.luogu.com.cn/problem/UVA10298)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P4391 [BalticOI 2009] Radio Transmission 无线传输](https://www.luogu.com.cn/problem/P4391)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 练习题
 
 例题：[P4824 [USACO15FEB] Censoring S](https://www.luogu.com.cn/problem/P4824)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P9606 [CERC2019] ABB](https://www.luogu.com.cn/problem/P9606)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## manacher
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::

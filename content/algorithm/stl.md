@@ -1,18 +1,23 @@
 # STL
 
-::: danger 警告
+::danger
+
 该页面尚未完工!
-:::
 
-::: details 目录
+::
 
+::detail
+
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## 什么是 STL
 
-STL 即标准模板库(Standard Template Library)，是 C++标准库的一部分，里面包含了一些模板化的通用的数据结构和算法。由于其模板化的特点，它能够兼容自定义的数据类型，避免大量的造轮子工作。
+STL 即标准模板库(Standard Template Library)，是 C++ 标准库的一部分，里面包含了一些模板化的通用的数据结构和算法。由于其模板化的特点，它能够兼容自定义的数据类型，避免大量的造轮子工作。
 
 NOI 和 ICPC 赛事都支持 STL 库的使用，蓝桥杯也是支持的。因此，一定要学习 STL 的使用，能够极大的提高编写代码的效率。
 
@@ -20,16 +25,16 @@ STL 的实现涉及比较高深的 C++ 知识，比如类、模板、容器适�
 
 ## 字符串-string
 
-`string`字符串其实是一种更加高级的封装，`string`字符串中包含大量的方法，这些方法使得字符串的操作变得更加简单。
+`string` 字符串其实是一种更加高级的封装，`string` 字符串中包含大量的方法，这些方法使得字符串的操作变得更加简单。
 
-C++ 中将字符串直接作为一种类型，也就是`string`类型，使用`string`类型创建的对象就是 C++ 的字符串。
+C++ 中将字符串直接作为一种类型，也就是 `string` 类型，使用 `string` 类型创建的对象就是 C++ 的字符串。
 
-```c++
+```cpp
 string s1;
 string s2 = "hello world";
 ```
 
-使用 C++ 中提供的`string`时，必须添加头文件`<string>`。
+使用 C++ 中提供的 `string` 时，必须添加头文件`<string>`。
 
 ### 创建字符串
 
@@ -40,28 +45,28 @@ string s2 = "hello world";
 
 除了以上创建字符串的写法外，C++ 中还有一些其他的创建字符串方式，如：
 
-```c++
+```cpp
 string s3("hello world");
 string s4 = s3;
 ```
 
-::: warning 注意
+::warning
 
-`string`类型内的字符串不再以`\0`作为结束标志了。
+`string` 类型内的字符串不再以 `\0` 作为结束标志了。
 
-:::
+::
 
 ### 字符串输入
 
-可以直接使用`cin`给`string`类型的字符串中输入一个字符串的数据，但无法正常读取带空格的字符串。
+可以直接使用 `cin` 给 `string` 类型的字符串中输入一个字符串的数据，但无法正常读取带空格的字符串。
 
-`getline()`是头文件`<string>`中定义的函数，用于从输入流中读取**一行文本**，并将其存储为字符串。
+`getline()` 是头文件 `<string>` 中定义的函数，用于从输入流中读取**一行文本**，并将其存储为字符串。
 
-`getline()`函数有两种不同的形式，分别对应着字符串的结束方式。
+`getline()` 函数有两种不同的形式，分别对应着字符串的结束方式。
 
-第一种`getling()`函数以换行符`\n`作为字符串的结束表示，它的一般格式是：
+第一种 `getling()` 函数以换行符 `\n` 作为字符串的结束表示，它的一般格式是：
 
-```c++
+```cpp
 istream& getline(istream& is, string& str);
 ```
 
@@ -69,9 +74,9 @@ istream& getline(istream& is, string& str);
 
 - **str** : 存放读取到的信息的字符串
 
-第二种`getline()`函数允许用户自定义结束标志，它的一般格式是：
+第二种 `getline()` 函数允许用户自定义结束标志，它的一般格式是：
 
-```c++
+```cpp
 istream& getline(istream& is, string& str, char delim);
 ```
 
@@ -81,15 +86,15 @@ istream& getline(istream& is, string& str, char delim);
 
 - **delim** : 自定义的结束标志
 
-::: tip 提示
+::tip
 
-`istream`是输入流类型，`cin`是`istream`类型的标准输入流对象。
+`istream` 是输入流类型，`cin` 是 `istream` 类型的标准输入流对象。
 
-`ostream`是输出流类型，`cout`是`ostream`类型的标准输出流对象。
+`ostream` 是输出流类型，`cout` 是 `ostream` 类型的标准输出流对象。
 
-`getline()`函数是输入流中读取一行文本信息，所有如果是在标准输入流(键盘)中读取数据，就可以传`cin`给第一个参数。
+`getline()` 函数是输入流中读取一行文本信息，所有如果是在标准输入流(键盘)中读取数据，就可以传 `cin` 给第一个参数。
 
-:::
+::
 
 ### size()
 
@@ -97,53 +102,53 @@ istream& getline(istream& is, string& str, char delim);
 
 使用示例：
 
-```c++
+```cpp
 string s = "hello world";
 cout << s.size() << endl;
 ```
 
-::: warning 注意
+::warning
 
-`string`类型的字符串是可以通过下标访问的，比如`s[i]`
+`string` 类型的字符串是可以通过下标访问的，比如 `s[i]`
 
-:::
+::
 
 ### 迭代器
 
 迭代器是一种对象，它可以用来遍历容器(`string`)中的元素，迭代器的作用类似于指针，或者数组下标。
 
-C++中的`string`提供了多种迭代器，用于遍历和操作字符串中的内容。常用的迭代器有：
+C++ 中的 `string` 提供了多种迭代器，用于遍历和操作字符串中的内容。常用的迭代器有：
 
 - `begin()`：返回指向字符串第一个字符的迭代器，需要一个迭代器的变量来接收。
 
 - `end()`：返回指向字符串最后一个字符的下一个位置的迭代器(该位置不属于字符串)。
 
-`string`中`begin()`和`end()`返回的迭代器的类型是`string::iterator`。
+`string` 中 `begin()` 和 `end()` 返回的迭代器的类型是 `string::iterator`。
 
-```c++
+```cpp
 string s = "abc";
 string::iterator it1 = s.begin();
 string::iterator it2 = s.end();
 cout << *it1;
 ```
 
-::: warning 注意
+::warning
 
-访问迭代器指向的值，需要解引用`*`。
+访问迭代器指向的值，需要解引用 `*`。
 
-:::
+::
 
-::: tip 提示
+::tip
 
 - 迭代器是可以进行大小比较，也可以进行 + 或者 - 整数运算的。比如：`it++`，就是让迭代器前进一步，`it--` 就是让迭代器后退一步。
 
 - 同一个容器的两个迭代器也可以相减，相减结果的绝对值，是两个迭代器中间元素的个数。
 
-:::
+::
 
 迭代器通常用于遍历字符串，可以正序遍历，也可以逆序遍历。
 
-```c++
+```cpp
 string s = "hello world";
 // 正序遍历
 for (string::iterator it = s.begin(); it != s.end(); it++) {
@@ -151,17 +156,17 @@ for (string::iterator it = s.begin(); it != s.end(); it++) {
 }
 ```
 
-::: warning 注意
+::warning
 
 通过迭代器找到元素后，改变迭代器指向的元素，是可以直接改变字符串内容的。
 
-:::
+::
 
 ### push_back()
 
-`push_back()`函数用于在字符串(包括空字符串)尾部插入一个字符。
+`push_back()` 函数用于在字符串(包括空字符串)尾部插入一个字符。
 
-```c++
+```cpp
 string s = "hello";
 s.push_back(' ');
 s.push_back('w');
@@ -174,9 +179,9 @@ cout << s << endl;
 
 ### 字符串的 += 和 + 运算
 
-`push_back()`是用于在字符串后添加一个字符，然而部分情况下我们需要向原有的字符串后继续添加字符串。其实`string`类型的字符串是支持`+`和`+=`运算的。这里的本质是`string`中重载了`operator+=`这个操作符。
+`push_back()` 是用于在字符串后添加一个字符，然而部分情况下我们需要向原有的字符串后继续添加字符串。其实 `string` 类型的字符串是支持 `+` 和 `+=` 运算的。这里的本质是 `string` 中重载了 `operator+=` 这个操作符。
 
-```c++
+```cpp
 string s = "hello";
 s += " world";
 cout << s << endl;
@@ -184,9 +189,9 @@ cout << s << endl;
 
 ### pop_back()
 
-`pop_back()`用于删除字符串中尾部的一个字符。这个成员函数是在`c++11`标准中引入的，有些编译器可能不支持。
+`pop_back()` 用于删除字符串中尾部的一个字符。这个成员函数是在 `c++11` 标准中引入的，有些编译器可能不支持。
 
-```c++
+```cpp
 string s = "helloX";
 s.pop_back();
 cout << s << endl;
@@ -194,15 +199,15 @@ cout << s << endl;
 
 ### insert()
 
-`insert()`函数用于在字符串中间的某个位置插入一个字符或者字符串。函数原型如下：
+`insert()` 函数用于在字符串中间的某个位置插入一个字符或者字符串。函数原型如下：
 
-```c++
+```cpp
 string& insert(size_t pos, const string& str); // pos位置前面插入一个 string 字符串
 string& insert(size_t pos, const char* s); // pos位置前面插入一个 C 风格的字符串
 string& insert(size_t pos, size_t n, char c); // pos位置前面插入 n 个字符 c
 ```
 
-```c++
+```cpp
 string s = "hello world";
 
 // 插入一个字符串 X
@@ -218,9 +223,9 @@ s.insert(5, 2, 'X');
 
 ### find()
 
-`find()`函数用于查找字符串中指定字串/字符，并返回子串/字符在字符串中第一次出现的位置。函数原型如下：
+`find()` 函数用于查找字符串中指定字串/字符，并返回子串/字符在字符串中第一次出现的位置。函数原型如下：
 
-```c++
+```cpp
 size_t find(const string& str, size_t pos = 0) const;
 // 查找 string 类型的字符串 str，默认是从头开始，pos可以指定位置开始
 
@@ -238,9 +243,9 @@ size_t find(char c, size_t pos = 0) const;
 
 - 若找到，返回字串/字符在字符串中第一次出现的起始下标位置。
 
-- 若未找到，返回一个整数值`npos`。通常判断`find()`函数的返回值是否等于`npos`就能直到是否查找到字串或者字符。
+- 若未找到，返回一个整数值 `npos`。通常判断 `find()` 函数的返回值是否等于 `npos` 就能直到是否查找到字串或者字符。
 
-```c++
+```cpp
 string s = "hello world";
 
 // 查找字符串 hello
@@ -258,21 +263,21 @@ cout << s.find('w') << endl;
 
 ```
 
-::: tip 提示
+::tip
 
-`npos`并不是一个随机的数字，而是`string`中定义的一个静态常量`npos`。
+`npos` 并不是一个随机的数字，而是 `string` 中定义的一个静态常量 `npos`。
 
-```c++
+```cpp
 static const size_t npos = -1;
 ```
 
-:::
+::
 
 ### substr()
 
-`substr()`函数用于截取字符串中指定位置指定长度的字串。函数原型如下：
+`substr()` 函数用于截取字符串中指定位置指定长度的字串。函数原型如下：
 
-```c++
+```cpp
 string substr(size_t pos = 0, size_t len = npos) const;
 ```
 
@@ -290,7 +295,7 @@ string substr(size_t pos = 0, size_t len = npos) const;
 
 **返回值类型** : `string`，返回的是截取到的字符串，可以使用`string`类型的字符串接收。
 
-```c++
+```cpp
 string s = "hello world";
 string s1 = s.substr(0, 3);
 string s2 = s.substr(3);
@@ -299,15 +304,15 @@ cout << s1 << endl;
 cout << s2 << endl;
 ```
 
-::: warning 注意
+::warning
 
-`substr()`不会修改原字符串。
+`substr()` 不会修改原字符串。
 
-:::
+::
 
-`substr()`和`find()`经常是配合使用的，`find()`负责找到位置，`substr()`从这个位置向后获得字符串。
+`substr()` 和 `find()` 经常是配合使用的，`find()` 负责找到位置，`substr()` 从这个位置向后获得字符串。
 
-```c++
+```cpp
 string s = "hello world hello everyone";
 size_t n = s.find("world");
 string s1 = s.substr(n, 11);
@@ -316,9 +321,9 @@ cout << s1 << endl;
 
 ### string 的关系运算
 
-两个`string`类型字符串可以比较大小，C++中为`string`提供了一系列的关系运算。
+两个`string`类型字符串可以比较大小，C++ 中为 `string` 提供了一系列的关系运算。
 
-```c++
+```cpp
 string s1 = "abc";
 string s2 = "abcd";
 char s3[] = "abcdef"; // C 风格的字符串
@@ -371,18 +376,18 @@ bool operator>=(const string& lhs, const char* rhs);// 使用方式：s1 >= s3
 
 函数原型如下：
 
-```c++
+```cpp
 int stoi(const string& str, size_t* idx = 0, int base = 10);
 long int stol(const string& str, size_t* idx = 0, int base = 10);
 ```
 
 - `str` : 表示被转换的`string`类型的字符串
 
-- `idx` : 是一个输出型参数，也就是通过这个参数会带会一个值。`idx`是一个指针，需要在外边创建一个`size_t`类型的值，传递它的地址给`idx`，这个参数将会带回`str`中无法正确匹配数字的第一个字符的位置。
+- `idx` : 是一个输出型参数，也就是通过这个参数会带会一个值。`idx` 是一个指针，需要在外边创建一个 `size_t` 类型的值，传递它的地址给 `idx`，这个参数将会带回 `str` 中无法正确匹配数字的第一个字符的位置。
 
-- `base` : 表示被解析的字符串中数字的进制值，可能是`2`、`8`、`10`、`16`或者`0`。默认情况下这个值是`10`，表示十进制数字；如果传递的是`2`，表示被解析的字符串中是二进制的数字，最终会转换成十进制的；如果传递的是`0`，会根据字符串的内容的信息自动推导进制，比如：字符串中有`0x`，就认为是十六进制，`0`开头会被认为是八进制，最终会转换成十进制。
+- `base` : 表示被解析的字符串中数字的进制值，可能是 `2`、`8`、`10`、`16` 或者 `0`。默认情况下这个值是 `10`，表示十进制数字；如果传递的是 `2`，表示被解析的字符串中是二进制的数字，最终会转换成十进制的；如果传递的是 `0`，会根据字符串的内容的信息自动推导进制，比如：字符串中有 `0x`，就认为是十六进制，`0` 开头会被认为是八进制，最终会转换成十进制。
 
-```c++
+```cpp
 string s = "11x22";
 size_t pos = 0;
 int r = stoi(s, &pos, 10);
@@ -390,26 +395,26 @@ cout << r << endl;
 cout << pos << endl;
 ```
 
-::: tip 提示
+::tip
 
-如果不想传递`idx`参数，可以传递`0`或者`NULL`。如`stoi(s, NULL, 10)`。
+如果不想传递 `idx` 参数，可以传递 `0` 或者 `NULL`。如 `stoi(s, NULL, 10)`。
 
-:::
+::
 
 ### `stod()`/`stof()`
 
-`stod()`是将字符串转换成`double`类型的值，`stof`是将字符串转换成`float`类型的值。和`stoi()`函数比较的话，少了描述字符串中数字进制的参数，其他参数一致。函数原型如下：
+`stod()` 是将字符串转换成 `double` 类型的值，`stof` 是将字符串转换成 `float` 类型的值。和 `stoi()` 函数比较的话，少了描述字符串中数字进制的参数，其他参数一致。函数原型如下：
 
-```c++
+```cpp
 double stod(const string& str, size_t* idx = 0);
 float stof(const string& str, size_t* idx = 0);
 ```
 
 ### `to_string()`
 
-`to_string()`函数可以将数字转换成字符串，包括整型、浮点型等。函数原型如下：
+`to_string()` 函数可以将数字转换成字符串，包括整型、浮点型等。函数原型如下：
 
-```c++
+```cpp
 string to_string(int val);
 string to_string(long val);
 string to_string(long long val);
@@ -423,7 +428,7 @@ string to_string(long double val);
 
 使用示例如下：
 
-```c++
+```cpp
 string pi = "pi is " + to_string(3.14);
 ```
 
@@ -433,7 +438,7 @@ string pi = "pi is " + to_string(3.14);
 
 ### 创建 vector
 
-```c++
+```cpp
 #include<vector>
 
 int main() {
@@ -454,17 +459,17 @@ int main() {
 
 - 一个名字为 a4 的可变长数组，里面有 5 个数据，数据初始化为 1,2,3,4,5。
 
-::: tip 提示
+::tip
 
-`<>`里面可以存放任意的数据类型，包括结构体 struct、字符串 string、顺序表 vector 等等。
+`<>` 里面可以存放任意的数据类型，包括结构体 struct、字符串 string、顺序表 vector 等等。
 
-:::
+::
 
-::: warning 注意
+::warning
 
-`vector<int> a[N]`创建了一个大小为 N 的 vector 数组。
+`vector<int> a[N]` 创建了一个大小为 N 的 vector 数组。
 
-:::
+::
 
 ### size()/empty()
 
@@ -472,7 +477,7 @@ int main() {
 
 - `empty()`: 返回顺序表是否为空。如果为空：返回 true，否则返回 false。
 
-```c++
+```cpp
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -495,11 +500,11 @@ int main() {
 
 - `end()`: 返回终点位置的下一个位置的迭代器（右开）。
 
-利用迭代器可以访问整个`vector`，存在迭代器的容器就可以使用范围 for 遍历。
+利用迭代器可以访问整个 `vector`，存在迭代器的容器就可以使用范围 for 遍历。
 
-::: code-group
+::code-group
 
-```c++ [写法1]
+```cpp [写法1]
 // 利用迭代器来遍历
 void print(vector<int>& a) {
 	for (vector<int>::iterator it = a.begin(); it != a.end(); it++)cout << *it << " ";
@@ -507,7 +512,7 @@ void print(vector<int>& a) {
 }
 ```
 
-```c++ [写法2]
+```cpp [写法2]
 // 利用范围 for 来遍历
 void print(vector<int>& a) {
 	for (auto x : a)cout << x << " ";
@@ -515,7 +520,7 @@ void print(vector<int>& a) {
 }
 ```
 
-:::
+::
 
 ### push_back()/pop_back()
 
@@ -523,9 +528,9 @@ void print(vector<int>& a) {
 
 - `pop_back()`: 删除顺序表尾部的一个元素。
 
-> 当然还有`insert()`和`erase()`。不过由于事件复杂度过高，尽量不使用。
+> 当然还有 `insert()` 和 `erase()`。不过由于事件复杂度过高，尽量不使用。
 
-```c++
+```cpp
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -551,7 +556,7 @@ int main() {
 
 - `back()`: 返回顺序表最后一个元素。
 
-```c++
+```cpp
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -570,7 +575,7 @@ int main() {
 
 - 如果小于原始的大小，相当于把后面的元素全部删掉。
 
-```c++
+```cpp
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -594,7 +599,7 @@ int main() {
 
 - `clear()`: 清空顺序表。
 
-```c++
+```cpp
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -618,7 +623,7 @@ int main() {
 
 ### 创建 stack
 
-```c++
+```cpp
 #include<stack>
 
 int main() {
@@ -644,7 +649,7 @@ int main() {
 
 - `top()`: 返回栈顶元素，但是不会删除栈顶元素。
 
-```c++
+```cpp
 #include<iostream>
 #include<stack>
 using namespace std;
@@ -663,7 +668,7 @@ int main() {
 
 ### 创建 queue
 
-```c++
+```cpp
 #include<queue>
 
 int main() {
@@ -691,41 +696,51 @@ int main() {
 
 ## 双端队列-deque
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 ## 优先队列-priority_queue
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 ## 集合-set
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 ## 红黑树-map
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 ## 哈希表-unordered_map
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 ## STL 函数
 
 ### lower_bound()
 
-包含在`<algorithm>`头文件中。在 a 数组（有序）（左闭右开）中查找第一个大于等于 x 的元素，返回该元素的地址。
+包含在 `<algorithm>` 头文件中。在 a 数组（有序）（左闭右开）中查找第一个大于等于 x 的元素，返回该元素的地址。
 
-```c++
+```cpp
 lower_bound(a, a + n, x);
 ```
 
@@ -733,9 +748,9 @@ lower_bound(a, a + n, x);
 
 ### upper_bound()
 
-包含在`<algorithm>`头文件中。在 a 数组（有序）（左闭右开）中查找第一个大于 x 的元素，返回该元素的地址。
+包含在 `<algorithm>` 头文件中。在 a 数组（有序）（左闭右开）中查找第一个大于 x 的元素，返回该元素的地址。
 
-```c++
+```cpp
 upper_bound(a, a + n, x);
 ```
 

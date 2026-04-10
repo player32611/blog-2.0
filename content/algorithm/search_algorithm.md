@@ -1,14 +1,19 @@
 # 搜索算法
 
-::: danger 警告
+::danger
+
 该页面尚未完工!
-:::
 
-::: details 目录
+::
 
+::detail
+
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## 什么是搜索
 
@@ -16,13 +21,17 @@
 
 搜索一般分为深度优先搜索(DFS)与宽度优先搜索(BFS)。
 
-::: tip 回溯与剪枝
+::detail
+
+#title
+回溯与剪枝
+#default
 
 - 回溯：当在搜索的过程中，遇到走不同或者走到底的情况时，就回头。
 
 - 剪枝：剪掉在搜索过程中，重复出现或者不是最优解的分支。
 
-:::
+::
 
 ## 深度优先遍历 - DFS
 
@@ -32,7 +41,7 @@
 
 <p><font color="blue">解法：深度优先搜索</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<string>
 using namespace std;
@@ -64,7 +73,7 @@ int main() {
 
 例题：[P10448 组合型枚举](https://www.luogu.com.cn/problem/P10448)
 
-```c++
+```cpp
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -93,7 +102,7 @@ int main() {
 
 例题：[B3623 枚举排列（递归实现排列型枚举）](https://www.luogu.com.cn/problem/B3623)
 
-```c++
+```cpp
 #include<bits/stdc++.h>
 using namespace std;
 string path;
@@ -121,7 +130,7 @@ int main(){
 
 例题：[P1706 全排列问题](https://www.luogu.com.cn/problem/P1706)
 
-```c++
+```cpp
 #include<bits/stdc++.h>
 using namespace std;
 string path;
@@ -153,7 +162,7 @@ int main(){
 
 <p><font color="blue">解法：暴力搜索</font></p>
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -195,21 +204,27 @@ int main() {
 
 例题：[P9241 [蓝桥杯 2023 省 B] 飞机降落](https://www.luogu.com.cn/problem/P9241)
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 例题：[P1219 [USACO1.5] 八皇后 Checker Challenge](https://www.luogu.com.cn/problem/P1219)
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 例题：[P1784 数独](https://www.luogu.com.cn/problem/P1784)
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 ### 剪枝与优化
 
@@ -241,7 +256,7 @@ int main() {
 
 <p><font color="blue">解法：暴力搜索（剪枝：排除等效冗余、可行性剪枝）</font></p>
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -271,9 +286,11 @@ int main() {
 
 例题：[P10483 小猫爬山](https://www.luogu.com.cn/problem/P10483)
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 ### 记忆化搜索
 
@@ -283,13 +300,15 @@ int main() {
 
 记忆化搜索，有时也叫动态规划。
 
-::: tip 记忆化搜索的使用条件
+::tip
 
-递归的过程中，出现了大量“完全相同的问题”。
+递归的过程中，出现了大量“完全相同的问题”，便可使用记忆化搜索
 
-:::
+::
 
-::: tip 如何实现记忆化搜索
+::tip
+
+**如何实现记忆化搜索**：
 
 1. 创建备忘录；
 
@@ -297,19 +316,19 @@ int main() {
 
 3. 递归的时候，先往备忘录里面瞅一瞅。
 
-:::
+::
 
-::: warning 注意：初始化备忘录
+::warning
 
 备忘录中，一定不能存在递归过程中有可能出现的值。
 
-:::
+::
 
 例题：[509. 斐波那契数](https://leetcode.cn/problems/fibonacci-number/description/)
 
 <p><font color="blue">解法：递归/暴力搜索</font></p>
 
-```c++
+```cpp
 class Solution {
     int f[35]; // 备忘录
 public:
@@ -330,15 +349,19 @@ public:
 
 例题：[P5635 【CSGRound1】天下第一](https://www.luogu.com.cn/problem/P5635)
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 例题：[P1434 [SHOI2002] 滑雪](https://www.luogu.com.cn/problem/P1434)
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 ## 广度优先遍历 - BFS
 
@@ -352,7 +375,7 @@ public:
 
 <p><font color="blue">解法：从[1, 1]开始，按照马的跳跃规则，来一次 BFS 即可。</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<queue>
 #include<utility>
@@ -404,29 +427,37 @@ int main() {
 
 例题：[P1588 [USACO07OPEN] Catch That Cow S](https://www.luogu.com.cn/problem/P1588)
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 例题：[P1379 八数码难题](https://www.luogu.com.cn/problem/P1379)
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 ### 多源 BFS
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 例题：[P1902 刺杀大使](https://www.luogu.com.cn/problem/P1902)
 
 ### 01 BFS
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 例题：[P4554 小明的游戏](https://www.luogu.com.cn/problem/P4554)
 
@@ -434,9 +465,11 @@ int main() {
 
 ## FloodFill 问题
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 例题：[P1596 [USACO10OCT] Lake Counting S](https://www.luogu.com.cn/problem/P1596)
 

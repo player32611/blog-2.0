@@ -1,16 +1,21 @@
 # Maven
 
-::: details 目录
+::detail
 
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## Maven 介绍
 
 Maven 是一款用于管理和构建 Java 项目的工具，是 apache 旗下的一个开源项目
 
-::: tip Maven 的作用
+::tip
+
+Maven 的作用：
 
 - 依赖管理：方便快捷的管理项目依赖的资源（jar 包）
 
@@ -18,7 +23,7 @@ Maven 是一款用于管理和构建 Java 项目的工具，是 apache 旗下的
 
 - 统一项目结构：提供标准，统一的项目结构
 
-:::
+::
 
 ## Maven 坐标
 
@@ -88,11 +93,11 @@ Maven 中有 3 套相互独立的生命周期：
 
 - site：生成报告、发布站点等
 
-::: warning 注意
+::warning
 
 在**同一套**生命周期中，当运行后面的阶段时，前面的阶段都会运行
 
-:::
+::
 
 执行指定生命周期的两种方式：
 
@@ -104,7 +109,9 @@ Maven 中有 3 套相互独立的生命周期：
 
 - 测试：是一种用来促进鉴定软件的正确性、完整性、安全性和质量的过程，划分为：单元测试、集成测试、系统测试、验收测试。
 
-::: tip 测试类型
+::tip
+
+测试类型：
 
 单元测试对软件的基本组成单位进行测试，最小测试单位，采用白盒测试。
 
@@ -130,11 +137,13 @@ Maven 中有 3 套相互独立的生命周期：
 
 - 测试人员：客户/需求方
 
-:::
+::
 
 测试方法包括：白盒测试、黑盒测试及灰盒测试。
 
-::: tip 测试方法
+::tip
+
+测试方法：
 
 白盒测试时清楚软件内部结构、代码逻辑。用于验证代码、逻辑正确性。
 
@@ -142,7 +151,7 @@ Maven 中有 3 套相互独立的生命周期：
 
 灰盒测试结合了白盒测试和黑盒测试的特点，即关注软件的内部结构，又考虑外部表现（功能）。
 
-:::
+::
 
 ### 单元测试
 
@@ -150,7 +159,9 @@ Maven 中有 3 套相互独立的生命周期：
 
 **JUnit** 是最流行的 Java 测试框架之一，提供了一些功能，方便程序进行单元测试（第三方公司提供）
 
-::: warning 使用 `main` 方法测试存在的问题
+::warning
+
+使用 `main` 方法测试存在的问题：
 
 - 测试代码与源代码为分开，难维护
 
@@ -158,9 +169,11 @@ Maven 中有 3 套相互独立的生命周期：
 
 - 无法自动化测试，得到测试报告
 
-:::
+::
 
-::: tip 使用 JUnit 测试的优势
+::tip
+
+使用 JUnit 测试的优势：
 
 - 测试代码与源代码分开，便于维护
 
@@ -168,7 +181,7 @@ Maven 中有 3 套相互独立的生命周期：
 
 - 可自动分析测试结果，产出测试报告
 
-:::
+::
 
 **使用方法**：
 
@@ -193,13 +206,13 @@ public void testGetAge() {
 }
 ```
 
-::: warning 注意
+::warning
 
 JUnit 单元测试类名命名规范为：XxxxxTest
 
 JUnit 单元测试的方法，必须声明为 `public void`
 
-:::
+::
 
 3. 运行单元测试（测试通过：绿色；测试失败：红色）
 
@@ -221,7 +234,11 @@ JUnit 提供了一些辅助方法，用来帮我们确定被测试的方法是�
 |       `Assertions.assertFalse(boolean condition,String msg)`        |    检查给定条件是否为假，不为假就报错     |
 | `Assertions.assertThrows(Class expType,Executable exec,String msg)` |   检查程序运行抛出的异常，是否符合预期    |
 
-::: details 具体示例
+::detail
+
+#title
+具体示例
+#default
 
 ```java
 public void testGenderWithAssert(){
@@ -238,13 +255,13 @@ public void testGenderWithAssert2(){
 }
 ```
 
-:::
+::
 
-::: tip 提示
+::tip
 
 上述方法形参中的最后一个参数 msg 表示错误提示信息，可以不指定（有对应的重载方法）
 
-:::
+::
 
 ### 常见注解
 
@@ -261,7 +278,11 @@ public void testGenderWithAssert2(){
 |     `@BeforeAll`     |     用来修饰一个静态方法，该方法会在所有测试方法之前只执行一次     |       初始化资源（准备工作）        |
 |     `@AfterAll`      |     用来修饰一个静态方法，该方法会在所有测试方法之后只执行一次     |        释放资源（清理工作）         |
 
-::: details 具体示例
+::detail
+
+#title
+具体示例
+#default
 
 ```java
 // test/java/com.xxx.xxx/UserServiceTest.java
@@ -299,7 +320,7 @@ public class UserServiceTest {
 }
 ```
 
-:::
+::
 
 ### 依赖范围
 

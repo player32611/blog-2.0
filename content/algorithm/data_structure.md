@@ -1,14 +1,19 @@
 # 数据结构
 
-::: danger 警告
+::danger
+
 该页面尚未完工!
-:::
 
-::: details 目录
+::
 
+::detail
+
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## 顺序表
 
@@ -28,7 +33,7 @@
 
 ### 创建顺序表
 
-```c++
+```cpp
 const int N = 1e6 + 10; // 定义静态数组的最大长度
 
 int a[N], n; // 直接创建一个大数组来实现顺序表，n 表示当前有多少个元素。
@@ -40,18 +45,18 @@ int a[N], n; // 直接创建一个大数组来实现顺序表，n 表示当前�
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 尾插
 void push_back(int x) {
 	a[++n] = x;
 }
 ```
 
-::: tip 提示
+::tip
 
 约定：下标为 0 的位置，不存储有效数据。也就是说数据是从 a[1] 开始存储。
 
-:::
+::
 
 **头插：在顺序表表头的前面，插入一个新元素。**
 
@@ -61,7 +66,7 @@ void push_back(int x) {
 
 3: 元素个数 +1。
 
-```c++
+```cpp
 // 头插
 void push_front(int x) {
 	for (int i = n; i >= 1; i--) {
@@ -82,7 +87,7 @@ void push_front(int x) {
 
 时间复杂度：O(n)
 
-```c++
+```cpp
 // 任意位置插入
 void insert(int p, int x) {
 	for (int i = n; i >= p; i--)a[i + 1] = a[i];
@@ -97,7 +102,7 @@ void insert(int p, int x) {
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 尾删
 void pop_back() {
 	n--;
@@ -112,7 +117,7 @@ void pop_back() {
 
 时间复杂度：O(n)
 
-```c++
+```cpp
 void pop_front() {
 	for (int i = 2; i <= n; i++)a[i - 1] = a[i];
 	n--;
@@ -125,7 +130,7 @@ void pop_front() {
 
 2: 元素个数 -1。
 
-```c++
+```cpp
 // 任意位置删除
 void erase(int p) {
 	for (int i = p + 1; i <= n; i++)a[i - 1] = a[i];
@@ -141,7 +146,7 @@ void erase(int p) {
 
 时间复杂度：O(n)
 
-```c++
+```cpp
 // 按值查找
 int find(int x) {
 	for (int i = 1; i <= n; i++) {
@@ -155,7 +160,7 @@ int find(int x) {
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 按位查找
 int at(int p) {
 	return a[p];
@@ -168,7 +173,7 @@ int at(int p) {
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 修改元素
 void change(int p, int x) {
     a[p] = x;
@@ -181,26 +186,26 @@ void change(int p, int x) {
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 清空顺序表
 void clear() {
     n = 0;
 }
 ```
 
-::: warning 注意
+::warning
 
 要注意，我们直接实现的简单形式的时间复杂度是 O(1)。
 
 但是，严谨的方式应该是 O(n)。
 
-:::
+::
 
 ### 封装静态顺序表
 
-利用 C++中的结构体和类把我们实现的顺序表封装起来，就能简化操作，使代码的复用率大大提升。
+利用 C++ 中的结构体和类把我们实现的顺序表封装起来，就能简化操作，使代码的复用率大大提升。
 
-```c++
+```cpp
 class SQList {
 	int a[N];
 	int n;
@@ -250,7 +255,7 @@ public:
 
 **定义、创建、初始化**
 
-```c++
+```cpp
 const int N = 1e5 + 10;
 
 int e[N], ne[N], h, id;
@@ -268,7 +273,7 @@ int e[N], ne[N], h, id;
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 头插
 void push_front(int x) {
 	id++;
@@ -282,7 +287,7 @@ void push_front(int x) {
 
 时间复杂度：O(n)
 
-```c++
+```cpp
 // 遍历链表
 void print() {
 	// 定义一个指针从头结点开始
@@ -299,9 +304,9 @@ void print() {
 
 解法二：如果存储的值数据范围不大，且无重复值，可以使用哈希表优化。时间复杂度：O(1)
 
-::: code-group
+::code-group
 
-```c++ [解法1]
+```cpp [解法1]
 // 遍历整个链表
 int find(int x) {
 	for (int i = ne[h]; i; i = ne[i])if (e[i] == x)return i;
@@ -309,7 +314,7 @@ int find(int x) {
 }
 ```
 
-```c++ [解法2]{2,7,12-14}
+```cpp [解法2]{2,7,12-14}
 // 用哈希表优化
 int mp[N]; // mp[i] 表示 i 这个元素存放的位置
 
@@ -326,13 +331,13 @@ int find(int x) {
 }
 ```
 
-:::
+::
 
 **在任意（存储）位置之后插入元素**
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 void insert(int p, int x) {
 	id++;
 	e[id] = x;
@@ -342,17 +347,17 @@ void insert(int p, int x) {
 }
 ```
 
-::: warning 警告注意
+::warning
 
 这里的 p 是存储位置，不是元素，也不是链表位置。
 
-:::
+::
 
 **删除任意（存储）位置之后的元素**
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 void erase(int p) {
 	if (ne[p]) { // 当 p 不是最后一个元素的时候
 		mp[e[ne[p]]] = 0; // 把标记清空
@@ -371,7 +376,7 @@ void erase(int p) {
 
 - 第三个数组 `next` 存储下一个元素的存储下标。
 
-```c++
+```cpp
 const int N = 1e5 + 10;
 
 int e[N], ne[N], pre[N], id, h;
@@ -381,7 +386,7 @@ int e[N], ne[N], pre[N], id, h;
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 头插
 void push_front(int x) {
 	id++;
@@ -397,7 +402,7 @@ void push_front(int x) {
 
 直接无视 `prev` 数组，与单链表的遍历方式一致。
 
-```c++
+```cpp
 // 遍历链表
 void print() {
 	for (int i = ne[h]; i; i = ne[i])cout << e[i] << " ";
@@ -409,7 +414,7 @@ void print() {
 
 时间复杂度：O(1)
 
-```c++{1,7,15-17}
+```cpp{1,7,15-17}
 int mp[N]; // mp[i] 表示 i 这个值存储的位置
 
 // 头插
@@ -443,7 +448,7 @@ int find(int x) {
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 在任意位置之后插入元素
 void insert(int p,int x) {
 	id++;
@@ -468,7 +473,7 @@ void insert(int p,int x) {
 
 5: 修改 p 的前驱指针，让其指向新的结点。
 
-```c++
+```cpp
 // 在任意位置之前插入元素
 void insert_front(int p, int x) {
 	id++;
@@ -489,7 +494,7 @@ void insert_front(int p, int x) {
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 删除任意位置的元素
 void erase(int p) {
 	mp[e[p]] = 0; // 把标记清空
@@ -506,11 +511,11 @@ void erase(int p) {
 
 - **进栈**就是往栈中放入元素，**出栈**就是将元素弹出栈顶。
 
-::: warning 注意
+::warning
 
 如果定义了一个栈结构，那么添加和删除元素只能在栈顶进行不能随意添加和删除元素。
 
-:::
+::
 
 ### 创建栈结构
 
@@ -518,23 +523,23 @@ void erase(int p) {
 
 2: 再定义一个变量 `n`，用来记录栈中元素的个数，同时还可以标记栈顶的位置。
 
-```c++
+```cpp
 const int N = 1e5 + 10;
 
 int stk[N], n;
 ```
 
-::: warning 注意
+::warning
 
 这里舍弃下标为 0 的位置，有效元素从 1 开始记录。
 
-:::
+::
 
 ### 进栈
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 进栈
 void push(int x) {
 	stk[++n] = x;
@@ -547,7 +552,7 @@ void push(int x) {
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 出栈
 void pop() {
 	n--;
@@ -558,7 +563,7 @@ void pop() {
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 获取栈顶元素
 int top() {
 	return stk[n];
@@ -569,7 +574,7 @@ int top() {
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 判断栈是否为空
 bool empty() {
 	return n == 0;
@@ -580,7 +585,7 @@ bool empty() {
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 获取栈中元素个数
 int size() {
 	return n;
@@ -605,23 +610,23 @@ int size() {
 
 - 一个变量 `t` 标记队尾元素的位置。
 
-```c++
+```cpp
 const int N = 1e5 + 10;
 
 int q[N], h, t;
 ```
 
-::: warning 注意
+::warning
 
 这里舍弃下标为 0 的位置，有效元素从 1 开始记录。
 
-:::
+::
 
 ### 入队
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 入队
 void push(int x) {
 	q[++t] = x;
@@ -632,7 +637,7 @@ void push(int x) {
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 出队
 void pop() {
 	h++;
@@ -643,7 +648,7 @@ void pop() {
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 获取队头元素
 int front() {
 	return q[h + 1];
@@ -654,7 +659,7 @@ int front() {
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 // 获取队尾元素
 int back() {
 	return q[t];
@@ -665,7 +670,7 @@ int back() {
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 bool empty() {
 	return h == t;
 }
@@ -675,7 +680,7 @@ bool empty() {
 
 时间复杂度：O(1)
 
-```c++
+```cpp
 int size() {
 	return t - h;
 }
@@ -691,7 +696,11 @@ int size() {
 
 - 当 n>1 时，其余结点可分为 m(m>0) 个互不相交的有限集 T，其中每一个集合本身又是一棵树，并且称为根的子树。
 
-::: details 相关术语
+::detail
+
+#title
+相关术语
+#default
 
 - 父节点：直接前驱，根结点没有父结点；
 
@@ -707,13 +716,13 @@ int size() {
 
 - 路径长度：两点的路径中，边的个数。
 
-:::
+::
 
-::: details 性质
+::tip
 
 结点个数 = 边数 + 1
 
-:::
+::
 
 ### 树的分类
 
@@ -721,23 +730,23 @@ int size() {
 
 - 无序树：结点的子树之间没有顺序，随意更改
 
-::: tip 提示
+::tip
 
 除了二叉树以外，我们在算法竞赛中遇到的树基本上都是无序树。也就是说，不需要考虑孩子结点的顺序。
 
-:::
+::
 
 - 有根树：树的根结点是固定的
 
 - 无根树：树的根结点是不固定的，谁都可以是根结点
 
-::: tip 提示
+::tip
 
 无根树会导致父子关系不明确，在存储的时候需要注意。算法竞赛中，一般遇到的树都是无根树。
 
 即使是有根树，也会存在父子关系未知的情况。此时我们需要把所有的情况都存下来，比如 a 和 b 之间有一条边，我们不仅要存 a 有一个孩子 b，也要存 b 有一个孩子 a。
 
-:::
+::
 
 ### 树的存储-孩子表示法
 
@@ -753,7 +762,7 @@ int size() {
 
 ![treelist-vector](/images/algorithm/data-structure/treelist-vector.png)
 
-```c++
+```cpp
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -786,7 +795,7 @@ int main() {
 
 4：当 x 有一个孩子 y 的时候，就把 y 头插到 x 的链表中。
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -821,9 +830,9 @@ int main() {
 
 ![DFS](/images/algorithm/data-structure/DFS.png)
 
-::: code-group
+::code-group
 
-```c++ [用 vector 数组]
+```cpp [用 vector 数组]
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -859,7 +868,7 @@ int main() {
 }
 ```
 
-```c++ [用链式前向星]
+```cpp [用链式前向星]
 #include<iostream>
 using namespace std;
 
@@ -903,7 +912,7 @@ int main() {
 }
 ```
 
-:::
+::
 
 ### 树的遍历-宽度优先遍历(BFS)
 
@@ -917,9 +926,9 @@ int main() {
 
 4：重复 3 过程，直到队列为空。
 
-::: code-group
+::code-group
 
-```c++ [用 vector 数组]
+```cpp [用 vector 数组]
 #include<iostream>
 #include<queue>
 #include<vector>
@@ -959,7 +968,7 @@ int main() {
 }
 ```
 
-```c++ [用链式前向星]
+```cpp [用链式前向星]
 #include<iostream>
 #include<queue>
 using namespace std;
@@ -1007,31 +1016,39 @@ int main() {
 }
 ```
 
-:::
+::
 
 ## 二叉树
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 ## 堆
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 ## 红黑树
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 ## 哈希表
 
-::: danger 警告
+::danger
+
 该部分尚未完工!
-:::
+
+::
 
 ## 排序
 
@@ -1039,7 +1056,7 @@ int main() {
 
 **插入排序(Insertion Sort)** 类似于玩扑克牌插牌过程，每次将一个待排序的元素按照其关键字大小插入到前面已经有序的序列中，按照这种方式将所有元素全部插入完成即可。
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -1075,7 +1092,7 @@ int main() {
 
 <font color="blue">算法思想：</font>每次找出未排序序列中最小的元素，然后放进有序序列的后面。
 
-```c++
+```cpp
 #include<iostream>
 #include<utility>
 using namespace std;
@@ -1110,7 +1127,7 @@ int main() {
 
 <font color="blue">算法思想：</font>执行 n-1 趟操作，每趟从前往后比较待排序区间的相邻元素，如果逆序，就交换。每趟结束之后，就会有一个较大元素在最终的位置上。
 
-```c++
+```cpp
 #include<iostream>
 #include<utility>
 using namespace std;
@@ -1138,11 +1155,14 @@ int main() {
 }
 ```
 
-::: details 冒泡排序优化
+::detail
 
+#title
+冒泡排序优化
+#default
 当某一趟冒泡操作中，没有执行元素的交换操作时，整个序列就是有序的了，没有必要再继续执行冒泡排序算法了。
 
-```c++
+```cpp
 // 优化后的冒泡排序
 void bubble_sort() {
 	for (int i = n; i > 1; i--) { // 依次枚举待排序区间的最后一个元素
@@ -1159,7 +1179,7 @@ void bubble_sort() {
 }
 ```
 
-:::
+::
 
 ### 堆排序
 
@@ -1177,7 +1197,7 @@ void bubble_sort() {
 
 排序时间复杂度：O(nlogn)
 
-```c++
+```cpp
 #include<iostream>
 #include<utility>
 using namespace std;
@@ -1234,29 +1254,33 @@ int main() {
 
 - 如果划分不当，数组分布比较极端，时间复杂度退化成 O(n^2)
 
-::: warning 朴素快排的缺陷
+::warning
+
+**朴素快排的缺陷**：
 
 - 基准元素选择不当，递归层数会增加，时间复杂度变高；
 
-解决方案：在待排序区间中，随机选择一个基准元素。利用 C++提供的随机函数，在一个区间内随机选择一个元素作为基准。
+解决方案：在待排序区间中，随机选择一个基准元素。利用 cpp 提供的随机函数，在一个区间内随机选择一个元素作为基准。
 
-```c++
+```cpp
 srand(time(0)) // 种下一个随机数种子
 rand() // 获得一个随机数
 rand() % (right - left + 1) + left // 在 [left, right] 区间内，随机选择一个数
 ```
 
-:::
+::
 
-::: warning 朴素快排的缺陷
+::warning
+
+**朴素快排的缺陷**：
 
 - 当有大量重复元素时，递归层数也会增加。
 
 解决方案：在划分区间时，如果划分的区间长度小于某个阈值，则将区间直接排序。
 
-:::
+::
 
-```c++
+```cpp
 #include<iostream>
 #include<ctime>
 #include<cstdlib>
@@ -1312,7 +1336,7 @@ int main() {
 
 - 因此归并排序是用递归来实现的；
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -1371,7 +1395,7 @@ int main() {
 
 **基本思想：栈 + 贪心**
 
-```c++
+```cpp
 #include<stack>
 
 using namespace std;
@@ -1422,7 +1446,7 @@ void test2() {
 
 **模板一：寻找当前元素左侧，离它最近，并且比它大的元素在哪**
 
-```c++
+```cpp
 #include<iostream>
 #include<stack>
 #include<cstring>
@@ -1457,7 +1481,7 @@ int main() {
 
 **模板二：寻找当前元素左侧，离它最近，并且比它小的元素在哪：**
 
-```c++
+```cpp
 #include<iostream>
 #include<stack>
 #include<cstring>
@@ -1492,7 +1516,7 @@ int main() {
 
 **模板三：寻找当前元素右侧，离它最近，并且比它大的元素在哪：**
 
-```c++
+```cpp
 #include<iostream>
 #include<stack>
 #include<cstring>
@@ -1527,7 +1551,7 @@ int main() {
 
 **模板四：寻找当前元素右侧，离它最近，并且比它小的元素在哪：**
 
-```c++
+```cpp
 #include<iostream>
 #include<stack>
 #include<cstring>
@@ -1560,17 +1584,19 @@ int main() {
 }
 ```
 
-::: tip 总结
+::tip
+
+**总结**：
 
 - 找左侧，正遍历；找右侧，逆遍历；
 
 - 比它大，单调减；比它小，单调增。
 
-:::
+::
 
 例题：[P5788 【模板】单调栈](https://www.luogu.com.cn/problem/P5788)
 
-```c++
+```cpp
 #include<iostream>
 #include<stack>
 
@@ -1602,11 +1628,11 @@ int main() {
 
 例题：[P1901 发射站](https://www.luogu.com.cn/problem/P1901)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 单调队列
 
@@ -1620,7 +1646,7 @@ int main() {
 
 <p><font color=blue>求窗口内最小值：双端队列（单调递增） + 贪心</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<deque>
 
@@ -1660,113 +1686,117 @@ int main() {
 
 例题：[P2251 质量检测](https://www.luogu.com.cn/problem/P2251)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 并查集
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 双亲表示法
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 并查集的实现
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 并查集的优化
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 普通并查集
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P3367 【模板】并查集](https://www.luogu.com.cn/problem/P3367)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P1551 亲戚](https://www.luogu.com.cn/problem/P1551)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P1955 [NOI2015] 程序自动分析](https://www.luogu.com.cn/problem/P1955)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 扩展并查集
 
 例题：[P1892 [BalticOI 2003] 团伙](https://www.luogu.com.cn/problem/P1892)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P2024 [NOI2001] 食物链](https://www.luogu.com.cn/problem/P2024)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 带权并查集
 
 例题：[P1196 [NOI2002] 银河英雄传说](https://www.luogu.com.cn/problem/P1196)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 字符串哈希
 
-::: details 回忆：哈希函数和哈希冲突
+::detail
+
+#title
+回忆：哈希函数和哈希冲突
+#default
 
 - **哈希函数**：将关键字映射成对应的地址的函数，记为 `Hash(key) = Addr`。
 
 - **哈希冲突**：哈希函数可能会把两个或两个以上的不同关键字映射到同一地址，这种情况称为哈希冲突。
 
-:::
+::
 
 定义一个把字符串映射到整数的函数 $hash$，这就是字符串哈希。说白了，就是将一个字符串用一个整数表示。
 
@@ -1788,7 +1818,7 @@ $$hash(s) = \sum_{i=0}^{n-1} s[i] * p^{n-i-1} (\mod M)$$
 
 **前缀哈希数组：`f[i]` 表示前 i 个字符组成的字符串的哈希值**
 
-```c++
+```cpp
 typedef unsigned long long ULL;
 
 const int N = 1e6 + 10, P = 13331;
@@ -1814,9 +1844,13 @@ ULL get_hash(int l, int r) {
 }
 ```
 
-::: details 如果题目只是简单的求单个字符串的哈希值
+::detail
 
-```c++
+#title
+如果题目只是简单的求单个字符串的哈希值
+#default
+
+```cpp
 typedef unsigned long long ULL;
 
 const int N = 1e6 + 10, P = 13331;
@@ -1830,13 +1864,13 @@ ULL gethash() {
 }
 ```
 
-:::
+::
 
 例题：[P3370 【模板】字符串哈希](https://www.luogu.com.cn/problem/P3370)
 
 <p><font color=blue>解法：把所有字符串利用“字符串哈希”映射成数之后，看看一共有多少个不同的数</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<algorithm>
 using namespace std;
@@ -1871,11 +1905,11 @@ int main() {
 
 例题：[P10468 兔子与兔子](https://www.luogu.com.cn/problem/P10468)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## Trie 树
 
@@ -1885,15 +1919,20 @@ Trie 树又叫字典树或前缀树，是一种能够快速插入和查询字符
 
 同时，对于每个结点，都需要另外维护 `pass` 和 `end` 两个变量。`pass` 标记当前节点一共经过了多少次，`end` 标记当前结点是多少个字符串的结尾。
 
-::: details 示例
+::detail
 
+#title
+示例
+#default
 例如，要存储 `"abc"`、`"abd"`、`"acde"` 以及 `"cd"` 时，构建的字典树如下：
 
 ![创建的 Trie 树](/images/algorithm/data-structure/trie-tree.png)
 
-:::
+::
 
-::: tip 字典树的作用
+::tip
+
+**字典树的作用**：
 
 当我们在字典树的每一个结点位置，额外维护一些信息时，就可以做到很多事情：
 
@@ -1903,7 +1942,7 @@ Trie 树又叫字典树或前缀树，是一种能够快速插入和查询字符
 
 - 查询所有以某个前缀开头的单词。
 
-:::
+::
 
 ### 字典树的实现
 
@@ -1911,7 +1950,7 @@ Trie 树又叫字典树或前缀树，是一种能够快速插入和查询字符
 
 **准备工作**：
 
-```c++
+```cpp
 #include<string>
 
 using namespace std;
@@ -1925,7 +1964,7 @@ int idx; // 新来一个字符之后，为它分配位置
 
 **插入字符串**：
 
-```c++
+```cpp
 void insert(string& s) {
 	int cur = 0; // 从根结点开始
 	p[cur]++; // 这个格子经过一次
@@ -1942,7 +1981,7 @@ void insert(string& s) {
 
 **查询字符串出现的次数**：
 
-```c++
+```cpp
 int find(string& s) {
 	int cur = 0;
 	for (auto ch : s) {
@@ -1956,7 +1995,7 @@ int find(string& s) {
 
 **查询有多少个单词以字符串 `s` 为前缀**
 
-```c++
+```cpp
 int find_pre(string& s) {
 	int cur = 0;
 	for (auto ch : s) {
@@ -1970,24 +2009,24 @@ int find_pre(string& s) {
 
 例题：[P8306 【模板】字典树](https://www.luogu.com.cn/problem/P8306)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P2580 于是他错误的点名开始了](https://www.luogu.com.cn/problem/P2580)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P10471 最大异或对 The XOR Largest Pair](https://www.luogu.com.cn/problem/P10471)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::

@@ -1,16 +1,19 @@
 # Node.js
 
-::: details 目录
+::detail
 
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## 初识 Node.js
 
 **Node.js** 是一个基于 Chrome V8 引擎的 JavaScript 运行环境。
 
-::: warning 注意
+::warning
 
 - 浏览器是 JavaScript 的前端运行环境
 
@@ -18,7 +21,7 @@
 
 - Node.js 中无法调用 DOM 和 BOM 等浏览器内置 API
 
-:::
+::
 
 浏览器中的 JavaScript 学习路径：JavaScript 基础语法 + 浏览器内置 API（DOM + BOM） + 第三方库（jQuery、art-template）
 
@@ -42,7 +45,7 @@ import fs from "fs";
 
 使用 `fs.readFile()` 方法，可以读取指定文件中的内容，语法格式如下：
 
-```javascript
+```js
 fs.readFile(path[, options], callback)
 ```
 
@@ -54,7 +57,7 @@ fs.readFile(path[, options], callback)
 
 例如以 utf-8 的编码格式，读取指定文件的内容，并打印 `err` 和 `dataStr` 的值：
 
-```javascript
+```js
 const fs = require("fs");
 fs.readFile("./files/1.txt", "utf-8", function (err, dataStr) {
 	console.log(err);
@@ -63,13 +66,13 @@ fs.readFile("./files/1.txt", "utf-8", function (err, dataStr) {
 });
 ```
 
-::: tip 提示
+::tip
 
 如果读取成功，则 `err` 的值为 `null`
 
 如果读取失败，则 `dataStr` 的值为 `undefined`
 
-:::
+::
 
 因此，可以判断 `err` 对象是否为 `null`，从而知晓文件读取的结果：
 
@@ -102,21 +105,21 @@ fs.writeFile(file, data[, options], callback)
 fs.writeFile("./files/1.txt", "Hello Node.js", function (err) {});
 ```
 
-::: warning 注意
+::warning
 
 - `fs.writeFile()` 方法只能用来创建文件，不能用来创建路径
 
 - 重复调用 `fs.writeFile()` 写入同一个文件，新写入的内容会覆盖之前的旧内容
 
-:::
+::
 
-::: tip 提示
+::tip
 
 如果文件写入成功，则 `err` 的值为 `null`
 
 如果文件写入失败，则 `err` 的值为一个错误对象
 
-:::
+::
 
 因此，可以判断 `err` 对象是否为 `null`，从而知晓文件写入的结果：
 
@@ -129,8 +132,11 @@ fs.writeFile("./pages/back-end/nodejs.md", "Hello node js", function (err) {
 });
 ```
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 使用 fs 文件系统模块，将文件进行整理：
 
 整理前文件中的数据格式如下：
@@ -182,7 +188,7 @@ fs.readFile("./files/1.txt", "utf-8", function (err, dataStr) {
 });
 ```
 
-:::
+::
 
 ### 路径动态拼接
 
@@ -229,7 +235,11 @@ path.join([...paths]);
 
 - **返回值**：string 类型
 
-::: details 具体示例
+::detail
+
+#title
+具体示例
+#default
 
 ```javascript
 const pathStr = path.join("/a", "/b/c", "../", "./d", "e");
@@ -239,7 +249,7 @@ const pathStr2 = path.join(__dirname, "./files/1.txt");
 console.log(pathStr2); // 输出当前文件所处目录 \files\1.txt
 ```
 
-:::
+::
 
 ### 获取路径中的文件名
 
@@ -255,7 +265,11 @@ path.basename(path[, ext])
 
 - **返回值**: 表示路径中的最后一部分
 
-::: details 具体示例
+::detail
+
+#title
+具体示例
+#default
 
 ```javascript
 const fpath = "/a/b/c/index.html"; // 文件的存放路径
@@ -267,7 +281,7 @@ const nameWithoutExt = path.basename(fpath, ".html");
 console.log(nameWithoutExt); // 输出 index
 ```
 
-:::
+::
 
 ### 获取路径中的文件扩展名
 
@@ -281,7 +295,11 @@ path.extname(path);
 
 - **返回值**: 返回得到的扩展名字符串
 
-::: details 具体示例
+::detail
+
+#title
+具体示例
+#default
 
 ```javascript
 const fpath = "/a/b/c/index.html"; // 路径字符串
@@ -290,10 +308,13 @@ const fext = path.extname(fpath);
 console.log(fext); // 输出 .html
 ```
 
-:::
+::
 
-::: details 综合案例 - 拆分出 html、css、js 文件
+::detail
 
+#title
+综合案例 - 拆分出 html、css、js 文件
+#default
 **案例的实现步骤**：
 
 ① 创建两个正则表达式，分别用来匹配 `<style>` 和 `<script>` 标签
@@ -356,7 +377,7 @@ fs.readFile(path.join(__dirname, "./index.html"), "utf-8", (err, dataStr) => {
 });
 ```
 
-:::
+::
 
 ## http 模块
 
@@ -372,13 +393,16 @@ const http = require("http");
 import http from "http";
 ```
 
-::: details 进一步理解 http 模块的作用
+::detail
 
+#title
+进一步理解 http 模块的作用
+#default
 服务器和普通电脑的区别在于，服务器上安装了 web 服务器软件，例如：IIS、Apache 等。通过安装这些服务器软件，就能把一台普通的电脑变成一台 web 服务器。
 
 在 Node.js 中，我们不需要使用 ISS、Apache 等这些第三方 web 服务器软件。因为我们可以基于 Node.js 提供的 http 模块，通过几行简单的代码，就能轻松的手写一个服务器软件，从而对外提供 web 服务。
 
-:::
+::
 
 ### IP 地址
 
@@ -386,13 +410,13 @@ import http from "http";
 
 IP 地址的格式通常用 "点分十进制" 表示成（a.b.c.d）的形式，其中，a、b、c、d 都是 0~255 之间的十进制整数。
 
-::: warning 注意
+::warning
 
 互联网中每台 Web 服务器，都有自己的 IP 地址
 
 在开发期间，自己的电脑即是一台服务器，也是一个客户端，为了方便测试，可以在自己的浏览器中输入 127.0.0.1 这个 IP 地址，就能把自己的电脑当作一台服务器进行访问了
 
-:::
+::
 
 ### 域名和域名服务器
 
@@ -400,13 +424,13 @@ IP 地址的格式通常用 "点分十进制" 表示成（a.b.c.d）的形式，
 
 IP 地址和域名是相对应的关系，这份对应关系存放在一种叫做**域名服务器**（DNS，Domain Name Server）的电脑中。使用者只需通过好记的域名访问对应的服务器即可，对应的转换工作由域名服务器实现。因此，域名服务器就是提供 IP 地址和域名之间的转换服务的服务器。
 
-::: warning 注意
+::warning
 
 单纯使用 IP 地址，互联网中的电脑也能够正常工作。但是有了域名的加持，能让互联网的世界变得更加方便
 
 在开发测试期间，127.0.0.1 对应的域名是 localhost，它们都代表我们自己的这台电脑，在使用效果上没有任何区别
 
-:::
+::
 
 ### 端口号
 
@@ -414,13 +438,13 @@ IP 地址和域名是相对应的关系，这份对应关系存放在一种叫�
 
 同样的道理，在一台电脑中，可以运行成百上千个 web 服务。每个 web 服务都对应一个唯一的端口号。客户端发送过来的网络请求，通过端口号，可以准确地交给对应的 web 服务进行处理。
 
-::: warning 注意
+::warning
 
 每个端口号不能被多个 web 服务占用
 
 在实际应用中，URL 中的 80 端口可以被省略
 
-:::
+::
 
 ### 创建最基本的 web 服务器
 
@@ -469,11 +493,11 @@ server.on("request", (req, res) => {
 });
 ```
 
-::: tip 提示
+::tip
 
 req 是请求对象，包含了与客户端相关的数据和属性。
 
-:::
+::
 
 ### res 响应对象
 
@@ -532,8 +556,11 @@ server.on("request", (req, res) => {
 });
 ```
 
-::: details 综合案例 - 通过服务器访问网页文件
+::detail
 
+#title
+综合案例 - 通过服务器访问网页文件
+#default
 **核心思路**：把文件的实际存放路径，作为每个资源的请求 url 地址
 
 **实现步骤**：
@@ -598,7 +625,7 @@ server.on("request", (req, res) => {
 });
 ```
 
-:::
+::
 
 ## 模块化
 
@@ -606,7 +633,9 @@ server.on("request", (req, res) => {
 
 在编程邻域中的模块化，就是遵守固定的规则，把一个大文件拆分成独立并互相依赖的多个小模块。
 
-::: tip 把代码进行模块化拆分的好处
+::tip
+
+把代码进行模块化拆分的好处：
 
 - 提高了代码的复用性
 
@@ -614,7 +643,7 @@ server.on("request", (req, res) => {
 
 - 可以实现按需加载
 
-:::
+::
 
 **模块化规范**就是对代码进行模块化的拆分与组合时，需要遵守的那些规则。
 
@@ -638,21 +667,23 @@ Node.js 中根据模块化来源的不同，将模块分为了 3 大类，分别
 
 和函数作用域类似，在自定义模块中定义的变量、方法等成员，只能在当前模块内被访问，这种模块级别的访问限制，叫做**模块作用域**。
 
-::: tip 模块作用域的好处
+::tip
+
+模块作用域的好处：
 
 防止了全局变量污染的问题
 
-:::
+::
 
 ### 模块的加载机制
 
 模块在第一次加载后会被缓存，这也意味着多次调用 `require()` 不会导致模块的代码被执行多次。
 
-::: warning 注意
+::warning
 
 不论是内置模块、用户自定义模块、还是第三方模块，它们都会优先从缓存中加载，从而提高模块的加载效率
 
-:::
+::
 
 内置模块的加载优先级最高，即使在 node_modules 目录下有名字相同的模块，始终返回内置的模块。
 
@@ -778,8 +809,11 @@ app.get(url, (req, res) => {});
 res.send({});
 ```
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 监听客户端的 GET 和 POST 请求，并向客户端响应对应的内容：
 
 ```javascript
@@ -803,7 +837,7 @@ app.listen(80, () => {
 });
 ```
 
-:::
+::
 
 通过 `req.query` 对象，可以访问到客户端通过查询字符串的形式（`?name=za&age=20`），发送到服务器的参数：
 
@@ -837,13 +871,13 @@ app.use(express.static("public"));
 
 此时即可通过 URL 路径直接访问对应文件。
 
-::: warning 注意
+::warning
 
 Express 在指定的静态目录中查找文件，并对外提供资源的访问路径。
 
 因此，存放静态文件的目录名不会出现在 URL 中。
 
-:::
+::
 
 如果要托管多个静态资源目录，请多次调用 `express.static()` 函数：
 
@@ -852,11 +886,11 @@ app.use(express.static("public"));
 app.use(express.static("./files"));
 ```
 
-::: warning 注意
+::warning
 
 访问静态资源文件时，`express.static()` 函数会根据目录的添加顺序查找所需的文件
 
-:::
+::
 
 如果希望在托管的静态资源访问路径之前，挂载路径前缀（即在访问的 URL 中添加静态资源目录），则可以使用如下的方式：
 
@@ -872,7 +906,11 @@ app.use("/abc", express.static("./files"));
 
 Express 中的路由分 3 部分组成，分别是**请求的类型**、**请求的 URL 地址**、**处理函数**。
 
-::: details 具体示例
+::detail
+
+#title
+具体示例
+#default
 
 ```javascript
 // 匹配 GET 请求，且请求 URL 为 /
@@ -886,19 +924,19 @@ app.post("/", (req, res) => {
 });
 ```
 
-:::
+::
 
 每当一个请求到达服务器之后，需要先经过路由的匹配，只有匹配成功之后，才会调用对应的处理函数。
 
 在匹配时，会按照路由的顺序进行匹配，如果请求类型和请求的 URL 同时匹配成功，则 Express 会将这次请求，转交给对应的 function 函数进行处理。
 
-::: warning 注意
+::warning
 
 - 按照定义的先后顺序进行匹配
 
 - 请求类型和请求的 URL 同时匹配成功，才会调用对应的处理函数
 
-:::
+::
 
 在 Express 中使用路由最简单的方式，就是把路由挂载到 app 上，示例如下：
 
@@ -937,7 +975,7 @@ app.listen(80, () => {
 
 ⑤ 使用 `app.use()` 函数注册路由模块
 
-::: code-group
+::code-group
 
 ```javascript [router.js]
 import express from "express";
@@ -971,13 +1009,13 @@ app.listen(80, () => {
 });
 ```
 
-:::
+::
 
-::: tip `app.use()`
+::tip
 
 `app.use()` 函数的作用，就是来注册全局中间件
 
-:::
+::
 
 类似于托管静态资源时，为静态资源统一挂载访问前缀一样，路由模块添加前缀的方式也非常简单：
 
@@ -1001,11 +1039,11 @@ app.use(function (req, res, next) {
 
 - **next 函数**：实现多个中间件连续调用的关键，表示把流转关系转交给下一个中间件或路由。
 
-::: warning 注意
+::warning
 
 中间件的形参列表中，必须包含 next 参数。而路由处理函数中只包含 req 和 res。
 
-:::
+::
 
 可以通过如下的方式，定义一个最简单的中间件函数：
 
@@ -1031,13 +1069,19 @@ app.use((req, res, next) => {
 });
 ```
 
-::: tip 中间件的作用
+::tip
+
+中间件的作用：
 
 多个中间件之间，共享同一份 req 和 res。基于这样的特性，我们可以在上游的中间件中，统一为 req 或 res 对象添加自定义的属性或方法，供下游的中间件或路由进行使用。
 
-:::
+::
 
-::: details 具体示例 - 添加到达服务器的时间戳
+::detail
+
+#title
+具体示例 - 添加到达服务器的时间戳
+#default
 
 ```javascript
 app.use((req, res, next) => {
@@ -1050,7 +1094,7 @@ app.get("/", (req, res) => {
 });
 ```
 
-:::
+::
 
 也可以使用 `app.use()` 连续定义多个全局中间件。客户端请求到达服务器之后，会按照中间件定义的先后顺序依次进行调用：
 
@@ -1097,7 +1141,9 @@ app.get("/", [mw1, mw2], (req, res) => {
 });
 ```
 
-::: warning 中间件的使用注意事项
+::warning
+
+中间件的使用注意事项：
 
 - 大部分中间件都要在路由之前注册
 
@@ -1109,7 +1155,7 @@ app.get("/", [mw1, mw2], (req, res) => {
 
 - 连续调用多个中间件时，多个中间件之间，共享 `req` 和 `res` 对象
 
-:::
+::
 
 如果数据量比较大，无法一次性发送完毕，则客户端会把数据切割后，分批发送到服务器。所以 data 事件可能会触发多次，每一次触发 data 事件时，获取到的数据只是完整的一部分，需要手动对接收到的数据进行拼接：
 
@@ -1130,8 +1176,11 @@ req.on("end", () => {
 });
 ```
 
-::: details 具体示例 - 模拟 `express.urlencoded()`
+::detail
 
+#title
+具体示例 - 模拟 `express.urlencoded()`
+#default
 手动模拟一个类似于 `express.urlencoded()` 这样的中间件，来解析 POST 提交到服务器的表单数据。
 
 **实现步骤**：
@@ -1148,7 +1197,7 @@ req.on("end", () => {
 
 ⑥ 将自定义中间件封装为模块
 
-::: code-group
+::code-group
 
 ```javascript [custom-body-parser.js]
 import queryString from "querystring";
@@ -1171,7 +1220,9 @@ import bodyParser from "./custom-body-parser.js";
 app.use(bodyParser);
 ```
 
-:::
+::
+
+::
 
 ### 中间件的分类
 
@@ -1206,11 +1257,11 @@ app.use((err, req, res, next) => {
 });
 ```
 
-::: warning 注意
+::warning
 
 错误级别的中间件，必须注册在所有路由之后
 
-:::
+::
 
 - **Express 内置的中间件**：自 Express 4.16.0 版本开始，Express 内置了 3 个常用的中间件：`express.static()` 快速托管静态资源的内置中间件（HTML 文件、图片、CSS 样式等）、`express.json()` 解析 JSON 格式的请求体数据（仅在 4.16.0+ 版本中可用）、`express.urlencoded()` 解析 URL-encoded 格式的请求体数据（仅在 4.16.0+ 版本中可用）：
 
@@ -1221,7 +1272,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 ```
 
-::: details 具体示例 - 解析 JSON 格式数据
+::detail
+
+#title
+具体示例 - 解析 JSON 格式数据
+#default
 
 ```javascript
 app.use(express.json());
@@ -1234,9 +1289,13 @@ app.post("/", (req, res) => {
 
 默认情况下，如果不配置解析表单数据的中间件，则 req.body 默认等于 undefined
 
-:::
+::
 
-::: details 具体示例 - 解析 URL-encoded 格式数据
+::detail
+
+#title
+具体示例 - 解析 URL-encoded 格式数据
+#default
 
 ```javascript
 app.use(express.urlencoded({ extended: false }));
@@ -1247,13 +1306,13 @@ app.post("/book", (req, res) => {
 });
 ```
 
-:::
+::
 
 - **第三方中间件**：非 Express 官方内置的，而是由第三方开发出来的中间件，可以按需下载并配置
 
 ## 编写接口
 
-::: code-group
+::code-group
 
 ```javascript [apiRouter.js]
 import express from "express";
@@ -1301,7 +1360,7 @@ app.listen(80, () => {
 });
 ```
 
-:::
+::
 
 ### 接口跨域问题
 
@@ -1313,8 +1372,11 @@ app.listen(80, () => {
 
 - **JSONP**：有缺陷的解决方案，只支持 GET 请求
 
-::: details 什么是 CORS
+::detail
 
+#title
+什么是 CORS
+#default
 CORS（Cross-Origin Resource Sharing，跨域资源共享）由一系列 HTTP 响应头组成，这些 HTTP 响应头决定浏览器是否阻止前端 JS 代码跨域获取资源。
 
 浏览器的同源安全策略默认会阻止网页 "跨域" 获取资源。但如果接口服务器配置了 CORS 相关的 HTTP 响应头，就可以解除浏览器端的跨域访问限制。
@@ -1323,7 +1385,7 @@ CORS 主要在服务器端进行配置。客户端浏览器无须做任何额外
 
 CORS 在浏览器中由兼容性。只有支持 XMLHttpRequest Level2 的浏览器，才能正常访问开启了 CORS 的服务端接口（例如：IE10+、Chrome4+、Firefox3.5+）。
 
-:::
+::
 
 ### 使用 cors 中间件解决接口跨域问题
 
@@ -1392,13 +1454,15 @@ res.setHeader("Access-Control-Allow-Methods", "*");
 
 在浏览器与服务器正式通信之前，浏览器会先发送 OPTIONS 请求进行预检，以获知服务器是否允许该实际请求，所以这一次的 OPTION 请求称为 "预检请求"。服务器成功响应预检请求后，才会发送真正的请求，并携带真实数据。
 
-::: tip 简单请求和预检请求的区别
+::tip
+
+简单请求和预检请求的区别：
 
 **简单请求的特点**：客户端与服务器之间只会发生一次请求
 
 **预检请求的特点**：客户端与服务器之间会发生两次请求，OPTION 预检请求成功之后，才会发起真正的请求
 
-:::
+::
 
 ### JSONP 接口
 
@@ -1406,13 +1470,13 @@ res.setHeader("Access-Control-Allow-Methods", "*");
 
 浏览器端通过 `<script>` 标签的 `scr` 属性，请求服务器上的数据，同时，服务器返回一个函数的调用。这种请求数据的方式叫做 **JSONP**。
 
-::: warning 注意
+::warning
 
 - JSONP 不属于真正的 Ajax 请求，因为它没有使用 XMLHttpRequest 这个对象
 
 - JSONP 仅支持 GET 请求，不支持 POST、PUT、DELETE 等请求
 
-:::
+::
 
 如果项目中已经配置了 CORS 跨域资源共享，为了防止冲突，必须在配置 CORS 中间件之前声明 JSONP 的接口。否则 JSONP 接口会被处理成开启了 CORS 的接口。
 
@@ -1505,7 +1569,9 @@ app.use("/api", apiRouter);
 
 ④ 设计表的字段
 
-::: tip Data Type 数据类型
+::tip
+
+Data Type 数据类型：
 
 - **INT**：整数
 
@@ -1513,9 +1579,11 @@ app.use("/api", apiRouter);
 
 - **TINYINT(1)**：布尔值
 
-:::
+::
 
-::: tip Storage 特殊标识
+::tip
+
+Storage 特殊标识：
 
 - **PK**(Primary Key)：主键、唯一标识
 
@@ -1525,7 +1593,7 @@ app.use("/api", apiRouter);
 
 - **AI**(Auto Increment)：值自动增长
 
-:::
+::
 
 ⑤ 点击 Apply 按钮，创建数据表
 
@@ -1559,7 +1627,7 @@ SQL 能做到：
 
 - etc...
 
-::: tip 关键点
+::tip
 
 - SQL 是一门数据库编程语言
 
@@ -1567,7 +1635,7 @@ SQL 能做到：
 
 - SQL 语言只能在关系型数据库中使用（MySQL、Oracle、SQL Server）。非关系型数据库（Mongodb）不支持 SQL 语言
 
-:::
+::
 
 ### SELECT 语句
 
@@ -1581,8 +1649,11 @@ SELECT * FROM 表名称;
 SELECT 列名称 FROM 表名称;
 ```
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 我们希望从 users 表中选取所有的列，可以使用符号 \* 取代列的名称：
 
 ```sql
@@ -1595,15 +1666,15 @@ SELECT * from users
 SELECT username, password FROM users;
 ```
 
-:::
+::
 
-::: warning 注意
+::warning
 
 - 多个列和多个值之间，使用英文逗号进行分隔
 
 - SQL 语句中的关键字对大小写不敏感，SELECT 等效于 select，FROM 等效于 from
 
-:::
+::
 
 ### INSERT INTO 语句
 
@@ -1613,15 +1684,18 @@ SELECT username, password FROM users;
 INSERT INTO 表名称 (列1, 列2, ...) VALUES (值1, 值2, ...);
 ```
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 向 users 表中，插入一条 `username` 为 tony stark，`password` 为 098123 的用户数据：
 
 ```sql
 INSERT INTO users (username, password) VALUES ('tony stark', '098123');
 ```
 
-:::
+::
 
 ### UPDATE 语句
 
@@ -1634,8 +1708,11 @@ INSERT INTO users (username, password) VALUES ('tony stark', '098123');
 UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值;
 ```
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 把 users 表中 `id` 为 4 的用户密码，更新为 888888：
 
 ```sql
@@ -1648,7 +1725,7 @@ UPDATE users SET password = '888888' WHERE id = 4;
 UPDATE users SET password = 'admin123', status = 1 WHERE id = 2;
 ```
 
-:::
+::
 
 ### DELETE 语句
 
@@ -1659,15 +1736,18 @@ UPDATE users SET password = 'admin123', status = 1 WHERE id = 2;
 DELETE FROM 表名称 WHERE 列名称 = 某值;
 ```
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 从 users 表中，删除 id 为 4 的用户：
 
 ```sql
 DELETE FROM users WHERE id = 4;
 ```
 
-:::
+::
 
 ### WHERE 子句
 
@@ -1695,14 +1775,17 @@ DELETE FROM 表名称 WHERE 列 运算符 值;
 | BETWEEN | 在某个范围内 |
 |  LIKE   | 搜索某种模式 |
 
-::: warning 注意
+::warning
 
 在某些版本的 SQL 中，操作符 `<>` 可以写为 `!=`
 
-:::
+::
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 可以通过 WHERE 子句来限定 SELECT 的查询条件：
 
 ```sql
@@ -1714,7 +1797,7 @@ SELECT * FROM users WHERE id > 2;
 SELECT * FROM users WHERE username <> 'admin';
 ```
 
-:::
+::
 
 ### AND 和 OR 运算符
 
@@ -1722,8 +1805,11 @@ SELECT * FROM users WHERE username <> 'admin';
 
 AND 表示必须同时满足多个条件，OR 表示只要满足任意一个条件即可。
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 使用 AND 来显示所有 `status` 为 0，并且 `id` 小于 3 的用户：
 
 ```sql
@@ -1736,7 +1822,7 @@ SELECT * FROM users WHERE status = 0 AND id < 3;
 SELECT * FROM users WHERE status = 1 OR username = 'zs';
 ```
 
-:::
+::
 
 ### ORDER BY 子句
 
@@ -1746,8 +1832,11 @@ SELECT * FROM users WHERE status = 1 OR username = 'zs';
 
 也可以一次性先后进行多次排序。
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 对 users 表中的数据，按照，`status` 字段进行升序排序：
 
 ```sql
@@ -1768,7 +1857,7 @@ SELECT * FROM users ORDER BY id DESC;
 SELECT * FROM users ORDER BY status DESC, username ASC;
 ```
 
-:::
+::
 
 ### COUNT(\*) 函数
 
@@ -1778,22 +1867,28 @@ SELECT * FROM users ORDER BY status DESC, username ASC;
 SELECT COUNT(*) FROM 表名称;
 ```
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 查询 users 表中 `status` 为 0 的总数据条数：
 
 ```sql
 SELECT COUNT(*) FROM users WHERE status = 0;
 ```
 
-:::
+::
 
 ### AS 关键字
 
 如果希望给查询出来的列名称设置别名，可以使用 **AS** 关键字。
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 使用 AS 关键字给列起别名
 
 ```sql
@@ -1801,7 +1896,7 @@ SELECT COUNT(*) AS total FROM users WHERE status = 0;
 SELECT username AS uname, password AS upwd FROM users;
 ```
 
-:::
+::
 
 ## mysql 模块
 
@@ -1855,8 +1950,11 @@ db.query("SELECT 1", (err, result) => {
 
 ### 查询数据
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 查询 users 表中所有的数据：
 
 ```javascript
@@ -1869,18 +1967,21 @@ db.query("SELECT * FROM users", (err, result) => {
 });
 ```
 
-:::
+::
 
-::: warning 注意
+::warning
 
 如果执行的是 SELECT 查询语句，则执行的结果是数组
 
-:::
+::
 
 ### 插入数据
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 向 users 表中新增数据，其中 `username` 为 Spider-Man，`password` 为 pcc321：
 
 ```javascript
@@ -1897,9 +1998,11 @@ db.query(sqlStr, [user.username, user.password], (err, result) => {
 });
 ```
 
-:::
+::
 
-::: tip 插入数据的便捷方式
+::tip
+
+插入数据的便捷方式：
 
 向表中新增数据时，如果数据对象的每个属性和数据表的字段一一对应，则可以通过如下方式快速插入数据：
 
@@ -1914,18 +2017,21 @@ db.query(sqlStr, user, (err, result) => {
 });
 ```
 
-:::
+::
 
-::: warning 注意
+::warning
 
 如果执行的是 INSERT 插入语句，则执行的结果是对象
 
-:::
+::
 
 ### 更新数据
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 可以通过如下方式，更新表中的数据：
 
 ```javascript
@@ -1942,9 +2048,11 @@ db.query(sqlStr, [user.username, user.password, user.id], (err, result) => {
 });
 ```
 
-:::
+::
 
-::: tip 更新数据的便捷方式
+::tip
+
+更新数据的便捷方式：
 
 更新表数据时，如果数据对象的每个属性和数据表的字段一一对应，则可以通过如下方式快速更新表数据：
 
@@ -1959,18 +2067,21 @@ db.query(sqlStr, [user, user.id], (err, result) => {
 });
 ```
 
-:::
+::
 
-::: warning 注意
+::warning
 
 如果执行的是 UPDATE 更新语句，则执行的结果是对象
 
-:::
+::
 
 ### 删除数据
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 在删除数据时，推荐根据 `id` 这样的唯一表示，来删除对应的数据：
 
 ```javascript
@@ -1985,23 +2096,25 @@ db.query(sqlStr, 7, (err, result) => {
 });
 ```
 
-:::
+::
 
-::: warning 注意
+::warning
 
 - 如果 SQL 语句中有多个占位符，则必须使用数组为每个占位符指定具体的值
 
 - 如果 SQl 语句中只有一个占位符，则可以省略数组
 
-:::
+::
 
-::: warning 注意
+::warning
 
 如果执行的是 DELETE 删除语句，则执行的结果是对象
 
-:::
+::
 
-::: tip 标记删除
+::tip
+
+标记删除：
 
 使用 DELETE 语句，会真正的把数据从表中删除掉。为了保险期间，推荐使用**标记删除**的形式，来模拟删除的动作。
 
@@ -2019,7 +2132,7 @@ db.query("UPDATE users SET status=1 WHERE id=?", 6, (err, result) => {
 });
 ```
 
-:::
+::
 
 ## 前后端的身份认证
 
@@ -2072,13 +2185,17 @@ app.get("/index.html", (req, res) => {
 
 当前端请求后端接口不存在跨域问题的时候，推荐使用 Session 身份认证机制。
 
-::: tip HTTP 协议的无状态性
+::tip
+
+HTTP 协议的无状态性：
 
 HTTP 协议的无状态性，指的是客户端的每次 HTTP 请求都是独立的，连续多个请求之间没有直接的关系，服务器不会主动保留每次 HTTP 请求的状态。
 
-:::
+::
 
-::: tip Cookie
+::tip
+
+Cookie：
 
 Cookie 是存储在用户浏览器中的一段不超过 4 KB 的字符串。它由一个名称（Name）、一个值（Value）和其他几个用于控制 Cookie 有效期、安全性、使用范围的可选属性组成。
 
@@ -2092,7 +2209,7 @@ Cookie 的几大特性：自动发送、域名独立、过期时限、4 KB 限�
 
 由于 Cookie 是存储在浏览器中的，而且浏览器也提供了读写 Cookie 的 AOI，因此 Cookie 很容易被伪造，不具有安全性。因此不建议服务器将虫咬的隐私数据，通过 Cookie 的形式发送给浏览器
 
-:::
+::
 
 **Session 的工作原理**：
 
@@ -2164,11 +2281,11 @@ app.post("/api/logout", (req, res) => {
 });
 ```
 
-::: warning 注意
+::warning
 
 Session 认证机制需要配合 Cookie 才能实现。由于 Cookie 默认不支持跨域访问，所以，当涉及到前端跨域请求后端接口的时候，需要做很多额外的配置。才能实现跨域 Session 认证
 
-:::
+::
 
 ### JWT 认证机制
 
@@ -2275,11 +2392,11 @@ app.get("/admin/getinfo", (req, res) => {
 });
 ```
 
-::: warning 注意
+::warning
 
 不要把密码加密到 token 字符串中
 
-:::
+::
 
 当使用 express-jwt 解析 Token 字符串时，如果客户端发送过来的 Token 字符串过期或不合法，会产生一个解析失败的错误，影响项目的正常运行。我们可以通过 Express 的错误中间件，捕获这个错误并进行相关的处理：
 

@@ -90,7 +90,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="blog_navigation_box" ref="boxRef" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
+	<div
+		class="blog_navigation_box"
+		ref="boxRef"
+		@mouseenter="handleMouseEnter"
+		@mouseleave="handleMouseLeave"
+	>
 		<div class="navigation_title">在此页面上</div>
 		<div class="navigation_links" v-if="headings.length > 0">
 			<div
@@ -137,7 +142,7 @@ onUnmounted(() => {
 
 		.navigation_link {
 			margin: 10px 0;
-			width: auto;
+			width: 100%;
 			color: rgba($color: #ffffff, $alpha: 0.5);
 			transition: color 0.2s ease-in-out;
 			user-select: none;

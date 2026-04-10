@@ -1,16 +1,19 @@
 # 算法基础
 
-::: danger 警告
+::danger
 
 该页面尚未完工!
 
-:::
+::
 
-::: details 目录
+::detail
 
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## 模拟
 
@@ -22,7 +25,7 @@
 
 例题：[P1067 [NOIP 2009 普及组] 多项式输出](https://www.luogu.com.cn/problem/P1067)
 
-```c++
+```cpp
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -72,7 +75,7 @@ int main() {
 
 2. 根据规则结合方向向量填数（朝一个方向走，一边走一边填数，直到越界；越界之后，结合方向向量，重新计算出新的坐标以及方向）
 
-```c++
+```cpp
 #include<cstdio>
 
 const int N = 15;
@@ -113,11 +116,11 @@ int main() {
 
 ### 字符串的展开
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 高精度
 
@@ -139,7 +142,7 @@ int main() {
 
 2. 利用数组，模拟小学列竖式计算加法的过程
 
-```c++
+```cpp
 #include<iostream>
 #include<string>
 #include<algorithm>
@@ -188,7 +191,7 @@ int main() {
 
 3. 利用数组，模拟小学列竖式计算减法过程
 
-```c++
+```cpp
 #include<iostream>
 #include<string>
 #include<algorithm>
@@ -249,7 +252,7 @@ int main() {
 
 2. 利用数组，模拟列竖式乘法过程（无进位相乘，然后相加，最后处理进位）
 
-```c++
+```cpp
 #include<iostream>
 #include<string>
 #include<algorithm>
@@ -302,7 +305,7 @@ int main() {
 
 2. 利用数组，模拟列竖式除法过程
 
-```c++
+```cpp
 #include<iostream>
 #include<string>
 using namespace std;
@@ -355,7 +358,7 @@ int main() {
 
 <font color="blue">解法：枚举所有的地毯，找出最后覆盖题目中点的那个地毯即可</font>
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -384,7 +387,7 @@ int main() {
 
 例题：[P2010 [NOIP 2016 普及组] 回文日期](https://www.luogu.com.cn/problem/P2010)
 
-```c++
+```cpp
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -494,11 +497,11 @@ int main(){
 
 例题：[B4167 [GXPC-S 2024] 扫雷](https://www.luogu.com.cn/problem/B4167)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 二进制枚举
 
@@ -514,7 +517,7 @@ int main(){
 
 <font color="blue">解法：利用二进制枚举的方式，把所有情况都枚举出来</font>
 
-```c++
+```cpp
 class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
@@ -543,7 +546,9 @@ public:
 
 <font color="blue">解法：暴力枚举第一行所有的按法，并根据第一行的按法，计算出当前行以及下一行被按之后的结果，推导出下一行的按法。直到按到最后一行，然后判断所有灯是否全亮。</font>
 
-::: tip 解法实现
+::tip
+
+**解法实现**：
 
 1. 如何枚举出第一行所有的按法？
 
@@ -561,9 +566,9 @@ public:
 
 - 可以用位运算的只是，快速计算出被按之后的状态
 
-:::
+::
 
-```c++
+```cpp
 #include<iostream>
 #include<cstring>
 #include<algorithm>
@@ -634,7 +639,7 @@ int main() {
 
 <font color="blue">解法：先预处理出来一个前缀和数组 f ，f[i]表示区间[1, i]中，所有元素的和</font>
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -662,11 +667,11 @@ int main() {
 }
 ```
 
-::: warning 注意
+::warning
 
 使用前缀和数组时，下标必须从 1 开始计数
 
-:::
+::
 
 ### 最大子段和
 
@@ -674,7 +679,7 @@ int main() {
 
 <font color="blue">解法：利用前缀和</font>
 
-```c++
+```cpp
 #include<iostream>
 #include<algorithm>
 using namespace std;
@@ -706,19 +711,19 @@ int main() {
 
 ### 二维前缀和
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P2280 [HNOI2003] 激光炸弹](https://www.luogu.com.cn/problem/P2280)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 差分
 
@@ -738,9 +743,9 @@ int main() {
 
 3. 直接对差分数组做前缀和运算，还原出原始的数组
 
-::: code-group
+::code-group
 
-```c++ [利用差分数组的定义创建差分数组]
+```cpp [利用差分数组的定义创建差分数组]
 #include<iostream>
 using namespace std;
 
@@ -774,7 +779,7 @@ int main() {
 }
 ```
 
-```c++ [利用差分数组的性质创建差分数组]
+```cpp [利用差分数组的性质创建差分数组]
 #include<iostream>
 using namespace std;
 
@@ -809,25 +814,27 @@ int main() {
 }
 ```
 
-:::
+::
 
-::: tip 差分数组的性质
+::tip
+
+**差分数组的性质**：
 
 原数组 [L, R] 区间全部加 k 这个操作，相当于在差分数组中，f[L] += k, f[R + 1] -= k
 
-:::
+::
 
-::: warning 注意
+::warning
 
 差分数组使用的时候，所有的操作必须全部进行完毕之后，才能还原出操作之后的数组
 
-:::
+::
 
 例题：[P3406 海底高铁](https://www.luogu.com.cn/problem/P3406)
 
 <p><font color="blue">解法：利用差分计算出每段路程经的次数，并判断最小花费</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<algorithm>
 using namespace std;
@@ -873,19 +880,19 @@ int main() {
 
 ### 二维差分
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P3397 地毯](https://www.luogu.com.cn/problem/P3397)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 双指针
 
@@ -903,7 +910,7 @@ int main() {
 
 <p><font color="blue">解法二：利用单调性，使用“同向双指针”来优化（在暴力枚举的过程中，left 以及 right 其实是可以不回退的）</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<map>
 #include<algorithm>
@@ -943,7 +950,7 @@ int main() {
 
 例题：[P1638 逛画展](https://www.luogu.com.cn/problem/P1638)
 
-```c++
+```cpp
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -993,7 +1000,7 @@ int main(){
 
 例题：[P14171 【MX-X23-T1】丢手绢](https://www.luogu.com.cn/problem/P14171)
 
-```c++
+```cpp
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -1027,7 +1034,9 @@ int main(){
 
 <p><font color="blue">解法二：二分算法</font></p>
 
-::: warning 查找起始位置的细节问题
+::warning
+
+**查找起始位置的细节问题**：
 
 while 循环里面的判断如何写?
 
@@ -1041,9 +1050,11 @@ while 循环里面的判断如何写?
 
 - 需要判断以下，循环结束之后，是否是我们想要的结果
 
-:::
+::
 
-::: warning 查找终止位置的细节问题
+::warning
+
+**查找终止位置的细节问题**：
 
 while 循环里面的判断如何写?
 
@@ -1057,9 +1068,9 @@ while 循环里面的判断如何写?
 
 - 需要判断以下，循环结束之后，是否是我们想要的结果
 
-:::
+::
 
-```c++
+```cpp
 class Solution {
 public:
     vector<int> searchRange(vector<int>& nums, int target) {
@@ -1098,7 +1109,7 @@ public:
 
 例题：[P1102 A-B 数对](https://www.luogu.com.cn/problem/P1102)
 
-```c++
+```cpp
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -1138,7 +1149,7 @@ int main(){
 
 例题：[P1678 烦恼的高考志愿](https://www.luogu.com.cn/problem/P1678)
 
-```c++
+```cpp
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -1192,7 +1203,7 @@ int main(){
 
 <p><font color="blue">解法二：利用二分来优化</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<algorithm>
 using namespace std;
@@ -1228,7 +1239,7 @@ int main() {
 
 例题：[P1873 [COCI 2011/2012 #5] EKO / 砍树](https://www.luogu.com.cn/problem/P1873)
 
-```c++
+```cpp
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -1268,27 +1279,30 @@ int main(){
 
 例题：[P2678 [NOIP 2015 提高组] 跳石头](https://www.luogu.com.cn/problem/P2678)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 二分模板
 
-::: details 算法原理
+::detail
 
+#title
+算法原理
+#default
 当我们的解具有**二段性**时，就可以使用二分算法找出答案：
 
 - 根据待查找区间的中点位置，分析答案会出现在哪一侧；
 
 - 接下来舍弃一半的待查找区间，转而在有答案的区间内继续使用二分算法查找结果。
 
-:::
+::
 
-::: code-group
+::code-group
 
-```c++ [二分查找区间左端点]
+```cpp [二分查找区间左端点]
 int l = 1, r = n; // 待查找区间为 [1, n]
 while (l < r) {
 	int mid = (l + r) / 2;
@@ -1298,7 +1312,7 @@ while (l < r) {
 // 二分结束之后可能需要判断是否存在结果
 ```
 
-```c++ [二分查找区间右端点]
+```cpp [二分查找区间右端点]
 int l = 1, r = n; // 待查找区间为 [1, n]
 while (l < r) {
 	int mid = (l + r + 1) / 2;
@@ -1308,9 +1322,9 @@ while (l < r) {
 // 二分结束之后可能需要判断是否存在结果
 ```
 
-:::
+::
 
-::: tip 防止溢出
+::tip
 
 为了防止溢出，求中点时可以用下面的方式：
 
@@ -1318,7 +1332,7 @@ while (l < r) {
 
 - `mid = left + (right - left + 1) / 2;`
 
-:::
+::
 
 时间复杂度：**$O(logn)$**
 
@@ -1332,19 +1346,21 @@ while (l < r) {
 
 - 3.“希望”得到全局的最优解。
 
-::: tip 贪心算法的特点
+::tip
+
+**贪心算法的特点**：
 
 对于大多数题目，贪心策略的提出并不是很难，难的是证明它是正确的。因为贪心算法相较于暴力枚举，每一步并不是把所有情况的考虑进去，而是只考虑当前看起来最优的情况。但是，局部最优并不等于全局最优，所以我们必须要能严谨的证明我们的贪心策略是正确的。
 
-:::
+::
 
 ### 简单贪心
 
 例题：[P10452 货仓选址](https://www.luogu.com.cn/problem/P10452)
 
-::: code-group
+::code-group
 
-```c++ [利用中间值来计算]
+```cpp [利用中间值来计算]
 #include<iostream>
 #include<algorithm>
 #include<cstdlib>
@@ -1368,7 +1384,7 @@ int main() {
 }
 ```
 
-```c++ [利用结论计算]
+```cpp [利用结论计算]
 #include<iostream>
 #include<algorithm>
 
@@ -1391,9 +1407,11 @@ int main() {
 }
 ```
 
-:::
+::
 
-::: tip 结论
+::tip
+
+**结论**：
 
 形如：$sum=\sum_{i=1}^n |a[i]-x| = |a[1]-x|+|a[2]-x|+...+|a[n]-x|$ 这样一个式子：
 
@@ -1401,11 +1419,11 @@ int main() {
 
 - 最小和为：$(a[n]-a[1])+(a[n-1]+a[2])+...+(a[n+1-n/2]+a[n/2])$。
 
-:::
+::
 
 例题：[P1115 最大子段和](https://www.luogu.com.cn/problem/P1115)
 
-```c++
+```cpp
 #include<iostream>
 #include<algorithm>
 
@@ -1433,37 +1451,37 @@ int main() {
 
 例题：[P1094 [NOIP 2007 普及组] 纪念品分组](https://www.luogu.com.cn/problem/P1094)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P1056 [NOIP 2008 普及组] 排座椅](https://www.luogu.com.cn/problem/P1056)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 推公式
 
 例题：[P14357 [CSP-J 2025] 拼数](https://www.luogu.com.cn/problem/P14357)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P1842 [USACO05NOV] 奶牛玩杂技](https://www.luogu.com.cn/problem/P1842)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 哈夫曼编码
 
@@ -1483,7 +1501,7 @@ int main() {
 
 <p><font color="blue">解法：编码后的字符串长度等于带权路径长度</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<queue>
 #include<vector>
@@ -1517,7 +1535,9 @@ int main() {
 }
 ```
 
-::: tip 如何计算带权路径长度
+::tip
+
+**如何计算带权路径长度**：
 
 - 在合并的过程中，每一棵树的根节点的权值其实等于该树所有叶子结点的权值之和；
 
@@ -1525,33 +1545,33 @@ int main() {
 
 - 每次合并都把左右子树的权值累加起来，就是最终的带权路径长度。
 
-:::
+::
 
 例题：[P1090 [NOIP 2004 提高组] 合并果子](https://www.luogu.com.cn/problem/P1090)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 区间问题
 
 例题：[P1803 凌乱的yyy / 线段覆盖](https://www.luogu.com.cn/problem/P1803)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P2887 [USACO07NOV] Sunscreen G](https://www.luogu.com.cn/problem/P2887)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 倍增思想
 
@@ -1563,7 +1583,7 @@ int main() {
 
 <p><font color="blue">解法：利用倍增 + 二进制</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<cstdio>
 using namespace std;
@@ -1589,7 +1609,9 @@ int main() {
 }
 ```
 
-::: tip 取模运算的规则
+::tip
+
+**取模运算的规则**：
 
 - 当计算过程中，只有**加法**和**乘法**时，取模可以放在任意的位置。
 
@@ -1597,47 +1619,51 @@ int main() {
 
 - 当计算过程中，存在**除法**的时候，任意位置取模是会造成结果错误的。
 
-:::
+::
 
 ### 大整数乘法
 
 例题：[P10446 64位整数乘法](https://www.luogu.com.cn/problem/P10446)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 离散化
 
 例题：[P1496 火烧赤壁](https://www.luogu.com.cn/problem/P1496)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P3740 [HAOI2014] 贴海报](https://www.luogu.com.cn/problem/P3740)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 递归初阶
 
-::: tip 为什么会用到递归？
+::tip
+
+**为什么会用到递归？**
 
 本质：在处理主问题时，需要解决子问题，两者的处理方式完全一致。
 
 问题 -> 相同的子问题 -> 相同的子子问题......直到子问题不能继续拆分
 
-:::
+::
 
-::: tip 从宏观角度看待递归
+::tip
+
+**从宏观角度看待递归**：
 
 - 不要在意递归的细节展开图 --- 写完代码不要再去纠结递归展开图；
 
@@ -1645,9 +1671,11 @@ int main() {
 
 - 相信这个黑盒一定能帮助我们完成这个任务。
 
-:::
+::
 
-::: tip 如何写好一个递归
+::tip
+
+**如何写好一个递归**：
 
 - 先找到相同的子问题 -> 确定函数的功能以及函数头的设计；
 
@@ -1655,13 +1683,13 @@ int main() {
 
 - 不能继续拆分的子问题 -> 递归出口。
 
-:::
+::
 
 例题：[1205：汉诺塔问题](https://ybt.ssoier.cn/problem_show.php?pid=1205)
 
 <p><font color="yellowgreen">相同的问题：x 柱子上有 n 个盘子，需要借助 y 的帮助，转移到 z 上</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<cstdio>
 using namespace std;
@@ -1685,7 +1713,7 @@ int main() {
 
 例题：[P10457 占卜DIY](https://www.luogu.com.cn/problem/P10457)
 
-```c++
+```cpp
 #include<bits/stdc++.h>
 using namespace std;
 typedef pair<bool, char> pbc;
@@ -1770,7 +1798,7 @@ int main(){
 
 例题：[P1087 [NOIP 2004 普及组] FBI 树](https://www.luogu.com.cn/problem/P1087)
 
-```c++
+```cpp
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -1819,7 +1847,7 @@ int main(){
 
 <p><font color="blue">解法二：利用 分治 + 归并排序 来解决（全在左边选、全在右边选、一左一右）</font></p>
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;;
 
@@ -1861,7 +1889,7 @@ int main() {
 
 例题：[P1923 【深基9.例4】求第 k 小的数](https://www.luogu.com.cn/problem/P1923)
 
-```c++
+```cpp
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -1917,19 +1945,19 @@ int main(){
 
 例题：[P1115 最大子段和](https://www.luogu.com.cn/problem/P1115)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 例题：[P1228 地毯填补问题](https://www.luogu.com.cn/problem/P1228)
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 其他
 

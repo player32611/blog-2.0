@@ -2,11 +2,14 @@
 
 > **卷积神经网络**（Convolutional Neural Network，CNN）被用于图像识别、语音识别等各种场合，在图像识别的比赛中，基于深度学习的方法几乎都以 CNN 为基础。
 
-::: details 目录
+::detail
 
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## 整体结构
 
@@ -86,7 +89,9 @@ CNN 中新增了 Convolution 层和 Pooling 层。CNN 的层的连接顺序是 �
 
 如果将填充设为 2，则输入数据的大小变为 (8, 8)；如果将填充设为 3，则大小变为 (10, 10)。
 
-::: tip 为什么要使用填充
+::tip
+
+为什么要使用填充：
 
 使用填充主要是为了调整输出的大小。
 
@@ -98,7 +103,7 @@ CNN 中新增了 Convolution 层和 Pooling 层。CNN 的层的连接顺序是 �
 
 在刚才的例子中，将填充的幅度设为1，那么相对于输入大小(4,4)，输出大小也保持为原来的(4,4)。因此，卷积运算就可以在保持空间大小不变的情况下将数据传给下一层。
 
-:::
+::
 
 ### 步幅
 
@@ -120,8 +125,11 @@ $$OH = \frac{H + 2P - FH}{S} + 1$$
 
 $$OW = \frac{W + 2P - FW}{S} + 1$$
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 输入大小：(4, 4)；填充：1；步幅：1；滤波器大小：(3, 3)
 
 $$OH = \frac{4 + 2 \times 1 - 3}{1} + 1 = 4$$
@@ -140,9 +148,9 @@ $$OH = \frac{28 + 2 \times 2 - 5}{3} + 1 = 10$$
 
 $$OW = \frac{31 + 2 \times 2 - 5}{3} + 1 = 11$$
 
-:::
+::
 
-::: warning 注意
+::warning
 
 虽然只要代入值就可以计算输出大小，但是所设定的值必须使 $\frac{W + 2P - FW}{S}$ 和 $\frac{H + 2P - FH}{S}$ 分别可以除尽。
 
@@ -150,7 +158,7 @@ $$OW = \frac{31 + 2 \times 2 - 5}{3} + 1 = 11$$
 
 根据深度学习的框架的不同，当值无法除尽时，有时会向最接近的整数四舍五入，不进行报错而继续运行。
 
-:::
+::
 
 ### 3 维数据的卷积运算
 
@@ -172,11 +180,11 @@ $$OW = \frac{31 + 2 \times 2 - 5}{3} + 1 = 11$$
 
 通道方向上有多个特征图时，会按通道进行输入数据和滤波器的卷积运算，并将结果相加，从而得到输出。
 
-::: warning 注意
+::warning
 
 在 3 维数据的卷积运算中，输入数据和滤波器的通道数要设为相同的值。
 
-:::
+::
 
 ### 结合方块思考
 
@@ -222,13 +230,13 @@ $$OW = \frac{31 + 2 \times 2 - 5}{3} + 1 = 11$$
 
 图中的批处理版的数据流中，在各个数据的开头添加了批用的维度。像这样，数据作为 4 维的形状在各层间传递。
 
-::: warning 注意
+::warning
 
 网络间传递的是 4 维数据，对这 N 个数据进行了卷积运算。
 
 也就是说，批处理将 N 次的处理汇总成了 1 次进行。
 
-:::
+::
 
 ## 池化层
 
@@ -246,11 +254,14 @@ $$OW = \frac{31 + 2 \times 2 - 5}{3} + 1 = 11$$
 
 如图所示，从 2×2 的区域中取出最大的元素。此外，这个例子中将步幅设为了 2，所以 2×2 的窗口的移动间隔为 2 个元素。一般来说，池化的窗口大小会和步幅设定成相同的值。比如， 3×3 的窗口的步幅会设为 3，4×4 的窗口的步幅会设为 4 等。
 
-::: details 关于池化
+::detail
 
+#title
+关于池化
+#default
 除了 Max 池化之外，还有 Average 池化等。相对于 Max 池化是从目标区域中取出最大值，Average 池化则是计算目标区域的平均值。在图像识别领域，主要使用 Max 池化。
 
-:::
+::
 
 ### 池化层的特征
 
@@ -357,8 +368,11 @@ def im2col(input_data, filter_h, filter_w, stride=1, pad=0):
     return col
 ```
 
-::: details 代码解释
+::detail
 
+#title
+代码解释
+#default
 `im2col(input_data, filter_h, filter_w, stride=1, pad=0)`
 
 - `input_data`：由（数据量，通道，高，长）的 4 维数组构成的输入数据
@@ -373,10 +387,13 @@ def im2col(input_data, filter_h, filter_w, stride=1, pad=0):
 
 im2col 会考虑滤波器大小、步幅、填充，将输入数据展开为 2 维数组。
 
-:::
+::
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 现在，我们来实际使用一下这个 im2col：
 
 ```python
@@ -400,7 +417,7 @@ print(col2.shape) # (90, 75)
 
 批大小为 1 时，im2col 的结果是 (9, 75)。而第 2 个例子中批大小为 10，所以保存了 10 倍的数据，即 (90, 75)。
 
-:::
+::
 
 现在使用 im2col 来实现卷积层。这里我们将卷积层实现为名为 Convolution 的类：
 
@@ -430,8 +447,11 @@ class Convolution:
         return out
 ```
 
-::: details 代码解释
+::detail
 
+#title
+代码解释
+#default
 卷积层的初始化方法将滤波器（权重）、偏置、步幅、填充作为参数接收。滤波器是 (FN, C, FH, FW) 的 4 维形状。另外，FN、C、FH、FW 分别是 Filter Number（滤波器数量）、Channel、Filter Height、Filter Width 的缩写。
 
 高亮的部分表示 Convolution 层的实现中的重要部分。用 `im2col` 展开输入数据，并用 `reshape` 将滤波器展开为 2 维数组。然后，计算展开后的矩阵的乘积。
@@ -446,13 +466,13 @@ forward 的实现中，最后会将输出大小转换为合适的形状。转换
 
 `reshape(N, out_h, out_w, FN)` 将输出恢复为 4 维，`transpose(0, 3, 1, 2)` 将通道维度放到第 1 维。
 
-:::
+::
 
 以上就是卷积层的 forward 处理的实现。通过使用 im2col 进行展开，基本上可以像实现全连接层的 Affine 层一样来实现。
 
 接下来是卷积层的反向传播的实现：
 
-::: code-group
+::code-group
 
 ```python [Convolution]
 class Convolution:
@@ -535,15 +555,18 @@ def col2im(col, input_shape, filter_h, filter_w, stride=1, pad=0):
     return img[:, :, pad:H + pad, pad:W + pad]
 ```
 
-:::
+::
 
-::: details 代码解释
+::detail
 
+#title
+代码解释
+#default
 在进行卷积层的反向传播时，必须进行 im2col 的逆处理，可以使用 col2im 函数。
 
 除了使用 col2im 这一点，卷积层的反向传播和 Affine 层的实现方式都一样。
 
-:::
+::
 
 ### 池化层的实现
 
@@ -603,8 +626,11 @@ class Pooling:
         return dx
 ```
 
-::: details 代码解释
+::detail
 
+#title
+代码解释
+#default
 池化层的实现按下面 3 个阶段进行：
 
 - 展开输入数据
@@ -617,7 +643,7 @@ class Pooling:
 
 比如，如果写成 `np.max(x, axis=1)`，就可以在输入 x 的第 1 维的各个轴方向上求最大值。
 
-:::
+::
 
 ## CNN 的实现
 
@@ -713,15 +739,18 @@ class SimpleConvNet:
         self.last_layer = SoftmaxWithLoss()
 ```
 
-::: details 代码解释
+::detail
 
+#title
+代码解释
+#default
 首先将由初始化参数传入的卷积层的超参数从字典中取了出来（以方便后面使用），然后，计算卷积层的输出大小。
 
 在初始化权重部分，学习所需的参数是第 1 层的卷积层和剩余两个全连接层的权重和偏置。将这些参数保存在实例变量的 `params` 字典中。将第 1 层的卷积层的权重设为关键字 `W1`，偏置设为关键字 `b1`。同样，分别用关键字 `W2`、`b2` 和关键字 `W3`、`b3` 来保存第 2 个和第 3 个全连接层的权重和偏置。
 
 最后，生成必要的层，从最前面开始按顺序向有序字典（`OrderedDict`）的 `layers` 中添加层。只有最后的 SoftmaxWithLoss 层被添加到别的变量 `lastLayer` 中。
 
-:::
+::
 
 以上就是 `SimpleConvNet` 的初始化中进行的处理。
 
@@ -743,15 +772,18 @@ class SimpleConvNet:
         return self.last_layer.forward(y, t)
 ```
 
-::: details 代码解释
+::detail
 
+#title
+代码解释
+#default
 这里，参数 x 是输入数据，t 是教师标签。
 
 用于推理的 `predict` 方法从头开始依次调用已添加的层，并将结果传递给下一层。
 
 在求损失函数的 `loss` 方法中，除了使用 `predict` 方法进行的 `forward` 处理之外，还会继续进行 `forward` 处理，直到到达最后的 SoftmaxWithLoss 层。
 
-:::
+::
 
 ### 反向传播
 
@@ -793,15 +825,18 @@ class SimpleConvNet:
         return grads
 ```
 
-::: details 代码解释
+::detail
 
+#title
+代码解释
+#default
 参数的梯度通过误差反向传播法（反向传播）求出，通过把正向传播和反向传播组装在一起来完成。
 
 因为已经在各层正确实现了正向传播和反向传播的功能，所以这里只需要以合适的顺序调用即可。
 
 最后，把各个权重参数的梯度保存到 `grads` 字典中。这就是 SimpleConvNet 的实现。
 
-:::
+::
 
 ### 学习 MNIST 数据集
 
@@ -922,8 +957,11 @@ filter_show(network.params['W1'])
 
 根据深度学习的可视化相关的研究，随着层次加深，提取的信息（正确地讲，是反映强烈的神经元）也越来越抽象。
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 ![进行一般物体识别（车或狗等）的 8 层 CNN](/images/deep-learning/convolutional-neural-network/cnn-8.png)
 
 > 进行一般物体识别（车或狗等）的 8 层 CNN（AlexNet）。
@@ -932,7 +970,7 @@ filter_show(network.params['W1'])
 
 图中的方块表示的是中间数据，对于这些中间数据，会连续应用卷积运算。
 
-:::
+::
 
 如果堆叠了多层卷积层，则随着层次加深，提取的信息也愈加复杂、抽象，这是深度学习中很有意思的一个地方。
 
@@ -972,7 +1010,11 @@ AlexNet 叠有多个卷积层和池化层，最后经由全连接层输出结果
 
 ## 小结
 
-::: details 小结
+::detail
+
+#title
+小结
+#default
 
 - CNN 在此前的全连接层的网络中新增了卷积层和池化层
 
@@ -984,9 +1026,13 @@ AlexNet 叠有多个卷积层和池化层，最后经由全连接层输出结果
 
 - 在深度学习的发展中，大数据和 GPU 做出了很大的贡献
 
-:::
+::
 
-::: details 专有名词
+::detail
+
+#title
+专有名词
+#default
 
 - **卷积神经网络（CNN）**：在普通的神经网络基础上，增加了卷积层和池化层
 
@@ -1014,4 +1060,4 @@ AlexNet 叠有多个卷积层和池化层，最后经由全连接层输出结果
 
 - **AlexNet**：网络结构和 LeNet 基本相同，但激活函数使用 ReLU，使用进行局部正规化的 LRN 层，使用 Dropout
 
-:::
+::

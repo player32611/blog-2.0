@@ -1,10 +1,13 @@
 # 神经网络
 
-::: details 目录
+::detail
 
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## 从感知机到神经网络
 
@@ -32,7 +35,7 @@ $$
 
 可以像下面这样简单地实现阶跃函数：
 
-::: code-group
+::code-group
 
 ```python [简单实现，但是参数 x 只能接受实数（浮点数）]
 def step_function(x):
@@ -48,9 +51,13 @@ def step_function(x):
     return y.astype(np.int)
 ```
 
-:::
+::
 
-::: details 代码解释
+::detail
+
+#title
+代码解释
+#default
 
 ```python
 x = np.array([-1.0, 1.0, 2.0])
@@ -65,7 +72,7 @@ y = y.astype(np.int)
 
 数组 y 是一个布尔型数组，但是我们想要的阶跃函数是会输出 int 型的 0 或 1 的函数。因此，需要把数组 y 的元素类型从布尔型转换为 int 型。可以用 astype()方法转换 NumPy 数组的类型。astype()方法通过参数指定期望的类型，这个例子中是 np.int 型。
 
-:::
+::
 
 用图来表示上面定义的阶跃函数，为此需要使用 matplotlib 库。
 
@@ -83,13 +90,16 @@ plt.ylim(-0.1, 1.1) # 指定y轴的范围
 plt.show()
 ```
 
-::: details 代码解释
+::detail
 
-np.arange(-5.0, 5.0, 0.1)在 −5.0 到 5.0 的范围内，以 0.1 为单位，生成 NumPy 数组（[-5.0, -4.9, ..., 4.9]）。
+#title
+代码解释
+#default
+`np.arange(-5.0, 5.0, 0.1)` 在 −5.0 到 5.0 的范围内，以 0.1 为单位，生成 NumPy 数组（[-5.0, -4.9, ..., 4.9]）。
 
-step_function()以该 NumPy 数组为参数，对数组的各个元素执行阶跃函数运算，并以数组形式返回运算结果。
+`step_function()` 以该 NumPy 数组为参数，对数组的各个元素执行阶跃函数运算，并以数组形式返回运算结果。
 
-:::
+::
 
 ![阶跃函数的图形](/images/deep-learning/neural-network/step-function.png)
 
@@ -119,13 +129,16 @@ plt.ylim(-0.1, 1.1) # 指定y轴的范围
 plt.show()
 ```
 
-::: details 代码解释
+::detail
 
-np.exp(-x)对应 exp(−x)
+#title
+代码解释
+#default
+`n`p.exp(-x)`对应`exp(−x)`
 
 注意参数 x 为 NumPy 数组时，结果也能被正确计算。
 
-:::
+::
 
 ![sigmoid 函数的图形](/images/deep-learning/neural-network/sigmoid-function.png)
 
@@ -179,11 +192,14 @@ plt.ylim(-0.1, 1.1) # 指定y轴的范围
 plt.show()
 ```
 
-::: details 代码解释
+::detail
 
+#title
+代码解释
+#default
 这里使用了 NumPy 的 maximum 函数。maximum 函数会从输入的数值中选择较大的那个值进行输出。
 
-:::
+::
 
 ![ReLU 函数](/images/deep-learning/neural-network/relu-function.png)
 
@@ -242,8 +258,11 @@ print(Z1) # [0.57444252, 0.66818777, 0.75026011]
 
 同理，也可以实现第 1 层到第 2 层的信号传递。
 
-::: details 第 1 层到第 2 层的信号传递
+::detail
 
+#title
+第 1 层到第 2 层的信号传递
+#default
 ![第1层到第2层的信号传递](/images/deep-learning/neural-network/signal-transmission-3.png)
 
 ```python
@@ -256,10 +275,13 @@ A2 = np.dot(Z1, W2) + B2
 Z2 = sigmoid(A2)
 ```
 
-:::
+::
 
-::: details 第 2 层到输出层的信号传递
+::detail
 
+#title
+第 2 层到输出层的信号传递
+#default
 ![第2层到输出层的信号传递](/images/deep-learning/neural-network/signal-transmission-4.png)
 
 ```python
@@ -276,7 +298,7 @@ Y = identity_function(A3) # 或者Y = A3
 
 另外，图 3-20 中，输出层的激活函数用 $σ()$ 表示，不同于隐藏层的激活函数 $h()$（$σ$ 读作 sigma）。
 
-:::
+::
 
 ### 代码实现小结
 
@@ -322,7 +344,7 @@ print(y) # [ 0.31682708  0.69627909]
 
 神经网络可以用在分类问题和回归问题上，不过需要根据情况改变输出层的激活函数。一般而言，回归问题用**恒等函数**，分类问题用 **softmax 函数**。
 
-::: tip 提示
+::tip
 
 机器学习的问题大致可以分为分类问题和回归问题。
 
@@ -330,7 +352,7 @@ print(y) # [ 0.31682708  0.69627909]
 
 回归问题是根据某个输入预测一个（连续的）数值的问题。比如，根据一个人的图像预测这个人的体重的问题就是回归问题（类似 “57.4kg” 这样的预测）。
 
-:::
+::
 
 ### 恒等函数
 
@@ -362,7 +384,7 @@ def softmax(a):
     return y
 ```
 
-::: warning 注意
+::warning
 
 上面的 softmax 函数的实现虽然正确描述了公式，但在计算机的运算上有一定的缺陷。这个缺陷就是溢出问题。。softmax 函数的实现中要进行指数函数的运算，但是此时指数函数的值很容易变得非常大。比如，$e^{10}$ 的值会超过 20000，$e^{100}$ 会变成一个后面有 40 多个 0 的超大值，$e^{1000}$ 的结果会返回一个表示无穷大的 inf。
 
@@ -383,9 +405,11 @@ def softmax(a):
     return y
 ```
 
-:::
+::
 
-::: tip softmax 函数的特征
+::tip
+
+softmax 函数的特征：
 
 softmax 函数的输出是 0.0 到 1.0 之间的实数。并且，softmax 函数的输出值的总和是 1。正因为有了这个性质，我们才可以把 softmax 函数的输出解释为 “概率”。
 
@@ -399,7 +423,7 @@ print(np.sum(y)) # 1.0
 
 比如，上面的例子可以解释成 y[0]的概率是 0.018（1.8%）， y[1]的概率是 0.245（24.5%）， y[2]的概率是 0.737（73.7%）
 
-:::
+::
 
 ### 输出层神经元的数量
 
@@ -409,7 +433,11 @@ print(np.sum(y)) # 1.0
 
 ## 小结
 
-::: details 小结
+::detail
+
+#title
+小结
+#default
 
 - 神经网络中的激活函数使用平滑变化的 sigmoid 函数或 ReLU 函数。
 
@@ -423,9 +451,13 @@ print(np.sum(y)) # 1.0
 
 - 输入数据的集合称为批。通过以批为单位进行推理处理，能够实现高速的运算。
 
-:::
+::
 
-::: details 专有名词
+::detail
+
+#title
+专有名词
+#default
 
 - **激活函数**：神经元在计算过程中，将输入信号进行转换的过程。
   - **阶跃函数**：激活函数的一种，以阈值为界，一旦输入超过阈值，就切换输出。
@@ -444,4 +476,4 @@ print(np.sum(y)) # 1.0
 
 - **隐藏层**：神经网络中的非输入层和输出层组成的层。
 
-:::
+::

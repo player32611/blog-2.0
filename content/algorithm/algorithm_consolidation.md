@@ -1,16 +1,19 @@
 # 算法巩固
 
-::: danger 警告
+::danger
 
 该页面尚未完工!
 
-:::
+::
 
-::: details 目录
+::detail
 
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## 第 1 周
 
@@ -20,7 +23,7 @@
 
 <p><font color="blue">解法：模拟</font></p>
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -44,7 +47,7 @@ int main() {
 
 <p><font color="blue">解法：模拟，找出所有的水龙头中最早结束的那一个</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<queue>
 #include<vector>
@@ -79,7 +82,7 @@ int main() {
 
 <p><font color="blue">解法：逆序对</font></p>
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -121,7 +124,7 @@ int main() {
 
 <p><font color="blue">解法：01 背包 + bfs/dfs/并查集，将连接的物品合并为一个大物品</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<vector>
 #include<algorithm>
@@ -178,7 +181,7 @@ int main() {
 
 <p><font color="blue">解法：暴力枚举</font></p>
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -202,7 +205,7 @@ int main() {
 
 <p><font color="blue">解法：贪心策略，每次选取单价最小的</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<algorithm>
 using namespace std;
@@ -241,7 +244,7 @@ int main() {
 
 <p><font color="blue">状态转移方程：f[i][j] = max(f[i - 1][j], f[i - 1][j - v[i]] + v[i] * p[i])</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<algorithm>
 using namespace std;
@@ -269,7 +272,7 @@ int main() {
 
 <p><font color="blue">解法：差分 + 二分答案</font></p>
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -324,7 +327,7 @@ int main() {
 
 <p><font color="blue">解法：分类讨论</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<string>
 using namespace std;
@@ -352,7 +355,7 @@ int main() {
 
 <p><font color="blue">解法：尽可能的选择较大的正方形</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<utility>
 using namespace std;
@@ -377,7 +380,7 @@ int main() {
 
 <p><font color="blue">解法：拓扑排序 + DFS/BFS 计数</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<queue>
 #include<algorithm>
@@ -439,7 +442,7 @@ int main() {
 
 <p><font color="blue">解法：二维差分</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<cstdlib>
 using namespace std;
@@ -496,7 +499,7 @@ int main() {
 
 [P1046 [NOIP 2005 普及组] 陶陶摘苹果](https://www.luogu.com.cn/problem/P1046)
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -518,7 +521,7 @@ int main() {
 
 <p><font color="blue">解法：贪心</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<algorithm>
 using namespace std;
@@ -554,7 +557,7 @@ int main() {
 
 <p><font color="blue">解法：前缀和 + 二分</font></p>
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -588,7 +591,7 @@ int main() {
 
 <p><font color="blue">解法：BFS</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<queue>
 #include<unordered_map>
@@ -646,7 +649,7 @@ int main() {
 
 <p><font color="blue">解法：数的二进制表示</font></p>
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -668,7 +671,7 @@ int main() {
 
 <p><font color="blue">解法：贪心，删除极大值点</font></p>
 
-```c++
+```cpp
 #include<iostream>
 #include<string>
 using namespace std;
@@ -706,7 +709,7 @@ int main() {
 
 <p><font color="blue">最终结果：f[n][sum / 2] / 2</font></p>
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -737,7 +740,7 @@ int main() {
 
 <p><font color="blue">解法：DFS 暴力搜索；任何一种分割方式，都可以看作在矩阵的四边选择一个非四角的点进入，然后在矩阵中随意行走，直到走到一个边界为止</font></p>
 
-```c++
+```cpp
 #include<iostream>
 using namespace std;
 
@@ -786,56 +789,56 @@ int main() {
 
 ## 第 2 周
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 第 3 周
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 第 4 周
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 第 5 周
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 第 6 周
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 第 7 周
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ## 第 8 周
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::

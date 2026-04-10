@@ -1313,15 +1313,15 @@ created 生命周期函数
 
 ::
 
-::detail attached 生命周期函数
+::detail
 
 #title
 attached 生命周期函数
 #default
 
-- 此时，this.data 已被初始化完毕
+此时，this.data 已被初始化完毕
 
-- 绝大多数初始化的工作可以在这个时机进行(例如发请求获取初始数据)
+绝大多数初始化的工作可以在这个时机进行(例如发请求获取初始数据)
 
 ::
 

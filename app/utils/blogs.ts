@@ -31,6 +31,7 @@ export const getLangIcon = (language: string) => {
 			return "&#xe61e;";
 		case "c++":
 		case "C++":
+		case "cpp":
 			return "&#xe61a;";
 		case "htm":
 		case "html":
@@ -49,6 +50,8 @@ export const getLangIcon = (language: string) => {
 		case "json":
 		case "JSON":
 			return "&#xe63a;";
+		case "properties":
+			return "&#xe74f;";
 		case "py":
 		case "python":
 		case "Python":
@@ -61,6 +64,11 @@ export const getLangIcon = (language: string) => {
 		case "typescript":
 		case "TypeScript":
 			return "&#xe664;";
+		case "vue":
+			return "&#xe799;";
+		case "xml":
+		case "XML":
+			return "&#xe67b;";
 		case "yml":
 		case "yaml":
 			return "&#xe680;";
@@ -81,6 +89,7 @@ export const getLangIconColor = (language: string) => {
 			return "#2196F3";
 		case "c++":
 		case "C++":
+		case "cpp":
 			return "#1D88E5";
 		case "htm":
 		case "html":
@@ -99,6 +108,8 @@ export const getLangIconColor = (language: string) => {
 		case "json":
 		case "JSON":
 			return "#BABABA";
+		case "properties":
+			return "#1177D7";
 		case "py":
 		case "python":
 		case "Python":
@@ -111,6 +122,11 @@ export const getLangIconColor = (language: string) => {
 		case "typescript":
 		case "TypeScript":
 			return "#0090E0";
+		case "vue":
+			return "#41B883";
+		case "xml":
+		case "XML":
+			return "#BABABA";
 		case "yml":
 		case "yaml":
 			return "#FFFF05";

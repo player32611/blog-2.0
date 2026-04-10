@@ -9,7 +9,12 @@ const handleClick = () => {
 	isActive.value = isActive.value === true ? false : true;
 	if (isActive.value) {
 		gsap.to(arrowRef.value, { duration: 0.5, rotate: 90, ease: "power2.out" });
-		gsap.to(contentRef.value, { duration: 0.5, height: "auto", padding: "10px", ease: "power2.out" });
+		gsap.to(contentRef.value, {
+			duration: 0.5,
+			height: "auto",
+			padding: "10px",
+			ease: "power2.out",
+		});
 	} else {
 		gsap.to(arrowRef.value, { duration: 0.5, rotate: 0, ease: "power2.out" });
 		gsap.to(contentRef.value, { duration: 0.5, height: 0, padding: "0 10px", ease: "power2.out" });
@@ -49,8 +54,13 @@ const handleClick = () => {
 	.content {
 		padding: 0 10px;
 		height: 0px;
-		:deep(p) {
-			margin: 0;
+
+		:deep(:first-child) {
+			margin-top: 0 !important;
+		}
+
+		:deep(:last-child) {
+			margin-bottom: 0 !important;
 		}
 	}
 }

@@ -2,17 +2,20 @@
 
 > Java 语言是一个面向对象的程序设计语言，除了面向对象的特点意外， Java 语言还在安全性、平台无关性、支持多线程、内存管理等许多方面具有卓越的优点
 
-::: danger 警告
+::danger
 
 该页面尚未完工!
 
-:::
+::
 
-::: details 目录
+::detail
 
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## JDK
 
@@ -30,7 +33,11 @@ Java 的产品加 **JDK**（Java Development Kit：Java 开发工具包），必
 
 - JDK（Java Development Kit）：Java 开发工具包（包括上面所有）
 
-::: details Java 与 C++ 的区别
+::detail
+
+#title
+Java 与 C++ 的区别
+#default
 
 Java 中没有 `#include` 和 `#define` 等预处理功能，用 `import` 语句包含其它类和包
 
@@ -44,7 +51,7 @@ Java 中没有操作符重载
 
 Java 中没有全局变量，可以在类中定义公用、静态的数据成员实现相同功能
 
-:::
+::
 
 ## IDEA
 
@@ -84,29 +91,29 @@ Java 中把内存分为了五部分：**栈内存**、**堆内存**、**方法�
 
 **栈内存**：方法被调用进栈执行，执行完毕出栈
 
-::: tip 提示
+::tip
 
 - 程序的主入口（main 方法）开始执行时会进栈，代码执行完毕会出栈
 
 - 方法出栈后，方法里面的变量全部消失
 
-:::
+::
 
 **堆内存**：所有线程共享，存储对象、数组、字符串常量池（new 关键字开辟的空间在堆内存中）
 
-::: tip 提示
+::tip
 
 - 如果没有任何地方使用堆里面的对象，那么对象也会从堆里面消失。
 
-:::
+::
 
 **方法区**：存储字节码信息
 
-::: tip 提示
+::tip
 
 - 方法区里面字节码一般不会消失，除非关闭虚拟机（IDE）
 
-:::
+::
 
 **本地内存栈**：调用本地 Native 方法
 
@@ -129,7 +136,9 @@ Java 中把内存分为了五部分：**栈内存**、**堆内存**、**方法�
 
 **标识符**是代码中所有我们自己起的名字。
 
-::: tip 标识符的命名规则-硬性要求
+::tip
+
+标识符的命名规则-硬性要求：
 
 - 由数组、字母、下划线、美元符 `$` 组成
 
@@ -139,15 +148,17 @@ Java 中把内存分为了五部分：**栈内存**、**堆内存**、**方法�
 
 - 区分大小写
 
-:::
+::
 
-::: tip 标识符的命名规则-软性建议
+::tip
+
+标识符的命名规则-软性建议：
 
 - **小驼峰命名法**：用于方法，变量。一个单词时全部小写，多个单词时第一个字母全部小写，其它单词首字母大写
 
 - **大驼峰命名法**：用于类，接口。一个单词时首字母大写，多个单词时每个单词首字母大写
 
-:::
+::
 
 ### 逻辑运算符
 
@@ -157,7 +168,9 @@ Java 中把内存分为了五部分：**栈内存**、**堆内存**、**方法�
 |    `\|`    | 或（或者） |
 |    `!`     | 非（取反） |
 
-::: tip 短路逻辑运算符
+::tip
+
+短路逻辑运算符：
 
 **运行规则**：和单个的 `&`、`|` 是一样的，只不过提高了效率
 
@@ -165,7 +178,7 @@ Java 中把内存分为了五部分：**栈内存**、**堆内存**、**方法�
 
 - `||`：**短路或**，当第一个条件为 `true` 时，返回 `true`，当第一个条件为 `false` 时，才会判断第二个条件
 
-:::
+::
 
 ### 键盘录入
 
@@ -285,8 +298,6 @@ int result = switch (expression) {
 
 当我们使用通常的等号 `==` 来判断两个对象是否相等时，实际上判断的是这两个对象是否同一。
 
-::: details 具体示例
-
 ```java
 public class Demo {
   public static void main(String[] args) {
@@ -300,17 +311,15 @@ public class Demo {
 }
 ```
 
-:::
-
 如果想判断两个对象的属性值是否相等，通常的办法是使用 `equals()` 方法进行判断。
 
 ## 数组
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 ### 数组的声明
 
@@ -335,7 +344,11 @@ Type arrayName[];
 
 这里 arrayName 是数组名，其内容是创建的数组在堆空间的地址
 
-::: details 具体示例
+::detail
+
+#title
+具体示例
+#default
 
 ```java
 int[] arr = new int[]{1, 2, 3}
@@ -347,7 +360,7 @@ int[] arr = new int[]{1, 2, 3}
 int[] arr = {1, 2, 3}
 ```
 
-:::
+::
 
 ### 数组的动态初始化
 
@@ -359,7 +372,11 @@ int[] arr = {1, 2, 3}
 
 ### 数组在方法中传递
 
-::: details 具体示例
+::detail
+
+#title
+具体示例
+#default
 
 ```java
 public class Memory{
@@ -377,7 +394,7 @@ public class Memory{
 }
 ```
 
-:::
+::
 
 ### 获取数组长度
 
@@ -389,17 +406,17 @@ public class Memory{
 
 ## 类与对象
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::
 
 **对象**：把相关的数据和方法组织为一个整体来看待
 
 **面向对象**：利用对象进行软件开发
 
-::: tip 小细节
+::tip
 
 - 描述一类事物的类叫 Javabean 类
 
@@ -407,7 +424,7 @@ public class Memory{
 
 - 带有 main 方法的类叫测试类
 
-:::
+::
 
 ### 类的分类
 
@@ -428,8 +445,11 @@ public class Memory{
  }
 ```
 
-::: details 具体示例
+::detail
 
+#title
+具体示例
+#default
 学生（Student）类举例：
 
 ```java
@@ -442,7 +462,7 @@ class Student {
 }
 ```
 
-:::
+::
 
 ### 方法成员
 
@@ -471,7 +491,9 @@ class Student {
 }
 ```
 
-::: tip 构造方法的特点
+::tip
+
+构造方法的特点：
 
 - 方法名与类名相同，大小写也要一致
 
@@ -487,18 +509,23 @@ class Student {
 
 - **习惯**：无论是否使用，都手动书写无参数构造方法，和带全部参数的构造方法
 
-:::
+::
 
-::: tip 构造方法的执行时机
+::tip
+
+构造方法的执行时机：
 
 - 创造对象的时候由虚拟机调用，不能手动调用构造方法
 
 - 每创建一次对象，就会调用一次构造方法
 
-:::
+::
 
-::: details 创建对象的基本原理
+::detail
 
+#title
+创建对象的基本原理
+#default
 创建对象分为七步：
 
 ① 加载 class 字节码文件
@@ -515,7 +542,7 @@ class Student {
 
 ⑦ 把对象的内存地址赋值给等号左边的变量
 
-:::
+::
 
 ### 传递对象
 
@@ -556,7 +583,11 @@ public enum 枚举类名 {
 }
 ```
 
-::: details 具体示例
+::detail
+
+#title
+具体示例
+#default
 
 ```java
 public enum Season {
@@ -571,9 +602,11 @@ public enum Season {
 Season s = Season.SPRING;
 ```
 
-:::
+::
 
-::: warning 枚举类的注意事项
+::warning
+
+枚举类的注意事项：
 
 - 每一个枚举项，都是该枚举类的对象
 
@@ -592,7 +625,7 @@ Season[] arr = Season.values();
 Season s = Season.valueOf("SPRING");
 ```
 
-:::
+::
 
 ### 继承
 
@@ -612,35 +645,47 @@ Java 只支持类的单继承，每个子类（派生类）只能有一个直接
 }
 ```
 
-::: details 具体示例
+::detail
+
+#title
+具体示例
+#default
 
 ```java
 public class Student extends Person { }
 ```
 
-:::
+::
 
-::: tip 继承的好处
+::tip
+
+继承的好处：
 
 - 可以把多个子类中重复的代码抽取到父类中，提高代码的复用性
 
 - 子类可以在父类的基础上，增加其它的功能，使子类更强大
 
-:::
+::
 
-::: warning 继承的特点
+::warning
+
+继承的特点：
 
 - Java 只支持单继承，不支持多继承，但支持多层继承
 
 - Java 中的类都默认继承于顶级父类 `Object`
 
-:::
+::
 
-::: details 如何实设计继承结构
+::detail
+
+#title
+如何实设计继承结构
+#default
 
 - 当类与类之间，存在相同（共性）的内容，并满足子类是父类中的一种，就可以考虑使用继承，来优化代码。
 
-:::
+::
 
 ### 关键字
 
@@ -648,7 +693,11 @@ public class Student extends Person { }
   - `static` 修饰成员变量，叫做静态变量，被该类所有对象共享
   - `static` 修饰成员方法，叫做静态方法，多用在测试类和工具类中，Javabean 类中很少会用
 
-::: details 具体示例：静态变量
+::detail
+
+#title
+具体示例：静态变量
+#default
 
 ```java
 public class Student {
@@ -666,9 +715,13 @@ public static void main(String[] args) {
 }
 ```
 
-:::
+::
 
-::: details 具体示例：静态方法
+::detail
+
+#title
+具体示例：静态方法
+#default
 
 ```java
 public class ArrayUtils {
@@ -682,17 +735,21 @@ public static void main(String[] args) {
 }
 ```
 
-:::
+::
 
-::: tip static 关键字的内存解析
+::tip
+
+static 关键字的内存解析：
 
 - 静态变量不属于某个对象，而是属于整个类的
 
 - 静态变量是随着类的加载而加载的，优先于对象出现的。因此可以在任意对象创建前为静态变量赋值。
 
-:::
+::
 
-::: warning 静态的注意事项
+::warning
+
+静态的注意事项：
 
 - 静态方法只能访问静态变量和其它的静态方法
 
@@ -700,23 +757,31 @@ public static void main(String[] args) {
 
 - 静态方法中没有 `this` 关键字
 
-:::
+::
 
 - `final`：可以修饰变量、类、方法
   - `final` 修饰变量：表示该变量只能赋值一次、数据不可变、通常用大写字母表示、多个单词下划线隔开
 
-::: details 具体示例
+::detail
+
+#title
+具体示例
+#default
 
 ```java
 final String NUMBER = 100;
 final int MAX_SIZE = 100;
 ```
 
-:::
+::
 
 - `private`：是一个权限修饰符，可以修饰成员变量和成员方法。一旦被 `private` 修饰，只能在本类中才能访问，外界无法访问。
 
-::: details 具体示例
+::detail
+
+#title
+具体示例
+#default
 
 ```java
 class Student {
@@ -724,11 +789,15 @@ class Student {
 }
 ```
 
-:::
+::
 
 - `this`：一个对象引用，表示当前对象，直接使用成员变量加 `this` 前缀
 
-::: details 具体示例
+::detail
+
+#title
+具体示例
+#default
 
 ```java
 class Student {
@@ -739,17 +808,23 @@ class Student {
 }
 ```
 
-:::
+::
 
-::: tip this 的本质
+::tip
+
+this 的本质：
 
 `this` 代表所在方法**调用者**的内存地址
 
-:::
+::
 
 - `super`：一个对象引用，表示父类对象，直接使用成员变量加 `super` 前缀
 
-::: details 具体示例
+::detail
+
+#title
+具体示例
+#default
 
 ```java
 public class Fu{
@@ -766,12 +841,12 @@ public class Zi extends Fu{
 }
 ```
 
-:::
+::
 
 ## 包
 
-::: danger 警告
+::danger
 
 该部分尚未完工!
 
-:::
+::

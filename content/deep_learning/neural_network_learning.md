@@ -1,10 +1,13 @@
 # 神经网络的学习
 
-::: details 目录
+::detail
 
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## 从数据中学习
 
@@ -28,15 +31,18 @@
 
 首先，使用训练数据进行学习，寻找最优的参数；然后，使用测试数据评价训练得到的模型的实际能力。
 
-::: info 泛化能力
+::detail
 
+#title
+泛化能力
+#default
 泛化能力是指处理未被观察过的数据（不包含在训练数据中的数据）的能力。**获得泛化能力是机器学习的最终目标**。
 
 比如，在识别手写数字的问题中，泛化能力可能会被用在自动读取明信片的邮政编码的系统上。此时，手写数字识别就必须具备较高的识别 “某个人” 写的字的能力。注意这里不是 “特定的某个人写的特定的文字”，而是 “任意一个人写的任意文字”。如果系统只能正确识别已有的训练数据，那有可能是只学习到了训练数据中的个人的习惯写法。
 
 因此，仅仅用一个数据集去学习和评价参数，是无法进行正确评价的。这样会导致可以顺利地处理某个数据集，但无法处理其他数据集的情况。
 
-:::
+::
 
 ## 损失函数
 
@@ -57,8 +63,11 @@ def mean_squared_error(y, t):
     return 0.5 * np.sum((y-t)**2)
 ```
 
-::: details 手写数字识别的例子
+::detail
 
+#title
+手写数字识别的例子
+#default
 $y_k$、$t_k$ 是由如下 10 个元素构成的数据：
 
 ```python
@@ -83,7 +92,7 @@ print(mean_squared_error(np.array(y), np.array(t))) # 0.59750000000000003
 
 这里举了两个例子。第一个例子中，正确解是 2，神经网络的输出的最大值是 2；第二个例子中，正确解是 2，神经网络的输出的最大值是 7。 如实验结果所示，我们发现第一个例子的损失函数的值更小，和监督数据之间的误差较小。也就是说，均方误差显示第一个例子的输出结果与监督数据更加吻合。
 
-:::
+::
 
 ### 交叉熵误差
 
@@ -93,12 +102,13 @@ $$E = - \sum_{k} t_k \log y_k$$
 
 这里，log 表示以 e 为底数的自然对数（$log_e$）。 $y_k$ 是神经网络的输出，$t_k$ 是正确解标签。并且，$t_k$ 中只有正确解标签的索引为 1，其他均为 0（one-hot 表 示 ）。
 
-::: tip 提示
+::tip
 
 该式实际上只计算对应正确解标签的输出的自然对数。
 
 比如，假设正确解标签的索引是 2，与之对应的神经网络的输出是 0.6，则交叉熵误差是 $−log0.6 = 0.51$； 若 2 对应的输出是 0.1，则交叉熵误差为 $−log0.1=2.30$。也就是说，交叉熵误差的值是由正确解标签所对应的输出结果决定的。
-:::
+
+::
 
 ```python
 def cross_entropy_error(y, t):
@@ -106,13 +116,20 @@ def cross_entropy_error(y, t):
     return -np.sum(t * np.log(y + delta))
 ```
 
-::: details 代码解释
+::detail
 
+#title
+代码解释
+#default
 这里，参数 y 和 t 是 NumPy 数组。函数内部在计算 np.log 时，加上了一个微小值 delta。这是因为，当出现 np.log(0) 时，np.log(0) 会变为负无限大的 -inf，这样一来就会导致后续计算无法进行。作为保护性对策，添加一个微小值可以防止负无限大的发生。
 
-:::
+::
 
-::: details 实例解释
+::detail
+
+#title
+实例解释
+#default
 
 ```python
 def cross_entropy_error(y, t):
@@ -130,7 +147,7 @@ print(cross_entropy_error(np.array(y), np.array(t))) # 2.3025840929945458
 
 第一个例子中，正确解标签对应的输出为 0.6，此时的交叉熵误差大约为 0.51。第二个例子中，正确解标签对应的输出为 0.1 的低值，此时的交叉熵误差大约为 2.3。
 
-:::
+::
 
 ### 平均损失函数
 
@@ -152,9 +169,9 @@ MNIST 数据集的训练数据有 60000 个，如果以全部数据为对象求�
 
 ### mini-batch 版交叉熵误差的实现
 
-::: code-group
+::code-group
 
-```python [同时处理单个数据和批量数据（数据作为batch集中输入）]
+```python [同时处理单个数据和批量数据（数据作为 batch 集中输入）]
 def cross_entropy_error(y, t):
     if y.ndim == 1:
         t = t.reshape(1, t.size)
@@ -163,7 +180,7 @@ def cross_entropy_error(y, t):
     return -np.sum(t * np.log(y + 1e-7)) / batch_size
 ```
 
-```python [监督数据是标签形式（非one-hot表示，而是像2、7这样的标签）]
+```python [监督数据是标签形式（非 one-hot 表示，而是像 2、7 这样的标签）]
 def cross_entropy_error(y, t):
     if y.ndim == 1:
         t = t.reshape(1, t.size)
@@ -172,7 +189,7 @@ def cross_entropy_error(y, t):
     return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size
 ```
 
-:::
+::
 
 实现的要点是，由于 one-hot 表示中 t 为 0 的元素的交叉熵误差也为 0，因此针对这些元素的计算可以忽略。
 
@@ -186,14 +203,17 @@ def cross_entropy_error(y, t):
 
 不过，当导数的值为 0 时，无论权重参数向哪个方向变化，损失函数的值都不会改变，此时该权重参数的更新会停在此处。
 
-::: info 总结
+::tip
 
 在进行神经网络的学习时，不能将识别精度作为指标。因为如果以识别精度为指标，则参数的导数在绝大多数地方都会变为 0。
 
-:::
+::
 
-::: details 为什么用识别精度作为指标时，参数的导数在绝大多数地方都会变成 0 呢？
+::detail
 
+#title
+为什么用识别精度作为指标时，参数的导数在绝大多数地方都会变成 0 呢？
+#default
 假设某个神经网络正确识别出了 100 笔训练数据中的 32 笔，此时识别精度为 32%。
 
 如果以识别精度为指标，即使稍微改变权重参数的值，识别精度也仍将保持在 32%，不会出现变化。
@@ -202,7 +222,7 @@ def cross_entropy_error(y, t):
 
 而如果把损失函数作为指标，则当前损失函数的值可以表示为 0.92543...这样的值。并且，如果稍微改变一下参数的值，对应的损失函数也会像 0.93432...这样发生连续性的变化。
 
-:::
+::
 
 ## 数值微分
 
@@ -234,11 +254,14 @@ def function_2(x):
     # 或者return np.sum(x**2)
 ```
 
-::: details 代码解释
+::detail
 
+#title
+代码解释
+#default
 这里，我们假定向参数输入了一个 NumPy 数组。函数的内部实现比较简单，先计算 NumPy 数组中各个元素的平方，再求它们的和（np.sum(x\*\*2)也可以实现同样的处理）。
 
-:::
+::
 
 ![函数图像](/images/deep-learning/neural-network-learning/function_2.png)
 
@@ -267,7 +290,11 @@ def numerical_gradient(f, x):
     return grad
 ```
 
-::: details 实例计算
+::detail
+
+#title
+实例计算
+#default
 
 ```python
 def function_2(x):
@@ -278,7 +305,7 @@ print(numerical_gradient(function_2, np.array([0.0, 2.0]))) # [0. 4.]
 print(numerical_gradient(function_2, np.array([3.0, 0.0]))) # [6. 0.]
 ```
 
-:::
+::
 
 ### 梯度法
 
@@ -286,13 +313,13 @@ print(numerical_gradient(function_2, np.array([3.0, 0.0]))) # [6. 0.]
 
 但是，一般而言，损失函数很复杂，参数空间庞大，我们不知道它在何处能取得最小值。而通过巧妙地使用梯度来寻找函数最小值（或者尽可能小的值）的方法就是**梯度法**（gradient method）。梯度法是解决机器学习中最优化问题的常用方法，特别是在神经网络的学习中经常被使用。
 
-::: warning 注意
+::warning
 
 梯度表示的是各点处的函数值减小最多的方向。因此，无法保证梯度所指的方向就是函数的最小值或者真正应该前进的方向。实际上，在复杂的函数中，梯度指示的方向基本上都不是函数值最小处。
 
 虽然梯度的方向并不一定指向最小值，但沿着它的方向能够最大限度地减小函数的值。因此，在寻找函数的最小值（或者尽可能小的值）的位置的任务中，要以梯度的信息为线索，决定前进的方向。
 
-:::
+::
 
 在梯度法中，函数的取值从当前位置沿着梯度方向前进一定距离，然后在新的地方重新求梯度，再沿着新梯度方向前进，如此反复，不断地沿梯度方向前进，通过不断地沿梯度方向前进，逐渐减小函数值。
 
@@ -304,11 +331,11 @@ $$x_1 = x_1 - \eta \frac{\partial f}{\partial x_1}$$
 
 这里的 $\eta$ 表示更新量，在神经网络的学习中，称为**学习率**（learning rate）。学习率决定在一次学习中，应该学习多少，以及在多大程度上更新参数。
 
-::: tip 提示
+::tip
 
 该式是表示更新一次的式子，这个步骤会反复执行。也就是说，每一步都按该式更新变量的值，通过反复执行此步骤，逐渐减小函数值。
 
-:::
+::
 
 ```python
 def gradient_descent(f, init_x, lr=0.01, step_num=100):
@@ -319,16 +346,22 @@ def gradient_descent(f, init_x, lr=0.01, step_num=100):
     return x
 ```
 
-::: details 代码解释
+::detail
 
+#title
+代码解释
+#default
 参数 f 是要进行最优化的函数，init_x 是初始值，lr 是学习率，step_num 是梯度法的重复次数。
 
 `numerical_gradient(f,x)` 会求函数的梯度，用该梯度乘以学习率得到的值进行更新操作，由 step_num 指定重复的次数。
 
-:::
+::
 
-::: details 实例计算
+::detail
 
+#title
+实例计算
+#default
 **问题**：请用梯度法求 $f(x_0+x_1) = x_0^2 + x_1^2$ 的最小值。
 
 ```python
@@ -346,9 +379,11 @@ print(gradient_descent(function_2, init_x=init_x, lr=0.1, step_num=100))
 
 ![梯度法的更新过程](/images/deep-learning/neural-network-learning/gradient-method.png)
 
-:::
+::
 
-::: warning 学习率过大或者过小都无法得到好的结果
+::warning
+
+学习率过大或者过小都无法得到好的结果：
 
 ```python
 # 学习率过大的例子：lr=10.0
@@ -366,14 +401,17 @@ print(gradient_descent(function_2, init_x=init_x, lr=1e-10, step_num=100))
 
 也就是说，设定合适的学习率是一个很重要的问题。
 
-:::
+::
 
 ### 神经网络的梯度
 
 神经网络的学习也要求梯度。这里所说的梯度是指损失函数关于权重参数的梯度。
 
-::: details 实例计算
+::detail
 
+#title
+实例计算
+#default
 我们以一个简单的神经网络为例，来实现求梯度的代码。为此，我们要实现一个名为 simpleNet 的类：
 
 ```python
@@ -429,7 +467,7 @@ print("梯度计算结果",dW)
 
 `numerical_gradient(f, x)` 的参数 f 是函数，x 是传给函数 f 的参数。因此，这里参数 x 取 net.W，并定义一个计算损失函数的新函数 f，然后把这个新定义的函数传递给 `numerical_gradient(f, x)`。
 
-:::
+::
 
 求出神经网络的梯度后，接下来只需根据梯度法，更新权重参数即可。
 
@@ -550,8 +588,11 @@ class TwoLayerNet:
 |            `numerical_gradient(self, x, t)`            |                           计算权重参数相对于损失函数的梯度                           |
 |                 `gradient(self, x, t)`                 |                  计算权重参数的梯度。`numerical_gradient()`的高速版                  |
 
-::: details `params` 和 `grads`
+::detail
 
+#title
+`params` 和 `grads`
+#default
 TwoLayerNet 类有 params 和 grads 两个字典型实例变量。params 变量中保存了权重参数，比如 `params['W1']` 以 NumPy 数组的形式保存了第 1 层的权重参数。
 
 ```python
@@ -562,15 +603,18 @@ net.params['W2'].shape # (100, 10)
 net.params['b2'].shape # (10,)
 ```
 
-:::
+::
 
-::: details `__init__` 方法
+::detail
 
+#title
+`__init__` 方法
+#default
 进行手写数字识别时，输入图像的大小是 784（28×28），输出为 10 个类别，所以指定参数 `input_size=784`、`output_size=10`，将隐藏层的个数 hidden_size 设置为一个合适的值即可。
 
 这里权重使用符合高斯分布的随机数进行初始化，偏置使用 0 进行初始化。
 
-:::
+::
 
 ### mini-batch 的实现
 
@@ -617,13 +661,16 @@ for i in range(iters_num):
     train_loss_list.append(loss)
 ```
 
-::: details 代码解释
+::detail
 
+#title
+代码解释
+#default
 这里，mini-batch 的大小为 100，需要每次从 60000 个训练数据中随机取出 100 个数据（图像数据和正确解标签数据）。
 
 然后，对这个包含 100 笔数据的 mini-batch 求梯度，使用随机梯度下降法（SGD）更新参数。这里，梯度法的更新次数（循环的次数）为 10000。每更新一次，都对训练数据计算损失函数的值，并把该值添加到数组中。
 
-:::
+::
 
 用图像来表示这个损失函数的值的推移：
 
@@ -641,13 +688,16 @@ for i in range(iters_num):
 
 神经网络学习的最初目标是掌握泛化能力，因此，要评价神经网络的泛化能力，就必须使用不包含在训练数据中的数据。下面的代码在进行学习的过程中，会定期地对训练数据和测试数据记录识别精度。这里，每经过一个 epoch，我们都会记录下训练数据和测试数据的识别精度：
 
-::: tip 什么是 epoch
+::detail
 
+#title
+什么是 epoch
+#default
 **epoch** 是一个单位。一个 epoch 表示学习中所有训练数据均被使用过一次时的更新次数。
 
 比如，对于 60000 笔训练数据，用大小为 100 笔数据的 mini-batch 进行学习时，重复随机梯度下降法 600 次，所有的训练数据就都被 “看过” 了。此时，600 次就是一个 epoch。
 
-:::
+::
 
 ```python {21,22,24,44-50}
 import sys, os
@@ -725,7 +775,11 @@ plt.show()
 
 ## 小结
 
-::: details 小结
+::detail
+
+#title
+小结
+#default
 
 - 机器学习中使用的数据集分为训练数据和测试数据
 
@@ -739,9 +793,13 @@ plt.show()
 
 - 数值微分虽然费时间，但是实现起来很简单。
 
-:::
+::
 
-::: details 专有名词
+::detail
+
+#title
+专有名词
+#default
 
 - **训练数据**：神经网络学习时使用的数据集。
 
@@ -761,4 +819,4 @@ plt.show()
 
 - **超参数**：神经网络学习过程中，需要设定手动的参数。比如，学习率、权重参数的初始值、权重参数的更新大小等等。
 
-:::
+::

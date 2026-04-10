@@ -2,23 +2,28 @@
 
 > Spring Boot 可以帮助我们非常快速的构建应用程序、简化开发、提高效率
 
-::: danger 警告
+::danger
 
 该页面尚未完工!
 
-:::
+::
 
-::: details 目录
+::detail
 
+#title
+目录
+#default
 [[toc]]
 
-:::
+::
 
 ## HTTP 协议
 
 **HTTP 协议**（Hyper Text Transfer Protocol、超文本传输协议）规定了浏览器和服务其之间数据传输的规则。
 
-::: tip HTTP 协议的特点
+::tip
+
+HTTP 协议的特点：
 
 1. 基于 TCP 协议：面向连接，安全
 
@@ -26,7 +31,7 @@
 
 3. HTTP 协议是无状态的协议：对于事务处理没有记忆能力，每次请求-响应都是独立的。多次请求间不能共享数据，但速度快。
 
-:::
+::
 
 ### 请求协议
 
@@ -38,15 +43,19 @@
 
 **请求体**：POST 请求，存放请求参数
 
-::: tip GET 与 POST
+::tip
+
+GET 与 POST：
 
 请求方式 - GET：请求参数在请求行中，没有请求体，如：`/brand/findAll?name=POOP&status=1`。GET 请求大小在浏览器中是有限制的
 
 请求方式 - POST：请求参数在请求体中，POST 请求大小是没有限制的
 
-:::
+::
 
-::: tip 常见的请求头
+::tip
+
+常见的请求头：
 
 |     请求头      |                                                            详细信息                                                             |
 | :-------------: | :-----------------------------------------------------------------------------------------------------------------------------: |
@@ -58,7 +67,7 @@
 |  Content-Type   |                                                         请求主体的类型                                                          |
 | Content-Length  |                                                  请求主体的大小（单位：字节）                                                   |
 
-:::
+::
 
 Web 服务器（Tomcat）对 HTTP 协议的请求数据进行解析，并进行了封装（HttpServletRequest），在调用 Controller 方法的时候传递给了该方法。这样，就使得程序员不必直接对协议进行操作，让 Web 开发更加便捷。
 
@@ -106,7 +115,9 @@ public class RequestController {
 
 **响应体**：最后一部分，存放响应数据
 
-::: tip 常见的响应头
+::tip
+
+常见的响应头：
 
 |      响应头      |                            详细信息                            |
 | :--------------: | :------------------------------------------------------------: |
@@ -116,7 +127,7 @@ public class RequestController {
 |  Cache-Control   | 指示客户端应如何缓存，例如 max-age=300 表示可以最多缓存 300 秒 |
 |    Set-Cookie    |            告诉浏览器为当前页面所在的域设置 cookie             |
 
-:::
+::
 
 Web 服务器对 HTTP 协议的响应数据进行了封装（HttpServletResponse），并在调用 Controller 方法的时候传递给了该方法。这样，就使得程序员不必直接对协议进行操作，让 Web 开发更加便捷。
 
@@ -152,11 +163,11 @@ public class ResponseController {
 }
 ```
 
-::: warning 注意
+::warning
 
 响应状态码和响应头如果没有特殊要求的话，通常不手动设定。服务器会根据请求处理的逻辑，自动设置响应状态码和响应头
 
-:::
+::
 
 ## 分层解耦
 
@@ -170,7 +181,7 @@ public class ResponseController {
 
 **dao**：数据访问层（Data Access Object）（持久层），负责数据访问操作。包括数据的增、删、改、查（数据访问操作）
 
-::: code-group
+::code-group
 
 ```java [UserDao.java]
 // /main/java/com.xxx.xxx/dao/UserDao.java
@@ -252,7 +263,7 @@ public class UserController {
 }
 ```
 
-:::
+::
 
 ### 分层解耦
 
@@ -260,11 +271,11 @@ public class UserController {
 
 **内聚**：软件中各个功能模块内部的功能联系
 
-::: tip 软件设计原则
+::tip
 
-高内聚低耦合
+软件设计原则：**高内聚低耦合**
 
-:::
+::
 
 **控制反转**（Inversion Of Control，IOC）：对象的创建控制权由程序自身转移到外部（容器），这种思想被称为控制反转。
 
@@ -272,19 +283,21 @@ public class UserController {
 
 **Bean对象**：IOC 容器中创建、管理的对象，称之为 Bean
 
-::: tip 实现分层解耦的思路
+::tip
+
+实现分层解耦的思路：
 
 - 将项目中的类交给 IOC 容器管理（IOC，控制反转）
 
 - 应用程序运行时需要什么对象，直接依赖容器为其提供（DI，依赖注入）
 
-:::
+::
 
 1. 通过 `@Component` 将 Dao 及 Service 层的实现类，交给 IOC 容器管理（是加在实现类上，而非接口上）
 
 2. 通过 `@Autowired` 为 Controller 及 Service 注入运行时所依赖的对象
 
-::: code-group
+::code-group
 
 ```java [UserServiceImpl.java] 1,4
 @Component // 将当前类交给 IOC 容器管理
@@ -346,7 +359,7 @@ public class UserController {
 }
 ```
 
-:::
+::
 
 ### IOC详解
 
@@ -359,7 +372,7 @@ public class UserController {
 |  @Service   | @Component 的衍生注解 |                  标注在业务层类上                   |
 | @Repository | @Component 的衍生注解 | 标注在数据访问层类上（由于与 mybatis 整合，用的少） |
 
-::: code-group
+::code-group
 
 ```java [UserDaoImpl.java] 1
 @Repository // 将当前类交给 IOC 容器管理
@@ -421,9 +434,9 @@ public class UserController {
 }
 ```
 
-:::
+::
 
-::: tip 提示
+::tip
 
 声明 bean 的时候，可以通过注解的 value 属性指定 bean 的名字。如果没有指定，默认为类名首字母小写。
 
@@ -440,7 +453,7 @@ public class UserDaoImpl implements UserDao {
 }
 ```
 
-:::
+::
 
 前面声明 bean 的四大注解，要想生效，还需要被组件扫描注解 `@ComponentScan` 扫描。
 
@@ -450,7 +463,7 @@ public class UserDaoImpl implements UserDao {
 
 基于 `@Autowired` 进行依赖注入的常见方式有三种：**属性注入**、**构造函数注入**、**setter 注入**。
 
-::: code-group
+::code-group
 
 ```java [属性注入] 4,5
 @RestController
@@ -490,15 +503,17 @@ public class UserController {
 }
 ```
 
-:::
+::
 
-::: tip 提示
+::tip
 
 如果使用构造函数方法时，当前类中只存在一个构造函数，可省略 `@Autowired` 注解。
 
-:::
+::
 
-::: tip 三种方式的优缺点
+::tip
+
+三种方式的优缺点：
 
 - 属性注入：代码简洁，方便快速开发；但隐藏了类之间的依赖关系，可能会破坏类的封装性
 
@@ -506,7 +521,7 @@ public class UserController {
 
 - setter 注入：保持了类的封装性，依赖关系更清晰；但需要额外编写 setter 方法，增加了代码量
 
-:::
+::
 
 `@Autowired` 注解，默认是按照类型进行注入的。如果存在多个相同类型的 bean，将会出现报错。
 
@@ -544,19 +559,23 @@ public class UserController {
 }
 ```
 
-::: tip `@Resource` 与 `@Autowired` 的区别
+::tip
+
+`@Resource` 与 `@Autowired` 的区别：
 
 - `@Autowired` 是 Spring 框架提供的注解，而 `@Resource` 是 JavaEE 规范提供的
 
 - `@Autowired` 是默认按照类型注入，而 `@Resource` 默认是按照名称注入
 
-:::
+::
 
 ## JDBC
 
 **JDBC**（Java DataBase Connectivity），就是使用 Java 语言操作关系型数据库的一套 API
 
-::: tip JDBC 的本质
+::tip
+
+JDBC 的本质：
 
 - sum 公司官方定义的一套操作所有关系型1数据库的规范，即接口
 
@@ -564,7 +583,7 @@ public class UserController {
 
 - 我们可以使用这套接口（JDBC）编程，真正执行的代码时驱动 jar 包中的实现类
 
-:::
+::
 
 ### JDBC 快速入门
 
@@ -657,7 +676,9 @@ public void testSelect() {
 }
 ```
 
-::: tip ResultSet（结果集对象）
+::tip
+
+ResultSet（结果集对象）：
 
 - **next()**：将光标从当前位置向前移动一行，并判断当前行是否为有效行，返回值为 boolean
   - **true**：有效行，当前行有数据
@@ -674,7 +695,7 @@ while(resultSet.next()){
 }
 ```
 
-:::
+::
 
 ### 预编译 SQL
 
@@ -687,11 +708,11 @@ ResultSet resultSet = pstmt.executeQuery();
 
 优势一：可以防止 SQL 注入，更安全
 
-::: tip SQL 注入
+::tip
 
-通过控制输入来修改事先定义好的 SQL 语句，以达到执行代码对服务器进行攻击的方法
+SQL 注入：通过控制输入来修改事先定义好的 SQL 语句，以达到执行代码对服务器进行攻击的方法
 
-:::
+::
 
 优势二：性能更高
 
@@ -761,13 +782,15 @@ class SpringbootMybatisApplicationTests {
 }
 ```
 
-::: tip 提示
+::tip
 
 Mybatis 的持久层接口命名规范为 XxxMapper，也称为 Mapper 接口
 
-:::
+::
 
-::: tip 日志输出
+::tip
+
+日志输出：
 
 默认情况下，在 Mybatis 中，SQL 语句执行时，我们并看不到 SQL 语句的执行日志。在 `application.properties` 加入如下配置，即可查看日志：
 
@@ -775,7 +798,7 @@ Mybatis 的持久层接口命名规范为 XxxMapper，也称为 Mapper 接口
 mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
 ```
 
-:::
+::
 
 ### 数据库连接池
 
@@ -785,7 +808,9 @@ mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
 
 释放空闲时间超过最大空闲时间的连接，来避免因为没有释放连接而引起的数据库连接遗漏
 
-::: tip 使用数据库连接池的优势
+::tip
+
+使用数据库连接池的优势：
 
 - 资源重用
 
@@ -793,7 +818,7 @@ mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
 
 - 避免数据库连接遗漏
 
-:::
+::
 
 官方提供了一个标准的数据库连接池接口 `DataSource`，用于获取连接，由第三方组织实现此接口
 
@@ -817,8 +842,11 @@ spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
 
 ### 增删改查
 
-::: details 具体示例：删除用户
+::detail
 
+#title
+具体示例：删除用户
+#default
 **需求**：根据 ID 删除用户信息
 
 **SQL**：`delete from users where id = 5`
@@ -860,10 +888,13 @@ class SpringbootMybatisApplicationTests {
 
 DML 语句执行完毕的返回值，表示该 DML 语句执行完毕影响的行数
 
-:::
+::
 
-::: details 具体示例：添加用户
+::detail
 
+#title
+具体示例：添加用户
+#default
 **需求**：添加一个用户
 
 **SQL**：`insert into users (name,password,avator,role_id,balance) values("hcb", '123456', 'https://666', 1, 114514)`
@@ -905,10 +936,13 @@ class SpringbootMybatisApplicationTests {
 
 当参数过多时，可以将所有参数封装到一个对象中，`#{}` 中为响应的对象属性名
 
-:::
+::
 
-::: details 具体示例：更新用户
+::detail
 
+#title
+具体示例：更新用户
+#default
 **需求**：根据 ID 更新用户信息
 
 **SQL**：`update users set name = "小王", password = "123456", avator = "https://666", role_id = 1, balance = 114514 where id = 5`
@@ -948,10 +982,13 @@ class SpringbootMybatisApplicationTests {
 }
 ```
 
-:::
+::
 
-::: details 具体示例：查询用户
+::detail
 
+#title
+具体示例：查询用户
+#default
 **需求**：根据用户名和密码查询用户信息
 
 **SQL**：`select * from users where name = "hcb" and password = "123456"`
@@ -993,9 +1030,9 @@ class SpringbootMybatisApplicationTests {
 
 如果接口方法形参中，需要传递多个参数，需要通过 `@Param` 注解为参数起名字
 
-:::
+::
 
-::: tip 说明
+::tip
 
 在基于官方骨架创建的 springboot 项目中，接口编译时会保留方法形参名，`@Param` 注解可以省略
 
@@ -1004,9 +1041,11 @@ class SpringbootMybatisApplicationTests {
 public User findByNameAndPassword(String name, String password);
 ```
 
-:::
+::
 
-::: tip Mybatis 中的 `#` 号和 `$` 号
+::tip
+
+Mybatis 中的 `#` 号和 `$` 号：
 
 |   符号   |                               说明                               |            场景            |     优缺点     |
 | :------: | :--------------------------------------------------------------: | :------------------------: | :------------: |
@@ -1021,7 +1060,7 @@ public User findByNameAndPassword(String name, String password);
 @Select("select  id,name,score from ${tableName} order by ${sortField}")
 ```
 
-:::
+::
 
 ### XML 映射配置
 
@@ -1035,7 +1074,7 @@ public User findByNameAndPassword(String name, String password);
 
 3. XML 映射文件中 sql 语句的 id 与 Mapper 接口中的方法名一致，并保持返回类型一致
 
-::: code-group
+::code-group
 
 ```xml [UserMapper.xml]
 <-- src/main/resources/com/itheima/mapper/UserMapper.xml -->
@@ -1064,21 +1103,23 @@ public interface UserMapper {
 }
 ```
 
-:::
+::
 
-::: tip resultType
+::tip
 
-resultType：查询返回的单条记录所封装的类型
+**resultType**：查询返回的单条记录所封装的类型
 
-:::
+::
 
-::: tip 注解开发与 XML 开发
+::tip
+
+注解开发与 XML 开发：
 
 使用 Mybatis 的注解，主要是来完成一些简单的增删改查功能
 
 如果需要实现复杂的 SQL 功能，建议使用 XML 来配置映射语句
 
-:::
+::
 
 如果想要手动指定 XML 映射配置文件的位置，可在 `application.properties` 中添加如下配置:
 
@@ -1092,7 +1133,7 @@ mybatis.mapper-locations=classpath:mapper/*.xml
 
 SpringBoot 项目提供了多种属性配置方式（properties、yaml、yml）
 
-::: code-group
+::code-group
 
 ```properties [application.properties]
 spring.datasource.url=jdbc:mysql://localhost:3306/shopping
@@ -1110,7 +1151,7 @@ spring:
     password: 1234
 ```
 
-:::
+::
 
 **格式**：
 
@@ -1157,17 +1198,19 @@ mybatis:
   mappper-locations: classpath:mapper/*.xml
 ```
 
-::: warning 注意
+::warning
 
 在 yml 格式的配置文件中，如果配置项的值是以 0 开头的，值需要使用 `''` 引起来，因为以 0 开头在 yml 中表示 8 进制的数据
 
-:::
+::
 
-::: tip yml 配置文件的特点及格式
+::tip
+
+yml 配置文件的特点及格式：
 
 - 简洁、以数据为中心
 
-:::
+::
 
 ### 数据封装
 
