@@ -535,11 +535,60 @@ int main() {
 
 例题：[P1816 忠诚](https://www.luogu.com.cn/problem/P1816)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+#define lc p << 1
+#define rc p << 1 | 1
 
-::
+typedef long long LL;
+
+const int N = 1e5 + 10;
+
+int m,n;
+int a[N];
+
+struct node {
+	LL l, r, small;
+}tr[N << 2];
+
+void pushup(int p) {
+	tr[p].small = min(tr[lc].small, tr[rc].small);
+}
+
+void build(int p, int l, int r) {
+	tr[p] = { l,r,0 };
+	if (l == r) {
+		tr[p].small = a[l];
+		return;
+	}
+	int mid = (l + r) >> 1;
+	build(lc, l, mid);
+	build(rc, mid + 1, r);
+	pushup(p);
+}
+
+LL query(int p, int x, int y) {
+	LL l = tr[p].l, r = tr[p].r;
+	if (x <= l && r <= y)return tr[p].small;
+	LL small = LLONG_MAX, mid = (l + r) >> 1;
+	if (x <= mid)small = min(small, query(lc, x, y));
+	if (y > mid)small = min(small, query(rc, x, y));
+	return small;
+}
+
+int main(){
+    cin>>m>>n;
+    for(int i = 1;i <= m;i++)cin>>a[i];
+    build(1,1,m);
+    for(int i = 1;i <= n;i++){
+        int a,b;
+        cin>>a>>b;
+        cout<<query(1,a,b)<<" ";
+    }
+}
+```
 
 例题：[P3870 [TJOI2009] 开关](https://www.luogu.com.cn/problem/P3870)
 

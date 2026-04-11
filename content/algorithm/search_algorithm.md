@@ -204,19 +204,132 @@ int main() {
 
 例题：[P9241 [蓝桥杯 2023 省 B] 飞机降落](https://www.luogu.com.cn/problem/P9241)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+const int N = 15;
+int n;
+bool sign;
+int t[N];
+int d[N];
+int l[N];
+bool isOk[N];
+int ti;
 
-::
+void dfs(){
+    bool fin = true;
+    for(int i =1;i<=n;i++)
+        if(!isOk[i])fin=false;
+    if(fin){
+        sign = true;
+        return;
+    }
+    for(int i =1;i<=n;i++){
+        if(isOk[i])continue;
+        if(t[i]+d[i]<ti)break;
+        int over = t[i]-ti;
+        if(over>0)ti=t[i];
+        ti+=l[i];
+        isOk[i]=true;
+        dfs();
+        ti-=l[i];
+        if(over>0)ti-=over;
+        isOk[i]=false;
+    }
+}
+
+int main(){
+    int T;
+    cin>>T;
+    while(T){
+        cin>>n;
+        for(int i =1;i<=n;i++){
+            cin>>t[i]>>d[i]>>l[i];
+        }
+        memset(isOk,0x00,sizeof(isOk));
+        sign = false;
+        ti =0;
+        dfs();
+        if(sign)cout<<"YES"<<endl;
+        else cout<<"NO"<<endl;
+        T--;
+    }
+}
+```
 
 例题：[P1219 [USACO1.5] 八皇后 Checker Challenge](https://www.luogu.com.cn/problem/P1219)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+const int N = 20;
 
-::
+int n;
+bool a[N][N];
+
+int num;
+int res;
+
+bool isOk(int i,int j){
+    for(int ii = 1;ii<i;ii++){
+        if(a[ii][j])return false;
+    }
+    for(int k = -13;k<0;k++){
+        if(i+k>0&&j+k>0&&i+k<=n&&j+k<=n&&a[i+k][j+k]){
+            return false;
+        }
+    }
+    for(int k = -13;k<0;k++){
+         if(i+k>0&&j-k>0&&i+k<=n&&j-k<=n&&a[i+k][j-k]){
+            return false;
+        }
+    }
+    return true;
+}
+
+void print(){
+    for(int i = 1;i <= n;i++){
+        for(int j = 1;j <= n;j++){
+            if(a[i][j])cout<<j<<" ";
+        }
+    }
+    cout<<endl;
+}
+
+void dfs(int i){
+    if(num>n)return;
+    if(num==n){
+        if(res<3)print();
+        res++;
+    }
+    for(int j = 1;j<=n;j++){
+        if(num==n){
+            if(res<3)print();
+            res++;
+        }
+        if(isOk(i,j)){
+            a[i][j] = true;
+            num++;
+            if(num==n){
+                if(res<3)print();
+                res++;
+            }else{
+                dfs(i+1);
+            }
+            a[i][j] = false;
+            num--;
+        }
+    }
+};
+
+int main(){
+    cin>>n;
+    dfs(1);
+    cout<<res<<endl;
+}
+```
 
 例题：[P1784 数独](https://www.luogu.com.cn/problem/P1784)
 

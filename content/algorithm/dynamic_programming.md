@@ -294,11 +294,31 @@ int main() {
 
 例题：[P1115 最大子段和](https://www.luogu.com.cn/problem/P1115)
 
-::danger
+```cpp
+#include<iostream>
+#include<algorithm>
 
-该部分尚未完工!
+using namespace std;
 
-::
+typedef long long ll;
+
+const int N = 2e5 + 10;
+
+int n;
+ll a[N];
+
+int main() {
+	cin >> n;
+	for (int i = 1; i <= n; i++)cin >> a[i];
+	ll sum = 0, ret = -1e6;
+	for (int i = 1; i <= n; i++) {
+		sum += a[i];
+		ret = max(ret, sum);
+		if (sum < 0)sum = 0;
+	}
+	cout << ret << endl;
+}
+```
 
 例题：[P5888 传球游戏](https://www.luogu.com.cn/problem/P5888)
 

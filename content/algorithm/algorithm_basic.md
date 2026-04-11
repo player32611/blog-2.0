@@ -719,11 +719,41 @@ int main() {
 
 例题：[P2280 [HNOI2003] 激光炸弹](https://www.luogu.com.cn/problem/P2280)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+const int N = 5e3+20;
 
-::
+int n,m;
+int a[N][N];
+int f[N][N];
+
+int main(){
+    cin>>n>>m;
+    for(int i = 1;i<=n;i++){
+        int x,y,v;
+        cin>>x>>y>>v;
+        a[x+1][y+1] += v;
+    }
+    for(int i = 1;i<N;i++){
+        for(int j = 1;j<N;j++){
+            f[i][j] = f[i-1][j] + f[i][j-1] - f[i-1][j-1] + a[i][j];
+        }
+    }
+    int res = 0;
+    for(int i = 1;i+m-1<N;i++){
+        for(int j = 1;j+m-1<N;j++){
+            int x1 = i;
+            int y1 = j;
+            int x2 = i+m-1;
+            int y2 = j+m-1;
+            res = max(res,f[x2][y2]-f[x1-1][y2]-f[x2][y1-1]+f[x1-1][y1-1]);
+        }
+    }
+    cout<<res<<endl;
+}
+```
 
 ## 差分
 
@@ -888,11 +918,35 @@ int main() {
 
 例题：[P3397 地毯](https://www.luogu.com.cn/problem/P3397)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+const int N = 1010;
 
-::
+int n,m;
+int a[N][N];
+
+int main(){
+    cin>>n>>m;
+    for(int i = 1;i <= m;i++){
+        int x1,y1,x2,y2;
+        cin>>x1>>y1>>x2>>y2;
+        a[x1][y1]++;
+        a[x1][y2+1]--;
+        a[x2+1][y1]--;
+        a[x2+1][y2+1]++;
+    }
+    int sum = 0;
+    for(int i = 1;i<=n;i++){
+        for(int j = 1;j<=n;j++){
+            a[i][j] += a[i-1][j] + a[i][j-1] - a[i-1][j-1];
+            cout<<a[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+}
+```
 
 ## 双指针
 
@@ -1279,11 +1333,42 @@ int main(){
 
 例题：[P2678 [NOIP 2015 提高组] 跳石头](https://www.luogu.com.cn/problem/P2678)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+const int N = 5e5+10;
 
-::
+int l,n,m;
+int a[N];
+
+int main(){
+    cin>>l>>n>>m;
+    for(int i = 1;i<=n;i++){
+        cin>>a[i];
+    }
+    a[n+1]=l;
+    int left = 1,right = l;
+    while(left<right){
+        int count = 0;
+        int pos = 0;
+        int next = 1;
+        int mid = (left+right+1)/2;
+        while(next<=n+1){
+            if(a[next]-a[pos]<mid){
+                count++;
+                next++;
+            } else {
+                pos = next;
+                next++;
+            }
+        }
+        if(count<=m) left = mid ;
+        else right = mid - 1;
+    }
+    cout<<left<<endl;
+}
+```
 
 ### 二分模板
 
@@ -1451,11 +1536,34 @@ int main() {
 
 例题：[P1094 [NOIP 2007 普及组] 纪念品分组](https://www.luogu.com.cn/problem/P1094)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+const int N = 3e4+10;
 
-::
+int w,n;
+int p[N];
+
+int main(){
+    cin>>w>>n;
+    for(int i = 1;i <= n;i++)cin>>p[i];
+    sort(p + 1,p + n + 1);
+    int l = 1,r = n;
+    int res = 0;
+    while(l<=r){
+        if(p[l] + p[r] <= w){
+            l++;
+            r--;
+            res++;
+        } else {
+            r--;
+            res++;
+        }
+    }
+    cout<<res<<endl;
+}
+```
 
 例题：[P1056 [NOIP 2008 普及组] 排座椅](https://www.luogu.com.cn/problem/P1056)
 
@@ -1469,11 +1577,27 @@ int main() {
 
 例题：[P14357 [CSP-J 2025] 拼数](https://www.luogu.com.cn/problem/P14357)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+string s;
+priority_queue<int> dq;
 
-::
+int main(){
+    cin>>s;
+    for(auto i : s){
+        int ch = i;
+        if(ch >= 48 && ch <= 57){
+            dq.push(ch-48);
+        }
+    }
+    while(dq.size()){
+        cout<<dq.top();
+        dq.pop();
+    }
+}
+```
 
 例题：[P1842 [USACO05NOV] 奶牛玩杂技](https://www.luogu.com.cn/problem/P1842)
 
@@ -1549,29 +1673,130 @@ int main() {
 
 例题：[P1090 [NOIP 2004 提高组] 合并果子](https://www.luogu.com.cn/problem/P1090)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+typedef long long ll;
 
-::
+int n;
+
+priority_queue<int, vector<int>, greater<int>> pq;
+
+int main(){
+    cin>>n;
+    for(int i = 1;i <= n;i++){
+        int a;
+        cin>>a;
+        pq.push(a);
+    }
+    ll sum = 0;
+    while(pq.size() > 1){
+        int a = pq.top();
+        pq.pop();
+        int b = pq.top();
+        pq.pop();
+        sum += a + b;
+        pq.push(a + b);
+    }
+    cout<<sum<<endl;
+}
+```
 
 ### 区间问题
 
 例题：[P1803 凌乱的yyy / 线段覆盖](https://www.luogu.com.cn/problem/P1803)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+typedef pair<int,int> pii;
 
-::
+int n;
+priority_queue<pii,vector<pii>,greater<pii>> li;
+
+int main(){
+    cin>>n;
+    for(int i = 1;i <= n;i++){
+        int a,b;
+        cin>>a>>b;
+        li.push({b,a});
+    }
+    int res = 0;
+    int current = 0;
+    while(li.size()){
+        pii item = li.top();
+        int a = item.second;
+        int b = item.first;
+        li.pop();
+        if(current<=a){
+            current = b;
+            res++;
+        }
+    }
+    cout<<res<<endl;
+}
+```
 
 例题：[P2887 [USACO07NOV] Sunscreen G](https://www.luogu.com.cn/problem/P2887)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+typedef pair<int,int> pii;
 
-::
+const int N = 6250000;
+
+int c,l;
+priority_queue<pii,vector<pii>,greater<pii>> spf;
+
+int cover[N];
+
+
+stack<int> sk;
+
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    cin>>c>>l;
+    for(int i = 1;i <= c;i++){
+        int a,b;
+        cin>>a>>b;
+        spf.push({b,a});
+    }
+    int count = 0;
+    for(int i = 1;i <= l;i++){
+        int v,co;
+        cin>>v>>co;
+        for(int j = 1;j <= co;j++){
+            cover[count] = v;
+            count++;
+        }
+    }
+    sort(cover,cover + count);
+    int res = 0;
+    while(spf.size()){
+        pii cow = spf.top();
+        int small = cow.second;
+        int big = cow.first;
+        bool sign = false;
+        for(int i = 0;i < count;i++){
+            if(small <= cover[i] && cover[i] <= big){
+                res++;
+                cover[i] = -1;
+                spf.pop();
+                sign = true;
+                break;
+            }
+        }
+        if(!sign)spf.pop();
+    }
+    cout<<res<<endl;
+}
+```
 
 ## 倍增思想
 
@@ -1625,29 +1850,125 @@ int main() {
 
 例题：[P10446 64位整数乘法](https://www.luogu.com.cn/problem/P10446)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+unsigned long long A,B,P,RES;
+__int128 a,b,p,res;
 
-::
+int main(){
+    cin>>A>>B>>P;
+    a = A;
+    b = B;
+    p = P;
+    res = a*b%p;
+    RES = res;
+    cout<<RES<<endl;
+}
+```
 
 ## 离散化
 
 例题：[P1496 火烧赤壁](https://www.luogu.com.cn/problem/P1496)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+typedef long long ll;
 
-::
+const int N = 2e5+10;
+
+ll n;
+ll a[N],b[N];
+ll f[N];
+ll g[N];
+bool sign[N];
+
+set<ll> s;
+
+int main(){
+    cin>>n;
+    for(ll i = 1;i<=n;i++){
+        cin>>a[i]>>b[i];
+        s.insert(a[i]);
+        s.insert(b[i]);
+    }
+    ll count = 1;
+    for(auto i : s){
+        f[count] = i;
+        count++;
+    }
+    for(ll i = 1;i<count;i++)g[i] = f[i+1] - f[i];
+    for(ll i = 1;i<=n;i++){
+        ll left = upper_bound(f+1,f+count,a[i]) - f - 1;
+        ll right = upper_bound(f+1,f+count,b[i]) - f - 1;
+        for(ll j = left;j<right;j++)sign[j] = 1;
+    }
+    ll res = 0;
+    for(ll i = 1;i<count-1;i++)if(sign[i])res+=g[i];
+    cout<<res<<endl;
+}
+```
 
 例题：[P3740 [HAOI2014] 贴海报](https://www.luogu.com.cn/problem/P3740)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+typedef long long ll;
 
-::
+const int N = 2e5 + 10;
+
+int n,m;
+ll a[N];
+ll b[N];
+int length = 1;
+ll f[N];
+int g[N];
+set<ll> s;
+set<int> re;
+
+int main(){
+    cin>>n>>m;
+    for(int i = 1;i <= m;i++){
+        ll aa,bb;
+        cin>>aa>>bb;
+        if(aa > n){
+            a[i] = aa;
+            b[i] = bb;
+            continue;
+        } else if(bb > n){
+            bb = n;
+        }
+        a[i] = aa;
+        b[i] = bb;
+        s.insert(a[i]);
+        s.insert(b[i]);
+        if(b[i] != n){
+            s.insert(b[i] + 1);
+        }
+    }
+    for(auto i : s){
+        f[length] = i;
+        length++;
+    }
+    for(int i = 1;i <= m;i++){
+        if(a[i] > n)continue;
+        int left = upper_bound(f + 1,f + length, a[i]) - f - 1;
+        int right = upper_bound(f + 1,f + length,b[i]) - f - 1;
+        for(int j = left;j <= right;j++){
+            g[j] = i;
+        }
+    }
+    for(int i = 1;i < length;i++){
+        if(g[i])re.insert(g[i]);
+    }
+    cout<<re.size()<<endl;
+}
+```
 
 ## 递归初阶
 
@@ -1945,11 +2266,31 @@ int main(){
 
 例题：[P1115 最大子段和](https://www.luogu.com.cn/problem/P1115)
 
-::danger
+```cpp
+#include<iostream>
+#include<algorithm>
 
-该部分尚未完工!
+using namespace std;
 
-::
+typedef long long ll;
+
+const int N = 2e5 + 10;
+
+int n;
+ll a[N];
+
+int main() {
+	cin >> n;
+	for (int i = 1; i <= n; i++)cin >> a[i];
+	ll sum = 0, ret = -1e6;
+	for (int i = 1; i <= n; i++) {
+		sum += a[i];
+		ret = max(ret, sum);
+		if (sum < 0)sum = 0;
+	}
+	cout << ret << endl;
+}
+```
 
 例题：[P1228 地毯填补问题](https://www.luogu.com.cn/problem/P1228)
 
