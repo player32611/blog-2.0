@@ -152,6 +152,7 @@ onUnmounted(() => {
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
+			user-select: none;
 			transition: color 0.2s ease-in-out;
 			transition: background-color 0.2s ease-in-out;
 			cursor: pointer;

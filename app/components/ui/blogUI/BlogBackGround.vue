@@ -33,7 +33,6 @@ const create = (side: number, margin: number) => {
 			let y = (side + margin) * r;
 			const box = document.createElementNS("http://www.w3.org/2000/svg", "rect");
 			box.setAttribute("class", "background_box");
-			// box.setAttribute("fill", "#17f700")
 			box.setAttribute("x", x.toString());
 			box.setAttribute("y", y.toString());
 			box.setAttribute("width", side.toString());
@@ -44,7 +43,6 @@ const create = (side: number, margin: number) => {
 		}
 	}
 };
-
 const handleMouseMove = (e: MouseEvent) => {
 	boxs.value.forEach((box, idx) => {
 		if (box && boxsOriPos.value[idx]) {

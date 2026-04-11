@@ -4,6 +4,7 @@ import type { BlogCollections } from "~/types/config";
 
 import BlogMenuBackGround from "./BlogMenuBackGround.vue";
 import MenuSelecter from "./MenuSelecter.vue";
+import Astronaut from "~/components/exhibit/Astronaut.vue";
 
 const menuRef = ref<HTMLDivElement | null>(null);
 const menuState = ref<"in" | "out">("in");
@@ -52,13 +53,17 @@ defineExpose({
 <template>
 	<div class="blog_menu" ref="menuRef">
 		<BlogMenuBackGround />
-		<div class="menu_card">11</div>
-		<div class="menu_selecter_box">
-			<MenuSelecter
-				v-for="collection in blogCollections"
-				:key="collection"
-				:collections="collection"
-			/>
+		<div class="menu_container">
+			<div class="menu_card">
+				<Astronaut />
+			</div>
+			<div class="menu_selecter_box">
+				<MenuSelecter
+					v-for="collection in blogCollections"
+					:key="collection"
+					:collections="collection"
+				/>
+			</div>
 		</div>
 	</div>
 </template>
@@ -74,19 +79,31 @@ defineExpose({
 	width: 100%;
 	background-color: #ffffff;
 
-	.menu_card {
-		height: 100%;
-		width: 40%;
-		overflow-y: hidden;
-	}
+	.menu_container {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 20px;
+		height: 70%;
+		width: 70%;
+		border: 5px solid rgba($color: #ffffff, $alpha: 0.5);
+		overflow: hidden;
 
-	.menu_selecter_box {
-		max-height: 80dvh;
-		width: 40%;
-		overflow-y: auto;
+		.menu_card {
+			position: relative;
+			height: 100%;
+			width: 50%;
+			overflow-y: hidden;
+		}
 
-		&::-webkit-scrollbar {
-			display: none;
+		.menu_selecter_box {
+			max-height: 100%;
+			width: 40%;
+			overflow-y: auto;
+
+			&::-webkit-scrollbar {
+				display: none;
+			}
 		}
 	}
 }

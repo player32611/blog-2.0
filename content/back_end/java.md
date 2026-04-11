@@ -841,3 +841,330 @@ public class Zi extends Fu{
 该部分尚未完工!
 
 ::
+
+## 接口
+
+::danger
+
+该部分尚未完工!
+
+::
+
+## 异常处理
+
+::danger
+
+该部分尚未完工!
+
+::
+
+在进行程序设计时，要认识到错误的产生是不可避免的。所谓错误，是在程序运行过程中发生的异常事件，这些事件的发生将阻止程序的正常运行。
+
+::tip
+
+**异常处理的本质**：程序运行出错时，给出可控的处理方式
+
+::
+
+### 捕获异常
+
+Java 程序设计中可以使用 `try` 语句括住可能抛出异常的代码段，然后紧接着用 `catch` 语句指明要捕获的异常级相应的处理代码。
+
+`try` 与 `catch` 语句的语法格式如下：
+
+```java
+try {
+  可能产生异常的代码
+} catch (异常类型 变量) {
+  处理代码（真正出异常了，就在这里处理）
+} finally {
+  收尾代码（不管有没有异常都会执行）
+}
+```
+
+::detail
+
+#title
+具体示例
+#default
+
+```java
+public class TryTest {
+    static void main() {
+        compute();
+    }
+
+    public static  void compute(){
+        try {
+            int num = 10 / 0;
+            System.out.println(num);
+        } catch (ArithmeticException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            System.out.println("执行 finally 块");
+        }
+    }
+}
+```
+
+::
+
+::detail
+
+#title
+`throws` 与 `throw`
+#default
+**`throws`**：写在方法声明处，表示**可能抛出**
+
+**`throw`**：写在方法体里面，表示**现在就抛出一个异常对象**
+
+::
+
+### 抛出异常
+
+如果程序员不想在当前方法内处理异常，可以使用 `throws` 子句声明将异常抛出到调用当前方法的方法中。
+
+::detail
+
+#title
+具体示例
+#default
+
+```java
+public void openThisFile(String fileName) thros java.io.FileNotFoundException {
+  // 该方法的代码
+}
+```
+
+::
+
+## 输入/输出流
+
+### I/O 流
+
+在 Java 中将信息的输入与输出过程抽象为 **I/O 流**
+
+- 输入是指数据流入程序
+
+- 输出是指数据从程序流出
+
+### 写文本文件
+
+为了在磁盘上创建一个文本文件并往其中写入字符串，需要用到 `FileWriter` 类。
+
+::detail
+
+#title
+具体示例
+#default
+
+```java
+public class FileWriterTester {
+  public static void main(String[] args) throws IOException {
+    String fileName = "D:\\test.txt";
+    FileWriter writer = new FileWriter(fileName);
+    writer.write("hello world!\n");
+    writer.write("This is my first text file.\n");
+    writer.close(); // 关闭流
+  }
+}
+```
+
+::
+
+::warning
+
+写完之后，必须使用 `close()`，否则数据可能没有完全落盘
+
+::
+
+::detail
+
+#title
+`BufferedWriter`
+#default
+`BufferedWriter` 类是在 `FileWriter` 外面再包一层，可以理解成带缓冲区的字符输出流，不是推翻 `FileWriter`，而是在上面做增强，写入更高效，也更方便换行。
+
+```java
+public class BufferedWriterTester {
+  public static void main(String[] args) throws IOException {
+    String fileName = "D:\\test.txt";
+    BufferedWriter out = new BufferedWriter(new FileWriter(fileName));
+    out.write("hello world");
+    out.newLine();
+    out.write("hello world");
+    out.close();
+  }
+}
+```
+
+::
+
+### 读文本文件
+
+从文本文件中读取字符需要使用 `FileReader` 类，对应于写文本文件的缓冲器，读文本文件也有缓冲器类 `BufferedReader`，具有 `readLine()` 函数，可以按行读取。
+
+::detail
+
+#title
+具体示例
+#default
+
+```java
+class BufferedReaderTester {
+  public static void main(String[] args) {
+    String fileName = "D:\\test.txt", line;
+    try {
+      BufferedReader in = new BufferedReader(new FileReader(fileName));
+      line = in.readLine(); //  读取一行内容
+      while (line != null) {
+        System.out.println(line);
+        line = in.readLine();
+      }
+      in.close();
+    } catch (IOException e) {
+      System.out.println(e.toString());
+      System.out.println("Problem reading " + fileName);
+    }
+  }
+}
+```
+
+::
+
+::tip
+
+读到 null 说明文件结束
+
+::
+
+### 写二进制文件
+
+::danger
+
+该部分尚未完工!
+
+::
+
+### 读二进制文件
+
+::danger
+
+该部分尚未完工!
+
+::
+
+## 集合框架
+
+::danger
+
+该部分尚未完工!
+
+::
+
+### Set 接口
+
+Set 是一个不含重复元素的集合，是数学中**集合**的抽象。
+
+Set 接口在声明时应该使用泛型，即 `Set<E>`。
+
+实现 Set 接口的两个主要类是 `HashSet` 和 `TreeSet`。
+
+::detail
+
+#title
+`HashSet` 应用举例
+#default
+
+```java
+public class HashsetDemo {
+  public static void main(String[] args) {
+    HashSet<String> names = new HashSet<String>();
+    names.add("Tom");
+    names.add("Jack");
+    names.add("Tom");
+    names.add("Alice");
+
+    System.out.println(names);
+    System.out.println("元素个数：" + names.size());
+    System.out.println("是否包含 Tom：" + names.contains("Tom"));
+
+    names.remove("Tom");
+    System.out.println("删除后：" + names);
+  }
+}
+```
+
+::
+
+### List 接口
+
+列表 List 是一个有序集合，其中的元素是按顺序排列的，且可以重复。列表中的每个元素都有一个 index 值（从 0 开始），用于标明元素在列表中的顺序。
+
+列表的主要实现类包括 `ArrayList`、`Vector`、`LinkedList` 和 `Stack` 等。
+
+**`ArrayList`**：能够存储任意类型的对象，是顺序表
+
+**`LinkedList`**：通过双向列表数据结构实现了 List 和 Deque 接口，同时具备 List、Queue 和 Deque 的特性
+
+::detail
+
+#title
+`ArrayList` 应用举例
+#default
+
+```java
+public class ArrayListDemo {
+  public static void main(String[] args) {
+    ArrayList<String> courses = new ArrayList<String>();
+
+    courses.add("Java");
+    courses.add("Python");
+    courses.add("Java");
+    courses.add("Database");
+
+    System.out.println("原集合：" + courses);
+    System.out.println("第一个元素：" + courses.get(0));
+
+    courses.set(1, "C++");
+    System.out.println("修改后：" + courses);
+
+    courses.remove(2);
+    System.out.println("删除后：" + courses);
+
+    System.out.println("元素个数：" + courses.size());
+  }
+}
+```
+
+::
+
+::detail
+
+#title
+`LinkedList` 应用举例
+#default
+
+```java
+public class LinkedListDemo {
+  public static void main(String[] args) {
+    LinkedList<String> queue = new LinkedList<String>();
+
+    queue.add("A");
+    queue.add("B");
+    queue.add("Start");
+    queue.add("End");
+
+    System.out.println(queue);
+
+    queue.removeFirst();
+    queue.removeLast();
+
+    System.out.println(queue);
+    System.out.println("第一个元素" + queue.getFirst());
+    System.out.println("最后一个元素" + queue.getLast());
+  }
+}
+```
+
+::
