@@ -6,15 +6,6 @@
 
 ::
 
-::detail
-
-#title
-目录
-#default
-[[toc]]
-
-::
-
 ## 线段树
 
 > 前置：[二叉树](data-structure.html#二叉树)、[堆](data-structure.html#堆)、[递归初阶](algorithm-basic.html#递归初阶)、[分治](algorithm-basic.html#分治)

@@ -1,14 +1,5 @@
 # C++ 基础
 
-::detail
-
-#title
-目录
-#default
-[[toc]]
-
-::
-
 ## 头文件
 
 ::tip

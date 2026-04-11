@@ -1,14 +1,5 @@
 # Maven
 
-::detail
-
-#title
-目录
-#default
-[[toc]]
-
-::
-
 ## Maven 介绍
 
 Maven 是一款用于管理和构建 Java 项目的工具，是 apache 旗下的一个开源项目

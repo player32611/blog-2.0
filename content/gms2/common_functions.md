@@ -6,15 +6,6 @@
 
 ::
 
-::detail
-
-#title
-目录
-#default
-[[toc]]
-
-::
-
 ## 数组
 
 ### array_equals(var1, var2)

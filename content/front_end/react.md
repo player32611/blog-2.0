@@ -1,14 +1,5 @@
 # React
 
-::detail
-
-#title
-目录
-#default
-[[toc]]
-
-::
-
 ## 什么是 React
 
 React 是用于构建 Web 和原生交互界面的库。

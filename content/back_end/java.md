@@ -8,15 +8,6 @@
 
 ::
 
-::detail
-
-#title
-目录
-#default
-[[toc]]
-
-::
-
 ## JDK
 
 Java 的产品加 **JDK**（Java Development Kit：Java 开发工具包），必须安装 JDK 才能使用 Java。

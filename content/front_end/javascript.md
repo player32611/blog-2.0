@@ -6,15 +6,6 @@
 
 ::
 
-::detail
-
-#title
-目录
-#default
-[[toc]]
-
-::
-
 ## 什么是 JavaScript
 
 ## 字符串

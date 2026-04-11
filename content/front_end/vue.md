@@ -1,14 +1,5 @@
 # Vue
 
-::detail
-
-#title
-目录
-#default
-[[toc]]
-
-::
-
 ## 什么是 Vue
 
 **Vue** 是一套用于构建用户界面的渐进式框架。

@@ -6,15 +6,6 @@
 
 ::
 
-::detail
-
-#title
-目录
-#default
-[[toc]]
-
-::
-
 ## 入门：从记忆化搜索到动态规划
 
 ::detail

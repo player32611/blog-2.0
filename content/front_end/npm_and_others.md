@@ -6,15 +6,6 @@
 
 ::
 
-::detail
-
-#title
-目录
-#default
-[[toc]]
-
-::
-
 ## npm 与包
 
 ### 包

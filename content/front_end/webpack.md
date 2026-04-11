@@ -1,14 +1,5 @@
 # webpack
 
-::detail
-
-#title
-目录
-#default
-[[toc]]
-
-::
-
 ## 什么是 webpack
 
 webpack 是一个模块打包器（构建工具）。它的主要目标是将 JavaScript 文件打包在一起，缩减文件大小，打包后的文件用于在浏览器中使用，但它也能够胜任转换、打包或包裹任何资源。

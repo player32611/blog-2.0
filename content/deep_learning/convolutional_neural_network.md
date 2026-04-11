@@ -2,15 +2,6 @@
 
 > **卷积神经网络**（Convolutional Neural Network，CNN）被用于图像识别、语音识别等各种场合，在图像识别的比赛中，基于深度学习的方法几乎都以 CNN 为基础。
 
-::detail
-
-#title
-目录
-#default
-[[toc]]
-
-::
-
 ## 整体结构
 
 CNN 和之前介绍的神经网络一样，可以像乐高积木一样通过组装层来构建。不过，CNN 中新出现了**卷积层**（Convolution 层）和**池化层**（Pooling 层）。

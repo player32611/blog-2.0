@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { gsap } from "gsap";
+import { gsap } from "gsap/gsap-core";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import type { BlogNavigationParams } from "~/types/components";
 
 const { page } = defineProps<BlogNavigationParams>();
 const boxRef = ref<HTMLDivElement | null>(null);
-const time = ref<number>(1);
-const headings = ref<Array<{ id: string; text: string }>>([]);
+const easeTime = ref<number>(1);
+const headings = ref<Array<{ id: string; text: string; level: number }>>([]);
 const activeHeadingId = ref<string | null>(null);
 
 const handleMouseEnter = () => {
 	gsap.to(boxRef.value, {
 		right: "0px",
-		duration: time.value,
+		duration: easeTime.value,
 		ease: "power2.out",
 	});
 };
@@ -20,7 +20,7 @@ const handleMouseEnter = () => {
 const handleMouseLeave = () => {
 	gsap.to(boxRef.value, {
 		right: "-300px",
-		duration: time.value,
+		duration: easeTime.value,
 		ease: "power2.out",
 	});
 };
@@ -28,24 +28,25 @@ const handleMouseLeave = () => {
 const handleClick = (id: string) => {
 	const element = document.getElementById(id);
 	if (element) {
-		const smoother = ScrollSmoother.get();
-		if (smoother) {
+		const contentSmoother = ScrollSmoother.get();
+		if (contentSmoother) {
 			const rect = element.getBoundingClientRect();
 			const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 			const elementTop = rect.top + scrollTop;
-			smoother.scrollTo(elementTop, true);
+			contentSmoother.scrollTo(elementTop, true);
 		}
 		activeHeadingId.value = id;
 	}
 };
 const getAllHeadings = () => {
 	headings.value = [];
-	const h2Elements = document.querySelectorAll("h2[id]");
-	h2Elements.forEach(el => {
+	const allElements = document.querySelectorAll("h2[id], h3[id]");
+	allElements.forEach(el => {
 		const id = el.getAttribute("id");
 		const text = el.textContent || "";
+		const level = el.tagName === "H2" ? 2 : 3;
 		if (id && text) {
-			headings.value.push({ id, text });
+			headings.value.push({ id, text, level });
 		}
 	});
 };
@@ -67,18 +68,19 @@ const getActiveHeading = () => {
 	activeHeadingId.value = currentActiveId || null;
 };
 
+watch(
+	() => page,
+	() => {
+		setTimeout(() => {
+			getAllHeadings();
+			getActiveHeading();
+		}, 100);
+	},
+);
+
 onMounted(() => {
 	getAllHeadings();
 	getActiveHeading();
-	watch(
-		() => page,
-		() => {
-			setTimeout(() => {
-				getAllHeadings();
-				getActiveHeading();
-			}, 100);
-		},
-	);
 	window.addEventListener("scroll", getActiveHeading);
 	window.addEventListener("resize", getActiveHeading);
 });
@@ -102,7 +104,11 @@ onUnmounted(() => {
 				v-for="heading in headings"
 				:key="heading.id"
 				class="navigation_link"
-				:class="{ active: activeHeadingId === heading.id }"
+				:class="{
+					active: activeHeadingId === heading.id,
+					h2: heading.level === 2,
+					h3: heading.level === 3,
+				}"
 				@click="handleClick(heading.id)"
 			>
 				{{ heading.text }}
@@ -141,15 +147,34 @@ onUnmounted(() => {
 		margin-top: 20px;
 
 		.navigation_link {
-			margin: 10px 0;
 			width: 100%;
 			color: rgba($color: #ffffff, $alpha: 0.5);
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 			transition: color 0.2s ease-in-out;
-			user-select: none;
+			transition: background-color 0.2s ease-in-out;
 			cursor: pointer;
 
 			&.active {
 				color: #ffffff;
+			}
+
+			&:hover {
+				background-color: rgba($color: #ffffff, $alpha: 0.5);
+			}
+
+			&.h2 {
+				padding: 10px 0;
+				font-size: 16px;
+				font-weight: 600;
+			}
+
+			&.h3 {
+				padding: 5px 0;
+				text-indent: 1rem;
+				font-size: 14px;
+				font-weight: 400;
 			}
 		}
 	}

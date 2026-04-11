@@ -22,10 +22,10 @@ const handleClick = () => {
 	margin: 5px 0;
 	min-height: 50px;
 	width: 100%;
-	color: #000000;
+	color: rgba($color: #ffffff, $alpha: 0.5);
 	font-family: "方正基础像素体";
 	text-align: left;
-	background-color: rgb(0, 0, 0, 0);
+	background-color: rgba(#000000, 0.5);
 	border: 5px solid #000000;
 	transition: background-color 0.2s ease-in-out;
 	cursor: pointer;

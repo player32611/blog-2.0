@@ -8,15 +8,6 @@
 
 ::
 
-::detail
-
-#title
-目录
-#default
-[[toc]]
-
-::
-
 ## 核心思想
 
 ::danger

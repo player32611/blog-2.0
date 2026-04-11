@@ -6,15 +6,6 @@
 
 ::
 
-::detail
-
-#title
-目录
-#default
-[[toc]]
-
-::
-
 ## DOM 简介
 
 DOM 的全称是 Document Object Model ，即文档对象模型，是一套对文档的内容进行抽象和概念化的方法，它是针对 HTML 和 XML 文档的一个 API （应用程序编程接口）描绘了一个层次化的节点树，允许开发人员添加，移除和修改页面的某一部分。

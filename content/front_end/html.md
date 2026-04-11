@@ -6,14 +6,6 @@
 
 ::
 
-::detail
-
-#title
-目录
-#default
-[[toc]]
-::
-
 ## 常用元素标签
 
 ### a

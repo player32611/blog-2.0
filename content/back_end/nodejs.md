@@ -1,14 +1,5 @@
 # Node.js
 
-::detail
-
-#title
-目录
-#default
-[[toc]]
-
-::
-
 ## 初识 Node.js
 
 **Node.js** 是一个基于 Chrome V8 引擎的 JavaScript 运行环境。
