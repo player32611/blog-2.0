@@ -15,16 +15,26 @@ export const formatTime = (seconds: number) => {
  * @returns 路径部分（以/开头的字符串）
  */
 export const extractPathPart = (urlOrPath: string): string => {
+	let path: string;
 	if (urlOrPath.startsWith("http")) {
 		// 对于完整URL，提取pathname
 		try {
-			return new URL(urlOrPath).pathname;
+			path = new URL(urlOrPath).pathname;
+			// 对URL进行解码，处理中文和特殊字符
+			path = decodeURIComponent(path);
 		} catch (error) {
 			console.warn("Invalid URL:", urlOrPath, error);
-			return urlOrPath;
+			path = urlOrPath;
 		}
 	} else {
 		// 对于相对路径，确保以/开头
-		return urlOrPath.startsWith("/") ? urlOrPath : `/${urlOrPath}`;
+		path = urlOrPath.startsWith("/") ? urlOrPath : `/${urlOrPath}`;
 	}
+
+	const baseURL = "/blog-2.0";
+	if (path.startsWith(baseURL)) {
+		path = path.substring(baseURL.length);
+	}
+
+	return path;
 };

@@ -12,7 +12,7 @@ webpack 是一个模块打包器（构建工具）。它的主要目标是将 Ja
 
 chunk：打包过程中被操作的模块文件叫做 chunk ，例如异步加载一个模块就是一个 chunk
 
-bundel：bundle是最后打包后的文件，最终文件可以和 chunk 长得一模一样，但是大部分情况下他是多个 chunk 的集合。
+bundel：bundle 是最后打包后的文件，最终文件可以和 chunk 长得一模一样，但是大部分情况下他是多个 chunk 的集合。
 
 ## 安装 webpack
 

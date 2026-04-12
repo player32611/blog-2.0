@@ -50,7 +50,7 @@ xhr.onreadystatechange = () => {
 
 ## axios
 
-Axios 是一个基于 promise 网络请求库，作用于node.js 和浏览器中。
+Axios 是一个基于 promise 网络请求库，作用于 node.js 和浏览器中。
 
 Axios 简单的理解就是 ajax 的封装
 
@@ -125,7 +125,7 @@ axios.get('post',"id=1").then(res => {
 
 ### 并发请求
 
-使用 axios 的并发请求`axios.all()`方法可以同时进行多个网络请求。
+使用 axios 的并发请求 `axios.all()` 方法可以同时进行多个网络请求。
 
 ```JavaScript
 axios.all([
@@ -141,7 +141,7 @@ axios.all([
 
 其中 res 与 err 的值均为数组，分别代表每一个请求的结果。
 
-若想分别处理单个请求的结果，也可以使用`spread()`方法：
+若想分别处理单个请求的结果，也可以使用 `spread()` 方法：
 
 ```JavaScript
 axios.all([

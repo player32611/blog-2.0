@@ -39,7 +39,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		if (!musicAudio.value) {
 			musicAudio.value = new Audio(music.path);
 			musicAudio.value.volume = musicVolume.value;
-		} else if (extractPathPart(musicAudio.value.src) !== music.path) {
+		} else if (extractPathPart(musicAudio.value.src) !== extractPathPart(music.path)) {
 			musicAudio.value.src = music.path;
 			musicAudio.value.load();
 		}
@@ -71,7 +71,6 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 
 	function toggle() {
 		if (!musicCurrent.value || !musicAudio.value) return;
-		console.log(musicListCurrent.value);
 		if (playingMusic.value) {
 			pause();
 		} else {
