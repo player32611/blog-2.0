@@ -14,7 +14,8 @@
 	background:
 		radial-gradient(ellipse at 20% 30%, rgba(138, 43, 226, 0.8) 0%, rgba(138, 43, 226, 0) 60%),
 		radial-gradient(ellipse at 80% 50%, rgba(0, 191, 255, 0.7) 0%, rgba(0, 191, 255, 0) 70%),
-		radial-gradient(ellipse at 50% 80%, rgba(50, 205, 50, 0.6) 0%, rgba(50, 205, 50, 0) 65%), linear-gradient(135deg, #000000 0%, #0a0520 100%);
+		radial-gradient(ellipse at 50% 80%, rgba(50, 205, 50, 0.6) 0%, rgba(50, 205, 50, 0) 65%),
+		linear-gradient(135deg, #000000 0%, #0a0520 100%);
 	background-blend-mode: overlay, screen, hard-light;
 	overflow: hidden;
 	animation: aurora-drift 25s infinite alternate ease-in-out;
@@ -27,8 +28,20 @@
 		top: -50%;
 		left: -50%;
 		background:
-			repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0px, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 40px),
-			repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 60px);
+			repeating-linear-gradient(
+				45deg,
+				rgba(255, 255, 255, 0.02) 0px,
+				rgba(255, 255, 255, 0.02) 1px,
+				transparent 1px,
+				transparent 40px
+			),
+			repeating-linear-gradient(
+				-45deg,
+				rgba(255, 255, 255, 0.03) 0px,
+				rgba(255, 255, 255, 0.03) 1px,
+				transparent 1px,
+				transparent 60px
+			);
 		animation: grid-shift 20s linear infinite;
 	}
 

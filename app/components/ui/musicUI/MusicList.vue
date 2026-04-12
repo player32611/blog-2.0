@@ -16,6 +16,8 @@ import MusicFolder from "./MusicFolder.vue";
 	width: 300px;
 	background-color: #000000;
 	border-right: 5px solid #ffffff;
+	overflow-y: scroll;
+	scrollbar-width: none;
 	opacity: 0.4;
 }
 </style>

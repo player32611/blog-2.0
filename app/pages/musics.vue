@@ -22,4 +22,10 @@ import Button from "~/components/ui/Button.vue";
 	</div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.musics {
+	height: 100dvh;
+	width: 100%;
+	overflow: hidden;
+}
+</style>

@@ -4,12 +4,10 @@ import { gsap } from "gsap/gsap-core";
 const soundStore = useSoundStore();
 const containerRef = ref<HTMLElement | null>(null);
 const animationRef = ref<GSAPAnimation | null>(null);
-
 const currentTitle = computed(() => {
 	if (!soundStore.musicCurrent) return "DISCORD";
 	return soundStore.musicCurrent.name;
 });
-
 const titleText = computed(() => {
 	const title = currentTitle.value;
 	let repeatedTitle = title;
@@ -17,7 +15,6 @@ const titleText = computed(() => {
 
 	return repeatedTitle;
 });
-
 const rotationStep = computed(() => {
 	const length = titleText.value.length;
 	if (length === 0) return 0;
@@ -56,6 +53,12 @@ onMounted(() => {
 			>
 				{{ char }}
 			</span>
+			<img
+				v-if="soundStore.musicCurrent?.cover"
+				class="music_cover"
+				:src="soundStore.musicCurrent?.cover"
+				alt="加载失败"
+			/>
 		</p>
 	</button>
 </template>
@@ -69,19 +72,20 @@ onMounted(() => {
 	height: 600px;
 	width: 600px;
 	border: none;
-	background: #5865f2;
+	background: #000000;
 	color: #fff;
 	font-weight: 600;
 	border-radius: 50%;
 	overflow: hidden;
 	place-content: center;
 	cursor: pointer;
-	transition:
-		background 300ms,
-		transform 200ms;
+	transition: transform 200ms;
 
 	.container {
 		position: absolute;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		inset: 0;
 
 		> span {
@@ -89,10 +93,16 @@ onMounted(() => {
 			transform: rotate(calc(var(--rotation-step) * var(--index) * 1deg));
 			inset: 7px;
 		}
+
+		.music_cover {
+			position: relative;
+			height: 450px;
+			width: 450px;
+			border-radius: 50%;
+		}
 	}
 
 	&:hover {
-		background: #000;
 		transform: scale(1.05);
 	}
 

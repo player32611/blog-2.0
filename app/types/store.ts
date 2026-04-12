@@ -23,11 +23,12 @@ export type BlogActions = {
 };
 
 /**
- * 音乐文件信息接口
+ * 音乐信息接口，用于描述音乐文件的基本元数据
  */
 export interface MusicInfo {
-	/** 文件名（不带扩展名） */
 	name: string;
+	cover: string;
+	artist: string;
 	path: string;
 	folder: string;
 }
