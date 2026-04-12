@@ -9,15 +9,12 @@ const { effectsVolume } = useSoundStore();
 const { text, size, icon, onClick, style } = defineProps<ButtonParams>();
 
 const undertaleSound = useSoundEffect("sounds/effects/undertale-button.wav");
-// const touhouSound = useSoundEffect('/sounds/touhou-button.mp3')
 
 const handleClick = () => {
 	if (onClick) {
 		onClick();
 		if (effectsVolume) {
 			if (theme === "undertale") undertaleSound.play();
-			// else
-			//   touhouSound.play()
 		}
 	}
 };
@@ -35,42 +32,127 @@ const handleClick = () => {
 <style scoped lang="scss">
 $base-height: 42px;
 $base-width: 110px;
+$base-size: 1;
 
+/* ========== 默认（> 1199px）========== */
 button {
-	font-size: 1em;
+	background: #000000;
+	color: #ff7f27;
+	text-align: right;
+	font-weight: 900;
+	font-family: "Mars Needs Cunnilingus";
+	border-color: #ff7f27;
+	border-style: solid;
+	cursor: pointer;
 	user-select: none;
 
 	&.small {
-		height: $base-height;
-		width: $base-width;
-		font-size: 1.3em;
+		height: $base-height * $base-size;
+		width: $base-width * $base-size;
+		font-size: 1.3rem * $base-size;
+		border-width: 0.25rem * $base-size;
 	}
 
 	&.large {
-		height: $base-height * 2;
-		width: $base-width * 2;
-		font-size: 2.5em;
+		height: $base-height * $base-size * 2;
+		width: $base-width * $base-size * 2;
+		font-size: 2.5rem * $base-size;
+		border-width: 0.5rem * $base-size;
 	}
 
-	&.undertale {
-		background: #000000;
-		color: #ff7f27;
-		text-align: right;
-		font-weight: 900;
-		font-family: "Mars Needs Cunnilingus";
-		border: 0.2em solid #ff7f27;
-		cursor: pointer;
-	}
-
-	&.undertale:hover {
+	&:hover {
 		color: #ffff00;
-		border: 0.2em solid #ffff00;
+		border-color: #ffff00;
 	}
 
 	.container {
 		display: flex;
 		justify-content: space-evenly;
 		align-items: center;
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.3;
+
+	button {
+		&.small {
+			height: $base-height * $base-size * 2;
+			width: $base-width * $base-size * 2;
+			font-size: 1.3em * $base-size;
+			border-width: 0.6rem * $base-size;
+		}
+
+		&.large {
+			height: $base-height * $base-size * 2;
+			width: $base-width * $base-size * 2;
+			font-size: 2.5em * $base-size;
+			border-width: 0.6rem * $base-size;
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.45;
+
+	button {
+		&.small {
+			height: $base-height * $base-size * 1.7;
+			width: $base-width * $base-size * 1.7;
+			font-size: 2em * $base-size;
+			border-width: 0.5rem * $base-size;
+		}
+
+		&.large {
+			height: $base-height * $base-size * 2;
+			width: $base-width * $base-size * 2;
+			font-size: 2.5em * $base-size;
+			border-width: 0.6rem * $base-size;
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.6;
+
+	button {
+		&.small {
+			height: $base-height * $base-size * 1.5;
+			width: $base-width * $base-size * 1.5;
+			font-size: 1.8em * $base-size;
+			border-width: 0.4rem * $base-size;
+		}
+
+		&.large {
+			height: $base-height * $base-size * 2;
+			width: $base-width * $base-size * 2;
+			font-size: 2.5em * $base-size;
+			border-width: 0.5rem * $base-size;
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.8;
+
+	button {
+		&.small {
+			height: $base-height * $base-size * 1.3;
+			width: $base-width * $base-size * 1.3;
+			font-size: 1.6em * $base-size;
+			border-width: 0.35rem * $base-size;
+		}
+
+		&.large {
+			height: $base-height * $base-size * 2;
+			width: $base-width * $base-size * 2;
+			font-size: 2.5em * $base-size;
+			border-width: 0.5rem * $base-size;
+		}
 	}
 }
 </style>

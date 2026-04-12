@@ -37,13 +37,7 @@ const loadingIn = (next: () => void) => {
 				props.checkLoading?.();
 			},
 		})
-		.set(
-			blocks.value,
-			{
-				"stroke-dashoffset": 0,
-			},
-			0,
-		)
+		.set(blocks.value, { "stroke-dashoffset": 0 })
 		.to(blocks.value, {
 			scale: 1,
 			opacity: 1,
@@ -100,9 +94,17 @@ defineExpose({
 </script>
 
 <template>
-	<svg :class="isLoading ? 'loading_blocks' : 'loading_blocks  loading_out'" viewBox="0 0 1000 1000" ref="loadingRef">
+	<svg
+		:class="isLoading ? 'loading_blocks' : 'loading_blocks  loading_out'"
+		viewBox="0 0 1000 1000"
+		ref="loadingRef"
+	>
 		<defs>
-			<polygon id="loading_hexagon" points="0,-50 43.3,-25 43.3,25 0,50 -43.3,25 -43.3,-25" fill="#171717" />
+			<polygon
+				id="loading_hexagon"
+				points="0,-50 43.3,-25 43.3,25 0,50 -43.3,25 -43.3,-25"
+				fill="#171717"
+			/>
 		</defs>
 	</svg>
 </template>

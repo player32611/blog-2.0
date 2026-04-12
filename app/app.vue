@@ -8,18 +8,15 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import type { LoadingInstance } from "./types/components";
-import Loading from "@/components/ui/Loading.vue";
+import Loading from "./components/ui/Loading.vue";
 
 const loadingRef = ref<LoadingInstance | null>(null);
 const router = useRouter();
 
 const checkLoading = () => {
-	const timer = setInterval(() => {
-		if (document.readyState === "complete") {
-			clearInterval(timer);
-			loadingRef.value?.loadingOut();
-		}
-	}, 100);
+	if (document.readyState === "complete") {
+		loadingRef.value?.loadingOut();
+	}
 };
 
 onMounted(() => {

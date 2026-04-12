@@ -52,7 +52,33 @@ const handleMouseMove = (e: MouseEvent) => {
 			const dy = boxsOriPos.value[idx].y - mouseY;
 			const distance = Math.sqrt(dx ** 2 + dy ** 2);
 			if (distance <= mouseRadius.value && Math.random() >= 0.9) {
-				box.setAttribute("fill", "#red");
+				gsap
+					.timeline()
+					.to(box, {
+						stroke: "#1778A7",
+						duration: 0.1,
+						ease: "power4.out",
+					})
+					.to(box, {
+						stroke: "#1C1C2D",
+						duration: 0.2,
+					});
+			}
+		}
+	});
+};
+
+const handleTouchMove = (e: TouchEvent) => {
+	const touch = e.touches[0];
+	if (!touch) return;
+	boxs.value.forEach((box, idx) => {
+		if (box && boxsOriPos.value[idx]) {
+			const mouseX = touch.clientX - left.value;
+			const mouseY = touch.clientY - top.value;
+			const dx = boxsOriPos.value[idx].x - mouseX;
+			const dy = boxsOriPos.value[idx].y - mouseY;
+			const distance = Math.sqrt(dx ** 2 + dy ** 2);
+			if (distance <= mouseRadius.value && Math.random() >= 0.9) {
 				gsap
 					.timeline()
 					.to(box, {
@@ -72,11 +98,13 @@ const handleMouseMove = (e: MouseEvent) => {
 onMounted(() => {
 	init();
 	document.addEventListener("mousemove", handleMouseMove);
+	document.addEventListener("touchmove", handleTouchMove);
 	window.addEventListener("resize", init);
 });
 
 onUnmounted(() => {
 	document.removeEventListener("mousemove", handleMouseMove);
+	document.removeEventListener("touchmove", handleTouchMove);
 	window.removeEventListener("resize", resize);
 	if (containerRef.value) containerRef.value.innerHTML = "";
 });
@@ -103,7 +131,6 @@ onUnmounted(() => {
 	z-index: -1;
 
 	:deep(.background_box) {
-		fill: #000013;
 		stroke: #1c1c2d;
 	}
 }

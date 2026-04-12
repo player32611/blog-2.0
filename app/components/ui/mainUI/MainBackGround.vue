@@ -66,12 +66,24 @@ const handleMouseDown = (event: MouseEvent) => {
 	mousePos.value.y = event.clientY;
 };
 
-const handleMouseUp = () => {
-	movedata.value.moveable = false;
+const handleTouchStart = (event: TouchEvent) => {
+	if (!event.touches[0]) return;
+	movedata.value.moveable = true;
+	mousePos.value.x = event.touches[0].clientX;
+	mousePos.value.y = event.touches[0].clientY;
 };
 
 const handleMouseMove = (event: MouseEvent) => {
 	move(event.clientX, event.clientY);
+};
+
+const handleTouchMove = (event: TouchEvent) => {
+	if (!event.touches[0]) return;
+	move(event.touches[0].clientX, event.touches[0].clientY);
+};
+
+const handleMouseUp = () => {
+	movedata.value.moveable = false;
 };
 
 onMounted(() => {
@@ -89,9 +101,13 @@ onUnmounted(() => {
 		className="viewBox"
 		ref="viewBoxRef"
 		@mousedown="handleMouseDown"
+		@mousemove="handleMouseMove"
 		@mouseup="handleMouseUp"
 		@mouseleave="handleMouseUp"
-		@mousemove="handleMouseMove"
+		@touchstart="handleTouchStart"
+		@touchmove="handleTouchMove"
+		@touchend="handleMouseUp"
+		@touchcancel="handleMouseUp"
 	>
 		<img
 			src="../../../assets/images/background/undertale.jpg"
