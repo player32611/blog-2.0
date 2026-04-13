@@ -11,15 +11,27 @@ const activeHeadingId = ref<string | null>(null);
 
 const handleMouseEnter = () => {
 	gsap.to(boxRef.value, {
-		right: "0px",
+		right: 0,
 		duration: easeTime.value,
 		ease: "power2.out",
 	});
 };
 
 const handleMouseLeave = () => {
+	let offset;
+	if (window.innerWidth < 576) {
+		offset = "-9rem";
+	} else if (window.innerWidth < 768) {
+		offset = "-12.5rem";
+	} else if (window.innerWidth < 991) {
+		offset = "-14.5rem";
+	} else if (window.innerWidth < 1199) {
+		offset = "-16.5rem";
+	} else {
+		offset = "-18rem";
+	}
 	gsap.to(boxRef.value, {
-		right: "-300px",
+		right: offset,
 		duration: easeTime.value,
 		ease: "power2.out",
 	});
@@ -119,15 +131,19 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
+$base-size: 1;
+
 .blog_navigation_box {
 	position: fixed;
-	right: -300px;
-	margin: 10dvh 0;
-	padding: 50px 40px;
-	height: calc(80dvh - 50px * 2 - 5px * 2);
-	width: 240px;
+	top: 10dvh;
+	right: -18rem * $base-size;
+	padding: 2rem * $base-size;
+	height: 80dvh;
+	width: 15rem * $base-size;
 	background-color: #000000;
-	border: 5px solid #ffffff;
+	border-width: 0.3rem * $base-size;
+	border-style: solid;
+	border-color: #ffffff;
 	font-family: "方正基础像素体";
 	overflow-y: scroll;
 
@@ -176,6 +192,118 @@ onUnmounted(() => {
 				text-indent: 1rem;
 				font-size: 14px;
 				font-weight: 400;
+			}
+		}
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.5;
+
+	.blog_navigation_box {
+		right: -18rem * $base-size;
+		padding: 2rem * $base-size;
+		width: 15rem * $base-size;
+		border-width: 0.3rem * $base-size;
+
+		.navigation_links {
+			margin-top: 0.5rem * $base-size;
+
+			.navigation_link {
+				&.h2 {
+					padding: 1rem * $base-size 0;
+					font-size: 1.5rem * $base-size;
+				}
+
+				&.h3 {
+					padding: 0.5rem * $base-size 0;
+					font-size: 1.2rem * $base-size;
+				}
+			}
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.7;
+
+	.blog_navigation_box {
+		right: -18rem * $base-size;
+		padding: 2rem * $base-size;
+		width: 15rem * $base-size;
+		border-width: 0.3rem * $base-size;
+
+		.navigation_links {
+			margin-top: 0.5rem * $base-size;
+
+			.navigation_link {
+				&.h2 {
+					padding: 1rem * $base-size 0;
+					font-size: 1.5rem * $base-size;
+				}
+
+				&.h3 {
+					padding: 0.5rem * $base-size 0;
+					font-size: 1.2rem * $base-size;
+				}
+			}
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.8;
+
+	.blog_navigation_box {
+		right: -18rem * $base-size;
+		padding: 2rem * $base-size;
+		width: 15rem * $base-size;
+		border-width: 0.3rem * $base-size;
+
+		.navigation_links {
+			margin-top: 0.5rem * $base-size;
+
+			.navigation_link {
+				&.h2 {
+					padding: 1rem * $base-size 0;
+					font-size: 1.3rem * $base-size;
+				}
+
+				&.h3 {
+					padding: 0.5rem * $base-size 0;
+					font-size: 1.1rem * $base-size;
+				}
+			}
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.9;
+
+	.blog_navigation_box {
+		right: -18rem * $base-size;
+		padding: 2rem * $base-size;
+		width: 15rem * $base-size;
+		border-width: 0.3rem * $base-size;
+
+		.navigation_links {
+			margin-top: 0.5rem * $base-size;
+
+			.navigation_link {
+				&.h2 {
+					padding: 1rem * $base-size 0;
+					font-size: 1.3rem * $base-size;
+				}
+
+				&.h3 {
+					padding: 0.5rem * $base-size 0;
+					font-size: 1.1rem * $base-size;
+				}
 			}
 		}
 	}

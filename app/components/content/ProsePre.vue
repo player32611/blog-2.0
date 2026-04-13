@@ -86,11 +86,15 @@ const copyCode = async () => {
 </template>
 
 <style scoped lang="scss">
+$base-size: 1;
+
 .custom_pre_wrapper {
 	position: relative;
-	margin: 1rem 0;
-	padding: 20px;
-	border: 2px solid #ffffff;
+	margin: 1rem * $base-size 0;
+	padding: 1rem * $base-size;
+	border-width: 0.2rem * $base-size;
+	border-style: solid;
+	border-color: #ffffff;
 	border-radius: 10px;
 	background-color: #000;
 
@@ -98,18 +102,18 @@ const copyCode = async () => {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		margin-bottom: 15px;
+		margin-bottom: 1rem * $base-size;
 
 		.points,
 		.language {
 			display: flex;
 			align-items: center;
-			gap: 8px;
+			gap: 0.5rem * $base-size;
 
 			span {
 				float: left;
-				width: 12px;
-				height: 12px;
+				width: 0.7rem * $base-size;
+				height: 0.7rem * $base-size;
 				border-radius: 50%;
 			}
 		}
@@ -127,20 +131,9 @@ const copyCode = async () => {
 		}
 	}
 
-	.language_tag {
-		position: absolute;
-		top: 0;
-		right: 0;
-		background: #3b82f6;
-		color: white;
-		padding: 0.25rem 0.75rem;
-		font-size: 0.75rem;
-		border-radius: 0 0.375rem 0 0.375rem;
-	}
-
 	.code_editor {
 		position: relative;
-		padding: 15px;
+		padding: 1rem * $base-size;
 		color: #dcdcdc;
 		font-family:
 			system-ui,
@@ -154,10 +147,12 @@ const copyCode = async () => {
 			"Open Sans",
 			"Helvetica Neue",
 			monospace;
-		font-size: 14px;
+		font-size: 0.9rem * $base-size;
 		line-height: 1.5;
 		background-color: #0d1117;
-		border: 1px solid #333;
+		border-width: 0.1rem * $base-size;
+		border-style: solid;
+		border-color: #333;
 		border-radius: 5px;
 		overflow: auto;
 
@@ -265,6 +260,153 @@ const copyCode = async () => {
 	&:hover {
 		.copy_btn {
 			opacity: 1;
+		}
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.6;
+
+	.custom_pre_wrapper {
+		margin: 1rem * $base-size 0;
+		padding: 1rem * $base-size;
+		border-width: 0.2rem * $base-size;
+		border-radius: 10px;
+
+		.mac_header {
+			margin-bottom: 1rem * $base-size;
+
+			.points,
+			.language {
+				gap: 0.5rem * $base-size;
+				font-size: 0.9rem * $base-size;
+				span {
+					width: 0.7rem * $base-size;
+					height: 0.7rem * $base-size;
+				}
+			}
+		}
+
+		.code_editor {
+			padding: 1rem * $base-size;
+			font-size: 0.9rem * $base-size;
+			border-width: 0.1rem * $base-size;
+
+			&::-webkit-scrollbar {
+				height: 0.3rem * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.8;
+
+	.custom_pre_wrapper {
+		margin: 1rem * $base-size 0;
+		padding: 1rem * $base-size;
+		border-width: 0.2rem * $base-size;
+		border-radius: 10px;
+
+		.mac_header {
+			margin-bottom: 1rem * $base-size;
+
+			.points,
+			.language {
+				gap: 0.5rem * $base-size;
+				font-size: 0.9rem * $base-size;
+
+				span {
+					width: 0.7rem * $base-size;
+					height: 0.7rem * $base-size;
+				}
+			}
+		}
+
+		.code_editor {
+			padding: 1rem * $base-size;
+			font-size: 0.9rem * $base-size;
+			border-width: 0.1rem * $base-size;
+
+			&::-webkit-scrollbar {
+				height: 0.3rem * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.9;
+
+	.custom_pre_wrapper {
+		margin: 1rem * $base-size 0;
+		padding: 1rem * $base-size;
+		border-width: 0.2rem * $base-size;
+		border-radius: 10px;
+
+		.mac_header {
+			margin-bottom: 1rem * $base-size;
+
+			.points,
+			.language {
+				gap: 0.5rem * $base-size;
+				font-size: 0.9rem * $base-size;
+
+				span {
+					width: 0.7rem * $base-size;
+					height: 0.7rem * $base-size;
+				}
+			}
+		}
+
+		.code_editor {
+			padding: 1rem * $base-size;
+			font-size: 0.9rem * $base-size;
+			border-width: 0.1rem * $base-size;
+
+			&::-webkit-scrollbar {
+				height: 0.3rem * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 1;
+
+	.custom_pre_wrapper {
+		margin: 1rem * $base-size 0;
+		padding: 1rem * $base-size;
+		border-width: 0.2rem * $base-size;
+		border-radius: 10px;
+
+		.mac_header {
+			margin-bottom: 1rem * $base-size;
+
+			.points,
+			.language {
+				gap: 0.5rem * $base-size;
+				font-size: 0.9rem * $base-size;
+
+				span {
+					width: 0.7rem * $base-size;
+					height: 0.7rem * $base-size;
+				}
+			}
+		}
+
+		.code_editor {
+			padding: 1rem * $base-size;
+			font-size: 0.9rem * $base-size;
+			border-width: 0.1rem * $base-size;
+
+			&::-webkit-scrollbar {
+				height: 0.3rem * $base-size;
+			}
 		}
 	}
 }

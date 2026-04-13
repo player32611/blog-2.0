@@ -80,14 +80,14 @@ button {
 		&.small {
 			height: $base-height * $base-size * 2;
 			width: $base-width * $base-size * 2;
-			font-size: 1.3em * $base-size;
+			font-size: 2.3rem * $base-size;
 			border-width: 0.6rem * $base-size;
 		}
 
 		&.large {
 			height: $base-height * $base-size * 2;
 			width: $base-width * $base-size * 2;
-			font-size: 2.5em * $base-size;
+			font-size: 2.5rem * $base-size;
 			border-width: 0.6rem * $base-size;
 		}
 	}
@@ -101,14 +101,14 @@ button {
 		&.small {
 			height: $base-height * $base-size * 1.7;
 			width: $base-width * $base-size * 1.7;
-			font-size: 2em * $base-size;
+			font-size: 2rem * $base-size;
 			border-width: 0.5rem * $base-size;
 		}
 
 		&.large {
 			height: $base-height * $base-size * 2;
 			width: $base-width * $base-size * 2;
-			font-size: 2.5em * $base-size;
+			font-size: 2.5rem * $base-size;
 			border-width: 0.6rem * $base-size;
 		}
 	}
@@ -122,14 +122,14 @@ button {
 		&.small {
 			height: $base-height * $base-size * 1.5;
 			width: $base-width * $base-size * 1.5;
-			font-size: 1.8em * $base-size;
+			font-size: 1.8rem * $base-size;
 			border-width: 0.4rem * $base-size;
 		}
 
 		&.large {
 			height: $base-height * $base-size * 2;
 			width: $base-width * $base-size * 2;
-			font-size: 2.5em * $base-size;
+			font-size: 2.5rem * $base-size;
 			border-width: 0.5rem * $base-size;
 		}
 	}
@@ -143,14 +143,14 @@ button {
 		&.small {
 			height: $base-height * $base-size * 1.3;
 			width: $base-width * $base-size * 1.3;
-			font-size: 1.6em * $base-size;
+			font-size: 1.6rem * $base-size;
 			border-width: 0.35rem * $base-size;
 		}
 
 		&.large {
 			height: $base-height * $base-size * 2;
 			width: $base-width * $base-size * 2;
-			font-size: 2.5em * $base-size;
+			font-size: 2.5rem * $base-size;
 			border-width: 0.5rem * $base-size;
 		}
 	}

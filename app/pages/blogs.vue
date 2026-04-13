@@ -66,6 +66,8 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
+$base-size: 0.3;
+
 .blogs {
 	height: auto;
 	width: 100%;
@@ -78,8 +80,82 @@ onUnmounted(() => {
 			margin: 0 20% 0;
 			padding: 50px;
 			color: #ffffff;
-			border: 5px solid #ffffff;
+			border-width: 5px;
+			border-style: solid;
+			border-color: #ffffff;
 			font-family: "方正基础像素体";
+		}
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.5;
+
+	.blogs {
+		font-size: 1.2rem * $base-size;
+		.blog_content {
+			width: 80%;
+
+			.blog_content_container_text {
+				margin: 0 10% 0;
+				padding: 2rem * $base-size;
+				border-width: 0.4rem * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.7;
+
+	.blogs {
+		font-size: 1.2rem * $base-size;
+		.blog_content {
+			width: 80%;
+
+			.blog_content_container_text {
+				margin: 0 10% 0;
+				padding: 2rem * $base-size;
+				border-width: 0.4rem * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.9;
+
+	.blogs {
+		font-size: 1.2rem * $base-size;
+		.blog_content {
+			width: 70%;
+
+			.blog_content_container_text {
+				margin: 0 15% 0;
+				padding: 2rem * $base-size;
+				border-width: 0.4rem * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.9;
+
+	.blogs {
+		font-size: 1.2rem * $base-size;
+		.blog_content {
+			width: 70%;
+
+			.blog_content_container_text {
+				margin: 0 15% 0;
+				padding: 2rem * $base-size;
+				border-width: 0.4rem * $base-size;
+			}
 		}
 	}
 }

@@ -19,6 +19,9 @@ const init = () => {
 
 const resize = () => {
 	if (containerRef.value) {
+		containerRef.value.innerHTML = "";
+		boxs.value = [];
+		boxsOriPos.value = [];
 		width.value = containerRef.value.getBoundingClientRect().width;
 		height.value = containerRef.value.getBoundingClientRect().height;
 		left.value = containerRef.value.getBoundingClientRect().left;
