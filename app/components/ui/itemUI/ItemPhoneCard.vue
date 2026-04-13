@@ -20,8 +20,6 @@ const itemRef = ref<HTMLDivElement | null>(null);
 		<p class="date">Fri, 20 December</p>
 		<svg
 			class="fingerprint"
-			width="26px"
-			height="26px"
 			viewBox="0 0 0.488 0.488"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
@@ -34,26 +32,12 @@ const itemRef = ref<HTMLDivElement | null>(null);
 				stroke-width="0.0325"
 			></path>
 		</svg>
-		<svg
-			class="camera"
-			width="24"
-			height="24"
-			viewBox="0 0 0.72 0.72"
-			version="1.2"
-			xmlns="http://www.w3.org/2000/svg"
-		>
+		<svg class="camera" viewBox="0 0 0.72 0.72" version="1.2" xmlns="http://www.w3.org/2000/svg">
 			<path
 				d="M.57.18H.522L.492.15A.1.1 0 0 0 .42.12H.3a.1.1 0 0 0-.072.03l-.03.03H.15a.09.09 0 0 0-.09.09v.24C.06.56.1.6.15.6h.42C.62.6.66.56.66.51V.27A.09.09 0 0 0 .57.18m-.21.3a.105.105 0 1 1 0-.21.105.105 0 0 1 0 .21M.54.339a.039.039 0 1 1 0-.078.039.039 0 0 1 0 .078"
 			></path>
 		</svg>
-		<svg
-			class="phone"
-			xmlns="http://www.w3.org/2000/svg"
-			viewBox="0 0 24 24"
-			xml:space="preserve"
-			width="24"
-			height="24"
-		>
+		<svg class="phone" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve">
 			<path
 				fill="none"
 				stroke="#000"
@@ -67,69 +51,342 @@ const itemRef = ref<HTMLDivElement | null>(null);
 </template>
 
 <style scoped lang="scss">
-/* From Uiverse.io by imtausef */
-/* Container styles */
+$base-size: 0.8;
+
 .item_phone {
 	position: absolute;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	height: 300px; /* Fixed height */
-	width: 160px; /* Fixed width */
-	border: 4px solid black; /* Border */
-	border-radius: 1rem; /* Rounded corners */
+	height: 30rem * $base-size; /* Fixed height */
+	width: 16rem * $base-size; /* Fixed width */
+	border-width: 0.4rem * $base-size;
+	border-style: solid;
+	border-color: black;
+	border-radius: 1rem * $base-size; /* Rounded corners */
 	background-color: #f9fafb; /* Light gray background */
 	user-select: none;
 	pointer-events: none;
-}
-.time {
-	font-size: 2.5rem;
-	margin: 1.5rem 0 -12px;
-}
-.date {
-	font-size: 12px;
-}
-.fingerprint {
-	position: absolute;
-	bottom: 3rem;
-}
-.phone {
-	position: absolute;
-	bottom: 10px;
-	left: 10px;
-	padding: 4px;
-	background-color: rgb(209, 218, 218);
-	border-radius: 6px;
-}
-.camera {
-	position: absolute;
-	bottom: 10px;
-	right: 10px;
-	padding: 4px;
-	background-color: rgb(209, 218, 218);
-	border-radius: 6px;
-}
-/* Top border styles */
-.top-border {
-	border: 1px solid black; /* Border */
-	background-color: black; /* Black background */
-	width: 80px; /* Width of the top border */
-	height: 8px; /* Height of the top border */
-	border-bottom-left-radius: 1rem; /* Rounded bottom corners */
-	border-bottom-right-radius: 1rem; /* Rounded bottom corners */
+
+	/* Top border styles */
+	.top-border {
+		border-width: 0.1rem * $base-size;
+		border-style: solid;
+		border-color: black;
+		background-color: black; /* Black background */
+		width: 8rem * $base-size; /* Width of the top border */
+		height: 0.8rem * $base-size; /* Height of the top border */
+		border-bottom-left-radius: 1rem * $base-size; /* Rounded bottom corners */
+		border-bottom-right-radius: 1rem * $base-size; /* Rounded bottom corners */
+	}
+
+	.time {
+		font-size: 2.5rem * $base-size;
+		margin: 1.5rem * $base-size 0 -1.2rem * $base-size;
+	}
+
+	.date {
+		font-size: 0.7rem * $base-size;
+	}
+
+	.fingerprint {
+		position: absolute;
+		bottom: 5rem * $base-size;
+		height: 2.6rem * $base-size;
+		width: 2.6rem * $base-size;
+	}
+
+	.camera {
+		position: absolute;
+		bottom: 1rem * $base-size;
+		right: 1rem * $base-size;
+		padding: 0.4rem * $base-size;
+		height: 2rem * $base-size;
+		width: 2rem * $base-size;
+		background-color: rgb(209, 218, 218);
+		border-radius: 0.6rem * $base-size;
+	}
+
+	.phone {
+		position: absolute;
+		bottom: 1rem * $base-size;
+		left: 1rem * $base-size;
+		padding: 0.4rem * $base-size;
+		height: 2rem * $base-size;
+		width: 2rem * $base-size;
+		background-color: rgb(209, 218, 218);
+		border-radius: 0.6rem * $base-size;
+	}
+
+	/* Right border styles */
+	.right-border {
+		position: absolute;
+		border-width: 0.4rem * $base-size;
+		border-style: solid;
+		border-color: black;
+		right: -0.8rem * $base-size; /* Positioning */
+		border-radius: 0.375rem * $base-size; /* Rounded corners */
+
+		&.top {
+			top: 5.6rem * $base-size; /* Positioning */
+			height: 2.8rem * $base-size; /* Height of the top right border */
+		}
+	}
 }
 
-/* Right border styles */
-.right-border {
-	position: absolute;
-	border: 4px solid black; /* Border */
-	right: -8px; /* Positioning */
-	border-radius: 0.375rem; /* Rounded corners */
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.3;
+
+	.item_phone {
+		height: 30rem * $base-size;
+		width: 16rem * $base-size;
+		border-width: 0.4rem * $base-size;
+		border-radius: 1rem * $base-size;
+
+		.top-border {
+			border-width: 0.1rem * $base-size;
+			width: 8rem * $base-size;
+			height: 0.8rem * $base-size;
+			border-bottom-left-radius: 1rem * $base-size;
+			border-bottom-right-radius: 1rem * $base-size;
+		}
+
+		.time {
+			font-size: 2.5rem * $base-size;
+			margin: 1.5rem * $base-size 0 -1.2rem * $base-size;
+		}
+
+		.date {
+			font-size: 0.7rem * $base-size;
+		}
+
+		.fingerprint {
+			bottom: 3rem * $base-size;
+			height: 2.6rem * $base-size;
+			width: 2.6rem * $base-size;
+		}
+
+		.camera {
+			bottom: 1rem * $base-size;
+			right: 1rem * $base-size;
+			padding: 0.4rem * $base-size;
+			height: 2rem * $base-size;
+			width: 2rem * $base-size;
+			border-radius: 0.6rem * $base-size;
+		}
+
+		.phone {
+			bottom: 1rem * $base-size;
+			left: 1rem * $base-size;
+			padding: 0.4rem * $base-size;
+			height: 2rem * $base-size;
+			width: 2rem * $base-size;
+			border-radius: 0.6rem * $base-size;
+		}
+
+		.right-border {
+			border-width: 0.4rem * $base-size;
+			right: -0.8rem * $base-size;
+			border-radius: 0.375rem * $base-size;
+
+			&.top {
+				top: 5.6rem * $base-size;
+				height: 2.8rem * $base-size;
+			}
+		}
+	}
 }
 
-/* Top right border */
-.right-border.top {
-	top: 56px; /* Positioning */
-	height: 28px; /* Height of the top right border */
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.4;
+
+	.item_phone {
+		height: 30rem * $base-size;
+		width: 16rem * $base-size;
+		border-width: 0.4rem * $base-size;
+		border-radius: 1rem * $base-size;
+
+		.top-border {
+			border-width: 0.1rem * $base-size;
+			width: 8rem * $base-size;
+			height: 0.8rem * $base-size;
+			border-bottom-left-radius: 1rem * $base-size;
+			border-bottom-right-radius: 1rem * $base-size;
+		}
+
+		.time {
+			font-size: 2.5rem * $base-size;
+			margin: 1.5rem * $base-size 0 -1.2rem * $base-size;
+		}
+
+		.date {
+			font-size: 0.7rem * $base-size;
+		}
+
+		.fingerprint {
+			bottom: 3rem * $base-size;
+			height: 2.6rem * $base-size;
+			width: 2.6rem * $base-size;
+		}
+
+		.camera {
+			bottom: 1rem * $base-size;
+			right: 1rem * $base-size;
+			padding: 0.4rem * $base-size;
+			height: 2rem * $base-size;
+			width: 2rem * $base-size;
+			border-radius: 0.6rem * $base-size;
+		}
+
+		.phone {
+			bottom: 1rem * $base-size;
+			left: 1rem * $base-size;
+			padding: 0.4rem * $base-size;
+			height: 2rem * $base-size;
+			width: 2rem * $base-size;
+			border-radius: 0.6rem * $base-size;
+		}
+
+		.right-border {
+			border-width: 0.4rem * $base-size;
+			right: -0.8rem * $base-size;
+			border-radius: 0.375rem * $base-size;
+
+			&.top {
+				top: 5.6rem * $base-size;
+				height: 2.8rem * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.5;
+
+	.item_phone {
+		height: 30rem * $base-size;
+		width: 16rem * $base-size;
+		border-width: 0.4rem * $base-size;
+		border-radius: 1rem * $base-size;
+
+		.top-border {
+			border-width: 0.1rem * $base-size;
+			width: 8rem * $base-size;
+			height: 0.8rem * $base-size;
+			border-bottom-left-radius: 1rem * $base-size;
+			border-bottom-right-radius: 1rem * $base-size;
+		}
+
+		.time {
+			font-size: 2.5rem * $base-size;
+			margin: 1.5rem * $base-size 0 -1.2rem * $base-size;
+		}
+
+		.date {
+			font-size: 0.7rem * $base-size;
+		}
+
+		.fingerprint {
+			bottom: 3rem * $base-size;
+			height: 2.6rem * $base-size;
+			width: 2.6rem * $base-size;
+		}
+
+		.camera {
+			bottom: 1rem * $base-size;
+			right: 1rem * $base-size;
+			padding: 0.4rem * $base-size;
+			height: 2rem * $base-size;
+			width: 2rem * $base-size;
+			border-radius: 0.6rem * $base-size;
+		}
+
+		.phone {
+			bottom: 1rem * $base-size;
+			left: 1rem * $base-size;
+			padding: 0.4rem * $base-size;
+			height: 2rem * $base-size;
+			width: 2rem * $base-size;
+			border-radius: 0.6rem * $base-size;
+		}
+
+		.right-border {
+			border-width: 0.4rem * $base-size;
+			right: -0.8rem * $base-size;
+			border-radius: 0.375rem * $base-size;
+
+			&.top {
+				top: 5.6rem * $base-size;
+				height: 2.8rem * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.6;
+
+	.item_phone {
+		height: 30rem * $base-size;
+		width: 16rem * $base-size;
+		border-width: 0.4rem * $base-size;
+		border-radius: 1rem * $base-size;
+
+		.top-border {
+			border-width: 0.1rem * $base-size;
+			width: 8rem * $base-size;
+			height: 0.8rem * $base-size;
+			border-bottom-left-radius: 1rem * $base-size;
+			border-bottom-right-radius: 1rem * $base-size;
+		}
+
+		.time {
+			font-size: 2.5rem * $base-size;
+			margin: 1.5rem * $base-size 0 -1.2rem * $base-size;
+		}
+
+		.date {
+			font-size: 0.7rem * $base-size;
+		}
+
+		.fingerprint {
+			bottom: 3rem * $base-size;
+			height: 2.6rem * $base-size;
+			width: 2.6rem * $base-size;
+		}
+
+		.camera {
+			bottom: 1rem * $base-size;
+			right: 1rem * $base-size;
+			padding: 0.4rem * $base-size;
+			height: 2rem * $base-size;
+			width: 2rem * $base-size;
+			border-radius: 0.6rem * $base-size;
+		}
+
+		.phone {
+			bottom: 1rem * $base-size;
+			left: 1rem * $base-size;
+			padding: 0.4rem * $base-size;
+			height: 2rem * $base-size;
+			width: 2rem * $base-size;
+			border-radius: 0.6rem * $base-size;
+		}
+
+		.right-border {
+			border-width: 0.4rem * $base-size;
+			right: -0.8rem * $base-size;
+			border-radius: 0.375rem * $base-size;
+
+			&.top {
+				top: 5.6rem * $base-size;
+				height: 2.8rem * $base-size;
+			}
+		}
+	}
 }
 </style>
