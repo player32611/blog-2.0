@@ -55,11 +55,13 @@ const handleClick = () => {
 </template>
 
 <style scoped lang="scss">
+$base-size: 1;
+
 .menu_selecter {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
-	margin: 5px 0;
+	margin: 0.5rem * $base-size 0;
 	height: auto;
 	width: 100%;
 	color: #ffffff;
@@ -70,13 +72,16 @@ const handleClick = () => {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 0 20px;
-		width: calc(100% - 40px - 10px);
+		padding: 0 1rem * $base-size;
+		width: calc(100% - 2rem * $base-size - 0.3rem * $base-size * 2);
 		min-height: 50px;
 		color: rgba($color: #ffffff, $alpha: 0.5);
+		font-size: 1rem * $base-size;
 		font-family: "方正基础像素体";
 		background-color: rgba(#000000, 0.5);
-		border: 5px solid #000000;
+		border-width: 0.3rem * $base-size;
+		border-style: solid;
+		border-color: #000000;
 		outline: none;
 		cursor: pointer;
 		transition: all ease-in-out 0.3s;
@@ -93,6 +98,70 @@ const handleClick = () => {
 		height: 0px;
 		width: 80%;
 		overflow: hidden;
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.7;
+
+	.menu_selecter {
+		margin: 0.5rem * $base-size 0;
+
+		.selecter_title {
+			padding: 0 1rem * $base-size;
+			width: calc(100% - 2rem * $base-size - 0.3rem * $base-size * 2);
+			font-size: 1rem * $base-size;
+			border-width: 0.3rem * $base-size;
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.9;
+
+	.menu_selecter {
+		margin: 0.5rem * $base-size 0;
+
+		.selecter_title {
+			padding: 0 1rem * $base-size;
+			width: calc(100% - 2rem * $base-size - 0.3rem * $base-size * 2);
+			font-size: 1rem * $base-size;
+			border-width: 0.3rem * $base-size;
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.8;
+
+	.menu_selecter {
+		margin: 0.5rem * $base-size 0;
+
+		.selecter_title {
+			padding: 0 1rem * $base-size;
+			width: calc(100% - 2rem * $base-size - 0.3rem * $base-size * 2);
+			font-size: 1rem * $base-size;
+			border-width: 0.3rem * $base-size;
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.9;
+
+	.menu_selecter {
+		margin: 0.5rem * $base-size 0;
+
+		.selecter_title {
+			padding: 0 1rem * $base-size;
+			width: calc(100% - 2rem * $base-size - 0.3rem * $base-size * 2);
+			font-size: 1rem * $base-size;
+			border-width: 0.3rem * $base-size;
+		}
 	}
 }
 </style>

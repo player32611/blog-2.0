@@ -69,6 +69,8 @@ defineExpose({
 </template>
 
 <style scoped lang="scss">
+$base-size: 1;
+
 .blog_menu {
 	position: fixed;
 	top: -100%;
@@ -83,10 +85,12 @@ defineExpose({
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 20px;
+		padding: 2rem * $base-size;
 		height: 70%;
 		width: 70%;
-		border: 5px solid rgba($color: #ffffff, $alpha: 0.5);
+		border-width: 0.3rem * $base-size;
+		border-style: solid;
+		border-color: rgba($color: #ffffff, $alpha: 0.5);
 		overflow: hidden;
 
 		.menu_card {
@@ -103,6 +107,112 @@ defineExpose({
 
 			&::-webkit-scrollbar {
 				display: none;
+			}
+		}
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.5;
+
+	.blog_menu {
+		.menu_container {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
+			padding: 2rem * $base-size;
+
+			.menu_card {
+				position: relative;
+				max-height: 50%;
+				width: 100%;
+			}
+
+			.menu_selecter_box {
+				max-height: 50%;
+				width: 100%;
+				overflow-y: auto;
+			}
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.8;
+
+	.blog_menu {
+		.menu_container {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
+			padding: 2rem * $base-size;
+
+			.menu_card {
+				position: relative;
+				max-height: 50%;
+				width: 100%;
+			}
+
+			.menu_selecter_box {
+				max-height: 50%;
+				width: 100%;
+				overflow-y: auto;
+			}
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 1;
+
+	.blog_menu {
+		.menu_container {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 2rem * $base-size;
+
+			.menu_card {
+				position: relative;
+				max-height: 100%;
+				width: 50%;
+			}
+
+			.menu_selecter_box {
+				max-height: 100%;
+				width: 50%;
+				overflow-y: auto;
+			}
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 1;
+
+	.blog_menu {
+		.menu_container {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 2rem * $base-size;
+
+			.menu_card {
+				position: relative;
+				max-height: 100%;
+				width: 50%;
+			}
+
+			.menu_selecter_box {
+				max-height: 100%;
+				width: 50%;
+				overflow-y: auto;
 			}
 		}
 	}
