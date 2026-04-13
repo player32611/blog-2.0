@@ -132,7 +132,6 @@ $base-size: 1;
 	}
 
 	.code_editor {
-		position: relative;
 		padding: 1rem * $base-size;
 		color: #dcdcdc;
 		font-family:
@@ -202,8 +201,8 @@ $base-size: 1;
 
 			& {
 				position: absolute;
-				top: 0.5rem;
-				right: 0.5rem;
+				top: 4rem * $base-size;
+				right: 2rem * $base-size;
 				box-sizing: border-box;
 				width: var(--button-diameter);
 				height: var(--button-diameter);
@@ -255,11 +254,11 @@ $base-size: 1;
 				display: none;
 			}
 		}
-	}
 
-	&:hover {
-		.copy_btn {
-			opacity: 1;
+		&:hover {
+			.copy_btn {
+				opacity: 1;
+			}
 		}
 	}
 }
@@ -295,6 +294,11 @@ $base-size: 1;
 
 			&::-webkit-scrollbar {
 				height: 0.3rem * $base-size;
+			}
+
+			.copy_btn {
+				top: 4rem * $base-size;
+				right: 2rem * $base-size;
 			}
 		}
 	}
@@ -333,6 +337,11 @@ $base-size: 1;
 			&::-webkit-scrollbar {
 				height: 0.3rem * $base-size;
 			}
+
+			.copy_btn {
+				top: 4rem * $base-size;
+				right: 2rem * $base-size;
+			}
 		}
 	}
 }
@@ -370,6 +379,11 @@ $base-size: 1;
 			&::-webkit-scrollbar {
 				height: 0.3rem * $base-size;
 			}
+
+			.copy_btn {
+				top: 4rem * $base-size;
+				right: 2rem * $base-size;
+			}
 		}
 	}
 }
@@ -406,6 +420,11 @@ $base-size: 1;
 
 			&::-webkit-scrollbar {
 				height: 0.3rem * $base-size;
+			}
+
+			.copy_btn {
+				top: 4rem * $base-size;
+				right: 2rem * $base-size;
 			}
 		}
 	}

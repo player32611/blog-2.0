@@ -17,12 +17,7 @@ const hp = ref(92);
 			<div>
 				<div class="userHp">
 					<div>HP</div>
-					<div class="hp_progress">
-						<!-- <UProgress v-model="hp" :max="hp" color="neutral" size="2xl" /> -->
-						<!-- <Progress className="userHpProgress" percent={50} railColor="#C00000" showInfo={false} size={{ height: 21 *
-              2, width: 92 * 1.25 * 2 }} strokeColor="#FFFF00" strokeLinecap="butt" style={{ display: "flex" ,
-              alignItems: "center" , justifyContent: "center" , }}></Progress> -->
-					</div>
+					<div class="hp_progress"></div>
 					<div>KR 92/92</div>
 				</div>
 			</div>
@@ -65,18 +60,18 @@ $base-size: 1;
 .uibox {
 	position: fixed;
 	bottom: 0;
-	padding: 5px 10%;
+	padding: 5px 5%;
 	display: flex;
 	flex-direction: column;
-	width: 80%;
+	width: 90%;
 	color: #ff7f27;
 	font-size: 1rem * $base-size;
 	text-align: center;
 
 	.userState {
-		margin: 5px;
+		margin: 0.3rem * $base-size;
 		display: grid;
-		grid-template-columns: 1fr 2fr 1fr;
+		grid-template-columns: 1fr 3fr 1fr;
 		justify-items: center;
 		align-items: center;
 		font-size: 3rem * $base-size;
