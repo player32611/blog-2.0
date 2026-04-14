@@ -97,6 +97,7 @@ defineExpose({
 	<svg
 		:class="isLoading ? 'loading_blocks' : 'loading_blocks  loading_out'"
 		viewBox="0 0 1000 1000"
+		preserveAspectRatio="xMidYMid slice"
 		ref="loadingRef"
 	>
 		<defs>
@@ -115,8 +116,9 @@ defineExpose({
 	top: 0;
 	left: 0;
 	height: 100dvh;
-	width: 100%;
+	width: 100vw;
 	z-index: 9999;
+	overflow: hidden;
 
 	&.loading_out {
 		pointer-events: none;
