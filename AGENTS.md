@@ -1,3 +1,7 @@
+# AGENTS.md
+
+This file provides guidance to Qoder (qoder.com) when working with code in this repository.
+
 # Blog 2.0 - 项目概述与开发指南
 
 ## 项目概述
@@ -9,30 +13,37 @@ Blog 2.0 是一个基于 Nuxt.js 4 构建的现代个人博客系统，采用内
 - **内容管理系统**: 基于 Nuxt Content 的 Markdown 文件内容管理
 - **动态交互**: 使用 GSAP 实现流畅的页面过渡和动画效果
 - **多媒体支持**: 集成音乐播放器和图片展示功能
+- **物理引擎**: 使用 matter-js 实现物品展示交互
 - **响应式设计**: 客户端渲染的单页应用，提供流畅的用户体验
 - **分类导航**: 按技术领域组织的内容分类系统
 
 ## 技术栈
 
 ### 核心框架
+
 - **Nuxt.js 4.3.1**: 基于 Vue 3 的全栈框架
 - **Vue 3**: 采用 Composition API 和 TypeScript
 - **TypeScript**: 全面的类型安全支持
 
 ### 状态管理与数据
+
 - **Pinia 3.0.4**: 现代化的状态管理库
 - **Nuxt Content 3.11.2**: 内容驱动架构
-- **SQLite**: 数据持久化（better-sqlite3 12.6.2）
+- **SQLite**: 数据持久化（better-sqlite3 12.8.0）
 
 ### 样式与动画
+
 - **Sass 1.97.3**: CSS 预处理器
 - **GSAP 3.14.2**: 专业级动画库
+- **matter-js 0.20.0**: 2D 物理引擎
 - **自定义字体**: Mars Needs Cunnilingus、方正基础像素体
 - **图标字体**: iconfont 自定义图标库
 
 ### 开发工具
+
 - **@nuxt/fonts 0.14.0**: 字体管理模块
 - **@pinia/nuxt 0.11.3**: Pinia 与 Nuxt 集成
+- **Prettier 3.8.1**: 代码格式化（使用 Tab 缩进）
 
 ## 项目架构
 
@@ -42,38 +53,55 @@ Blog 2.0 是一个基于 Nuxt.js 4 构建的现代个人博客系统，采用内
 blog-2.0/
 ├── app/                          # 应用主目录
 │   ├── app.vue                   # 根组件，包含全局加载逻辑
-│   ├── assets/                   # 静态资源（图片、字体文件）
+│   ├── assets/                   # 静态资源
+│   │   ├── icons/               # iconfont 图标库
+│   │   └── images/              # 图片资源（background、normal、sprites）
 │   ├── components/               # Vue 组件
 │   │   ├── content/             # 内容展示组件（Prose 组件）
+│   │   │   ├── CodeGroup.vue
 │   │   │   ├── Danger.vue
 │   │   │   ├── Detail.vue
+│   │   │   ├── ProseBlockquote.vue
 │   │   │   ├── ProseCode.vue
 │   │   │   ├── ProseH1.vue
 │   │   │   ├── ProseH2.vue
 │   │   │   ├── ProseH3.vue
-│   │   │   └── ProseTable.vue
-│   │   ├── ui/                  # UI 组件库
-│   │   │   ├── Button.vue
-│   │   │   ├── Image.vue
-│   │   │   ├── Loading.vue
-│   │   │   ├── blogUI/          # 博客专用 UI 组件
-│   │   │   │   ├── BlogBackGround.vue
-│   │   │   │   ├── BlogMask.vue
-│   │   │   │   ├── BlogMenu.vue
-│   │   │   │   ├── BlogMenuBackGround.vue
-│   │   │   │   ├── BlogNavigation.vue
-│   │   │   │   ├── BlogScrollBar.vue
-│   │   │   │   ├── MenuSelecter.vue
-│   │   │   │   └── MenuSelection.vue
-│   │   │   ├── imageUI/         # 图片相关 UI 组件
-│   │   │   │   ├── ImageBackground.vue
-│   │   │   │   └── ImageContainer.vue
-│   │   │   ├── mainUI/          # 主界面 UI 组件
-│   │   │   │   ├── MainBackGround.vue
-│   │   │   │   └── UiBox.vue
-│   │   │   └── musicUI/         # 音乐播放器 UI 组件
-│   │   │       ├── MusicController.vue
-│   │   │       └── MusicWave.vue
+│   │   │   ├── ProsePre.vue
+│   │   │   ├── ProseTable.vue
+│   │   │   ├── Tip.vue
+│   │   │   └── Warning.vue
+│   │   ├── exhibit/             # 展览组件
+│   │   │   └── Astronaut.vue
+│   │   └── ui/                  # UI 组件库
+│   │       ├── Button.vue
+│   │       ├── Image.vue
+│   │       ├── Loading.vue
+│   │       ├── blogUI/          # 博客专用 UI 组件
+│   │       │   ├── BlogBackGround.vue
+│   │       │   ├── BlogMask.vue
+│   │       │   ├── BlogMenu.vue
+│   │       │   ├── BlogMenuBackGround.vue
+│   │       │   ├── BlogNavigation.vue
+│   │       │   ├── BlogScrollBar.vue
+│   │       │   ├── MenuSelecter.vue
+│   │       │   └── MenuSelection.vue
+│   │       ├── imageUI/         # 图片相关 UI 组件
+│   │       │   ├── ImageBackground.vue
+│   │       │   └── ImageContainer.vue
+│   │       ├── itemUI/          # 物品展示 UI 组件（物理引擎）
+│   │       │   ├── ItemContainer.vue
+│   │       │   ├── ItemPhoneCard.vue
+│   │       │   └── ItemSwitchCard.vue
+│   │       ├── mainUI/          # 主界面 UI 组件
+│   │       │   ├── MainBackGround.vue
+│   │       │   └── UiBox.vue
+│   │       └── musicUI/         # 音乐播放器 UI 组件
+│   │           ├── MusicBackground.vue
+│   │           ├── MusicController.vue
+│   │           ├── MusicFolder.vue
+│   │           ├── MusicItem.vue
+│   │           ├── MusicList.vue
+│   │           └── MusicRecord.vue
 │   ├── composables/             # 组合式函数
 │   │   └── useSoundEffect.ts   # 音效处理
 │   ├── pages/                   # 页面路由
@@ -81,21 +109,23 @@ blog-2.0/
 │   │   ├── blogs.vue            # 博客列表页
 │   │   ├── images.vue           # 图片展示页
 │   │   ├── index.vue            # 首页
+│   │   ├── items.vue            # 物品展示页（物理引擎）
 │   │   └── musics.vue           # 音乐页面
 │   ├── stores/                  # Pinia 状态管理
 │   │   ├── blogStore.ts        # 博客状态管理
 │   │   ├── soundStore.ts       # 音效状态管理
 │   │   └── themeStore.ts       # 主题状态管理
-│   ├── styles/                  # 全局样式
-│   │   └── blogs.scss          # 博客相关样式
 │   ├── types/                   # TypeScript 类型定义
 │   │   ├── components.ts
 │   │   ├── composables.ts
+│   │   ├── config.ts
 │   │   ├── store.ts
 │   │   └── utils.ts
 │   └── utils/                   # 工具函数
 │       ├── blogs.ts            # 博客相关工具
-│       └── images.ts           # 图片处理工具
+│       ├── common.ts           # 通用工具函数
+│       ├── images.ts           # 图片处理工具
+│       └── musics.ts           # 音乐工具函数
 ├── content/                     # Markdown 内容目录
 │   ├── algorithm/              # 算法相关文章
 │   ├── back_end/               # 后端技术文章
@@ -108,6 +138,7 @@ blog-2.0/
 │   ├── icons/                   # 图标字体文件
 │   ├── images/                  # 图片资源
 │   │   ├── background/
+│   │   ├── cover/
 │   │   └── ui/
 │   └── sounds/                  # 音频资源
 │       ├── effects/
@@ -115,6 +146,8 @@ blog-2.0/
 ├── .github/                     # GitHub 配置
 │   └── workflows/
 │       └── deploy.yml          # 自动部署配置
+├── .vscode/                     # VSCode 配置
+│   └── settings.json           # Prettier 配置（使用 Tab 缩进）
 ├── content.config.ts           # Nuxt Content 配置
 ├── nuxt.config.ts              # Nuxt 主配置文件
 ├── package.json                # 项目依赖配置
@@ -215,16 +248,19 @@ yarn generate
 ### 1. 博客内容系统
 
 **状态管理**: `blogStore.ts`
+
 - 管理当前激活的博客分类和内容
 - 提供内容查询和路由路径计算
 - 支持动态内容加载
 
 **内容展示**: `Prose` 组件系列
+
 - `ProseCode.vue`: 代码块样式
 - `ProseH1.vue`, `ProseH2.vue`, `ProseH3.vue`: 标题样式
 - `ProseTable.vue`: 表格样式
 
-**导航系统**: 
+**导航系统**:
+
 - `BlogMenu.vue`: 博客菜单导航
 - `BlogNavigation.vue`: 内容导航
 - `MenuSelecter.vue`: 分类选择器
@@ -232,31 +268,42 @@ yarn generate
 ### 2. 加载系统
 
 **全局加载**: `Loading.vue`
+
 - 页面初始化加载动画
 - 路由切换过渡效果
 - 基于 `document.readyState` 检测加载状态
 
 ### 3. 多媒体功能
 
-**音乐播放器**: `MusicController.vue`, `MusicWave.vue`
+**音乐播放器**: `MusicController.vue`, `MusicBackground.vue`, `MusicFolder.vue`, `MusicItem.vue`, `MusicList.vue`, `MusicRecord.vue`
+
 - 支持背景音乐播放
-- 可视化音频波形效果
+- 音乐文件夹和唱片展示
 - 音效状态管理: `soundStore.ts`
+- 音乐工具函数: `musics.ts`
+
+**物品展示**: `ItemContainer.vue`, `ItemPhoneCard.vue`, `ItemSwitchCard.vue`
+
+- 基于 matter-js 物理引擎的交互展示
+- 物品卡片物理效果模拟
 
 **图片展示**: `ImageBackground.vue`, `ImageContainer.vue`
+
 - 图片背景处理
 - 响应式图片容器
 - 图片管理工具: `images.ts`
 
 ### 4. 用户界面
 
-**主界面组件**: 
+**主界面组件**:
+
 - `MainBackGround.vue`: 主界面背景
 - `UiBox.vue`: 主界面容器
 - `BlogBackGround.vue`: 博客背景
 - `BlogMask.vue`: 博客遮罩层
 
 **自定义字体**:
+
 - Mars Needs Cunnilingus: 英文字体
 - 方正基础像素体: 中文字体
 
@@ -269,16 +316,19 @@ yarn generate
 **部署配置文件**: `.github/workflows/deploy.yml`
 
 **触发条件**:
+
 - 推送到 `nuxt` 分支
 - 手动触发工作流
 
 **部署流程**:
+
 1. 在 Ubuntu 环境中构建项目
 2. 使用 Node.js 20 运行环境
 3. 执行 `npx nuxt build --preset github_pages`
 4. 部署到 GitHub Pages
 
 **部署命令**:
+
 ```bash
 # 构建并部署
 git push origin nuxt
@@ -289,39 +339,48 @@ git push origin nuxt
 ```typescript
 // nuxt.config.ts 关键配置
 export default defineNuxtConfig({
-  modules: ["@nuxt/content", "@pinia/nuxt", "@nuxt/fonts"],
-  ssr: false,  // 客户端渲染模式
-  components: {
-    dirs: [
-      {
-        path: "~/components/content",
-        prefix: "Prose",
-        global: true,
-      },
-    ],
-  },
-  // 自定义字体配置
-  fonts: {
-    providers: {
-      google: false,
-      googleicons: false,
-      adobe: false,
-      bunny: false,
-      fontshare: false,
-    },
-    families: [
-      {
-        name: "Mars Needs Cunnilingus",
-        src: "/fonts/Mars_Needs_Cunnilingus.ttf",
-        weight: 500,
-      },
-      {
-        name: "方正基础像素体",
-        src: "/fonts/方正基础像素体.ttf",
-        weight: 500,
-      },
-    ],
-  },
+	modules: ["@nuxt/content", "@pinia/nuxt", "@nuxt/fonts"],
+	devtools: { enabled: true },
+	compatibilityDate: "2024-04-03",
+	ssr: false, // 客户端渲染模式
+	app: {
+		baseURL: "/blog-2.0/", // GitHub Pages 部署基础路径
+	},
+	content: {
+		build: {
+			markdown: {
+				highlight: {
+					langs: ["c", "cpp", "java", "properties", "python", "vue", "xml"],
+					theme: "github-light",
+				},
+				toc: {
+					depth: 2,
+					searchDepth: 2,
+				},
+			},
+		},
+	},
+	fonts: {
+		providers: {
+			google: false,
+			googleicons: false,
+			adobe: false,
+			bunny: false,
+			fontshare: false,
+		},
+		families: [
+			{
+				name: "Mars Needs Cunnilingus",
+				src: "/fonts/Mars_Needs_Cunnilingus.ttf",
+				weight: 500,
+			},
+			{
+				name: "方正基础像素体",
+				src: "/fonts/方正基础像素体.ttf",
+				weight: 500,
+			},
+		],
+	},
 });
 ```
 
@@ -330,28 +389,28 @@ export default defineNuxtConfig({
 ```typescript
 // content.config.ts
 export default defineContentConfig({
-  collections: {
-    front_end: defineCollection({
-      type: "page",
-      source: "front_end/*.md",
-    }),
-    back_end: defineCollection({
-      type: "page",
-      source: "back_end/*.md",
-    }),
-    gms2: defineCollection({
-      type: "page",
-      source: "gms2/*.md",
-    }),
-    algorithm: defineCollection({
-      type: "page",
-      source: "algorithm/*.md",
-    }),
-    deep_learning: defineCollection({
-      type: "page",
-      source: "deep_learning/*.md",
-    }),
-  },
+	collections: {
+		front_end: defineCollection({
+			type: "page",
+			source: "front_end/*.md",
+		}),
+		back_end: defineCollection({
+			type: "page",
+			source: "back_end/*.md",
+		}),
+		gms2: defineCollection({
+			type: "page",
+			source: "gms2/*.md",
+		}),
+		algorithm: defineCollection({
+			type: "page",
+			source: "algorithm/*.md",
+		}),
+		deep_learning: defineCollection({
+			type: "page",
+			source: "deep_learning/*.md",
+		}),
+	},
 });
 ```
 
@@ -434,6 +493,9 @@ yarn preview
 
 # 静态生成
 yarn generate
+
+# 格式化代码（使用 Prettier）
+yarn prettier --write .
 ```
 
 ### 关键文件路径
@@ -443,6 +505,9 @@ yarn generate
 - 根组件: `app/app.vue`
 - 首页: `app/pages/index.vue`
 - 博客状态: `app/stores/blogStore.ts`
+- 博客列表: `app/pages/blogs.vue`
+- 物品展示: `app/pages/items.vue`
+- 音乐页面: `app/pages/musics.vue`
 - 内容目录: `content/`
 - 公共资源: `public/`
 
@@ -451,7 +516,13 @@ yarn generate
 - 加载组件: `~/components/ui/Loading.vue`
 - 博客菜单: `~/components/ui/blogUI/BlogMenu.vue`
 - 音乐控制器: `~/components/ui/musicUI/MusicController.vue`
+- 物品容器: `~/components/ui/itemUI/ItemContainer.vue`
 - 主背景: `~/components/ui/mainUI/MainBackGround.vue`
+
+### 代码格式化
+
+项目使用 Prettier 进行代码格式化，配置为使用 Tab 缩进（见 `.vscode/settings.json`）。
+运行 `yarn prettier --write .` 格式化所有文件。
 
 ---
 
