@@ -55,7 +55,7 @@ import Button from "~/components/ui/Button.vue";
 @media screen and (max-width: 576px) {
 	.musics {
 		grid-template-columns: auto;
-		grid-template-rows: 400px 6fr 1fr;
+		grid-template-rows: 250px 6fr 1fr;
 
 		.musics_background_container {
 			grid-area: 1 / 1 / 4 / 2;
@@ -79,7 +79,7 @@ import Button from "~/components/ui/Button.vue";
 @media screen and (min-width: 576px) and (max-width: 768px) {
 	.musics {
 		grid-template-columns: auto;
-		grid-template-rows: 300px 6fr 1fr;
+		grid-template-rows: 250px 6fr 1fr;
 
 		.musics_background_container {
 			grid-area: 1 / 1 / 4 / 2;
