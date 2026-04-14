@@ -10,7 +10,6 @@ const ItemPhoneCardRef = ref<InstanceType<typeof ItemPhoneCard> | null>(null);
 const ItemSwitchCardRef = ref<InstanceType<typeof ItemSwitchCard> | null>(null);
 const boxPositions = ref<Map<string, ItemParams> | null>(null);
 const boxes = ref<Map<string, Matter.Body> | null>(null);
-
 let engine: Engine;
 let render: Render;
 let runner: Runner;
@@ -157,15 +156,9 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-	if (runner) {
-		Runner.stop(runner);
-	}
-	if (render) {
-		Render.stop(render);
-	}
-	if (render && render.canvas) {
-		render.canvas.remove();
-	}
+	if (runner) Runner.stop(runner);
+	if (render) Render.stop(render);
+	if (render && render.canvas) render.canvas.remove();
 	if (render && render.canvas && render.canvas.parentNode) {
 		render.canvas.parentNode.removeChild(render.canvas);
 	}

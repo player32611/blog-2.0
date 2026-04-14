@@ -64,13 +64,14 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+$base-size: 1;
+
 .music_record {
-	position: absolute;
-	top: 10dvh;
-	right: calc((100% - 300px) / 2 - 300px);
+	position: relative;
 	display: grid;
-	height: 600px;
-	width: 600px;
+	height: 600px * $base-size;
+	width: 600px * $base-size;
+	font-size: 1rem * $base-size;
 	border: none;
 	background: #000000;
 	color: #fff;
@@ -91,13 +92,13 @@ onMounted(() => {
 		> span {
 			position: absolute;
 			transform: rotate(calc(var(--rotation-step) * var(--index) * 1deg));
-			inset: 7px;
+			inset: 7px * $base-size;
 		}
 
 		.music_cover {
 			position: relative;
-			height: 450px;
-			width: 450px;
+			height: 450px * $base-size;
+			width: 450px * $base-size;
 			border-radius: 50%;
 		}
 	}
@@ -108,6 +109,94 @@ onMounted(() => {
 
 	&:active {
 		transform: scale(0.95);
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.4;
+
+	.music_record {
+		height: 600px * $base-size;
+		width: 600px * $base-size;
+		font-size: 1rem * $base-size;
+
+		.container {
+			> span {
+				inset: 7px * $base-size;
+			}
+
+			.music_cover {
+				height: 450px * $base-size;
+				width: 450px * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.5;
+
+	.music_record {
+		height: 600px * $base-size;
+		width: 600px * $base-size;
+		font-size: 1rem * $base-size;
+
+		.container {
+			> span {
+				inset: 7px * $base-size;
+			}
+
+			.music_cover {
+				height: 450px * $base-size;
+				width: 450px * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.6;
+
+	.music_record {
+		height: 600px * $base-size;
+		width: 600px * $base-size;
+		font-size: 1rem * $base-size;
+
+		.container {
+			> span {
+				inset: 7px * $base-size;
+			}
+
+			.music_cover {
+				height: 450px * $base-size;
+				width: 450px * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.8;
+
+	.music_record {
+		height: 600px * $base-size;
+		width: 600px * $base-size;
+		font-size: 1rem * $base-size;
+
+		.container {
+			> span {
+				inset: 7px * $base-size;
+			}
+
+			.music_cover {
+				height: 450px * $base-size;
+				width: 450px * $base-size;
+			}
+		}
 	}
 }
 </style>

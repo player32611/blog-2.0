@@ -12,10 +12,16 @@ const handelClick = () => {
 	if (!folderRef.value) return;
 	if (isactive.value) {
 		isactive.value = false;
-		gsap.to(folderRef.value, { duration: 0.5, height: "3em", ease: "power2.out" });
+		gsap
+			.timeline()
+			.set(folderRef.value, { height: "auto" })
+			.to(folderRef.value, { duration: 0.5, height: 50, ease: "power2.out" });
 	} else {
 		isactive.value = true;
-		gsap.to(folderRef.value, { duration: 0.5, height: "auto", ease: "power2.out" });
+		gsap
+			.timeline()
+			.set(folderRef.value, { height: 50 })
+			.to(folderRef.value, { duration: 0.5, height: "auto", ease: "power2.out" });
 	}
 };
 </script>
@@ -28,14 +34,16 @@ const handelClick = () => {
 </template>
 
 <style scoped lang="scss">
+$base-size: 1;
+
 .music_folder {
 	display: flex;
 	flex-direction: column;
 	align-items: end;
+	height: 50px;
 	width: 100%;
-	height: 3em;
-	border-bottom: 2.5px solid #ffffff;
-	font-size: 1em;
+	border-bottom: 2.5px * $base-size solid #ffffff;
+	font-size: 1rem * $base-size;
 	overflow: hidden;
 	cursor: pointer;
 
@@ -43,14 +51,78 @@ const handelClick = () => {
 		display: flex;
 		align-items: center;
 		width: 100%;
-		min-height: 3em;
+		min-height: 50px * $base-size;
 		color: #ffffff;
-		border-right: 2.5px solid #ffffff;
-		border-bottom: 2.5px dashed #ffffff;
+		border-right: none;
+		border-bottom: 2.5px * $base-size dashed #ffffff;
 		font-family: "方正基础像素体";
 		text-align: center;
-		text-indent: 1em;
+		text-indent: 1rem;
 		user-select: none;
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 1;
+
+	.music_folder {
+		border-bottom: 2.5px * $base-size solid #ffffff;
+		font-size: 1rem * $base-size;
+
+		.folder_name {
+			min-height: 50px * $base-size;
+			border-right: none;
+			border-bottom: 2.5px * $base-size dashed #ffffff;
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 1;
+
+	.music_folder {
+		border-bottom: 2.5px * $base-size solid #ffffff;
+		font-size: 1rem * $base-size;
+
+		.folder_name {
+			min-height: 50px * $base-size;
+			border-right: none;
+			border-bottom: 2.5px * $base-size dashed #ffffff;
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 1;
+
+	.music_folder {
+		border-bottom: 2.5px * $base-size solid #ffffff;
+		font-size: 1rem * $base-size;
+
+		.folder_name {
+			min-height: 50px * $base-size;
+			border-right: none;
+			border-bottom: 2.5px * $base-size dashed #ffffff;
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 1;
+
+	.music_folder {
+		border-bottom: 2.5px * $base-size solid #ffffff;
+		font-size: 1rem * $base-size;
+
+		.folder_name {
+			min-height: 50px * $base-size;
+			border-right: none;
+			border-bottom: 2.5px * $base-size dashed #ffffff;
+		}
 	}
 }
 </style>

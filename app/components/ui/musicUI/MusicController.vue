@@ -46,24 +46,25 @@ const soundStore = useSoundStore();
 </template>
 
 <style scoped lang="scss">
+$base-size: 1;
+
 .music_controller {
-	position: fixed;
-	bottom: 0;
-	right: 0;
 	display: flex;
 	flex-direction: column;
-	width: calc(100% - 304.5px);
+	justify-content: space-evenly;
+	height: 100%;
+	width: 100%;
 	font-family: "方正基础像素体";
 	background-color: #000000;
-	border-top: 5px solid #ffffff;
+	border-top: 5px * $base-size solid #ffffff;
 	opacity: 0.4;
 
 	.music_info {
 		text-align: center;
-		padding: 0.5rem;
+		padding-top: 10px * $base-size;
 
 		.music_name {
-			font-size: 1.1rem;
+			font-size: 1.2rem * $base-size;
 			font-weight: bold;
 			color: #fff;
 			overflow: hidden;
@@ -76,8 +77,8 @@ const soundStore = useSoundStore();
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 1.5rem;
-		padding: 0.5rem;
+		gap: 10px * $base-size;
+		padding: 10px * $base-size;
 
 		.control_btn,
 		.play_btn {
@@ -92,13 +93,135 @@ const soundStore = useSoundStore();
 		}
 
 		.control_btn {
-			width: 40px;
-			height: 40px;
+			width: 50px * $base-size;
+			height: 50px * $base-size;
 		}
 
 		.play_btn {
-			width: 60px;
-			height: 60px;
+			width: 50px * $base-size;
+			height: 50px * $base-size;
+		}
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.8;
+
+	.music_controller {
+		border-top: 3px * $base-size solid #ffffff;
+
+		.music_info {
+			padding-top: 10px * $base-size;
+
+			.music_name {
+				font-size: 1rem * $base-size;
+			}
+		}
+
+		.music_controls {
+			gap: 10px * $base-size;
+			padding: 10px * $base-size;
+
+			.control_btn {
+				width: 50px * $base-size;
+				height: 50px * $base-size;
+			}
+
+			.play_btn {
+				width: 50px * $base-size;
+				height: 50px * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.9;
+
+	.music_controller {
+		border-top: 4px * $base-size solid #ffffff;
+
+		.music_info {
+			padding-top: 10px * $base-size;
+
+			.music_name {
+				font-size: 1.1rem * $base-size;
+			}
+		}
+
+		.music_controls {
+			gap: 10px * $base-size;
+			padding: 10px * $base-size;
+
+			.control_btn {
+				width: 50px * $base-size;
+				height: 50px * $base-size;
+			}
+
+			.play_btn {
+				width: 50px * $base-size;
+				height: 50px * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.9;
+
+	.music_controller {
+		border-top: 5px * $base-size solid #ffffff;
+
+		.music_info {
+			.music_name {
+				font-size: 1.2rem * $base-size;
+			}
+		}
+
+		.music_controls {
+			gap: 10px * $base-size;
+
+			.control_btn {
+				width: 50px * $base-size;
+				height: 50px * $base-size;
+			}
+
+			.play_btn {
+				width: 50px * $base-size;
+				height: 50px * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 1;
+
+	.music_controller {
+		border-top: 5px * $base-size solid #ffffff;
+
+		.music_info {
+			.music_name {
+				font-size: 1.2rem * $base-size;
+			}
+		}
+
+		.music_controls {
+			gap: 10px * $base-size;
+
+			.control_btn {
+				width: 50px * $base-size;
+				height: 50px * $base-size;
+			}
+
+			.play_btn {
+				width: 50px * $base-size;
+				height: 50px * $base-size;
+			}
 		}
 	}
 }
