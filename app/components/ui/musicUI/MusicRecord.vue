@@ -76,6 +76,7 @@ $base-size: 1;
 	background: #000000;
 	color: #fff;
 	font-weight: 600;
+	font-family: "方正基础像素体";
 	border-radius: 50%;
 	overflow: hidden;
 	place-content: center;
