@@ -27,8 +27,9 @@ $base-size: 1;
 	$base-size: 0.5;
 
 	.music_list {
-		width: calc(100% - 5px * 2 * $base-size);
-		border: 5px * $base-size solid #ffffff;
+		width: 100%;
+		border-right: none;
+		border-bottom: 5px * $base-size solid #ffffff;
 	}
 }
 
@@ -37,8 +38,9 @@ $base-size: 1;
 	$base-size: 0.7;
 
 	.music_list {
-		width: calc(100% - 5px * 2 * $base-size);
-		border: 5px * $base-size solid #ffffff;
+		width: 100%;
+		border-right: none;
+		border-bottom: 5px * $base-size solid #ffffff;
 	}
 }
 
