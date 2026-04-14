@@ -104,8 +104,9 @@ onUnmounted(() => {
 		@mousemove="handleMouseMove"
 		@mouseup="handleMouseUp"
 		@mouseleave="handleMouseUp"
+		@dragstart.prevent
 		@touchstart="handleTouchStart"
-		@touchmove="handleTouchMove"
+		@touchmove.prevent="handleTouchMove"
 		@touchend="handleMouseUp"
 		@touchcancel="handleMouseUp"
 	>
