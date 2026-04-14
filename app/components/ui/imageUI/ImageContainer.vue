@@ -24,7 +24,10 @@ const isDragging = ref<boolean>(false);
 const velocityX = ref<number>(0);
 const velocityY = ref<number>(0);
 const acceleration = ref<number>(0.1); // 加速度系数
-const friction = ref<number>(0.95); // 摩擦力系数
+const friction = ref<number>(0.98); // 摩擦力系数（越小减速越快，越大滑动越久）
+// 0.98 — 约 2.5 倍滑动时间
+// 0.99 — 约 5 倍滑动时间
+// 0.995 — 约 10 倍滑动时间
 const mouseSensitivity = ref<number>(0.5); // 鼠标灵敏度
 
 const handleMouseDown = () => {
@@ -63,18 +66,26 @@ const handleMouseMove = (e: MouseEvent) => {
 const createImgDatas = async () => {
 	imageDatas.value = [];
 	const loadPromises: Promise<void>[] = [];
+	const w = imageWidth.value;
+	const h = imageHeight.value;
 
 	for (let i = 0; i < imageTotal.value; i++) {
 		const img = new window.Image();
 		const colIndex = i % rowMax.value;
 		const lineIndex = Math.floor(i / rowMax.value);
-		const x = colIndex * (imageWidth.value + imageMargin.value);
-		const y = lineIndex * (imageHeight.value + imageMargin.value);
+		const x = colIndex * (w + imageMargin.value);
+		const y = lineIndex * (h + imageMargin.value);
 
 		const loadPromise = new Promise<void>(resolve => {
 			img.onload = () => {
+				// 预缩放到目标尺寸，避免每帧对大图做缩放
+				const offscreen = document.createElement("canvas");
+				offscreen.width = w;
+				offscreen.height = h;
+				offscreen.getContext("2d")!.drawImage(img, 0, 0, w, h);
+
 				imageDatas.value.push({
-					img,
+					img: offscreen,
 					x,
 					y,
 					targetX: x,
@@ -84,7 +95,6 @@ const createImgDatas = async () => {
 				resolve();
 			};
 			img.onerror = () => {
-				// 即使加载失败也要 resolve，避免阻塞其他图片
 				console.error(`Failed to load image: ${allImagePath.value[i]}`);
 				resolve();
 			};
@@ -94,7 +104,6 @@ const createImgDatas = async () => {
 		loadPromises.push(loadPromise);
 	}
 
-	// 等待所有图片加载完成
 	await Promise.all(loadPromises);
 };
 
@@ -150,7 +159,10 @@ const drawFrame = () => {
 };
 
 const checkImg = (x: number, y: number) => {
-	let img = imageDatas.value.find(img => x >= img.x && x < img.x + imageWidth.value && y >= img.y && y < img.y + imageHeight.value);
+	let img = imageDatas.value.find(
+		img =>
+			x >= img.x && x < img.x + imageWidth.value && y >= img.y && y < img.y + imageHeight.value,
+	);
 	if (img) console.log(img, img.img);
 };
 
