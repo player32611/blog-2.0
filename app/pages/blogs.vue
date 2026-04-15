@@ -19,6 +19,8 @@ const menuRef = ref<BlogMenuInstance | null>(null);
 const page = useBlogContent();
 const smoother = ref<ScrollSmoother | null>(null);
 
+usePageReady();
+
 onMounted(() => {
 	smoother.value = ScrollSmoother.create({
 		wrapper: ".blog_content",

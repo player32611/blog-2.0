@@ -1,5 +1,5 @@
-import type { BlogCollections, Theme } from "./config";
-import type { BlogMaskInstance, BlogMenuInstance } from "./components";
+import type { BlogCollections } from "./config";
+import type { BlogMaskInstance, BlogMenuInstance, LoadingInstance } from "./components";
 
 export type BlogContent = string;
 
@@ -20,6 +20,20 @@ export type BlogActions = {
 	useBlogContent: () => Ref<any>;
 	setBlogInstance: (mask: BlogMaskInstance | null, menu: BlogMenuInstance | null) => void;
 	changeBlogMenuState: () => void;
+};
+
+export type LoadingState = {
+	loadingRef: Ref<LoadingInstance | null>;
+	isLoading: Ref<boolean>;
+};
+
+export type LoadingGetter = {};
+
+export type LoadingActions = {
+	initLoadingRef: (loading: LoadingInstance) => void;
+	setIsLoading: (state: boolean) => void;
+	loadingIn: (next: () => void) => void;
+	loadingOut: () => void;
 };
 
 /**
@@ -54,14 +68,4 @@ export type SoundActions = {
 	toggle: () => void;
 	previous: () => void;
 	next: () => void;
-};
-
-export type ThemeState = {
-	theme: Ref<Theme>;
-};
-
-export type ThemeGetter = {};
-
-export type ThemeActions = {
-	setTheme: (theme: Theme) => void;
 };

@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import MainBackGround from "@/components/ui/mainUI/MainBackGround.vue";
 import UiBox from "@/components/ui/mainUI/UiBox.vue";
+
+usePageReady();
+
+onMounted(async () => {
+	await fetch("/666");
+});
 </script>
 
 <template>

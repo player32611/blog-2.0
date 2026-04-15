@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import ItemContainer from "~/components/ui/itemUI/ItemContainer.vue";
 import Button from "~/components/ui/Button.vue";
+
+usePageReady();
 </script>
 
 <template>

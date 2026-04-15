@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { gsap } from "gsap";
-import type { LoadingParams } from "~/types/components";
 
 const row = 22;
 const line = 15;
 const loadingRef = ref<SVGSVGElement | null>(null);
 const blocks = ref<SVGUseElement[]>([]);
-const props = defineProps<LoadingParams>();
-const isLoading = ref(true);
+const loadingStore = useLoadingStore();
 
 const createBlocks = () => {
 	if (!loadingRef.value) return;
@@ -29,12 +27,10 @@ const createBlocks = () => {
 };
 
 const loadingIn = (next: () => void) => {
-	isLoading.value = true;
 	gsap
 		.timeline({
 			onComplete: () => {
 				next();
-				props.checkLoading?.();
 			},
 		})
 		.set(blocks.value, { "stroke-dashoffset": 0 })
@@ -51,7 +47,6 @@ const loadingIn = (next: () => void) => {
 };
 
 const loadingOut = () => {
-	isLoading.value = false;
 	gsap
 		.timeline()
 		.to(blocks.value, {
@@ -95,7 +90,7 @@ defineExpose({
 
 <template>
 	<svg
-		:class="isLoading ? 'loading_blocks' : 'loading_blocks  loading_out'"
+		:class="loadingStore.isLoading ? 'loading_blocks' : 'loading_blocks  loading_out'"
 		viewBox="0 0 1000 1000"
 		preserveAspectRatio="xMidYMid slice"
 		ref="loadingRef"

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const route = useRoute();
 
+usePageReady();
+
 const { data: page } = await useAsyncData("page-" + route.path, () => {
 	return queryCollection("front_end").path(route.path).first();
 });

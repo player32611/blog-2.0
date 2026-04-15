@@ -1,6 +1,6 @@
 <template>
-	<Loading ref="loadingRef" :checkLoading="checkLoading" />
-	<NuxtPage />
+	<Loading ref="loadingRef" />
+	<NuxtPage :page-key="$route.fullPath" />
 	<NuxtRouteAnnouncer />
 </template>
 
@@ -10,19 +10,15 @@ import { useRouter } from "vue-router";
 import type { LoadingInstance } from "./types/components";
 import Loading from "./components/ui/Loading.vue";
 
+const loadingStore = useLoadingStore();
 const loadingRef = ref<LoadingInstance | null>(null);
 const router = useRouter();
 
-const checkLoading = () => {
-	if (document.readyState === "complete") {
-		loadingRef.value?.loadingOut();
-	}
-};
-
 onMounted(() => {
-	checkLoading();
+	if (!loadingRef.value) return;
+	loadingStore.initLoadingRef(loadingRef.value);
 	router.beforeEach((to, from, next) => {
-		loadingRef.value?.loadingIn(next);
+		loadingStore.loadingIn(next);
 	});
 });
 </script>

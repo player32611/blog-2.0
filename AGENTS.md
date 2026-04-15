@@ -271,7 +271,13 @@ yarn generate
 
 - 页面初始化加载动画
 - 路由切换过渡效果
-- 基于 `document.readyState` 检测加载状态
+- 基于 `window.load` 事件等待目标页面资源加载完成后再执行 `loadingOut`
+
+**加载流程** (`app.vue`):
+
+- 首次加载：如果 `document.readyState` 不是 `complete`，则监听 `window.load` 事件
+- 路由跳转：在 `beforeEach` 中，`loadingIn` 动画完成后注册 `window.load` 监听器，再调用 `next()` 跳转
+- 目标页面的所有资源（图片、音频等）加载完毕后，才会触发 `loadingOut` 动画
 
 ### 3. 多媒体功能
 

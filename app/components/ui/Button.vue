@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { useSoundEffect } from "@/composables/useSoundEffect";
-import { useThemeStore } from "@/stores/themeStore";
 import { useSoundStore } from "@/stores/soundStore";
 import type { ButtonParams } from "@/types/components";
 
-const { theme } = useThemeStore();
 const { effectsVolume } = useSoundStore();
 const { text, size, icon, onClick, style } = defineProps<ButtonParams>();
 
@@ -14,14 +12,14 @@ const handleClick = () => {
 	if (onClick) {
 		onClick();
 		if (effectsVolume) {
-			if (theme === "undertale") undertaleSound.play();
+			undertaleSound.play();
 		}
 	}
 };
 </script>
 
 <template>
-	<button :class="`${theme} ${size}`" @click="handleClick" :style="style" draggable="false">
+	<button :class="`${size}`" @click="handleClick" :style="style" draggable="false">
 		<div class="container">
 			<span class="icon">{{ icon }}</span>
 			<span v-for="(char, index) in text.toUpperCase().split('')" :key="index">{{ char }}</span>

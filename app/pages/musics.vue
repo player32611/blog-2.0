@@ -4,6 +4,8 @@ import MusicController from "~/components/ui/musicUI/MusicController.vue";
 import MusicList from "~/components/ui/musicUI/MusicList.vue";
 import MusicRecord from "~/components/ui/musicUI/MusicRecord.vue";
 import Button from "~/components/ui/Button.vue";
+
+usePageReady();
 </script>
 
 <template>
