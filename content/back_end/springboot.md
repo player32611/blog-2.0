@@ -1309,3 +1309,146 @@ public class RecordTimeAspect {
   - **切面类**：`@Aspect` 注解修饰的类
 
 - **目标对象**（Target）：通知所应用的对象
+
+### 通知类型
+
+根据通知方法执行时机的不同，将通知类型分为以下常见的五类：
+
+- **`@Around`**：环绕通知，此注解标注的通知方法在目标方法前、后都被执行
+
+- **`@Before`**：前置通知，此注解标注的通知方法在目标方法前被执行
+
+- **`@After`**：后置通知，此注解标注的通知方法在目标方法后被执行，无论是否有异常都会执行
+
+- **`@AfterReturning`**：返回后通知，此注解标注的通知方法在目标方法后被执行，有异常不会执行
+
+- **`@AfterThrowing`**：异常通知，此注解标注的通知方法发生异常后被执行
+
+::warning
+
+`@Around` 环绕通知需要自己调用 `ProceedingJoinPoint.proceed()` 来让原始方法执行，其他通知不需要考虑目标方法执行
+
+`@Around` 环绕通知方法的返回值，必须指定为 Object，来接收原始方法的返回值
+
+::
+
+::detail
+
+#title
+具体示例
+#default
+
+```java [com.itheima.aop.MyAspect.java]
+public class MyAspect {
+  @Before("execution(* com.itheima.service.impl.*.*(..))")
+  public void before() {
+    log.info("前置通知");
+  }
+
+  @Around("execution(* com.itheima.service.impl.*.*(..))")
+  public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+    log.info("环绕通知开始");
+    Object result = joinPoint.proceed();
+    log.info("环绕通知结束");
+    return result;
+  }
+
+  @After("execution(* com.itheima.service.impl.*.*(..))")
+  public void after() {
+    log.info("后置通知");
+  }
+
+  @AfterReturning("execution(* com.itheima.service.impl.*.*(..))")
+  public void afterReturning() {
+    log.info("返回后通知");
+  }
+
+  @AfterThrowing("execution(* com.itheima.service.impl.*.*(..))")
+  public void afterThrowing() {
+    log.info("异常通知");
+  }
+}
+```
+
+::
+
+::tip
+
+`@PointCut` 注解
+
+该注解的作用是将公共的切入点表达式抽取出来，需要用到时引用该切点表达式即可
+
+```java [com.itheima.aop.MyAspect.java]
+public class MyAspect {
+
+  @Pointcut("execution(* com.itheima.service.impl.*.*(..))")
+  private void pt(){}
+
+  @Before("pt()")
+  public void before() {
+    log.info("前置通知");
+  }
+
+  @Around("pt()")
+  public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+    log.info("环绕通知开始");
+    Object result = joinPoint.proceed();
+    log.info("环绕通知结束");
+    return result;
+  }
+
+  @After("pt()")
+  public void after() {
+    log.info("后置通知");
+  }
+
+  @AfterReturning("pt()")
+  public void afterReturning() {
+    log.info("返回后通知");
+  }
+
+  @AfterThrowing("pt()")
+  public void afterThrowing() {
+    log.info("异常通知");
+  }
+}
+```
+
+- **private**：仅能在当前切面类中引用该表达式
+
+- **public**：在其它外部的切面类中也可以引用该表达式
+
+::
+
+### 通知顺序
+
+当有多个切面的切入点都匹配到了目标方法，目标方法运行时，多个通知方法都会被执行
+
+不同切面类中，默认按照切面类的**类名字母排序**：
+
+- 目标方法前的通知方法：字母排名靠前的先执行
+
+- 目标方法后的通知方法：字母排名靠前的后执行
+
+或者可以用 `@Order` 注解加在切面类上来控制顺序
+
+- 目标方法前的通知方法：数字小的先执行
+
+- 目标方法后的通知方法：数字小的后执行
+
+::detail
+
+#title
+具体示例
+#default
+
+```java [com.itheima.aop.MyAspect.java]
+@Aspect
+@Component
+@Order(5)
+public class MyAspect {
+  // ...
+}
+```
+
+::
