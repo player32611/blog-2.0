@@ -2,6 +2,8 @@
 import ItemContainer from "~/components/ui/itemUI/ItemContainer.vue";
 import Button from "~/components/ui/Button.vue";
 
+const { loadingNavigate } = useLoadingStore();
+
 usePageReady();
 </script>
 
@@ -12,7 +14,7 @@ usePageReady();
 			:text="'back'"
 			:icon="'&#xeb06;'"
 			:size="'small'"
-			@click="navigateTo('/')"
+			@click="loadingNavigate('/')"
 			:style="{ position: 'fixed', left: '20px', top: '20px' }"
 		></Button>
 	</div>

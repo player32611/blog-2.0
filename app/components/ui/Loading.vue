@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { gsap } from "gsap";
 
-const row = 22;
+const row = 13;
 const line = 15;
 const loadingRef = ref<SVGSVGElement | null>(null);
 const blocks = ref<SVGUseElement[]>([]);
@@ -16,7 +16,7 @@ const createBlocks = () => {
 			let use = document.createElementNS("http://www.w3.org/2000/svg", "use");
 			use.setAttribute("class", "loading_block");
 			use.setAttribute("href", "#loading_hexagon");
-			use.setAttribute("x", `${(l % 2 ? 86.5 * r : 86.5 * r + 43.3) - 450}`);
+			use.setAttribute("x", `${l % 2 ? 86.5 * r : 86.5 * r + 43.3}`);
 			use.setAttribute("y", `${74.5 * l}`);
 			use.setAttribute("transform-origin", "50 50");
 			g.appendChild(use);
@@ -48,7 +48,11 @@ const loadingIn = (next: () => void) => {
 
 const loadingOut = () => {
 	gsap
-		.timeline()
+		.timeline({
+			onComplete: () => {
+				loadingStore.setIsLoading(false);
+			},
+		})
 		.to(blocks.value, {
 			"stroke-dashoffset": 0,
 			"stroke-opacity": 1,
@@ -90,7 +94,7 @@ defineExpose({
 
 <template>
 	<svg
-		:class="loadingStore.isLoading ? 'loading_blocks' : 'loading_blocks  loading_out'"
+		class="loading_blocks"
 		viewBox="0 0 1000 1000"
 		preserveAspectRatio="xMidYMid slice"
 		ref="loadingRef"
@@ -114,10 +118,7 @@ defineExpose({
 	width: 100vw;
 	z-index: 9999;
 	overflow: hidden;
-
-	&.loading_out {
-		pointer-events: none;
-	}
+	pointer-events: none;
 
 	:deep(.loading_block) {
 		stroke: #17f700;

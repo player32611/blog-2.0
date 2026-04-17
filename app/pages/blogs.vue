@@ -14,6 +14,7 @@ import Button from "~/components/ui/Button.vue";
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 const { useBlogContent, setBlogInstance, changeBlogMenuState } = useBlogStore();
+const { loadingNavigate } = useLoadingStore();
 const maskRef = ref<BlogMaskInstance | null>(null);
 const menuRef = ref<BlogMenuInstance | null>(null);
 const page = useBlogContent();
@@ -54,7 +55,7 @@ onUnmounted(() => {
 			:text="'back'"
 			:icon="'&#xeb06;'"
 			:size="'small'"
-			@click="navigateTo('/')"
+			@click="loadingNavigate('/')"
 			:style="{ position: 'fixed', left: '20px', top: '20px' }"
 		></Button>
 		<Button

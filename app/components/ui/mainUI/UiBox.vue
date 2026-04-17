@@ -2,6 +2,8 @@
 import Button from "@/components/ui/Button.vue";
 
 const hp = ref(92);
+
+const { loadingNavigate } = useLoadingStore();
 </script>
 
 <template>
@@ -30,25 +32,25 @@ const hp = ref(92);
 				:text="'blog'"
 				:size="'large'"
 				:icon="'&#xe99c;'"
-				@click="navigateTo('/blogs')"
+				@click="loadingNavigate('/blogs')"
 			></Button>
 			<Button
 				:text="'music'"
 				:size="'large'"
 				:icon="'&#xe99a;'"
-				@click="navigateTo('/musics')"
+				@click="loadingNavigate('/musics')"
 			></Button>
 			<Button
 				:text="'items'"
 				:size="'large'"
 				:icon="'&#xe994;'"
-				@click="navigateTo('/items')"
+				@click="loadingNavigate('/items')"
 			></Button>
 			<Button
 				:text="'image'"
 				:size="'large'"
 				:icon="'&#xe997;'"
-				@click="navigateTo('/images')"
+				@click="loadingNavigate('/images')"
 			></Button>
 		</div>
 	</div>

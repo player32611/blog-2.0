@@ -17,16 +17,28 @@ export const useLoadingStore = defineStore(
 
 		function loadingIn(next: () => void) {
 			if (isLoading.value) return;
-			isLoading.value = true;
 			loadingRef.value?.loadingIn(next);
+			isLoading.value = true;
 		}
 
 		function loadingOut() {
 			if (!isLoading.value) return;
-			isLoading.value = false;
 			loadingRef.value?.loadingOut();
 		}
 
-		return { loadingRef, isLoading, initLoadingRef, setIsLoading, loadingIn, loadingOut };
+		function loadingNavigate(target: string) {
+			if (isLoading.value) return;
+			navigateTo(target);
+		}
+
+		return {
+			loadingRef,
+			isLoading,
+			initLoadingRef,
+			setIsLoading,
+			loadingIn,
+			loadingOut,
+			loadingNavigate,
+		};
 	},
 );

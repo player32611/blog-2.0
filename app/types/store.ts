@@ -34,6 +34,7 @@ export type LoadingActions = {
 	setIsLoading: (state: boolean) => void;
 	loadingIn: (next: () => void) => void;
 	loadingOut: () => void;
+	loadingNavigate: (target: string) => void;
 };
 
 /**
