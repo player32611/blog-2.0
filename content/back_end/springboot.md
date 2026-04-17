@@ -1667,3 +1667,53 @@ private Integer getCurrentUserId() {
 ::
 
 ::
+
+## Spring Boot 原理
+
+### 配置优先级
+
+Spring Boot 中支持三种格式的配置文件：`properties`、`yml`、`yaml`
+
+如果存在多个配置文件，Spring Boot 会优先加载 `application.properties` 文件，然后加载 `application.yml` 文件，最后加载 `application.yaml` 文件
+
+::warning
+
+虽然 Spring Boot 支持多种格式配置文件，但是在项目开发时，推荐统一使用一种格式的配置（yml 是主流）
+
+::
+
+Spring Boot 除了支持配置文件属性配置，还支持 Java 系统属性和命令行参数的方式进行属性配置
+
+- **Java 系统属性**：`-Dserver.port=9000`
+
+- **命令行参数**：`--server.port=10010`
+
+::tip
+
+命令行参数的优先级高于 Java 系统属性，Java 系统属性的优先级高于配置文件属性
+
+::
+
+可以在 IDEA 中配置启动参数，也可以在打包后进行属性配置：
+
+1. 执行 maven 打包命令：`mvn clean package`
+
+2. 执行 java 指令，运行 jar 包：
+
+```bash
+java -Dserver.port=9000 -jar xxx.jar --server.port=10010
+```
+
+::warning
+
+Spring Boot 项目进行打包时，需要引入插件 spring-boot-maven-plugin（基于官网骨架创建项目，会自动添加该插件）
+
+::
+
+### Bean 管理
+
+::danger
+
+该部分尚未完工!
+
+::
