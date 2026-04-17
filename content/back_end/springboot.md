@@ -1452,3 +1452,218 @@ public class MyAspect {
 ```
 
 ::
+
+### 切入点表达式
+
+即描述切入点方法的一种表达式，用来决定项目中的那些方法需要加入通知
+
+有以下常见形式：
+
+- **`execution(...)`**：根据方法的签名来匹配
+
+- **`@annotation(...)`**：根据注解匹配
+
+`execution()` 主要根据方法的返回值、包名、类名、方法名、方法参数等信息来匹配，语法为：
+
+```java
+excution(访问修饰符? 返回值 包名.类名.?方法名(方法参数) throws 异常?)
+```
+
+- **访问修饰符**：可省略（比如：public、protected）
+
+- **包名.类名**：可省略
+
+- **throws 异常**：可省略（注意是方法上声明抛出的异常，不是实际抛出的异常）
+
+可以使用通配符描述切入点：
+
+- **`*`**：单个独立的任意符号，可以通配任意返回值、包名、类名、方法名、任意类型的一个参数，也可以通配包、类、方法名的一部分：
+
+```java
+execution(* com.*.service.*.update*(*))
+```
+
+- **`..`**：多个任意符号，可以通配任意层级的包，或任意类型、任意个数的参数
+
+```java
+execution(* com.itheima..DeptService.*(..))
+```
+
+::tip
+
+`*` 通配符支持模糊匹配，例如 `com.itheima.service.impl.*.del*(java.lang.Integer)` 匹配 com.itheima.service.impl 包下所有以 del 开头的方法，并且只有一个参数，参数类型为 Integer；`com.itheima.service.impl.*.*e(*)` 匹配 com.itheima.service.impl 包下所有以 e 结尾的方法，并且有一个任意参数
+
+::
+
+::tip
+
+根据业务需要，可以使用**且**（&&）、**或**（||）、**非**（!）来组合比较复杂的切入点表达式，例如：
+
+```java
+@Before("execution(* com.itheima.service.impl.*.list(..)) || execution(* com.itheima.service.impl.*.delete(..))")
+public void before() {
+  // ...
+}
+```
+
+这表示匹配 com.itheima.service.impl 包下 list 和 delete 方法
+
+::
+
+::tip
+
+**书写建议**：
+
+- 所有业务方法名在命名时尽量规范，方便切入点表达式快速匹配。如：`findXxx`、`updateXxx`
+
+- 描述切入点方法通常基于接口描述，而不是直接描述实现类，增强扩展性
+
+- 在满足业务需要的前提下，尽量缩小切入点的匹配范围。如：包名尽量不使用 `..`，使用 `*` 匹配单个包
+
+::
+
+`@annotation` 切入点表达式，用于匹配标识有特定注解的方法
+
+::code-group
+
+```java [src/main/java/com/itheima/anno/LogOperation.java]
+package com.itheima.anno;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface LogOperation {
+}
+```
+
+```java [src/main/java/com/itheima/aop/MyAspect.java]
+// ...
+@Before("@annotation(com.itheima.anno.LogOperation)")
+public void before() {
+  log.info("前置通知");
+}
+// ...
+```
+
+```java [src/main/java/com/itheima/service/impl/DeptServiceImpl.java]
+// ...
+@LogOperation
+@Override
+public void delete(Integer id) {
+  deptMapper.delete(id);
+}
+// ...
+```
+
+::
+
+### 连接点
+
+在 Spring 中用 JoinPoint 抽象了连接点，用它可以获得方法执行时的相关信息，如目标类名、方法名、方法参数等
+
+- 对于 `@Around` 通知，获取连接点信息只能使用 `ProceedingJoinPoint`
+
+- 对于其它四种通知，获取连接点信息只能使用 `JoinPoint`，他是 `ProceedingJoinPoint` 的父类型
+
+::detail
+
+#title
+具体示例
+#default
+
+```java
+// ...
+@Before("execution(* com.itheima.service.impl.*.*(..))")
+public void before(JoinPoint joinPoint) {
+  log.info("before ...")
+  // 获取目标对象
+  Object target = joinPoint.getTarget();
+  log.info("获取目标对象: {}", target);
+  // 获取目标类
+  String className = joinPoint.getTarget().getClass().getName();
+  log.info("获取目标类: {}", className);
+
+  // 获取目标方法
+  String methodName = joinPoint.getSignature().getName();
+  log.info("获取目标方法: {}", methodName);
+
+  // 获取目标方法参数
+  Object[] args = joinPoint.getArgs();
+  log.info("获取目标方法参数: {}", Arrays.toString(args));
+}
+```
+
+::
+
+### ThreadLocal
+
+**ThreadLocal** 并不是一个 Thread，而是 Thread 的局部变量
+
+ThreadLoacl 为每个线程提供一份单独的存储空间，具有线程隔离的效果，不同的线程之间不会相互干扰
+
+**ThreadLocal** 常用方法：
+
+- `public void set(T value)`：设置当前线程的线程局部变量的值
+
+- `public T get()`：返回当前线程所对应的线程局部变量的值
+
+- `public void remove()`：移除当前线程的线程局部变量
+
+::detail
+
+#title
+具体示例：获取当前登录员工
+#default
+
+具体操作步骤：
+
+1. 定义 ThreadLocal 操作的工具类，用于操作当前登录员工 ID
+
+2. 在 TokenFilter 中，解析完当前登录员工 ID，将其存入 ThreadLocal（用完之后需将其删除）
+
+3. 在 AOP 程序中，从 ThreadLocal 中获取当前登录员工的 ID
+
+::code-group
+
+```java [src/main/java/com/itheima/utils/CurrentHolder.java]
+public class CurrentHolder {
+  private static final ThreadLocal<Integer> CURRENT_LOCAL = new ThreadLocal<>();
+
+  public static void set(Integer employeeId) {
+    CURRENT_LOCAL.set(employeeId);
+  }
+
+  public static Integer get() {
+    return CURRENT_LOCAL.get();
+  }
+
+  public static void remove() {
+    CURRENT_LOCAL.remove();
+  }
+}
+```
+
+```java [src/main/java/com/itheima/filter/TokenFilter.java]
+// ...
+Integer empId = Integer.valueOf(claims.get("id")).toString()
+CurrentHolder.set(empId);
+// ...
+filterChain.doFilter(request, response);
+CurrentHolder.remove(); // 删除 ThreadLocal
+```
+
+```java [src/main/java/com/itheima/aop/MyAspect.java]
+// ...
+private Integer getCurrentUserId() {
+  return CurrentHolder.get();
+}
+// ...
+```
+
+::
+
+::
