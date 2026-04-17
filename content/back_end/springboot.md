@@ -1133,7 +1133,7 @@ spring.datasource.username=root
 spring.datasource.password=1234
 ```
 
-```yaml [application.yaml/application.yml]
+```yml [application.yaml/application.yml]
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
@@ -1156,7 +1156,7 @@ spring:
 
 定义对象/Map 集合：
 
-```yaml
+```yml
 user:
   name: 小王
   age: 18
@@ -1165,7 +1165,7 @@ user:
 
 定义数组/list/Set 集合：
 
-```yaml
+```yml
 hobby:
   - java
   - game
@@ -1234,3 +1234,78 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
 ```
+
+## AOP
+
+**AOP**（Aspect Oriented Programming）（面向切面编程，面向方面编程），可简单理解为就是面向特定方法编程
+
+例如当需要在多个方法中添加相同的功能时，可以使用 AOP 进行代码复用
+
+AOP 的应用场景包括：记录系统的操作日志、事务管理、权限控制
+
+::tip
+
+优势：
+
+- 减少重复代码
+
+- 代码无侵入
+
+- 提高开发效率
+
+- 维护方便
+
+::
+
+::tip
+
+AOP 是一种思想，而在 Spring 框架中对这种思想进行的实现，就是 Spring AOP
+
+Spring AOP 的实现原理：**动态代理**，使用代理类来调用原始方法，并添加额外的功能
+
+::
+
+### 快速入门
+
+**需求**：统计所有业务层方法的执行耗时
+
+1. **导入依赖**
+
+```xml [pom.xml]
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-aop</artifactId>
+  <version>3.2.10</version>
+</dependency>
+```
+
+2. **编写 AOP 程序**
+
+```java [src/main/java/com/itheima/RecordTimeAspect.java]
+@Aspect
+@Component
+public class RecordTimeAspect {
+  @Around("execution(* com.itheima.service.impl.*.*(..))") // 匹配需要使用到的方法
+  public Object recordTime(ProceedingJoinPoint joinPoint) throws Throwable {
+    long beginTime = System.currentTimeMillis(); // 记录方法运行的开始时间
+    Object result = joinPoint.proceed(); // 运行原始方法
+    long endTime = System.currentTimeMillis(); // 记录方法运行的结束时间
+    log.info("方法 {} 执行耗时：{} ms", joinPoint.getSignature() , endTime - beginTime);
+    return result;
+  }
+}
+```
+
+### AOP 核心概念
+
+- **连接点**（JoinPoint）：可以被 AOP 控制的方法（暗含方法执行的相关信息）
+
+- **通知**（Advice）：指那些重复的逻辑，也就是共性功能（最终体现为一个方法）
+
+- **切入点**（PointCut）：实际被 AOP 控制的方法，匹配连接点的条件，通知仅会在切入点执行时被应用
+  - 切入点表达式：`@Around("execution(* com.itheima.service.impl.*.*(..))")`
+
+- **切面**（Aspect）：描述通知与切入点的对应关系（通知 + 切入点）
+  - **切面类**：`@Aspect` 注解修饰的类
+
+- **目标对象**（Target）：通知所应用的对象
