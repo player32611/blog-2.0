@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { gsap } from "gsap";
+import Background from "@/assets/images/background/undertale.jpg";
 
 const viewBoxRef = ref<HTMLDivElement | null>(null);
 const imageRef = ref<HTMLImageElement | null>(null);
@@ -105,13 +106,13 @@ onUnmounted(() => {
 		@mouseup="handleMouseUp"
 		@mouseleave="handleMouseUp"
 		@dragstart.prevent
-		@touchstart="handleTouchStart"
+		@touchstart.passive="handleTouchStart"
 		@touchmove.prevent="handleTouchMove"
 		@touchend="handleMouseUp"
 		@touchcancel="handleMouseUp"
 	>
 		<img
-			src="../../../assets/images/background/undertale.jpg"
+			:src="Background"
 			alt="background"
 			:width="6016 / 2"
 			:height="3541 / 2"

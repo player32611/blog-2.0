@@ -69,4 +69,5 @@ export type SoundActions = {
 	toggle: () => void;
 	previous: () => void;
 	next: () => void;
+	seek: (time: number) => void;
 };

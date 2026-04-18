@@ -36,12 +36,20 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 	}
 
 	function initAudio(music: MusicInfo) {
+		const handleMusicEnded = () => {
+			playingMusic.value = false;
+			musicAudio.value?.removeEventListener("ended", handleMusicEnded);
+		};
+
 		if (!musicAudio.value) {
 			musicAudio.value = new Audio(music.path);
 			musicAudio.value.volume = musicVolume.value;
+			musicAudio.value.addEventListener("ended", handleMusicEnded);
 		} else if (extractPathPart(musicAudio.value.src) !== extractPathPart(music.path)) {
+			musicAudio.value.removeEventListener("ended", handleMusicEnded);
 			musicAudio.value.src = music.path;
 			musicAudio.value.load();
+			musicAudio.value.addEventListener("ended", handleMusicEnded);
 		}
 
 		if (musicListNameCurrent.value !== music.folder) {
@@ -111,6 +119,15 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		}
 	}
 
+	function seek(time: number) {
+		if (!musicAudio.value) return;
+		const newTime = musicAudio.value.currentTime + time;
+		if (newTime < 0) musicAudio.value.currentTime = 0;
+		else if (newTime > musicAudio.value.duration)
+			musicAudio.value.currentTime = musicAudio.value.duration;
+		else musicAudio.value.currentTime = newTime;
+	}
+
 	return {
 		effectsVolume,
 		musicAudio,
@@ -127,5 +144,6 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		toggle,
 		previous,
 		next,
+		seek,
 	};
 });

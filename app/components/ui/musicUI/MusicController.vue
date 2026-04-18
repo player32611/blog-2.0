@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const soundStore = useSoundStore();
+const seekTime = ref<number>(5);
 </script>
 
 <template>
@@ -11,36 +12,37 @@ const soundStore = useSoundStore();
 		</div>
 
 		<div class="music_controls">
-			<button class="control_btn" @click="soundStore.previous" title="上一首">
-				<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-					<path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
-				</svg>
-			</button>
-
-			<button
-				class="play_btn"
-				@click="soundStore.toggle"
-				:title="soundStore.playingMusic ? '暂停' : '播放'"
-			>
-				<svg
-					v-if="!soundStore.playingMusic"
-					width="32"
-					height="32"
-					viewBox="0 0 24 24"
-					fill="currentColor"
+			<div class="left_controls"></div>
+			<div class="center_controls">
+				<button class="control_btn" title="上一首" @click="soundStore.previous">
+					<span class="icon">&#xea88;</span>
+				</button>
+				<button class="control_btn" title="快退" @click="() => soundStore.seek(-seekTime)">
+					<span class="icon">&#xea7a;</span>
+				</button>
+				<button
+					class="control_btn"
+					:title="soundStore.playingMusic ? '暂停' : '播放'"
+					@click="soundStore.toggle"
 				>
-					<path d="M8 5v14l11-7z" />
-				</svg>
-				<svg v-else width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-					<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-				</svg>
-			</button>
-
-			<button class="control_btn" @click="soundStore.next" title="下一首">
-				<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-					<path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
-				</svg>
-			</button>
+					<span v-if="!soundStore.playingMusic" class="icon">&#xea82;</span>
+					<span v-else class="icon">&#xea81;</span>
+				</button>
+				<button class="control_btn" title="快进" @click="() => soundStore.seek(seekTime)">
+					<span class="icon">&#xea7e;</span>
+				</button>
+				<button class="control_btn" title="下一首" @click="soundStore.next">
+					<span class="icon">&#xea7f;</span>
+				</button>
+			</div>
+			<div class="right_controls">
+				<button class="control_btn" title="音量">
+					<span v-if="soundStore.musicVolume > 0.66" class="icon">&#xea12;</span>
+					<span v-else-if="soundStore.musicVolume > 0.33" class="icon">&#xea13;</span>
+					<span v-else-if="soundStore.musicVolume > 0" class="icon">&#xea11;</span>
+					<span v-else class="icon">&#xea0f;</span>
+				</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -74,32 +76,46 @@ $base-size: 1;
 	}
 
 	.music_controls {
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: 100%;
 		gap: 10px * $base-size;
 		padding: 10px * $base-size;
 
-		.control_btn,
-		.play_btn {
+		.left_controls,
+		.center_controls,
+		.right_controls {
 			display: flex;
 			align-items: center;
-			justify-content: center;
-			color: #fff;
-			background: transparent;
-			border: none;
-			transition: all 0.3s ease;
-			cursor: pointer;
-		}
 
-		.control_btn {
-			width: 50px * $base-size;
-			height: 50px * $base-size;
-		}
+			&.left_controls {
+				justify-content: flex-start;
+			}
 
-		.play_btn {
-			width: 50px * $base-size;
-			height: 50px * $base-size;
+			&.center_controls {
+				justify-content: center;
+			}
+
+			&.right_controls {
+				justify-content: flex-end;
+			}
+
+			.control_btn {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 50px * $base-size;
+				height: 50px * $base-size;
+				color: #fff;
+				background: transparent;
+				border: none;
+				transition: all 0.3s ease;
+				cursor: pointer;
+
+				.icon {
+					font-size: 1.3rem * $base-size;
+				}
+			}
 		}
 	}
 }
@@ -126,11 +142,10 @@ $base-size: 1;
 			.control_btn {
 				width: 50px * $base-size;
 				height: 50px * $base-size;
-			}
 
-			.play_btn {
-				width: 50px * $base-size;
-				height: 50px * $base-size;
+				.icon {
+					font-size: 1.3rem * $base-size;
+				}
 			}
 		}
 	}
@@ -158,11 +173,10 @@ $base-size: 1;
 			.control_btn {
 				width: 50px * $base-size;
 				height: 50px * $base-size;
-			}
 
-			.play_btn {
-				width: 50px * $base-size;
-				height: 50px * $base-size;
+				.icon {
+					font-size: 1.2rem * $base-size;
+				}
 			}
 		}
 	}
@@ -187,11 +201,10 @@ $base-size: 1;
 			.control_btn {
 				width: 50px * $base-size;
 				height: 50px * $base-size;
-			}
 
-			.play_btn {
-				width: 50px * $base-size;
-				height: 50px * $base-size;
+				.icon {
+					font-size: 1.2rem * $base-size;
+				}
 			}
 		}
 	}
@@ -216,11 +229,10 @@ $base-size: 1;
 			.control_btn {
 				width: 50px * $base-size;
 				height: 50px * $base-size;
-			}
 
-			.play_btn {
-				width: 50px * $base-size;
-				height: 50px * $base-size;
+				.icon {
+					font-size: 1.2rem * $base-size;
+				}
 			}
 		}
 	}
