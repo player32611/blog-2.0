@@ -11,10 +11,18 @@ const volumePercent = computed({
 	},
 });
 
-const handleVolumeChange = (e: Event) => {
-	if (!e.target) return;
+const handleChangeVolume = (e: Event) => {
+	if (!e.target || !isSliderOpen.value) return;
 	const target = e.target as HTMLInputElement;
 	soundStore.setMusicVolume(parseFloat(target.value) / 100);
+};
+
+const openSlider = () => {
+	isSliderOpen.value = true;
+};
+
+const closeSlider = () => {
+	isSliderOpen.value = false;
 };
 </script>
 
@@ -51,37 +59,17 @@ const handleVolumeChange = (e: Event) => {
 				</button>
 			</div>
 			<div class="right_controls">
-				<button
-					class="control_btn"
-					title="音量"
-					@mouseenter="() => (isSliderOpen = true)"
-					@mouseleave="() => (isSliderOpen = false)"
-				>
-					<span
-						v-if="soundStore.musicVolume > 0.66"
-						class="icon"
-						@click="soundStore.setMusicVolume(0)"
-						>&#xea12;</span
-					>
-					<span
-						v-else-if="soundStore.musicVolume > 0.33"
-						class="icon"
-						@click="soundStore.setMusicVolume(0)"
-						>&#xea13;</span
-					>
-					<span
-						v-else-if="soundStore.musicVolume > 0"
-						class="icon"
-						@click="soundStore.setMusicVolume(0)"
-						>&#xea11;</span
-					>
-					<span v-else class="icon" @click="soundStore.setMusicVolume(1)">&#xea0f;</span>
+				<button class="control_btn" title="音量" @mouseenter="openSlider" @mouseleave="closeSlider">
+					<span v-if="soundStore.musicVolume > 0.66" class="icon">&#xea12;</span>
+					<span v-else-if="soundStore.musicVolume > 0.33" class="icon">&#xea13;</span>
+					<span v-else-if="soundStore.musicVolume > 0" class="icon">&#xea11;</span>
+					<span v-else class="icon">&#xea0f;</span>
 					<label class="slider">
 						<input
 							type="range"
 							:class="`level ${isSliderOpen ? 'active' : ''}`"
 							v-model="volumePercent"
-							@input="handleVolumeChange"
+							@input="handleChangeVolume"
 						/>
 					</label>
 				</button>
@@ -163,7 +151,6 @@ $base-size: 1;
 				.slider {
 					position: absolute;
 					bottom: 70px;
-					cursor: pointer;
 					display: -webkit-inline-box;
 					display: -ms-inline-flexbox;
 					display: inline-flex;
@@ -174,6 +161,7 @@ $base-size: 1;
 					-webkit-box-align: center;
 					-ms-flex-align: center;
 					align-items: center;
+					pointer-events: none;
 
 					.level {
 						-webkit-appearance: none;
@@ -186,11 +174,13 @@ $base-size: 1;
 						border-radius: 9px;
 						-webkit-transition: height 0.1s;
 						-o-transition: height 0.1s;
-						cursor: inherit;
+						cursor: pointer;
+						pointer-events: all;
 						transform: rotate(270deg);
 						transition:
 							width 0.3s,
 							height 0.3s;
+						touch-action: none;
 
 						&.active {
 							width: 100px;
@@ -238,12 +228,29 @@ $base-size: 1;
 			gap: 10px * $base-size;
 			padding: 10px * $base-size;
 
-			.control_btn {
-				width: 50px * $base-size;
-				height: 50px * $base-size;
+			.left_controls,
+			.center_controls,
+			.right_controls {
+				.control_btn {
+					width: 50px * $base-size;
+					height: 50px * $base-size;
 
-				.icon {
-					font-size: 1.3rem * $base-size;
+					.icon {
+						font-size: 1.3rem * $base-size;
+					}
+
+					.slider {
+						bottom: 70px;
+
+						.level {
+							border-radius: 9px;
+
+							&.active {
+								width: 100px;
+								height: 50px * $base-size;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -269,12 +276,29 @@ $base-size: 1;
 			gap: 10px * $base-size;
 			padding: 10px * $base-size;
 
-			.control_btn {
-				width: 50px * $base-size;
-				height: 50px * $base-size;
+			.left_controls,
+			.center_controls,
+			.right_controls {
+				.control_btn {
+					width: 50px * $base-size;
+					height: 50px * $base-size;
 
-				.icon {
-					font-size: 1.2rem * $base-size;
+					.icon {
+						font-size: 1.3rem * $base-size;
+					}
+
+					.slider {
+						bottom: 70px;
+
+						.level {
+							border-radius: 9px;
+
+							&.active {
+								width: 100px;
+								height: 50px * $base-size;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -296,13 +320,31 @@ $base-size: 1;
 
 		.music_controls {
 			gap: 10px * $base-size;
+			padding: 10px * $base-size;
 
-			.control_btn {
-				width: 50px * $base-size;
-				height: 50px * $base-size;
+			.left_controls,
+			.center_controls,
+			.right_controls {
+				.control_btn {
+					width: 50px * $base-size;
+					height: 50px * $base-size;
 
-				.icon {
-					font-size: 1.2rem * $base-size;
+					.icon {
+						font-size: 1.3rem * $base-size;
+					}
+
+					.slider {
+						bottom: 70px;
+
+						.level {
+							border-radius: 9px;
+
+							&.active {
+								width: 100px;
+								height: 50px * $base-size;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -324,13 +366,31 @@ $base-size: 1;
 
 		.music_controls {
 			gap: 10px * $base-size;
+			padding: 10px * $base-size;
 
-			.control_btn {
-				width: 50px * $base-size;
-				height: 50px * $base-size;
+			.left_controls,
+			.center_controls,
+			.right_controls {
+				.control_btn {
+					width: 50px * $base-size;
+					height: 50px * $base-size;
 
-				.icon {
-					font-size: 1.2rem * $base-size;
+					.icon {
+						font-size: 1.3rem * $base-size;
+					}
+
+					.slider {
+						bottom: 70px;
+
+						.level {
+							border-radius: 9px;
+
+							&.active {
+								width: 100px;
+								height: 50px * $base-size;
+							}
+						}
+					}
 				}
 			}
 		}
