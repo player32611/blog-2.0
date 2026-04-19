@@ -1,6 +1,21 @@
 <script setup lang="ts">
+import { gsap } from "gsap/gsap-core";
+
 const soundStore = useSoundStore();
 const seekTime = ref<number>(5);
+const isSliderOpen = ref<boolean>(false);
+const volumePercent = computed({
+	get: () => soundStore.musicVolume * 100,
+	set: value => {
+		soundStore.setMusicVolume(value / 100);
+	},
+});
+
+const handleVolumeChange = (e: Event) => {
+	if (!e.target) return;
+	const target = e.target as HTMLInputElement;
+	soundStore.setMusicVolume(parseFloat(target.value) / 100);
+};
 </script>
 
 <template>
@@ -36,11 +51,39 @@ const seekTime = ref<number>(5);
 				</button>
 			</div>
 			<div class="right_controls">
-				<button class="control_btn" title="音量">
-					<span v-if="soundStore.musicVolume > 0.66" class="icon">&#xea12;</span>
-					<span v-else-if="soundStore.musicVolume > 0.33" class="icon">&#xea13;</span>
-					<span v-else-if="soundStore.musicVolume > 0" class="icon">&#xea11;</span>
-					<span v-else class="icon">&#xea0f;</span>
+				<button
+					class="control_btn"
+					title="音量"
+					@mouseenter="() => (isSliderOpen = true)"
+					@mouseleave="() => (isSliderOpen = false)"
+				>
+					<span
+						v-if="soundStore.musicVolume > 0.66"
+						class="icon"
+						@click="soundStore.setMusicVolume(0)"
+						>&#xea12;</span
+					>
+					<span
+						v-else-if="soundStore.musicVolume > 0.33"
+						class="icon"
+						@click="soundStore.setMusicVolume(0)"
+						>&#xea13;</span
+					>
+					<span
+						v-else-if="soundStore.musicVolume > 0"
+						class="icon"
+						@click="soundStore.setMusicVolume(0)"
+						>&#xea11;</span
+					>
+					<span v-else class="icon" @click="soundStore.setMusicVolume(1)">&#xea0f;</span>
+					<label class="slider">
+						<input
+							type="range"
+							:class="`level ${isSliderOpen ? 'active' : ''}`"
+							v-model="volumePercent"
+							@input="handleVolumeChange"
+						/>
+					</label>
 				</button>
 			</div>
 		</div>
@@ -101,6 +144,7 @@ $base-size: 1;
 			}
 
 			.control_btn {
+				position: relative;
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -109,11 +153,66 @@ $base-size: 1;
 				color: #fff;
 				background: transparent;
 				border: none;
-				transition: all 0.3s ease;
+				user-select: none;
 				cursor: pointer;
 
 				.icon {
 					font-size: 1.3rem * $base-size;
+				}
+
+				.slider {
+					position: absolute;
+					bottom: 70px;
+					cursor: pointer;
+					display: -webkit-inline-box;
+					display: -ms-inline-flexbox;
+					display: inline-flex;
+					-webkit-box-orient: horizontal;
+					-webkit-box-direction: reverse;
+					-ms-flex-direction: row-reverse;
+					flex-direction: row-reverse;
+					-webkit-box-align: center;
+					-ms-flex-align: center;
+					align-items: center;
+
+					.level {
+						-webkit-appearance: none;
+						-moz-appearance: none;
+						appearance: none;
+						width: 0px;
+						height: 0px;
+						background: rgb(82, 82, 82);
+						overflow: hidden;
+						border-radius: 9px;
+						-webkit-transition: height 0.1s;
+						-o-transition: height 0.1s;
+						cursor: inherit;
+						transform: rotate(270deg);
+						transition:
+							width 0.3s,
+							height 0.3s;
+
+						&.active {
+							width: 100px;
+							height: 50px * $base-size;
+						}
+
+						&::-webkit-slider-thumb {
+							-webkit-appearance: none;
+							width: 0;
+							height: 0;
+							-webkit-box-shadow: -200px 0 0 200px #fff;
+							box-shadow: -200px 0 0 200px #fff;
+						}
+
+						&::-moz-range-thumb {
+							width: 0;
+							height: 0;
+							border-radius: 0;
+							border: none;
+							box-shadow: -200px 0 0 200px #fff;
+						}
+					}
 				}
 			}
 		}

@@ -1168,3 +1168,79 @@ public class LinkedListDemo {
 ```
 
 ::
+
+### Map 接口
+
+Map 是一个从关键字到值的映射对象，Map 中不能有重复的关键字，每个关键字最多能够映射到一个值
+
+Map 接口在声明时应该使用泛型，即 `Map<K, V>`，其中 K 表示关键字的类型，V 表示值的类型
+
+Map 的实现类有 `HashMap`、`HashTable` 等。
+
+::detail
+
+#title
+`HashMap` 应用举例
+#default
+
+```java
+public class HashMapDemo {
+  public static void main(String[] args) {
+    HashMap<String, Integer> scores = new HashMap<String, Integer>();
+    scores.put("Tom", 85);
+    scores.put("Jack", 92);
+    scores.put("Alice", 88);
+    scores.put("Tom", 90);
+
+    System.out.println(scores);
+    System.out.println("Tom 的成绩是：" + scores.get("Tom"));
+    System.out.println("是否包含 Jack：" + scores.containsKey("Jack"));
+    System.out.println("是否包含 88：" + scores.containsValue(88));
+
+    scores.remove("Alice");
+    System.out.println("删除后：" + scores));
+  }
+}
+```
+
+::
+
+### 集合遍历
+
+集合的遍历是最常见的一种集合操作，我们通常使用下面的方法遍历集合类对象 v 中的每一个元素：
+
+```java
+for (元素类型 元素名 : 集合对象 v) {  }
+```
+
+使用 `java.util.Iterator` 类可以使得遍历方法得到简化。`Iterator` 提供了用于遍历元素的方法，能够从集合类对象中提取元素，还具有从正在遍历的集合中去除对象的能力：
+
+```java
+Iterator<元素类型> it = 集合对象.iterator();
+while (it.hasNext()) {
+  元素类型 element = it.next();
+  // 访问元素 element
+}
+```
+
+::tip
+
+`Iterator` 类的实例方法：
+
+- `hasNext()`：判断是否还有元素可供遍历
+
+- `next()`：返回下一个元素
+
+- `remove()`：从集合中移除最近一次调用 Iterator 的 `next()` 方法所返回的元素。每调用一次 `next()` 方法，只能相应地调用一次 `remove()` 方法
+
+::
+
+## 图形用户界面
+
+::danger
+
+该部分尚未完工!
+
+::
+
+在屏幕上绘图要使用 Java 的图形环境，Graphics 对象就是专门管理图形环境的
