@@ -63,6 +63,7 @@ export type SoundGetter = {};
 export type SoundActions = {
 	setEffectsVolume: (volume: number) => void;
 	setMusicVolume: (volume: number) => void;
+	setMusicCurrentTime: (time: number) => void;
 	initAudio: (music: MusicInfo) => void;
 	play: (music: MusicInfo) => void;
 	pause: () => void;

@@ -2,8 +2,16 @@
 import { gsap } from "gsap/gsap-core";
 
 const soundStore = useSoundStore();
+const progressRef = ref<HTMLDivElement | null>(null);
 const barRef = ref<HTMLDivElement | null>(null);
 const stripeAnimation = ref<gsap.core.Tween | null>(null);
+
+const handleClickProgress = (e: MouseEvent) => {
+	if (!progressRef.value || !soundStore.musicAudio) return;
+	soundStore.setMusicCurrentTime(
+		(e.offsetX / progressRef.value.offsetWidth) * soundStore.musicAudio.duration,
+	);
+};
 
 // 启动条纹动画
 const startStripeAnimation = () => {
@@ -75,13 +83,14 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-	<div class="music_progress">
+	<div class="music_progress" @click="handleClickProgress" ref="progressRef">
 		<div class="progress_bar" ref="barRef"></div>
 	</div>
 </template>
 
 <style scoped lang="scss">
 .music_progress {
+	position: relative;
 	width: 100%;
 	height: 100%;
 	background-color: #333;

@@ -35,6 +35,11 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		if (musicAudio.value) musicAudio.value.volume = volume;
 	}
 
+	function setMusicCurrentTime(time: number) {
+		if (!musicAudio.value || time < 0 || time > musicAudio.value.duration) return;
+		musicAudio.value.currentTime = time;
+	}
+
 	function initAudio(music: MusicInfo) {
 		const handleMusicEnded = () => {
 			playingMusic.value = false;
@@ -138,6 +143,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		playingMusic,
 		setEffectsVolume,
 		setMusicVolume,
+		setMusicCurrentTime,
 		initAudio,
 		play,
 		pause,
