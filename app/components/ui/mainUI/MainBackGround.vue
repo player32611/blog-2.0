@@ -105,9 +105,8 @@ onUnmounted(() => {
 		@mousemove="handleMouseMove"
 		@mouseup="handleMouseUp"
 		@mouseleave="handleMouseUp"
-		@dragstart.prevent
 		@touchstart.passive="handleTouchStart"
-		@touchmove.prevent="handleTouchMove"
+		@touchmove.passive="handleTouchMove"
 		@touchend="handleMouseUp"
 		@touchcancel="handleMouseUp"
 	>
@@ -132,6 +131,7 @@ onUnmounted(() => {
 	width: 100%;
 	overflow: hidden;
 	user-select: none;
+	overscroll-behavior: none;
 
 	img {
 		cursor: pointer;

@@ -101,7 +101,7 @@ const handleTouchMove = (e: TouchEvent) => {
 onMounted(() => {
 	init();
 	document.addEventListener("mousemove", handleMouseMove);
-	document.addEventListener("touchmove", handleTouchMove);
+	document.addEventListener("touchmove", handleTouchMove, { passive: true });
 	window.addEventListener("resize", init);
 });
 
