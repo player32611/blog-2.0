@@ -3,14 +3,14 @@ import { gsap } from "gsap/gsap-core";
 
 const soundStore = useSoundStore();
 const barRef = ref<HTMLDivElement | null>(null);
-let stripeAnimation: gsap.core.Tween | null = null;
+const stripeAnimation = ref<gsap.core.Tween | null>(null);
 
 // 启动条纹动画
 const startStripeAnimation = () => {
 	if (!barRef.value) return;
-	stripeAnimation = gsap.to(barRef.value, {
-		backgroundPosition: "left",
-		duration: 1,
+	stripeAnimation.value = gsap.to(barRef.value, {
+		backgroundPositionX: "+=56.57",
+		duration: 0.5,
 		repeat: -1,
 		ease: "linear",
 	});
@@ -18,21 +18,21 @@ const startStripeAnimation = () => {
 
 // 停止条纹动画
 const stopStripeAnimation = () => {
-	stripeAnimation?.kill();
-	stripeAnimation = null;
+	stripeAnimation.value?.kill();
+	stripeAnimation.value = null;
 };
 
 const updateTime = () => {
 	if (!soundStore.musicAudio) {
 		gsap.to(barRef.value, {
 			width: 0,
-			duration: 0.2,
+			duration: 0.1,
 			ease: "power1.out",
 		});
 	} else {
 		gsap.to(barRef.value, {
 			width: `${(soundStore.musicAudio.currentTime / soundStore.musicAudio.duration) * 100}%`,
-			duration: 0.2,
+			duration: 0.1,
 			ease: "power1.out",
 		});
 	}
@@ -92,7 +92,7 @@ onBeforeUnmount(() => {
 	.progress_bar {
 		width: 0;
 		height: 100%;
-		background: repeating-linear-gradient(-45deg, #766df4 0 20px, #0000 0 40px) right/200% 100%;
+		background: repeating-linear-gradient(-45deg, #766df4 0 20px, #0000 0 40px) 0 0 / 56.57px 100%;
 		border-right: 1px solid #766df4;
 		border-radius: 10px;
 	}

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { gsap } from "gsap/gsap-core";
-
 import MusicProgress from "./MusicProgress.vue";
 
 const soundStore = useSoundStore();
@@ -96,8 +94,10 @@ $base-size: 1;
 	opacity: 0.4;
 
 	.music_info {
+		display: flex;
+		align-items: center;
 		text-align: center;
-		padding-top: 10px * $base-size;
+		padding: 10px * $base-size;
 
 		.music_name {
 			font-size: 1.2rem * $base-size;
@@ -110,7 +110,7 @@ $base-size: 1;
 	}
 
 	.music_progress_container {
-		height: 10px;
+		height: 8px * $base-size;
 		width: 90%;
 	}
 
@@ -119,7 +119,7 @@ $base-size: 1;
 		grid-template-columns: repeat(3, 1fr);
 		grid-template-rows: 100%;
 		gap: 10px * $base-size;
-		padding: 10px * $base-size;
+		padding-bottom: 10px * $base-size;
 		width: 100%;
 
 		.left_controls,
@@ -154,7 +154,7 @@ $base-size: 1;
 				cursor: pointer;
 
 				.icon {
-					font-size: 1.3rem * $base-size;
+					font-size: 1.2rem * $base-size;
 				}
 
 				.slider {
@@ -226,16 +226,21 @@ $base-size: 1;
 		border-top: 3px * $base-size solid #ffffff;
 
 		.music_info {
-			padding-top: 10px * $base-size;
+			padding: 10px * $base-size;
 
 			.music_name {
 				font-size: 1rem * $base-size;
 			}
 		}
 
+		.music_progress_container {
+			height: 6px * $base-size;
+			width: 90%;
+		}
+
 		.music_controls {
 			gap: 10px * $base-size;
-			padding: 10px * $base-size;
+			padding-bottom: 10px * $base-size;
 
 			.left_controls,
 			.center_controls,
@@ -245,7 +250,7 @@ $base-size: 1;
 					height: 50px * $base-size;
 
 					.icon {
-						font-size: 1.3rem * $base-size;
+						font-size: 1rem * $base-size;
 					}
 
 					.slider {
@@ -274,16 +279,21 @@ $base-size: 1;
 		border-top: 4px * $base-size solid #ffffff;
 
 		.music_info {
-			padding-top: 10px * $base-size;
+			padding: 10px * $base-size;
 
 			.music_name {
 				font-size: 1.1rem * $base-size;
 			}
 		}
 
+		.music_progress_container {
+			height: 8px * $base-size;
+			width: 90%;
+		}
+
 		.music_controls {
 			gap: 10px * $base-size;
-			padding: 10px * $base-size;
+			padding-bottom: 10px * $base-size;
 
 			.left_controls,
 			.center_controls,
@@ -293,7 +303,7 @@ $base-size: 1;
 					height: 50px * $base-size;
 
 					.icon {
-						font-size: 1.3rem * $base-size;
+						font-size: 1rem * $base-size;
 					}
 
 					.slider {
@@ -327,9 +337,14 @@ $base-size: 1;
 			}
 		}
 
+		.music_progress_container {
+			height: 8px * $base-size;
+			width: 90%;
+		}
+
 		.music_controls {
 			gap: 10px * $base-size;
-			padding: 10px * $base-size;
+			padding-bottom: 10px * $base-size;
 
 			.left_controls,
 			.center_controls,
@@ -339,7 +354,7 @@ $base-size: 1;
 					height: 50px * $base-size;
 
 					.icon {
-						font-size: 1.3rem * $base-size;
+						font-size: 1rem * $base-size;
 					}
 
 					.slider {
@@ -369,13 +384,18 @@ $base-size: 1;
 
 		.music_info {
 			.music_name {
-				font-size: 1.2rem * $base-size;
+				font-size: 1.1rem * $base-size;
 			}
+		}
+
+		.music_progress_container {
+			height: 8px * $base-size;
+			width: 90%;
 		}
 
 		.music_controls {
 			gap: 10px * $base-size;
-			padding: 10px * $base-size;
+			padding-bottom: 10px * $base-size;
 
 			.left_controls,
 			.center_controls,
@@ -385,7 +405,7 @@ $base-size: 1;
 					height: 50px * $base-size;
 
 					.icon {
-						font-size: 1.3rem * $base-size;
+						font-size: 1.1rem * $base-size;
 					}
 
 					.slider {
