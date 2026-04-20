@@ -33,7 +33,9 @@ const closeSlider = () => {
 				{{ soundStore.musicCurrent?.name || "未选择音乐" }}
 			</div>
 		</div>
-		<div class="music_progress_container"><MusicProgress /></div>
+		<div class="music_progress_container">
+			<MusicProgress />
+		</div>
 		<div class="music_controls">
 			<div class="left_controls"></div>
 			<div class="center_controls">
@@ -86,6 +88,7 @@ $base-size: 1;
 	flex-direction: column;
 	justify-content: space-evenly;
 	align-items: center;
+	margin-left: 5px * $base-size;
 	height: 100%;
 	width: 100%;
 	font-family: "方正基础像素体";
@@ -110,8 +113,11 @@ $base-size: 1;
 	}
 
 	.music_progress_container {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 		height: 8px * $base-size;
-		width: 90%;
+		width: 100%;
 	}
 
 	.music_controls {
@@ -223,6 +229,7 @@ $base-size: 1;
 	$base-size: 0.8;
 
 	.music_controller {
+		margin-left: 0;
 		border-top: 3px * $base-size solid #ffffff;
 
 		.music_info {
@@ -235,7 +242,6 @@ $base-size: 1;
 
 		.music_progress_container {
 			height: 6px * $base-size;
-			width: 90%;
 		}
 
 		.music_controls {
@@ -276,6 +282,7 @@ $base-size: 1;
 	$base-size: 0.9;
 
 	.music_controller {
+		margin-left: 0;
 		border-top: 4px * $base-size solid #ffffff;
 
 		.music_info {
@@ -288,7 +295,6 @@ $base-size: 1;
 
 		.music_progress_container {
 			height: 8px * $base-size;
-			width: 90%;
 		}
 
 		.music_controls {
@@ -329,6 +335,7 @@ $base-size: 1;
 	$base-size: 0.9;
 
 	.music_controller {
+		margin-left: 0px * $base-size;
 		border-top: 5px * $base-size solid #ffffff;
 
 		.music_info {
@@ -339,7 +346,6 @@ $base-size: 1;
 
 		.music_progress_container {
 			height: 8px * $base-size;
-			width: 90%;
 		}
 
 		.music_controls {
@@ -380,6 +386,7 @@ $base-size: 1;
 	$base-size: 1;
 
 	.music_controller {
+		margin-left: 0px * $base-size;
 		border-top: 5px * $base-size solid #ffffff;
 
 		.music_info {
@@ -390,7 +397,6 @@ $base-size: 1;
 
 		.music_progress_container {
 			height: 8px * $base-size;
-			width: 90%;
 		}
 
 		.music_controls {

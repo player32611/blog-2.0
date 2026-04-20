@@ -52,6 +52,7 @@ export type SoundState = {
 	effectsVolume: Ref<number>;
 	musicAudio: Ref<HTMLAudioElement | null>;
 	musicCurrent: Ref<MusicInfo | null>;
+	musicCurrentTime: Ref<number>;
 	musicListCurrent: Ref<MusicInfo[]>;
 	musicListNameCurrent: Ref<string | null>;
 	musicVolume: Ref<number>;

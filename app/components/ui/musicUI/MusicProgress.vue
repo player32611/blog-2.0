@@ -2,14 +2,14 @@
 import { gsap } from "gsap/gsap-core";
 
 const soundStore = useSoundStore();
-const progressRef = ref<HTMLDivElement | null>(null);
+const barContainerRef = ref<HTMLDivElement | null>(null);
 const barRef = ref<HTMLDivElement | null>(null);
 const stripeAnimation = ref<gsap.core.Tween | null>(null);
 
 const handleClickProgress = (e: MouseEvent) => {
-	if (!progressRef.value || !soundStore.musicAudio) return;
+	if (!barContainerRef.value || !soundStore.musicAudio) return;
 	soundStore.setMusicCurrentTime(
-		(e.offsetX / progressRef.value.offsetWidth) * soundStore.musicAudio.duration,
+		(e.offsetX / barContainerRef.value.offsetWidth) * soundStore.musicAudio.duration,
 	);
 };
 
@@ -30,37 +30,6 @@ const stopStripeAnimation = () => {
 	stripeAnimation.value = null;
 };
 
-const updateTime = () => {
-	if (!soundStore.musicAudio) {
-		gsap.to(barRef.value, {
-			width: 0,
-			duration: 0.1,
-			ease: "power1.out",
-		});
-	} else {
-		gsap.to(barRef.value, {
-			width: `${(soundStore.musicAudio.currentTime / soundStore.musicAudio.duration) * 100}%`,
-			duration: 0.1,
-			ease: "power1.out",
-		});
-	}
-};
-
-// 监听 musicAudio 变化，绑定/解绑 timeupdate 事件
-watch(
-	() => soundStore.musicAudio,
-	(newAudio, oldAudio) => {
-		if (oldAudio) {
-			oldAudio.removeEventListener("timeupdate", updateTime);
-		}
-		if (newAudio) {
-			newAudio.addEventListener("timeupdate", updateTime);
-			updateTime(); // 初始化
-		}
-	},
-	{ immediate: true },
-);
-
 // 监听播放状态，控制条纹动画
 watch(
 	() => soundStore.playingMusic,
@@ -74,36 +43,129 @@ watch(
 	{ immediate: true },
 );
 
-onBeforeUnmount(() => {
-	if (soundStore.musicAudio) {
-		soundStore.musicAudio.removeEventListener("timeupdate", updateTime);
-	}
+onUnmounted(() => {
 	stopStripeAnimation();
 });
 </script>
 
 <template>
-	<div class="music_progress" @click="handleClickProgress" ref="progressRef">
-		<div class="progress_bar" ref="barRef"></div>
+	<div class="music_progress">
+		<div class="music_currentTime">{{ formatTime(soundStore.musicCurrentTime) }}</div>
+		<div class="bar_container" ref="barContainerRef" @click="handleClickProgress">
+			<div
+				class="progress_bar"
+				ref="barRef"
+				:style="{
+					width: `${soundStore.musicAudio ? (soundStore.musicCurrentTime / soundStore.musicAudio.duration) * 100 : 0}%`,
+				}"
+			></div>
+		</div>
+		<div class="music_duration">
+			{{ soundStore.musicAudio ? formatTime(soundStore.musicAudio.duration) : "00:00" }}
+		</div>
 	</div>
 </template>
 
 <style scoped lang="scss">
 .music_progress {
 	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	width: 100%;
 	height: 100%;
-	background-color: #333;
-	border-radius: 10px;
-	overflow: hidden;
 	cursor: pointer;
 
-	.progress_bar {
-		width: 0;
+	.music_currentTime,
+	.music_duration {
+		font-size: 1rem;
+		color: #fff;
+		transform: translateY(-1px);
+	}
+
+	.bar_container {
+		margin: 0 10px;
 		height: 100%;
-		background: repeating-linear-gradient(-45deg, #766df4 0 20px, #0000 0 40px) 0 0 / 56.57px 100%;
-		border-right: 1px solid #766df4;
+		width: 80%;
+		background-color: #333;
 		border-radius: 10px;
+		overflow: hidden;
+
+		.progress_bar {
+			width: 0;
+			height: 100%;
+			background: repeating-linear-gradient(-45deg, #766df4 0 20px, #0000 0 40px) 0 0 / 56.57px 100%;
+			border-right: 1px solid #766df4;
+			border-radius: 10px;
+		}
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.7;
+
+	.music_progress {
+		.music_currentTime,
+		.music_duration {
+			font-size: 1rem * $base-size;
+		}
+
+		.bar_container {
+			margin: 0 10px * $base-size;
+			width: 80%;
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.9;
+
+	.music_progress {
+		.music_currentTime,
+		.music_duration {
+			font-size: 1rem * $base-size;
+		}
+
+		.bar_container {
+			margin: 0 10px * $base-size;
+			width: 80%;
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 1;
+
+	.music_progress {
+		.music_currentTime,
+		.music_duration {
+			font-size: 1rem * $base-size;
+		}
+
+		.bar_container {
+			margin: 0 10px * $base-size;
+			width: 80%;
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 1;
+
+	.music_progress {
+		.music_currentTime,
+		.music_duration {
+			font-size: 1rem * $base-size;
+		}
+
+		.bar_container {
+			margin: 0 10px * $base-size;
+			width: 80%;
+		}
 	}
 }
 </style>

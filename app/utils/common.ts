@@ -4,6 +4,7 @@
  * @returns 格式化后的时间字符串，格式为 "分钟:秒数"，其中秒数始终为两位数（不足两位时前面补零）
  */
 export const formatTime = (seconds: number) => {
+	if (Number.isNaN(seconds)) return "0:00";
 	const mins = Math.floor(seconds / 60);
 	const secs = Math.floor(seconds % 60);
 	return `${mins}:${secs.toString().padStart(2, "0")}`;

@@ -12,6 +12,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 	const effectsVolume = ref<number>(0.7); // 音效音量
 	const musicAudio = ref<HTMLAudioElement | null>(null); // 音乐播放器
 	const musicCurrent = ref<MusicInfo | null>(null); // 当前音乐信息
+	const musicCurrentTime = ref<number>(0); // 当前音乐播放位置
 	const musicListCurrent = ref<MusicInfo[]>([]); // 当前音乐播放列表
 	const musicListNameCurrent = ref<string | null>(null); // 当前音乐播放列表名称
 	const musicVolume = ref<number>(0.7); // 音乐音量
@@ -46,15 +47,24 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 			musicAudio.value?.removeEventListener("ended", handleMusicEnded);
 		};
 
+		const handleTimeUpdate = () => {
+			if (musicAudio.value) {
+				musicCurrentTime.value = musicAudio.value.currentTime;
+			}
+		};
+
 		if (!musicAudio.value) {
 			musicAudio.value = new Audio(music.path);
 			musicAudio.value.volume = musicVolume.value;
 			musicAudio.value.addEventListener("ended", handleMusicEnded);
+			musicAudio.value.addEventListener("timeupdate", handleTimeUpdate);
 		} else if (extractPathPart(musicAudio.value.src) !== extractPathPart(music.path)) {
 			musicAudio.value.removeEventListener("ended", handleMusicEnded);
+			musicAudio.value.removeEventListener("timeupdate", handleTimeUpdate);
 			musicAudio.value.src = music.path;
 			musicAudio.value.load();
 			musicAudio.value.addEventListener("ended", handleMusicEnded);
+			musicAudio.value.addEventListener("timeupdate", handleTimeUpdate);
 		}
 
 		if (musicListNameCurrent.value !== music.folder) {
@@ -137,6 +147,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		effectsVolume,
 		musicAudio,
 		musicCurrent,
+		musicCurrentTime,
 		musicListCurrent,
 		musicListNameCurrent,
 		musicVolume,
