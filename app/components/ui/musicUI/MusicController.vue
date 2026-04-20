@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { gsap } from "gsap/gsap-core";
 
+import MusicProgress from "./MusicProgress.vue";
+
 const soundStore = useSoundStore();
 const seekTime = ref<number>(5);
 const isSliderOpen = ref<boolean>(false);
@@ -33,7 +35,7 @@ const closeSlider = () => {
 				{{ soundStore.musicCurrent?.name || "未选择音乐" }}
 			</div>
 		</div>
-
+		<div class="music_progress_container"><MusicProgress /></div>
 		<div class="music_controls">
 			<div class="left_controls"></div>
 			<div class="center_controls">
@@ -85,6 +87,7 @@ $base-size: 1;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
+	align-items: center;
 	height: 100%;
 	width: 100%;
 	font-family: "方正基础像素体";
@@ -106,12 +109,18 @@ $base-size: 1;
 		}
 	}
 
+	.music_progress_container {
+		height: 10px;
+		width: 90%;
+	}
+
 	.music_controls {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		grid-template-rows: 100%;
 		gap: 10px * $base-size;
 		padding: 10px * $base-size;
+		width: 100%;
 
 		.left_controls,
 		.center_controls,
