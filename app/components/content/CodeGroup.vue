@@ -106,7 +106,9 @@ onMounted(async () => {
 	.tabs {
 		position: relative;
 		display: flex;
-		border: 2.5px solid #ffffff;
+		border-width: 2.5px;
+		border-style: solid;
+		border-color: #ffffff;
 		border-radius: 8px;
 		overflow-x: hidden;
 
@@ -117,7 +119,7 @@ onMounted(async () => {
 		.tab {
 			padding: 8px 16px;
 			font-family: "方正基础像素体";
-			font-size: 13px;
+			font-size: 1rem;
 			color: rgba(255, 255, 255, 0.5);
 			background: transparent;
 			border: none;
@@ -142,6 +144,7 @@ onMounted(async () => {
 		display: flex;
 		align-items: center;
 		width: 100%;
+
 		.bar {
 			position: absolute;
 			top: 6px;
@@ -168,6 +171,122 @@ onMounted(async () => {
 			:deep(.custom_pre_wrapper) {
 				margin: 0;
 			}
+		}
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.6;
+
+	.code_group {
+		margin: 20px * $base-size 0;
+
+		.tabs {
+			border-width: 2.5px * $base-size;
+
+			.tab {
+				padding: 8px * $base-size 16px * $base-size;
+				font-size: 1rem * $base-size;
+			}
+		}
+
+		.bar_container {
+			.bar {
+				top: 6px * $base-size;
+				height: 2px * $base-size;
+			}
+		}
+
+		.blocks {
+			margin-top: 1rem * $base-size;
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.7;
+
+	.code_group {
+		margin: 20px * $base-size 0;
+
+		.tabs {
+			border-width: 2.5px * $base-size;
+
+			.tab {
+				padding: 8px * $base-size 16px * $base-size;
+				font-size: 1rem * $base-size;
+			}
+		}
+
+		.bar_container {
+			.bar {
+				top: 6px * $base-size;
+				height: 2px * $base-size;
+			}
+		}
+
+		.blocks {
+			margin-top: 1rem * $base-size;
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.8;
+
+	.code_group {
+		margin: 20px * $base-size 0;
+
+		.tabs {
+			border-width: 2.5px * $base-size;
+
+			.tab {
+				padding: 8px * $base-size 16px * $base-size;
+				font-size: 1rem * $base-size;
+			}
+		}
+
+		.bar_container {
+			.bar {
+				top: 6px * $base-size;
+				height: 2px * $base-size;
+			}
+		}
+
+		.blocks {
+			margin-top: 1rem * $base-size;
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.9;
+
+	.code_group {
+		margin: 20px * $base-size 0;
+
+		.tabs {
+			border-width: 2.5px * $base-size;
+
+			.tab {
+				padding: 8px * $base-size 16px * $base-size;
+				font-size: 1rem * $base-size;
+			}
+		}
+
+		.bar_container {
+			.bar {
+				top: 6px * $base-size;
+				height: 2px * $base-size;
+			}
+		}
+
+		.blocks {
+			margin-top: 1rem * $base-size;
 		}
 	}
 }

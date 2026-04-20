@@ -87,6 +87,7 @@ $base-size: 0.3;
 			border-style: solid;
 			border-color: #ffffff;
 			font-family: "方正基础像素体";
+			overflow-x: hidden;
 		}
 	}
 }
@@ -129,7 +130,7 @@ $base-size: 0.3;
 
 /* ========== 中等屏（768px - 991px）========== */
 @media screen and (min-width: 768px) and (max-width: 991px) {
-	$base-size: 0.9;
+	$base-size: 0.8;
 
 	.blogs {
 		font-size: 1.2rem * $base-size;

@@ -23,6 +23,7 @@
 	border-top-left-radius: 0px;
 	border-bottom-left-radius: 0px;
 	background: linear-gradient(to right, #add8e66e, #add8e64e 50%, #add8e63e);
+	overflow: auto;
 
 	span {
 		display: flex;

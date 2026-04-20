@@ -78,8 +78,8 @@ const createBoxes = () => {
 		boxes.value.set(
 			"ItemSwitchCard",
 			Bodies.rectangle(
-				width / 2,
-				height / 2,
+				Math.random() * width,
+				Math.random() * -100,
 				ItemSwitchCardRef.value.$el.offsetWidth,
 				ItemSwitchCardRef.value.$el.offsetHeight,
 				{
@@ -96,8 +96,8 @@ const createBoxes = () => {
 		boxes.value.set(
 			"ItemPhoneCard",
 			Bodies.rectangle(
-				width / 2,
-				height / 2,
+				Math.random() * width,
+				Math.random() * -100,
 				ItemPhoneCardRef.value.$el.offsetWidth,
 				ItemPhoneCardRef.value.$el.offsetHeight,
 				{

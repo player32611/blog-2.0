@@ -8,10 +8,11 @@
 
 <style scoped lang="scss">
 code {
-	padding: 3px 6px;
+	padding: 0px 0.5rem;
 	color: #ffffff;
 	border: 1px solid #ffffff;
 	border-radius: 4px;
+	font-family: "方正基础像素体";
 	transition:
 		color 0.25s,
 		background-color 0.5s;
