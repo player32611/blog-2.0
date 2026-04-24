@@ -40,23 +40,22 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		if (!musicAudio.value || time < 0 || time > musicAudio.value.duration) return;
 		musicAudio.value.currentTime = time;
 	}
+	const handleCanPlay = () => {
+		if (playingMusic.value && musicAudio.value) {
+			musicAudio.value.play();
+		}
+	};
+	const handleTimeUpdate = () => {
+		if (musicAudio.value) {
+			musicCurrentTime.value = musicAudio.value.currentTime;
+		}
+	};
+	const handleMusicEnded = () => {
+		playingMusic.value = false;
+		musicAudio.value?.removeEventListener("ended", handleMusicEnded);
+	};
 
 	function initAudio(music: MusicInfo) {
-		const handleCanPlay = () => {
-			if (playingMusic.value && musicAudio.value) {
-				musicAudio.value.play();
-			}
-		};
-		const handleTimeUpdate = () => {
-			if (musicAudio.value) {
-				musicCurrentTime.value = musicAudio.value.currentTime;
-			}
-		};
-		const handleMusicEnded = () => {
-			playingMusic.value = false;
-			musicAudio.value?.removeEventListener("ended", handleMusicEnded);
-		};
-
 		if (!musicAudio.value) {
 			musicAudio.value = new Audio(music.path);
 			console.log("musicAudio:", musicAudio.value.preload);
