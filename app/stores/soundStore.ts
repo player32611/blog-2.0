@@ -42,29 +42,37 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 	}
 
 	function initAudio(music: MusicInfo) {
-		const handleMusicEnded = () => {
-			playingMusic.value = false;
-			musicAudio.value?.removeEventListener("ended", handleMusicEnded);
+		const handleCanPlay = () => {
+			if (playingMusic.value && musicAudio.value) {
+				musicAudio.value.play();
+			}
 		};
-
 		const handleTimeUpdate = () => {
 			if (musicAudio.value) {
 				musicCurrentTime.value = musicAudio.value.currentTime;
 			}
 		};
+		const handleMusicEnded = () => {
+			playingMusic.value = false;
+			musicAudio.value?.removeEventListener("ended", handleMusicEnded);
+		};
 
 		if (!musicAudio.value) {
 			musicAudio.value = new Audio(music.path);
+			console.log("musicAudio:", musicAudio.value.preload);
 			musicAudio.value.volume = musicVolume.value;
-			musicAudio.value.addEventListener("ended", handleMusicEnded);
+			musicAudio.value.addEventListener("canplay", handleCanPlay);
 			musicAudio.value.addEventListener("timeupdate", handleTimeUpdate);
+			musicAudio.value.addEventListener("ended", handleMusicEnded);
 		} else if (extractPathPart(musicAudio.value.src) !== extractPathPart(music.path)) {
-			musicAudio.value.removeEventListener("ended", handleMusicEnded);
+			musicAudio.value.removeEventListener("canplay", handleCanPlay);
 			musicAudio.value.removeEventListener("timeupdate", handleTimeUpdate);
+			musicAudio.value.removeEventListener("ended", handleMusicEnded);
 			musicAudio.value.src = music.path;
 			musicAudio.value.load();
-			musicAudio.value.addEventListener("ended", handleMusicEnded);
+			musicAudio.value.addEventListener("canplay", handleCanPlay);
 			musicAudio.value.addEventListener("timeupdate", handleTimeUpdate);
+			musicAudio.value.addEventListener("ended", handleMusicEnded);
 		}
 
 		if (musicListNameCurrent.value !== music.folder) {
@@ -74,6 +82,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 	}
 
 	function play(music: MusicInfo) {
+		playingMusic.value = true;
 		initAudio(music);
 
 		if (musicAudio.value) {
@@ -81,7 +90,6 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 				musicCurrent.value = music;
 			}
 			musicAudio.value.play();
-			playingMusic.value = true;
 		}
 	}
 
