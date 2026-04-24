@@ -1235,7 +1235,7 @@ mybatis:
     map-underscore-to-camel-case: true
 ```
 
-## AOP
+## Spring AOP
 
 **AOP**（Aspect Oriented Programming）（面向切面编程，面向方面编程），可简单理解为就是面向特定方法编程
 
@@ -1668,6 +1668,161 @@ private Integer getCurrentUserId() {
 
 ::
 
+## Bean 管理
+
+### Bean 作用域
+
+Spring 支持五种作用域，后三种在 Web 环境才生效：
+
+|  作用域   |                       说明                       |
+| :-------: | :----------------------------------------------: |
+| singleton | 容器内同名称的 Bean 只有一个实例（单例）（默认） |
+| prototype | 每次使用该 Bean 时会创建新的实例（非单例/多例）  |
+|  request  |           每个请求范围内会创建新的实例           |
+|  session  |           每个会话范围内会创建新的实例           |
+|  global   |           每个应用范围内会创建新的实例           |
+
+可以通过 `@Scope` 注解指定作用域
+
+::detail
+
+#title
+具体示例
+#default
+
+```java
+@Scope("prototype")
+@RequestMapping("/depts")
+@RestController
+public class DeptController {
+
+}
+```
+
+::
+
+::warning
+
+默认单例的 Bean 是在项目启动时创建的，创建完毕后会将该 Bean 存入 IOC 容器
+
+通过添加 `@Lazy` 注解延迟初始化，将单例 Bean 改为懒加载，即在第一次使用时创建
+
+::
+
+::tip
+
+作用域的使用场景
+
+1. 单例 Bean（无状态的 Bean）：
+
+```java
+@Slf4j
+@RestController
+@Scope("singleton")
+public class DeptController {
+  @Autowired
+  private DeptService deptService;
+
+  @GetMapping("/depts")
+  public List<Dept> list() {
+    log.info("查询所有部门信息...");
+    List<Dept> list = deptService.list();
+    return Result.success(list);
+  }
+}
+```
+
+2. 多例 Bean（有状态的 Bean）：
+
+```java
+@Component
+public class DataProcessor {
+  private List<EmpModel> dataList = new ArrayList<EmpModel>(); // 暂存数据
+  private Integer errCount = 0; //错误数据统计
+
+  @Autowired
+  private EmpService empService;
+  public void process(List<EmpModel> empList) {
+    dataList = empList.stream().map(emp->{
+      // 数据处理
+    }).toList();
+  }
+  public void handle() {
+    // ...
+  }
+}
+```
+
+::
+
+::warning
+
+实际开发当中，绝大部分的 Bean 是单例的，也就是说绝大部分 Bean 不需要配置 scope 属性
+
+::
+
+### Bean 的线程安全
+
+Bean 的线程安全取决于 Bean 的状态及 Bean 的作用域
+
+单例 Bean：
+
+- 如果是无状态的 Bean，内部不保存任何状态信息，则是线程安全的
+- 如果是有状态的 Bean，内部会保存状态信息，多个线程会同时操作该 Bean 时，可能会出现数据不一致的问我呢提，这样的 Bean 则是线程不安全的
+
+### 第三方 Bean
+
+如果要管理的 Bean 对象来自第三方（不是自定义的），是无法用 `@Component` 及衍生注解声明 Bean 的，就需要用到 `@Bean` 注解
+
+::detail
+
+#title
+具体示例
+#default
+
+在**启动类**中定义一个新方法，
+
+```java
+@SpringBootApplication
+public class SpringbootWebConfigApplication {
+
+  //...
+
+  @Bean // 将方法返回值交给 IOC 容器管理，成为 IOC 容器的 Bean 对象
+  public AliyunOSSOperator aliyunOSSOperator(AliyunOSSProperties aliyunOSSProperties) {
+    return new AliyunOSSOperator(aliyunOSSProperties);
+  }
+}
+```
+
+- **aliyunOSSProperties**：可能需要的形参
+
+::
+
+::warning
+
+如果第三方 Bean 需要依赖其它 Bean 对象，直接在 Bean 定义方法中设置形参即可，容器会根据类型自动装配
+
+::
+
+::warning
+
+通过 `@Bean` 注解的 name 或 value 属性可以声明 Bean 的名称，如果不指定，默认 Bean 的名称就是方法名
+
+::
+
+若要管理第三方 Bean 对象，建议对这些 Bean 进行集中分类配置，可以通过 `@Configuration` 注解声明一个配置类
+
+```java [src/main/java/com/itheima/config/OSSConfig.java]
+// src/main/java/com/itheima/config/OSSConfig.java
+public class OSSConfig {
+  @Bean
+  public AliyunOSSOperator aliyunOSSOperator(AliyunOSSProperties aliyunOSSProperties) {
+    return new AliyunOSSOperator(aliyunOSSProperties);
+  }
+}
+```
+
 ## Spring Boot 原理
 
 ### 配置优先级
@@ -1710,10 +1865,14 @@ Spring Boot 项目进行打包时，需要引入插件 spring-boot-maven-plugin�
 
 ::
 
-### Bean 管理
+### 起步依赖
+
+**原理**：依赖传递
+
+### 自动配置
 
 ::danger
 
-该部分尚未完工!
+该部分尚未完工！
 
 ::
