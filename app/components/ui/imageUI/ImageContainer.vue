@@ -4,7 +4,6 @@ import type { ImageData } from "~/types/components";
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 const content = ref<CanvasRenderingContext2D | null | undefined>(null);
 const allImagePath = ref<string[]>([]);
-const imageTotal = ref<number>(28);
 const rowMax = ref<number>(4);
 const lineMax = ref<number>(7);
 const imageWidth = ref<number>(350);
@@ -147,10 +146,12 @@ const calculateImageSize = () => {
  * 创建带圆角和边框的缩略图
  */
 const createThumbnail = (img: HTMLImageElement, w: number, h: number): HTMLCanvasElement => {
+	const dpr = window.devicePixelRatio || 1;
 	const offscreen = document.createElement("canvas");
-	offscreen.width = w;
-	offscreen.height = h;
+	offscreen.width = w * dpr;
+	offscreen.height = h * dpr;
 	const ctx = offscreen.getContext("2d")!;
+	ctx.scale(dpr, dpr);
 	const r = imageBorderRadius.value;
 
 	// 绘制圆角路径
@@ -186,11 +187,7 @@ const createImgDatas = async () => {
 	imageHeight.value = h;
 	imageMargin.value = margin;
 
-	// 计算画布尺寸
-	const canvasWidth = rowMax.value * (w + margin) - margin;
-	const canvasHeight = lineMax.value * (h + margin) - margin;
-
-	for (let i = 0; i < imageTotal.value; i++) {
+	for (let i = 0; i < allImagePath.value.length; i++) {
 		const img = new window.Image();
 		const colIndex = i % rowMax.value;
 		const lineIndex = Math.floor(i / rowMax.value);
@@ -353,19 +350,10 @@ const resize = async () => {
 				}
 
 				// 重新渲染
-				renderStatic();
+				drawFrame();
 			}
 		}
 	}
-};
-
-const renderStatic = () => {
-	if (!canvasRef.value || !content.value) return;
-	const rect = canvasRef.value.getBoundingClientRect();
-	content.value.clearRect(0, 0, rect.width, rect.height);
-	imageDatas.value.forEach(img => {
-		content.value?.drawImage(img.img, img.x, img.y, imageWidth.value, imageHeight.value);
-	});
 };
 
 onMounted(async () => {
@@ -413,7 +401,7 @@ onMounted(async () => {
 	}
 
 	// 初始渲染
-	renderStatic();
+	drawFrame();
 
 	window.addEventListener("resize", resize);
 });
