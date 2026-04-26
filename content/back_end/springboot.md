@@ -1871,8 +1871,135 @@ Spring Boot 项目进行打包时，需要引入插件 spring-boot-maven-plugin�
 
 ### 自动配置
 
-::danger
+SpringBoot 的自动配置就是当 spring 项目启动后，一些配置类，bean 对象就自动存入到了 IOC 容器中，不需要我们手动去声明，从而简化了开发，省去了繁琐的配置操作
 
-该部分尚未完工！
+**自动配置实现方案一：`@Component` + `@ComponentScan`**
+
+在第三方工具包中，需要使用 `@Component` 注解进行声明 bean，并在我们的项目中基于 `@ComponentScan` 注解进行扫描
+
+::code-group
+
+```java [第三方工具包工具类]
+// itheima-utils/src/main/java/com/example/TokenParser.java
+
+@Component
+public class TokenParser{
+  public void parse(){
+    System.out.println("TokenParser ... parse ...");
+  }
+}
+```
+
+```java [主项目启动类]
+// springboot-web-config/src/main/java/com/itheima/SpringbootWebConfigApplication.java
+
+@ComponentScan(basePackages = {"com.example", "com.itheima"})
+@SpringBootApplication
+public class SpringbootWebConfigApplication {
+  public static void main(String[] args) {
+    SpringApplication.run(SpringbootWebConfigApplication.class, args);
+  }
+}
+```
+
+::
+
+**自动配置实现方案二：`@Import`**
+
+`@Import` 导入的类会被 Spring 加载到 IOC 容器中，导入形式主要有以下几种：
+
+- 导入普通类
+
+```java [主项目启动类]
+// springboot-web-config/src/main/java/com/itheima/SpringbootWebConfigApplication.java
+
+@Import(TokenParser.class) // 导入普通类
+@SpringBootApplication
+public class SpringbootWebConfigApplication {
+  public static void main(String[] args) {
+    SpringApplication.run(SpringbootWebConfigApplication.class, args);
+  }
+}
+```
+
+- 导入配置类
+
+::code-group
+
+```java [工具包配置类]
+// itheima-utils/src/main/java/com/example/HeaderConfig.java
+
+@Configuration
+public class HeaderConfig {
+
+  @Bean
+  public HeaderParser headerParser(){
+    return new HeaderParser();
+  }
+
+  @Bean
+  public HeaderGenerator headerGenerator(){
+    return new HeaderGenerator();
+  }
+}
+```
+
+```java [主项目启动类]
+// springboot-web-config/src/main/java/com/itheima/SpringbootWebConfigApplication.java
+
+@Import(HeaderConfig.class) // 导入配置类
+@SpringBootApplication
+public class SpringbootWebConfigApplication {
+  public static void main(String[] args) {
+    SpringApplication.run(SpringbootWebConfigApplication.class, args);
+  }
+}
+```
+
+::
+
+- 导入 ImportSelector 接口实现类：在 ImportSelector 内导入的类
+
+::code-group
+
+```java [工具包接口实现类]
+// itheima-utils/src/main/java/com/example/MyImportSelector.java
+
+public class MyImportSelector implements ImportSelector {
+  public String[] selectImports(AnnotationMetadata importingClassMetadata) {
+    return new String[]{"com.example.HeaderConfig", "com.example.TokenParser"};
+  }
+}
+```
+
+```java [主项目启动类]
+// springboot-web-config/src/main/java/com/itheima/SpringbootWebConfigApplication.java
+
+@Import(MyImportSelector.class) // 导入 ImportSelector 实现类
+@SpringBootApplication
+public class SpringbootWebConfigApplication {
+  public static void main(String[] args) {
+    SpringApplication.run(SpringbootWebConfigApplication.class, args);
+  }
+}
+```
+
+::
+
+::tip
+
+**`@EnableXxx` 注解**
+
+大多数工具包内会存在一个 `@EnableXxx` 注解，内部封装了 `@Import` 注解实现了配置类导入，我们可以借助 `@EnableXxx` 注解进行导入
+
+```java
+@EnableHeaderCongfig
+@SpringBootApplication
+public class SpringbootWebConfigApplication {
+  public static void main(String[] args) {
+    SpringApplication.run(SpringbootWebConfigApplication.class, args);
+  }
+}
+```
 
 ::
