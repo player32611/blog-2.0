@@ -2019,3 +2019,27 @@ public class SpringbootWebConfigApplication {
 在低版本（2.7.0 以前）的 SpringBoot 中，自动配置类（XxxAutoConfiguration）是定义在 spring.factories 文件中
 
 ::
+
+`@Conditional` 注解按照一定的条件进行判断，作用于方法或类，在满足给定条件后才会注册对应的 bean 对象到 Spring IOC 容器中
+
+`@Conditional` 本身是一个父注解，派生出大量的子注解：
+
+- `@ConditionalOnClass`：判断环境中是否有对应字节码文件，才注册 bean 到 IOC 容器
+
+- `@ConditionalOnMissingBean`：判断环境中没有对应的 bean（类型或名称），才注册 bean 到 IOC 容器
+
+- `@ConditionalOnProperty`：判断配置文件中有对应属性和值，才注册 bean 到 IOC 容器
+
+::tip
+
+`@Conditional` 及其衍生注解作用在方法上时针对当前这个方法声明的 bean 生效
+
+作用在类上时针对当前这个类中所有的方法声明的 bean 生效
+
+::
+
+::tip
+
+自己定义自动配置类的核心是**定义自动配置类**，并将自动配置类配置在 `/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` 文件中
+
+::
