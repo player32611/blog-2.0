@@ -158,6 +158,7 @@ $base-size: 1;
 				border: none;
 				user-select: none;
 				cursor: pointer;
+				-webkit-tap-highlight-color: transparent;
 
 				.icon {
 					font-size: 1.2rem * $base-size;

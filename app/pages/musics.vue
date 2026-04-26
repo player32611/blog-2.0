@@ -52,6 +52,7 @@ usePageReady();
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		outline: none;
 	}
 }
 

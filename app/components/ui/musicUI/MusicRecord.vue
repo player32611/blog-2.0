@@ -111,6 +111,7 @@ $base-size: 1;
 	place-content: center;
 	cursor: pointer;
 	transition: transform 200ms;
+	-webkit-tap-highlight-color: transparent;
 
 	.container {
 		position: absolute;

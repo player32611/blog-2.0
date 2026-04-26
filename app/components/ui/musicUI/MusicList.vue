@@ -20,6 +20,7 @@ $base-size: 1;
 	scrollbar-width: none;
 	opacity: 0.4;
 	user-select: none;
+	-webkit-tap-highlight-color: transparent;
 }
 
 /* ========== 超小屏（< 576px）========== */
