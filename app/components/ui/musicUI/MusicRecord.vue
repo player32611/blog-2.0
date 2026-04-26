@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { gsap } from "gsap/gsap-core";
 
+import Loading1 from "~/components/exhibit/Loading1.vue";
+
 const soundStore = useSoundStore();
 const containerRef = ref<HTMLElement | null>(null);
 const animationRef = ref<GSAPAnimation | null>(null);
+const isLoading = ref<boolean>(true);
+const loadingError = ref<boolean>(false);
 const currentTitle = computed(() => {
 	if (!soundStore.musicCurrent) return "DISCORD";
 	return soundStore.musicCurrent.name;
@@ -20,6 +24,24 @@ const rotationStep = computed(() => {
 	if (length === 0) return 0;
 	return 360 / length;
 });
+
+const handleLoad = () => {
+	isLoading.value = false;
+	loadingError.value = false;
+};
+
+const handleError = () => {
+	isLoading.value = false;
+	loadingError.value = true;
+};
+
+watch(
+	() => soundStore.musicCurrent?.cover,
+	() => {
+		isLoading.value = true;
+		loadingError.value = false;
+	},
+);
 
 watch(
 	() => soundStore.playingMusic,
@@ -54,11 +76,18 @@ onMounted(() => {
 				{{ char }}
 			</span>
 			<img
-				v-if="soundStore.musicCurrent?.cover"
+				v-if="!loadingError"
 				class="music_cover"
+				:class="{ loading: isLoading }"
 				:src="soundStore.musicCurrent?.cover"
-				alt="加载失败"
+				:alt="soundStore.musicCurrent?.cover"
+				@load="handleLoad"
+				@error="handleError"
 			/>
+			<span v-if="isLoading && soundStore.musicCurrent?.cover" class="cover_loading">
+				<Loading1 />
+			</span>
+			<span v-else-if="!isLoading && loadingError" class="loading_error">加载失败</span>
 		</p>
 	</button>
 </template>
@@ -98,6 +127,21 @@ $base-size: 1;
 
 		.music_cover {
 			position: relative;
+			height: 450px * $base-size;
+			width: 450px * $base-size;
+			border-radius: 50%;
+
+			&.loading {
+				display: none;
+			}
+		}
+
+		.cover_loading,
+		.loading_error {
+			position: relative;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 			height: 450px * $base-size;
 			width: 450px * $base-size;
 			border-radius: 50%;
