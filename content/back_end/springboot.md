@@ -2003,3 +2003,19 @@ public class SpringbootWebConfigApplication {
 ```
 
 ::
+
+### 源码跟踪
+
+`@SpringBootApplication`：该注解标识在 SpringBoot 工程引导类上，是 SpringBoot 中**最**重要的注解。该注解由三个部分组成：
+
+- `@SpringBootConfiguration`：该注解与 `@Configuration` 注解作用相同，用来声明当前也是一个配置类
+
+- `@ComponentScan`：组件扫描，默认扫描当前引导类所在包及其子包
+
+- `@EnableAutoConfiguration`：SpringBoot 实现自动化配置的核心注解
+
+::warning
+
+在低版本（2.7.0 以前）的 SpringBoot 中，自动配置类（XxxAutoConfiguration）是定义在 spring.factories 文件中
+
+::
