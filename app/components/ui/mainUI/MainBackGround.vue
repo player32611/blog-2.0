@@ -130,8 +130,8 @@ onUnmounted(() => {
 	height: 100dvh;
 	width: 100%;
 	overflow: hidden;
-	user-select: none;
 	overscroll-behavior: none;
+	-webkit-tap-highlight-color: transparent;
 
 	img {
 		cursor: pointer;
