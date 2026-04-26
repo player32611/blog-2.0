@@ -43,6 +43,14 @@ watch(
 	{ immediate: true },
 );
 
+watch(
+	() => soundStore.musicCurrent,
+	() => {
+		if (!barRef.value) return;
+		barRef.value.style.width = "0px";
+	},
+);
+
 onUnmounted(() => {
 	stopStripeAnimation();
 });
@@ -61,7 +69,7 @@ onUnmounted(() => {
 			></div>
 		</div>
 		<div class="music_duration">
-			{{ soundStore.musicAudio ? formatTime(soundStore.musicAudio.duration) : "00:00" }}
+			{{ soundStore.musicAudio ? formatTime(soundStore.musicAudio.duration) : "加载中" }}
 		</div>
 	</div>
 </template>
