@@ -69,7 +69,7 @@ onUnmounted(() => {
 			></div>
 		</div>
 		<div class="music_duration">
-			{{ soundStore.musicAudio ? formatTime(soundStore.musicAudio.duration) : "加载中" }}
+			{{ soundStore.musicAudio ? formatTime(soundStore.musicAudio.duration) : "0:00" }}
 		</div>
 	</div>
 </template>

@@ -1,4 +1,4 @@
-import type { BlogCollections } from "./config";
+import type { BlogCollections, MusicPlayingMode } from "./config";
 import type { BlogMaskInstance, BlogMenuInstance, LoadingInstance } from "./components";
 
 export type BlogContent = string;
@@ -55,6 +55,7 @@ export type SoundState = {
 	musicCurrentTime: Ref<number>;
 	musicListCurrent: Ref<MusicInfo[]>;
 	musicListNameCurrent: Ref<string | null>;
+	musicPlayingMode: Ref<MusicPlayingMode>;
 	musicVolume: Ref<number>;
 	playingMusic: Ref<boolean>;
 };
@@ -72,4 +73,5 @@ export type SoundActions = {
 	previous: () => void;
 	next: () => void;
 	seek: (time: number) => void;
+	nextPlayingMode: () => void;
 };

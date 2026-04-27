@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "44311576",
+      "name": "单曲循环",
+      "font_class": "danquxunhuan",
+      "unicode": "e877",
+      "unicode_decimal": 59511
+    },
+    {
+      "icon_id": "44311577",
+      "name": "列表循环",
+      "font_class": "liebiaoxunhuan",
+      "unicode": "e878",
+      "unicode_decimal": 59512
+    },
+    {
+      "icon_id": "44311580",
+      "name": "随机播放",
+      "font_class": "suijibofang",
+      "unicode": "e87a",
+      "unicode_decimal": 59514
+    },
+    {
+      "icon_id": "44315653",
+      "name": "顺序播放",
+      "font_class": "shunxubofang",
+      "unicode": "e87e",
+      "unicode_decimal": 59518
+    },
+    {
       "icon_id": "7592577",
       "name": "24gf-volumeDisable",
       "font_class": "24gf-volumeDisable",
@@ -32,20 +60,6 @@
       "font_class": "24gf-volumeMiddle",
       "unicode": "ea13",
       "unicode_decimal": 59923
-    },
-    {
-      "icon_id": "7594081",
-      "name": "24gl-shuffle",
-      "font_class": "24gl-shuffle",
-      "unicode": "ea75",
-      "unicode_decimal": 60021
-    },
-    {
-      "icon_id": "7594083",
-      "name": "24gl-repeat2",
-      "font_class": "24gl-repeat2",
-      "unicode": "ea76",
-      "unicode_decimal": 60022
     },
     {
       "icon_id": "7594129",

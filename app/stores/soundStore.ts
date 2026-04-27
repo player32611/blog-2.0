@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import type { MusicPlayingMode } from "~/types/config";
 import type { MusicInfo } from "@/types/store";
 import type { SoundState, SoundGetter, SoundActions } from "@/types/store";
 
@@ -15,6 +16,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 	const musicCurrentTime = ref<number>(0); // 当前音乐播放位置
 	const musicListCurrent = ref<MusicInfo[]>([]); // 当前音乐播放列表
 	const musicListNameCurrent = ref<string | null>(null); // 当前音乐播放列表名称
+	const musicPlayingMode = ref<MusicPlayingMode>("OrderAll");
 	const musicVolume = ref<number>(0.7); // 音乐音量
 	const playingMusic = ref<boolean>(false); // 音乐播放状态
 
@@ -54,8 +56,24 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 	};
 
 	const handleMusicEnded = () => {
-		playingMusic.value = false;
-		musicAudio.value?.removeEventListener("ended", handleMusicEnded);
+		if (!musicAudio.value) return;
+		musicAudio.value.removeEventListener("ended", handleMusicEnded);
+		if (musicPlayingMode.value === "RepeatSingle") {
+			musicAudio.value.currentTime = 0;
+			if (playingMusic.value) musicAudio.value.play();
+			else {
+				playingMusic.value = false;
+			}
+		} else if (musicPlayingMode.value === "RepeatAll" || musicPlayingMode.value === "RandomAll") {
+			next();
+		} else if (musicPlayingMode.value === "OrderAll") {
+			const index = musicListCurrent.value.indexOf(musicCurrent.value!);
+			if (index === -1 || index === musicListCurrent.value.length - 1) {
+				playingMusic.value = false;
+			} else {
+				next();
+			}
+		}
 	};
 
 	function initAudio(music: MusicInfo) {
@@ -113,14 +131,27 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 	function previous() {
 		if (musicListCurrent.value.length === 0) return;
 		if (!musicCurrent.value) return;
-		const index = musicListCurrent.value.indexOf(musicCurrent.value);
-		if (index === -1 && musicListCurrent.value.length > 0 && musicListCurrent.value[0]) {
-			musicCurrent.value = musicListCurrent.value[0];
-		} else {
-			musicCurrent.value =
-				musicListCurrent.value[
-					(index - 1 + musicListCurrent.value.length) % musicListCurrent.value.length
-				]!;
+		if (
+			musicPlayingMode.value === "RepeatSingle" ||
+			musicPlayingMode.value === "RepeatAll" ||
+			musicPlayingMode.value === "OrderAll"
+		) {
+			const index = musicListCurrent.value.indexOf(musicCurrent.value);
+			if (index === -1 && musicListCurrent.value.length > 0 && musicListCurrent.value[0]) {
+				musicCurrent.value = musicListCurrent.value[0];
+			} else {
+				musicCurrent.value =
+					musicListCurrent.value[
+						(index - 1 + musicListCurrent.value.length) % musicListCurrent.value.length
+					]!;
+			}
+		} else if (musicPlayingMode.value === "RandomAll") {
+			const index = musicListCurrent.value.indexOf(musicCurrent.value!);
+			let nextIndex = Math.floor(Math.random() * musicListCurrent.value.length);
+			while (index === nextIndex) {
+				nextIndex = Math.floor(Math.random() * musicListCurrent.value.length);
+			}
+			musicCurrent.value = musicListCurrent.value[nextIndex]!;
 		}
 		if (musicCurrent.value) {
 			initAudio(musicCurrent.value);
@@ -131,11 +162,24 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 	function next() {
 		if (musicListCurrent.value.length === 0) return;
 		if (!musicCurrent.value) return;
-		const index = musicListCurrent.value.indexOf(musicCurrent.value!);
-		if (index === -1 && musicListCurrent.value.length > 0 && musicListCurrent.value[0]) {
-			musicCurrent.value = musicListCurrent.value[0];
-		} else {
-			musicCurrent.value = musicListCurrent.value[(index + 1) % musicListCurrent.value.length]!;
+		if (
+			musicPlayingMode.value === "RepeatSingle" ||
+			musicPlayingMode.value === "RepeatAll" ||
+			musicPlayingMode.value === "OrderAll"
+		) {
+			const index = musicListCurrent.value.indexOf(musicCurrent.value!);
+			if (index === -1 && musicListCurrent.value.length > 0 && musicListCurrent.value[0]) {
+				musicCurrent.value = musicListCurrent.value[0];
+			} else {
+				musicCurrent.value = musicListCurrent.value[(index + 1) % musicListCurrent.value.length]!;
+			}
+		} else if (musicPlayingMode.value === "RandomAll") {
+			const index = musicListCurrent.value.indexOf(musicCurrent.value!);
+			let nextIndex = Math.floor(Math.random() * musicListCurrent.value.length);
+			while (index === nextIndex) {
+				nextIndex = Math.floor(Math.random() * musicListCurrent.value.length);
+			}
+			musicCurrent.value = musicListCurrent.value[nextIndex]!;
 		}
 		if (musicCurrent.value) {
 			initAudio(musicCurrent.value);
@@ -152,6 +196,26 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		else musicAudio.value.currentTime = newTime;
 	}
 
+	function nextPlayingMode() {
+		switch (musicPlayingMode.value) {
+			case "OrderAll":
+				musicPlayingMode.value = "RepeatSingle";
+				break;
+			case "RepeatSingle":
+				musicPlayingMode.value = "RepeatAll";
+				break;
+			case "RepeatAll":
+				musicPlayingMode.value = "RandomAll";
+				break;
+			case "RandomAll":
+				musicPlayingMode.value = "OrderAll";
+		}
+		if (musicAudio.value) {
+			musicAudio.value.removeEventListener("ended", handleMusicEnded);
+			musicAudio.value.addEventListener("ended", handleMusicEnded);
+		}
+	}
+
 	return {
 		effectsVolume,
 		musicAudio,
@@ -159,6 +223,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		musicCurrentTime,
 		musicListCurrent,
 		musicListNameCurrent,
+		musicPlayingMode,
 		musicVolume,
 		playingMusic,
 		setEffectsVolume,
@@ -171,5 +236,6 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		previous,
 		next,
 		seek,
+		nextPlayingMode,
 	};
 });

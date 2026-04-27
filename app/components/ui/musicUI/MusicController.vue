@@ -42,7 +42,7 @@ const closeSlider = () => {
 				<button class="control_btn" title="上一首" @click="soundStore.previous">
 					<span class="icon">&#xea88;</span>
 				</button>
-				<button class="control_btn" title="快退" @click="() => soundStore.seek(-seekTime)">
+				<button class="control_btn" title="快退" @click="soundStore.seek(-seekTime)">
 					<span class="icon">&#xea7a;</span>
 				</button>
 				<button
@@ -53,11 +53,17 @@ const closeSlider = () => {
 					<span v-if="!soundStore.playingMusic" class="icon">&#xea82;</span>
 					<span v-else class="icon">&#xea81;</span>
 				</button>
-				<button class="control_btn" title="快进" @click="() => soundStore.seek(seekTime)">
+				<button class="control_btn" title="快进" @click="soundStore.seek(seekTime)">
 					<span class="icon">&#xea7e;</span>
 				</button>
 				<button class="control_btn" title="下一首" @click="soundStore.next">
 					<span class="icon">&#xea7f;</span>
+				</button>
+				<button class="control_btn" title="播放模式" @click="soundStore.nextPlayingMode">
+					<span v-if="soundStore.musicPlayingMode == 'RepeatSingle'" class="icon">&#xe877;</span>
+					<span v-else-if="soundStore.musicPlayingMode == 'RepeatAll'" class="icon">&#xe878;</span>
+					<span v-else-if="soundStore.musicPlayingMode == 'RandomAll'" class="icon">&#xe87a;</span>
+					<span v-else-if="soundStore.musicPlayingMode == 'OrderAll'" class="icon">&#xe87e;</span>
 				</button>
 			</div>
 			<div class="right_controls">
