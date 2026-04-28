@@ -5,6 +5,11 @@ const loadingError = ref<boolean>(false);
 const cardRef = ref<HTMLDivElement | null>(null);
 const isDragging = ref<boolean>(false);
 const draggingPoint = ref<{ x: number; y: number }>({ x: 0, y: 0 });
+const position = ref({ x: 100, y: 100 });
+const maxSpeed = ref<number>(15);
+const speed = ref<{ x: number; y: number }>({ x: 0, y: 0 });
+const friction = ref<number>(0.98);
+const animationFrame = ref<number | null>(null);
 
 const handleLoad = () => {
 	isLoading.value = false;
@@ -28,6 +33,8 @@ const handleMouseDown = (e: MouseEvent) => {
 	if (!cardRef.value) return;
 	isDragging.value = true;
 	draggingPoint.value = { x: e.clientX, y: e.clientY };
+	animationFrame.value = null;
+	speed.value = { x: 0, y: 0 };
 };
 
 const handleTouchStart = (e: TouchEvent) => {
@@ -40,8 +47,9 @@ const handleMouseMove = (e: MouseEvent) => {
 	if (!isDragging.value || !cardRef.value) return;
 	const dx = e.clientX - draggingPoint.value.x;
 	const dy = e.clientY - draggingPoint.value.y;
-	cardRef.value.style.left = `${cardRef.value.offsetLeft + dx}px`;
-	cardRef.value.style.top = `${cardRef.value.offsetTop + dy}px`;
+	position.value.x += dx;
+	position.value.y += dy;
+	speed.value = { x: dx, y: dy };
 	draggingPoint.value = { x: e.clientX, y: e.clientY };
 };
 
@@ -49,15 +57,37 @@ const handleTouchMove = (e: TouchEvent) => {
 	if (!isDragging.value || !cardRef.value || !e.touches[0]) return;
 	const dx = e.touches[0].clientX - draggingPoint.value.x;
 	const dy = e.touches[0].clientY - draggingPoint.value.y;
-	cardRef.value.style.left = `${cardRef.value.offsetLeft + dx}px`;
-	cardRef.value.style.top = `${cardRef.value.offsetTop + dy}px`;
+	position.value.x += dx;
+	position.value.y += dy;
+	speed.value = { x: dx, y: dy };
 	draggingPoint.value = { x: e.touches[0].clientX, y: e.touches[0].clientY };
 };
 
 const handleMouseUp = () => {
 	if (!cardRef.value) return;
 	isDragging.value = false;
-	console.log("handleMouseUp");
+	speed.value.x = Math.max(Math.min(speed.value.x, maxSpeed.value), -maxSpeed.value);
+	speed.value.y = Math.max(Math.min(speed.value.y, maxSpeed.value), -maxSpeed.value);
+	startInertia();
+};
+
+const startInertia = () => {
+	if (!cardRef.value) return;
+	const animate = () => {
+		if (!cardRef.value) return;
+		if (speed.value.x > maxSpeed.value) console.log(speed.value.x);
+		speed.value.x *= friction.value;
+		speed.value.y *= friction.value;
+		if (Math.abs(speed.value.x) < 0.1) speed.value.x = 0;
+		if (Math.abs(speed.value.y) < 0.1) speed.value.y = 0;
+		if (speed.value.x !== 0 || speed.value.y !== 0) {
+			position.value.x += speed.value.x;
+			position.value.y += speed.value.y;
+			animationFrame.value = requestAnimationFrame(animate);
+		} else animationFrame.value = null;
+	};
+
+	animationFrame.value = requestAnimationFrame(animate);
 };
 </script>
 
@@ -65,12 +95,13 @@ const handleMouseUp = () => {
 	<div
 		class="music_card"
 		ref="cardRef"
+		:style="{ transform: `translate(${position.x}px, ${position.y}px)` }"
 		@mousedown="handleMouseDown"
 		@mousemove="handleMouseMove"
 		@mouseup="handleMouseUp"
 		@mouseleave="handleMouseUp"
-		@touchstart="handleTouchStart"
-		@touchmove="handleTouchMove"
+		@touchstart.passive="handleTouchStart"
+		@touchmove.passive="handleTouchMove"
 		@touchend="handleMouseUp"
 		@touchcancel="handleMouseUp"
 	>
@@ -136,10 +167,9 @@ $base-size: 1;
 
 .music_card {
 	position: fixed;
-	left: 100px;
-	top: 100px;
+	left: 0;
+	top: 0;
 	width: 190px;
-	background: lightgrey;
 	border-radius: 10px;
 	cursor: pointer;
 	user-select: none;
