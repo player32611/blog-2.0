@@ -111,6 +111,7 @@ const startInertia = () => {
 				<img
 					v-if="!loadingError"
 					class="music_cover"
+					draggable="false"
 					:class="{ loading: isLoading }"
 					:src="soundStore.musicCurrent?.cover"
 					:alt="soundStore.musicCurrent?.cover"
