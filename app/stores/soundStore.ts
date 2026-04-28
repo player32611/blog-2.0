@@ -19,6 +19,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 	const musicPlayingMode = ref<MusicPlayingMode>("OrderAll");
 	const musicVolume = ref<number>(0.7); // 音乐音量
 	const playingMusic = ref<boolean>(false); // 音乐播放状态
+	const seekTime = ref<number>(5); // 快进快退时间
 
 	/**
     设置音效音量。
@@ -41,6 +42,10 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 	function setMusicCurrentTime(time: number) {
 		if (!musicAudio.value || time < 0 || time > musicAudio.value.duration) return;
 		musicAudio.value.currentTime = time;
+	}
+
+	function setSeekTime(time: number) {
+		seekTime.value = time;
 	}
 
 	const handleCanPlay = () => {
@@ -226,9 +231,11 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		musicPlayingMode,
 		musicVolume,
 		playingMusic,
+		seekTime,
 		setEffectsVolume,
 		setMusicVolume,
 		setMusicCurrentTime,
+		setSeekTime,
 		initAudio,
 		play,
 		pause,

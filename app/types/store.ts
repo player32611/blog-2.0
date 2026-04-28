@@ -58,6 +58,7 @@ export type SoundState = {
 	musicPlayingMode: Ref<MusicPlayingMode>;
 	musicVolume: Ref<number>;
 	playingMusic: Ref<boolean>;
+	seekTime: Ref<number>;
 };
 
 export type SoundGetter = {};
@@ -66,6 +67,7 @@ export type SoundActions = {
 	setEffectsVolume: (volume: number) => void;
 	setMusicVolume: (volume: number) => void;
 	setMusicCurrentTime: (time: number) => void;
+	setSeekTime: (time: number) => void;
 	initAudio: (music: MusicInfo) => void;
 	play: (music: MusicInfo) => void;
 	pause: () => void;

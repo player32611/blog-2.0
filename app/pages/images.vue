@@ -28,5 +28,6 @@ usePageReady();
 	width: 100%;
 	height: 100dvh;
 	user-select: none;
+	-webkit-tap-highlight-color: transparent;
 }
 </style>

@@ -2,7 +2,6 @@
 import MusicProgress from "./MusicProgress.vue";
 
 const soundStore = useSoundStore();
-const seekTime = ref<number>(5);
 const isSliderOpen = ref<boolean>(false);
 const volumePercent = computed({
 	get: () => soundStore.musicVolume * 100,
@@ -42,7 +41,7 @@ const closeSlider = () => {
 				<button class="control_btn" title="上一首" @click="soundStore.previous">
 					<span class="icon">&#xea88;</span>
 				</button>
-				<button class="control_btn" title="快退" @click="soundStore.seek(-seekTime)">
+				<button class="control_btn" title="快退" @click="soundStore.seek(-soundStore.seekTime)">
 					<span class="icon">&#xea7a;</span>
 				</button>
 				<button
@@ -53,7 +52,7 @@ const closeSlider = () => {
 					<span v-if="!soundStore.playingMusic" class="icon">&#xea82;</span>
 					<span v-else class="icon">&#xea81;</span>
 				</button>
-				<button class="control_btn" title="快进" @click="soundStore.seek(seekTime)">
+				<button class="control_btn" title="快进" @click="soundStore.seek(soundStore.seekTime)">
 					<span class="icon">&#xea7e;</span>
 				</button>
 				<button class="control_btn" title="下一首" @click="soundStore.next">

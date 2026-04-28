@@ -1,5 +1,6 @@
 <template>
 	<Loading ref="loadingRef" />
+	<MusicCard />
 	<NuxtPage :page-key="$route.fullPath" />
 	<NuxtRouteAnnouncer />
 </template>
@@ -8,7 +9,9 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import type { LoadingInstance } from "./types/components";
-import Loading from "./components/ui/Loading.vue";
+
+import MusicCard from "./components/ui/rootUI/MusicCard.vue";
+import Loading from "./components/ui/rootUI/Loading.vue";
 
 const loadingStore = useLoadingStore();
 const loadingRef = ref<LoadingInstance | null>(null);
@@ -48,6 +51,7 @@ body {
 	padding: 0;
 	height: 100dvh;
 	width: 100%;
+	overscroll-behavior: none;
 
 	pre.shiki code .sgsFI,
 	code.shiki .sgsFI {
