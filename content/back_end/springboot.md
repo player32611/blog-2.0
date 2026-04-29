@@ -2043,3 +2043,80 @@ public class SpringbootWebConfigApplication {
 自己定义自动配置类的核心是**定义自动配置类**，并将自动配置类配置在 `/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` 文件中
 
 ::
+
+### 自定义 starter
+
+在实际开发中，经常会定义一些公共组件，提供给哥哥项目团队使用。而在 SpringBoot 的项目中，一般会将这些公共组件封装为 SpringBoot 的 starter（包含了起步依赖和自动配置的功能）
+
+::detail
+
+#title
+自定义 starter
+#default
+**需求**：自定义 aliyun-oss-spring-boot-starter，完成阿里云 OSS 操作工具类 AliyunOSSOperator 的自动配置
+
+**目标**：引入起步依赖之后，要想使用阿里云 OSS，注入 AliyunOSSIoerator 直接使用即可
+
+**步骤**：
+
+1. 创建 aliyun-oss-spring-boot-starter 模块
+
+2. 创建 aliyun-oss-spring-boot-autoconfigure 模块，在 starter 中引入该模块
+
+3. 在 aliyun-oss-spring-boot-autoconfigure 模块中的定义自动配置功能，并定义自动配置文件 META-INF/spring/xxxx.imports
+
+::code-group
+
+```xml [aliyun-oss-spring-boot-autoconfigure/pom.xml]
+<!-- 阿里云 OSS 依赖 -->
+<dependency>
+  <groupId>com.aliyun.oss</groupId>
+  <artifactId>aliyun-sdk-oss</artifactId>
+  <version>3.17.4</version>
+</dependency>
+```
+
+```java [AliyunOSSAutoConfiguration.java]
+// aliyun-oss-spring-boot-autoconfigure/src/main/java/com/aliyun/oss/AliyunOSSAutoConfiguration.java
+
+@EnableConfigurationProperties(AliyunOSSProperties.class)
+@Configuration
+public class AliyunOSSAutoConfiguration {
+  @Bean
+  @ConditionalOnMissingBean
+  public AliyunOSSOperator aliyunOSSOperator(AliyunOSSProperties aliyunOSSProperties) {
+    return new AliyunOSSOperator(aliyunOSSProperties);
+  }
+}
+```
+
+```[org.springframework.boot.autoconfigure.AutoConfiguration.imports]
+// aliyun-oss-spring-boot-autoconfigure/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
+
+com.aliyun.oss.AliyunOSSAutoConfiguration
+```
+
+```xml [aliyun-oss-spring-boot-starter/pom.xml]
+<dependency>
+  <groupId>com.aliyun.oss</groupId>
+  <artifactId>spring-boot-starter</artifactId>
+</dependency>
+```
+
+使用时引入 starter 依赖：
+
+```xml [pom.xml]
+<dependency>
+  <groupId>com.aliyun.oss</groupId>
+  <artifactId>aliyun-oss-spring-boot-starter</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+</dependency>
+```
+
+```java
+String url = aliyunOSSOperator.upload(image.getBytes(), image.getOriginalFilename());
+```
+
+::
+
+::
