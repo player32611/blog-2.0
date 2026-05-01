@@ -89,6 +89,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 			musicAudio.value.addEventListener("timeupdate", handleTimeUpdate);
 			musicAudio.value.addEventListener("ended", handleMusicEnded);
 		} else if (extractPathPart(musicAudio.value.src) !== extractPathPart(music.path)) {
+			musicAudio.value.pause();
 			musicAudio.value.removeEventListener("canplay", handleCanPlay);
 			musicAudio.value.removeEventListener("timeupdate", handleTimeUpdate);
 			musicAudio.value.removeEventListener("ended", handleMusicEnded);

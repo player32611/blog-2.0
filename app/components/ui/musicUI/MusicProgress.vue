@@ -51,6 +51,10 @@ watch(
 	},
 );
 
+onMounted(() => {
+	if (soundStore.playingMusic) startStripeAnimation();
+});
+
 onUnmounted(() => {
 	stopStripeAnimation();
 });

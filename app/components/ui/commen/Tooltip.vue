@@ -38,7 +38,7 @@ defineExpose<TooltipInstance>({
 $base-size: 1;
 
 .cyber-tooltip {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	padding: 10px * $base-size;
