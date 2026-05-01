@@ -478,10 +478,137 @@ relativePath 指定父工程的 pom 文件的相对位置（如果不指定，�
 </dependencies>
 ```
 
+### 聚合
+
+**聚合**是将多个模块组织成一个整体，同时进行项目的构建
+
+- **聚合工程**：一个不具有业务功能的“空”工程（有且仅有一个 pom 文件），可用故意快速构建项目（无需根据依赖关系手动构建，直接在聚合工程上构建即可）
+
+maven 中可以通过 `<modules>` 设置当前聚合工程所包含的子模块名称
+
+```xml
+<!-- 父工程的 pom.xml 文件 -->
+<modules>
+  <module>xxx-pojo</module>
+  <module>xxx-dao</module>
+  <module>xxx-service</module>
+  <module>xxx-utils</module>
+</modules>
+```
+
+::warning
+
+聚合工程中所包含的模块，在构建时，会自动根据模块间的依赖关系设置构建顺序，与聚合工程中模块的配置书写位置无关
+
+::
+
+::tip
+
+maven 中继承与聚合的联系与区别
+
+**联系**：继承与聚合都属于设计型模块，打包方式都为 pom，常将两种关系制作到同一个 pom 文件中
+
+**区别**：
+
+- 继承用于简化依赖配置、统一管理依赖版本，是在子工程中配置继承关系
+
+- 聚合用于快速构建项目，是在父工程（聚合工程）中配置聚合的模块
+
+::
+
 ### 私服
 
-::danger
+**私服**是一种特殊的远程仓库，它是架设在局域网内的仓库服务，用来代理位于外部的中央仓库，用于解决团队内部的资源共享与资源同步问题。
 
-该部分尚未完工!
+对于一个依赖，查找的顺序是：本地仓库 -> 私服 -> 中央仓库
+
+::warning
+
+私服在企业项目开发中，一个项目/公司，只需要一台即可（无需我们自己搭建）
+
+::
+
+想要在私服中上传或下载资源，需要进行以下步骤：
+
+1. 设置私服的访问用户名/密码（settings.xml 中的 servers 中配置）
+
+```xml
+<!-- settings.xml -->
+
+<server>
+  <id>xxx-releases</id>
+  <username>admin</username>
+  <password>admin</password>
+</server>
+<server>
+  <id>xxx-snapshots</id>
+  <username>admin</username>
+  <password>admin</password>
+</server>
+```
+
+2. 在 IDEA 的 maven 工程的 pom 文件中配置上传（发布）地址
+
+```xml
+<!-- pom.xml -->
+
+<distributionManagement>
+  <repository>
+    <id>xxx-releases</id>
+    <url>xxx</url>
+  </repository>
+  <snapshotRepository>
+    <id>xxx-snapshots</id>
+    <url>xxx</url>
+  </snapshotRepository>
+</distributionManagement>
+```
+
+3. 设置私服依赖下载的仓库组地址（settings.xml 中的 mirrors、profiles 中配置）
+
+```xml
+<!-- settings.xml -->
+
+<mirror>
+  <id>xxx-public</id>
+  <mirrorOf>*</mirrorOf>
+  <url>xxx</url>
+</mirror>
+
+<profile>
+  <id>all-snapshots</id>
+  <activation>
+    <activeByDefault>true</activeByDefault>
+  </activation>
+  <repositories>
+    <repository>
+      <id>xxx-public</id>
+      <url>xxx</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+</profile>
+```
+
+配置后执行 maven 生命周期的 deploy 生命周期，即可将资源上传到私服中
+
+::warning
+
+maven 的 settings.xml 位置在本地安装 maven 的配置目录下
+
+::
+
+::tip
+
+**项目版本**：
+
+- RELEASE（发行版本）：功能趋于稳定，当前更新停止，可以用于发行的版本，存储在私服中的 RELEASE 仓库中
+
+- SNAPSHOT（快照版本）：功能不稳定，尚处于开发中的版本，即快照版本，存储在私服的 SNAPSHOT 仓库中
 
 ::
