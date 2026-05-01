@@ -1,6 +1,10 @@
 import type { BlogCollections } from "./config";
 import type { BlogContent, MusicInfo } from "./store";
 
+export interface Arrow1Params {
+	direction: "left" | "right" | "up" | "down" | null;
+}
+
 export interface BlogMaskInstance {
 	changeMask: () => void;
 }
@@ -52,6 +56,18 @@ export interface ButtonParams {
 	size: "small" | "medium" | "large";
 	onClick: () => void;
 	style?: Record<string, string | number>;
+}
+
+export interface TooltipInstance {
+	width: ComputedRef<number>;
+	height: ComputedRef<number>;
+}
+
+export interface TooltipParams {
+	style?: Record<string, string | number>;
+	text?: string;
+	visable: boolean;
+	onClick?: () => void;
 }
 
 export interface LoadingParams {

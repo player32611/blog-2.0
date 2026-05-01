@@ -340,3 +340,148 @@ public class UserServiceTest {
   <scope>test</scope>
 </dependency>
 ```
+
+## Maven 高级
+
+### 分模块设计与开发
+
+将一个大项目拆分成若干个子模块，方便项目的管理维护、扩展，也方便模块间的相互引用，资源共享
+
+**策略一**：按照功能模块拆分，比如：公共组件、商品模块、搜索模块、购物车模块、订单模块等
+
+**策略二**：按照层拆分，比如：公共组件、实体类、控制层、业务层、数据访问层
+
+**策略三**：按照功能模块 + 层拆分
+
+::warning
+
+分模块开发需要先针对模块功能进行设计，再进行编码。不会先将工程开发完毕，然后进行拆分
+
+::
+
+### 继承
+
+**继承**描述的是两个工程间的关系，与 java 中的继承相似，子工程可以继承父工程中的配置信息，常见于依赖关系的继承
+
+::tip
+
+作用
+
+简化依赖配置、统一管理依赖
+
+::
+
+1. 创建 maven 模块 xxx-parent，该工程为父工程，设置打包方式为 pom（默认 jar）
+
+```xml
+<parent>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-parent</artifactId>
+  <version>3.2.10</version>
+  <!-- 父工程的 pom.xml 的相对路径 -->
+  <relativePath/>
+</parent>
+
+<groupId>com.xxx</groupId>
+<artifactId>xxx-parent</artifactId>
+<version>1.0-SNAPSHOT</version>
+<packaging>pom</packaging>
+```
+
+2. 在子工程的 pom.xml 文件中，配置继承关系
+
+```xml
+<parent>
+  <groupId>com.xxx</groupId>
+  <artifactId>xxx-parent</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <relativePath>../xxx-parent/pom.xml</relativePath>
+</parent>
+
+<artifactId>xxx-pojo</artifactId>
+<version>1.0-SNAPSHOT</version>
+```
+
+3. 在父工程中配置各个工程共有的依赖（子工程会自动继承父工程的依赖）
+
+::tip
+
+在子过程中，配置了继承关系之后，坐标中的 groupId 是可以省略的，因为会自动继承父工程的
+
+relativePath 指定父工程的 pom 文件的相对位置（如果不指定，将从本地仓库/远程仓库查找）
+
+若父子工程都配置了同一个依赖的不同版本，以子工程的为准
+
+::
+
+在 maven 中，可以在父工程的 pom 文件中通过 `<dependencyManagement>` 来统一管理依赖版本
+
+::code-group
+
+```xml [父工程 pom.xml]
+<dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>org.aliyun.oss</groupId>
+      <artifactId>aliyun-sdk-oss</artifactId>
+      <version>3.17.4</version>
+    </dependency>
+  </dependencies>
+</dependencyManagement>
+```
+
+```xml [子工程 pom.xml]
+<dependencies>
+  <dependency>
+    <groupId>org.aliyun.oss</groupId>
+    <artifactId>aliyun-sdk-oss</artifactId>
+  </dependency>
+</dependencies>
+```
+
+::
+
+::tip
+
+`<dependencies>` 和 `<dependencyManagement>` 的区别
+
+`<dependencies>` 是直接依赖，在父成功配置了依赖，子工程会直接继承下来
+
+`<dependencyManagement>` 是统一管理依赖版本，不会直接依赖，还需要在子工程中引入所需依赖（子工程中无需指定版本）
+
+::
+
+可以通过自定义属性/引用属性来简化父工程的 pom.xml 配置：
+
+```xml
+<properties>
+  <lombok.version>1.18.30</lombok.version>
+  <jjwt.version>0.9.1</jjwt.version>
+</properties>
+
+<dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt</artifactId>
+      <version>${jjwt.version}</version>
+    </dependency>
+  </dependencies>
+</dependencyManagement>
+
+<dependencies>
+  <dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>${lombok.version}</version>
+  </dependency>
+</dependencies>
+```
+
+### 私服
+
+::danger
+
+该部分尚未完工!
+
+::

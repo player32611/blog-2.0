@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ItemContainer from "~/components/ui/itemUI/ItemContainer.vue";
-import Button from "~/components/ui/Button.vue";
+import Button from "~/components/ui/commen/Button.vue";
 
 const { loadingNavigate } = useLoadingStore();
 

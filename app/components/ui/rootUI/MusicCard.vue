@@ -1,15 +1,46 @@
 <script setup lang="ts">
+import gsap from "gsap";
+import type { TooltipInstance } from "~/types/components";
+
+import Tooltip from "../commen/Tooltip.vue";
+import Arrow1 from "../commen/Arrow1.vue";
+
 const soundStore = useSoundStore();
-const isLoading = ref<boolean>(true);
-const loadingError = ref<boolean>(false);
-const cardRef = ref<HTMLDivElement | null>(null);
-const isDragging = ref<boolean>(false);
-const draggingPoint = ref<{ x: number; y: number }>({ x: 0, y: 0 });
-const position = ref({ x: 100, y: 100 });
-const maxSpeed = ref<number>(15);
-const speed = ref<{ x: number; y: number }>({ x: 0, y: 0 });
-const friction = ref<number>(0.98);
-const animationFrame = ref<number | null>(null);
+const isLoading = ref<boolean>(true); // 封面加载状态
+const loadingError = ref<boolean>(false); // 封面是否加载错误
+const cardRef = ref<HTMLDivElement | null>(null); // 卡片容器 Ref
+const isDragging = ref<boolean>(false); // 是否正在拖动
+const draggingPoint = ref<{ x: number; y: number }>({ x: 0, y: 0 }); // 鼠标拖动点
+const position = ref({ x: 100, y: 100 }); // 卡片位置
+const maxSpeed = ref<number>(15); // 卡片最大速度
+const speed = ref<{ x: number; y: number }>({ x: 0, y: 0 }); // 卡片运动速度
+const friction = ref<number>(0.98); // 卡片运动摩擦力
+const animationFrame = ref<number | null>(null); // 动画帧
+const tooltipRef = ref<TooltipInstance | null>(null); // 提示框实例
+const tooltipVisable = computed(() => {
+	if (!cardRef.value) return false;
+	return (
+		position.value.x < -cardRef.value.offsetWidth ||
+		position.value.x > window.innerWidth ||
+		position.value.y < -cardRef.value.offsetHeight ||
+		position.value.y > window.innerHeight
+	);
+}); // 提示框是否可见
+const tooltipPosition = computed(() => {
+	if (!cardRef.value || !tooltipRef.value) return { x: 0, y: 0 };
+	return {
+		x: Math.min(Math.max(position.value.x, 0), window.innerWidth - tooltipRef.value.width),
+		y: Math.min(Math.max(position.value.y, 0), window.innerHeight - tooltipRef.value.height),
+	};
+}); // 提示框位置
+const arrowDirection = computed(() => {
+	if (!cardRef.value) return null;
+	if (position.value.x < -cardRef.value.offsetWidth) return "left";
+	if (position.value.x > window.innerWidth) return "right";
+	if (position.value.y < -cardRef.value.offsetHeight) return "up";
+	if (position.value.y > window.innerHeight) return "down";
+	else return null;
+}); // 提示箭头方向
 
 const handleLoad = () => {
 	isLoading.value = false;
@@ -89,6 +120,15 @@ const startInertia = () => {
 
 	animationFrame.value = requestAnimationFrame(animate);
 };
+
+const resetCardPosition = () => {
+	if (!cardRef.value || !tooltipPosition) return;
+	gsap.to(position.value, {
+		x: tooltipPosition.value.x,
+		y: tooltipPosition.value.y,
+		duration: 0.5,
+	});
+};
 </script>
 
 <template>
@@ -118,7 +158,7 @@ const startInertia = () => {
 					@load="handleLoad"
 					@error="handleError"
 				/>
-				<span v-if="isLoading && soundStore.musicCurrent?.cover" class="cover_loading"></span>
+				<span v-if="isLoading && soundStore.musicCurrent?.cover" class="cover_loading">加载中</span>
 				<span v-else-if="!isLoading && loadingError" class="loading_error">加载失败</span>
 			</div>
 			<div class="music_name">
@@ -161,6 +201,14 @@ const startInertia = () => {
 		<div class="backgound1"></div>
 		<div class="backgound2"></div>
 	</div>
+	<Tooltip
+		:style="{ transform: `translate(${tooltipPosition.x}px, ${tooltipPosition.y}px)` }"
+		:visable="tooltipVisable"
+		:onClick="resetCardPosition"
+		ref="tooltipRef"
+	>
+		<Arrow1 :direction="arrowDirection" />
+	</Tooltip>
 </template>
 
 <style scoped lang="scss">
@@ -170,46 +218,50 @@ $base-size: 1;
 	position: fixed;
 	left: 0;
 	top: 0;
-	width: 190px;
-	border-radius: 10px;
+	width: 190px * $base-size;
+	height: auto;
+	border-radius: 10px * $base-size;
 	cursor: pointer;
 	user-select: none;
 	-webkit-tap-highlight-color: transparent;
 	z-index: 10;
 
 	.card_content {
-		width: 190px;
+		width: 190px * $base-size;
 		z-index: 10;
-		position: absolute;
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		background: rgba(255, 255, 255, 0.55);
-		box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-		backdrop-filter: blur(8.5px);
-		-webkit-backdrop-filter: blur(8.5px);
-		border-radius: 10px;
-		border: 1px solid rgba(255, 255, 255, 0.18);
+		box-shadow: 0 8px * $base-size 32px * $base-size 0 rgba(31, 38, 135, 0.37);
+		backdrop-filter: blur(8.5px * $base-size);
+		-webkit-backdrop-filter: blur(8.5px * $base-size);
+		border-radius: 10px * $base-size;
+		border-width: 1px * $base-size;
+		border-style: solid;
+		border-color: rgba(255, 255, 255, 0.18);
 		overflow: hidden;
 
 		.card_title {
-			width: 70px;
-			border: 1px solid rgba(180, 177, 177, 0.308);
+			border-width: 1px * $base-size;
+			border-style: solid;
+			border-color: rgba(180, 177, 177, 0.308);
 			display: block;
-			margin: 12px auto;
+			margin: 12px * $base-size auto;
 			text-align: center;
-			font-size: 10px;
-			border-radius: 12px;
+			font-size: 0.6rem * $base-size;
+			border-radius: 12px * $base-size;
 			font-family: Roboto, sans-serif;
 			color: rgba(102, 100, 100, 0.911);
 		}
 
 		.cover_container {
-			width: 80px;
-			min-height: 80px;
+			width: 80px * $base-size;
+			min-height: 80px * $base-size;
 			background: rgba(216, 212, 212, 0.726);
-			margin-top: 20px;
-			border-radius: 15px;
+			margin-top: 20px * $base-size;
+			border-radius: 15px * $base-size;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -227,12 +279,12 @@ $base-size: 1;
 
 		.music_name {
 			width: auto;
-			height: 20px;
-			font-size: 12px;
+			height: 20px * $base-size;
+			font-size: 0.7rem * $base-size;
 			font-weight: 500;
 			font-family: Roboto, sans-serif;
-			padding: 0 5px;
-			margin: 10px auto 0px;
+			padding: 0 5px * $base-size;
+			margin: 10px * $base-size auto 0px;
 			display: block;
 			text-align: center;
 			color: rgba(50, 49, 51, 0.637);
@@ -241,11 +293,10 @@ $base-size: 1;
 		}
 
 		.music_artist {
-			width: 120px;
-			font-size: 9px;
+			font-size: 0.6rem * $base-size;
 			font-weight: 500;
 			font-family: Roboto, sans-serif;
-			padding: 0 5px;
+			padding: 0 5px * $base-size;
 			margin: 0px auto;
 			display: block;
 			overflow: hidden;
@@ -254,11 +305,10 @@ $base-size: 1;
 		}
 
 		.music_control {
-			margin: 0px auto;
 			display: flex;
 			align-items: center;
 			justify-content: space-evenly;
-			padding: 0 5px;
+			padding: 0 5px * $base-size;
 			cursor: pointer;
 
 			.control_btn {
@@ -283,89 +333,789 @@ $base-size: 1;
 	}
 
 	.backgound1 {
-		width: 60px;
-		height: 60px;
+		position: absolute;
+		top: 30px * $base-size;
+		left: 20px * $base-size;
+		width: 60px * $base-size;
+		height: 60px * $base-size;
 		background-color: rgb(131, 25, 163);
 		filter: drop-shadow(0 0 10px rgb(131, 25, 163));
 		border-radius: 50%;
-		position: relative;
-		top: 30px;
-		left: 20px;
 		animation: one 5s infinite;
 	}
 
 	.backgound2 {
-		width: 60px;
-		height: 60px;
+		position: absolute;
+		top: 90px * $base-size;
+		left: 90px * $base-size;
+		width: 60px * $base-size;
+		height: 60px * $base-size;
 		background-color: rgb(29, 209, 149);
 		filter: drop-shadow(0 0 10px rgb(29, 209, 149));
 		border-radius: 50%;
-		position: relative;
-		top: 90px;
-		left: 90px;
 		animation: two 5s infinite;
 	}
 }
 
 @keyframes one {
 	0% {
-		top: 30px;
-		left: 20px;
+		top: 30px * $base-size;
+		left: 20px * $base-size;
 	}
 	20% {
-		top: 50px;
-		left: 40px;
+		top: 50px * $base-size;
+		left: 40px * $base-size;
 	}
 	40% {
-		top: 80px;
-		left: 70px;
+		top: 80px * $base-size;
+		left: 70px * $base-size;
 	}
 	50% {
-		top: 60px;
-		left: 40px;
+		top: 60px * $base-size;
+		left: 40px * $base-size;
 	}
 	60% {
-		top: 35px;
-		left: 90px;
+		top: 35px * $base-size;
+		left: 90px * $base-size;
 	}
 	80% {
-		top: 70px;
-		left: 70px;
+		top: 70px * $base-size;
+		left: 70px * $base-size;
 	}
 	100% {
-		top: 30px;
-		left: 20px;
+		top: 30px * $base-size;
+		left: 20px * $base-size;
 	}
 }
 
 @keyframes two {
 	0% {
-		top: 90px;
-		left: 90px;
+		top: 90px * $base-size;
+		left: 90px * $base-size;
 	}
 	20% {
-		top: 50px;
-		left: 40px;
+		top: 50px * $base-size;
+		left: 40px * $base-size;
 	}
 	40% {
-		top: 60px;
-		left: 20px;
+		top: 60px * $base-size;
+		left: 20px * $base-size;
 	}
 	50% {
-		top: 80px;
-		left: 30px;
+		top: 80px * $base-size;
+		left: 30px * $base-size;
 	}
 	60% {
-		top: 35px;
-		left: 90px;
+		top: 35px * $base-size;
+		left: 90px * $base-size;
 	}
 	80% {
-		top: 70px;
-		left: 60px;
+		top: 70px * $base-size;
+		left: 60px * $base-size;
 	}
 	100% {
-		top: 90px;
-		left: 90px;
+		top: 90px * $base-size;
+		left: 90px * $base-size;
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.75;
+
+	.music_card {
+		width: 190px * $base-size;
+		border-radius: 10px * $base-size;
+
+		.card_content {
+			width: 190px * $base-size;
+			box-shadow: 0 8px * $base-size 32px * $base-size 0 rgba(31, 38, 135, 0.37);
+			backdrop-filter: blur(8.5px * $base-size);
+			-webkit-backdrop-filter: blur(8.5px * $base-size);
+			border-radius: 10px * $base-size;
+			border-width: 1px * $base-size;
+
+			.card_title {
+				border-width: 1px * $base-size;
+				margin: 12px * $base-size auto;
+				font-size: 0.6rem * $base-size;
+				border-radius: 12px * $base-size;
+			}
+
+			.cover_container {
+				width: 80px * $base-size;
+				min-height: 80px * $base-size;
+				margin-top: 20px * $base-size;
+				border-radius: 15px * $base-size;
+			}
+
+			.music_name {
+				height: 20px * $base-size;
+				font-size: 0.7rem * $base-size;
+				padding: 0 5px * $base-size;
+				margin: 10px * $base-size auto 0px;
+			}
+
+			.music_artist {
+				font-size: 0.6rem * $base-size;
+				padding: 0 5px * $base-size;
+			}
+
+			.music_control {
+				padding: 0 5px * $base-size;
+
+				.control_btn {
+					width: 30px * $base-size;
+					height: 30px * $base-size;
+
+					.icon {
+						font-size: 13px * $base-size;
+					}
+				}
+			}
+		}
+
+		.backgound1 {
+			top: 30px * $base-size;
+			left: 20px * $base-size;
+			width: 60px * $base-size;
+			height: 60px * $base-size;
+		}
+
+		.backgound2 {
+			top: 90px * $base-size;
+			left: 90px * $base-size;
+			width: 60px * $base-size;
+			height: 60px * $base-size;
+		}
+	}
+
+	@keyframes one {
+		0% {
+			top: 30px * $base-size;
+			left: 20px * $base-size;
+		}
+		20% {
+			top: 50px * $base-size;
+			left: 40px * $base-size;
+		}
+		40% {
+			top: 80px * $base-size;
+			left: 70px * $base-size;
+		}
+		50% {
+			top: 60px * $base-size;
+			left: 40px * $base-size;
+		}
+		60% {
+			top: 35px * $base-size;
+			left: 90px * $base-size;
+		}
+		80% {
+			top: 70px * $base-size;
+			left: 70px * $base-size;
+		}
+		100% {
+			top: 30px * $base-size;
+			left: 20px * $base-size;
+		}
+	}
+
+	@keyframes two {
+		0% {
+			top: 90px * $base-size;
+			left: 90px * $base-size;
+		}
+		20% {
+			top: 50px * $base-size;
+			left: 40px * $base-size;
+		}
+		40% {
+			top: 60px * $base-size;
+			left: 20px * $base-size;
+		}
+		50% {
+			top: 80px * $base-size;
+			left: 30px * $base-size;
+		}
+		60% {
+			top: 35px * $base-size;
+			left: 90px * $base-size;
+		}
+		80% {
+			top: 70px * $base-size;
+			left: 60px * $base-size;
+		}
+		100% {
+			top: 90px * $base-size;
+			left: 90px * $base-size;
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.85;
+
+	.music_card {
+		width: 190px * $base-size;
+		border-radius: 10px * $base-size;
+
+		.card_content {
+			width: 190px * $base-size;
+			box-shadow: 0 8px * $base-size 32px * $base-size 0 rgba(31, 38, 135, 0.37);
+			backdrop-filter: blur(8.5px * $base-size);
+			-webkit-backdrop-filter: blur(8.5px * $base-size);
+			border-radius: 10px * $base-size;
+			border-width: 1px * $base-size;
+
+			.card_title {
+				border-width: 1px * $base-size;
+				margin: 12px * $base-size auto;
+				font-size: 0.6rem * $base-size;
+				border-radius: 12px * $base-size;
+			}
+
+			.cover_container {
+				width: 80px * $base-size;
+				min-height: 80px * $base-size;
+				margin-top: 20px * $base-size;
+				border-radius: 15px * $base-size;
+			}
+
+			.music_name {
+				height: 20px * $base-size;
+				font-size: 0.7rem * $base-size;
+				padding: 0 5px * $base-size;
+				margin: 10px * $base-size auto 0px;
+			}
+
+			.music_artist {
+				font-size: 0.6rem * $base-size;
+				padding: 0 5px * $base-size;
+			}
+
+			.music_control {
+				padding: 0 5px * $base-size;
+
+				.control_btn {
+					width: 30px * $base-size;
+					height: 30px * $base-size;
+
+					.icon {
+						font-size: 13px * $base-size;
+					}
+				}
+			}
+		}
+
+		.backgound1 {
+			top: 30px * $base-size;
+			left: 20px * $base-size;
+			width: 60px * $base-size;
+			height: 60px * $base-size;
+		}
+
+		.backgound2 {
+			top: 90px * $base-size;
+			left: 90px * $base-size;
+			width: 60px * $base-size;
+			height: 60px * $base-size;
+		}
+	}
+
+	@keyframes one {
+		0% {
+			top: 30px * $base-size;
+			left: 20px * $base-size;
+		}
+		20% {
+			top: 50px * $base-size;
+			left: 40px * $base-size;
+		}
+		40% {
+			top: 80px * $base-size;
+			left: 70px * $base-size;
+		}
+		50% {
+			top: 60px * $base-size;
+			left: 40px * $base-size;
+		}
+		60% {
+			top: 35px * $base-size;
+			left: 90px * $base-size;
+		}
+		80% {
+			top: 70px * $base-size;
+			left: 70px * $base-size;
+		}
+		100% {
+			top: 30px * $base-size;
+			left: 20px * $base-size;
+		}
+	}
+
+	@keyframes two {
+		0% {
+			top: 90px * $base-size;
+			left: 90px * $base-size;
+		}
+		20% {
+			top: 50px * $base-size;
+			left: 40px * $base-size;
+		}
+		40% {
+			top: 60px * $base-size;
+			left: 20px * $base-size;
+		}
+		50% {
+			top: 80px * $base-size;
+			left: 30px * $base-size;
+		}
+		60% {
+			top: 35px * $base-size;
+			left: 90px * $base-size;
+		}
+		80% {
+			top: 70px * $base-size;
+			left: 60px * $base-size;
+		}
+		100% {
+			top: 90px * $base-size;
+			left: 90px * $base-size;
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.9;
+
+	.music_card {
+		position: fixed;
+		left: 0;
+		top: 0;
+		width: 190px * $base-size;
+		height: auto;
+		border-radius: 10px * $base-size;
+		cursor: pointer;
+		user-select: none;
+		-webkit-tap-highlight-color: transparent;
+		z-index: 10;
+
+		.card_content {
+			width: 190px * $base-size;
+			z-index: 10;
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			background: rgba(255, 255, 255, 0.55);
+			box-shadow: 0 8px * $base-size 32px * $base-size 0 rgba(31, 38, 135, 0.37);
+			backdrop-filter: blur(8.5px * $base-size);
+			-webkit-backdrop-filter: blur(8.5px * $base-size);
+			border-radius: 10px * $base-size;
+			border-width: 1px * $base-size;
+			border-style: solid;
+			border-color: rgba(255, 255, 255, 0.18);
+			overflow: hidden;
+
+			.card_title {
+				border-width: 1px * $base-size;
+				border-style: solid;
+				border-color: rgba(180, 177, 177, 0.308);
+				display: block;
+				margin: 12px * $base-size auto;
+				text-align: center;
+				font-size: 0.6rem * $base-size;
+				border-radius: 12px * $base-size;
+				font-family: Roboto, sans-serif;
+				color: rgba(102, 100, 100, 0.911);
+			}
+
+			.cover_container {
+				width: 80px * $base-size;
+				min-height: 80px * $base-size;
+				background: rgba(216, 212, 212, 0.726);
+				margin-top: 20px * $base-size;
+				border-radius: 15px * $base-size;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				overflow: hidden;
+
+				.music_cover {
+					height: 100%;
+					width: 100%;
+
+					&.loading {
+						display: none;
+					}
+				}
+			}
+
+			.music_name {
+				width: auto;
+				height: 20px * $base-size;
+				font-size: 0.7rem * $base-size;
+				font-weight: 500;
+				font-family: Roboto, sans-serif;
+				padding: 0 5px * $base-size;
+				margin: 10px * $base-size auto 0px;
+				display: block;
+				text-align: center;
+				color: rgba(50, 49, 51, 0.637);
+				mask-image: linear-gradient(
+					to right,
+					transparent 0%,
+					black 10%,
+					black 90%,
+					transparent 100%
+				);
+				overflow: hidden;
+			}
+
+			.music_artist {
+				font-size: 0.6rem * $base-size;
+				font-weight: 500;
+				font-family: Roboto, sans-serif;
+				padding: 0 5px * $base-size;
+				margin: 0px auto;
+				display: block;
+				overflow: hidden;
+				text-align: center;
+				color: rgba(50, 49, 51, 0.637);
+			}
+
+			.music_control {
+				display: flex;
+				align-items: center;
+				justify-content: space-evenly;
+				padding: 0 5px * $base-size;
+				cursor: pointer;
+
+				.control_btn {
+					position: relative;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					width: 30px * $base-size;
+					height: 30px * $base-size;
+					color: rgba($color: #000000, $alpha: 0.5);
+					background: transparent;
+					border: none;
+					user-select: none;
+					cursor: pointer;
+					-webkit-tap-highlight-color: transparent;
+
+					.icon {
+						font-size: 13px * $base-size;
+					}
+				}
+			}
+		}
+
+		.backgound1 {
+			position: absolute;
+			top: 30px * $base-size;
+			left: 20px * $base-size;
+			width: 60px * $base-size;
+			height: 60px * $base-size;
+			background-color: rgb(131, 25, 163);
+			filter: drop-shadow(0 0 10px rgb(131, 25, 163));
+			border-radius: 50%;
+			animation: one 5s infinite;
+		}
+
+		.backgound2 {
+			position: absolute;
+			top: 90px * $base-size;
+			left: 90px * $base-size;
+			width: 60px * $base-size;
+			height: 60px * $base-size;
+			background-color: rgb(29, 209, 149);
+			filter: drop-shadow(0 0 10px rgb(29, 209, 149));
+			border-radius: 50%;
+			animation: two 5s infinite;
+		}
+	}
+
+	@keyframes one {
+		0% {
+			top: 30px * $base-size;
+			left: 20px * $base-size;
+		}
+		20% {
+			top: 50px * $base-size;
+			left: 40px * $base-size;
+		}
+		40% {
+			top: 80px * $base-size;
+			left: 70px * $base-size;
+		}
+		50% {
+			top: 60px * $base-size;
+			left: 40px * $base-size;
+		}
+		60% {
+			top: 35px * $base-size;
+			left: 90px * $base-size;
+		}
+		80% {
+			top: 70px * $base-size;
+			left: 70px * $base-size;
+		}
+		100% {
+			top: 30px * $base-size;
+			left: 20px * $base-size;
+		}
+	}
+
+	@keyframes two {
+		0% {
+			top: 90px * $base-size;
+			left: 90px * $base-size;
+		}
+		20% {
+			top: 50px * $base-size;
+			left: 40px * $base-size;
+		}
+		40% {
+			top: 60px * $base-size;
+			left: 20px * $base-size;
+		}
+		50% {
+			top: 80px * $base-size;
+			left: 30px * $base-size;
+		}
+		60% {
+			top: 35px * $base-size;
+			left: 90px * $base-size;
+		}
+		80% {
+			top: 70px * $base-size;
+			left: 60px * $base-size;
+		}
+		100% {
+			top: 90px * $base-size;
+			left: 90px * $base-size;
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.9;
+
+	.music_card {
+		position: fixed;
+		left: 0;
+		top: 0;
+		width: 190px * $base-size;
+		height: auto;
+		border-radius: 10px * $base-size;
+		cursor: pointer;
+		user-select: none;
+		-webkit-tap-highlight-color: transparent;
+		z-index: 10;
+
+		.card_content {
+			width: 190px * $base-size;
+			z-index: 10;
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			background: rgba(255, 255, 255, 0.55);
+			box-shadow: 0 8px * $base-size 32px * $base-size 0 rgba(31, 38, 135, 0.37);
+			backdrop-filter: blur(8.5px * $base-size);
+			-webkit-backdrop-filter: blur(8.5px * $base-size);
+			border-radius: 10px * $base-size;
+			border-width: 1px * $base-size;
+			border-style: solid;
+			border-color: rgba(255, 255, 255, 0.18);
+			overflow: hidden;
+
+			.card_title {
+				border-width: 1px * $base-size;
+				border-style: solid;
+				border-color: rgba(180, 177, 177, 0.308);
+				display: block;
+				margin: 12px * $base-size auto;
+				text-align: center;
+				font-size: 0.6rem * $base-size;
+				border-radius: 12px * $base-size;
+				font-family: Roboto, sans-serif;
+				color: rgba(102, 100, 100, 0.911);
+			}
+
+			.cover_container {
+				width: 80px * $base-size;
+				min-height: 80px * $base-size;
+				background: rgba(216, 212, 212, 0.726);
+				margin-top: 20px * $base-size;
+				border-radius: 15px * $base-size;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				overflow: hidden;
+
+				.music_cover {
+					height: 100%;
+					width: 100%;
+
+					&.loading {
+						display: none;
+					}
+				}
+			}
+
+			.music_name {
+				width: auto;
+				height: 20px * $base-size;
+				font-size: 0.7rem * $base-size;
+				font-weight: 500;
+				font-family: Roboto, sans-serif;
+				padding: 0 5px * $base-size;
+				margin: 10px * $base-size auto 0px;
+				display: block;
+				text-align: center;
+				color: rgba(50, 49, 51, 0.637);
+				mask-image: linear-gradient(
+					to right,
+					transparent 0%,
+					black 10%,
+					black 90%,
+					transparent 100%
+				);
+				overflow: hidden;
+			}
+
+			.music_artist {
+				font-size: 0.6rem * $base-size;
+				font-weight: 500;
+				font-family: Roboto, sans-serif;
+				padding: 0 5px * $base-size;
+				margin: 0px auto;
+				display: block;
+				overflow: hidden;
+				text-align: center;
+				color: rgba(50, 49, 51, 0.637);
+			}
+
+			.music_control {
+				display: flex;
+				align-items: center;
+				justify-content: space-evenly;
+				padding: 0 5px * $base-size;
+				cursor: pointer;
+
+				.control_btn {
+					position: relative;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					width: 30px * $base-size;
+					height: 30px * $base-size;
+					color: rgba($color: #000000, $alpha: 0.5);
+					background: transparent;
+					border: none;
+					user-select: none;
+					cursor: pointer;
+					-webkit-tap-highlight-color: transparent;
+
+					.icon {
+						font-size: 13px * $base-size;
+					}
+				}
+			}
+		}
+
+		.backgound1 {
+			position: absolute;
+			top: 30px * $base-size;
+			left: 20px * $base-size;
+			width: 60px * $base-size;
+			height: 60px * $base-size;
+			background-color: rgb(131, 25, 163);
+			filter: drop-shadow(0 0 10px rgb(131, 25, 163));
+			border-radius: 50%;
+			animation: one 5s infinite;
+		}
+
+		.backgound2 {
+			position: absolute;
+			top: 90px * $base-size;
+			left: 90px * $base-size;
+			width: 60px * $base-size;
+			height: 60px * $base-size;
+			background-color: rgb(29, 209, 149);
+			filter: drop-shadow(0 0 10px rgb(29, 209, 149));
+			border-radius: 50%;
+			animation: two 5s infinite;
+		}
+	}
+
+	@keyframes one {
+		0% {
+			top: 30px * $base-size;
+			left: 20px * $base-size;
+		}
+		20% {
+			top: 50px * $base-size;
+			left: 40px * $base-size;
+		}
+		40% {
+			top: 80px * $base-size;
+			left: 70px * $base-size;
+		}
+		50% {
+			top: 60px * $base-size;
+			left: 40px * $base-size;
+		}
+		60% {
+			top: 35px * $base-size;
+			left: 90px * $base-size;
+		}
+		80% {
+			top: 70px * $base-size;
+			left: 70px * $base-size;
+		}
+		100% {
+			top: 30px * $base-size;
+			left: 20px * $base-size;
+		}
+	}
+
+	@keyframes two {
+		0% {
+			top: 90px * $base-size;
+			left: 90px * $base-size;
+		}
+		20% {
+			top: 50px * $base-size;
+			left: 40px * $base-size;
+		}
+		40% {
+			top: 60px * $base-size;
+			left: 20px * $base-size;
+		}
+		50% {
+			top: 80px * $base-size;
+			left: 30px * $base-size;
+		}
+		60% {
+			top: 35px * $base-size;
+			left: 90px * $base-size;
+		}
+		80% {
+			top: 70px * $base-size;
+			left: 60px * $base-size;
+		}
+		100% {
+			top: 90px * $base-size;
+			left: 90px * $base-size;
+		}
 	}
 }
 </style>

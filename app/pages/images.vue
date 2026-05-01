@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ImageBackground from "~/components/ui/imageUI/ImageBackground.vue";
 import ImageContainer from "~/components/ui/imageUI/ImageContainer.vue";
-import Button from "~/components/ui/Button.vue";
+import Button from "~/components/ui/commen/Button.vue";
 
 const { loadingNavigate } = useLoadingStore();
 
