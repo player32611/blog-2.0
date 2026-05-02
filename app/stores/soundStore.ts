@@ -20,6 +20,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 	const musicVolume = ref<number>(0.7); // 音乐音量
 	const playingMusic = ref<boolean>(false); // 音乐播放状态
 	const seekTime = ref<number>(5); // 快进快退时间
+	const musicCardVisible = ref<boolean>(false); // 音乐卡片可见性
 
 	/**
     设置音效音量。
@@ -46,6 +47,10 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 
 	function setSeekTime(time: number) {
 		seekTime.value = time;
+	}
+
+	function setMusicCardVisible(visible: boolean) {
+		musicCardVisible.value = visible;
 	}
 
 	const handleCanPlay = () => {
@@ -233,10 +238,12 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		musicVolume,
 		playingMusic,
 		seekTime,
+		musicCardVisible,
 		setEffectsVolume,
 		setMusicVolume,
 		setMusicCurrentTime,
 		setSeekTime,
+		setMusicCardVisible,
 		initAudio,
 		play,
 		pause,

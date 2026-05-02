@@ -6,8 +6,17 @@ import MusicRecord from "~/components/ui/musicUI/MusicRecord.vue";
 import Button from "~/components/ui/commen/Button.vue";
 
 const { loadingNavigate } = useLoadingStore();
+const soundStore = useSoundStore();
 
 usePageReady();
+
+onMounted(() => {
+	soundStore.setMusicCardVisible(false);
+});
+
+onUnmounted(() => {
+	if (soundStore.musicAudio) soundStore.setMusicCardVisible(true);
+});
 </script>
 
 <template>

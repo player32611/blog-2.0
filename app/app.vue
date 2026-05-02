@@ -1,13 +1,11 @@
 <template>
 	<Loading ref="loadingRef" />
-	<MusicCard />
+	<MusicCard v-if="soundStore.musicCardVisible" />
 	<NuxtPage :page-key="$route.fullPath" />
 	<NuxtRouteAnnouncer />
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
 import type { LoadingInstance } from "./types/components";
 
 import MusicCard from "./components/ui/rootUI/MusicCard.vue";
@@ -15,6 +13,7 @@ import Loading from "./components/ui/rootUI/Loading.vue";
 
 const loadingStore = useLoadingStore();
 const loadingRef = ref<LoadingInstance | null>(null);
+const soundStore = useSoundStore();
 const router = useRouter();
 
 onMounted(() => {
