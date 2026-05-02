@@ -309,12 +309,167 @@ drwxr-x--- 20 hcb  hcb   4096  5月  2 14:09 ./
 
 ### 拷贝移动命令
 
+`cp`：用于赋值文件或目录
+
+- 语法：`cp [-f] source dest`
+
+- 选项：`-f` 如果复制的是目录需要使用此选项，此时将复制该目录下所有的子目录和文件；
+
+::detail
+
+#title
+具体示例
+#default
+
+`cp hello.txt itcast/`：将 hello.txt 复制到 itcast 目录中
+
+`cp hello.txt ./hi.txt`：将 hello.txt 复制到当前目录，并改名为 hi.txt
+
+`cp -r itcast/ ./itheima/`：将 itcast 目录和目录下所有文件复制到 itheima 目录下
+
+`cp -r itcast/* ./itheima/`：将 itcast 目录下所有文件复制到 itheima 目录下
+
+::
+
+`mv`：为文件或目录重命名、或将文件或目录移动到其它位置（若第二个参数是已存在的目录则执行移动）
+
+- 语法：`mv source dest`
+
+::detail
+
+#title
+具体示例
+#default
+
+`mv hello.txt hi.txt`：将 hello.txt 改名为 hi.txt
+
+`mv hi.txt itheima/`：将 hi.txt 移动到 itheima 目录中
+
+`mv hi.txt itheima/hello.txt`：将 hi.txt 移动到 itheima 目录下，并改名为 hello.txt
+
+`mv itcast/ itheima/`：如果 itheima 目录不存在，将 itcast 目录改名为 itheima；如果 itheima 目录存在，将 itcast 目录移动到 itheima 目录中
+
+::
+
 ### 打包压缩命令
+
+`tar`：对文件进行打包、解包、压缩、解压
+
+- 语法：`tar [-zcxvf] fileName [files]`
+
+- 说明：包文件后缀为 .tar 表示只是完成了打包，并没有压缩；包文件后缀为 .tarr.gz 表示打包的同时还进行了压缩
+
+- 选项：`-z` 代表的是 gzip，通过 gzip 命令处理文件，gzip 可以对文件压缩或者解压；`-c` 代表的是 create，即创建新的包文件；`-x` 代表的是 extract，实现从包文件中还原文件；`-v` 代表的是 verbose，显示命令的执行过程；`-f` 代表的是 file，用于指定包文件的名称
+
+::detail
+
+#title
+具体实例
+#default
+
+`tar -cvf hello.tar hello`：将当前目录下所有文件打包，打包后的文件名为 hello.tar
+
+`tar -zcvf hello.tar.gz hello`：将当前目录下所有文件打包并压缩，打包后的文件名为 hello.tar.gz
+
+`tar -xvf hello.tar`：将 hello.tar 文件进行解包，并将解包后的文件放在当前目录
+
+`tar -zxvf hello.tar.gz`：将 hello.tar.gz 文件进行解压，并将解压后的文件放在当前目录
+
+`tar -zxvf hello.tar.gz -C /user/local`：将 hello.tar.gz 文件进行解压。解压到指定的 /user/local 目录中
+
+::
 
 ### 文本编辑命令
 
+`vi`：vi 命令是 Linux 系统提供的一个文本编辑工具，可以对文件内容进行编辑，类似于 Windows 中的记事本
+
+- 语法：`vi fileName`
+
+vim 是从 vi 发展来的一个功能更加强大的文本编辑工具，在编辑文件时可以对文本内容进行着色（更常用）。要使用 vim 命令，需要我们自己完成安装。可以使用下面的命令来完成安装：
+
+```bash
+yum install vim
+```
+
+`vim`：对文件内容进行编辑，vim 其实就是一个文本编辑器
+
+- 语法：`vim fileName`
+
+::tip
+
+vim 使用指南
+
+输入 `vim fileName` 打开文件后会先进入**命令模式**
+
+|   命令模式指令    |                含义                 |
+| :---------------: | :---------------------------------: |
+|       `gg`        |       定位到文本内容的第一行        |
+|        `G`        |       定位到文本内容最后一行        |
+|       `dd`        |        删除光标所在行的数据         |
+|       `ndd`       | 删除当前光标所在行及之后的 n 行数据 |
+|        `u`        |              撤销操作               |
+| `i` 或 `a` 或 `o` |            进入插入模式             |
+
+命令模式下，可以按下 i、a、o 键进入**插入模式**，插入模式下按下 Esc 键返回命令模式
+
+命令模式下，可以按下 : 键进入**底行模式**，底行模式下按下 Esc 键返回命令模式
+
+| 底行模式命令 |     含义      |
+| :----------: | :-----------: |
+|    `:wq`     |  保存并退出   |
+|    `:q!`     |  不保存退出   |
+|  `:set nu`   |   显示行号    |
+| `:set nonu`  | 取消行号显示  |
+|     `:n`     | 定位到第 n 行 |
+
+::
+
 ### 查找命令
+
+`find`：在指定目录下查找文件
+
+- 语法：`find dirName -option fileName`
+
+::detail
+
+#title
+具体示例
+#default
+
+`find . -name "*.log"`：在当前目录及其子目录下查找 .log 结尾文件
+
+`find /itcast -name "*.log"`：在 /itcast 目录及其子目录下查找 .log 结尾的文件
+
+::
+
+`grep`：从指定文件中查找指定的文本内容
+
+- 语法：`grep [-inAB] word fileName`
+
+- 选项：`-i` 检索的关键字忽略（ignore）大小写；`-n` 显示关键字所在的这一行的行号；`-A` 输出关键字所在行及之后（After）的几行记录；`-B` 输出关键字所在行及之前（Before）的几行记录
+
+::detail
+
+#title
+具体示例
+#default
+
+`grep Hello HelloWorld.java`：查找 HelloWorld.java 文件中出现的 Hello 字符串的位置
+
+`grep hello *.java`：查找当前目录中所有 .java 结尾的文件中包含 hello 字符串的位置
+
+::
 
 ### 其它命令
 
 `history`：查看命令历史记录
+
+## 软件安装
+
+**二进制发布包安装**：软件已经针对具体平台编译打包发布，只要解压，修改配置即可
+
+**rpm 安装**：软件已经按照 redhat 的包管理规范进行打包，使用 rpm 命令进行安装，不能自行解决库依赖问题
+
+**yum 安装**：一种在线软件安装方式，本质上还是 rpm 安装，自动下载安装包并安装，安装过程中自动解决库依赖问题
+
+**源码编译安装**：软件以源码工程的形式发布，需要自己编译打包
