@@ -460,6 +460,52 @@ vim 使用指南
 
 ::
 
+### Mysql 数据库操作命令
+
+`mysql -uroot -p`：连接 mysql 数据库
+
+`service mysql status`：查看 mysql 服务状态
+
+`service mysql start`：启动 mysql 服务
+
+### 防火墙操作命令
+
+`systemctl status firewalld`、`firewall-cmd --state`：查看防火墙状态
+
+`systemctl stop firewalld`：关闭防火墙
+
+`systemctl start firewalld`：开启防火墙
+
+`systemctl disable firewalld`：永久关闭防火墙
+
+`firewall-cmd --zone=public --add-port=8080/tcp --permanent`：开放指定端口
+
+`firewall-cmd --zone=public --remove-port=8080/tcp --permanent`：关闭指定端口
+
+`firewall-cmd --reload`：立即生效
+
+`firewall-cmd --zone=public --list-ports`：查看开放的端口
+
+::tip
+
+- systemctl 是管理 Linux 中服务的命令，可以对服务进行启动、停止、重启、查看状态等操作
+
+- firewall-cmd 是 Linux 中专门用于控制防火墙的命令
+
+- 为了保证系统安全，生产服务器的防火墙不建议关闭
+
+::
+
+::tip
+
+Ubuntu 系统防火墙关闭命令
+
+`sudo ufw status`：查看防火墙状态
+
+`sudo ufw enable`：开启防火墙
+
+::
+
 ### 其它命令
 
 `history`：查看命令历史记录
