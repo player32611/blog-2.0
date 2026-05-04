@@ -2,12 +2,6 @@
 
 > Spring Boot 可以帮助我们非常快速的构建应用程序、简化开发、提高效率
 
-::danger
-
-该页面尚未完工!
-
-::
-
 ## HTTP 协议
 
 **HTTP 协议**（Hyper Text Transfer Protocol、超文本传输协议）规定了浏览器和服务其之间数据传输的规则。
