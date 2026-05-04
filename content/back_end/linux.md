@@ -462,7 +462,7 @@ vim 使用指南
 
 ### Mysql 数据库操作命令
 
-`mysql -uroot -p`：连接 mysql 数据库
+`mysql -u[用户名] -p`：连接 mysql 数据库
 
 `service mysql status`：查看 mysql 服务状态
 
@@ -506,9 +506,23 @@ Ubuntu 系统防火墙关闭命令
 
 ::
 
+### Nginx 操作命令
+
+`nginx`：启动 nginx 服务
+
+`nginx -s reload`：重启 nginx 服务
+
+`nginx -s quit`：停止 nginx 服务
+
 ### 其它命令
 
 `history`：查看命令历史记录
+
+### 特殊符号
+
+`|`：管道符，将前面命令的输出，作为后面命令的输入
+
+`>` 与 `>>`：重定向符号，将前面的问问你笨内容，输出到后面的文件中（`>`：覆盖重定向，`>>`：追加重定向）
 
 ## 软件安装
 
@@ -519,3 +533,52 @@ Ubuntu 系统防火墙关闭命令
 **yum 安装**：一种在线软件安装方式，本质上还是 rpm 安装，自动下载安装包并安装，安装过程中自动解决库依赖问题
 
 **源码编译安装**：软件以源码工程的形式发布，需要自己编译打包
+
+## 项目部署
+
+### 前端项目部署
+
+1. 将打包好的静态资源，上传到 nginx 的 html 目录中
+
+2. 配置 nginx 的配置文件，在 conf/nginx.conf 中配置反向代理服务器及路径重写规则
+
+```conf
+server {
+  listen 80;
+  server_name localhost;
+  client_max_body_size 10m;
+  location / {
+    root html;
+    index index.html index.htm;
+    try_files $uri $uri/ /index.html;
+  }
+  location ^~ /api/ {
+    rewrite ^/api/(.*)$ / break;
+    proxy_pass http://localhost:8080;
+  }
+}
+```
+
+3. 在 nginx 的安装目录中，执行 sbin 目录下的 nginx 命令启动 nginx 服务：`sbin/nginx` 或 `sbin/nginx -s start`
+
+### 后端项目部署
+
+1. 执行 maven 的父工程中的 package 生命周期，对项目进行打包
+
+2. 在 linux 服务器的 /usr/local 目录下，创建一个目录 xxx-app，将 jar 包上传到服务器的 /usr/local/xxx-app 目录中
+
+3. 然后在命令行执行命令，运行 jar 包：`java -jar xxx.jar`
+
+::tip
+
+上述执行运行 jar 包之后，会占用前台窗口，窗口关闭服务器也就停了。可以使用 nohup 指令，后台运行服务：
+
+```bash
+nohup java -jar xxx.jar &
+```
+
+- 查看进程：`ps -ef | grep java`
+
+- 停止进程：`kill -9 [进程号]`
+
+::
