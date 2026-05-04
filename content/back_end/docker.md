@@ -125,7 +125,23 @@ docker run -d \
 mysql:8
 ```
 
-- `<PASSWORD>` 填写你的密码
+- `docker run`：创建并运行一个容器，`-d` 是让容器在后台运行
+
+- `--name mysql`：给容器起个名字，必须唯一
+
+- `-p 3308:3306`：设置端口映射，前为宿主机的端口，后为容器的端口
+
+- `-e [KEY]=[VALUE]`：设置环境变量
+
+- `mysql:8`：指定运行的镜像的名字，版本
+
+镜像名称一般分两部分组成：`[repository]:[tag]`，其中 `repository` 就是镜像名，`tag` 时镜像的版本
+
+::warning
+
+在没有指定 `tag` 时，默认是 latest，代表最新版本的镜像
+
+::
 
 ### 镜像和容器
 
@@ -135,9 +151,61 @@ mysql:8
 
 ## Docker 核心
 
-::danger
+### 常见命令
 
-该部分尚未完工!
+Docker 最常见的命令就是操作镜像、容器的命令
+
+`docker pull`：拉取镜像
+
+`docker push`：推送镜像
+
+`docker images`：查看所有镜像
+
+`docker rmi`：删除镜像
+
+`docker run`：创建并运行容器
+
+`docker start`：启动容器
+
+`docker stop`：停止容器
+
+`docker ps`：查看正在运行的容器
+
+`docker rm`：删除容器
+
+`docker logs`：查看容器的日志
+
+`docker exec`：进入容器
+
+`docker build`：构建镜像
+
+`docker save`：保存容器
+
+`docker load`：加载容器
+
+### 数据卷
+
+**数据卷**（volume）是一个虚拟目录，是**容器内目录**与**宿主机目录**之间映射的桥梁
+
+`docker volume create`：创建数据卷
+
+`docker volume ls`：查看所有数据卷
+
+`docker volume rm`：删除指定数据卷
+
+`docker volume inspect [数据卷]`：查看某个数据卷的详情
+
+- `Mountpoint`：宿主机内的数据卷挂载路径
+
+`docker volume prune`：清理所有未使用的数据卷
+
+::warning
+
+在执行 `docker run` 命令时，使用 `-v [数据卷]:[容器内目录]` 形式可以完成数据卷挂载（数据卷不存在会自动创建）
+
+```bash
+docker run -d --name nginx -p 80:80 -v html:/usr/share/nginx/html nginx:latest
+```
 
 ::
 
