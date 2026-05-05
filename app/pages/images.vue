@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ImageBackground from "~/components/ui/imageUI/ImageBackground.vue";
 import ImageContainer from "~/components/ui/imageUI/ImageContainer.vue";
+import ImageViewbox from "~/components/ui/imageUI/ImageViewbox.vue";
 import Button from "~/components/ui/commen/Button.vue";
 
 const { loadingNavigate } = useLoadingStore();
@@ -12,6 +13,7 @@ usePageReady();
 	<div class="images">
 		<ImageBackground />
 		<ImageContainer />
+		<ImageViewbox :data="null" />
 		<Button
 			:text="'back'"
 			:icon="'&#xeb06;'"

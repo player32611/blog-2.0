@@ -22,6 +22,28 @@ export type BlogActions = {
 	changeBlogMenuState: () => void;
 };
 
+export type ImageLayoutState = {
+	rowMax: number;
+	lineMax: number;
+	imageWidth: number;
+	imageHeight: number;
+	imageMargin: number;
+	imageBorderRadius: number;
+	totalWidth: number;
+	totalHeight: number;
+};
+
+export type ImageState = {
+	allImageDatas: Ref<ImageData[]>;
+	activeImageData: Ref<ImageData | null>;
+};
+
+export type ImageGetter = {};
+
+export type ImageActions = {
+	getLayoutAttribute: () => ImageLayoutState;
+};
+
 export type LoadingState = {
 	loadingRef: Ref<LoadingInstance | null>;
 	isLoading: Ref<boolean>;

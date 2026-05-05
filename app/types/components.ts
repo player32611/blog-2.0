@@ -27,13 +27,18 @@ export interface BlogNavigationParams {
 	page: globalThis.Ref<any, any>;
 }
 
-export interface ImageData {
-	img: CanvasImageSource;
+export interface ImagePosData {
+	img: CanvasImageSource | null;
+	path: string;
 	x: number;
 	y: number;
 	targetX: number;
 	targetY: number;
 	animation: GSAPAnimation | null;
+}
+
+export interface ImageViewboxInstance {
+	setImageData: (data: ImageData | null) => void;
 }
 
 export interface ItemParams {
