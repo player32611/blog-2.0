@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { ImagePosData } from "~/types/components";
-
 const imageStore = useImageStore();
 const { rowMax, imageBorderRadius } = imageStore.getLayoutAttribute();
 const { drawImage, drawPlaceholder } = useCanvasDrawing();
@@ -11,8 +9,6 @@ const allImagePath = ref<string[]>([]);
 const currentImageWidth = ref<number>(0);
 const currentImageHeight = ref<number>(0);
 const currentImageMargin = ref<number>(0);
-const imagePosDatas = ref<ImagePosData[]>([]);
-const originalImages = ref<HTMLImageElement[]>([]); // 存储原始图片引用，用于 resize 时重新缩放
 const animationFrameId = ref<number | null>(null); // 添加 animationFrameId 引用来存储 requestAnimationFrame 的 ID
 
 // 物理模型参数
@@ -90,13 +86,12 @@ const handleMouseLeave = () => {
 	isDragging.value = false;
 };
 
-const handleTouchCancel = (e: TouchEvent) => {
+const handleTouchCancel = () => {
 	isDragging.value = false;
 };
 
-const createImgDatas = async () => {
-	imagePosDatas.value = [];
-	originalImages.value = [];
+const createImgDatas = () => {
+	imageStore.setAllImagePosData([]);
 	const loadPromises: Promise<void>[] = [];
 	const { imageWidth, imageHeight, imageMargin } = imageStore.getLayoutAttribute();
 	currentImageWidth.value = imageWidth;
@@ -113,25 +108,31 @@ const createImgDatas = async () => {
 		const y = lineIndex * (imageHeight + imageMargin) + offsetY;
 		const path = allImagePath.value[i];
 		if (!path) continue;
-		imagePosDatas.value[i] = {
-			img: drawPlaceholder(imageWidth, imageHeight, imageBorderRadius, "#ffffff"),
-			path: path,
-			x,
-			y,
-			targetX: x,
-			targetY: y,
-			animation: null,
-		};
+		imageStore.setAllImagePosData([
+			...imageStore.allImagePosData,
+			{
+				img: drawPlaceholder(imageWidth, imageHeight, imageBorderRadius, "#ffffff"),
+				path: path,
+				x,
+				y,
+				targetX: x,
+				targetY: y,
+				animation: null,
+			},
+		]);
 
 		const loadPromise = new Promise<void>(resolve => {
 			img.onload = () => {
-				originalImages.value[i] = img;
-				imagePosDatas.value[i]!.img = drawImage(img, imageWidth, imageHeight, imageBorderRadius);
+				const currentAllImage = imageStore.allImagePosData;
+				currentAllImage[i]!.img = drawImage(img, imageWidth, imageHeight, imageBorderRadius);
+				imageStore.setAllImagePosData(currentAllImage);
 				drawFrame();
 				resolve();
 			};
 			img.onerror = () => {
-				imagePosDatas.value[i]!.img = null;
+				const currentAllImage = imageStore.allImagePosData;
+				currentAllImage[i]!.img = null;
+				imageStore.setAllImagePosData(currentAllImage);
 				resolve();
 			};
 		});
@@ -140,7 +141,7 @@ const createImgDatas = async () => {
 		loadPromises.push(loadPromise);
 	}
 
-	await Promise.all(loadPromises);
+	Promise.all(loadPromises);
 };
 
 const updatePosition = () => {
@@ -153,7 +154,7 @@ const updatePosition = () => {
 	}
 	const { totalWidth, totalHeight } = imageStore.getLayoutAttribute();
 	// 更新所有图片位置
-	imagePosDatas.value.forEach(img => {
+	imageStore.allImagePosData.forEach(img => {
 		img.x += velocityX.value;
 		img.y += velocityY.value;
 
@@ -180,7 +181,7 @@ const drawFrame = () => {
 
 	updatePosition();
 
-	imagePosDatas.value.forEach(img => {
+	imageStore.allImagePosData.forEach(img => {
 		if (!img.img) return;
 		content.value?.drawImage(
 			img.img,
@@ -199,42 +200,37 @@ const drawFrame = () => {
 	}
 };
 
-const checkImg = (x: number, y: number) => {
+const checkImg = throttle((x: number, y: number) => {
 	if (Math.abs(velocityX.value) > 5 || Math.abs(velocityY.value) > 5) return;
-	let img = imagePosDatas.value.find(
+	let img = imageStore.allImagePosData.find(
 		img =>
 			x >= img.x &&
 			x < img.x + currentImageWidth.value &&
 			y >= img.y &&
 			y < img.y + currentImageHeight.value,
 	);
-	if (img) console.log(img, img.img);
-};
+	if (img) {
+		console.log("点击了图片");
+		imageStore.setActiveImage(img);
+	}
+}, 1000);
 
-const resize = async () => {
+const resize = () => {
 	if (!canvasRef.value) return;
 
 	const dpr = window.devicePixelRatio || 1;
 	const rect = canvasRef.value.getBoundingClientRect();
-
 	// 只有当尺寸确实改变时才重新设置
 	if (canvasRef.value.width !== rect.width * dpr || canvasRef.value.height !== rect.height * dpr) {
 		canvasRef.value.width = rect.width * dpr;
 		canvasRef.value.height = rect.height * dpr;
-
 		const ctx = canvasRef.value.getContext("2d");
 		if (ctx) {
 			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 			content.value = ctx;
-
-			// 如果已经加载完成，重新计算图片尺寸并重新生成缩略图
-			if (originalImages.value.length > 0) {
-				const { imageWidth } = imageStore.getLayoutAttribute();
-
-				// 只有当图片尺寸或间距需要改变时才重新生成
-				if (imageWidth !== currentImageWidth.value) {
-					createImgDatas();
-				}
+			// 只有当图片尺寸或间距需要改变时才重新生成
+			if (imageStore.getLayoutAttribute().imageWidth !== currentImageWidth.value) {
+				createImgDatas();
 			}
 		}
 	}
@@ -244,9 +240,6 @@ const resize = async () => {
 onMounted(() => {
 	allImagePath.value = getAllImages();
 
-	// 等待 DOM 布局和渲染完成后再获取 canvas 尺寸
-	// await new Promise(resolve => requestAnimationFrame(resolve));
-
 	const dpr = window.devicePixelRatio || 1;
 	const rect = canvasRef.value!.getBoundingClientRect();
 
@@ -254,31 +247,9 @@ onMounted(() => {
 	canvasRef.value!.height = rect.height * dpr;
 
 	content.value = canvasRef.value!.getContext("2d");
-	if (content.value) {
-		content.value.setTransform(dpr, 0, 0, dpr, 0, 0);
-	}
+	if (content.value) content.value.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-	// 等待所有图片加载完成
 	createImgDatas();
-
-	// 等待一帧确保布局完成后再渲染
-	// await new Promise(resolve => requestAnimationFrame(resolve));
-
-	// 给图片一个初始偏移，使内容居中显示在视口中
-	// if (canvasRef.value) {
-	// 	const { totalWidth, totalHeight } = imageStore.getLayoutAttribute();
-	// 	const rect = canvasRef.value.getBoundingClientRect();
-	// 	offsetX.value = (rect.width - totalWidth) / 2;
-	// 	offsetY.value = (rect.height - totalHeight) / 2;
-
-	// 	// 应用偏移到所有图片
-	// 	imageDatas.value.forEach(img => {
-	// 		img.x += offsetX.value;
-	// 		img.y += offsetY.value;
-	// 	});
-	// }
-
-	// 初始渲染
 	drawFrame();
 
 	window.addEventListener("resize", resize);
@@ -293,8 +264,6 @@ onUnmounted(() => {
 		animationFrameId.value = null;
 	}
 
-	// 清理图片引用，避免内存泄漏
-	imagePosDatas.value = [];
 	allImagePath.value = [];
 });
 </script>

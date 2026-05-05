@@ -1,5 +1,5 @@
 import type { BlogCollections } from "./config";
-import type { BlogContent, MusicInfo } from "./store";
+import type { BlogContent, MusicInfo } from "./common";
 
 export interface Arrow1Params {
 	direction: "left" | "right" | "up" | "down" | null;
@@ -25,20 +25,6 @@ export interface BlogMenuSelectionParams {
 
 export interface BlogNavigationParams {
 	page: globalThis.Ref<any, any>;
-}
-
-export interface ImagePosData {
-	img: CanvasImageSource | null;
-	path: string;
-	x: number;
-	y: number;
-	targetX: number;
-	targetY: number;
-	animation: GSAPAnimation | null;
-}
-
-export interface ImageViewboxInstance {
-	setImageData: (data: ImageData | null) => void;
 }
 
 export interface ItemParams {

@@ -1,7 +1,6 @@
+import type { BlogContent, ImageLayoutState, ImagePosData, MusicInfo } from "./common";
 import type { BlogCollections, MusicPlayingMode } from "./config";
 import type { BlogMaskInstance, BlogMenuInstance, LoadingInstance } from "./components";
-
-export type BlogContent = string;
 
 export type BlogState = {
 	activeBlogCollection: Ref<BlogCollections>;
@@ -22,26 +21,17 @@ export type BlogActions = {
 	changeBlogMenuState: () => void;
 };
 
-export type ImageLayoutState = {
-	rowMax: number;
-	lineMax: number;
-	imageWidth: number;
-	imageHeight: number;
-	imageMargin: number;
-	imageBorderRadius: number;
-	totalWidth: number;
-	totalHeight: number;
-};
-
 export type ImageState = {
-	allImageDatas: Ref<ImageData[]>;
-	activeImageData: Ref<ImageData | null>;
+	allImagePosData: Ref<ImagePosData[]>;
+	activeImageData: Ref<ImagePosData | null>;
 };
 
 export type ImageGetter = {};
 
 export type ImageActions = {
 	getLayoutAttribute: () => ImageLayoutState;
+	setAllImagePosData: (data: ImagePosData[]) => void;
+	setActiveImage: (data: ImagePosData | null) => void;
 };
 
 export type LoadingState = {
@@ -58,17 +48,6 @@ export type LoadingActions = {
 	loadingOut: () => void;
 	loadingNavigate: (target: string) => void;
 };
-
-/**
- * 音乐信息接口，用于描述音乐文件的基本元数据
- */
-export interface MusicInfo {
-	name: string;
-	cover: string;
-	artist: string;
-	path: string;
-	folder: string;
-}
 
 export type SoundState = {
 	effectsVolume: Ref<number>;

@@ -13,7 +13,7 @@ usePageReady();
 	<div class="images">
 		<ImageBackground />
 		<ImageContainer />
-		<ImageViewbox :data="null" />
+		<ImageViewbox />
 		<Button
 			:text="'back'"
 			:icon="'&#xeb06;'"

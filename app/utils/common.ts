@@ -39,3 +39,63 @@ export const extractPathPart = (urlOrPath: string): string => {
 
 	return path;
 };
+
+/**
+ * 防抖函数，用于限制函数的执行频率。
+ * 防抖函数会在指定的延迟时间后执行传入的函数，
+ * 如果在延迟时间内再次调用防抖函数，则会重置计时器。
+ *
+ * @param func - 需要防抖处理的原始函数
+ * @param delay - 延迟时间（毫秒），在该时间间隔内若无新的调用才会执行原始函数
+ * @returns 返回一个新的函数，该函数具有防抖功能
+ */
+export const debounce = (func: Function, delay: number) => {
+	let timeoutId: number | null = null;
+
+	return (...args: any[]) => {
+		if (timeoutId) {
+			clearTimeout(timeoutId);
+		}
+
+		timeoutId = window.setTimeout(() => {
+			func.apply(this, args);
+			timeoutId = null;
+		}, delay);
+	};
+};
+
+/**
+ * 节流函数 - 保证在指定时间内只执行一次
+ * @param func - 要执行的函数
+ * @param delay - 节流延迟时间（毫秒）
+ * @returns 节流后的函数
+ */
+export const throttle = (func: Function, delay: number) => {
+	let lastExecTime = 0;
+	let timeoutId: number | null = null;
+
+	return (...args: any[]) => {
+		const currentTime = Date.now();
+
+		// 如果之前有定时器，清除它
+		if (timeoutId) {
+			clearTimeout(timeoutId);
+		}
+
+		// 如果距离上次执行时间超过delay，则立即执行
+		if (currentTime - lastExecTime >= delay) {
+			func.apply(this, args);
+			lastExecTime = currentTime;
+		} else {
+			// 否则设置定时器，在剩余时间后执行
+			timeoutId = window.setTimeout(
+				() => {
+					func.apply(this, args);
+					lastExecTime = Date.now();
+					timeoutId = null;
+				},
+				delay - (currentTime - lastExecTime),
+			);
+		}
+	};
+};

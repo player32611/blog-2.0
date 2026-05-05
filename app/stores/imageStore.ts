@@ -1,8 +1,9 @@
-import type { ImageLayoutState, ImageState, ImageGetter, ImageActions } from "~/types/store";
+import type { ImageLayoutState, ImagePosData } from "~/types/common";
+import type { ImageState, ImageGetter, ImageActions } from "~/types/store";
 
 export const useImageStore = defineStore("image", (): ImageState & ImageGetter & ImageActions => {
-	const allImageDatas = ref<ImageData[]>([]);
-	const activeImageData = ref<ImageData | null>(null);
+	const allImagePosData = ref<ImagePosData[]>([]);
+	const activeImageData = ref<ImagePosData | null>(null);
 
 	const getLayoutAttribute = (): ImageLayoutState => {
 		const rowMax = 4;
@@ -37,5 +38,18 @@ export const useImageStore = defineStore("image", (): ImageState & ImageGetter &
 		};
 	};
 
-	return { allImageDatas, activeImageData, getLayoutAttribute };
+	const setAllImagePosData = (data: ImagePosData[]) => {
+		allImagePosData.value = data;
+	};
+	const setActiveImage = (data: ImagePosData | null) => {
+		activeImageData.value = data;
+	};
+
+	return {
+		allImagePosData,
+		activeImageData,
+		getLayoutAttribute,
+		setAllImagePosData,
+		setActiveImage,
+	};
 });
