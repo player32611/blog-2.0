@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
+import type { BlogContent } from "~/types/common";
 import type { BlogMaskInstance, BlogMenuInstance } from "~/types/components";
 import type { BlogCollections } from "~/types/config";
-import type { BlogContent, BlogState, BlogGetter, BlogActions } from "@/types/store";
+import type { BlogState, BlogGetter, BlogActions } from "@/types/store";
 
 export const useBlogStore = defineStore("blog", (): BlogState & BlogGetter & BlogActions => {
 	const activeBlogCollection = ref<BlogCollections>("front_end");

@@ -1,4 +1,4 @@
-import type { MusicInfo } from "~/types/store";
+import type { MusicInfo } from "~/types/common";
 
 const musicsData: MusicInfo[] = [
 	{

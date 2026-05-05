@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import type { MusicPlayingMode } from "~/types/config";
-import type { MusicInfo } from "@/types/store";
+import type { MusicInfo } from "~/types/common";
 import type { SoundState, SoundGetter, SoundActions } from "@/types/store";
 
 /**
