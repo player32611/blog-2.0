@@ -6129,6 +6129,11 @@ safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
+sakana-widget@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/sakana-widget/-/sakana-widget-3.0.0.tgz#3409fce353429fa7e215a28921216514ded1d07d"
+  integrity sha512-m5FWTSPn2KewJ9RDx+ZC2/Edg1cMHHco2OhNkXlsCSW0lVrOqkJjaOOnNsFLHCqU6dKNBUiRI7olFnOaxc+oKw==
+
 sass@^1.97.3:
   version "1.97.3"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.97.3.tgz#9cb59339514fa7e2aec592b9700953ac6e331ab2"

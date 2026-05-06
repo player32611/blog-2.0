@@ -17,6 +17,7 @@
 		"matter-js": "^0.20.0",
 		"nuxt": "^4.3.1",
 		"pinia": "^3.0.4",
+		"sakana-widget": "^3.0.0",
 		"sass": "^1.97.3"
 	},
 	"devDependencies": {
