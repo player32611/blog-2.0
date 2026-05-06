@@ -64,10 +64,12 @@ watch(
 </template>
 
 <style scoped lang="scss">
+$base-size: 1;
+
 .sign {
 	position: fixed;
 	bottom: 0;
-	left: calc(20% - 150px - 5px - 20px);
+	left: calc(20% - 150px * $base-size - 5px * $base-size - 20px * $base-size);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -75,32 +77,149 @@ watch(
 	rotate: -180deg;
 
 	.sign_head {
-		padding: 10px;
-		height: 150px;
-		width: 300px;
+		padding: 10px * $base-size;
+		height: 150px * $base-size;
+		width: 300px * $base-size;
 		background-color: #a46952;
-		border-width: 5px;
+		border-width: 5px * $base-size;
 		border-style: solid;
 		border-color: #000000;
 
 		.sign_content {
-			padding: 10px;
-			height: calc(100% - 10px * 2);
+			padding: 10px * $base-size;
+			height: calc(100% - 10px * 2 * $base-size);
 			width: auto;
 			background-color: #b596ac;
 			color: #71456e;
+			font-size: 1rem * $base-size;
 			font-weight: 600;
 			font-family: "方正基础像素体";
 		}
 	}
 
 	.sign_body {
-		height: 100px;
-		width: 20px;
+		height: 100px * $base-size;
+		width: 20px * $base-size;
 		background: linear-gradient(to bottom, #71456e 0%, #71456e 80%, #a46952 80%, #a46952 100%);
-		border-width: 0 5px 5px 5px;
+		border-width: 0 5px * $base-size 5px * $base-size 5px * $base-size;
 		border-style: solid;
 		border-color: #000000;
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.6;
+
+	.sign {
+		left: calc(50% - 150px * $base-size - 5px * $base-size - 20px * $base-size);
+		rotate: -180deg;
+
+		.sign_head {
+			padding: 10px * $base-size;
+			height: 150px * $base-size;
+			width: 300px * $base-size;
+			border-width: 5px * $base-size;
+
+			.sign_content {
+				padding: 10px * $base-size;
+				height: calc(100% - 10px * 2 * $base-size);
+				font-size: 1rem * $base-size;
+			}
+		}
+
+		.sign_body {
+			height: 100px * $base-size;
+			width: 20px * $base-size;
+			border-width: 0 5px * $base-size 5px * $base-size 5px * $base-size;
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.7;
+
+	.sign {
+		left: calc(50% - 150px * $base-size - 5px * $base-size - 20px * $base-size);
+		rotate: -180deg;
+
+		.sign_head {
+			padding: 10px * $base-size;
+			height: 150px * $base-size;
+			width: 300px * $base-size;
+			border-width: 5px * $base-size;
+
+			.sign_content {
+				padding: 10px * $base-size;
+				height: calc(100% - 10px * 2 * $base-size);
+				font-size: 1rem * $base-size;
+			}
+		}
+
+		.sign_body {
+			height: 100px * $base-size;
+			width: 20px * $base-size;
+			border-width: 0 5px * $base-size 5px * $base-size 5px * $base-size;
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.6;
+
+	.sign {
+		left: calc(20% - 150px * $base-size - 5px * $base-size - 20px * $base-size);
+		rotate: -180deg;
+
+		.sign_head {
+			padding: 10px * $base-size;
+			height: 150px * $base-size;
+			width: 300px * $base-size;
+			border-width: 5px * $base-size;
+
+			.sign_content {
+				padding: 10px * $base-size;
+				height: calc(100% - 10px * 2 * $base-size);
+				font-size: 1rem * $base-size;
+			}
+		}
+
+		.sign_body {
+			height: 100px * $base-size;
+			width: 20px * $base-size;
+			border-width: 0 5px * $base-size 5px * $base-size 5px * $base-size;
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.8;
+
+	.sign {
+		left: calc(20% - 150px * $base-size - 5px * $base-size - 20px * $base-size);
+		rotate: -180deg;
+
+		.sign_head {
+			padding: 10px * $base-size;
+			height: 150px * $base-size;
+			width: 300px * $base-size;
+			border-width: 5px * $base-size;
+
+			.sign_content {
+				padding: 10px * $base-size;
+				height: calc(100% - 10px * 2 * $base-size);
+				font-size: 1rem * $base-size;
+			}
+		}
+
+		.sign_body {
+			height: 100px * $base-size;
+			width: 20px * $base-size;
+			border-width: 0 5px * $base-size 5px * $base-size 5px * $base-size;
+		}
 	}
 }
 </style>
