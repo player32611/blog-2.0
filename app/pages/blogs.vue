@@ -9,7 +9,7 @@ import BlogMask from "~/components/ui/blogUI/BlogMask.vue";
 import BlogMenu from "~/components/ui/blogUI/BlogMenu.vue";
 import BlogNavigation from "~/components/ui/blogUI/BlogNavigation.vue";
 import BlogScrollBar from "~/components/ui/blogUI/BlogScrollBar.vue";
-import Button from "~/components/ui/commen/Button.vue";
+import Button from "~/components/ui/common/Button.vue";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 

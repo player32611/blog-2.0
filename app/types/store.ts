@@ -1,4 +1,10 @@
-import type { BlogContent, ImageLayoutState, ImagePosData, MusicInfo } from "./common";
+import type {
+	BlogContent,
+	ImageHoverData,
+	ImageLayoutData,
+	ImagePosData,
+	MusicInfo,
+} from "./common";
 import type { BlogCollections, MusicPlayingMode } from "./config";
 import type { BlogMaskInstance, BlogMenuInstance, LoadingInstance } from "./components";
 
@@ -24,14 +30,16 @@ export type BlogActions = {
 export type ImageState = {
 	allImagePosData: Ref<ImagePosData[]>;
 	activeImageData: Ref<ImagePosData | null>;
+	hoverImageData: Ref<ImageHoverData | null>;
 };
 
 export type ImageGetter = {};
 
 export type ImageActions = {
-	getLayoutAttribute: () => ImageLayoutState;
+	getLayoutAttribute: () => ImageLayoutData;
 	setAllImagePosData: (data: ImagePosData[]) => void;
 	setActiveImage: (data: ImagePosData | null) => void;
+	setHoverImage: (data: ImageHoverData | null) => void;
 };
 
 export type LoadingState = {

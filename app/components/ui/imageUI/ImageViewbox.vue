@@ -38,12 +38,10 @@ const handleAnimHide = () => {
 };
 
 const handleClickOutside = throttle(() => {
-	console.log("click outside");
 	handleAnimHide();
 }, 1000);
 
 const handleClickImage = (event: MouseEvent) => {
-	console.log("click image");
 	event.stopPropagation();
 };
 
@@ -61,8 +59,15 @@ watch(
 	<div class="image_viewbox" ref="viewboxRef">
 		<div class="viewbox_container" v-if="isShowingBox" @click="handleClickOutside">
 			<img
+				class="image_shadow"
+				:src="imageStore.activeImageData?.path"
+				alt="加载失败"
+				:width="imageStore.getLayoutAttribute().imageWidth * 1.1"
+				:height="imageStore.getLayoutAttribute().imageHeight * 1.1"
+			/>
+			<img
 				class="active_image"
-				alt=""
+				alt="加载失败"
 				ref="imageRef"
 				@click="handleClickImage"
 				:src="imageStore.activeImageData?.path"
@@ -89,6 +94,16 @@ watch(
 		align-items: center;
 		width: 100%;
 		height: 100%;
+
+		.image_shadow {
+			position: absolute;
+			filter: blur(4rem);
+		}
+
+		.active_image {
+			position: absolute;
+			cursor: pointer;
+		}
 	}
 }
 </style>

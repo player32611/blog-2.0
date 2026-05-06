@@ -26,6 +26,7 @@ const handleMouseDown = () => {
 	isDragging.value = true;
 	velocityX.value = 0;
 	velocityY.value = 0;
+	imageStore.setHoverImage(null);
 	// 如果动画循环未运行，启动它
 	if (animationFrameId.value === null) {
 		animationFrameId.value = requestAnimationFrame(drawFrame);
@@ -39,21 +40,42 @@ const handleTouchStart = (e: TouchEvent) => {
 	velocityY.value = 0;
 	lastTouchX.value = e.touches[0].clientX;
 	lastTouchY.value = e.touches[0].clientY;
+	imageStore.setHoverImage(null);
 	if (animationFrameId.value === null) {
 		animationFrameId.value = requestAnimationFrame(drawFrame);
 	}
 };
 
 const handleMouseMove = (e: MouseEvent) => {
-	if (!isDragging.value) return;
+	if (isDragging.value) {
+		// 鼠标移动时给予加速度
+		velocityX.value += e.movementX * mouseSensitivity.value * acceleration.value;
+		velocityY.value += e.movementY * mouseSensitivity.value * acceleration.value;
 
-	// 鼠标移动时给予加速度
-	velocityX.value += e.movementX * mouseSensitivity.value * acceleration.value;
-	velocityY.value += e.movementY * mouseSensitivity.value * acceleration.value;
-
-	// 如果动画循环未运行，启动它
-	if (animationFrameId.value === null) {
-		animationFrameId.value = requestAnimationFrame(drawFrame);
+		// 如果动画循环未运行，启动它
+		if (animationFrameId.value === null) {
+			animationFrameId.value = requestAnimationFrame(drawFrame);
+		}
+	} else if (Math.abs(velocityX.value) < 5 && Math.abs(velocityY.value) < 5) {
+		let img = imageStore.allImagePosData.find(
+			img =>
+				e.x >= img.x &&
+				e.x < img.x + currentImageWidth.value &&
+				e.y >= img.y &&
+				e.y < img.y + currentImageHeight.value,
+		);
+		if (img) {
+			imageStore.setHoverImage({
+				width: currentImageWidth.value * 1.1,
+				height: currentImageHeight.value * 1.1,
+				center: {
+					x: (2 * img.x + currentImageWidth.value) / 2,
+					y: (2 * img.y + currentImageHeight.value) / 2,
+				},
+			});
+		} else {
+			imageStore.setHoverImage(null);
+		}
 	}
 };
 
@@ -210,7 +232,6 @@ const checkImg = throttle((x: number, y: number) => {
 			y < img.y + currentImageHeight.value,
 	);
 	if (img) {
-		console.log("点击了图片");
 		imageStore.setActiveImage(img);
 	}
 }, 1000);
@@ -291,12 +312,12 @@ onUnmounted(() => {
 	position: absolute;
 	width: 100%;
 	height: 100%;
+	cursor: pointer;
 
 	.image_container {
 		position: absolute;
 		width: 100%;
 		height: 100%;
-		cursor: pointer;
 	}
 
 	.loading_indicator {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Button from "~/components/ui/commen/Button.vue";
+import Button from "~/components/ui/common/Button.vue";
 
 const hp = ref(92);
 

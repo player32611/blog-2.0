@@ -1,11 +1,12 @@
-import type { ImageLayoutState, ImagePosData } from "~/types/common";
+import type { ImageHoverData, ImageLayoutData, ImagePosData } from "~/types/common";
 import type { ImageState, ImageGetter, ImageActions } from "~/types/store";
 
 export const useImageStore = defineStore("image", (): ImageState & ImageGetter & ImageActions => {
 	const allImagePosData = ref<ImagePosData[]>([]);
 	const activeImageData = ref<ImagePosData | null>(null);
+	const hoverImageData = ref<ImageHoverData | null>(null);
 
-	const getLayoutAttribute = (): ImageLayoutState => {
+	const getLayoutAttribute = (): ImageLayoutData => {
 		const rowMax = 4;
 		const lineMax = 4;
 		let imageWidth = 350;
@@ -45,11 +46,17 @@ export const useImageStore = defineStore("image", (): ImageState & ImageGetter &
 		activeImageData.value = data;
 	};
 
+	const setHoverImage = (data: ImageHoverData | null) => {
+		hoverImageData.value = data;
+	};
+
 	return {
 		allImagePosData,
 		activeImageData,
+		hoverImageData,
 		getLayoutAttribute,
 		setAllImagePosData,
 		setActiveImage,
+		setHoverImage,
 	};
 });

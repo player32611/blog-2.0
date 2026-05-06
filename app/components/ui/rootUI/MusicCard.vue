@@ -2,8 +2,8 @@
 import gsap from "gsap";
 import type { TooltipInstance } from "~/types/components";
 
-import Tooltip from "../commen/Tooltip.vue";
-import Arrow1 from "../commen/Arrow1.vue";
+import Tooltip from "../common/Tooltip.vue";
+import Arrow1 from "../common/Arrow1.vue";
 
 const soundStore = useSoundStore();
 const isLoading = ref<boolean>(true); // 封面加载状态
