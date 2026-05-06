@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import ItemContainer from "~/components/ui/itemUI/ItemContainer.vue";
 import Button from "~/components/ui/common/Button.vue";
+import ItemCommandBar from "~/components/ui/itemUI/ItemCommandBar.vue";
+import ItemContainer from "~/components/ui/itemUI/ItemContainer.vue";
 import SakanaWidget from "~/components/ui/itemUI/SakanaWidget.vue";
 
 const { loadingNavigate } = useLoadingStore();
@@ -12,6 +13,7 @@ usePageReady();
 	<div class="items">
 		<ItemContainer />
 		<SakanaWidget />
+		<ItemCommandBar />
 		<Button
 			:text="'back'"
 			:icon="'&#xeb06;'"
