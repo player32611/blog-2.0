@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import gsap from "gsap";
+import type { ImagePosData } from "~/types/common";
 
 const imageStore = useImageStore();
 const viewboxRef = ref<HTMLDivElement | null>(null);
 const imageRef = ref<HTMLImageElement | null>(null);
 const animationRef = ref<GSAPAnimation | null>(null);
+const currentImage = ref<ImagePosData | null>(null);
 const isShowingBox = ref<boolean>(false);
 
 const handleAnimShow = () => {
@@ -29,11 +31,11 @@ const handleAnimHide = () => {
 		opacity: 0,
 		duration: 0.3,
 		onStart: () => {
+			imageStore.setActiveImage(null);
 			gsap.set(viewboxRef.value, { pointerEvents: "none" });
 		},
 		onComplete: () => {
 			isShowingBox.value = false;
-			imageStore.setActiveImage(null);
 		},
 	});
 };
@@ -66,6 +68,7 @@ watch(
 	() => imageStore.activeImageData,
 	newData => {
 		if (newData) {
+			currentImage.value = imageStore.activeImageData;
 			handleAnimShow();
 		}
 	},
@@ -77,7 +80,7 @@ watch(
 		<div class="viewbox_container" v-if="isShowingBox" @click="handleClickOutside">
 			<img
 				class="image_shadow"
-				:src="imageStore.activeImageData?.path"
+				:src="currentImage?.path"
 				alt="加载失败"
 				:width="imageStore.getLayoutAttribute().imageWidth * 1.1"
 				:height="imageStore.getLayoutAttribute().imageHeight * 1.1"
@@ -89,7 +92,7 @@ watch(
 				@click="handleClickImage"
 				@mouseenter="handleMouseEnter"
 				@mouseleave="handleMouseLeave"
-				:src="imageStore.activeImageData?.path"
+				:src="currentImage?.path"
 				:width="imageStore.getLayoutAttribute().imageWidth"
 				:height="imageStore.getLayoutAttribute().imageHeight"
 			/>

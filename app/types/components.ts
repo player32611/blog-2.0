@@ -5,6 +5,26 @@ export interface Arrow1Params {
 	direction: "left" | "right" | "up" | "down" | null;
 }
 
+export interface ButtonParams {
+	text: string;
+	icon?: any;
+	size: "small" | "medium" | "large";
+	onClick: () => void;
+	style?: Record<string, string | number>;
+}
+
+export interface TooltipInstance {
+	width: ComputedRef<number>;
+	height: ComputedRef<number>;
+}
+
+export interface TooltipParams {
+	style?: Record<string, string | number>;
+	text?: string;
+	visable: boolean;
+	onClick?: () => void;
+}
+
 export interface BlogMaskInstance {
 	changeMask: () => void;
 }
@@ -39,26 +59,6 @@ export interface MusicFolderParams {
 
 export interface MusicItemParams {
 	info: MusicInfo;
-}
-
-export interface ButtonParams {
-	text: string;
-	icon?: any;
-	size: "small" | "medium" | "large";
-	onClick: () => void;
-	style?: Record<string, string | number>;
-}
-
-export interface TooltipInstance {
-	width: ComputedRef<number>;
-	height: ComputedRef<number>;
-}
-
-export interface TooltipParams {
-	style?: Record<string, string | number>;
-	text?: string;
-	visable: boolean;
-	onClick?: () => void;
 }
 
 export interface LoadingParams {

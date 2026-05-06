@@ -4,6 +4,7 @@ import ImageContainer from "~/components/ui/imageUI/ImageContainer.vue";
 import ImageCursor from "~/components/ui/imageUI/ImageCursor.vue";
 import ImageViewbox from "~/components/ui/imageUI/ImageViewbox.vue";
 import Button from "~/components/ui/common/Button.vue";
+import ImageDetailSign from "~/components/ui/imageUI/ImageDetailSign.vue";
 
 const { loadingNavigate } = useLoadingStore();
 
@@ -15,6 +16,7 @@ usePageReady();
 		<ImageBackground />
 		<ImageContainer />
 		<ImageViewbox />
+		<ImageDetailSign />
 		<ImageCursor />
 		<Button
 			:text="'back'"
