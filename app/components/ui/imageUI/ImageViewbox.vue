@@ -3,6 +3,7 @@ import gsap from "gsap";
 
 const imageStore = useImageStore();
 const viewboxRef = ref<HTMLDivElement | null>(null);
+const imageRef = ref<HTMLImageElement | null>(null);
 const animationRef = ref<GSAPAnimation | null>(null);
 const isShowingBox = ref<boolean>(false);
 
@@ -45,6 +46,22 @@ const handleClickImage = (event: MouseEvent) => {
 	event.stopPropagation();
 };
 
+const handleMouseEnter = () => {
+	if (!imageStore.activeImageData || !imageRef.value) return;
+	imageStore.setHoverImage({
+		width: imageRef.value.offsetWidth,
+		height: imageRef.value.offsetHeight,
+		center: {
+			x: window.innerWidth / 2,
+			y: window.innerHeight / 2,
+		},
+	});
+};
+
+const handleMouseLeave = () => {
+	imageStore.setHoverImage(null);
+};
+
 watch(
 	() => imageStore.activeImageData,
 	newData => {
@@ -70,6 +87,8 @@ watch(
 				alt="加载失败"
 				ref="imageRef"
 				@click="handleClickImage"
+				@mouseenter="handleMouseEnter"
+				@mouseleave="handleMouseLeave"
 				:src="imageStore.activeImageData?.path"
 				:width="imageStore.getLayoutAttribute().imageWidth"
 				:height="imageStore.getLayoutAttribute().imageHeight"

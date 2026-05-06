@@ -3,17 +3,42 @@ import gsap from "gsap";
 
 const imageStore = useImageStore();
 const cursorRef = ref<HTMLDivElement | null>(null);
-const easeTime: number = 0.2;
+const rotateAnimation = ref<GSAPAnimation | null>(null); // 旋转动画引用
+const easeTime: number = 0.2; // 缓动时间
+const cursorScale: number = 1.1; // 光标缩放比例
+const dampCoefficient: number = 0.05; // 阻尼系数
+
+const handleMouseDown = (event: MouseEvent) => {
+	if (!cursorRef.value) return;
+	if (imageStore.hoverImageData) {
+		gsap.to(cursorRef.value, {
+			x:
+				imageStore.hoverImageData.center.x +
+				(event.clientX - imageStore.hoverImageData.center.x) * dampCoefficient,
+			y:
+				imageStore.hoverImageData.center.y +
+				(event.clientY - imageStore.hoverImageData.center.y) * dampCoefficient,
+			duration: easeTime,
+		});
+	} else {
+		gsap.to(cursorRef.value, {
+			x: event.clientX,
+			y: event.clientY,
+			duration: easeTime,
+		});
+	}
+};
+
 const handleMouseMove = (event: MouseEvent) => {
 	if (!cursorRef.value) return;
 	if (imageStore.hoverImageData) {
 		gsap.to(cursorRef.value, {
 			x:
 				imageStore.hoverImageData.center.x +
-				(event.clientX - imageStore.hoverImageData.center.x) * 0.1,
+				(event.clientX - imageStore.hoverImageData.center.x) * dampCoefficient,
 			y:
 				imageStore.hoverImageData.center.y +
-				(event.clientY - imageStore.hoverImageData.center.y) * 0.1,
+				(event.clientY - imageStore.hoverImageData.center.y) * dampCoefficient,
 			duration: easeTime,
 		});
 	} else {
@@ -30,15 +55,17 @@ watch(
 	newData => {
 		if (!cursorRef.value) return;
 		if (newData) {
+			rotateAnimation.value?.restart().pause();
 			gsap.to(cursorRef.value, {
-				top: newData.height / -2,
-				left: newData.width / -2,
-				height: newData.height,
-				width: newData.width,
+				top: (newData.height * cursorScale) / -2,
+				left: (newData.width * cursorScale) / -2,
+				height: newData.height * cursorScale,
+				width: newData.width * cursorScale,
 				duration: easeTime,
 				ease: "power1.out",
 			});
 		} else {
+			rotateAnimation.value?.restart();
 			gsap.to(cursorRef.value, {
 				top: -20,
 				left: -20,
@@ -52,16 +79,29 @@ watch(
 );
 
 onMounted(() => {
+	// 添加循环动画效果
+	if (cursorRef.value) {
+		rotateAnimation.value = gsap.to(cursorRef.value, {
+			rotate: 720,
+			duration: 2,
+			repeat: -1,
+			yoyo: true,
+			ease: "power1.inOut",
+		});
+	}
+
+	window.addEventListener("mousedown", handleMouseDown);
 	window.addEventListener("mousemove", handleMouseMove);
 });
 
 onUnmounted(() => {
+	window.removeEventListener("mousedown", handleMouseDown);
 	window.removeEventListener("mousemove", handleMouseMove);
 });
 </script>
 
 <template>
-	<div class="image_cursor" ref="cursorRef">
+	<div class="image_cursor" ref="cursorRef" v-if="!isMobile()">
 		<div></div>
 		<div></div>
 		<div></div>

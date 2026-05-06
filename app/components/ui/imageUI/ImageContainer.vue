@@ -15,12 +15,13 @@ const animationFrameId = ref<number | null>(null); // 添加 animationFrameId �
 const isDragging = ref<boolean>(false);
 const velocityX = ref<number>(0);
 const velocityY = ref<number>(0);
-const acceleration = ref<number>(0.1); // 加速度系数
-const friction = ref<number>(0.98); // 摩擦力系数（越小减速越快，越大滑动越久）
-const mouseSensitivity = ref<number>(0.5); // 鼠标灵敏度
+const acceleration: number = 0.1; // 加速度系数
+const friction: number = 0.98; // 摩擦力系数（越小减速越快，越大滑动越久）
+const mouseSensitivity: number = 0.5; // 鼠标灵敏度
 // 触摸事件跟踪
 const lastTouchX = ref<number>(0);
 const lastTouchY = ref<number>(0);
+const interactVelocity: number = 2; // 允许交互的速度阈值
 
 const handleMouseDown = () => {
 	isDragging.value = true;
@@ -49,14 +50,17 @@ const handleTouchStart = (e: TouchEvent) => {
 const handleMouseMove = (e: MouseEvent) => {
 	if (isDragging.value) {
 		// 鼠标移动时给予加速度
-		velocityX.value += e.movementX * mouseSensitivity.value * acceleration.value;
-		velocityY.value += e.movementY * mouseSensitivity.value * acceleration.value;
+		velocityX.value += e.movementX * mouseSensitivity * acceleration;
+		velocityY.value += e.movementY * mouseSensitivity * acceleration;
 
 		// 如果动画循环未运行，启动它
 		if (animationFrameId.value === null) {
 			animationFrameId.value = requestAnimationFrame(drawFrame);
 		}
-	} else if (Math.abs(velocityX.value) < 5 && Math.abs(velocityY.value) < 5) {
+	} else if (
+		Math.abs(velocityX.value) < interactVelocity &&
+		Math.abs(velocityY.value) < interactVelocity
+	) {
 		let img = imageStore.allImagePosData.find(
 			img =>
 				e.x >= img.x &&
@@ -66,8 +70,8 @@ const handleMouseMove = (e: MouseEvent) => {
 		);
 		if (img) {
 			imageStore.setHoverImage({
-				width: currentImageWidth.value * 1.1,
-				height: currentImageHeight.value * 1.1,
+				width: currentImageWidth.value,
+				height: currentImageHeight.value,
 				center: {
 					x: (2 * img.x + currentImageWidth.value) / 2,
 					y: (2 * img.y + currentImageHeight.value) / 2,
@@ -86,8 +90,8 @@ const handleTouchMove = (e: TouchEvent) => {
 	const deltaX = touch.clientX - lastTouchX.value;
 	const deltaY = touch.clientY - lastTouchY.value;
 
-	velocityX.value += deltaX * mouseSensitivity.value * acceleration.value;
-	velocityY.value += deltaY * mouseSensitivity.value * acceleration.value;
+	velocityX.value += deltaX * mouseSensitivity * acceleration;
+	velocityY.value += deltaY * mouseSensitivity * acceleration;
 
 	lastTouchX.value = touch.clientX;
 	lastTouchY.value = touch.clientY;
@@ -99,9 +103,8 @@ const handleMouseup = (e: MouseEvent) => {
 };
 
 const handleTouchEnd = (e: TouchEvent) => {
-	if (!e.touches[0]) return;
 	isDragging.value = false;
-	checkImg(e.touches[0].clientX, e.touches[0].clientY);
+	checkImg(e.touches[0]?.clientX, e.touches[0]?.clientY);
 };
 
 const handleMouseLeave = () => {
@@ -169,8 +172,8 @@ const createImgDatas = () => {
 const updatePosition = () => {
 	// 应用摩擦力
 	if (!isDragging.value) {
-		velocityX.value *= friction.value;
-		velocityY.value *= friction.value;
+		velocityX.value *= friction;
+		velocityY.value *= friction;
 		if (Math.abs(velocityX.value) < 0.1) velocityX.value = 0;
 		if (Math.abs(velocityY.value) < 0.1) velocityY.value = 0;
 	}
@@ -223,7 +226,8 @@ const drawFrame = () => {
 };
 
 const checkImg = throttle((x: number, y: number) => {
-	if (Math.abs(velocityX.value) > 5 || Math.abs(velocityY.value) > 5) return;
+	if (Math.abs(velocityX.value) > interactVelocity || Math.abs(velocityY.value) > interactVelocity)
+		return;
 	let img = imageStore.allImagePosData.find(
 		img =>
 			x >= img.x &&

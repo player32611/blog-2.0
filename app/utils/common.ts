@@ -99,3 +99,11 @@ export const throttle = (func: Function, delay: number) => {
 		}
 	};
 };
+
+/**
+ * 检测当前设备是否为移动设备
+ * @returns 如果用户代理字符串匹配移动设备标识则返回 true，否则返回 false
+ */
+export const isMobile = () => {
+	return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+};
