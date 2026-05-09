@@ -1,4 +1,16 @@
 export function useCanvasDrawing() {
+	/**
+	 * 绘制带有圆角的图片到离屏 canvas 上
+	 *
+	 * 该函数创建一个高分辨率的离屏 canvas，根据设备像素比进行缩放，
+	 * 并绘制指定尺寸和圆角半径的图片。
+	 *
+	 * @param img - 要绘制的 HTMLImageElement 图片元素
+	 * @param w - 绘制区域的宽度（逻辑像素）
+	 * @param h - 绘制区域的高度（逻辑像素）
+	 * @param r - 圆角半径（逻辑像素）
+	 * @returns 包含绘制结果的 HTMLCanvasElement 元素
+	 */
 	const drawImage = (img: HTMLImageElement, w: number, h: number, r: number): HTMLCanvasElement => {
 		const dpr = window.devicePixelRatio || 1;
 		const offscreen = document.createElement("canvas");
@@ -29,7 +41,15 @@ export function useCanvasDrawing() {
 		return offscreen;
 	};
 
-	// 绘制单色占位符卡片
+	/**
+	 * 绘制带有圆角的占位图
+	 *
+	 * @param w - 占位图的宽度（CSS 像素）
+	 * @param h - 占位图的高度（CSS 像素）
+	 * @param r - 圆角半径（CSS 像素）
+	 * @param color - 填充颜色
+	 * @returns 返回包含绘制好的占位图的离屏 canvas 元素
+	 */
 	const drawPlaceholder = (w: number, h: number, r: number, color: string) => {
 		const dpr = window.devicePixelRatio || 1;
 		const offscreen = document.createElement("canvas");

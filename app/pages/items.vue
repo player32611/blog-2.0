@@ -29,5 +29,6 @@ usePageReady();
 	position: relative;
 	height: 100dvh;
 	width: 100%;
+	overflow: hidden;
 }
 </style>

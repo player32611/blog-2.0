@@ -24,6 +24,7 @@ const items = ref<Map<string, Matter.Body>>(new Map());
 let engine: Engine;
 let render: Render;
 let runner: Runner;
+let mouseConstraint: MouseConstraint;
 
 const init = () => {
 	if (!containerRef.value) return;
@@ -99,7 +100,7 @@ const createConstraints = () => {
 				restitution: 0.6,
 				friction: 0.5,
 				render: {
-					fillStyle: "rgba(0, 0, 0)",
+					fillStyle: "rgba(0, 0, 0, 0)",
 				},
 			},
 		);
@@ -122,24 +123,6 @@ const createConstraints = () => {
 	}
 };
 
-/**
- * 创建物理引擎中的碰撞物体并设置位置监听
- *
- * 该函数负责：
- * 1. 基于容器尺寸创建SwitchCard和PhoneCard的物理矩形物体
- * 2. 将这些物体添加到Matter.js物理引擎的世界中
- * 3. 监听物理引擎的afterUpdate事件，实时更新卡片的位置和角度信息
- *
- * 函数依赖以下响应式引用：
- * - containerRef: 容器DOM元素引用
- * - ItemSwitchCardRef: Switch卡片组件引用
- * - ItemPhoneCardRef: Phone卡片组件引用
- * - boxes: 存储物理物体的Map
- * - boxPositions: 存储物体位置信息的Map
- * - engine: Matter.js物理引擎实例
- *
- * 无参数，无返回值
- */
 const createCards = () => {
 	if (!containerRef.value) return;
 
@@ -184,6 +167,18 @@ const createCards = () => {
 };
 
 const handleUpdate = () => {
+	Matter.Events.on(mouseConstraint, "startdrag", () => {
+		if (containerRef.value) {
+			containerRef.value.style.cursor = "grabbing";
+		}
+	});
+
+	Matter.Events.on(mouseConstraint, "enddrag", () => {
+		if (containerRef.value) {
+			containerRef.value.style.cursor = "default";
+		}
+	});
+
 	Matter.Events.on(engine, "afterUpdate", () => {
 		items.value.forEach((item, key) => {
 			itemPositions.value?.set(key, {
@@ -191,6 +186,9 @@ const handleUpdate = () => {
 				y: item.position.y,
 				angle: item.angle,
 			});
+			if (key === "ItemMagnetCard" && item.velocity.y < -10) {
+				console.log("666");
+			}
 		});
 	});
 };
@@ -199,12 +197,11 @@ onMounted(() => {
 	init();
 	createConstraints();
 	createCards();
-	console.log(Array.from(items.value.values()));
 	World.add(engine.world, Array.from(items.value.values()));
-	handleUpdate();
+
 	// 添加鼠标交互
 	const mouse = Mouse.create(render.canvas);
-	const mouseConstraint = MouseConstraint.create(engine, {
+	mouseConstraint = MouseConstraint.create(engine, {
 		mouse: mouse,
 		constraint: {
 			stiffness: 0.2,
@@ -221,6 +218,8 @@ onMounted(() => {
 	Render.run(render);
 	runner = Runner.create();
 	Runner.run(runner, engine);
+
+	handleUpdate();
 });
 
 onUnmounted(() => {
@@ -257,10 +256,10 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .item-container {
-	width: 100%;
-	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	width: 100%;
+	height: 100%;
 }
 </style>

@@ -111,6 +111,12 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		}
 	}
 
+	/**
+    播放指定的音乐。
+    该函数会设置音乐播放状态为 true，初始化音频元素，并开始播放音乐。
+    如果当前播放的音乐与传入的音乐不同，则更新当前播放的音乐信息。
+    @param music - 要播放的音乐信息对象，包含音乐路径、文件夹等元数据
+  **/
 	function play(music: MusicInfo) {
 		playingMusic.value = true;
 		initAudio(music);
@@ -123,6 +129,12 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		}
 	}
 
+	/**
+	 * 暂停当前正在播放的音乐。
+	 *
+	 * 该函数检查是否存在有效的音频元素，如果存在则调用其 pause() 方法暂停播放，
+	 * 并将 playingMusic 状态更新为 false。
+	 */
 	function pause() {
 		if (musicAudio.value) {
 			musicAudio.value.pause();
@@ -130,6 +142,13 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		}
 	}
 
+	/**
+	 * 切换当前音乐的播放/暂停状态。
+	 *
+	 * 该函数检查当前是否有有效的音乐信息和音频元素，如果有，则根据当前播放状态
+	 * 决定是暂停还是继续播放。如果音乐正在播放，则调用 pause() 函数暂停播放；
+	 * 如果音乐未在播放，则调用 play() 函数使用当前音乐信息开始播放。
+	 */
 	function toggle() {
 		if (!musicCurrent.value || !musicAudio.value) return;
 		if (playingMusic.value) {
@@ -139,6 +158,19 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		}
 	}
 
+	/**
+	 * 切换到上一首音乐
+	 *
+	 * 根据当前的播放模式（单曲循环、列表循环、顺序播放或随机播放），
+	 * 更新当前播放的音乐，并初始化音频播放器。
+	 * 如果当前没有音乐列表或没有正在播放的音乐，则直接返回。
+	 *
+	 * 播放模式说明：
+	 * - RepeatSingle/RepeatAll/OrderAll：按索引顺序切换至上一首（循环）
+	 * - RandomAll：随机选择一首不同于当前的音乐
+	 *
+	 * 切换后会自动初始化音频并继续播放（如果之前正在播放）。
+	 */
 	function previous() {
 		if (musicListCurrent.value.length === 0) return;
 		if (!musicCurrent.value) return;
@@ -170,6 +202,20 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		}
 	}
 
+	/**
+	 * 切换到下一首音乐
+	 *
+	 * 根据当前的播放模式（单曲循环、列表循环、顺序播放或随机播放），
+	 * 更新 musicCurrent 为下一首音乐，并初始化音频播放。
+	 *
+	 * 播放模式说明：
+	 * - RepeatSingle: 单曲循环（实际行为与 RepeatAll 相同，切换到下一首）
+	 * - RepeatAll: 列表循环（播放完最后一首后回到第一首）
+	 * - OrderAll: 顺序播放（播放完最后一首后回到第一首）
+	 * - RandomAll: 随机播放（确保不会连续播放同一首）
+	 *
+	 * 注意：当音乐列表为空或当前没有播放音乐时，函数直接返回。
+	 */
 	function next() {
 		if (musicListCurrent.value.length === 0) return;
 		if (!musicCurrent.value) return;
@@ -198,6 +244,11 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		}
 	}
 
+	/**
+	 * 跳转音频播放位置
+	 *
+	 * @param time - 相对于当前播放位置的时间偏移量（秒），正数表示向后跳转，负数表示向前跳转
+	 */
 	function seek(time: number) {
 		if (!musicAudio.value) return;
 		const newTime = musicAudio.value.currentTime + time;
@@ -207,6 +258,15 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		else musicAudio.value.currentTime = newTime;
 	}
 
+	/**
+	 * 切换到下一个音乐播放模式
+	 *
+	 * 播放模式按以下顺序循环切换：
+	 * OrderAll（顺序播放全部） -> RepeatSingle（单曲循环） ->
+	 * RepeatAll（列表循环） -> RandomAll（随机播放） -> OrderAll
+	 *
+	 * 切换模式后会重新绑定音频结束事件监听器，确保播放行为与当前模式一致。
+	 */
 	function nextPlayingMode() {
 		switch (musicPlayingMode.value) {
 			case "OrderAll":

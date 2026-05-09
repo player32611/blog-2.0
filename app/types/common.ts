@@ -3,6 +3,10 @@
  */
 export type BlogContent = string;
 
+/**
+ * 图片悬停数据类型
+ * 包含图片的尺寸信息和中心点坐标
+ */
 export type ImageHoverData = {
 	width: number;
 	height: number;
