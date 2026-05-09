@@ -1,7 +1,23 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import gsap from "gsap";
+
+const itemStore = useItemStore();
+const barRef = ref<HTMLDivElement | null>(null);
+
+watch(
+	() => itemStore.showCommandBar,
+	newValue => {
+		if (newValue) {
+			gsap.to(barRef.value, { bottom: "5px", duration: 0.5, ease: "back.out" });
+		} else {
+			gsap.to(barRef.value, { bottom: "-50px", duration: 0.5, ease: "power1.out" });
+		}
+	},
+);
+</script>
 
 <template>
-	<div class="bar_container">
+	<div class="bar_container" ref="barRef">
 		<input placeholder="" class="hacker-input" type="text" />
 		<label class="hacker-label">命令行</label>
 	</div>
@@ -10,7 +26,7 @@
 <style scoped lang="scss">
 .bar_container {
 	position: fixed;
-	bottom: 5px;
+	bottom: -50px;
 	margin: 0 10px;
 	width: calc(100% - 10px * 2);
 

@@ -15,6 +15,7 @@ import ItemMagnetCard from "./ItemMagnetCard.vue";
 import ItemPhoneCard from "./ItemPhoneCard.vue";
 import ItemSwitchCard from "./ItemSwitchCard.vue";
 
+const itemStore = useItemStore();
 const containerRef = ref<HTMLDivElement>();
 const ItemMagnetCardRef = ref<InstanceType<typeof ItemMagnetCard> | null>(null);
 const ItemPhoneCardRef = ref<InstanceType<typeof ItemPhoneCard> | null>(null);
@@ -187,7 +188,7 @@ const handleUpdate = () => {
 				angle: item.angle,
 			});
 			if (key === "ItemMagnetCard" && item.velocity.y < -10) {
-				console.log("666");
+				itemStore.setShowCommandBar(!itemStore.showCommandBar);
 			}
 		});
 	});

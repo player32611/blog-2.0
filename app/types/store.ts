@@ -42,6 +42,16 @@ export type ImageActions = {
 	setHoverImage: (data: ImageHoverData | null) => void;
 };
 
+export type ItemState = {
+	showCommandBar: Ref<boolean>;
+};
+
+export type ItemGetter = {};
+
+export type ItemActions = {
+	setShowCommandBar: (state: boolean) => void;
+};
+
 export type LoadingState = {
 	loadingRef: Ref<LoadingInstance | null>;
 	isLoading: Ref<boolean>;

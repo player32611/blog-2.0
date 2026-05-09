@@ -1,8 +1,56 @@
 <script setup lang="ts">
+import gsap from "gsap";
 import type { ItemParams } from "~/types/components";
 
+const itemStore = useItemStore();
 const { x, y, angle } = defineProps<ItemParams>();
 const itemRef = ref<HTMLDivElement | null>(null);
+const magnetismRef = ref<HTMLDivElement | null>(null);
+const magnetismAnimation = ref<GSAPAnimation | null>(null);
+
+watch(
+	() => itemStore.showCommandBar,
+	newValue => {
+		if (newValue) {
+			if (magnetismAnimation.value) magnetismAnimation.value.resume();
+			else {
+				gsap.set(magnetismRef.value, { visibility: "visible" });
+				magnetismAnimation.value = gsap.to(magnetismRef.value, {
+					left: "200%",
+					width: "90px",
+					opacity: 0,
+					duration: 0.5,
+					ease: "ease-in-out",
+					repeat: -1,
+					onStart: () => {
+						if (magnetismRef.value) {
+							gsap.set(magnetismRef.value, {
+								left: "0%",
+								width: "30px",
+								opacity: 1,
+							});
+						}
+					},
+					onRepeat: () => {
+						if (magnetismRef.value) {
+							gsap.set(magnetismRef.value, {
+								left: "0%",
+								width: "30px",
+								opacity: 1,
+							});
+						}
+					},
+				});
+			}
+		} else magnetismAnimation.value?.progress(1).pause();
+	},
+);
+
+onUnmounted(() => {
+	if (magnetismAnimation.value) {
+		magnetismAnimation.value.kill();
+	}
+});
 </script>
 
 <template>
@@ -15,7 +63,7 @@ const itemRef = ref<HTMLDivElement | null>(null);
 		}"
 		ref="itemRef"
 	>
-		<div class="magnetism"></div>
+		<div class="magnetism" ref="magnetismRef"></div>
 	</div>
 </template>
 
@@ -67,44 +115,14 @@ const itemRef = ref<HTMLDivElement | null>(null);
 		position: absolute;
 		color: rgb(0, 151, 252);
 		bottom: 0;
-		width: 80px;
+		width: 30px;
 		left: 0%;
 		height: 40px;
 		border: solid 2px currentColor;
 		border-color: currentColor transparent transparent transparent;
 		border-radius: 50%;
+		visibility: hidden;
 		transform: rotate(90deg);
-		animation: go 0.5s ease-in-out infinite;
-	}
-}
-
-@keyframes rotate {
-	0% {
-		transform: rotate(-30deg);
-	}
-	50% {
-		transform: rotate(30deg);
-	}
-	100% {
-		transform: rotate(-30deg);
-	}
-}
-
-@keyframes go {
-	0% {
-		left: 0%;
-		width: 30px;
-		opacity: 1;
-	}
-	50% {
-		left: 100%;
-		width: 60px;
-		opacity: 0.5;
-	}
-	100% {
-		width: 90px;
-		left: 200%;
-		opacity: 0;
 	}
 }
 </style>
