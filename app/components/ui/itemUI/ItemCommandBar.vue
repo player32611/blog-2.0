@@ -10,7 +10,7 @@
 <style scoped lang="scss">
 .bar_container {
 	position: fixed;
-	bottom: 20px;
+	bottom: 5px;
 	margin: 0 10px;
 	width: calc(100% - 10px * 2);
 

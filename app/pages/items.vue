@@ -26,6 +26,7 @@ usePageReady();
 
 <style scoped lang="scss">
 .items {
+	position: relative;
 	height: 100dvh;
 	width: 100%;
 }

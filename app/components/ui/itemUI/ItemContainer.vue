@@ -1,15 +1,26 @@
 <script setup lang="ts">
-import Matter, { Engine, Render, World, Bodies, Mouse, MouseConstraint, Runner } from "matter-js";
+import Matter, {
+	Constraint,
+	Engine,
+	Render,
+	World,
+	Bodies,
+	Mouse,
+	MouseConstraint,
+	Runner,
+} from "matter-js";
 import type { ItemParams } from "~/types/components";
 
+import ItemMagnetCard from "./ItemMagnetCard.vue";
 import ItemPhoneCard from "./ItemPhoneCard.vue";
 import ItemSwitchCard from "./ItemSwitchCard.vue";
 
 const containerRef = ref<HTMLDivElement>();
+const ItemMagnetCardRef = ref<InstanceType<typeof ItemMagnetCard> | null>(null);
 const ItemPhoneCardRef = ref<InstanceType<typeof ItemPhoneCard> | null>(null);
 const ItemSwitchCardRef = ref<InstanceType<typeof ItemSwitchCard> | null>(null);
-const boxPositions = ref<Map<string, ItemParams> | null>(null);
-const boxes = ref<Map<string, Matter.Body> | null>(null);
+const itemPositions = ref<Map<string, ItemParams>>(new Map());
+const items = ref<Map<string, Matter.Body>>(new Map());
 let engine: Engine;
 let render: Render;
 let runner: Runner;
@@ -63,19 +74,80 @@ const init = () => {
 	World.add(engine.world, [ground, leftWall, rightWall]);
 };
 
-const createBoxes = () => {
+const createConstraints = () => {
 	if (!containerRef.value) return;
 
-	if (!boxPositions.value) boxPositions.value = new Map();
+	const width = containerRef.value.clientWidth;
+	const height = containerRef.value.clientHeight;
+	// 创建悬挂点（固定点）
+	const anchorPoint = Bodies.circle(width / 2, 0, 5, {
+		isStatic: true,
+		render: {
+			fillStyle: "transparent", // 隐藏悬挂点
+		},
+	});
+
+	// 创建悬挂物体）
+	let magnetCardBody: Matter.Body | null = null;
+	if (ItemMagnetCardRef.value) {
+		magnetCardBody = Bodies.rectangle(
+			width / 2,
+			120,
+			ItemMagnetCardRef.value.$el.offsetHeight,
+			ItemMagnetCardRef.value.$el.offsetWidth * 5,
+			{
+				restitution: 0.6,
+				friction: 0.5,
+				render: {
+					fillStyle: "rgba(0, 0, 0)",
+				},
+			},
+		);
+		// 创建绳子约束（连接悬挂点和物体）
+		const ropeConstraint = Constraint.create({
+			bodyA: anchorPoint, // 悬挂点位置
+			bodyB: magnetCardBody, // 被悬挂的物体
+			length: 120, // 绳子长度
+			stiffness: 0.1, // 刚度（接近1表示更像刚性杆，较低值更像弹性绳）
+			render: {
+				visible: true, // 可视化绳子（调试时可开启）
+				strokeStyle: "#ffffff", // 绳子颜色
+				lineWidth: 2,
+			},
+		});
+
+		// 将物体和约束添加到世界
+		items.value.set("ItemMagnetCard", magnetCardBody);
+		World.add(engine.world, [anchorPoint, ropeConstraint]);
+	}
+};
+
+/**
+ * 创建物理引擎中的碰撞物体并设置位置监听
+ *
+ * 该函数负责：
+ * 1. 基于容器尺寸创建SwitchCard和PhoneCard的物理矩形物体
+ * 2. 将这些物体添加到Matter.js物理引擎的世界中
+ * 3. 监听物理引擎的afterUpdate事件，实时更新卡片的位置和角度信息
+ *
+ * 函数依赖以下响应式引用：
+ * - containerRef: 容器DOM元素引用
+ * - ItemSwitchCardRef: Switch卡片组件引用
+ * - ItemPhoneCardRef: Phone卡片组件引用
+ * - boxes: 存储物理物体的Map
+ * - boxPositions: 存储物体位置信息的Map
+ * - engine: Matter.js物理引擎实例
+ *
+ * 无参数，无返回值
+ */
+const createCards = () => {
+	if (!containerRef.value) return;
 
 	const width = containerRef.value.clientWidth;
 	const height = containerRef.value.clientHeight;
 
-	if (!boxes.value) boxes.value = new Map();
-	boxes.value.clear();
-
 	if (ItemSwitchCardRef.value)
-		boxes.value.set(
+		items.value.set(
 			"ItemSwitchCard",
 			Bodies.rectangle(
 				Math.random() * width,
@@ -93,7 +165,7 @@ const createBoxes = () => {
 		);
 
 	if (ItemPhoneCardRef.value)
-		boxes.value.set(
+		items.value.set(
 			"ItemPhoneCard",
 			Bodies.rectangle(
 				Math.random() * width,
@@ -109,31 +181,27 @@ const createBoxes = () => {
 				},
 			),
 		);
+};
 
-	World.add(engine.world, Array.from(boxes.value.values()));
-
-	// 在更新事件中监听坐标变化
+const handleUpdate = () => {
 	Matter.Events.on(engine, "afterUpdate", () => {
-		if (boxes.value?.get("ItemSwitchCard")) {
-			boxPositions.value?.set("ItemSwitchCard", {
-				x: boxes.value.get("ItemSwitchCard")?.position.x ?? 0,
-				y: boxes.value.get("ItemSwitchCard")?.position.y ?? 0,
-				angle: boxes.value.get("ItemSwitchCard")?.angle ?? 0,
+		items.value.forEach((item, key) => {
+			itemPositions.value?.set(key, {
+				x: item.position.x,
+				y: item.position.y,
+				angle: item.angle,
 			});
-		}
-		if (boxes.value?.get("ItemPhoneCard")) {
-			boxPositions.value?.set("ItemPhoneCard", {
-				x: boxes.value.get("ItemPhoneCard")?.position.x ?? 0,
-				y: boxes.value.get("ItemPhoneCard")?.position.y ?? 0,
-				angle: boxes.value.get("ItemPhoneCard")?.angle ?? 0,
-			});
-		}
+		});
 	});
 };
 
 onMounted(() => {
 	init();
-	createBoxes();
+	createConstraints();
+	createCards();
+	console.log(Array.from(items.value.values()));
+	World.add(engine.world, Array.from(items.value.values()));
+	handleUpdate();
 	// 添加鼠标交互
 	const mouse = Mouse.create(render.canvas);
 	const mouseConstraint = MouseConstraint.create(engine, {
@@ -167,16 +235,22 @@ onUnmounted(() => {
 
 <template>
 	<ItemPhoneCard
-		:x="boxPositions?.get('ItemPhoneCard')?.x ?? 0"
-		:y="boxPositions?.get('ItemPhoneCard')?.y ?? 0"
-		:angle="boxPositions?.get('ItemPhoneCard')?.angle ?? 0"
+		:x="itemPositions?.get('ItemPhoneCard')?.x ?? 0"
+		:y="itemPositions?.get('ItemPhoneCard')?.y ?? 0"
+		:angle="itemPositions?.get('ItemPhoneCard')?.angle ?? 0"
 		ref="ItemPhoneCardRef"
 	/>
 	<ItemSwitchCard
-		:x="boxPositions?.get('ItemSwitchCard')?.x ?? 0"
-		:y="boxPositions?.get('ItemSwitchCard')?.y ?? 0"
-		:angle="boxPositions?.get('ItemSwitchCard')?.angle ?? 0"
+		:x="itemPositions?.get('ItemSwitchCard')?.x ?? 0"
+		:y="itemPositions?.get('ItemSwitchCard')?.y ?? 0"
+		:angle="itemPositions?.get('ItemSwitchCard')?.angle ?? 0"
 		ref="ItemSwitchCardRef"
+	/>
+	<ItemMagnetCard
+		:x="itemPositions?.get('ItemMagnetCard')?.x ?? 0"
+		:y="itemPositions?.get('ItemMagnetCard')?.y ?? 0"
+		:angle="itemPositions?.get('ItemMagnetCard')?.angle ?? 0"
+		ref="ItemMagnetCardRef"
 	/>
 	<div ref="containerRef" class="item-container"></div>
 </template>
