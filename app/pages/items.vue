@@ -5,12 +5,25 @@ import ItemContainer from "~/components/ui/itemUI/ItemContainer.vue";
 import SakanaWidget from "~/components/ui/itemUI/SakanaWidget.vue";
 
 const { loadingNavigate } = useLoadingStore();
+const isResize = ref<boolean>(false);
+
+const handleResize = () => {
+	isResize.value = true;
+};
+
+onMounted(() => {
+	window.addEventListener("resize", handleResize);
+});
+
+onUnmounted(() => {
+	window.removeEventListener("resize", handleResize);
+});
 
 usePageReady();
 </script>
 
 <template>
-	<div class="items">
+	<div class="items" v-if="!isResize">
 		<ItemContainer />
 		<SakanaWidget />
 		<ItemCommandBar />

@@ -11,13 +11,13 @@ import Matter, {
 } from "matter-js";
 import type { ItemParams } from "~/types/components";
 
-import ItemMagnetCard from "./ItemMagnetCard.vue";
+import ItemMagnetConstraint from "./ItemMagnetConstraint.vue";
 import ItemPhoneCard from "./ItemPhoneCard.vue";
 import ItemSwitchCard from "./ItemSwitchCard.vue";
 
 const itemStore = useItemStore();
 const containerRef = ref<HTMLDivElement>();
-const ItemMagnetCardRef = ref<InstanceType<typeof ItemMagnetCard> | null>(null);
+const ItemMagnetConstraintRef = ref<InstanceType<typeof ItemMagnetConstraint> | null>(null);
 const ItemPhoneCardRef = ref<InstanceType<typeof ItemPhoneCard> | null>(null);
 const ItemSwitchCardRef = ref<InstanceType<typeof ItemSwitchCard> | null>(null);
 const itemPositions = ref<Map<string, ItemParams>>(new Map());
@@ -91,12 +91,12 @@ const createConstraints = () => {
 
 	// 创建悬挂物体）
 	let magnetCardBody: Matter.Body | null = null;
-	if (ItemMagnetCardRef.value) {
+	if (ItemMagnetConstraintRef.value) {
 		magnetCardBody = Bodies.rectangle(
 			width / 2,
 			120,
-			ItemMagnetCardRef.value.$el.offsetHeight,
-			ItemMagnetCardRef.value.$el.offsetWidth * 5,
+			ItemMagnetConstraintRef.value.$el.offsetHeight,
+			ItemMagnetConstraintRef.value.$el.offsetWidth * 5,
 			{
 				restitution: 0.6,
 				friction: 0.5,
@@ -119,7 +119,7 @@ const createConstraints = () => {
 		});
 
 		// 将物体和约束添加到世界
-		items.value.set("ItemMagnetCard", magnetCardBody);
+		items.value.set("ItemMagnetConstraint", magnetCardBody);
 		World.add(engine.world, [anchorPoint, ropeConstraint]);
 	}
 };
@@ -187,7 +187,7 @@ const handleUpdate = () => {
 				y: item.position.y,
 				angle: item.angle,
 			});
-			if (key === "ItemMagnetCard" && item.velocity.y < -10) {
+			if (key === "ItemMagnetConstraint" && item.velocity.y < -10) {
 				itemStore.setShowCommandBar(!itemStore.showCommandBar);
 			}
 		});
@@ -246,11 +246,11 @@ onUnmounted(() => {
 		:angle="itemPositions?.get('ItemSwitchCard')?.angle ?? 0"
 		ref="ItemSwitchCardRef"
 	/>
-	<ItemMagnetCard
-		:x="itemPositions?.get('ItemMagnetCard')?.x ?? 0"
-		:y="itemPositions?.get('ItemMagnetCard')?.y ?? 0"
-		:angle="itemPositions?.get('ItemMagnetCard')?.angle ?? 0"
-		ref="ItemMagnetCardRef"
+	<ItemMagnetConstraint
+		:x="itemPositions?.get('ItemMagnetConstraint')?.x ?? 0"
+		:y="itemPositions?.get('ItemMagnetConstraint')?.y ?? 0"
+		:angle="itemPositions?.get('ItemMagnetConstraint')?.angle ?? 0"
+		ref="ItemMagnetConstraintRef"
 	/>
 	<div ref="containerRef" class="item-container"></div>
 </template>

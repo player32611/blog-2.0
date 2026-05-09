@@ -3,6 +3,7 @@ import gsap from "gsap";
 
 const itemStore = useItemStore();
 const barRef = ref<HTMLDivElement | null>(null);
+const inputRef = ref<HTMLInputElement | null>(null);
 
 watch(
 	() => itemStore.showCommandBar,
@@ -11,6 +12,7 @@ watch(
 			gsap.to(barRef.value, { bottom: "5px", duration: 0.5, ease: "back.out" });
 		} else {
 			gsap.to(barRef.value, { bottom: "-50px", duration: 0.5, ease: "power1.out" });
+			inputRef.value?.blur();
 		}
 	},
 );
@@ -18,7 +20,7 @@ watch(
 
 <template>
 	<div class="bar_container" ref="barRef">
-		<input placeholder="" class="hacker-input" type="text" />
+		<input placeholder="" class="hacker-input" type="text" ref="inputRef" />
 		<label class="hacker-label">命令行</label>
 	</div>
 </template>
@@ -62,10 +64,6 @@ watch(
 		border: 2px solid #ff7f27;
 		outline: none;
 		transition: all 0.3s ease;
-
-		&:hover {
-			animation: glitch 0.5s infinite;
-		}
 
 		&:focus {
 			background: #000000;
