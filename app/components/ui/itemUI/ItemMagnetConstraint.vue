@@ -6,16 +6,16 @@ const itemStore = useItemStore();
 const { x, y, angle } = defineProps<ItemParams>();
 const itemRef = ref<HTMLDivElement | null>(null);
 const magnetismRef = ref<HTMLDivElement | null>(null);
-const magnetismAnimation = ref<GSAPAnimation | null>(null);
+const animationRef = ref<GSAPAnimation | null>(null);
 
 watch(
-	() => itemStore.showCommandBar,
+	() => itemStore.showingCommandBar,
 	newValue => {
 		if (newValue) {
-			if (magnetismAnimation.value) magnetismAnimation.value.resume();
+			if (animationRef.value) animationRef.value.resume();
 			else {
 				gsap.set(magnetismRef.value, { visibility: "visible" });
-				magnetismAnimation.value = gsap.to(magnetismRef.value, {
+				animationRef.value = gsap.to(magnetismRef.value, {
 					left: "200%",
 					width: "90px",
 					opacity: 0,
@@ -42,14 +42,12 @@ watch(
 					},
 				});
 			}
-		} else magnetismAnimation.value?.progress(1).pause();
+		} else animationRef.value?.progress(1).pause();
 	},
 );
 
 onUnmounted(() => {
-	if (magnetismAnimation.value) {
-		magnetismAnimation.value.kill();
-	}
+	if (animationRef.value) animationRef.value.kill();
 });
 </script>
 

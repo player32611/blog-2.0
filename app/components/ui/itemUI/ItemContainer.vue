@@ -11,12 +11,14 @@ import Matter, {
 } from "matter-js";
 import type { ItemParams } from "~/types/components";
 
+import ItemBookConstraint from "./ItemBookConstraint.vue";
 import ItemMagnetConstraint from "./ItemMagnetConstraint.vue";
 import ItemPhoneCard from "./ItemPhoneCard.vue";
 import ItemSwitchCard from "./ItemSwitchCard.vue";
 
 const itemStore = useItemStore();
 const containerRef = ref<HTMLDivElement>();
+const ItemBookConstraintRef = ref<InstanceType<typeof ItemBookConstraint> | null>(null);
 const ItemMagnetConstraintRef = ref<InstanceType<typeof ItemMagnetConstraint> | null>(null);
 const ItemPhoneCardRef = ref<InstanceType<typeof ItemPhoneCard> | null>(null);
 const ItemSwitchCardRef = ref<InstanceType<typeof ItemSwitchCard> | null>(null);
@@ -81,19 +83,12 @@ const createConstraints = () => {
 
 	const width = containerRef.value.clientWidth;
 	const height = containerRef.value.clientHeight;
-	// 创建悬挂点（固定点）
-	const anchorPoint = Bodies.circle(width / 2, 0, 5, {
-		isStatic: true,
-		render: {
-			fillStyle: "transparent", // 隐藏悬挂点
-		},
-	});
 
 	// 创建悬挂物体）
-	let magnetCardBody: Matter.Body | null = null;
+	let magnetConstraint: Matter.Body | null = null;
 	if (ItemMagnetConstraintRef.value) {
-		magnetCardBody = Bodies.rectangle(
-			width / 2,
+		magnetConstraint = Bodies.rectangle(
+			width / 3,
 			120,
 			ItemMagnetConstraintRef.value.$el.offsetHeight,
 			ItemMagnetConstraintRef.value.$el.offsetWidth * 5,
@@ -105,23 +100,66 @@ const createConstraints = () => {
 				},
 			},
 		);
-		// 创建绳子约束（连接悬挂点和物体）
-		const ropeConstraint = Constraint.create({
-			bodyA: anchorPoint, // 悬挂点位置
-			bodyB: magnetCardBody, // 被悬挂的物体
-			length: 120, // 绳子长度
-			stiffness: 0.1, // 刚度（接近1表示更像刚性杆，较低值更像弹性绳）
-			render: {
-				visible: true, // 可视化绳子（调试时可开启）
-				strokeStyle: "#ffffff", // 绳子颜色
-				lineWidth: 2,
-			},
-		});
-
-		// 将物体和约束添加到世界
-		items.value.set("ItemMagnetConstraint", magnetCardBody);
-		World.add(engine.world, [anchorPoint, ropeConstraint]);
+		items.value.set("ItemMagnetConstraint", magnetConstraint);
 	}
+	let bookConstraint: Matter.Body | null = null;
+	if (ItemBookConstraintRef.value) {
+		bookConstraint = Bodies.rectangle(
+			(width / 3) * 2,
+			120,
+			ItemBookConstraintRef.value.$el.offsetWidth,
+			ItemBookConstraintRef.value.$el.offsetHeight,
+			{
+				restitution: 0.6,
+				friction: 0.5,
+				render: {
+					fillStyle: "rgba(0, 0, 0, 0)",
+				},
+			},
+		);
+		items.value.set("ItemBookConstraint", bookConstraint);
+	}
+
+	// 创建绳子约束（连接悬挂点和物体）
+	let ropes: Matter.Constraint[] = [];
+	if (magnetConstraint) {
+		ropes.push(
+			Constraint.create({
+				pointA: {
+					x: width / 3,
+					y: 0,
+				},
+				bodyB: magnetConstraint, // 被悬挂的物体
+				length: 120, // 绳子长度
+				stiffness: 0.1, // 刚度（接近1表示更像刚性杆，较低值更像弹性绳）
+				render: {
+					visible: true, // 可视化绳子（调试时可开启）
+					strokeStyle: "#ffffff", // 绳子颜色
+					lineWidth: 2,
+				},
+			}),
+		);
+	}
+	if (bookConstraint) {
+		ropes.push(
+			Constraint.create({
+				pointA: {
+					x: (width / 3) * 2,
+					y: 0,
+				},
+				bodyB: bookConstraint, // 被悬挂的物体
+				length: 120, // 绳子长度
+				stiffness: 0.1, // 刚度（接近1表示更像刚性杆，较低值更像弹性绳）
+				render: {
+					visible: true, // 可视化绳子（调试时可开启）
+					strokeStyle: "#ffffff", // 绳子颜色
+					lineWidth: 2,
+				},
+			}),
+		);
+	}
+	// 将物体和约束添加到世界
+	World.add(engine.world, ropes);
 };
 
 const createCards = () => {
@@ -188,7 +226,9 @@ const handleUpdate = () => {
 				angle: item.angle,
 			});
 			if (key === "ItemMagnetConstraint" && item.velocity.y < -10) {
-				itemStore.setShowCommandBar(!itemStore.showCommandBar);
+				itemStore.toggleShowingCommandBar();
+			} else if (key === "ItemBookConstraint" && item.velocity.y < -10) {
+				itemStore.toggleShowingGuide();
 			}
 		});
 	});
@@ -234,6 +274,18 @@ onUnmounted(() => {
 </script>
 
 <template>
+	<ItemBookConstraint
+		:x="itemPositions?.get('ItemBookConstraint')?.x ?? 0"
+		:y="itemPositions?.get('ItemBookConstraint')?.y ?? 0"
+		:angle="itemPositions?.get('ItemBookConstraint')?.angle ?? 0"
+		ref="ItemBookConstraintRef"
+	/>
+	<ItemMagnetConstraint
+		:x="itemPositions?.get('ItemMagnetConstraint')?.x ?? 0"
+		:y="itemPositions?.get('ItemMagnetConstraint')?.y ?? 0"
+		:angle="itemPositions?.get('ItemMagnetConstraint')?.angle ?? 0"
+		ref="ItemMagnetConstraintRef"
+	/>
 	<ItemPhoneCard
 		:x="itemPositions?.get('ItemPhoneCard')?.x ?? 0"
 		:y="itemPositions?.get('ItemPhoneCard')?.y ?? 0"
@@ -245,12 +297,6 @@ onUnmounted(() => {
 		:y="itemPositions?.get('ItemSwitchCard')?.y ?? 0"
 		:angle="itemPositions?.get('ItemSwitchCard')?.angle ?? 0"
 		ref="ItemSwitchCardRef"
-	/>
-	<ItemMagnetConstraint
-		:x="itemPositions?.get('ItemMagnetConstraint')?.x ?? 0"
-		:y="itemPositions?.get('ItemMagnetConstraint')?.y ?? 0"
-		:angle="itemPositions?.get('ItemMagnetConstraint')?.angle ?? 0"
-		ref="ItemMagnetConstraintRef"
 	/>
 	<div ref="containerRef" class="item-container"></div>
 </template>

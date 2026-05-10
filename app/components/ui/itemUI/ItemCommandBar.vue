@@ -6,12 +6,12 @@ const barRef = ref<HTMLDivElement | null>(null);
 const inputRef = ref<HTMLInputElement | null>(null);
 
 watch(
-	() => itemStore.showCommandBar,
+	() => itemStore.showingCommandBar,
 	newValue => {
 		if (newValue) {
 			gsap.to(barRef.value, { bottom: "5px", duration: 0.5, ease: "back.out" });
 		} else {
-			gsap.to(barRef.value, { bottom: "-50px", duration: 0.5, ease: "power1.out" });
+			gsap.to(barRef.value, { bottom: "-70px", duration: 0.5, ease: "power1.out" });
 			inputRef.value?.blur();
 		}
 	},
@@ -19,16 +19,16 @@ watch(
 </script>
 
 <template>
-	<div class="bar_container" ref="barRef">
+	<div class="item_command_bar" ref="barRef">
 		<input placeholder="" class="hacker-input" type="text" ref="inputRef" />
 		<label class="hacker-label">命令行</label>
 	</div>
 </template>
 
 <style scoped lang="scss">
-.bar_container {
+.item_command_bar {
 	position: fixed;
-	bottom: -50px;
+	bottom: -70px;
 	margin: 0 10px;
 	width: calc(100% - 10px * 2);
 

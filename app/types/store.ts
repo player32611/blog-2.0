@@ -43,13 +43,15 @@ export type ImageActions = {
 };
 
 export type ItemState = {
-	showCommandBar: Ref<boolean>;
+	showingCommandBar: Ref<boolean>;
+	showingGuide: Ref<boolean>;
 };
 
 export type ItemGetter = {};
 
 export type ItemActions = {
-	setShowCommandBar: (state: boolean) => void;
+	toggleShowingCommandBar: () => void;
+	toggleShowingGuide: () => void;
 };
 
 export type LoadingState = {

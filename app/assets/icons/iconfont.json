@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "7597999",
+      "name": "24gf-arrowRight3",
+      "font_class": "24gf-arrowRight3",
+      "unicode": "eb77",
+      "unicode_decimal": 60279
+    },
+    {
+      "icon_id": "7598004",
+      "name": "24gf-arrowLeft3",
+      "font_class": "24gf-arrowLeft3",
+      "unicode": "eb79",
+      "unicode_decimal": 60281
+    },
+    {
       "icon_id": "43696571",
       "name": "取消",
       "font_class": "quxiao",
