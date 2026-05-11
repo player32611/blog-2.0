@@ -1,9 +1,22 @@
 <script setup lang="ts">
+import type { DayTime } from "~/types/common";
 import Button from "~/components/ui/common/Button.vue";
 
-const hp = ref(92);
+const hp = ref<number>(92);
 
 const { loadingNavigate } = useLoadingStore();
+const currentTime = ref<DayTime>(formatDateTime(Date.now()));
+const timeInterval = ref<number>(1000);
+
+onMounted(() => {
+	timeInterval.value = setInterval(() => {
+		currentTime.value = formatDateTime(Date.now());
+	}, 1000);
+});
+
+onUnmounted(() => {
+	clearInterval(timeInterval.value);
+});
 </script>
 
 <template>
@@ -24,7 +37,9 @@ const { loadingNavigate } = useLoadingStore();
 				</div>
 			</div>
 			<div>
-				<div class="userName">13:00</div>
+				<div class="userName">
+					{{ currentTime.hour + ":" + currentTime.minute + ":" + currentTime.second }}
+				</div>
 			</div>
 		</div>
 		<div class="buttons">

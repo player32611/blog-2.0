@@ -1,13 +1,41 @@
+import type { DayTime } from "~/types/common";
+
 /**
  * 将秒数格式化为 MM:SS 格式的时间字符串
  * @param seconds - 输入的秒数
  * @returns 格式化后的时间字符串，格式为 "分钟:秒数"，其中秒数始终为两位数（不足两位时前面补零）
  */
-export const formatTime = (seconds: number) => {
+export const formatTime = (seconds: number): string => {
 	if (Number.isNaN(seconds)) return "0:00";
 	const mins = Math.floor(seconds / 60);
 	const secs = Math.floor(seconds % 60);
 	return `${mins}:${secs.toString().padStart(2, "0")}`;
+};
+
+/**
+ * 将时间戳格式化为包含年、月、日、时、分、秒的对象
+ *
+ * @param timestamp - 输入的时间戳（毫秒）
+ * @returns 包含格式化后日期时间信息的对象，其中年份为数字类型，
+ *          月、日、时、分、秒均为两位数字符串（不足两位时前面补零）
+ */
+export const formatDateTime = (timestamp: number): DayTime => {
+	const date = new Date(timestamp);
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, "0");
+	const day = String(date.getDate()).padStart(2, "0");
+	const hours = String(date.getHours()).padStart(2, "0");
+	const minutes = String(date.getMinutes()).padStart(2, "0");
+	const seconds = String(date.getSeconds()).padStart(2, "0");
+
+	return {
+		year,
+		month,
+		day,
+		hour: hours,
+		minute: minutes,
+		second: seconds,
+	};
 };
 
 /**

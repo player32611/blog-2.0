@@ -1,3 +1,12 @@
+export type DayTime = {
+	year: number;
+	month: string;
+	day: string;
+	hour: string;
+	minute: string;
+	second: string;
+};
+
 /**
  * 博客内容类型，表示博客文章的文本内容
  */
