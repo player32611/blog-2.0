@@ -82,7 +82,6 @@ const createConstraints = () => {
 	if (!containerRef.value) return;
 
 	const width = containerRef.value.clientWidth;
-	const height = containerRef.value.clientHeight;
 
 	// 创建悬挂物体）
 	let magnetConstraint: Matter.Body | null = null;
@@ -163,46 +162,15 @@ const createConstraints = () => {
 };
 
 const createCards = () => {
-	if (!containerRef.value) return;
+	if (ItemSwitchCardRef.value) {
+		const item = ItemSwitchCardRef.value.createItem();
+		if (item) items.value.set("ItemSwitchCard", item);
+	}
 
-	const width = containerRef.value.clientWidth;
-	const height = containerRef.value.clientHeight;
-
-	if (ItemSwitchCardRef.value)
-		items.value.set(
-			"ItemSwitchCard",
-			Bodies.rectangle(
-				Math.random() * width,
-				Math.random() * -100,
-				ItemSwitchCardRef.value.$el.offsetWidth,
-				ItemSwitchCardRef.value.$el.offsetHeight,
-				{
-					restitution: 0.6,
-					friction: 0.5,
-					render: {
-						fillStyle: "rgba(0, 0, 0, 0)",
-					},
-				},
-			),
-		);
-
-	if (ItemPhoneCardRef.value)
-		items.value.set(
-			"ItemPhoneCard",
-			Bodies.rectangle(
-				Math.random() * width,
-				Math.random() * -100,
-				ItemPhoneCardRef.value.$el.offsetWidth,
-				ItemPhoneCardRef.value.$el.offsetHeight,
-				{
-					restitution: 0.6,
-					friction: 0.5,
-					render: {
-						fillStyle: "rgba(0, 0, 0, 0)",
-					},
-				},
-			),
-		);
+	if (ItemPhoneCardRef.value) {
+		const item = ItemPhoneCardRef.value.createItem();
+		if (item) items.value.set("ItemPhoneCard", item);
+	}
 };
 
 const handleUpdate = () => {
@@ -233,6 +201,41 @@ const handleUpdate = () => {
 		});
 	});
 };
+
+watch(
+	() => itemStore.currentCommand,
+	command => {
+		if (!command.length) return;
+		const char = command.split(" ");
+		switch (char[0]) {
+			case "add":
+				const addItemName = char[1] || "";
+				if (items.value.has(addItemName)) return;
+				let item: Matter.Body | null = null;
+				switch (addItemName) {
+					case "ItemSwitchCard":
+						if (ItemSwitchCardRef.value) item = ItemSwitchCardRef.value.createItem();
+						break;
+					case "ItemPhoneCard":
+						if (ItemPhoneCardRef.value) item = ItemPhoneCardRef.value.createItem();
+						break;
+				}
+				if (item) {
+					items.value.set(addItemName, item);
+					World.add(engine.world, item);
+				}
+				break;
+			case "delete":
+				const delItemName = char[1] || "";
+				const delItem = items.value.get(delItemName);
+				if (!delItem) return;
+				World.remove(engine.world, delItem);
+				items.value.delete(delItemName);
+				itemPositions.value.delete(delItemName);
+				break;
+		}
+	},
+);
 
 onMounted(() => {
 	init();
@@ -275,34 +278,36 @@ onUnmounted(() => {
 
 <template>
 	<ItemBookConstraint
-		:x="itemPositions?.get('ItemBookConstraint')?.x ?? 0"
-		:y="itemPositions?.get('ItemBookConstraint')?.y ?? 0"
-		:angle="itemPositions?.get('ItemBookConstraint')?.angle ?? 0"
+		:x="itemPositions.get('ItemBookConstraint')?.x ?? 0"
+		:y="itemPositions.get('ItemBookConstraint')?.y ?? 0"
+		:angle="itemPositions.get('ItemBookConstraint')?.angle ?? 0"
 		ref="ItemBookConstraintRef"
 	/>
 	<ItemMagnetConstraint
-		:x="itemPositions?.get('ItemMagnetConstraint')?.x ?? 0"
-		:y="itemPositions?.get('ItemMagnetConstraint')?.y ?? 0"
-		:angle="itemPositions?.get('ItemMagnetConstraint')?.angle ?? 0"
+		:x="itemPositions.get('ItemMagnetConstraint')?.x ?? 0"
+		:y="itemPositions.get('ItemMagnetConstraint')?.y ?? 0"
+		:angle="itemPositions.get('ItemMagnetConstraint')?.angle ?? 0"
 		ref="ItemMagnetConstraintRef"
 	/>
 	<ItemPhoneCard
-		:x="itemPositions?.get('ItemPhoneCard')?.x ?? 0"
-		:y="itemPositions?.get('ItemPhoneCard')?.y ?? 0"
-		:angle="itemPositions?.get('ItemPhoneCard')?.angle ?? 0"
+		:x="itemPositions.get('ItemPhoneCard')?.x ?? 0"
+		:y="itemPositions.get('ItemPhoneCard')?.y ?? 0"
+		:angle="itemPositions.get('ItemPhoneCard')?.angle ?? 0"
+		:visible="itemPositions.has('ItemPhoneCard')"
 		ref="ItemPhoneCardRef"
 	/>
 	<ItemSwitchCard
-		:x="itemPositions?.get('ItemSwitchCard')?.x ?? 0"
-		:y="itemPositions?.get('ItemSwitchCard')?.y ?? 0"
-		:angle="itemPositions?.get('ItemSwitchCard')?.angle ?? 0"
+		:x="itemPositions.get('ItemSwitchCard')?.x ?? 0"
+		:y="itemPositions.get('ItemSwitchCard')?.y ?? 0"
+		:angle="itemPositions.get('ItemSwitchCard')?.angle ?? 0"
+		:visible="itemPositions.has('ItemSwitchCard')"
 		ref="ItemSwitchCardRef"
 	/>
-	<div ref="containerRef" class="item-container"></div>
+	<div ref="containerRef" class="item_container"></div>
 </template>
 
 <style scoped lang="scss">
-.item-container {
+.item_container {
 	display: flex;
 	align-items: center;
 	justify-content: center;

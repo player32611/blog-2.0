@@ -1,3 +1,4 @@
+import type { Body } from "matter-js";
 import type { BlogCollections } from "./config";
 import type { BlogContent, MusicInfo } from "./common";
 
@@ -51,6 +52,11 @@ export interface ItemParams {
 	x: number;
 	y: number;
 	angle: number;
+	visible?: boolean;
+}
+
+export interface ItemInstance {
+	createItem: () => Body | null;
 }
 
 export interface MusicFolderParams {

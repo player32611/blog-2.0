@@ -1,8 +1,31 @@
 <script setup lang="ts">
-import type { ItemParams } from "~/types/components";
+import { Bodies } from "matter-js";
+import type { Body } from "matter-js";
+import type { ItemParams, ItemInstance } from "~/types/components";
 
-const { x, y, angle } = defineProps<ItemParams>();
+const { x, y, angle, visible } = defineProps<ItemParams>();
 const itemRef = ref<HTMLDivElement | null>(null);
+
+const createItem = (): Body | null => {
+	if (!itemRef.value) return null;
+	return Bodies.rectangle(
+		Math.random() * window.innerWidth,
+		Math.random() * -100,
+		itemRef.value.offsetWidth,
+		itemRef.value.offsetHeight,
+		{
+			restitution: 0.6,
+			friction: 0.5,
+			render: {
+				fillStyle: "rgba(0, 0, 0, 0)",
+			},
+		},
+	);
+};
+
+defineExpose<ItemInstance>({
+	createItem,
+});
 </script>
 
 <template>
@@ -12,6 +35,7 @@ const itemRef = ref<HTMLDivElement | null>(null);
 			left: x - (itemRef ? itemRef.offsetWidth / 2 : 0) + 'px',
 			top: y - (itemRef ? itemRef.offsetHeight / 2 : 0) + 'px',
 			rotate: angle + 'rad',
+			visibility: visible ? 'visible' : 'hidden',
 		}"
 		ref="itemRef"
 	>

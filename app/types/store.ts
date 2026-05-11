@@ -45,6 +45,7 @@ export type ImageActions = {
 export type ItemState = {
 	showingCommandBar: Ref<boolean>;
 	showingGuide: Ref<boolean>;
+	currentCommand: Ref<string>;
 };
 
 export type ItemGetter = {};
@@ -52,6 +53,7 @@ export type ItemGetter = {};
 export type ItemActions = {
 	toggleShowingCommandBar: () => void;
 	toggleShowingGuide: () => void;
+	setCurrentCommand: (command: string) => void;
 };
 
 export type LoadingState = {

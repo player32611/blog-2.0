@@ -5,6 +5,13 @@ const itemStore = useItemStore();
 const barRef = ref<HTMLDivElement | null>(null);
 const inputRef = ref<HTMLInputElement | null>(null);
 
+const handleKeyboardEvent = (e: KeyboardEvent) => {
+	if (e.key === "Enter" && inputRef.value && inputRef.value.value) {
+		itemStore.setCurrentCommand(inputRef.value.value);
+		inputRef.value.value = "";
+	}
+};
+
 watch(
 	() => itemStore.showingCommandBar,
 	newValue => {
@@ -20,7 +27,13 @@ watch(
 
 <template>
 	<div class="item_command_bar" ref="barRef">
-		<input placeholder="" class="hacker-input" type="text" ref="inputRef" />
+		<input
+			placeholder=""
+			class="command_input"
+			type="text"
+			ref="inputRef"
+			@keyup="handleKeyboardEvent"
+		/>
 		<label class="hacker-label">命令行</label>
 	</div>
 </template>
@@ -54,7 +67,7 @@ watch(
 		animation: scanline 2s infinite linear;
 	}
 
-	.hacker-input {
+	.command_input {
 		padding: 12px 15px;
 		width: calc(100% - 2px * 2 - 15px * 2);
 		color: #ff7f27;
@@ -89,8 +102,8 @@ watch(
 		transition: all 0.3s ease;
 	}
 
-	.hacker-input:focus + .hacker-label,
-	.hacker-input:not(:placeholder-shown) + .hacker-label {
+	.command_input:focus + .hacker-label,
+	.command_input:not(:placeholder-shown) + .hacker-label {
 		top: -10px;
 		left: 10px;
 		padding: 0 5px;

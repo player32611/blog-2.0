@@ -40,6 +40,7 @@ watch(
 		</div>
 
 		<div class="guide_content"><span>add xxx</span>添加物品</div>
+		<div class="guide_content"><span>delete xxx</span>删除物品</div>
 
 		<div class="guide_links">
 			<button class="guide_links_btn previous" aria-label="previous">
