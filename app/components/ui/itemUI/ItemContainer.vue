@@ -207,7 +207,8 @@ watch(
 	command => {
 		if (!command.length) return;
 		const char = command.split(" ");
-		switch (char[0]) {
+		console.log(char[0]?.toLowerCase());
+		switch (char[0]?.toLowerCase()) {
 			case "add":
 				const addItemName = char[1] || "";
 				if (items.value.has(addItemName)) return;

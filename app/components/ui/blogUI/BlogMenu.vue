@@ -90,7 +90,7 @@ $base-size: 1;
 		width: 70%;
 		border-width: 0.3rem * $base-size;
 		border-style: solid;
-		border-color: rgba($color: #ffffff, $alpha: 0.5);
+		border-color: rgba($color: #ffffff, $alpha: 0.7);
 		overflow: hidden;
 
 		.menu_card {

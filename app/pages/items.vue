@@ -37,6 +37,7 @@ usePageReady();
 			:style="{ position: 'fixed', left: '20px', top: '20px' }"
 		></Button>
 	</div>
+	<div v-else></div>
 </template>
 
 <style scoped lang="scss">
