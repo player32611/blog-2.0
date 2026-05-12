@@ -1,10 +1,12 @@
 <script setup lang="ts"></script>
 
 <template>
+	<!-- From Uiverse.io by risabbir -->
 	<div class="music_background"></div>
 </template>
 
 <style scoped lang="scss">
+/* From Uiverse.io by risabbir */
 .music_background {
 	width: 100%;
 	height: 100%;

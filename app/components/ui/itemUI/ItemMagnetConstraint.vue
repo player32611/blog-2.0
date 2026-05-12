@@ -52,6 +52,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+	<!-- From Uiverse.io by Cybercom682 -->
 	<div
 		class="item_magnet"
 		:style="{
@@ -66,6 +67,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
+/* From Uiverse.io by Cybercom682 */
 .item_magnet {
 	position: absolute;
 	background-color: red;

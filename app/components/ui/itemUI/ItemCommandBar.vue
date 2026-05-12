@@ -26,6 +26,7 @@ watch(
 </script>
 
 <template>
+	<!-- From Uiverse.io by chase2k25 -->
 	<div class="item_command_bar" ref="barRef">
 		<input
 			placeholder=""
@@ -39,6 +40,7 @@ watch(
 </template>
 
 <style scoped lang="scss">
+/* From Uiverse.io by chase2k25 */
 .item_command_bar {
 	position: fixed;
 	bottom: -70px;

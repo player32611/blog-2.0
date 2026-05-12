@@ -132,6 +132,7 @@ const resetCardPosition = () => {
 </script>
 
 <template>
+	<!-- From Uiverse.io by Tsiangana -->
 	<div
 		class="music_card"
 		ref="cardRef"
@@ -214,6 +215,7 @@ const resetCardPosition = () => {
 <style scoped lang="scss">
 $base-size: 1;
 
+/* From Uiverse.io by Tsiangana */
 .music_card {
 	position: fixed;
 	left: 0;

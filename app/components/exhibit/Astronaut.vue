@@ -1,6 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
+	<!-- From Uiverse.io by JkHuger -->
 	<div data-js="astro" class="astronaut">
 		<div class="head"></div>
 		<div class="arm arm-left"></div>
@@ -17,6 +18,7 @@
 <style scoped lang="scss">
 $base-size: 1;
 
+/* From Uiverse.io by JkHuger */
 .astronaut {
 	width: 250px * $base-size;
 	height: 300px * $base-size;

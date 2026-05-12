@@ -30,6 +30,7 @@ defineExpose<ItemInstance>({
 </script>
 
 <template>
+	<!-- From Uiverse.io by imtausef -->
 	<div
 		class="item_phone"
 		:style="{
@@ -78,6 +79,7 @@ defineExpose<ItemInstance>({
 <style scoped lang="scss">
 $base-size: 0.8;
 
+/* From Uiverse.io by imtausef */
 .item_phone {
 	position: absolute;
 	display: flex;

@@ -17,6 +17,7 @@ watch(
 </script>
 
 <template>
+	<!-- From Uiverse.io by mamyapro123 -->
 	<div class="item_guide" ref="guideRef">
 		<svg class="doodle star" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 			<path d="M12 2L15 9L22 10L17 15L18.5 22L12 18.5L5.5 22L7 15L2 10L9 9L12 2Z"></path>
@@ -72,7 +73,7 @@ watch(
 	--accent-lavender: #c0bbfe;
 	--accent-yellow: #ffdf6c;
 	position: absolute;
-	top: -50%;
+	top: -100%;
 	left: calc(50% - 80% / 2 - 1.5em);
 	display: flex;
 	flex-direction: column;

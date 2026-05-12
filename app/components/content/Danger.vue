@@ -1,6 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
+	<!-- From Uiverse.io by CodeM7710 -->
 	<div class="custom-block danger">
 		<span>
 			<span class="icon">&#xeaf7;</span>
@@ -12,6 +13,7 @@
 </template>
 
 <style scoped lang="scss">
+/* From Uiverse.io by CodeM7710 */
 .custom-block.danger {
 	margin: 20px 0;
 	height: fit-content;

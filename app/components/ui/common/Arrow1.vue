@@ -19,6 +19,7 @@ const getDirectionStyle = (direction: string | null) => {
 </script>
 
 <template>
+	<!-- From Uiverse.io by xopc333 -->
 	<button class="arrow1" :style="getDirectionStyle(direction)">
 		<div class="button-box">
 			<span class="button-elem">
@@ -42,6 +43,7 @@ const getDirectionStyle = (direction: string | null) => {
 <style scoped lang="scss">
 $base-size: 0.5;
 
+/* From Uiverse.io by xopc333 */
 .arrow1 {
 	display: block;
 	position: relative;

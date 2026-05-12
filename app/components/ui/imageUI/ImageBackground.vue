@@ -1,6 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
+	<!-- From Uiverse.io by jaykdoe -->
 	<div class="image_background">
 		<div id="stars"></div>
 		<div id="stars2"></div>

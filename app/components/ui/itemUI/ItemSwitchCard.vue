@@ -29,6 +29,7 @@ defineExpose<ItemInstance>({
 </script>
 
 <template>
+	<!-- From Uiverse.io by necatimertmetin -->
 	<div
 		class="item_switch"
 		:style="{
@@ -110,6 +111,7 @@ defineExpose<ItemInstance>({
 <style scoped lang="scss">
 $base-size: 1;
 
+/* From Uiverse.io by necatimertmetin */
 .item_switch {
 	position: absolute;
 	display: flex;

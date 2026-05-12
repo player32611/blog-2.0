@@ -61,6 +61,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+	<!-- From Uiverse.io by dylanharriscameron -->
 	<div class="music_progress">
 		<div class="music_currentTime">{{ formatTime(soundStore.musicCurrentTime) }}</div>
 		<div class="bar_container" ref="barContainerRef" @click="handleClickProgress">
@@ -79,6 +80,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
+/* From Uiverse.io by dylanharriscameron */
 .music_progress {
 	position: relative;
 	display: flex;

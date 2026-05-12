@@ -1,6 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
+	<!-- From Uiverse.io by Z4drus -->
 	<div class="loader">
 		<div class="loader__inner"></div>
 		<div class="loader__orbit">
@@ -15,6 +16,7 @@
 <style scoped lang="scss">
 $base-size: 1;
 
+/* From Uiverse.io by Z4drus*/
 .loader {
 	position: relative;
 	width: 200px * $base-size;

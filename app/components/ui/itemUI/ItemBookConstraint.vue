@@ -48,6 +48,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+	<!-- From Uiverse.io by vinodjangid07 -->
 	<div
 		class="item_book"
 		:style="{
@@ -95,6 +96,7 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 $base-size: 0.5;
+/* From Uiverse.io by vinodjangid07 */
 .item_book {
 	position: absolute;
 	display: flex;
