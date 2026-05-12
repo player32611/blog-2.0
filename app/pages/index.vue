@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import MainBackGround from "@/components/ui/mainUI/MainBackGround.vue";
-import UiBox from "@/components/ui/mainUI/UiBox.vue";
+import MainBackMask from "~/components/ui/mainUI/MainBackMask.vue";
+import MainUIBox from "~/components/ui/mainUI/MainUIBox.vue";
 
 usePageReady();
 </script>
@@ -8,7 +9,8 @@ usePageReady();
 <template>
 	<div class="home">
 		<MainBackGround />
-		<UiBox />
+		<MainBackMask />
+		<MainUIBox />
 	</div>
 </template>
 

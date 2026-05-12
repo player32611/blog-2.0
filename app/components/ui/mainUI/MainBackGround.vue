@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { gsap } from "gsap";
-import Background from "@/assets/images/background/undertale.jpg";
+import Background from "@/assets/images/background/main_background.png";
 
 const viewBoxRef = ref<HTMLDivElement | null>(null);
 const imageRef = ref<HTMLImageElement | null>(null);
@@ -99,7 +99,7 @@ onUnmounted(() => {
 
 <template>
 	<div
-		className="viewBox"
+		className="main_background"
 		ref="viewBoxRef"
 		@mousedown="handleMouseDown"
 		@mousemove="handleMouseMove"
@@ -113,8 +113,8 @@ onUnmounted(() => {
 		<img
 			:src="Background"
 			alt="background"
-			:width="6016 / 2"
-			:height="3541 / 2"
+			:width="6016 / 3"
+			:height="3541 / 3"
 			draggable="false"
 			ref="imageRef"
 		/>
@@ -122,7 +122,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-.viewBox {
+.main_background {
 	position: relative;
 	display: flex;
 	justify-content: center;

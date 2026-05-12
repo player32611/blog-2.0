@@ -21,26 +21,19 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="uibox">
-		<div class="userState">
-			<div>
-				<div class="ui_name">
-					<div><FaultText text="FRISK" style="color: #ff7f27" /></div>
-					<div>LV</div>
-					<div>19</div>
-				</div>
+	<div class="main_ui_box">
+		<div class="ui_state">
+			<div class="ui_name">
+				<div><FaultText text="FRISK" style="color: #ff7f27; cursor: pointer" /></div>
+				<div>LV 19</div>
 			</div>
-			<div>
-				<div class="userHp">
-					<div>HP</div>
-					<div class="hp_progress"></div>
-					<div>KR 92/92</div>
-				</div>
+			<div class="ui_hp">
+				<div>HP</div>
+				<div class="hp_progress"></div>
+				<div>KR 92/92</div>
 			</div>
-			<div>
-				<div class="ui_time">
-					{{ currentTime.hour + ":" + currentTime.minute + ":" + currentTime.second }}
-				</div>
+			<div class="ui_time">
+				{{ currentTime.hour + ":" + currentTime.minute + ":" + currentTime.second }}
 			</div>
 		</div>
 		<div class="buttons">
@@ -75,7 +68,7 @@ onUnmounted(() => {
 <style scoped lang="scss">
 $base-size: 1;
 
-.uibox {
+.main_ui_box {
 	position: fixed;
 	bottom: 0;
 	padding: 5px 5%;
@@ -86,10 +79,10 @@ $base-size: 1;
 	font-size: 1em * $base-size;
 	text-align: center;
 
-	.userState {
+	.ui_state {
 		margin: 0.3rem * $base-size;
 		display: grid;
-		grid-template-columns: 1fr 3fr 1fr;
+		grid-template-columns: 1.5fr 3fr 1fr;
 		justify-items: center;
 		align-items: center;
 		font-size: 3rem * $base-size;
@@ -98,15 +91,20 @@ $base-size: 1;
 		.ui_name,
 		.ui_time {
 			display: flex;
-			justify-content: center;
+			justify-content: space-between;
 			align-items: center;
+			width: 100%;
 		}
 
-		.ui_name :first-child {
-			font-size: 1em * $base-size;
+		.ui_name {
+			justify-self: start;
+
+			:first-child {
+				font-size: 1em * $base-size;
+			}
 		}
 
-		.userHp {
+		.ui_hp {
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -132,13 +130,13 @@ $base-size: 1;
 @media screen and (max-width: 576px) {
 	$base-size: 0.3;
 
-	.uibox {
+	.main_ui_box {
 		font-size: 1rem * $base-size;
 
-		.userState {
+		.ui_state {
 			font-size: 2.7rem * $base-size;
 
-			.userHp {
+			.ui_hp {
 				font-size: 2rem * $base-size;
 
 				.hp_progress {
@@ -156,13 +154,13 @@ $base-size: 1;
 @media screen and (min-width: 576px) and (max-width: 768px) {
 	$base-size: 0.6;
 
-	.uibox {
+	.main_ui_box {
 		font-size: 1rem * $base-size;
 
-		.userState {
+		.ui_state {
 			font-size: 2.4rem * $base-size;
 
-			.userHp {
+			.ui_hp {
 				font-size: 2rem * $base-size;
 
 				.hp_progress {
@@ -180,13 +178,13 @@ $base-size: 1;
 @media screen and (min-width: 768px) and (max-width: 991px) {
 	$base-size: 0.8;
 
-	.uibox {
+	.main_ui_box {
 		font-size: 1rem * $base-size;
 
-		.userState {
+		.ui_state {
 			font-size: 2.5rem * $base-size;
 
-			.userHp {
+			.ui_hp {
 				font-size: 2rem * $base-size;
 
 				.hp_progress {
@@ -204,13 +202,13 @@ $base-size: 1;
 @media screen and (min-width: 991px) and (max-width: 1199px) {
 	$base-size: 1;
 
-	.uibox {
+	.main_ui_box {
 		font-size: 1rem * $base-size;
 
-		.userState {
+		.ui_state {
 			font-size: 2.5rem * $base-size;
 
-			.userHp {
+			.ui_hp {
 				font-size: 2rem * $base-size;
 
 				.hp_progress {

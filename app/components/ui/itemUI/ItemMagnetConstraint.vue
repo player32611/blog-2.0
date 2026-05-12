@@ -51,8 +51,8 @@ onUnmounted(() => {
 });
 </script>
 
+<!-- From Uiverse.io by Cybercom682 -->
 <template>
-	<!-- From Uiverse.io by Cybercom682 -->
 	<div
 		class="item_magnet"
 		:style="{

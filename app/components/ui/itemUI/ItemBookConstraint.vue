@@ -47,8 +47,8 @@ onUnmounted(() => {
 });
 </script>
 
+<!-- From Uiverse.io by vinodjangid07 -->
 <template>
-	<!-- From Uiverse.io by vinodjangid07 -->
 	<div
 		class="item_book"
 		:style="{
