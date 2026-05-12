@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { DayTime } from "~/types/common";
 import Button from "~/components/ui/common/Button.vue";
+import FaultText from "../common/FaultText.vue";
 
 const hp = ref<number>(92);
 
@@ -23,8 +24,8 @@ onUnmounted(() => {
 	<div class="uibox">
 		<div class="userState">
 			<div>
-				<div class="userName">
-					FRISK
+				<div class="ui_name">
+					<div><FaultText text="FRISK" style="color: #ff7f27" /></div>
 					<div>LV</div>
 					<div>19</div>
 				</div>
@@ -37,7 +38,7 @@ onUnmounted(() => {
 				</div>
 			</div>
 			<div>
-				<div class="userName">
+				<div class="ui_time">
 					{{ currentTime.hour + ":" + currentTime.minute + ":" + currentTime.second }}
 				</div>
 			</div>
@@ -82,7 +83,7 @@ $base-size: 1;
 	flex-direction: column;
 	width: 90%;
 	color: #ff7f27;
-	font-size: 1rem * $base-size;
+	font-size: 1em * $base-size;
 	text-align: center;
 
 	.userState {
@@ -94,10 +95,15 @@ $base-size: 1;
 		font-size: 3rem * $base-size;
 		font-family: "Mars Needs Cunnilingus";
 
-		.userName {
+		.ui_name,
+		.ui_time {
 			display: flex;
 			justify-content: center;
 			align-items: center;
+		}
+
+		.ui_name :first-child {
+			font-size: 1em * $base-size;
 		}
 
 		.userHp {

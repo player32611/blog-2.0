@@ -10,6 +10,7 @@ import type { LoadingInstance } from "./types/components";
 
 import MusicCard from "./components/ui/rootUI/MusicCard.vue";
 import Loading from "./components/ui/rootUI/Loading.vue";
+import FaultText from "./components/ui/common/FaultText.vue";
 
 const loadingStore = useLoadingStore();
 const loadingRef = ref<LoadingInstance | null>(null);

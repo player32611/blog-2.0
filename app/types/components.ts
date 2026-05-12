@@ -14,6 +14,11 @@ export interface ButtonParams {
 	style?: Record<string, string | number>;
 }
 
+export interface FaultTextParams {
+	text: string;
+	style?: Record<string, string | number>;
+}
+
 export interface TooltipInstance {
 	width: ComputedRef<number>;
 	height: ComputedRef<number>;
