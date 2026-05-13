@@ -132,6 +132,7 @@ onUnmounted(() => {
 	overflow: hidden;
 	overscroll-behavior: none;
 	-webkit-tap-highlight-color: transparent;
+	user-select: none;
 
 	img {
 		cursor: pointer;

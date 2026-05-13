@@ -64,6 +64,10 @@ export interface ItemInstance {
 	createItem: () => Body | null;
 }
 
+export interface MainColorVialParams extends ItemParams {
+	color: string;
+}
+
 export interface MusicFolderParams {
 	name: string;
 }

@@ -1,3 +1,13 @@
+/**
+ * 表示日期时间信息的数据结构类型。
+ *
+ * @property year - 年份，以数字形式表示（例如：2023）。
+ * @property month - 月份，以字符串形式表示（例如："01" 表示一月）。
+ * @property day - 日期，以字符串形式表示（例如："05" 表示5号）。
+ * @property hour - 小时，以字符串形式表示（24小时制，例如："14" 表示下午2点）。
+ * @property minute - 分钟，以字符串形式表示（例如："30"）。
+ * @property second - 秒数，以字符串形式表示（例如："45"）。
+ */
 export type DayTime = {
 	year: number;
 	month: string;

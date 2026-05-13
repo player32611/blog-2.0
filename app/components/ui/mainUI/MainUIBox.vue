@@ -70,6 +70,7 @@ $base-size: 1;
 
 .main_ui_box {
 	position: fixed;
+	left: 0;
 	bottom: 0;
 	padding: 5px 5%;
 	display: flex;
