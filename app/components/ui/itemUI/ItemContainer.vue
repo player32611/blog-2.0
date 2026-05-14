@@ -118,12 +118,18 @@ const createConstraints = () => {
 	// 创建悬挂物体）
 	let magnetConstraint: Matter.Body | null = null;
 	if (ItemMagnetConstraintRef.value) {
-		magnetConstraint = ItemMagnetConstraintRef.value.createItem(width / 3, 120);
+		const x = itemPositions.value.get("ItemMagnetConstraint")?.x ?? width / 3;
+		const y = itemPositions.value.get("ItemMagnetConstraint")?.y ?? 120;
+		const angle = itemPositions.value.get("ItemMagnetConstraint")?.angle ?? 0;
+		magnetConstraint = ItemMagnetConstraintRef.value.createItem(x, y, angle);
 		if (magnetConstraint) items.value.set("ItemMagnetConstraint", magnetConstraint);
 	}
 	let bookConstraint: Matter.Body | null = null;
 	if (ItemBookConstraintRef.value) {
-		bookConstraint = ItemBookConstraintRef.value.createItem((width / 3) * 2, 120);
+		const x = itemPositions.value.get("ItemBookConstraint")?.x ?? (width / 3) * 2;
+		const y = itemPositions.value.get("ItemBookConstraint")?.y ?? 120;
+		const angle = itemPositions.value.get("ItemBookConstraint")?.angle ?? 0;
+		bookConstraint = ItemBookConstraintRef.value.createItem(x, y, angle);
 		if (bookConstraint) items.value.set("ItemBookConstraint", bookConstraint);
 	}
 
@@ -171,18 +177,18 @@ const createConstraints = () => {
 
 const createCards = () => {
 	if (ItemSwitchCardRef.value) {
-		const item = ItemSwitchCardRef.value.createItem(
-			Math.random() * window.innerWidth,
-			Math.random() * -100,
-		);
+		const x = itemPositions.value.get("ItemSwitchCard")?.x ?? Math.random() * window.innerWidth;
+		const y = itemPositions.value.get("ItemSwitchCard")?.y ?? Math.random() * -100;
+		const angle = itemPositions.value.get("ItemSwitchCard")?.angle ?? Math.random() * 360;
+		const item = ItemSwitchCardRef.value.createItem(x, y, angle);
 		if (item) items.value.set("ItemSwitchCard", item);
 	}
 
 	if (ItemPhoneCardRef.value) {
-		const item = ItemPhoneCardRef.value.createItem(
-			Math.random() * window.innerWidth,
-			Math.random() * -100,
-		);
+		const x = itemPositions.value.get("ItemPhoneCard")?.x ?? Math.random() * window.innerWidth;
+		const y = itemPositions.value.get("ItemPhoneCard")?.y ?? Math.random() * -100;
+		const angle = itemPositions.value.get("ItemPhoneCard")?.angle ?? Math.random() * 360;
+		const item = ItemPhoneCardRef.value.createItem(x, y, angle);
 		if (item) items.value.set("ItemPhoneCard", item);
 	}
 };
@@ -233,6 +239,7 @@ watch(
 							item = ItemSwitchCardRef.value.createItem(
 								Math.random() * window.innerWidth,
 								Math.random() * -100,
+								Math.random() * 360,
 							);
 						break;
 					case "ItemPhoneCard":
@@ -240,6 +247,7 @@ watch(
 							item = ItemPhoneCardRef.value.createItem(
 								Math.random() * window.innerWidth,
 								Math.random() * -100,
+								Math.random() * 360,
 							);
 						break;
 				}

@@ -11,9 +11,10 @@ const pageRef = ref<SVGAElement | null>(null);
 const animationRef = ref<GSAPAnimation | null>();
 const animationDuration: number = 0.15;
 
-const createItem = (x: number, y: number): Body | null => {
+const createItem = (x: number, y: number, angle: number): Body | null => {
 	if (!itemRef.value) return null;
 	return Bodies.rectangle(x, y, itemRef.value.offsetWidth, itemRef.value.offsetHeight, {
+		angle,
 		restitution: 0.6,
 		friction: 0.5,
 		render: {

@@ -6,10 +6,11 @@ import type { ItemParams, ItemInstance } from "~/types/components";
 const { x, y, angle, visible } = defineProps<ItemParams>();
 const itemRef = ref<HTMLDivElement | null>(null);
 
-const createItem = (x: number, y: number): Body | null => {
+const createItem = (x: number, y: number, angle: number): Body | null => {
 	if (!itemRef.value) return null;
 
 	return Bodies.rectangle(x, y, itemRef.value.offsetWidth, itemRef.value.offsetHeight, {
+		angle,
 		restitution: 0.6,
 		friction: 0.5,
 		render: {

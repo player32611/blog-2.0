@@ -10,9 +10,10 @@ const itemRef = ref<HTMLDivElement | null>(null);
 const magnetismRef = ref<HTMLDivElement | null>(null);
 const animationRef = ref<GSAPAnimation | null>(null);
 
-const createItem = (x: number, y: number): Body | null => {
+const createItem = (x: number, y: number, angle: number): Body | null => {
 	if (!itemRef.value) return null;
 	return Bodies.rectangle(x, y, itemRef.value.offsetHeight, itemRef.value.offsetWidth, {
+		angle,
 		restitution: 0.6,
 		friction: 0.5,
 		render: {

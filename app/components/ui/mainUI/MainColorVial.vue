@@ -1,8 +1,27 @@
 <script setup lang="ts">
-import type { MainColorVialParams } from "~/types/components";
+import { Bodies } from "matter-js";
+import type { Body } from "matter-js";
+import type { ItemInstance, MainColorVialParams } from "~/types/components";
 
 const { x, y, angle, color } = defineProps<MainColorVialParams>();
 const vialRef = ref<HTMLDivElement | null>(null);
+
+const createItem = (x: number, y: number, angle: number): Body | null => {
+	if (!vialRef.value) return null;
+
+	return Bodies.rectangle(x, y, vialRef.value.offsetWidth, vialRef.value.offsetHeight, {
+		angle,
+		restitution: 0.6,
+		friction: 0.5,
+		render: {
+			fillStyle: "rgba(0, 0, 0, 0)",
+		},
+	});
+};
+
+defineExpose<ItemInstance>({
+	createItem,
+});
 </script>
 
 <template>

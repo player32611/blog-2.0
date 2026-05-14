@@ -58,9 +58,6 @@ const resize = () => {
 const init = () => {
 	if (!containerRef.value) return;
 
-	vialPositions.value.clear();
-	vials.value.clear();
-
 	const width = containerRef.value.clientWidth;
 	const height = containerRef.value.clientHeight;
 
@@ -88,35 +85,26 @@ const createVials = () => {
 	const length = colors.length;
 
 	colors.forEach((color, index) => {
-		const x = (width / (length + 1)) * (index + 1);
-		const y = 100;
+		const x = vialPositions.value.get(`${color}Vial`)?.x ?? (width / (length + 1)) * (index + 1);
+		const y = vialPositions.value.get(`${color}Vial`)?.y ?? 100;
+		const angle = vialPositions.value.get(`${color}Vial`)?.angle ?? 0;
 		const vialInstance = vialRefs.value.get(`${color}Vial`);
 		if (vialInstance) {
-			const object = Bodies.rectangle(
-				x,
-				y,
-				vialInstance.$el.offsetWidth,
-				vialInstance.$el.offsetHeight,
-				{
-					restitution: 0.6,
-					friction: 0.5,
+			const object = vialInstance.createItem(x, y, angle);
+			if (object) {
+				vials.value.set(`${color}Vial`, object);
+				const rope = Constraint.create({
+					pointA: { x: (width / (length + 1)) * (index + 1), y: 0 },
+					bodyB: object, // 被悬挂的物体
+					length: 100, // 绳子长度
+					stiffness: 0.3, // 刚度（接近1表示更像刚性杆，较低值更像弹性绳）
 					render: {
-						fillStyle: "rgba(0, 0, 0, 0)",
+						strokeStyle: "#ffffff", // 绳子颜色
+						lineWidth: 2,
 					},
-				},
-			);
-			vials.value.set(`${color}Vial`, object);
-			const rope = Constraint.create({
-				pointA: { x, y: 0 },
-				bodyB: object, // 被悬挂的物体
-				length: y, // 绳子长度
-				stiffness: 0.3, // 刚度（接近1表示更像刚性杆，较低值更像弹性绳）
-				render: {
-					strokeStyle: "#ffffff", // 绳子颜色
-					lineWidth: 2,
-				},
-			});
-			World.add(engine.world, rope);
+				});
+				World.add(engine.world, rope);
+			}
 		}
 	});
 };
