@@ -61,7 +61,7 @@ export interface ItemParams {
 }
 
 export interface ItemInstance {
-	createItem: () => Body | null;
+	createItem: (x: number, y: number) => Body | null;
 }
 
 export interface MainColorVialParams extends ItemParams {

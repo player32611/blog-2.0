@@ -6,21 +6,15 @@ import type { ItemParams, ItemInstance } from "~/types/components";
 const { x, y, angle, visible } = defineProps<ItemParams>();
 const itemRef = ref<HTMLDivElement | null>(null);
 
-const createItem = (): Body | null => {
+const createItem = (x: number, y: number): Body | null => {
 	if (!itemRef.value) return null;
-	return Bodies.rectangle(
-		Math.random() * window.innerWidth,
-		Math.random() * -100,
-		itemRef.value.offsetWidth,
-		itemRef.value.offsetHeight,
-		{
-			restitution: 0.6,
-			friction: 0.5,
-			render: {
-				fillStyle: "rgba(0, 0, 0, 0)",
-			},
+	return Bodies.rectangle(x, y, itemRef.value.offsetWidth, itemRef.value.offsetHeight, {
+		restitution: 0.6,
+		friction: 0.5,
+		render: {
+			fillStyle: "rgba(0, 0, 0, 0)",
 		},
-	);
+	});
 };
 
 defineExpose<ItemInstance>({

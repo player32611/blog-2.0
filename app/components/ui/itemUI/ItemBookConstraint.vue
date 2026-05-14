@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import gsap from "gsap";
-import type { ItemParams } from "~/types/components";
+import { Bodies } from "matter-js";
+import type { Body } from "matter-js";
+import type { ItemParams, ItemInstance } from "~/types/components";
 
 const itemStore = useItemStore();
 const { x, y, angle } = defineProps<ItemParams>();
@@ -8,6 +10,17 @@ const itemRef = ref<HTMLDivElement | null>(null);
 const pageRef = ref<SVGAElement | null>(null);
 const animationRef = ref<GSAPAnimation | null>();
 const animationDuration: number = 0.15;
+
+const createItem = (x: number, y: number): Body | null => {
+	if (!itemRef.value) return null;
+	return Bodies.rectangle(x, y, itemRef.value.offsetWidth, itemRef.value.offsetHeight, {
+		restitution: 0.6,
+		friction: 0.5,
+		render: {
+			fillStyle: "rgba(0, 0, 0, 0)",
+		},
+	});
+};
 
 watch(
 	() => itemStore.showingGuide,
@@ -44,6 +57,10 @@ watch(
 
 onUnmounted(() => {
 	if (animationRef.value) animationRef.value.kill();
+});
+
+defineExpose<ItemInstance>({
+	createItem,
 });
 </script>
 

@@ -1,12 +1,25 @@
 <script setup lang="ts">
 import gsap from "gsap";
-import type { ItemParams } from "~/types/components";
+import { Bodies } from "matter-js";
+import type { Body } from "matter-js";
+import type { ItemParams, ItemInstance } from "~/types/components";
 
 const itemStore = useItemStore();
 const { x, y, angle } = defineProps<ItemParams>();
 const itemRef = ref<HTMLDivElement | null>(null);
 const magnetismRef = ref<HTMLDivElement | null>(null);
 const animationRef = ref<GSAPAnimation | null>(null);
+
+const createItem = (x: number, y: number): Body | null => {
+	if (!itemRef.value) return null;
+	return Bodies.rectangle(x, y, itemRef.value.offsetHeight, itemRef.value.offsetWidth, {
+		restitution: 0.6,
+		friction: 0.5,
+		render: {
+			fillStyle: "rgba(0, 0, 0, 0)",
+		},
+	});
+};
 
 watch(
 	() => itemStore.showingCommandBar,
@@ -48,6 +61,10 @@ watch(
 
 onUnmounted(() => {
 	if (animationRef.value) animationRef.value.kill();
+});
+
+defineExpose<ItemInstance>({
+	createItem,
 });
 </script>
 

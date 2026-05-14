@@ -118,37 +118,13 @@ const createConstraints = () => {
 	// 创建悬挂物体）
 	let magnetConstraint: Matter.Body | null = null;
 	if (ItemMagnetConstraintRef.value) {
-		magnetConstraint = Bodies.rectangle(
-			width / 3,
-			120,
-			ItemMagnetConstraintRef.value.$el.offsetHeight,
-			ItemMagnetConstraintRef.value.$el.offsetWidth * 5,
-			{
-				restitution: 0.6,
-				friction: 0.5,
-				render: {
-					fillStyle: "rgba(0, 0, 0, 0)",
-				},
-			},
-		);
-		items.value.set("ItemMagnetConstraint", magnetConstraint);
+		magnetConstraint = ItemMagnetConstraintRef.value.createItem(width / 3, 120);
+		if (magnetConstraint) items.value.set("ItemMagnetConstraint", magnetConstraint);
 	}
 	let bookConstraint: Matter.Body | null = null;
 	if (ItemBookConstraintRef.value) {
-		bookConstraint = Bodies.rectangle(
-			(width / 3) * 2,
-			120,
-			ItemBookConstraintRef.value.$el.offsetWidth,
-			ItemBookConstraintRef.value.$el.offsetHeight,
-			{
-				restitution: 0.6,
-				friction: 0.5,
-				render: {
-					fillStyle: "rgba(0, 0, 0, 0)",
-				},
-			},
-		);
-		items.value.set("ItemBookConstraint", bookConstraint);
+		bookConstraint = ItemBookConstraintRef.value.createItem((width / 3) * 2, 120);
+		if (bookConstraint) items.value.set("ItemBookConstraint", bookConstraint);
 	}
 
 	// 创建绳子约束（连接悬挂点和物体）
@@ -195,12 +171,18 @@ const createConstraints = () => {
 
 const createCards = () => {
 	if (ItemSwitchCardRef.value) {
-		const item = ItemSwitchCardRef.value.createItem();
+		const item = ItemSwitchCardRef.value.createItem(
+			Math.random() * window.innerWidth,
+			Math.random() * -100,
+		);
 		if (item) items.value.set("ItemSwitchCard", item);
 	}
 
 	if (ItemPhoneCardRef.value) {
-		const item = ItemPhoneCardRef.value.createItem();
+		const item = ItemPhoneCardRef.value.createItem(
+			Math.random() * window.innerWidth,
+			Math.random() * -100,
+		);
 		if (item) items.value.set("ItemPhoneCard", item);
 	}
 };
@@ -247,10 +229,18 @@ watch(
 				let item: Matter.Body | null = null;
 				switch (addItemName) {
 					case "ItemSwitchCard":
-						if (ItemSwitchCardRef.value) item = ItemSwitchCardRef.value.createItem();
+						if (ItemSwitchCardRef.value)
+							item = ItemSwitchCardRef.value.createItem(
+								Math.random() * window.innerWidth,
+								Math.random() * -100,
+							);
 						break;
 					case "ItemPhoneCard":
-						if (ItemPhoneCardRef.value) item = ItemPhoneCardRef.value.createItem();
+						if (ItemPhoneCardRef.value)
+							item = ItemPhoneCardRef.value.createItem(
+								Math.random() * window.innerWidth,
+								Math.random() * -100,
+							);
 						break;
 				}
 				if (item) {

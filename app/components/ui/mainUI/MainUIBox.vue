@@ -24,7 +24,9 @@ onUnmounted(() => {
 	<div class="main_ui_box">
 		<div class="ui_state">
 			<div class="ui_name">
-				<div><FaultText text="FRISK" style="color: #ff7f27; cursor: pointer" /></div>
+				<div @click="loadingNavigate('/details')">
+					<FaultText text="FRISK" style="color: #ff7f27; cursor: pointer" />
+				</div>
 				<div>LV 19</div>
 			</div>
 			<div class="ui_hp">
