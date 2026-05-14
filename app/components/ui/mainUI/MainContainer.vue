@@ -25,8 +25,41 @@ let mouse: Mouse;
 let mouseConstraint: MouseConstraint | null;
 const colors = ["red", "purple", "pink", "blue", "cyan", "green", "yellow", "orange"];
 
+const resize = () => {
+	World.clear(engine.world, true);
+	Render.stop(render);
+	Engine.clear(engine);
+	containerRef.value?.removeChild(render.canvas);
+	init();
+	createVials();
+	World.add(engine.world, Array.from(vials.value.values()));
+
+	// 添加鼠标交互
+	mouse = Mouse.create(render.canvas);
+	mouseConstraint = MouseConstraint.create(engine, {
+		mouse: mouse,
+		constraint: {
+			stiffness: 0.2,
+			render: {
+				visible: false,
+			},
+		},
+	});
+
+	World.add(engine.world, mouseConstraint);
+	render.mouse = mouse;
+
+	// 启动渲染器和物理引擎
+	Render.run(render);
+	runner = Runner.create();
+	Runner.run(runner, engine);
+};
+
 const init = () => {
 	if (!containerRef.value) return;
+
+	vialPositions.value.clear();
+	vials.value.clear();
 
 	const width = containerRef.value.clientWidth;
 	const height = containerRef.value.clientHeight;
@@ -46,9 +79,6 @@ const init = () => {
 			showAngleIndicator: false,
 		},
 	});
-
-	// 添加边界
-	World.add(engine.world, []);
 };
 
 const createVials = () => {
@@ -80,7 +110,7 @@ const createVials = () => {
 				pointA: { x, y: 0 },
 				bodyB: object, // 被悬挂的物体
 				length: y, // 绳子长度
-				stiffness: 0.1, // 刚度（接近1表示更像刚性杆，较低值更像弹性绳）
+				stiffness: 0.3, // 刚度（接近1表示更像刚性杆，较低值更像弹性绳）
 				render: {
 					strokeStyle: "#ffffff", // 绳子颜色
 					lineWidth: 2,
@@ -166,6 +196,7 @@ onMounted(() => {
 	Runner.run(runner, engine);
 
 	handleUpdate();
+	window.addEventListener("resize", resize);
 });
 
 onUnmounted(() => {
@@ -175,6 +206,7 @@ onUnmounted(() => {
 	if (render && render.canvas && render.canvas.parentNode) {
 		render.canvas.parentNode.removeChild(render.canvas);
 	}
+	window.removeEventListener("resize", resize);
 });
 </script>
 

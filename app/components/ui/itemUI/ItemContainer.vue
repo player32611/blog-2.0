@@ -27,7 +27,39 @@ const items = ref<Map<string, Matter.Body>>(new Map());
 let engine: Engine;
 let render: Render;
 let runner: Runner;
+let mouse: Mouse;
 let mouseConstraint: MouseConstraint;
+
+const resize = () => {
+	World.clear(engine.world, true);
+	Render.stop(render);
+	Engine.clear(engine);
+	containerRef.value?.removeChild(render.canvas);
+	init();
+	createConstraints();
+	createCards();
+	World.add(engine.world, Array.from(items.value.values()));
+
+	// 添加鼠标交互
+	mouse = Mouse.create(render.canvas);
+	mouseConstraint = MouseConstraint.create(engine, {
+		mouse: mouse,
+		constraint: {
+			stiffness: 0.2,
+			render: {
+				visible: false,
+			},
+		},
+	});
+
+	World.add(engine.world, mouseConstraint);
+	render.mouse = mouse;
+
+	// 启动渲染器和物理引擎
+	Render.run(render);
+	runner = Runner.create();
+	Runner.run(runner, engine);
+};
 
 const init = () => {
 	if (!containerRef.value) return;
@@ -245,7 +277,7 @@ onMounted(() => {
 	World.add(engine.world, Array.from(items.value.values()));
 
 	// 添加鼠标交互
-	const mouse = Mouse.create(render.canvas);
+	mouse = Mouse.create(render.canvas);
 	mouseConstraint = MouseConstraint.create(engine, {
 		mouse: mouse,
 		constraint: {
@@ -265,6 +297,7 @@ onMounted(() => {
 	Runner.run(runner, engine);
 
 	handleUpdate();
+	window.addEventListener("resize", resize);
 });
 
 onUnmounted(() => {
@@ -274,6 +307,7 @@ onUnmounted(() => {
 	if (render && render.canvas && render.canvas.parentNode) {
 		render.canvas.parentNode.removeChild(render.canvas);
 	}
+	window.removeEventListener("resize", resize);
 });
 </script>
 

@@ -17,6 +17,8 @@ const movedata = ref<{ moveable: boolean; x: number; y: number; movX: number; mo
 const ani = ref<gsap.core.Tween | null>(null); // gsap 动画
 const standardWidth = ref<number>(1700); // 标准宽度
 const scalesNums = ref<number>(1); // 缩放比例
+const resistance: number = 0.2;
+const easeTime: number = 1;
 
 const resize = () => {
 	if (viewBoxRef.value && imageRef.value) {
@@ -40,8 +42,8 @@ const resize = () => {
 
 const move = (x: number, y: number) => {
 	if (!movedata.value.moveable || !imageRef.value) return;
-	const distanceX = (x - mousePos.value.x) / scalesNums.value;
-	const distanceY = (y - mousePos.value.y) / scalesNums.value;
+	const distanceX = ((x - mousePos.value.x) / scalesNums.value) * resistance;
+	const distanceY = ((y - mousePos.value.y) / scalesNums.value) * resistance;
 
 	const newMovX = movedata.value.movX + distanceX;
 	const newMovY = movedata.value.movY + distanceY;
@@ -55,7 +57,7 @@ const move = (x: number, y: number) => {
 	if (ani.value) ani.value.kill();
 	ani.value = gsap.to(imageRef.value, {
 		transform: `translate(${movedata.value.movX}px , ${movedata.value.movY}px)`,
-		duration: 0.3,
+		duration: easeTime,
 		ease: "power4.out",
 	});
 	mousePos.value = { x, y };
