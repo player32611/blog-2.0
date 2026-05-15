@@ -24,6 +24,7 @@ let runner: Runner;
 let mouse: Mouse;
 let mouseConstraint: MouseConstraint | null;
 const colors = ["red", "purple", "pink", "blue", "cyan", "green", "yellow", "orange"];
+const ropeLength = Array.from({ length: colors.length }, () => Math.random() * 100 + 50);
 
 const resize = () => {
 	World.clear(engine.world, true);
@@ -96,7 +97,7 @@ const createVials = () => {
 				const rope = Constraint.create({
 					pointA: { x: (width / (length + 1)) * (index + 1), y: 0 },
 					bodyB: object, // 被悬挂的物体
-					length: 100, // 绳子长度
+					length: ropeLength[index], // 绳子长度
 					stiffness: 0.3, // 刚度（接近1表示更像刚性杆，较低值更像弹性绳）
 					render: {
 						strokeStyle: "#ffffff", // 绳子颜色
@@ -204,7 +205,7 @@ onUnmounted(() => {
 		ref="containerRef"
 		@mouseleave="handleMouseLeave"
 		@touchcancel="handleMouseLeave"
-		@touchmove="handleTouchLeave"
+		@touchmove.passive="handleTouchLeave"
 	>
 		<MainColorVial
 			v-for="item in colors"
