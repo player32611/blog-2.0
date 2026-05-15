@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { gsap } from "gsap";
+import gsap from "gsap";
+
+import Loading1 from "~/components/exhibit/Loading1.vue";
 
 const row = 13;
 const line = 15;
 const loadingRef = ref<SVGSVGElement | null>(null);
 const blocks = ref<SVGUseElement[]>([]);
+const animRef = ref<HTMLDivElement | null>(null);
 const loadingStore = useLoadingStore();
 
 const createBlocks = () => {
@@ -33,36 +36,71 @@ const loadingIn = (next: () => void) => {
 				next();
 			},
 		})
-		.set(blocks.value, { "stroke-dashoffset": 0 })
 		.to(blocks.value, {
 			scale: 1,
 			opacity: 1,
 			duration: 0.5,
 			ease: "power2.out",
 			stagger: {
-				from: "center",
+				from: "edges",
 				each: 0.003,
 			},
-		});
+		})
+		.to(
+			blocks.value,
+			{
+				"stroke-dashoffset": Math.random() < 0.5 ? -100 : 100,
+				"stroke-opacity": 0,
+				duration: 0.5,
+				ease: "power4.out",
+				stagger: {
+					from: "random",
+					each: 0.002,
+				},
+			},
+			"<0.5",
+		)
+		.to(
+			animRef.value,
+			{
+				opacity: 1,
+				duration: 0.5,
+				ease: "linear",
+			},
+			"<0.5",
+		);
 };
 
 const loadingOut = () => {
 	gsap
 		.timeline({
+			// onStart: () => {
+			// 	console.log("start");
+			// 	gsap.set(animRef.value, { opacity: 1 });
+			// },
 			onComplete: () => {
 				loadingStore.setIsLoading(false);
 			},
 		})
-		.to(blocks.value, {
-			"stroke-dashoffset": 0,
-			"stroke-opacity": 1,
+		.to(animRef.value, {
+			opacity: 0,
 			duration: 0.5,
-			ease: "power4.out",
-			stagger: {
-				from: "random",
-				each: 0.002,
-			},
+			ease: "linear",
 		})
+		.to(
+			blocks.value,
+			{
+				"stroke-dashoffset": 0,
+				"stroke-opacity": 1,
+				duration: 0.5,
+				ease: "power4.out",
+				stagger: {
+					from: "random",
+					each: 0.002,
+				},
+			},
+			"<0.2",
+		)
 		.to(
 			blocks.value,
 			{
@@ -81,9 +119,9 @@ const loadingOut = () => {
 
 onMounted(() => {
 	createBlocks();
-	setTimeout(() => {
-		loadingOut();
-	}, 1000);
+	// setTimeout(() => {
+	// 	loadingOut();
+	// }, 1000);
 });
 
 defineExpose({
@@ -93,38 +131,63 @@ defineExpose({
 </script>
 
 <template>
-	<svg
-		class="loading_blocks"
-		viewBox="0 0 1000 1000"
-		preserveAspectRatio="xMidYMid slice"
-		ref="loadingRef"
-	>
-		<defs>
-			<polygon
-				id="loading_hexagon"
-				points="0,-50 43.3,-25 43.3,25 0,50 -43.3,25 -43.3,-25"
-				fill="#171717"
-			/>
-		</defs>
-	</svg>
+	<div class="root_loading">
+		<svg
+			class="loading_blocks"
+			viewBox="0 0 1000 1000"
+			preserveAspectRatio="xMidYMid slice"
+			ref="loadingRef"
+		>
+			<defs>
+				<polygon
+					id="loading_hexagon"
+					points="0,-50 43.3,-25 43.3,25 0,50 -43.3,25 -43.3,-25"
+					fill="#171717"
+				/>
+			</defs>
+		</svg>
+		<div class="loading_anim" ref="animRef">
+			<Loading1 />
+		</div>
+	</div>
 </template>
 
 <style scoped lang="scss">
-.loading_blocks {
+.root_loading {
 	position: fixed;
 	top: 0;
 	left: 0;
 	height: 100dvh;
-	width: 100vw;
+	width: 100dvw;
 	z-index: 9999;
 	overflow: hidden;
 	pointer-events: none;
 
-	:deep(.loading_block) {
-		stroke: #17f700;
-		stroke-width: 0.8;
-		stroke-dasharray: 100;
-		stroke-opacity: 0;
+	.loading_blocks {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+
+		:deep(.loading_block) {
+			stroke: #17f700;
+			stroke-width: 0.8;
+			stroke-dasharray: 100;
+			stroke-opacity: 0;
+		}
+	}
+
+	.loading_anim {
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		width: 100%;
+		background-color: #000000;
 	}
 }
 </style>
