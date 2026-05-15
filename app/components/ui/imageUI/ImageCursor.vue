@@ -5,6 +5,7 @@ const imageStore = useImageStore();
 const cursorRef = ref<HTMLDivElement | null>(null);
 const rotateAnimation = ref<GSAPAnimation | null>(null); // 旋转动画引用
 const easeTime: number = 0.2; // 缓动时间
+const outTime: number = 0.5; // 离开变化时间（s）
 const cursorScale: number = 1.1; // 光标缩放比例
 const dampCoefficient: number = 0.05; // 阻尼系数
 
@@ -31,6 +32,10 @@ const handleMouseDown = (event: MouseEvent) => {
 
 const handleMouseMove = (event: MouseEvent) => {
 	if (!cursorRef.value) return;
+	if (!rotateAnimation.value?.isActive()) {
+		gsap.to(cursorRef.value, { scale: 1, opacity: 1, duration: outTime });
+		if (!imageStore.hoverImageData) rotateAnimation.value?.resume();
+	}
 	if (imageStore.hoverImageData) {
 		gsap.to(cursorRef.value, {
 			x:
@@ -47,6 +52,13 @@ const handleMouseMove = (event: MouseEvent) => {
 			y: event.clientY,
 			duration: easeTime,
 		});
+	}
+};
+
+const handleMouseOut = (event: MouseEvent) => {
+	if (event.relatedTarget === null) {
+		gsap.to(cursorRef.value, { scale: 0, opacity: 0, duration: outTime });
+		rotateAnimation.value?.pause();
 	}
 };
 
@@ -79,7 +91,6 @@ watch(
 );
 
 onMounted(() => {
-	// 添加循环动画效果
 	if (cursorRef.value) {
 		rotateAnimation.value = gsap.to(cursorRef.value, {
 			rotate: 720,
@@ -89,14 +100,15 @@ onMounted(() => {
 			ease: "power1.inOut",
 		});
 	}
-
 	window.addEventListener("mousedown", handleMouseDown);
 	window.addEventListener("mousemove", handleMouseMove);
+	window.addEventListener("mouseout", handleMouseOut);
 });
 
 onUnmounted(() => {
 	window.removeEventListener("mousedown", handleMouseDown);
 	window.removeEventListener("mousemove", handleMouseMove);
+	window.removeEventListener("mouseout", handleMouseOut);
 });
 </script>
 

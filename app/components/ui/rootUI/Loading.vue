@@ -67,7 +67,7 @@ const loadingIn = (next: () => void) => {
 				duration: 0.5,
 				ease: "linear",
 			},
-			"<0.5",
+			"<0.2",
 		);
 };
 
@@ -153,13 +153,15 @@ defineExpose({
 </template>
 
 <style scoped lang="scss">
+@use "../../../assets/styles/variables.scss";
+
 .root_loading {
 	position: fixed;
 	top: 0;
 	left: 0;
 	height: 100dvh;
 	width: 100dvw;
-	z-index: 9999;
+	z-index: variables.$loading_zIndex;
 	overflow: hidden;
 	pointer-events: none;
 
