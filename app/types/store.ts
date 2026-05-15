@@ -71,6 +71,16 @@ export type LoadingActions = {
 	loadingNavigate: (target: string) => void;
 };
 
+export type MainState = {
+	isDragging: Ref<boolean>;
+};
+
+export type MainGetter = {};
+
+export type MainActions = {
+	setIsDragging: (state: boolean) => void;
+};
+
 export type SoundState = {
 	effectsVolume: Ref<number>;
 	musicAudio: Ref<HTMLAudioElement | null>;

@@ -9,6 +9,10 @@ import ImageDetailSign from "~/components/ui/imageUI/ImageDetailSign.vue";
 const { loadingNavigate } = useLoadingStore();
 
 usePageReady();
+
+onMounted(() => {
+	document.title = "图像集";
+});
 </script>
 
 <template>
@@ -17,7 +21,6 @@ usePageReady();
 		<ImageContainer />
 		<ImageViewbox />
 		<ImageDetailSign />
-		<ImageCursor />
 		<Button
 			:text="'back'"
 			:icon="'&#xeb06;'"
@@ -25,6 +28,7 @@ usePageReady();
 			@click="loadingNavigate('/')"
 			:style="{ position: 'fixed', left: '20px', top: '20px' }"
 		></Button>
+		<ImageCursor />
 	</div>
 </template>
 

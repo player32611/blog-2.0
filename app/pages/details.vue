@@ -1,5 +1,9 @@
 <script setup lang="ts">
 usePageReady();
+
+onMounted(() => {
+	document.title = "个人介绍";
+});
 </script>
 
 <template>

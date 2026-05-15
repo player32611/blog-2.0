@@ -6,6 +6,10 @@ import MainCursor from "~/components/ui/mainUI/MainCursor.vue";
 import MainUIBox from "~/components/ui/mainUI/MainUIBox.vue";
 
 usePageReady();
+
+onMounted(() => {
+	document.title = "首页";
+});
 </script>
 
 <template>

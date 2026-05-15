@@ -13,6 +13,7 @@ import type { ItemParams } from "~/types/components";
 
 import MainColorVial from "./MainColorVial.vue";
 
+const mainStore = useMainStore();
 const containerRef = ref<HTMLDivElement | null>(null);
 const vialRefs = ref<Map<string, InstanceType<typeof MainColorVial>>>(new Map());
 const vialPositions = ref<Map<string, ItemParams>>(new Map());
@@ -113,12 +114,14 @@ const createVials = () => {
 const handleUpdate = () => {
 	Matter.Events.on(mouseConstraint, "startdrag", () => {
 		if (containerRef.value) {
+			mainStore.setIsDragging(true);
 			containerRef.value.style.cursor = "grabbing";
 		}
 	});
 
 	Matter.Events.on(mouseConstraint, "enddrag", () => {
 		if (containerRef.value) {
+			mainStore.setIsDragging(false);
 			containerRef.value.style.cursor = "default";
 		}
 	});

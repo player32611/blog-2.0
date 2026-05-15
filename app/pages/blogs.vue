@@ -13,14 +13,21 @@ import Button from "~/components/ui/common/Button.vue";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-const { useBlogContent, setBlogInstance, changeBlogMenuState } = useBlogStore();
+const blogStore = useBlogStore();
 const { loadingNavigate } = useLoadingStore();
 const maskRef = ref<BlogMaskInstance | null>(null);
 const menuRef = ref<BlogMenuInstance | null>(null);
-const page = useBlogContent();
+const page = blogStore.useBlogContent();
 const smoother = ref<ScrollSmoother | null>(null);
 
 usePageReady();
+
+watch(
+	() => blogStore.activeBlogContent,
+	() => {
+		document.title = blogStore.activeBlogContent;
+	},
+);
 
 onMounted(() => {
 	smoother.value = ScrollSmoother.create({
@@ -28,12 +35,13 @@ onMounted(() => {
 		content: ".blog_content_container",
 		smooth: 1,
 	});
-	setBlogInstance(maskRef.value, menuRef.value);
+	blogStore.setBlogInstance(maskRef.value, menuRef.value);
+	document.title = blogStore.activeBlogContent;
 });
 
 onUnmounted(() => {
 	smoother.value?.kill();
-	setBlogInstance(null, null);
+	blogStore.setBlogInstance(null, null);
 });
 </script>
 
@@ -62,7 +70,7 @@ onUnmounted(() => {
 			:text="'menu'"
 			:icon="'&#xeaf8;'"
 			:size="'small'"
-			@click="changeBlogMenuState"
+			@click="blogStore.changeBlogMenuState"
 			:style="{ position: 'fixed', right: '20px', top: '20px' }"
 		></Button>
 	</div>

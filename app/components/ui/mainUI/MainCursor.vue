@@ -2,7 +2,9 @@
 import gsap from "gsap";
 import brushImg from "@/assets/images/sprites/brush.png";
 
+const mainStore = useMainStore();
 const cursorRef = ref<HTMLDivElement | null>(null);
+const normalAnimation = ref<GSAPAnimation | null>(null);
 const rotateAnimation = ref<GSAPAnimation | null>(null);
 const traceRef = ref<HTMLDivElement | null>(null);
 const currentMousePos = ref<{ x: number; y: number }>({ x: -100, y: -100 });
@@ -28,9 +30,9 @@ const makeTrace = () => {
 
 const handleMouseMove = (event: MouseEvent) => {
 	if (!cursorRef.value) return;
-	if (!rotateAnimation.value?.isActive()) {
+	if (!normalAnimation.value?.isActive() && !rotateAnimation.value?.isActive()) {
 		gsap.to(cursorRef.value, { scale: 1, opacity: 1, duration: outTime });
-		rotateAnimation.value?.resume();
+		normalAnimation.value?.resume();
 	}
 	gsap.to(cursorRef.value, {
 		x: event.clientX,
@@ -43,13 +45,27 @@ const handleMouseMove = (event: MouseEvent) => {
 const handleMouseOut = (event: MouseEvent) => {
 	if (event.relatedTarget === null) {
 		gsap.to(cursorRef.value, { scale: 0, opacity: 0, duration: outTime });
+		normalAnimation.value?.pause();
 		rotateAnimation.value?.pause();
 	}
 };
 
+watch(
+	() => mainStore.isDragging,
+	newState => {
+		if (newState) {
+			normalAnimation.value?.pause();
+			rotateAnimation.value?.resume();
+		} else {
+			normalAnimation.value?.resume();
+			rotateAnimation.value?.pause();
+		}
+	},
+);
+
 onMounted(() => {
 	if (cursorRef.value) {
-		rotateAnimation.value = gsap
+		normalAnimation.value = gsap
 			.timeline({
 				onUpdate: () => {
 					const currentRotate = gsap.getProperty(cursorRef.value!, "rotation");
@@ -69,6 +85,13 @@ onMounted(() => {
 				ease: "power1.inOut",
 			});
 		gsap.set(cursorRef.value, { opacity: 0 });
+		normalAnimation.value.pause();
+		rotateAnimation.value = gsap.timeline().to(cursorRef.value, {
+			rotation: "+=360", // 每次增加360度，实现无限旋转
+			duration: 0.2, // 旋转一周的时间（秒）
+			repeat: -1, // 无限重复
+			ease: "none", // 匀速旋转
+		});
 		rotateAnimation.value.pause();
 	}
 	window.addEventListener("mousemove", handleMouseMove);

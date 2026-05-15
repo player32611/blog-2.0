@@ -12,6 +12,7 @@ usePageReady();
 
 onMounted(() => {
 	soundStore.setMusicCardVisible(false);
+	document.title = "音乐";
 });
 
 onUnmounted(() => {

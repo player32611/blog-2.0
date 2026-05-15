@@ -8,6 +8,10 @@ import SakanaWidget from "~/components/ui/itemUI/SakanaWidget.vue";
 const { loadingNavigate } = useLoadingStore();
 
 usePageReady();
+
+onMounted(() => {
+	document.title = "物品";
+});
 </script>
 
 <template>

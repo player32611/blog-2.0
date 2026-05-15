@@ -2,6 +2,7 @@
 import { gsap } from "gsap";
 import Background from "@/assets/images/background/main_background.png";
 
+const mainStore = useMainStore();
 const viewBoxRef = ref<HTMLDivElement | null>(null);
 const imageRef = ref<HTMLImageElement | null>(null);
 const viewBoxData = ref<{ height: number; width: number }>({ height: 0, width: 0 });
@@ -65,6 +66,7 @@ const move = (x: number, y: number) => {
 
 const handleMouseDown = (event: MouseEvent) => {
 	movedata.value.moveable = true;
+	mainStore.setIsDragging(true);
 	mousePos.value.x = event.clientX;
 	mousePos.value.y = event.clientY;
 };
@@ -72,6 +74,7 @@ const handleMouseDown = (event: MouseEvent) => {
 const handleTouchStart = (event: TouchEvent) => {
 	if (!event.touches[0]) return;
 	movedata.value.moveable = true;
+	mainStore.setIsDragging(true);
 	mousePos.value.x = event.touches[0].clientX;
 	mousePos.value.y = event.touches[0].clientY;
 };
@@ -87,6 +90,7 @@ const handleTouchMove = (event: TouchEvent) => {
 
 const handleMouseUp = () => {
 	movedata.value.moveable = false;
+	mainStore.setIsDragging(false);
 };
 
 onMounted(() => {
