@@ -42,7 +42,7 @@ onMounted(() => {
 	height: 100dvh;
 	width: 100%;
 	font-size: 1rem;
-	background-color: red;
+	background-color: pink;
 
 	.details_container {
 		height: 500dvh;

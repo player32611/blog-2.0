@@ -5,7 +5,7 @@ import { SplitText } from "gsap/all";
 const split = ref<SplitText | null>(null);
 
 const initDelay: number = 1; // 初始延迟（s）
-const singleDuration: number = 1.5; // 单字符动画时长（s）
+const singleDuration: number = 1.2; // 单字符动画时长（s）
 
 const firstCharAnim = () => {
 	if (!split.value || !split.value.chars[0]) return;
@@ -40,10 +40,23 @@ const secondCharAnim = () => {
 		.to(split.value.chars[1], { rotateX: 0, duration: singleDuration / 2 });
 };
 
+const thirdCharAnim = () => {
+	if (!split.value || !split.value.chars[2]) return;
+	gsap.from(split.value.chars[2], {
+		rotateX: -90,
+		transformOrigin: "50% 50% -160px",
+		opacity: 0,
+		duration: singleDuration,
+		ease: "power3",
+		delay: initDelay + singleDuration,
+	});
+};
+
 onMounted(() => {
 	split.value = SplitText.create(".details_title", { type: "chars" });
 	firstCharAnim();
 	secondCharAnim();
+	thirdCharAnim();
 });
 </script>
 
