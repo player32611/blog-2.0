@@ -52,11 +52,30 @@ const thirdCharAnim = () => {
 	});
 };
 
+const fourthCharAnim = () => {
+	if (!split.value || !split.value.chars[3]) return;
+	gsap.fromTo(
+		split.value.chars[3],
+		{
+			scale: 0,
+			rotate: 90,
+		},
+		{
+			scale: 1,
+			rotate: 0,
+			ease: "elastic.out",
+			duration: singleDuration,
+			delay: initDelay + (singleDuration / 2) * 3,
+		},
+	);
+};
+
 onMounted(() => {
 	split.value = SplitText.create(".details_title", { type: "chars" });
 	firstCharAnim();
 	secondCharAnim();
 	thirdCharAnim();
+	fourthCharAnim();
 });
 </script>
 

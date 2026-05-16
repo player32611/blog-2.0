@@ -1,46 +1,14 @@
 <script setup lang="ts">
 import gsap from "gsap";
-import type { TooltipInstance } from "~/types/components";
+import { Draggable, InertiaPlugin } from "gsap/all";
 
-import Tooltip from "../common/Tooltip.vue";
-import Arrow1 from "../common/Arrow1.vue";
+gsap.registerPlugin(Draggable, InertiaPlugin);
 
 const soundStore = useSoundStore();
 const isLoading = ref<boolean>(true); // 封面加载状态
 const loadingError = ref<boolean>(false); // 封面是否加载错误
 const cardRef = ref<HTMLDivElement | null>(null); // 卡片容器 Ref
-const isDragging = ref<boolean>(false); // 是否正在拖动
-const draggingPoint = ref<{ x: number; y: number }>({ x: 0, y: 0 }); // 鼠标拖动点
-const position = ref({ x: 100, y: 100 }); // 卡片位置
-const maxSpeed = ref<number>(15); // 卡片最大速度
-const speed = ref<{ x: number; y: number }>({ x: 0, y: 0 }); // 卡片运动速度
-const friction = ref<number>(0.98); // 卡片运动摩擦力
-const animationFrame = ref<number | null>(null); // 动画帧
-const tooltipRef = ref<TooltipInstance | null>(null); // 提示框实例
-const tooltipVisable = computed(() => {
-	if (!cardRef.value) return false;
-	return (
-		position.value.x < -cardRef.value.offsetWidth ||
-		position.value.x > window.innerWidth ||
-		position.value.y < -cardRef.value.offsetHeight ||
-		position.value.y > window.innerHeight
-	);
-}); // 提示框是否可见
-const tooltipPosition = computed(() => {
-	if (!cardRef.value || !tooltipRef.value) return { x: 0, y: 0 };
-	return {
-		x: Math.min(Math.max(position.value.x, 0), window.innerWidth - tooltipRef.value.width),
-		y: Math.min(Math.max(position.value.y, 0), window.innerHeight - tooltipRef.value.height),
-	};
-}); // 提示框位置
-const arrowDirection = computed(() => {
-	if (!cardRef.value) return null;
-	if (position.value.x < -cardRef.value.offsetWidth) return "left";
-	if (position.value.x > window.innerWidth) return "right";
-	if (position.value.y < -cardRef.value.offsetHeight) return "up";
-	if (position.value.y > window.innerHeight) return "down";
-	else return null;
-}); // 提示箭头方向
+const position = ref<{ x: number; y: number }>({ x: 100, y: 100 }); // 卡片位置
 
 const handleLoad = () => {
 	isLoading.value = false;
@@ -60,92 +28,29 @@ watch(
 	},
 );
 
-const handleMouseDown = (e: MouseEvent) => {
-	if (!cardRef.value) return;
-	isDragging.value = true;
-	draggingPoint.value = { x: e.clientX, y: e.clientY };
-	animationFrame.value = null;
-	speed.value = { x: 0, y: 0 };
-};
+onMounted(() => {
+	Draggable.create(cardRef.value, {
+		type: "x,y", // 可以是 "x", "y", "x,y", "rotation", "scrollLeft", "scrollTop" 等
+		bounds: "body", // 限制拖拽范围
+		edgeResistance: 0.65, // 边界阻力
+		throwProps: true, // 启用投掷效果（需要 InertiaPlugin）
+		onDrag: function () {
+			position.value.x = this.x;
+			position.value.y = this.y;
+		},
 
-const handleTouchStart = (e: TouchEvent) => {
-	if (!cardRef.value || !e.touches[0]) return;
-	isDragging.value = true;
-	draggingPoint.value = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-};
-
-const handleMouseMove = (e: MouseEvent) => {
-	if (!isDragging.value || !cardRef.value) return;
-	const dx = e.clientX - draggingPoint.value.x;
-	const dy = e.clientY - draggingPoint.value.y;
-	position.value.x += dx;
-	position.value.y += dy;
-	speed.value = { x: dx, y: dy };
-	draggingPoint.value = { x: e.clientX, y: e.clientY };
-};
-
-const handleTouchMove = (e: TouchEvent) => {
-	if (!isDragging.value || !cardRef.value || !e.touches[0]) return;
-	const dx = e.touches[0].clientX - draggingPoint.value.x;
-	const dy = e.touches[0].clientY - draggingPoint.value.y;
-	position.value.x += dx;
-	position.value.y += dy;
-	speed.value = { x: dx, y: dy };
-	draggingPoint.value = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-};
-
-const handleMouseUp = () => {
-	if (!cardRef.value) return;
-	isDragging.value = false;
-	speed.value.x = Math.max(Math.min(speed.value.x, maxSpeed.value), -maxSpeed.value);
-	speed.value.y = Math.max(Math.min(speed.value.y, maxSpeed.value), -maxSpeed.value);
-	startInertia();
-};
-
-const startInertia = () => {
-	if (!cardRef.value) return;
-	const animate = () => {
-		if (!cardRef.value) return;
-		if (speed.value.x > maxSpeed.value) console.log(speed.value.x);
-		speed.value.x *= friction.value;
-		speed.value.y *= friction.value;
-		if (Math.abs(speed.value.x) < 0.1) speed.value.x = 0;
-		if (Math.abs(speed.value.y) < 0.1) speed.value.y = 0;
-		if (speed.value.x !== 0 || speed.value.y !== 0) {
-			position.value.x += speed.value.x;
-			position.value.y += speed.value.y;
-			animationFrame.value = requestAnimationFrame(animate);
-		} else animationFrame.value = null;
-	};
-
-	animationFrame.value = requestAnimationFrame(animate);
-};
-
-const resetCardPosition = () => {
-	if (!cardRef.value || !tooltipPosition) return;
-	gsap.to(position.value, {
-		x: tooltipPosition.value.x,
-		y: tooltipPosition.value.y,
-		duration: 0.5,
+		// 拖拽结束时的回调（包括投掷结束）
+		onThrowUpdate: function () {
+			position.value.x = this.x;
+			position.value.y = this.y;
+		},
 	});
-};
+});
 </script>
 
 <template>
 	<!-- From Uiverse.io by Tsiangana -->
-	<div
-		class="music_card"
-		ref="cardRef"
-		:style="{ transform: `translate(${position.x}px, ${position.y}px)` }"
-		@mousedown="handleMouseDown"
-		@mousemove="handleMouseMove"
-		@mouseup="handleMouseUp"
-		@mouseleave="handleMouseUp"
-		@touchstart.passive="handleTouchStart"
-		@touchmove.passive="handleTouchMove"
-		@touchend="handleMouseUp"
-		@touchcancel="handleMouseUp"
-	>
+	<div class="music_card" ref="cardRef">
 		<div class="card_content">
 			<div class="card_title">Music</div>
 			<div class="cover_container">
@@ -202,14 +107,6 @@ const resetCardPosition = () => {
 		<div class="backgound1"></div>
 		<div class="backgound2"></div>
 	</div>
-	<Tooltip
-		:style="{ transform: `translate(${tooltipPosition.x}px, ${tooltipPosition.y}px)` }"
-		:visable="tooltipVisable"
-		:onClick="resetCardPosition"
-		ref="tooltipRef"
-	>
-		<Arrow1 :direction="arrowDirection" />
-	</Tooltip>
 </template>
 
 <style scoped lang="scss">
