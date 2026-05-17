@@ -20,6 +20,10 @@ onMounted(() => {
 	});
 	document.title = "个人介绍";
 });
+
+onUnmounted(() => {
+	smoother.value?.kill();
+});
 </script>
 
 <template>

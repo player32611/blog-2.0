@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MainBackGround from "@/components/ui/mainUI/MainBackGround.vue";
+import MainBackGround from "~/components/ui/mainUI/MainBackGround.vue";
 import MainBackMask from "~/components/ui/mainUI/MainBackMask.vue";
 import MainContainer from "~/components/ui/mainUI/MainContainer.vue";
 import MainCursor from "~/components/ui/mainUI/MainCursor.vue";
