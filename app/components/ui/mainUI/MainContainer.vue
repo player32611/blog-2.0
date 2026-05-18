@@ -99,7 +99,7 @@ const createVials = () => {
 					pointA: { x: (width / (length + 1)) * (index + 1), y: 0 },
 					bodyB: object, // 被悬挂的物体
 					length: ropeLength[index], // 绳子长度
-					stiffness: 0.3, // 刚度（接近1表示更像刚性杆，较低值更像弹性绳）
+					stiffness: 0.1, // 刚度（接近1表示更像刚性杆，较低值更像弹性绳）
 					render: {
 						strokeStyle: "#ffffff", // 绳子颜色
 						lineWidth: 2,

@@ -10,7 +10,6 @@ import type { LoadingInstance } from "./types/components";
 
 import MusicCard from "./components/ui/rootUI/MusicCard.vue";
 import Loading from "./components/ui/rootUI/Loading.vue";
-import FaultText from "./components/ui/common/FaultText.vue";
 
 const loadingStore = useLoadingStore();
 const loadingRef = ref<LoadingInstance | null>(null);
@@ -51,11 +50,15 @@ body {
 	padding: 0;
 	height: 100dvh;
 	width: 100%;
-	overscroll-behavior: none;
+	// overscroll-behavior: none;
 
 	pre.shiki code .sgsFI,
 	code.shiki .sgsFI {
 		--shiki-default: #ffffff !important; /* 改为纯黑色 */
+	}
+
+	&:has(.home) {
+		overflow: hidden;
 	}
 
 	&::-webkit-scrollbar {

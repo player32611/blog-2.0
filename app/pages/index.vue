@@ -22,9 +22,4 @@ onMounted(() => {
 	</div>
 </template>
 
-<style lang="scss">
-html,
-body {
-	overflow: hidden;
-}
-</style>
+<style scoped lang="scss"></style>

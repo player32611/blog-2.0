@@ -3,19 +3,21 @@ import gsap from "gsap";
 import { ScrollSmoother, ScrollTrigger } from "gsap/all";
 
 import Button from "~/components/ui/common/Button.vue";
-import DetailTitle from "~/components/ui/detailUI/DetailTitle.vue";
+import DetailTitle from "~/components/ui/detailUI/DetailTitle/DetailTitle.vue";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 const loadingStore = useLoadingStore();
 const smoother = ref<ScrollSmoother | null>(null);
+const wrapperRef = ref<HTMLDivElement | null>(null);
+const contentRef = ref<HTMLDivElement | null>(null);
 
 usePageReady();
 
 onMounted(() => {
 	smoother.value = ScrollSmoother.create({
-		wrapper: ".details",
-		content: ".details_container",
+		wrapper: wrapperRef.value,
+		content: contentRef.value,
 		smooth: 1,
 	});
 	document.title = "个人介绍";
@@ -27,10 +29,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="details">
-		<div class="details_container">
-			<DetailTitle />
-		</div>
+	<div class="details" ref="wrapperRef">
+		<div class="details_container" ref="contentRef"><DetailTitle /></div>
 		<Button
 			:text="'back'"
 			:icon="'&#xeb06;'"
@@ -43,7 +43,7 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .details {
-	height: 100dvh;
+	position: relative;
 	width: 100%;
 	font-size: 1rem;
 	background-color: pink;
@@ -51,6 +51,7 @@ onUnmounted(() => {
 	.details_container {
 		height: 500dvh;
 		width: 100%;
+		overflow: visible;
 	}
 }
 </style>

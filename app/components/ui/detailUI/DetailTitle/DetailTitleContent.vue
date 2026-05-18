@@ -1,57 +1,15 @@
 <script setup lang="ts">
 import gsap from "gsap";
-import { DrawSVGPlugin, Physics2DPlugin, SplitText } from "gsap/all";
+import { SplitText } from "gsap/all";
 
-gsap.registerPlugin(DrawSVGPlugin, Physics2DPlugin, SplitText);
+gsap.registerPlugin(SplitText);
 
 const titleSplit = ref<SplitText | null>(null);
 const toSplit = ref<SplitText | null>(null);
-const leftCannonRef = ref<HTMLDivElement | null>(null);
-const leftBulletContainerRef = ref<HTMLDivElement | null>(null);
-const leftBulletRefs = ref<HTMLDivElement[]>([]);
-const leftCannonFireAnim = ref<gsap.core.Tween | null>(null);
-const rightCannonRef = ref<HTMLDivElement | null>(null);
-const rightBulletContainerRef = ref<HTMLDivElement | null>(null);
-const rightBulletRefs = ref<HTMLDivElement[]>([]);
-const rightCannonFireAnim = ref<gsap.core.Tween | null>(null);
 
 const initDelay: number = 1; // 初始延迟（s）
 const singleDuration: number = 1.2; // 单字符动画时长（s）
 const singleInterval: Ref<number> = computed(() => singleDuration / 3); // 单字符动画间隔（s）
-const bulletNum: number = 40;
-
-const createBullets = () => {
-	if (leftBulletContainerRef.value && rightBulletContainerRef.value) {
-		for (let i = 0; i < bulletNum; i++) {
-			const leftFlairBullet = document.createElement("div");
-			leftFlairBullet.setAttribute("class", "cannon_bullet");
-			leftBulletContainerRef.value.appendChild(leftFlairBullet);
-			leftBulletRefs.value.push(leftFlairBullet);
-			const rightFlairBullet = document.createElement("div");
-			rightFlairBullet.setAttribute("class", "cannon_bullet");
-			rightBulletContainerRef.value.appendChild(rightFlairBullet);
-			rightBulletRefs.value.push(rightFlairBullet);
-		}
-		leftCannonFireAnim.value = gsap.to(leftBulletRefs.value, {
-			duration: 40,
-			physics2D: {
-				velocity: "random(600, 850)",
-				angle: () => 270 + Math.random() * 30,
-				gravity: 600,
-			},
-			stagger: { amount: 40 },
-		});
-		rightCannonFireAnim.value = gsap.to(rightBulletRefs.value, {
-			duration: 40,
-			physics2D: {
-				velocity: "random(600, 850)",
-				angle: () => 270 - Math.random() * 30,
-				gravity: 600,
-			},
-			stagger: { amount: 40 },
-		});
-	}
-};
 
 const firstCharAnim = () => {
 	if (!titleSplit.value || !titleSplit.value.chars[0]) return;
@@ -220,7 +178,6 @@ const ninthCharAnim = () => {
 };
 
 onMounted(() => {
-	createBullets();
 	titleSplit.value = SplitText.create(".title_welcome", { type: "chars" });
 	toSplit.value = SplitText.create(".title_to", { type: "chars" });
 	firstCharAnim();
@@ -240,32 +197,18 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="details_title">
+	<div class="title_content">
 		<div class="title_welcome">WELCOME</div>
 		<div class="title_to">TO</div>
-		<div class="title_bottom">
-			<div class="left_cannon">
-				<div class="cannon" ref="leftCannonRef"></div>
-				<div class="bullet_container" ref="leftBulletContainerRef"></div>
-			</div>
-			<div class="right_cannon">
-				<div class="cannon" ref="rightCannonRef"></div>
-				<div class="bullet_container" ref="rightBulletContainerRef"></div>
-			</div>
-		</div>
 	</div>
 </template>
 
 <style scoped lang="scss">
-.details_title {
+.title_content {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	height: 100dvh;
-	width: 100%;
-	font-size: 5rem;
-	font-family: "Coustard Black";
 
 	.title_welcome {
 		width: auto;
@@ -274,41 +217,6 @@ onUnmounted(() => {
 	.title_to {
 		margin-left: 8rem;
 		width: auto;
-	}
-
-	.title_bottom {
-		display: flex;
-		justify-content: space-between;
-		width: 100%;
-
-		.left_cannon,
-		.right_cannon {
-			position: relative;
-
-			.cannon {
-				position: relative;
-				height: 100px;
-				width: 100px;
-				background-color: blue;
-			}
-
-			.bullet_container {
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 100px;
-				height: 100px;
-
-				:deep(.cannon_bullet) {
-					position: absolute;
-					top: 0;
-					left: 0;
-					height: 50px;
-					width: 50px;
-					background-color: yellow;
-				}
-			}
-		}
 	}
 }
 </style>
