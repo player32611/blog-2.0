@@ -30,7 +30,9 @@ onUnmounted(() => {
 
 <template>
 	<div class="details" ref="wrapperRef">
-		<div class="details_container" ref="contentRef"><DetailTitle /></div>
+		<div class="details_container" ref="contentRef">
+			<DetailTitle />
+		</div>
 		<Button
 			:text="'back'"
 			:icon="'&#xeb06;'"

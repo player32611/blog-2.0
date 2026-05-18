@@ -128,6 +128,8 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
+@use "../../../assets/styles/variables.scss";
+
 .main_background {
 	position: relative;
 	display: flex;

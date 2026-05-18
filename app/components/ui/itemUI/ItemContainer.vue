@@ -36,29 +36,6 @@ const resize = () => {
 	Engine.clear(engine);
 	containerRef.value?.removeChild(render.canvas);
 	init();
-	createConstraints();
-	createCards();
-	World.add(engine.world, Array.from(items.value.values()));
-
-	// 添加鼠标交互
-	mouse = Mouse.create(render.canvas);
-	mouseConstraint = MouseConstraint.create(engine, {
-		mouse: mouse,
-		constraint: {
-			stiffness: 0.2,
-			render: {
-				visible: false,
-			},
-		},
-	});
-
-	World.add(engine.world, mouseConstraint);
-	render.mouse = mouse;
-
-	// 启动渲染器和物理引擎
-	Render.run(render);
-	runner = Runner.create();
-	Runner.run(runner, engine);
 };
 
 const init = () => {
@@ -83,6 +60,21 @@ const init = () => {
 		},
 	});
 
+	// 添加鼠标交互
+	mouse = Mouse.create(render.canvas);
+	mouseConstraint = MouseConstraint.create(engine, {
+		mouse: mouse,
+		constraint: {
+			stiffness: 0.2,
+			render: {
+				visible: false,
+			},
+		},
+	});
+	render.mouse = mouse;
+
+	runner = Runner.create();
+
 	// 创建地面
 	const ground = Bodies.rectangle(width / 2, height + 30, width, 60, {
 		isStatic: true,
@@ -106,8 +98,16 @@ const init = () => {
 		},
 	});
 
-	// 添加边界
+	createConstraints();
+	createCards();
+
 	World.add(engine.world, [ground, leftWall, rightWall]);
+	World.add(engine.world, mouseConstraint);
+	World.add(engine.world, Array.from(items.value.values()));
+
+	// 启动渲染器和物理引擎
+	Render.run(render);
+	Runner.run(runner, engine);
 };
 
 const createConstraints = () => {
@@ -227,7 +227,6 @@ watch(
 	command => {
 		if (!command.length) return;
 		const char = command.split(" ");
-		console.log(char[0]?.toLowerCase());
 		switch (char[0]?.toLowerCase()) {
 			case "add":
 				const addItemName = char[1] || "";
@@ -270,30 +269,6 @@ watch(
 
 onMounted(() => {
 	init();
-	createConstraints();
-	createCards();
-	World.add(engine.world, Array.from(items.value.values()));
-
-	// 添加鼠标交互
-	mouse = Mouse.create(render.canvas);
-	mouseConstraint = MouseConstraint.create(engine, {
-		mouse: mouse,
-		constraint: {
-			stiffness: 0.2,
-			render: {
-				visible: false,
-			},
-		},
-	});
-
-	World.add(engine.world, mouseConstraint);
-	render.mouse = mouse;
-
-	// 启动渲染器和物理引擎
-	Render.run(render);
-	runner = Runner.create();
-	Runner.run(runner, engine);
-
 	handleUpdate();
 	window.addEventListener("resize", resize);
 });
@@ -302,9 +277,8 @@ onUnmounted(() => {
 	if (runner) Runner.stop(runner);
 	if (render) Render.stop(render);
 	if (render && render.canvas) render.canvas.remove();
-	if (render && render.canvas && render.canvas.parentNode) {
+	if (render && render.canvas && render.canvas.parentNode)
 		render.canvas.parentNode.removeChild(render.canvas);
-	}
 	window.removeEventListener("resize", resize);
 });
 </script>

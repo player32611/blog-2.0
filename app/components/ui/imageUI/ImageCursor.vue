@@ -122,6 +122,8 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
+@use "../../../assets/styles/variables.scss";
+
 $base-size: 1;
 
 .image_cursor {
@@ -130,6 +132,7 @@ $base-size: 1;
 	left: -20px * $base-size;
 	width: 40px * $base-size;
 	height: 40px * $base-size;
+	z-index: variables.$cursor_zIndex;
 	pointer-events: none;
 
 	div {

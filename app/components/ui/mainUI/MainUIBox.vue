@@ -161,7 +161,7 @@ $base-size: 1;
 		font-size: 1rem * $base-size;
 
 		.ui_state {
-			font-size: 2.4rem * $base-size;
+			font-size: 2.3rem * $base-size;
 
 			.ui_hp {
 				font-size: 2rem * $base-size;
@@ -185,7 +185,7 @@ $base-size: 1;
 		font-size: 1rem * $base-size;
 
 		.ui_state {
-			font-size: 2.5rem * $base-size;
+			font-size: 2.3rem * $base-size;
 
 			.ui_hp {
 				font-size: 2rem * $base-size;
@@ -209,7 +209,7 @@ $base-size: 1;
 		font-size: 1rem * $base-size;
 
 		.ui_state {
-			font-size: 2.5rem * $base-size;
+			font-size: 2.4rem * $base-size;
 
 			.ui_hp {
 				font-size: 2rem * $base-size;

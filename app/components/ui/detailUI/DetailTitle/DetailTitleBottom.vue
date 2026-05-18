@@ -67,7 +67,10 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+@use "../../../../assets/styles/variables.scss";
+
 .title_bottom {
+	position: relative;
 	display: flex;
 	justify-content: space-between;
 	width: 100%;
@@ -97,6 +100,7 @@ onMounted(() => {
 				height: 50px;
 				width: 50px;
 				background-color: yellow;
+				z-index: variables.$float_zIndex;
 			}
 		}
 	}

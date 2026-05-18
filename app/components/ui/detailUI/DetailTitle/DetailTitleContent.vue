@@ -4,49 +4,50 @@ import { SplitText } from "gsap/all";
 
 gsap.registerPlugin(SplitText);
 
-const titleSplit = ref<SplitText | null>(null);
-const toSplit = ref<SplitText | null>(null);
+const word1Split = ref<SplitText | null>(null);
+const word2Split = ref<SplitText | null>(null);
+const word3Split = ref<SplitText | null>(null);
 
 const initDelay: number = 1; // 初始延迟（s）
 const singleDuration: number = 1.2; // 单字符动画时长（s）
 const singleInterval: Ref<number> = computed(() => singleDuration / 3); // 单字符动画间隔（s）
 
-const firstCharAnim = () => {
-	if (!titleSplit.value || !titleSplit.value.chars[0]) return;
+const word1FirstCharAnim = () => {
+	if (!word1Split.value || !word1Split.value.chars[0]) return;
 	gsap.fromTo(
-		titleSplit.value.chars[0],
+		word1Split.value.chars[0],
 		{ x: -300 },
 		{ x: 0, duration: singleDuration, ease: "power1.out", delay: initDelay },
 	);
 	gsap.fromTo(
-		titleSplit.value.chars[0],
+		word1Split.value.chars[0],
 		{ y: -600 },
 		{ y: 0, duration: singleDuration, ease: "bounce.out", delay: initDelay },
 	);
 	gsap.fromTo(
-		titleSplit.value.chars[0],
+		word1Split.value.chars[0],
 		{ rotate: 240 },
 		{ rotate: 720, duration: singleDuration, ease: "back.out", delay: initDelay },
 	);
 };
 
-const secondCharAnim = () => {
-	if (!titleSplit.value || !titleSplit.value.chars[1]) return;
+const word1SecondCharAnim = () => {
+	if (!word1Split.value || !word1Split.value.chars[1]) return;
 	gsap
 		.timeline()
-		.set(titleSplit.value.chars[1], { rotateX: -90 })
-		.to(titleSplit.value.chars[1], {
+		.set(word1Split.value.chars[1], { rotateX: -90 })
+		.to(word1Split.value.chars[1], {
 			rotateX: -180,
 			transformOrigin: "50% 80%",
 			duration: singleDuration / 2,
 			delay: initDelay + singleInterval.value,
 		})
-		.to(titleSplit.value.chars[1], { rotateX: 0, duration: singleDuration / 2 });
+		.to(word1Split.value.chars[1], { rotateX: 0, duration: singleDuration / 2 });
 };
 
-const thirdCharAnim = () => {
-	if (!titleSplit.value || !titleSplit.value.chars[2]) return;
-	gsap.from(titleSplit.value.chars[2], {
+const word1ThirdCharAnim = () => {
+	if (!word1Split.value || !word1Split.value.chars[2]) return;
+	gsap.from(word1Split.value.chars[2], {
 		rotateX: -90,
 		transformOrigin: "50% 50% -160px",
 		opacity: 0,
@@ -56,10 +57,10 @@ const thirdCharAnim = () => {
 	});
 };
 
-const fourthCharAnim = () => {
-	if (!titleSplit.value || !titleSplit.value.chars[3]) return;
+const word1FourthCharAnim = () => {
+	if (!word1Split.value || !word1Split.value.chars[3]) return;
 	gsap.fromTo(
-		titleSplit.value.chars[3],
+		word1Split.value.chars[3],
 		{
 			scale: 0,
 			rotate: 90,
@@ -74,26 +75,26 @@ const fourthCharAnim = () => {
 	);
 };
 
-const fifthCharAnim = () => {
-	if (!titleSplit.value || !titleSplit.value.chars[4]) return;
+const word1FifthCharAnim = () => {
+	if (!word1Split.value || !word1Split.value.chars[4]) return;
 	gsap
 		.timeline()
-		.set(titleSplit.value.chars[4], { y: -100, clipPath: "inset(100% 0% 0% 0%)" })
-		.to(titleSplit.value.chars[4], {
+		.set(word1Split.value.chars[4], { y: -100, clipPath: "inset(100% 0% 0% 0%)" })
+		.to(word1Split.value.chars[4], {
 			y: 0,
 			clipPath: "inset(0% 0% 0% 0%)",
 			ease: "none",
 			duration: singleDuration / 4,
 			delay: initDelay + singleInterval.value * 4,
 		})
-		.to(titleSplit.value.chars[4], {
+		.to(word1Split.value.chars[4], {
 			y: 100,
 			clipPath: "inset(0% 0% 100% 0%)",
 			ease: "none",
 			duration: singleDuration / 4,
 		})
 		.fromTo(
-			titleSplit.value.chars[4],
+			word1Split.value.chars[4],
 			{ y: -100, clipPath: "inset(100% 0% 0% 0%)" },
 			{
 				y: 0,
@@ -104,71 +105,72 @@ const fifthCharAnim = () => {
 		);
 };
 
-const sixthCharAnim = () => {
-	if (!titleSplit.value || !titleSplit.value.chars[5]) return;
-	gsap
-		.timeline()
-		.set(titleSplit.value.chars[5], { clipPath: "inset(0% 100% 0% 0%)" })
-		.to(titleSplit.value.chars[5], {
-			clipPath: "inset(0% 0% 0% 0%)",
-			ease: "power2.in",
-			duration: singleDuration / 2,
-			delay: initDelay + singleInterval.value * 5 + (singleDuration / 3) * 2,
-		});
-};
-
-const seventhCharAnim = () => {
-	if (!titleSplit.value || !titleSplit.value.chars[6]) return;
-	gsap
-		.timeline()
-		.fromTo(
-			titleSplit.value.chars[6],
-			{ x: 700, skewX: 20 },
-			{
-				x: "-4rem",
-				ease: "power2.out",
-				duration: (singleDuration / 3) * 2,
-				delay: initDelay + singleInterval.value * 5,
-			},
-		)
-		.to(titleSplit.value.chars[6], {
+const word1SixthCharAnim = () => {
+	if (!word1Split.value || !word1Split.value.chars[5]) return;
+	gsap.timeline().fromTo(
+		word1Split.value.chars[5],
+		{ x: 1000, rotate: 720 },
+		{
 			x: 0,
-			skewX: 0,
-			ease: "power2.in",
-			duration: singleDuration / 2,
-		});
+			rotate: 0,
+			ease: "power1.out",
+			duration: singleDuration,
+			delay: initDelay + singleInterval.value * 5,
+		},
+	);
 };
 
-const eighthCharAnim = () => {
-	if (!toSplit.value || !toSplit.value.chars[0]) return;
+const word3FirstCharAnim = () => {
+	if (!word3Split.value || !word3Split.value.chars[0]) return;
 	gsap
 		.timeline()
-		.set(toSplit.value.chars[0], { y: -100, clipPath: "inset(0% 43% 100%)" })
-		.to(toSplit.value.chars[0], {
+		.set(word3Split.value.chars[0], { y: -100, clipPath: "inset(0% 43% 100%)" })
+		.to(word3Split.value.chars[0], {
 			y: 0,
 			clipPath: "inset(0% 43% 0%)",
 			ease: "power2.out",
 			duration: singleDuration / 2,
 			delay: initDelay + singleInterval.value * 6,
 		})
-		.to(toSplit.value.chars[0], {
+		.to(word3Split.value.chars[0], {
 			clipPath: "inset(0% 0%)",
 			ease: "power2.in",
 			duration: singleDuration / 2,
 		});
 };
 
-const ninthCharAnim = () => {
-	if (!toSplit.value || !toSplit.value.chars[1] || !titleSplit.value || !titleSplit.value.chars[4])
+const word3SecondCharAnim = () => {
+	if (!word3Split.value || !word3Split.value.chars[1]) return;
+	gsap.fromTo(
+		word3Split.value.chars[1],
+		{
+			rotateY: -450,
+		},
+		{
+			rotateY: 0,
+			ease: "power1.out",
+			duration: singleDuration,
+			delay: initDelay + singleInterval.value * 7,
+		},
+	);
+};
+
+const word3ThirdCharAnim = () => {
+	if (
+		!word3Split.value ||
+		!word3Split.value.chars[2] ||
+		!word1Split.value ||
+		!word1Split.value.chars[3]
+	)
 		return;
-	const rect = titleSplit.value.chars[4].getBoundingClientRect();
-	const dx = rect.x - toSplit.value.chars[1].getBoundingClientRect().x;
-	const dy = rect.y - toSplit.value.chars[1].getBoundingClientRect().y;
+	const rect = word1Split.value.chars[3].getBoundingClientRect();
+	const dx = rect.x - word3Split.value.chars[2].getBoundingClientRect().x;
+	const dy = rect.y - word3Split.value.chars[2].getBoundingClientRect().y;
 	gsap
 		.timeline()
-		.set(toSplit.value.chars[1], { x: dx, y: dy + 100, opacity: 0 })
-		.set(toSplit.value.chars[1], { opacity: 1, delay: initDelay + singleInterval.value * 8 })
-		.to(toSplit.value.chars[1], {
+		.set(word3Split.value.chars[2], { x: dx, y: dy, opacity: 0 })
+		.set(word3Split.value.chars[2], { opacity: 0, delay: initDelay + singleInterval.value * 8 })
+		.to(word3Split.value.chars[2], {
 			x: 0,
 			y: 0,
 			opacity: 1,
@@ -177,46 +179,152 @@ const ninthCharAnim = () => {
 		});
 };
 
+const word3FourthCharAnim = () => {
+	if (!word3Split.value || !word3Split.value.chars[3]) return;
+	gsap
+		.timeline()
+		.set(word3Split.value.chars[3], { y: "-60dvh", rotate: 90 })
+		.to(word3Split.value.chars[3], {
+			y: 0,
+			ease: "bounce.out",
+			duration: singleDuration,
+			delay: initDelay + singleInterval.value * 9,
+		})
+		.to(word3Split.value.chars[3], {
+			rotate: 0,
+			duration: singleDuration / 3,
+		});
+};
+
+const word3FifthCharAnim = () => {
+	if (!word3Split.value || !word3Split.value.chars[4]) return;
+	gsap
+		.timeline()
+		.set(word3Split.value.chars[4], {
+			y: 50,
+			scale: 0,
+		})
+		.to(word3Split.value.chars[4], {
+			y: -50,
+			scale: 1,
+			ease: "power2.out",
+			duration: singleDuration / 2,
+			delay: initDelay + singleInterval.value * 10,
+		})
+		.to(word3Split.value.chars[4], {
+			y: 0,
+			ease: "power2.in",
+			duration: singleDuration / 2,
+		});
+};
+
+const word3SixthCharAnim = () => {
+	if (!word3Split.value || !word3Split.value.chars[5]) return;
+	gsap
+		.timeline()
+		.set(word3Split.value.chars[5], {
+			scaleY: 0,
+		})
+		.to(word3Split.value.chars[5], {
+			scaleY: 1,
+			ease: "bounce.out",
+			duration: singleDuration,
+			delay: initDelay + singleInterval.value * 11,
+		});
+};
+
 onMounted(() => {
-	titleSplit.value = SplitText.create(".title_welcome", { type: "chars" });
-	toSplit.value = SplitText.create(".title_to", { type: "chars" });
-	firstCharAnim();
-	secondCharAnim();
-	thirdCharAnim();
-	fourthCharAnim();
-	fifthCharAnim();
-	sixthCharAnim();
-	seventhCharAnim();
-	eighthCharAnim();
-	ninthCharAnim();
+	word1Split.value = SplitText.create(".title_word1", { type: "chars" });
+	word2Split.value = SplitText.create(".title_word2", { type: "chars" });
+	word3Split.value = SplitText.create(".title_word3", { type: "chars" });
+	word1FirstCharAnim();
+	word1SecondCharAnim();
+	word1ThirdCharAnim();
+	word1FourthCharAnim();
+	word1FifthCharAnim();
+	word1SixthCharAnim();
+	word3FirstCharAnim();
+	word3SecondCharAnim();
+	word3ThirdCharAnim();
+	word3FourthCharAnim();
+	word3FifthCharAnim();
+	word3SixthCharAnim();
 });
 
 onUnmounted(() => {
-	titleSplit.value?.revert();
+	word1Split.value?.revert();
 });
 </script>
 
 <template>
 	<div class="title_content">
-		<div class="title_welcome">WELCOME</div>
-		<div class="title_to">TO</div>
+		<div class="title_word1">CODING</div>
+		<div class="title_word2">ANY</div>
+		<div class="title_word3">THINGS</div>
 	</div>
 </template>
 
 <style scoped lang="scss">
+$base_size: 1;
+
 .title_content {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	padding: 10rem 0;
+	width: 100%;
+	font-size: 5rem;
+	font-family: "Coustard Black";
+	overflow: hidden;
 
-	.title_welcome {
-		width: auto;
-		background-color: transparent;
+	.title_word1 {
+		background-color: pink;
 	}
-	.title_to {
-		margin-left: 8rem;
+
+	.title_word2 {
 		width: auto;
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base_size: 0.5;
+
+	.title_content {
+		padding: 10rem * $base_size 0;
+		font-size: 5rem * $base_size;
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base_size: 0.6;
+
+	.title_content {
+		padding: 10rem * $base_size 0;
+		font-size: 5rem * $base_size;
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base_size: 0.8;
+
+	.title_content {
+		padding: 7rem * $base_size 0;
+		font-size: 5rem * $base_size;
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base_size: 0.9;
+
+	.title_content {
+		padding: 5rem * $base_size 0;
+		font-size: 5rem * $base_size;
 	}
 }
 </style>

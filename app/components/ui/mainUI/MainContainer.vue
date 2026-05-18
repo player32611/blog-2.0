@@ -33,28 +33,6 @@ const resize = () => {
 	Engine.clear(engine);
 	containerRef.value?.removeChild(render.canvas);
 	init();
-	createVials();
-	World.add(engine.world, Array.from(vials.value.values()));
-
-	// 添加鼠标交互
-	mouse = Mouse.create(render.canvas);
-	mouseConstraint = MouseConstraint.create(engine, {
-		mouse: mouse,
-		constraint: {
-			stiffness: 0.2,
-			render: {
-				visible: false,
-			},
-		},
-	});
-
-	World.add(engine.world, mouseConstraint);
-	render.mouse = mouse;
-
-	// 启动渲染器和物理引擎
-	Render.run(render);
-	runner = Runner.create();
-	Runner.run(runner, engine);
 };
 
 const init = () => {
@@ -78,6 +56,28 @@ const init = () => {
 			showAngleIndicator: false,
 		},
 	});
+
+	// 添加鼠标交互
+	mouse = Mouse.create(render.canvas);
+	mouseConstraint = MouseConstraint.create(engine, {
+		mouse: mouse,
+		constraint: {
+			stiffness: 0.2,
+			render: {
+				visible: false,
+			},
+		},
+	});
+	render.mouse = mouse;
+
+	runner = Runner.create();
+
+	createVials();
+	World.add(engine.world, Array.from(vials.value.values()));
+	World.add(engine.world, mouseConstraint);
+
+	Render.run(render);
+	Runner.run(runner, engine);
 };
 
 const createVials = () => {
@@ -164,29 +164,6 @@ const handleTouchLeave = (event: TouchEvent) => {
 
 onMounted(() => {
 	init();
-	createVials();
-	World.add(engine.world, Array.from(vials.value.values()));
-
-	// 添加鼠标交互
-	mouse = Mouse.create(render.canvas);
-	mouseConstraint = MouseConstraint.create(engine, {
-		mouse: mouse,
-		constraint: {
-			stiffness: 0.2,
-			render: {
-				visible: false,
-			},
-		},
-	});
-
-	World.add(engine.world, mouseConstraint);
-	render.mouse = mouse;
-
-	// 启动渲染器和物理引擎
-	Render.run(render);
-	runner = Runner.create();
-	Runner.run(runner, engine);
-
 	handleUpdate();
 	window.addEventListener("resize", resize);
 });
@@ -195,9 +172,8 @@ onUnmounted(() => {
 	if (runner) Runner.stop(runner);
 	if (render) Render.stop(render);
 	if (render && render.canvas) render.canvas.remove();
-	if (render && render.canvas && render.canvas.parentNode) {
+	if (render && render.canvas && render.canvas.parentNode)
 		render.canvas.parentNode.removeChild(render.canvas);
-	}
 	window.removeEventListener("resize", resize);
 });
 </script>
