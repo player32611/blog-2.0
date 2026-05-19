@@ -293,11 +293,14 @@ $base_size: 1;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	padding: 10rem 0;
+	padding: 5rem 0;
 	width: 100%;
-	font-size: 5rem;
+	color: #00000000;
+	font-size: 9rem;
 	font-family: "Coustard Black";
+	-webkit-text-stroke: calc(0.2rem) green;
 	overflow: hidden;
+	user-select: none;
 
 	.title_word1 {
 		background-color: pink;
@@ -314,7 +317,7 @@ $base_size: 1;
 
 	.title_content {
 		padding: 10rem * $base_size 0;
-		font-size: 5rem * $base_size;
+		font-size: 8rem * $base_size;
 	}
 }
 
@@ -324,7 +327,7 @@ $base_size: 1;
 
 	.title_content {
 		padding: 10rem * $base_size 0;
-		font-size: 5rem * $base_size;
+		font-size: 8rem * $base_size;
 	}
 }
 
@@ -334,7 +337,7 @@ $base_size: 1;
 
 	.title_content {
 		padding: 7rem * $base_size 0;
-		font-size: 5rem * $base_size;
+		font-size: 8rem * $base_size;
 	}
 }
 
@@ -344,7 +347,7 @@ $base_size: 1;
 
 	.title_content {
 		padding: 5rem * $base_size 0;
-		font-size: 5rem * $base_size;
+		font-size: 8rem * $base_size;
 	}
 }
 </style>

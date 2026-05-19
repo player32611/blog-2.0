@@ -6,10 +6,8 @@ gsap.registerPlugin(Physics2DPlugin);
 
 const leftBulletContainerRef = ref<HTMLDivElement | null>(null);
 const leftBulletRefs = ref<HTMLDivElement[]>([]);
-const leftBulletAnim = ref<gsap.core.Tween | null>(null);
 const rightBulletContainerRef = ref<HTMLDivElement | null>(null);
 const rightBulletRefs = ref<HTMLDivElement[]>([]);
-const rightBulletAnim = ref<gsap.core.Tween | null>(null);
 const observer = ref<IntersectionObserver | null>(null);
 
 const allBulletRefs = computed(() => {
@@ -20,21 +18,19 @@ const bulletNum: number = 40;
 const cannonRunDuration: number = 5;
 const cannonFireDuration: number = 1;
 
-const createBullets = () => {
-	if (leftBulletContainerRef.value && rightBulletContainerRef.value) {
+const createBullets = (delayTime: number, direction: "left" | "right") => {
+	if (!leftBulletContainerRef.value || !rightBulletContainerRef.value) return;
+	const currentBullets: HTMLDivElement[] = [];
+	if (direction === "left") {
 		for (let i = 0; i < bulletNum; i++) {
 			const leftFlairBullet = document.createElement("div");
 			leftFlairBullet.setAttribute("class", "cannon_bullet");
 			leftBulletContainerRef.value.appendChild(leftFlairBullet);
-			leftBulletRefs.value.push(leftFlairBullet);
-			const rightFlairBullet = document.createElement("div");
-			rightFlairBullet.setAttribute("class", "cannon_bullet");
-			rightBulletContainerRef.value.appendChild(rightFlairBullet);
-			rightBulletRefs.value.push(rightFlairBullet);
+			currentBullets.push(leftFlairBullet);
 		}
-		gsap.to(leftBulletRefs.value, {
+		gsap.to(currentBullets, {
 			duration: 40,
-			delay: cannonFireDuration - 0.05,
+			delay: delayTime,
 			physics2D: {
 				velocity: "random(600, 850)",
 				angle: () => 315 - 15 + Math.random() * 30,
@@ -42,9 +38,17 @@ const createBullets = () => {
 				friction: 0.01,
 			},
 		});
-		gsap.to(rightBulletRefs.value, {
+		leftBulletRefs.value.push(...currentBullets);
+	} else if (direction === "right") {
+		for (let i = 0; i < bulletNum; i++) {
+			const rightFlairBullet = document.createElement("div");
+			rightFlairBullet.setAttribute("class", "cannon_bullet");
+			rightBulletContainerRef.value.appendChild(rightFlairBullet);
+			currentBullets.push(rightFlairBullet);
+		}
+		gsap.to(currentBullets, {
 			duration: 40,
-			delay: cannonFireDuration - 0.05,
+			delay: delayTime,
 			physics2D: {
 				velocity: "random(600, 850)",
 				angle: () => 225 - 15 + Math.random() * 30,
@@ -52,7 +56,11 @@ const createBullets = () => {
 				friction: 0.01,
 			},
 		});
+		rightBulletRefs.value.push(...currentBullets);
 	}
+
+	cleanupObserver();
+	setupBulletObserver();
 };
 
 const cannonMoveAnim = () => {
@@ -79,7 +87,8 @@ const cannonMoveAnim = () => {
 			ease: "power1.out",
 			duration: cannonRunDuration,
 			onComplete: () => {
-				createBullets();
+				createBullets(cannonFireDuration - 0.05, "left");
+				createBullets(cannonFireDuration - 0.05, "right");
 			},
 		},
 	);
@@ -110,36 +119,42 @@ const cannonMoveAnim = () => {
 	);
 };
 
-const cannonFireAnim = () => {
-	gsap
-		.timeline()
-		.set(".left_carrel", { delay: cannonRunDuration })
-		.to(".left_carrel", {
-			transform: "matrix(0.9, 0.1, 0.1, 0.9, 0, 0)",
-			ease: "power1.out",
-			duration: cannonFireDuration,
-		})
-		.to(".left_carrel", {
-			transform: "matrix(1, 0, 0, 1, 0, 0)",
-			ease: "elastic.out",
-			duration: cannonFireDuration,
-		});
+const cannonFireAnim = (delayTime: number, direction: "left" | "right") => {
+	if (direction === "left")
+		gsap
+			.timeline()
+			.set(".left_carrel", { delay: delayTime })
+			.to(".left_carrel", {
+				transform: "matrix(0.9, 0.1, 0.1, 0.9, 0, 0)",
+				ease: "power1.out",
+				duration: cannonFireDuration,
+			})
+			.to(".left_carrel", {
+				transform: "matrix(1, 0, 0, 1, 0, 0)",
+				ease: "elastic.out",
+				duration: cannonFireDuration,
+			});
+	else if (direction === "right")
+		gsap
+			.timeline()
+			.set(".right_carrel", { delay: delayTime })
+			.to(".right_carrel", {
+				transform: "matrix(0.1, -0.9, 0.9, -0.1, 0, 0)",
+				ease: "power1.out",
+				duration: cannonFireDuration,
+			})
+			.to(".right_carrel", {
+				transform: "matrix(0, -1, 1, 0, 0, 0)",
+				ease: "elastic.out",
+				duration: cannonFireDuration,
+			});
+};
 
-	gsap
-		.timeline()
-		.set(".right_carrel", {
-			delay: cannonRunDuration,
-		})
-		.to(".right_carrel", {
-			transform: "matrix(0.1, -0.9, 0.9, -0.1, 0, 0)",
-			ease: "power1.out",
-			duration: cannonFireDuration,
-		})
-		.to(".right_carrel", {
-			transform: "matrix(0, -1, 1, 0, 0, 0)",
-			ease: "elastic.out",
-			duration: cannonFireDuration,
-		});
+const handleClick = (direction: "left" | "right") => {
+	if (direction === "left" && gsap.isTweening(".left_carrel")) return;
+	if (direction === "right" && gsap.isTweening(".right_carrel")) return;
+	cannonFireAnim(0, direction);
+	createBullets(cannonFireDuration - 0.05, direction);
 };
 
 // 设置 IntersectionObserver 来监听子弹元素
@@ -154,9 +169,12 @@ const setupBulletObserver = () => {
 					entry.target.remove();
 
 					// 从引用数组中移除
-					const index = allBulletRefs.value.indexOf(entry.target as HTMLDivElement);
-					if (index > -1) {
-						allBulletRefs.value.splice(index, 1);
+					const leftIndex = leftBulletRefs.value.indexOf(entry.target as HTMLDivElement);
+					const rightIndex = rightBulletRefs.value.indexOf(entry.target as HTMLDivElement);
+					if (leftIndex > -1) {
+						leftBulletRefs.value.splice(leftIndex, 1);
+					} else if (rightIndex > -1) {
+						rightBulletRefs.value.splice(rightIndex, 1);
 					}
 
 					// 停止观察这个元素
@@ -185,10 +203,9 @@ const cleanupObserver = () => {
 };
 
 onMounted(() => {
-	// createBullets();
 	cannonMoveAnim();
-	setupBulletObserver();
-	cannonFireAnim();
+	cannonFireAnim(cannonRunDuration, "left");
+	cannonFireAnim(cannonRunDuration, "right");
 });
 
 onUnmounted(() => {
@@ -242,6 +259,7 @@ onUnmounted(() => {
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 40 40"
 					ref="leftWheelRef"
+					@click="() => handleClick('left')"
 				>
 					<g>
 						<path
@@ -431,6 +449,7 @@ onUnmounted(() => {
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 40 40"
 					ref="rightWheelRef"
+					@click="() => handleClick('right')"
 				>
 					<g>
 						<path
@@ -610,6 +629,8 @@ onUnmounted(() => {
 				height: 200px;
 				width: 200px;
 				z-index: variables.$float_zIndex + 1;
+				-webkit-tap-highlight-color: transparent;
+				cursor: pointer;
 			}
 		}
 
@@ -617,7 +638,6 @@ onUnmounted(() => {
 			position: absolute;
 			width: 100px;
 			height: 100px;
-			cursor: pointer;
 
 			:deep(.cannon_bullet) {
 				position: absolute;
@@ -649,6 +669,246 @@ onUnmounted(() => {
 			:deep(.cannon_bullet) {
 				top: 0;
 				left: 0;
+			}
+		}
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.5;
+
+	.title_bottom {
+		.left_cannon,
+		.right_cannon {
+			.cannon {
+				height: 200px * $base-size;
+
+				#carrel {
+					left: 15%;
+					bottom: 15%;
+					height: 300px * $base-size;
+					width: 300px * $base-size;
+				}
+
+				#wheel {
+					height: 200px * $base-size;
+					width: 200px * $base-size;
+				}
+			}
+
+			.bullet_container {
+				width: 100px * $base-size;
+				height: 100px * $base-size;
+
+				:deep(.cannon_bullet) {
+					height: 10px;
+					width: 10px;
+				}
+			}
+		}
+
+		.left_cannon {
+			.bullet_container {
+				top: -40px * $base-size;
+				right: -40px * $base-size;
+
+				:deep(.cannon_bullet) {
+					top: 0;
+					right: 0;
+				}
+			}
+		}
+
+		.right_cannon {
+			.bullet_container {
+				top: -40px * $base-size;
+				left: -40px * $base-size;
+
+				:deep(.cannon_bullet) {
+					top: 0;
+					left: 0;
+				}
+			}
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.5;
+
+	.title_bottom {
+		.left_cannon,
+		.right_cannon {
+			.cannon {
+				height: 200px * $base-size;
+
+				#carrel {
+					left: 15%;
+					bottom: 15%;
+					height: 300px * $base-size;
+					width: 300px * $base-size;
+				}
+
+				#wheel {
+					height: 200px * $base-size;
+					width: 200px * $base-size;
+				}
+			}
+
+			.bullet_container {
+				width: 100px * $base-size;
+				height: 100px * $base-size;
+
+				:deep(.cannon_bullet) {
+					height: 10px;
+					width: 10px;
+				}
+			}
+		}
+
+		.left_cannon {
+			.bullet_container {
+				top: -40px * $base-size;
+				right: -40px * $base-size;
+
+				:deep(.cannon_bullet) {
+					top: 0;
+					right: 0;
+				}
+			}
+		}
+
+		.right_cannon {
+			.bullet_container {
+				top: -40px * $base-size;
+				left: -40px * $base-size;
+
+				:deep(.cannon_bullet) {
+					top: 0;
+					left: 0;
+				}
+			}
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.6;
+
+	.title_bottom {
+		.left_cannon,
+		.right_cannon {
+			.cannon {
+				height: 200px * $base-size;
+
+				#carrel {
+					left: 15%;
+					bottom: 15%;
+					height: 300px * $base-size;
+					width: 300px * $base-size;
+				}
+
+				#wheel {
+					height: 200px * $base-size;
+					width: 200px * $base-size;
+				}
+			}
+
+			.bullet_container {
+				width: 100px * $base-size;
+				height: 100px * $base-size;
+
+				:deep(.cannon_bullet) {
+					height: 10px;
+					width: 10px;
+				}
+			}
+		}
+
+		.left_cannon {
+			.bullet_container {
+				top: -40px * $base-size;
+				right: -40px * $base-size;
+
+				:deep(.cannon_bullet) {
+					top: 0;
+					right: 0;
+				}
+			}
+		}
+
+		.right_cannon {
+			.bullet_container {
+				top: -40px * $base-size;
+				left: -40px * $base-size;
+
+				:deep(.cannon_bullet) {
+					top: 0;
+					left: 0;
+				}
+			}
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.7;
+
+	.title_bottom {
+		.left_cannon,
+		.right_cannon {
+			.cannon {
+				height: 200px * $base-size;
+
+				#carrel {
+					left: 15%;
+					bottom: 15%;
+					height: 300px * $base-size;
+					width: 300px * $base-size;
+				}
+
+				#wheel {
+					height: 200px * $base-size;
+					width: 200px * $base-size;
+				}
+			}
+
+			.bullet_container {
+				width: 100px * $base-size;
+				height: 100px * $base-size;
+
+				:deep(.cannon_bullet) {
+					height: 10px;
+					width: 10px;
+				}
+			}
+		}
+
+		.left_cannon {
+			.bullet_container {
+				top: -40px * $base-size;
+				right: -40px * $base-size;
+
+				:deep(.cannon_bullet) {
+					top: 0;
+					right: 0;
+				}
+			}
+		}
+
+		.right_cannon {
+			.bullet_container {
+				top: -40px * $base-size;
+				left: -40px * $base-size;
+
+				:deep(.cannon_bullet) {
+					top: 0;
+					left: 0;
+				}
 			}
 		}
 	}
