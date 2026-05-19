@@ -2,6 +2,8 @@
 import gsap from "gsap";
 import { Physics2DPlugin } from "gsap/all";
 
+import DetailTitleSavePoint from "./DetailTitleSavePoint.vue";
+
 gsap.registerPlugin(Physics2DPlugin);
 
 const leftBulletContainerRef = ref<HTMLDivElement | null>(null);
@@ -24,7 +26,10 @@ const createBullets = (delayTime: number, direction: "left" | "right") => {
 	if (direction === "left") {
 		for (let i = 0; i < bulletNum; i++) {
 			const leftFlairBullet = document.createElement("div");
-			leftFlairBullet.setAttribute("class", "cannon_bullet");
+			leftFlairBullet.setAttribute(
+				"class",
+				`cannon_bullet color${Math.floor(Math.random() * 9) + 1}`,
+			);
 			leftBulletContainerRef.value.appendChild(leftFlairBullet);
 			currentBullets.push(leftFlairBullet);
 		}
@@ -42,7 +47,10 @@ const createBullets = (delayTime: number, direction: "left" | "right") => {
 	} else if (direction === "right") {
 		for (let i = 0; i < bulletNum; i++) {
 			const rightFlairBullet = document.createElement("div");
-			rightFlairBullet.setAttribute("class", "cannon_bullet");
+			rightFlairBullet.setAttribute(
+				"class",
+				`cannon_bullet color${Math.floor(Math.random() * 9) + 1}`,
+			);
 			rightBulletContainerRef.value.appendChild(rightFlairBullet);
 			currentBullets.push(rightFlairBullet);
 		}
@@ -405,6 +413,7 @@ onUnmounted(() => {
 			</div>
 			<div class="bullet_container" ref="leftBulletContainerRef"></div>
 		</div>
+		<DetailTitleSavePoint />
 		<div class="right_cannon">
 			<div class="cannon" ref="rightCannonRef">
 				<svg
@@ -605,6 +614,7 @@ onUnmounted(() => {
 	position: relative;
 	display: flex;
 	justify-content: space-between;
+	align-items: end;
 	width: 100%;
 
 	.left_cannon,
@@ -643,8 +653,43 @@ onUnmounted(() => {
 				position: absolute;
 				height: 10px;
 				width: 10px;
-				background-color: yellow;
 				z-index: variables.$float_zIndex;
+
+				&.color1 {
+					background-color: red;
+				}
+
+				&.color2 {
+					background-color: orange;
+				}
+
+				&.color3 {
+					background-color: yellow;
+				}
+
+				&.color4 {
+					background-color: green;
+				}
+
+				&.color5 {
+					background-color: blue;
+				}
+
+				&.color6 {
+					background-color: indigo;
+				}
+
+				&.color7 {
+					background-color: violet;
+				}
+
+				&.color8 {
+					background-color: pink;
+				}
+
+				&.color9 {
+					background-color: purple;
+				}
 			}
 		}
 	}

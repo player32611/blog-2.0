@@ -2,13 +2,11 @@
 import DetailTitleBackground from "./DetailTitleBackground.vue";
 import DetailTitleBottom from "./DetailTitleBottom.vue";
 import DetailTitleContent from "./DetailTitleContent.vue";
-import DetailTitleHead from "./DetailTitleHead.vue";
 </script>
 
 <template>
 	<div class="details_title">
 		<!-- <DetailTitleBackground /> -->
-		<DetailTitleHead />
 		<DetailTitleContent />
 		<DetailTitleBottom />
 	</div>
@@ -18,7 +16,7 @@ import DetailTitleHead from "./DetailTitleHead.vue";
 .details_title {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: end;
 	align-items: center;
 	height: 100dvh;
 	width: 100%;

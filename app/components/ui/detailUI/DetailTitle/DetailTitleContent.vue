@@ -2,6 +2,8 @@
 import gsap from "gsap";
 import { SplitText } from "gsap/all";
 
+import DetailTitleCode from "./DetailTitleCode.vue";
+
 gsap.registerPlugin(SplitText);
 
 const word1Split = ref<SplitText | null>(null);
@@ -278,9 +280,14 @@ onUnmounted(() => {
 
 <template>
 	<div class="title_content">
-		<div class="title_word1">CODING</div>
-		<div class="title_word2">ANY</div>
-		<div class="title_word3">THINGS</div>
+		<div class="content_word">
+			<div class="title_word1">CODING</div>
+			<div class="title_word2">ANY</div>
+			<div class="title_word3">THINGS</div>
+		</div>
+		<div class="content_code">
+			<DetailTitleCode />
+		</div>
 	</div>
 </template>
 
@@ -289,25 +296,32 @@ $base_size: 1;
 
 .title_content {
 	position: relative;
+	padding: 0;
 	display: flex;
-	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	padding: 5rem 0;
 	width: 100%;
-	color: #00000000;
-	font-size: 9rem;
-	font-family: "Coustard Black";
-	-webkit-text-stroke: calc(0.2rem) green;
 	overflow: hidden;
 	user-select: none;
 
-	.title_word1 {
-		background-color: pink;
-	}
+	.content_word {
+		grid-area: 1 / 1 / 2 / 4;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		color: #00000000;
+		font-size: 9rem;
+		font-family: "Coustard Black";
+		-webkit-text-stroke: calc(0.2rem) green;
 
-	.title_word2 {
-		width: auto;
+		.title_word1 {
+			background-color: pink;
+		}
+
+		.title_word2 {
+			width: auto;
+		}
 	}
 }
 
@@ -316,7 +330,7 @@ $base_size: 1;
 	$base_size: 0.5;
 
 	.title_content {
-		padding: 10rem * $base_size 0;
+		padding: 5rem * $base_size 0;
 		font-size: 8rem * $base_size;
 	}
 }
@@ -326,17 +340,17 @@ $base_size: 1;
 	$base_size: 0.6;
 
 	.title_content {
-		padding: 10rem * $base_size 0;
+		padding: 10rem * $base_size 0 0;
 		font-size: 8rem * $base_size;
 	}
 }
 
 /* ========== 中等屏（768px - 991px）========== */
 @media screen and (min-width: 768px) and (max-width: 991px) {
-	$base_size: 0.8;
+	$base_size: 0.7;
 
 	.title_content {
-		padding: 7rem * $base_size 0;
+		padding: 5rem * $base_size 0 0;
 		font-size: 8rem * $base_size;
 	}
 }
@@ -346,7 +360,7 @@ $base_size: 1;
 	$base_size: 0.9;
 
 	.title_content {
-		padding: 5rem * $base_size 0;
+		padding: 5rem * $base_size 0 0;
 		font-size: 8rem * $base_size;
 	}
 }

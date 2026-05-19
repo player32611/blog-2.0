@@ -48,7 +48,7 @@ onUnmounted(() => {
 	position: relative;
 	width: 100%;
 	font-size: 1rem;
-	background-color: pink;
+	background-color: #171717;
 
 	.details_container {
 		height: 500dvh;
