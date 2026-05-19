@@ -233,9 +233,28 @@ const word3SixthCharAnim = () => {
 		});
 };
 
+const word2Anim = () => {
+	if (!word2Split.value) return;
+	gsap.fromTo(
+		word2Split.value.words,
+		{
+			scale: 5,
+			rotate: -30,
+			opacity: 0,
+		},
+		{
+			scale: 1.5,
+			opacity: 1,
+			duration: singleDuration,
+			ease: "expo.out",
+			delay: initDelay + singleInterval.value * 13,
+		},
+	);
+};
+
 onMounted(() => {
 	word1Split.value = SplitText.create(".title_word1", { type: "chars" });
-	word2Split.value = SplitText.create(".title_word2", { type: "chars" });
+	word2Split.value = SplitText.create(".title_word2", { type: "words" });
 	word3Split.value = SplitText.create(".title_word3", { type: "chars" });
 	word1FirstCharAnim();
 	word1SecondCharAnim();
@@ -249,6 +268,7 @@ onMounted(() => {
 	word3FourthCharAnim();
 	word3FifthCharAnim();
 	word3SixthCharAnim();
+	word2Anim();
 });
 
 onUnmounted(() => {
