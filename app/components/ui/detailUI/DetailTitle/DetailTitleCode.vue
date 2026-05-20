@@ -4,61 +4,85 @@ import { ScrambleTextPlugin, TextPlugin } from "gsap/all";
 
 gsap.registerPlugin(ScrambleTextPlugin, TextPlugin);
 
-const preRef = ref<HTMLDivElement | null>(null);
+const containerRef = ref<HTMLDivElement | null>(null);
+const line1Ref = ref<HTMLDivElement | null>(null);
+const line2Ref = ref<HTMLDivElement | null>(null);
+const line3Ref = ref<HTMLDivElement | null>(null);
 
-const codingDuration: number = 3;
-const codingInterval: number = 1;
+const appearDelay: number = 7;
+const appearDuration: number = 1;
+const codingLineDelay: number = 0.5;
+const singleCharDuration: number = 0.1;
+
 const language: string = "html";
-const code1: string = `
-<div class="container">
-  <div class="box">
-    <div class="box-content">
-    </div>
-  </div>
-`;
-const code2: string = `
-<div class="box">
-  <div class="box-title">Title</div>
-</div>
-`;
+const code1: string[] = ["<span class='box'>", "<span class='word'>text</span>", "</span>"];
+const code2: string[] = ["<div class='box'>", "<div class='title'>Title</div>", "</div>"];
+
+const codingAnim = () => {
+	const currentCode = Math.random() > 0.5 ? code1 : code2;
+	if (!currentCode[0] || !currentCode[1] || !currentCode[2]) return;
+	gsap
+		.timeline({ yoyo: true, repeat: -1, repeatDelay: codingLineDelay })
+		.to(line1Ref.value, {
+			scrambleText: { text: currentCode[0] },
+			ease: "none",
+			duration: singleCharDuration * currentCode[0].length,
+			delay: codingLineDelay,
+		})
+		.to(line2Ref.value, {
+			scrambleText: { text: currentCode[1] },
+			ease: "none",
+			duration: singleCharDuration * currentCode[1].length,
+			delay: codingLineDelay,
+		})
+		.to(line3Ref.value, {
+			scrambleText: { text: currentCode[2] },
+			ease: "none",
+			duration: singleCharDuration * currentCode[2].length,
+			delay: codingLineDelay,
+		});
+};
 
 onMounted(() => {
-	gsap
-		.timeline({ repeat: -1 })
-		.to(preRef.value, {
-			scrambleText: { text: code2 },
-			ease: "none",
-			duration: codingDuration,
-			delay: codingInterval,
-		})
-		.to(preRef.value, {
-			text: "",
-			ease: "none",
-			duration: codingDuration,
-			delay: codingInterval,
-		});
+	gsap.fromTo(
+		containerRef.value,
+		{ height: 0 },
+		{
+			height: "auto",
+			ease: "power2.out",
+			duration: appearDuration,
+			delay: appearDelay,
+			onComplete: codingAnim,
+		},
+	);
 });
 </script>
 
 <template>
-	<div class="custom_pre_wrapper">
-		<div class="mac_header">
-			<div class="points">
-				<span class="red"></span>
-				<span class="yellow"></span>
-				<span class="green"></span>
+	<div class="title_code_container" ref="containerRef">
+		<div class="custom_pre_wrapper">
+			<div class="mac_header">
+				<div class="points">
+					<span class="red"></span>
+					<span class="yellow"></span>
+					<span class="green"></span>
+				</div>
+				<div class="language">
+					<span
+						class="icon"
+						v-html="getLangIcon(language)"
+						:style="{ color: getLangIconColor(language) }"
+					></span>
+					{{ language }}
+				</div>
 			</div>
-			<div class="language">
-				<span
-					class="icon"
-					v-html="getLangIcon(language)"
-					:style="{ color: getLangIconColor(language) }"
-				></span>
-				{{ language }}
+			<div class="code_editor">
+				<div ref="preRef">
+					<div class="line1" ref="line1Ref"></div>
+					<div class="line2" ref="line2Ref"></div>
+					<div class="line3" ref="line3Ref"></div>
+				</div>
 			</div>
-		</div>
-		<div class="code_editor">
-			<div ref="preRef"></div>
 		</div>
 	</div>
 </template>
@@ -66,94 +90,126 @@ onMounted(() => {
 <style scoped lang="scss">
 $base-size: 1;
 
-.custom_pre_wrapper {
-	position: absolute;
-	top: 50%;
-	margin: 1rem * $base-size 0;
-	height: auto;
-	width: 20rem * $base-size;
-	padding: 1rem * $base-size;
-	border-width: 0.2rem * $base-size;
-	border-style: solid;
-	border-color: #ffffff;
-	border-radius: 10px;
-	background-color: #000;
+.title_code_container {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
 
-	.mac_header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		margin-bottom: 1rem * $base-size;
+	&::after {
+		--m-i: linear-gradient(#000, #000);
+		--m-o: content-box, padding-box;
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: calc(100% - 10px);
+		height: calc(100% - 10px);
+		padding: 5px;
+		border-radius: 5px;
+		background-image: conic-gradient(#488cfb, #29dbbc, #ddf505, #ff9f0e, #e440bb, #655adc, #488cfb);
+		-webkit-mask-image: var(--m-i), var(--m-i);
+		mask-image: var(--m-i), var(--m-i);
+		-webkit-mask-origin: var(--m-o);
+		mask-origin: var(--m-o);
+		-webkit-mask-clip: var(--m-o);
+		mask-clip: var(--m-o);
+		mask-composite: exclude;
+		-webkit-mask-composite: destination-out;
+		filter: hue-rotate(0);
+		animation: rotate-hue linear 2s infinite;
+	}
 
-		.points,
-		.language {
+	.custom_pre_wrapper {
+		position: relative;
+		width: 300px * $base-size;
+		padding: 1rem * $base-size;
+		border-radius: 10px;
+		background-color: #000;
+		overflow: hidden;
+
+		.mac_header {
 			display: flex;
 			align-items: center;
-			color: #ffffff;
-			gap: 0.5rem * $base-size;
+			justify-content: space-between;
+			margin-bottom: 1rem * $base-size;
 
-			span {
-				float: left;
-				width: 0.7rem * $base-size;
-				height: 0.7rem * $base-size;
-				border-radius: 50%;
+			.points,
+			.language {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem * $base-size;
+				font-family: "方正基础像素体";
+				color: #ffffff;
+
+				span {
+					float: left;
+					width: 0.7rem * $base-size;
+					height: 0.7rem * $base-size;
+					border-radius: 50%;
+				}
+			}
+
+			.red {
+				background-color: #ff5f57;
+			}
+
+			.yellow {
+				background-color: #ffbd2e;
+			}
+
+			.green {
+				background-color: #28c941;
 			}
 		}
 
-		.red {
-			background-color: #ff5f57;
-		}
+		.code_editor {
+			padding: 1rem * $base-size;
+			color: #dcdcdc;
+			font-family:
+				system-ui,
+				-apple-system,
+				BlinkMacSystemFont,
+				"Segoe UI",
+				Roboto,
+				Oxygen,
+				Ubuntu,
+				Cantarell,
+				"Open Sans",
+				"Helvetica Neue",
+				monospace;
+			font-size: 0.9rem * $base-size;
+			line-height: 1.5;
+			background-color: #0d1117;
+			border-width: 0.1rem * $base-size;
+			border-style: solid;
+			border-color: #333;
+			border-radius: 5px;
+			overflow: auto;
 
-		.yellow {
-			background-color: #ffbd2e;
-		}
+			&::-webkit-scrollbar {
+				height: 4px;
+				width: 8px;
+			}
 
-		.green {
-			background-color: #28c941;
-		}
-	}
+			&::-webkit-scrollbar-thumb {
+				background: #555;
+				border-radius: 4px;
+			}
 
-	.code_editor {
-		padding: 1rem * $base-size;
-		color: #dcdcdc;
-		font-family:
-			system-ui,
-			-apple-system,
-			BlinkMacSystemFont,
-			"Segoe UI",
-			Roboto,
-			Oxygen,
-			Ubuntu,
-			Cantarell,
-			"Open Sans",
-			"Helvetica Neue",
-			monospace;
-		font-size: 0.9rem * $base-size;
-		line-height: 1.5;
-		background-color: #0d1117;
-		border-width: 0.1rem * $base-size;
-		border-style: solid;
-		border-color: #333;
-		border-radius: 5px;
-		overflow: auto;
+			pre {
+				code {
+					display: block;
+					height: auto;
+					width: auto;
+					color: #ffffff;
+					white-space: pre-wrap;
+				}
+			}
 
-		&::-webkit-scrollbar {
-			height: 4px;
-			width: 8px;
-		}
-
-		&::-webkit-scrollbar-thumb {
-			background: #555;
-			border-radius: 4px;
-		}
-
-		pre {
-			code {
-				display: block;
-				height: auto;
-				width: auto;
-				color: #ffffff;
-				white-space: pre-wrap;
+			.line2 {
+				text-indent: 2rem;
 			}
 		}
 	}
@@ -164,6 +220,7 @@ $base-size: 1;
 	$base-size: 0.6;
 
 	.custom_pre_wrapper {
+		position: relative;
 		margin: 1rem * $base-size 0;
 		padding: 1rem * $base-size;
 		border-width: 0.2rem * $base-size;
@@ -200,6 +257,7 @@ $base-size: 1;
 	$base-size: 0.8;
 
 	.custom_pre_wrapper {
+		position: relative;
 		margin: 1rem * $base-size 0;
 		padding: 1rem * $base-size;
 		border-width: 0.2rem * $base-size;
@@ -237,6 +295,7 @@ $base-size: 1;
 	$base-size: 0.9;
 
 	.custom_pre_wrapper {
+		position: relative;
 		margin: 1rem * $base-size 0;
 		padding: 1rem * $base-size;
 		border-width: 0.2rem * $base-size;
@@ -303,6 +362,12 @@ $base-size: 1;
 				height: 0.3rem * $base-size;
 			}
 		}
+	}
+}
+
+@keyframes rotate-hue {
+	to {
+		filter: hue-rotate(1turn);
 	}
 }
 </style>

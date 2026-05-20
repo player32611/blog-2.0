@@ -7,8 +7,10 @@ import DetailTitleCode from "./DetailTitleCode.vue";
 gsap.registerPlugin(SplitText);
 
 const word1Split = ref<SplitText | null>(null);
+const word1Interval = ref<number | null>(null);
 const word2Split = ref<SplitText | null>(null);
 const word3Split = ref<SplitText | null>(null);
+const word3Interval = ref<number | null>(null);
 
 const initDelay: number = 1; // 初始延迟（s）
 const singleDuration: number = 1.2; // 单字符动画时长（s）
@@ -73,6 +75,16 @@ const word1FourthCharAnim = () => {
 			ease: "elastic.out",
 			duration: singleDuration,
 			delay: initDelay + singleInterval.value * 3,
+			onComplete: () => {
+				word1Interval.value = setInterval(() => {
+					if (!word1Split.value || !word1Split.value.chars[3]) return;
+					gsap.to(word1Split.value.chars[3], {
+						rotateY: "+=180",
+						ease: "power2.out",
+						duration: singleDuration,
+					});
+				}, 2000);
+			},
 		},
 	);
 };
@@ -184,7 +196,18 @@ const word3ThirdCharAnim = () => {
 const word3FourthCharAnim = () => {
 	if (!word3Split.value || !word3Split.value.chars[3]) return;
 	gsap
-		.timeline()
+		.timeline({
+			onComplete: () => {
+				word3Interval.value = setInterval(() => {
+					if (!word3Split.value || !word3Split.value.chars[3]) return;
+					gsap.to(word3Split.value.chars[3], {
+						rotate: "+=360",
+						ease: "power2.out",
+						duration: singleDuration / 2,
+					});
+				}, 3000);
+			},
+		})
 		.set(word3Split.value.chars[3], { y: "-60dvh", rotate: 90 })
 		.to(word3Split.value.chars[3], {
 			y: 0,
@@ -257,7 +280,7 @@ const word2Anim = () => {
 onMounted(() => {
 	word1Split.value = SplitText.create(".title_word1", { type: "chars" });
 	word2Split.value = SplitText.create(".title_word2", { type: "words" });
-	word3Split.value = SplitText.create(".title_word3", { type: "chars" });
+	word3Split.value = SplitText.create(".title_word3", { type: "chars, words" });
 	word1FirstCharAnim();
 	word1SecondCharAnim();
 	word1ThirdCharAnim();
@@ -275,6 +298,10 @@ onMounted(() => {
 
 onUnmounted(() => {
 	word1Split.value?.revert();
+	word2Split.value?.revert();
+	word3Split.value?.revert();
+	if (word3Interval.value) clearInterval(word3Interval.value);
+	if (word1Interval.value) clearInterval(word1Interval.value);
 });
 </script>
 
@@ -310,18 +337,27 @@ $base_size: 1;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		color: #00000000;
+		margin-left: 200px;
+
 		font-size: 9rem;
 		font-family: "Coustard Black";
-		-webkit-text-stroke: calc(0.2rem) green;
 
 		.title_word1 {
-			background-color: pink;
+			color: #fffce1;
 		}
 
 		.title_word2 {
-			width: auto;
+			color: #ff7f27;
 		}
+
+		.title_word3 {
+			color: #00000000;
+			-webkit-text-stroke: calc(0.2rem) #ff7f27;
+		}
+	}
+
+	.content_code {
+		position: relative;
 	}
 }
 
@@ -330,8 +366,17 @@ $base_size: 1;
 	$base_size: 0.5;
 
 	.title_content {
-		padding: 5rem * $base_size 0;
-		font-size: 8rem * $base_size;
+		display: grid;
+		grid-template-rows: repeat(2, 1fr);
+
+		.content_word {
+			grid-area: 2/1/3/2;
+			font-size: 8rem * $base_size;
+		}
+
+		.content_code {
+			grid-area: 1/1/2/2;
+		}
 	}
 }
 
@@ -340,18 +385,28 @@ $base_size: 1;
 	$base_size: 0.6;
 
 	.title_content {
-		padding: 10rem * $base_size 0 0;
-		font-size: 8rem * $base_size;
+		display: grid;
+		grid-template-rows: repeat(2, 1fr);
+
+		.content_word {
+			grid-area: 2/1/3/2;
+			font-size: 8rem * $base_size;
+		}
+
+		.content_code {
+			grid-area: 1/1/2/2;
+		}
 	}
 }
 
 /* ========== 中等屏（768px - 991px）========== */
 @media screen and (min-width: 768px) and (max-width: 991px) {
-	$base_size: 0.7;
+	$base_size: 0.6;
 
 	.title_content {
-		padding: 5rem * $base_size 0 0;
-		font-size: 8rem * $base_size;
+		.content_word {
+			font-size: 8rem * $base_size;
+		}
 	}
 }
 
@@ -360,8 +415,9 @@ $base_size: 1;
 	$base_size: 0.9;
 
 	.title_content {
-		padding: 5rem * $base_size 0 0;
-		font-size: 8rem * $base_size;
+		.content_word {
+			font-size: 8rem * $base_size;
+		}
 	}
 }
 </style>
