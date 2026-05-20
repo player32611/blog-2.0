@@ -8,7 +8,7 @@
 .title_save_point {
 	height: 200px;
 	width: 100%;
-	background-color: yellow;
+	// background-color: yellow;
 }
 
 /* ========== 超小屏（< 576px）========== */

@@ -1,3 +1,5 @@
+export type RGBColor = { r: number; g: number; b: number; a?: number };
+
 /**
  * 表示日期时间信息的数据结构类型。
  *
@@ -92,3 +94,8 @@ export interface MusicInfo {
 	path: string;
 	folder: string;
 }
+
+export type Point = {
+	x: number;
+	y: number;
+};

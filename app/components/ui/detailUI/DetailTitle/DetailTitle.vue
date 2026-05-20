@@ -6,8 +6,8 @@ import DetailTitleContent from "./DetailTitleContent.vue";
 
 <template>
 	<div class="details_title">
-		<!-- <DetailTitleBackground /> -->
-		<DetailTitleContent />
+		<DetailTitleBackground />
+		<!-- <DetailTitleContent /> -->
 		<DetailTitleBottom />
 	</div>
 </template>
