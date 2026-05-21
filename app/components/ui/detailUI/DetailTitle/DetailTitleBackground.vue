@@ -20,6 +20,7 @@ const getTopPoints = (width: number, height: number): Point[] => {
 		{ x: (width / 21) * 9, y: (height / 8) * 5 },
 		{ x: (width / 21) * 11, y: (height / 9) * 5 },
 		{ x: width / 2, y: height / 2 },
+		{ x: width, y: 0 },
 	];
 };
 
@@ -33,6 +34,7 @@ const getBottomPoints = (width: number, height: number): Point[] => {
 		{ x: (width / 21) * 12, y: (height / 8) * 3 },
 		{ x: (width / 21) * 10, y: (height / 9) * 4 },
 		{ x: width / 2, y: height / 2 },
+		{ x: 0, y: height },
 	];
 };
 
@@ -168,14 +170,14 @@ const startProgressAnimation = () => {
 		delay: 1,
 		repeat: -1,
 		repeatDelay: 3,
-		ease: "power1.inOut",
+		ease: "power2.out",
 		onUpdate: drawLine,
 	});
 
 	gsap.to(progressEnd, {
 		value: 1,
 		duration: 3,
-		ease: "power1.inOut",
+		ease: "power2.out",
 		repeat: -1,
 		repeatDelay: 3,
 		onUpdate: drawLine,

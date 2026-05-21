@@ -19,6 +19,21 @@ const allBulletRefs = computed(() => {
 const bulletNum: number = 40;
 const cannonRunDuration: number = 5;
 const cannonFireDuration: number = 1;
+const cannonFireScale: number = 0.9;
+
+const getCarrelRotateAngle = () => {
+	if (window.innerWidth < 576) {
+		return { left: 20, right: -20 };
+	} else if (window.innerWidth < 768) {
+		return { left: 25, right: -25 };
+	} else if (window.innerWidth < 991) {
+		return { left: 30, right: -30 };
+	} else if (window.innerWidth < 1199) {
+		return { left: 35, right: -35 };
+	} else {
+		return { left: 45, right: -45 };
+	}
+};
 
 const createBullets = (delayTime: number, direction: "left" | "right") => {
 	if (!leftBulletContainerRef.value || !rightBulletContainerRef.value) return;
@@ -38,7 +53,7 @@ const createBullets = (delayTime: number, direction: "left" | "right") => {
 			delay: delayTime,
 			physics2D: {
 				velocity: "random(600, 850)",
-				angle: () => 315 - 15 + Math.random() * 30,
+				angle: () => -90 + getCarrelRotateAngle().left + (Math.random() * 30 - 15),
 				gravity: 600,
 				friction: 0.01,
 			},
@@ -59,7 +74,7 @@ const createBullets = (delayTime: number, direction: "left" | "right") => {
 			delay: delayTime,
 			physics2D: {
 				velocity: "random(600, 850)",
-				angle: () => 225 - 15 + Math.random() * 30,
+				angle: () => -90 + getCarrelRotateAngle().right + (Math.random() * 30 - 15),
 				gravity: 600,
 				friction: 0.01,
 			},
@@ -88,10 +103,10 @@ const cannonMoveAnim = () => {
 	});
 	gsap.fromTo(
 		".left_carrel",
-		{ rotate: -45 },
+		{ rotate: 0 },
 		{
-			rotate: 0,
-			transformOrigin: "25% 75%",
+			rotate: getCarrelRotateAngle().left,
+			transformOrigin: "50% 100%",
 			ease: "power1.out",
 			duration: cannonRunDuration,
 			onComplete: () => {
@@ -117,10 +132,10 @@ const cannonMoveAnim = () => {
 	});
 	gsap.fromTo(
 		".right_carrel",
-		{ rotate: -45 },
+		{ rotate: 0 },
 		{
-			rotate: -90,
-			transformOrigin: "25% 75%",
+			rotate: getCarrelRotateAngle().right,
+			transformOrigin: "50% 100%",
 			ease: "power1.out",
 			duration: cannonRunDuration,
 		},
@@ -133,12 +148,12 @@ const cannonFireAnim = (delayTime: number, direction: "left" | "right") => {
 			.timeline()
 			.set(".left_carrel", { delay: delayTime })
 			.to(".left_carrel", {
-				transform: "matrix(0.9, 0.1, 0.1, 0.9, 0, 0)",
+				scaleY: cannonFireScale,
 				ease: "power1.out",
 				duration: cannonFireDuration,
 			})
 			.to(".left_carrel", {
-				transform: "matrix(1, 0, 0, 1, 0, 0)",
+				scaleY: 1,
 				ease: "elastic.out",
 				duration: cannonFireDuration,
 			});
@@ -147,12 +162,12 @@ const cannonFireAnim = (delayTime: number, direction: "left" | "right") => {
 			.timeline()
 			.set(".right_carrel", { delay: delayTime })
 			.to(".right_carrel", {
-				transform: "matrix(0.1, -0.9, 0.9, -0.1, 0, 0)",
+				scaleY: cannonFireScale,
 				ease: "power1.out",
 				duration: cannonFireDuration,
 			})
 			.to(".right_carrel", {
-				transform: "matrix(0, -1, 1, 0, 0, 0)",
+				scaleY: 1,
 				ease: "elastic.out",
 				duration: cannonFireDuration,
 			});
@@ -210,14 +225,35 @@ const cleanupObserver = () => {
 	}
 };
 
+const resize = () => {
+	if (gsap.getProperty(".left_carrel", "rotate") !== getCarrelRotateAngle().left) {
+		gsap.to(".left_carrel", {
+			rotate: getCarrelRotateAngle().left,
+			transformOrigin: "50% 100%",
+			ease: "power1.out",
+			duration: cannonFireDuration,
+		});
+	}
+	if (gsap.getProperty(".right_carrel", "rotate") !== getCarrelRotateAngle().right) {
+		gsap.to(".right_carrel", {
+			rotate: getCarrelRotateAngle().right,
+			transformOrigin: "50% 100%",
+			ease: "power1.out",
+			duration: cannonFireDuration,
+		});
+	}
+};
+
 onMounted(() => {
 	cannonMoveAnim();
 	cannonFireAnim(cannonRunDuration, "left");
 	cannonFireAnim(cannonRunDuration, "right");
+	window.addEventListener("resize", resize);
 });
 
 onUnmounted(() => {
 	cleanupObserver();
+	window.removeEventListener("resize", resize);
 });
 </script>
 
@@ -230,35 +266,28 @@ onUnmounted(() => {
 					class="left_carrel"
 					data-name="carrel"
 					xmlns="http://www.w3.org/2000/svg"
-					viewBox="0 0 67.81573 66.41753"
+					viewBox="0 0 30 49.99791"
 				>
 					<g>
-						<rect
-							x="20.47421"
-							y="11.34326"
-							width="42.4842"
-							height="29.0001"
-							transform="translate(-6.33979 35.78003) rotate(-43.46087)"
-							style="fill: #7f7970"
+						<g>
+							<rect x=".5" y=".5002" width="29" height="48.99756" style="fill: #7f7970" />
+							<path d="M29,1v47.99791H1V1h28M30,0H0v49.99791h30V0h0Z" />
+						</g>
+						<line
+							x1="1"
+							y1="25.85106"
+							x2="29"
+							y2="25.8511"
+							style="fill: #7f7970; stroke: #523235; stroke-miterlimit: 10"
 						/>
-						<path
-							d="M47.14197,1.4137l19.26007,20.32362-30.11133,28.53564-19.2601-20.32361L47.14197,1.4137M47.17993,0L15.61691,29.91139l20.63583,21.77527,31.56299-29.91138L47.17993,0h0Z"
+						<line
+							x1="1"
+							y1="22.21277"
+							x2="29"
+							y2="22.21277"
+							style="fill: #7f7970; stroke: #523235; stroke-miterlimit: 10"
 						/>
 					</g>
-					<line
-						x1="27.26862"
-						y1="20.25263"
-						x2="46.82447"
-						y2="40.31114"
-						style="fill: #7f7970; stroke: #523235; stroke-miterlimit: 10"
-					/>
-					<line
-						x1="29.08777"
-						y1="18.47072"
-						x2="48.64362"
-						y2="38.52923"
-						style="fill: #7f7970; stroke: #523235; stroke-miterlimit: 10"
-					/>
 				</svg>
 				<svg
 					id="wheel"
@@ -421,35 +450,28 @@ onUnmounted(() => {
 					class="right_carrel"
 					data-name="carrel"
 					xmlns="http://www.w3.org/2000/svg"
-					viewBox="0 0 67.81573 66.41753"
+					viewBox="0 0 30 49.99791"
 				>
 					<g>
-						<rect
-							x="20.47421"
-							y="11.34326"
-							width="42.4842"
-							height="29.0001"
-							transform="translate(-6.33979 35.78003) rotate(-43.46087)"
-							style="fill: #7f7970"
+						<g>
+							<rect x=".5" y=".5002" width="29" height="48.99756" style="fill: #7f7970" />
+							<path d="M29,1v47.99791H1V1h28M30,0H0v49.99791h30V0h0Z" />
+						</g>
+						<line
+							x1="1"
+							y1="25.85106"
+							x2="29"
+							y2="25.8511"
+							style="fill: #7f7970; stroke: #523235; stroke-miterlimit: 10"
 						/>
-						<path
-							d="M47.14197,1.4137l19.26007,20.32362-30.11133,28.53564-19.2601-20.32361L47.14197,1.4137M47.17993,0L15.61691,29.91139l20.63583,21.77527,31.56299-29.91138L47.17993,0h0Z"
+						<line
+							x1="1"
+							y1="22.21277"
+							x2="29"
+							y2="22.21277"
+							style="fill: #7f7970; stroke: #523235; stroke-miterlimit: 10"
 						/>
 					</g>
-					<line
-						x1="27.26862"
-						y1="20.25263"
-						x2="46.82447"
-						y2="40.31114"
-						style="fill: #7f7970; stroke: #523235; stroke-miterlimit: 10"
-					/>
-					<line
-						x1="29.08777"
-						y1="18.47072"
-						x2="48.64362"
-						y2="38.52923"
-						style="fill: #7f7970; stroke: #523235; stroke-miterlimit: 10"
-					/>
 				</svg>
 				<svg
 					id="wheel"
@@ -629,9 +651,8 @@ onUnmounted(() => {
 			#carrel {
 				position: absolute;
 				left: 15%;
-				bottom: 15%;
-				height: 300px;
-				width: 300px;
+				bottom: 100px;
+				width: 150px;
 				z-index: variables.$float_zIndex + 1;
 			}
 
@@ -721,7 +742,7 @@ onUnmounted(() => {
 
 /* ========== 超小屏（< 576px）========== */
 @media screen and (max-width: 576px) {
-	$base-size: 0.5;
+	$base-size: 0.4;
 
 	.title_bottom {
 		.left_cannon,
@@ -731,9 +752,8 @@ onUnmounted(() => {
 
 				#carrel {
 					left: 15%;
-					bottom: 15%;
-					height: 300px * $base-size;
-					width: 300px * $base-size;
+					bottom: 100px * $base-size;
+					width: 150px * $base-size;
 				}
 
 				#wheel {
@@ -747,8 +767,8 @@ onUnmounted(() => {
 				height: 100px * $base-size;
 
 				:deep(.cannon_bullet) {
-					height: 10px;
-					width: 10px;
+					height: 10px * $base-size;
+					width: 10px * $base-size;
 				}
 			}
 		}
@@ -756,24 +776,14 @@ onUnmounted(() => {
 		.left_cannon {
 			.bullet_container {
 				top: -40px * $base-size;
-				right: -40px * $base-size;
-
-				:deep(.cannon_bullet) {
-					top: 0;
-					right: 0;
-				}
+				right: 40px * $base-size;
 			}
 		}
 
 		.right_cannon {
 			.bullet_container {
 				top: -40px * $base-size;
-				left: -40px * $base-size;
-
-				:deep(.cannon_bullet) {
-					top: 0;
-					left: 0;
-				}
+				left: 40px * $base-size;
 			}
 		}
 	}
@@ -791,9 +801,8 @@ onUnmounted(() => {
 
 				#carrel {
 					left: 15%;
-					bottom: 15%;
-					height: 300px * $base-size;
-					width: 300px * $base-size;
+					bottom: 100px * $base-size;
+					width: 150px * $base-size;
 				}
 
 				#wheel {
@@ -807,8 +816,8 @@ onUnmounted(() => {
 				height: 100px * $base-size;
 
 				:deep(.cannon_bullet) {
-					height: 10px;
-					width: 10px;
+					height: 10px * $base-size;
+					width: 10px * $base-size;
 				}
 			}
 		}
@@ -816,24 +825,14 @@ onUnmounted(() => {
 		.left_cannon {
 			.bullet_container {
 				top: -40px * $base-size;
-				right: -40px * $base-size;
-
-				:deep(.cannon_bullet) {
-					top: 0;
-					right: 0;
-				}
+				right: 40px * $base-size;
 			}
 		}
 
 		.right_cannon {
 			.bullet_container {
 				top: -40px * $base-size;
-				left: -40px * $base-size;
-
-				:deep(.cannon_bullet) {
-					top: 0;
-					left: 0;
-				}
+				left: 40px * $base-size;
 			}
 		}
 	}
@@ -851,9 +850,8 @@ onUnmounted(() => {
 
 				#carrel {
 					left: 15%;
-					bottom: 15%;
-					height: 300px * $base-size;
-					width: 300px * $base-size;
+					bottom: 100px * $base-size;
+					width: 150px * $base-size;
 				}
 
 				#wheel {
@@ -867,8 +865,8 @@ onUnmounted(() => {
 				height: 100px * $base-size;
 
 				:deep(.cannon_bullet) {
-					height: 10px;
-					width: 10px;
+					height: 10px * $base-size;
+					width: 10px * $base-size;
 				}
 			}
 		}
@@ -876,24 +874,14 @@ onUnmounted(() => {
 		.left_cannon {
 			.bullet_container {
 				top: -40px * $base-size;
-				right: -40px * $base-size;
-
-				:deep(.cannon_bullet) {
-					top: 0;
-					right: 0;
-				}
+				right: 20px * $base-size;
 			}
 		}
 
 		.right_cannon {
 			.bullet_container {
 				top: -40px * $base-size;
-				left: -40px * $base-size;
-
-				:deep(.cannon_bullet) {
-					top: 0;
-					left: 0;
-				}
+				left: 20px * $base-size;
 			}
 		}
 	}
@@ -911,9 +899,8 @@ onUnmounted(() => {
 
 				#carrel {
 					left: 15%;
-					bottom: 15%;
-					height: 300px * $base-size;
-					width: 300px * $base-size;
+					bottom: 100px * $base-size;
+					width: 150px * $base-size;
 				}
 
 				#wheel {
@@ -927,8 +914,8 @@ onUnmounted(() => {
 				height: 100px * $base-size;
 
 				:deep(.cannon_bullet) {
-					height: 10px;
-					width: 10px;
+					height: 10px * $base-size;
+					width: 10px * $base-size;
 				}
 			}
 		}
@@ -936,24 +923,14 @@ onUnmounted(() => {
 		.left_cannon {
 			.bullet_container {
 				top: -40px * $base-size;
-				right: -40px * $base-size;
-
-				:deep(.cannon_bullet) {
-					top: 0;
-					right: 0;
-				}
+				right: 0 * $base-size;
 			}
 		}
 
 		.right_cannon {
 			.bullet_container {
 				top: -40px * $base-size;
-				left: -40px * $base-size;
-
-				:deep(.cannon_bullet) {
-					top: 0;
-					left: 0;
-				}
+				left: 0 * $base-size;
 			}
 		}
 	}
