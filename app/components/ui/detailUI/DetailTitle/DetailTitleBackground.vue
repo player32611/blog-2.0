@@ -4,11 +4,14 @@ import type { RGBColor, Point } from "@/types/common";
 
 const backgroundRef = ref<HTMLDivElement | null>(null);
 const canvasRef = ref<HTMLCanvasElement | null>(null);
+const currentLineDirection = ref<"vertical" | "horizontal">("vertical");
 const progressStart = ref<number>(0);
 const progressEnd = ref<number>(0);
 
 const activeColor: RGBColor = { r: 0, g: 174, b: 240 };
 const defaultColor: RGBColor = { r: 23, g: 23, b: 23 };
+const initDelay: number = 7;
+const progressInterval: number = 1;
 
 const getTopPoints = (width: number, height: number): Point[] => {
 	return [
@@ -35,6 +38,34 @@ const getBottomPoints = (width: number, height: number): Point[] => {
 		{ x: (width / 21) * 10, y: (height / 9) * 4 },
 		{ x: width / 2, y: height / 2 },
 		{ x: 0, y: height },
+	];
+};
+
+const getLeftPoints = (width: number, height: number): Point[] => {
+	return [
+		{ x: 0, y: height / 2 },
+		{ x: (width / 5) * 3, y: height / 4 },
+		{ x: (width / 9) * 8, y: height / 2 },
+		{ x: (width / 9) * 4, y: (height / 6) * 4 },
+		{ x: (width / 6) * 2, y: (height / 11) * 5 },
+		{ x: (width / 8) * 5, y: (height / 21) * 9 },
+		{ x: (width / 9) * 5, y: (height / 21) * 11 },
+		{ x: width / 2, y: height / 2 },
+		{ x: 0, y: 0 },
+	];
+};
+
+const getRightPoints = (width: number, height: number): Point[] => {
+	return [
+		{ x: width, y: height / 2 },
+		{ x: (width / 5) * 2, y: (height / 4) * 3 },
+		{ x: (width / 9) * 1, y: height / 2 },
+		{ x: (width / 9) * 5, y: (height / 6) * 2 },
+		{ x: (width / 6) * 4, y: (height / 11) * 6 },
+		{ x: (width / 8) * 3, y: (height / 21) * 12 },
+		{ x: (width / 9) * 4, y: (height / 21) * 10 },
+		{ x: width / 2, y: height / 2 },
+		{ x: width, y: height },
 	];
 };
 
@@ -138,50 +169,69 @@ const drawLine = () => {
 	// 清除画布
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-	// 获取点数组
-	const topPoints = getTopPoints(logicalWidth, logicalHeight);
-	const bottomPoints = getBottomPoints(logicalWidth, logicalHeight);
-
-	// 绘制上线条进度范围效果
-	drawProgressLine(
-		ctx,
-		topPoints,
-		defaultColor,
-		activeColor,
-		progressStart.value,
-		progressEnd.value,
-	);
-
-	// 绘制下线条进度范围效果
-	drawProgressLine(
-		ctx,
-		bottomPoints,
-		defaultColor,
-		activeColor,
-		progressStart.value,
-		progressEnd.value,
-	);
+	if (currentLineDirection.value === "vertical") {
+		const topPoints = getTopPoints(logicalWidth, logicalHeight);
+		const bottomPoints = getBottomPoints(logicalWidth, logicalHeight);
+		drawProgressLine(
+			ctx,
+			topPoints,
+			defaultColor,
+			activeColor,
+			progressStart.value,
+			progressEnd.value,
+		);
+		drawProgressLine(
+			ctx,
+			bottomPoints,
+			defaultColor,
+			activeColor,
+			progressStart.value,
+			progressEnd.value,
+		);
+	} else {
+		const leftPoints = getLeftPoints(logicalWidth, logicalHeight);
+		const rightPoints = getRightPoints(logicalWidth, logicalHeight);
+		drawProgressLine(
+			ctx,
+			leftPoints,
+			defaultColor,
+			activeColor,
+			progressStart.value,
+			progressEnd.value,
+		);
+		drawProgressLine(
+			ctx,
+			rightPoints,
+			defaultColor,
+			activeColor,
+			progressStart.value,
+			progressEnd.value,
+		);
+	}
 };
 
 const startProgressAnimation = () => {
 	gsap.to(progressStart, {
 		value: 1,
 		duration: 3,
-		delay: 1,
+		delay: initDelay + progressInterval,
+		ease: "none",
 		repeat: -1,
 		repeatDelay: 3,
-		ease: "power2.out",
 		onUpdate: drawLine,
 	});
 
 	gsap.to(progressEnd, {
 		value: 1,
 		duration: 3,
-		ease: "power2.out",
+		delay: initDelay,
+		ease: "none",
 		repeat: -1,
 		repeatDelay: 3,
 		onUpdate: drawLine,
 		onRepeat: () => {
+			currentLineDirection.value =
+				currentLineDirection.value === "vertical" ? "horizontal" : "vertical";
 			progressStart.value = 0;
 			progressEnd.value = 0;
 		},
