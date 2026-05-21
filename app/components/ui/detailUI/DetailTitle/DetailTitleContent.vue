@@ -78,11 +78,16 @@ const word1FourthCharAnim = () => {
 			onComplete: () => {
 				word1Interval.value = setInterval(() => {
 					if (!word1Split.value || !word1Split.value.chars[3]) return;
-					gsap.to(word1Split.value.chars[3], {
-						rotateY: "+=180",
-						ease: "power2.out",
-						duration: singleDuration,
-					});
+					gsap
+						.timeline()
+						.set(word1Split.value.chars[3], {
+							rotateY: 0,
+						})
+						.to(word1Split.value.chars[3], {
+							rotateY: 180,
+							ease: "power2.out",
+							duration: singleDuration,
+						});
 				}, 2000);
 			},
 		},
@@ -200,11 +205,16 @@ const word3FourthCharAnim = () => {
 			onComplete: () => {
 				word3Interval.value = setInterval(() => {
 					if (!word3Split.value || !word3Split.value.chars[3]) return;
-					gsap.to(word3Split.value.chars[3], {
-						rotate: "+=360",
-						ease: "power2.out",
-						duration: singleDuration / 2,
-					});
+					gsap
+						.timeline()
+						.set(word3Split.value.chars[3], {
+							rotate: 0,
+						})
+						.to(word3Split.value.chars[3], {
+							rotate: 360,
+							ease: "power2.out",
+							duration: singleDuration / 2,
+						});
 				}, 3000);
 			},
 		})

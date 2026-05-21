@@ -4,6 +4,7 @@ import { ScrollSmoother, ScrollTrigger } from "gsap/all";
 
 import Button from "~/components/ui/common/Button.vue";
 import DetailTitle from "~/components/ui/detailUI/DetailTitle/DetailTitle.vue";
+import DetailPartition from "~/components/ui/detailUI/DetailPartition.vue";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
@@ -32,6 +33,7 @@ onUnmounted(() => {
 	<div class="details" ref="wrapperRef">
 		<div class="details_container" ref="contentRef">
 			<DetailTitle />
+			<DetailPartition />
 		</div>
 		<Button
 			:text="'back'"
