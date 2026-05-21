@@ -8,35 +8,38 @@
 
 ## 核心特性
 
-- **内容管理系统** - 基于 Nuxt Content 的 Markdown 文件内容管理
-- **动态交互** - 使用 GSAP 实现流畅的页面过渡和动画效果
-- **多媒体支持** - 集成音乐播放器和图片展示功能
-- **物理引擎** - 使用 matter-js 实现物品展示交互
-- **响应式设计** - 客户端渲染的单页应用（SPA）
-- **分类导航** - 按技术领域组织的内容分类系统
+- **内容管理系统** - 基于 Nuxt Content 3 的 Markdown 文件内容管理，支持 5 个技术分类
+- **全局加载动画** - 路由切换时的自定义加载过渡效果
+- **GSAP 动画系统** - 流畅的页面滚动（ScrollSmoother）、滚动触发动画（ScrollTrigger）
+- **多媒体支持** - 集成音乐播放器（含文件夹浏览、播放列表、进度条）和图片画廊（全屏查看、详情展示）
+- **物理引擎交互** - 使用 matter-js 实现可拖拽的物品展示（手机卡片、Switch 卡片、磁吸约束等）
+- **自定义光标** - 全局自定义光标效果与悬停交互
+- **响应式设计** - 客户端渲染的单页应用（SPA），支持触摸事件
 
 ## 技术栈
 
 ### 框架与核心
 
-- [Nuxt.js 4](https://nuxt.com/) - Vue 3 全栈框架
+- [Nuxt.js 4](https://nuxt.com/) - Vue 3 全栈框架（SPA 模式，`ssr: false`）
 - [Vue 3](https://vuejs.org/) - Composition API + TypeScript
 - [Nuxt Content 3](https://content.nuxt.com/) - 内容管理系统
-
-### 状态管理与数据
-
-- [Pinia](https://pinia.vuejs.org/) - 状态管理
-- [SQLite](https://www.sqlite.org/) - 数据持久化
+- [Pinia 3](https://pinia.vuejs.org/) - 状态管理
 
 ### 动画与交互
 
-- [GSAP](https://gsap.com/) - 专业级动画库
+- [GSAP 3](https://gsap.com/) - 专业级动画库（ScrollTrigger、ScrollSmoother 插件）
 - [matter-js](https://brm.io/matter-js/) - 2D 物理引擎
+- [Sakana Widget 3](https://github.com/rocketduck/sakana-widget) - 桌面挂件组件
 
-### 样式
+### 样式与字体
 
 - [Sass](https://sass-lang.com/) - CSS 预处理器
-- 自定义字体：Mars Needs Cunnilingus、方正基础像素体
+- [@nuxt/fonts](https://github.com/nuxt/fonts) - 字体管理模块
+- 自定义字体：Mars Needs Cunnilingus、方正基础像素体、Coustard Black
+
+### 数据持久化
+
+- [better-sqlite3](https://github.com/WiseLibs/better-sqlite3) - SQLite 同步驱动
 
 ## 快速开始
 
@@ -79,34 +82,65 @@ yarn prettier --write .
 
 ```
 blog-2.0/
-├── app/                    # 应用主目录
-│   ├── components/         # Vue 组件
-│   │   ├── content/       # Markdown 内容展示组件
-│   │   ├── exhibit/       # 展览组件
-│   │   └── ui/            # UI 组件库
-│   │       ├── blogUI/    # 博客专用 UI
-│   │       ├── imageUI/   # 图片相关 UI
-│   │       ├── itemUI/    # 物品展示 UI（物理引擎）
-│   │       ├── mainUI/    # 主界面 UI
-│   │       └── musicUI/   # 音乐播放器 UI
-│   ├── pages/             # 页面路由
-│   ├── stores/            # Pinia 状态管理
-│   ├── composables/       # 组合式函数
-│   ├── types/             # TypeScript 类型定义
-│   └── utils/             # 工具函数
-├── content/               # Markdown 内容
-│   ├── front_end/        # 前端技术文章
-│   ├── back_end/         # 后端技术文章
-│   ├── algorithm/        # 算法文章
-│   ├── deep_learning/    # 深度学习文章
-│   └── gms2/             # GameMaker Studio 2 文章
-├── public/                # 公共静态资源
-│   ├── fonts/            # 字体文件
-│   ├── images/           # 图片资源
-│   ├── sounds/           # 音频资源
-│   └── icons/            # 图标字体
-└── .github/workflows/     # GitHub Actions 配置
-    └── deploy.yml        # 自动部署配置
+├── app/
+│   ├── app.vue                    # 根组件，全局加载系统入口
+│   ├── components/
+│   │   ├── content/               # Markdown 渲染组件（Prose* 系列）
+│   │   │   ├── ProseH1/2/3.vue   # 标题组件
+│   │   │   ├── ProseCode.vue     # 代码块组件
+│   │   │   ├── ProsePre.vue      # 预格式化文本
+│   │   │   ├── ProseBlockquote.vue
+│   │   │   ├── ProseTable.vue    # 表格组件
+│   │   │   ├── CodeGroup.vue     # 代码组组件
+│   │   │   ├── Detail.vue        # 详情折叠组件
+│   │   │   ├── Tip.vue           # 提示框
+│   │   │   ├── Warning.vue       # 警告框
+│   │   │   └── Danger.vue        # 危险框
+│   │   ├── exhibit/               # 展示组件
+│   │   │   ├── Loading1.vue      # 加载动画
+│   │   │   └── Astronaut.vue     # 宇航员动画
+│   │   └── ui/                    # UI 组件库
+│   │       ├── blogUI/            # 博客 UI（菜单、导航、遮罩、滚动条、背景）
+│   │       ├── detailUI/          # 详情页 UI（标题分区、背景、代码区）
+│   │       ├── imageUI/           # 图片画廊 UI（容器、查看器、光标、背景）
+│   │       ├── itemUI/            # 物理引擎 UI（容器、指南、命令栏、卡片、磁吸、书约束、Sakana）
+│   │       ├── mainUI/            # 主界面 UI（容器、背景、光标、颜色条、遮罩、盒子）
+│   │       ├── musicUI/           # 音乐播放器 UI（控制器、文件夹、唱片、列表、进度条、背景）
+│   │       ├── rootUI/            # 根级 UI（加载动画、音乐卡片）
+│   │       └── common/            # 通用 UI（按钮、图片、工具提示、故障文字、箭头）
+│   ├── composables/               # 组合式函数
+│   │   ├── usePageReady.ts       # 页面就绪钩子（配合加载系统）
+│   │   ├── useSoundEffect.ts     # 音效控制
+│   │   └── useCanvasDrawing.ts   # Canvas 绘制
+│   ├── pages/
+│   │   ├── index.vue              # 首页
+│   │   ├── blogs.vue              # 博客列表（ScrollSmoother 平滑滚动）
+│   │   ├── [...slug].vue          # 动态内容路由
+│   │   ├── details.vue            # 详情页
+│   │   ├── items.vue              # 物理引擎物品展示
+│   │   ├── images.vue             # 图片画廊
+│   │   └── musics.vue             # 音乐播放器
+│   ├── stores/                    # Pinia 状态管理
+│   │   ├── blogStore.ts          # 博客集合/内容状态
+│   │   ├── loadingStore.ts       # 全局加载动画状态
+│   │   ├── soundStore.ts         # 音频播放状态
+│   │   ├── imageStore.ts         # 图片画廊状态
+│   │   ├── itemStore.ts          # 物理引擎物品状态
+│   │   └── mainStore.ts          # 主界面状态
+│   ├── types/                     # TypeScript 类型定义
+│   └── utils/                     # 工具函数
+├── content/                       # Markdown 文章内容
+│   ├── front_end/                # 前端技术文章 -> /blogs/front_end/
+│   ├── back_end/                 # 后端技术文章 -> /blogs/back_end/
+│   ├── algorithm/                # 算法文章     -> /blogs/algorithm/
+│   ├── deep_learning/            # 深度学习文章   -> /blogs/deep_learning/
+│   └── gms2/                     # GMS2 文章    -> /blogs/gms2/
+├── public/
+│   ├── fonts/                    # 自定义字体
+│   ├── images/                   # 背景、封面、UI 图片
+│   ├── sounds/                   # 音效和音乐
+│   └── icons/                    # iconfont 自定义图标
+└── .github/workflows/deploy.yml   # GitHub Actions 自动部署配置
 ```
 
 ## 内容管理
@@ -125,7 +159,7 @@ content/
 └── gms2/
 ```
 
-文件名会自动成为路由路径的一部分。
+文件名会自动成为路由路径的一部分（例如 `content/front_end/vue.md` -> `/blogs/front_end/vue`）。
 
 ### 支持的内容分类
 
@@ -139,13 +173,55 @@ content/
 
 ### Markdown 代码高亮
 
-支持的语言：C、C++、Java、Properties、Python、Vue、XML
+支持的语言：C、C++、Java、Properties、Python、Vue、XML（主题：github-light）
+
+### Markdown 自定义组件
+
+项目提供了丰富的 Prose 组件扩展：
+
+- **提示框**：`Tip`、`Warning`、`Danger`
+- **代码组**：`CodeGroup`（多标签代码块）
+- **折叠详情**：`Detail`
+
+## 核心架构
+
+### 全局加载系统
+
+路由切换时的加载动画流程：
+
+1. **首次加载**（`app.vue`）：检查 `document.readyState`，未完成则等待 `window.load`
+2. **路由跳转前**：调用 `loadingStore.loadingIn()` 触发动画
+3. **目标页面**：在 `usePageReady()` 组合式函数中调用 `loadingStore.loadingOut()` 结束动画
+4. **加载组件**：`app/components/ui/rootUI/Loading.vue` 处理动画进出状态
+
+### 博客页面滚动
+
+`blogs.vue` 使用 GSAP ScrollSmoother 实现平滑滚动：
+
+```typescript
+ScrollSmoother.create({
+	wrapper: ".blog_content",
+	content: ".blog_content_container",
+	smooth: 1,
+});
+```
+
+### 触摸事件处理
+
+- 模板中使用 `@touchmove.prevent` 阻止默认滚动
+- 文档级监听器：需要阻止默认行为时用 `{ passive: false }`，仅需提升滚动性能时用 `{ passive: true }`
+
+### 物理引擎（matter-js）
+
+`ItemContainer.vue` 使用 matter-js 实现物理交互：
+
+- 物品组件：`ItemPhoneCard.vue`、`ItemSwitchCard.vue`
+- 约束系统：`ItemMagnetConstraint.vue`（磁吸）、`ItemBookConstraint.vue`（书本）
+- 交互控制：`ItemCommandBar.vue`（命令栏）、`ItemGuide.vue`（操作指南）
 
 ## 部署
 
-### GitHub Pages
-
-项目配置了 GitHub Actions 自动部署：
+### GitHub Pages（自动）
 
 1. 推送到 `nuxt` 分支
 2. GitHub Actions 自动构建并部署到 GitHub Pages
@@ -156,29 +232,39 @@ git push origin nuxt
 
 部署配置位于 `.github/workflows/deploy.yml`
 
-### 静态部署
+### 手动静态构建
 
 ```bash
 yarn generate
-# 输出目录 .output/public
+# 输出目录：.output/public
 ```
 
 ## 开发规范
 
-### 组件命名
-
-- 使用 PascalCase：`BlogMenu.vue`
-- 遵循 Vue 3 Composition API 规范
-
 ### 代码风格
 
-- 使用 TypeScript 进行类型检查
-- 使用 Prettier 格式化代码（Tab 缩进）
+- **TypeScript**：所有组件、组合式函数、Store 必须使用 TypeScript
+- **组件命名**：PascalCase（如 `BlogMenu.vue`）
+- **Store 命名**：`useXxxStore` 模式
+- **缩进**：Tab（`.vscode/settings.json` 配置）
+- **CSS**：使用 SCSS，`<style scoped>`
+- **格式化**：运行 `yarn prettier --write .`
 
-### 状态管理
+### Store 模式
 
-- Store 命名：`useXxxStore`
-- 按业务功能分离 stores
+Store 使用 Pinia 和显式 TypeScript 接口：
+
+```typescript
+export const useXxxStore = defineStore("xxx", (): XxxState & XxxGetter & XxxActions => {
+	// ...
+});
+```
+
+### GSAP 动画注意事项
+
+- 使用 `gsap.to()`、`gsap.timeline()` 创建动画
+- **必须在 `onUnmounted()` 中销毁动画**，防止内存泄漏
+- ScrollTrigger 用于滚动触发动画，ScrollSmoother 用于平滑滚动
 
 ## 相关文档
 
