@@ -8,6 +8,7 @@ const containerRef = ref<HTMLDivElement | null>(null);
 const line1Ref = ref<HTMLDivElement | null>(null);
 const line2Ref = ref<HTMLDivElement | null>(null);
 const line3Ref = ref<HTMLDivElement | null>(null);
+const codingAnim = ref<gsap.core.Timeline | null>(null);
 
 const appearDelay: number = 7;
 const appearDuration: number = 1;
@@ -18,11 +19,15 @@ const language: string = "html";
 const code1: string[] = ["<span class='box'>", "<span class='word'>text</span>", "</span>"];
 const code2: string[] = ["<div class='box'>", "<div class='title'>Title</div>", "</div>"];
 
-const codingAnim = () => {
+const createCodingAnim = () => {
 	const currentCode = Math.random() > 0.5 ? code1 : code2;
 	if (!currentCode[0] || !currentCode[1] || !currentCode[2]) return;
-	gsap
-		.timeline({ yoyo: true, repeat: -1, repeatDelay: codingLineDelay })
+	codingAnim.value = gsap
+		.timeline({
+			yoyo: true,
+			repeat: -1,
+			repeatDelay: codingLineDelay,
+		})
 		.to(line1Ref.value, {
 			scrambleText: { text: currentCode[0] },
 			ease: "none",
@@ -52,9 +57,15 @@ onMounted(() => {
 			ease: "power2.out",
 			duration: appearDuration,
 			delay: appearDelay,
-			onComplete: codingAnim,
+			onComplete: createCodingAnim,
 		},
 	);
+});
+
+onUnmounted(() => {
+	if (codingAnim.value) {
+		codingAnim.value.kill();
+	}
 });
 </script>
 
@@ -140,6 +151,7 @@ $base-size: 1;
 				display: flex;
 				align-items: center;
 				gap: 0.5rem * $base-size;
+				font-size: 1rem;
 				font-family: "方正基础像素体";
 				color: #ffffff;
 
@@ -219,34 +231,43 @@ $base-size: 1;
 @media screen and (max-width: 576px) {
 	$base-size: 0.6;
 
-	.custom_pre_wrapper {
-		position: relative;
-		margin: 1rem * $base-size 0;
-		padding: 1rem * $base-size;
-		border-width: 0.2rem * $base-size;
-		border-radius: 10px;
-
-		.mac_header {
-			margin-bottom: 1rem * $base-size;
-
-			.points,
-			.language {
-				gap: 0.5rem * $base-size;
-				font-size: 0.9rem * $base-size;
-				span {
-					width: 0.7rem * $base-size;
-					height: 0.7rem * $base-size;
-				}
-			}
+	.title_code_container {
+		&::after {
+			width: calc(100% - 10px * $base-size);
+			height: calc(100% - 10px * $base-size);
+			padding: 5px * $base-size;
+			border-radius: 5px * $base-size;
 		}
 
-		.code_editor {
+		.custom_pre_wrapper {
+			width: 300px * $base-size;
 			padding: 1rem * $base-size;
-			font-size: 0.9rem * $base-size;
-			border-width: 0.1rem * $base-size;
+			border-radius: 10px * $base-size;
 
-			&::-webkit-scrollbar {
-				height: 0.3rem * $base-size;
+			.mac_header {
+				margin-bottom: 1rem * $base-size;
+
+				.points,
+				.language {
+					gap: 0.5rem * $base-size;
+					font-size: 1rem * $base-size;
+
+					span {
+						width: 0.7rem * $base-size;
+						height: 0.7rem * $base-size;
+					}
+				}
+			}
+
+			.code_editor {
+				padding: 1rem * $base-size;
+				font-size: 0.9rem * $base-size;
+				border-width: 0.1rem * $base-size;
+				border-radius: 5px * $base-size;
+
+				.line2 {
+					text-indent: 2rem * $base-size;
+				}
 			}
 		}
 	}
@@ -256,35 +277,43 @@ $base-size: 1;
 @media screen and (min-width: 576px) and (max-width: 768px) {
 	$base-size: 0.8;
 
-	.custom_pre_wrapper {
-		position: relative;
-		margin: 1rem * $base-size 0;
-		padding: 1rem * $base-size;
-		border-width: 0.2rem * $base-size;
-		border-radius: 10px;
-
-		.mac_header {
-			margin-bottom: 1rem * $base-size;
-
-			.points,
-			.language {
-				gap: 0.5rem * $base-size;
-				font-size: 0.9rem * $base-size;
-
-				span {
-					width: 0.7rem * $base-size;
-					height: 0.7rem * $base-size;
-				}
-			}
+	.title_code_container {
+		&::after {
+			width: calc(100% - 10px * $base-size);
+			height: calc(100% - 10px * $base-size);
+			padding: 5px * $base-size;
+			border-radius: 5px * $base-size;
 		}
 
-		.code_editor {
+		.custom_pre_wrapper {
+			width: 300px * $base-size;
 			padding: 1rem * $base-size;
-			font-size: 0.9rem * $base-size;
-			border-width: 0.1rem * $base-size;
+			border-radius: 10px * $base-size;
 
-			&::-webkit-scrollbar {
-				height: 0.3rem * $base-size;
+			.mac_header {
+				margin-bottom: 1rem * $base-size;
+
+				.points,
+				.language {
+					gap: 0.5rem * $base-size;
+					font-size: 1rem * $base-size;
+
+					span {
+						width: 0.7rem * $base-size;
+						height: 0.7rem * $base-size;
+					}
+				}
+			}
+
+			.code_editor {
+				padding: 1rem * $base-size;
+				font-size: 0.9rem * $base-size;
+				border-width: 0.1rem * $base-size;
+				border-radius: 5px * $base-size;
+
+				.line2 {
+					text-indent: 2rem * $base-size;
+				}
 			}
 		}
 	}
@@ -292,37 +321,45 @@ $base-size: 1;
 
 /* ========== 中等屏（768px - 991px）========== */
 @media screen and (min-width: 768px) and (max-width: 991px) {
-	$base-size: 0.9;
+	$base-size: 0.6;
 
-	.custom_pre_wrapper {
-		position: relative;
-		margin: 1rem * $base-size 0;
-		padding: 1rem * $base-size;
-		border-width: 0.2rem * $base-size;
-		border-radius: 10px;
-
-		.mac_header {
-			margin-bottom: 1rem * $base-size;
-
-			.points,
-			.language {
-				gap: 0.5rem * $base-size;
-				font-size: 0.9rem * $base-size;
-
-				span {
-					width: 0.7rem * $base-size;
-					height: 0.7rem * $base-size;
-				}
-			}
+	.title_code_container {
+		&::after {
+			width: calc(100% - 10px * $base-size);
+			height: calc(100% - 10px * $base-size);
+			padding: 5px * $base-size;
+			border-radius: 5px * $base-size;
 		}
 
-		.code_editor {
+		.custom_pre_wrapper {
+			width: 300px * $base-size;
 			padding: 1rem * $base-size;
-			font-size: 0.9rem * $base-size;
-			border-width: 0.1rem * $base-size;
+			border-radius: 10px * $base-size;
 
-			&::-webkit-scrollbar {
-				height: 0.3rem * $base-size;
+			.mac_header {
+				margin-bottom: 1rem * $base-size;
+
+				.points,
+				.language {
+					gap: 0.5rem * $base-size;
+					font-size: 1rem * $base-size;
+
+					span {
+						width: 0.7rem * $base-size;
+						height: 0.7rem * $base-size;
+					}
+				}
+			}
+
+			.code_editor {
+				padding: 1rem * $base-size;
+				font-size: 0.9rem * $base-size;
+				border-width: 0.1rem * $base-size;
+				border-radius: 5px * $base-size;
+
+				.line2 {
+					text-indent: 2rem * $base-size;
+				}
 			}
 		}
 	}
@@ -330,36 +367,45 @@ $base-size: 1;
 
 /* ========== 大屏（991px - 1199px）========== */
 @media screen and (min-width: 991px) and (max-width: 1199px) {
-	$base-size: 1;
+	$base-size: 0.6;
 
-	.custom_pre_wrapper {
-		margin: 1rem * $base-size 0;
-		padding: 1rem * $base-size;
-		border-width: 0.2rem * $base-size;
-		border-radius: 10px;
-
-		.mac_header {
-			margin-bottom: 1rem * $base-size;
-
-			.points,
-			.language {
-				gap: 0.5rem * $base-size;
-				font-size: 0.9rem * $base-size;
-
-				span {
-					width: 0.7rem * $base-size;
-					height: 0.7rem * $base-size;
-				}
-			}
+	.title_code_container {
+		&::after {
+			width: calc(100% - 10px * $base-size);
+			height: calc(100% - 10px * $base-size);
+			padding: 5px * $base-size;
+			border-radius: 5px * $base-size;
 		}
 
-		.code_editor {
+		.custom_pre_wrapper {
+			width: 300px * $base-size;
 			padding: 1rem * $base-size;
-			font-size: 0.9rem * $base-size;
-			border-width: 0.1rem * $base-size;
+			border-radius: 10px * $base-size;
 
-			&::-webkit-scrollbar {
-				height: 0.3rem * $base-size;
+			.mac_header {
+				margin-bottom: 1rem * $base-size;
+
+				.points,
+				.language {
+					gap: 0.5rem * $base-size;
+					font-size: 1rem * $base-size;
+
+					span {
+						width: 0.7rem * $base-size;
+						height: 0.7rem * $base-size;
+					}
+				}
+			}
+
+			.code_editor {
+				padding: 1rem * $base-size;
+				font-size: 0.9rem * $base-size;
+				border-width: 0.1rem * $base-size;
+				border-radius: 5px * $base-size;
+
+				.line2 {
+					text-indent: 2rem * $base-size;
+				}
 			}
 		}
 	}

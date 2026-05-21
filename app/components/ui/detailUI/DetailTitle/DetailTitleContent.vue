@@ -208,7 +208,7 @@ const word3FourthCharAnim = () => {
 				}, 3000);
 			},
 		})
-		.set(word3Split.value.chars[3], { y: "-60dvh", rotate: 90 })
+		.set(word3Split.value.chars[3], { y: "-70dvh", rotate: 90 })
 		.to(word3Split.value.chars[3], {
 			y: 0,
 			ease: "bounce.out",
@@ -368,9 +368,13 @@ $base_size: 1;
 	.title_content {
 		display: grid;
 		grid-template-rows: repeat(2, 1fr);
+		justify-items: center;
+		align-items: center;
 
 		.content_word {
 			grid-area: 2/1/3/2;
+			margin-left: 0;
+			margin-bottom: 100px * $base_size;
 			font-size: 8rem * $base_size;
 		}
 
@@ -387,9 +391,13 @@ $base_size: 1;
 	.title_content {
 		display: grid;
 		grid-template-rows: repeat(2, 1fr);
+		justify-items: center;
+		align-items: center;
 
 		.content_word {
 			grid-area: 2/1/3/2;
+			margin-left: 0;
+			margin-bottom: 100px * $base_size;
 			font-size: 8rem * $base_size;
 		}
 
@@ -401,10 +409,11 @@ $base_size: 1;
 
 /* ========== 中等屏（768px - 991px）========== */
 @media screen and (min-width: 768px) and (max-width: 991px) {
-	$base_size: 0.6;
+	$base_size: 0.8;
 
 	.title_content {
 		.content_word {
+			margin-left: 90px * $base_size;
 			font-size: 8rem * $base_size;
 		}
 	}
@@ -416,6 +425,7 @@ $base_size: 1;
 
 	.title_content {
 		.content_word {
+			margin-left: 100px * $base_size;
 			font-size: 8rem * $base_size;
 		}
 	}
