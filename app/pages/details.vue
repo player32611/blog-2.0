@@ -30,10 +30,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="details" ref="wrapperRef">
-		<div class="details_container" ref="contentRef">
-			<DetailTitle />
-			<DetailPartition />
+	<div class="details">
+		<div class="details_wrapper" ref="wrapperRef">
+			<div class="details_content" ref="contentRef">
+				<DetailTitle />
+				<DetailPartition />
+			</div>
 		</div>
 		<Button
 			:text="'back'"
@@ -47,15 +49,18 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .details {
-	position: relative;
 	width: 100%;
 	font-size: 1rem;
-	background-color: #171717;
 
-	.details_container {
-		height: 500dvh;
+	.details_wrapper {
+		height: auto;
 		width: 100%;
-		overflow: visible;
+		background-color: #171717;
+
+		.details_content {
+			height: 500dvh;
+			width: 100%;
+		}
 	}
 }
 </style>

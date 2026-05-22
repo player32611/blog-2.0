@@ -22,6 +22,7 @@ const cannonFireDuration: number = 1;
 const cannonFireScale: number = 0.9;
 
 const getCarrelRotateAngle = () => {
+	console.log(window.innerWidth);
 	if (window.innerWidth < 576) {
 		return { left: 20, right: -20 };
 	} else if (window.innerWidth < 768) {
