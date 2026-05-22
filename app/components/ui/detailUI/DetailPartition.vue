@@ -1,36 +1,46 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
-
-const itemNum: number = 15;
+import type { DetailPartitionParams } from "~/types/components";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const { text, direction } = defineProps<DetailPartitionParams>();
+const containerRef = ref<HTMLDivElement | null>(null);
+const anim = ref<gsap.core.Tween | null>(null);
+
+const itemNum: number = 15;
+
 onMounted(() => {
-	gsap.fromTo(
-		".partition_container",
-		{ x: 0 },
+	const start = direction === "left" ? 0 : -1000;
+	const end = direction === "left" ? -1000 : 0;
+	anim.value = gsap.fromTo(
+		containerRef.value,
+		{ x: start },
 		{
-			x: -1000,
-			scrollTrigger: {
-				// trigger: ".detail_partition",
-				scrub: true, // 平滑滚动效果
-			},
+			x: end,
+			scrollTrigger: { scrub: true },
 		},
 	);
+});
+
+onUnmounted(() => {
+	anim.value?.scrollTrigger?.kill();
+	anim.value?.kill();
 });
 </script>
 
 <template>
 	<div class="detail_partition">
-		<div class="partition_container">
+		<div class="partition_container" ref="containerRef">
 			<div class="partition_item" v-for="i in itemNum">
-				<div class="partition_text">INTRODUCE</div>
+				<div class="partition_text">{{ text.toUpperCase() }}</div>
 				<svg
 					id="partition_arrow"
 					data-name="arrow"
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 57.68085 54"
+					:style="{ rotate: direction === 'left' ? '0deg' : '180deg' }"
 				>
 					<g id="arrow" data-name="arrow">
 						<g>
@@ -126,8 +136,6 @@ onMounted(() => {
 	display: flex;
 	height: 5rem;
 	width: 100%;
-	border-top: 5px solid #000000;
-	border-bottom: 5px solid #000000;
 	overflow: hidden;
 
 	.partition_container {

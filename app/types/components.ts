@@ -53,6 +53,11 @@ export interface BlogNavigationParams {
 	page: globalThis.Ref<any, any>;
 }
 
+export interface DetailPartitionParams {
+	text: string;
+	direction: "left" | "right";
+}
+
 export interface ItemParams {
 	x: number;
 	y: number;
