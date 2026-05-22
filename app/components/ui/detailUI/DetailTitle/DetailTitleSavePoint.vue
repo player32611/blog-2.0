@@ -16,7 +16,6 @@
 	.title_save_point {
 		height: 200px;
 		width: 100%;
-		background-color: yellow;
 	}
 }
 
@@ -25,7 +24,6 @@
 	.title_save_point {
 		height: 200px;
 		width: 100%;
-		background-color: yellow;
 	}
 }
 
@@ -34,7 +32,6 @@
 	.title_save_point {
 		height: 200px;
 		width: 100%;
-		background-color: yellow;
 	}
 }
 
@@ -43,7 +40,6 @@
 	.title_save_point {
 		height: 200px;
 		width: 100%;
-		background-color: yellow;
 	}
 }
 </style>

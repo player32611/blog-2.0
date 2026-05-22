@@ -8,6 +8,7 @@ const containerRef = ref<HTMLDivElement | null>(null);
 const line1Ref = ref<HTMLDivElement | null>(null);
 const line2Ref = ref<HTMLDivElement | null>(null);
 const line3Ref = ref<HTMLDivElement | null>(null);
+const appearAnim = ref<gsap.core.Tween | null>(null);
 const codingAnim = ref<gsap.core.Timeline | null>(null);
 
 const appearDelay: number = 7;
@@ -49,7 +50,7 @@ const createCodingAnim = () => {
 };
 
 onMounted(() => {
-	gsap.fromTo(
+	appearAnim.value = gsap.fromTo(
 		containerRef.value,
 		{ height: 0 },
 		{
@@ -63,9 +64,8 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-	if (codingAnim.value) {
-		codingAnim.value.kill();
-	}
+	if (appearAnim.value) appearAnim.value.kill();
+	if (codingAnim.value) codingAnim.value.kill();
 });
 </script>
 

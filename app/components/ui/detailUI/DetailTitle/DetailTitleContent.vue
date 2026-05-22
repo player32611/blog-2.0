@@ -342,26 +342,28 @@ $base_size: 1;
 	user-select: none;
 
 	.content_word {
-		grid-area: 1 / 1 / 2 / 4;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		margin-left: 200px;
-
-		font-size: 9rem;
+		font-size: 8rem;
 		font-family: "Coustard Black";
 
 		.title_word1 {
 			color: #fffce1;
+			white-space: nowrap;
 		}
 
 		.title_word2 {
 			color: #ff7f27;
+			white-space: nowrap;
 		}
 
 		.title_word3 {
+			height: auto;
 			color: #00000000;
+			white-space: nowrap;
 			-webkit-text-stroke: calc(0.2rem) #ff7f27;
 		}
 	}
