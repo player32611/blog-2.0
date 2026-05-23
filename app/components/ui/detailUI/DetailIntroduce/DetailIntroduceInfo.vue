@@ -131,8 +131,8 @@ onUnmounted(() => {
 		<div class="introduce_line1" @mouseout="handleChangeName">
 			<div class="line1_container" ref="line1Ref">昵称：{{ line1CurrentName }}</div>
 		</div>
-		<div class="introduce_line2" ref="line2Ref">昵称</div>
-		<div class="introduce_line3" ref="line3Ref">爱好</div>
+		<div class="introduce_line2" ref="line2Ref">昵称：</div>
+		<div class="introduce_line3" ref="line3Ref">爱好：{{ getDetailHobby() }}</div>
 	</div>
 </template>
 
@@ -140,7 +140,7 @@ onUnmounted(() => {
 .introduce_info {
 	position: absolute;
 	left: 20%;
-	top: 25%;
+	top: 5%;
 	padding: 3rem;
 	display: flex;
 	flex-direction: column;

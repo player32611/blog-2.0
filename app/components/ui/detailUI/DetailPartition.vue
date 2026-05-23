@@ -14,19 +14,14 @@ const itemNum: number = 15;
 
 onMounted(() => {
 	if (!itemRefs.value[0]) return;
-	const start = direction === "left" ? 0 : -2 * itemRefs.value[0]?.offsetWidth;
-	const end = direction === "left" ? -2 * itemRefs.value[0]?.offsetWidth : 0;
-	anim.value = gsap.fromTo(
-		containerRef.value,
-		{ x: start },
-		{
-			x: end,
-			scrollTrigger: { scrub: true },
-		},
-	);
+	const rect = itemRefs.value[0].getBoundingClientRect();
+	anim.value = gsap.to(containerRef.value, {
+		x: direction === "left" ? `-=${2 * rect.width}px` : `+=${2 * rect.width}px`,
+		scrollTrigger: { scrub: true },
+	});
 	itemRefs.value.forEach(el => {
 		anim.value = gsap.to(el, {
-			x: direction === "left" ? `-=${el.offsetWidth}` : `+=${el.offsetWidth}`,
+			x: direction === "left" ? `-=${2 * rect.width}px` : `+=${2 * rect.width}px`,
 			ease: "none",
 			duration: 3,
 			repeat: -1,
@@ -153,9 +148,11 @@ onUnmounted(() => {
 	overflow: hidden;
 
 	.partition_container {
+		position: relative;
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		left: -50%;
 		height: 5rem;
 		width: auto;
 		font-family: "方正基础像素体";
@@ -163,8 +160,11 @@ onUnmounted(() => {
 		background-color: #ff7f27;
 
 		.partition_item {
+			position: relative;
 			display: flex;
+			justify-content: space-around;
 			align-items: center;
+			width: 250px;
 			font-size: 2rem;
 
 			#partition_arrow {
