@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DetailIntroduceCircle from "./DetailIntroduceCircle.vue";
 import DetailIntroduceInfo from "./DetailIntroduceInfo.vue";
 import DetailIntroduceSkill from "./DetailIntroduceSkill.vue";
 </script>
@@ -7,6 +8,7 @@ import DetailIntroduceSkill from "./DetailIntroduceSkill.vue";
 	<div class="detail_introduce">
 		<DetailIntroduceInfo />
 		<DetailIntroduceSkill />
+		<DetailIntroduceCircle />
 	</div>
 </template>
 

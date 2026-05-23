@@ -38,6 +38,8 @@ onUnmounted(() => {
 				<DetailPartition text="introduce" :direction="'left'" />
 				<DetailPartition text="introduce" :direction="'right'" />
 				<DetailIntroduce />
+				<DetailPartition text="work" :direction="'left'" />
+				<DetailPartition text="work" :direction="'right'" />
 			</div>
 		</div>
 		<Button

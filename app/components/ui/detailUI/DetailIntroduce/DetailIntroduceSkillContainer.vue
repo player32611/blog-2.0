@@ -1,14 +1,5 @@
 <script setup lang="ts">
-import Matter, {
-	Constraint,
-	Engine,
-	Render,
-	World,
-	Bodies,
-	Mouse,
-	MouseConstraint,
-	Runner,
-} from "matter-js";
+import Matter, { Engine, Render, World, Bodies, Mouse, MouseConstraint, Runner } from "matter-js";
 import { ScrollSmoother } from "gsap/all";
 import type { ItemParams } from "~/types/components";
 
