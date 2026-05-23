@@ -9,6 +9,7 @@ import Matter, {
 	MouseConstraint,
 	Runner,
 } from "matter-js";
+import { ScrollSmoother } from "gsap/all";
 import type { ItemParams } from "~/types/components";
 
 import DetailIntroduceSkillItem from "./DetailIntroduceSkillItem.vue";
@@ -17,6 +18,7 @@ const containerRef = ref<HTMLDivElement | null>(null);
 const itemRefs = ref<Map<string, InstanceType<typeof DetailIntroduceSkillItem>>>(new Map());
 const itemPositions = ref<Map<string, ItemParams>>(new Map());
 const itemInstances = ref<Map<string, Matter.Body>>(new Map());
+const smootherRef = ref<ScrollSmoother | null>(ScrollSmoother.get() || null);
 
 const skills = getDetailSkills();
 
@@ -99,16 +101,16 @@ const init = () => {
 
 const createItems = () => {
 	if (!containerRef.value) return;
-
+	console.log("create");
 	const width = containerRef.value.clientWidth;
 
 	skills.forEach((skill, index) => {
 		const x = itemPositions.value.get(`${skill}Item`)?.x ?? Math.random() * width;
 		const y = itemPositions.value.get(`${skill}Item`)?.y ?? Math.random() * -100;
 		const angle = itemPositions.value.get(`${skill}Item`)?.angle ?? 0;
-		const vialInstance = itemRefs.value.get(`${skill}Item`);
-		if (vialInstance) {
-			const object = vialInstance.createItem(x, y, angle);
+		const itemRef = itemRefs.value.get(`${skill}Item`);
+		if (itemRef) {
+			const object = itemRef.createItem(x, y, angle);
 			if (object) itemInstances.value.set(`${skill}Item`, object);
 		}
 	});
@@ -125,6 +127,14 @@ const handleUpdate = () => {
 		if (containerRef.value) {
 			containerRef.value.style.cursor = "pointer";
 		}
+	});
+
+	Matter.Events.on(engine, "beforeUpdate", () => {
+		if (!smootherRef.value) return;
+		const speed = smootherRef.value.getVelocity() / 2000;
+		itemInstances.value.forEach(item => {
+			Matter.Body.setVelocity(item, { x: item.velocity.x, y: (item.velocity.y -= speed) });
+		});
 	});
 
 	Matter.Events.on(engine, "afterUpdate", () => {

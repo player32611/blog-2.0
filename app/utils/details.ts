@@ -1,8 +1,8 @@
-const names = ["昵称1", "昵称2", "昵称3"];
+const names = ["一颗没梦想的苹果", "酷酷苹果炮", "player32611"];
 
 const hobby = "大概是 coding";
 
-const skills = ["html", "css", "javascript"];
+const skills = ["html", "css", "javascript", "ts", "vue", "java"];
 
 export const getDetailName = (index: number) => {
 	if (!names[index]) return "null";
