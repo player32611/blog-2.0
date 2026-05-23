@@ -101,7 +101,6 @@ const init = () => {
 
 const createItems = () => {
 	if (!containerRef.value) return;
-	console.log("create");
 	const width = containerRef.value.clientWidth;
 
 	skills.forEach((skill, index) => {

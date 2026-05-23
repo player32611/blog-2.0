@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import gsap from "gsap";
-import { ScrollTrigger, SplitText } from "gsap/all";
+import { ScrollTrigger } from "gsap/all";
 
 import DetailIntroduceSkillContainer from "./DetailIntroduceSkillContainer.vue";
 
-gsap.registerPlugin(ScrollTrigger, SplitText);
+gsap.registerPlugin(ScrollTrigger);
 
 const skillRef = ref<HTMLDivElement | null>(null);
 const mountAnim = ref<gsap.core.Tween | null>(null);
@@ -55,12 +55,57 @@ onUnmounted(() => {
 	align-items: start;
 	height: 30dvh;
 	width: 30%;
-	color: rgba($color: #ffffff, $alpha: 0.5);
-	font-size: 1.5rem;
-	font-family: "方正基础像素体";
 	border-color: rgba($color: #ffffff, $alpha: 0.5);
 	border-width: 5px;
 	border-style: solid;
 	overflow: hidden;
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.5;
+
+	.introduce_skill {
+		right: 10%;
+		bottom: 50%;
+		width: calc(80% - 2 * 5px * $base-size);
+		border-width: 5px * $base-size;
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.7;
+
+	.introduce_skill {
+		right: 10%;
+		bottom: 50%;
+		width: calc(80% - 2 * 5px * $base-size);
+		border-width: 5px * $base-size;
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.5;
+
+	.introduce_skill {
+		right: 5%;
+		bottom: 50%;
+		width: 40%;
+		border-width: 8px * $base-size;
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.7;
+
+	.introduce_skill {
+		right: 10%;
+		bottom: 50%;
+		width: 40%;
+		border-width: 5px * $base-size;
+	}
 }
 </style>

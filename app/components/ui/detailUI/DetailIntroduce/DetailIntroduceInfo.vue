@@ -131,7 +131,7 @@ onUnmounted(() => {
 		<div class="introduce_line1" @mouseout="handleChangeName">
 			<div class="line1_container" ref="line1Ref">昵称：{{ line1CurrentName }}</div>
 		</div>
-		<div class="introduce_line2" ref="line2Ref">昵称：</div>
+		<div class="introduce_line2" ref="line2Ref">职业：{{ getDetailJob() }}</div>
 		<div class="introduce_line3" ref="line3Ref">爱好：{{ getDetailHobby() }}</div>
 	</div>
 </template>
@@ -139,14 +139,13 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .introduce_info {
 	position: absolute;
-	left: 20%;
+	left: 10%;
 	top: 5%;
 	padding: 3rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
 	align-items: start;
-	height: 30dvh;
 	width: 20%;
 	color: rgba($color: #ffffff, $alpha: 0.5);
 	font-size: 1.5rem;
@@ -166,6 +165,82 @@ onUnmounted(() => {
 
 		div {
 			pointer-events: none;
+		}
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.5;
+
+	.introduce_info {
+		left: 20%;
+		top: 5%;
+		padding: 3rem * $base-size;
+		width: 50%;
+		font-size: 2rem * $base-size;
+		border-width: 5px * $base-size;
+
+		.introduce_line1,
+		.introduce_line2,
+		.introduce_line3 {
+			height: 3rem * $base-size;
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.7;
+
+	.introduce_info {
+		padding: 3rem * $base-size;
+		width: 50%;
+		font-size: 2rem * $base-size;
+		border-width: 5px * $base-size;
+
+		.introduce_line1,
+		.introduce_line2,
+		.introduce_line3 {
+			height: 3rem * $base-size;
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.5;
+
+	.introduce_info {
+		left: 5%;
+		padding: 3rem * $base-size;
+		width: 30%;
+		font-size: 2rem * $base-size;
+		border-width: 8px * $base-size;
+
+		.introduce_line1,
+		.introduce_line2,
+		.introduce_line3 {
+			height: 3rem * $base-size;
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.7;
+
+	.introduce_info {
+		left: 10%;
+		padding: 3rem * $base-size;
+		width: 30%;
+		font-size: 2rem * $base-size;
+		border-width: 5px * $base-size;
+
+		.introduce_line1,
+		.introduce_line2,
+		.introduce_line3 {
+			height: 3rem * $base-size;
 		}
 	}
 }

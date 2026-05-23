@@ -49,6 +49,7 @@ defineExpose<ItemInstance>({
 	align-items: center;
 	height: 50px;
 	width: 50px;
+	font-size: 1.5rem;
 	border-radius: 50%;
 	border-color: #000000;
 	border-style: solid;

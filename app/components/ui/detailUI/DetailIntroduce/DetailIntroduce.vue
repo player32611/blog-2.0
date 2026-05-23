@@ -15,7 +15,5 @@ import DetailIntroduceSkill from "./DetailIntroduceSkill.vue";
 	position: relative;
 	height: 200vh;
 	width: 100%;
-	// background-color: #000000;
-	// background-color: rgba($color: #ffffff, $alpha: 0.5);
 }
 </style>

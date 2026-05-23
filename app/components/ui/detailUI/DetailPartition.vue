@@ -8,30 +8,38 @@ gsap.registerPlugin(ScrollTrigger);
 const { text, direction } = defineProps<DetailPartitionParams>();
 const containerRef = ref<HTMLDivElement | null>(null);
 const itemRefs = ref<HTMLDivElement[]>([]);
-const anim = ref<gsap.core.Tween | null>(null);
+const scrollAnim = ref<gsap.core.Tween | null>(null);
+const normalAnims = ref<gsap.core.Tween[]>([]);
 
-const itemNum: number = 15;
+const itemNum: number = 20;
 
 onMounted(() => {
 	if (!itemRefs.value[0]) return;
 	const rect = itemRefs.value[0].getBoundingClientRect();
-	anim.value = gsap.to(containerRef.value, {
+	scrollAnim.value = gsap.to(containerRef.value, {
+		onStart: () => {
+			if (direction === "left") gsap.set(containerRef.value, { right: 2 * rect.width });
+			else gsap.set(containerRef.value, { right: 4 * rect.width });
+		},
 		x: direction === "left" ? `-=${2 * rect.width}px` : `+=${2 * rect.width}px`,
 		scrollTrigger: { scrub: true },
 	});
 	itemRefs.value.forEach(el => {
-		anim.value = gsap.to(el, {
-			x: direction === "left" ? `-=${2 * rect.width}px` : `+=${2 * rect.width}px`,
-			ease: "none",
-			duration: 3,
-			repeat: -1,
-		});
+		normalAnims.value.push(
+			gsap.to(el, {
+				x: direction === "left" ? `-=${2 * rect.width}px` : `+=${2 * rect.width}px`,
+				ease: "none",
+				duration: 3,
+				repeat: -1,
+			}),
+		);
 	});
 });
 
 onUnmounted(() => {
-	anim.value?.scrollTrigger?.kill();
-	anim.value?.kill();
+	scrollAnim.value?.scrollTrigger?.kill();
+	scrollAnim.value?.kill();
+	normalAnims.value.forEach(item => item.kill());
 });
 </script>
 
@@ -152,7 +160,6 @@ onUnmounted(() => {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		left: -50%;
 		height: 5rem;
 		width: auto;
 		font-family: "方正基础像素体";
