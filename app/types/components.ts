@@ -58,6 +58,10 @@ export interface DetailPartitionParams {
 	direction: "left" | "right";
 }
 
+export interface DetailIntroduceSkillItemParams extends ItemParams {
+	skill: string;
+}
+
 export interface ItemParams {
 	x: number;
 	y: number;

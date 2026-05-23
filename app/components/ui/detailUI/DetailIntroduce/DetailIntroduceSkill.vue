@@ -2,10 +2,13 @@
 import gsap from "gsap";
 import { ScrollTrigger, SplitText } from "gsap/all";
 
+import DetailIntroduceSkillContainer from "./DetailIntroduceSkillContainer.vue";
+
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const skillRef = ref<HTMLDivElement | null>(null);
 const mountAnim = ref<gsap.core.Tween | null>(null);
+const showContainer = ref<boolean>(false);
 
 onMounted(() => {
 	mountAnim.value = gsap.fromTo(
@@ -22,6 +25,9 @@ onMounted(() => {
 				start: "top 80%", // 当元素顶部到达视口 80% 位置时触发
 				toggleActions: "play none none reverse", // 进入时播放，离开时反向播放
 			},
+			onComplete: () => {
+				showContainer.value = true;
+			},
 		},
 	);
 });
@@ -33,21 +39,22 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="introduce_skill" ref="skillRef"></div>
+	<div class="introduce_skill" ref="skillRef">
+		<DetailIntroduceSkillContainer v-if="showContainer" />
+	</div>
 </template>
 
 <style scoped lang="scss">
 .introduce_skill {
 	position: absolute;
-	right: 20%;
+	right: 10%;
 	bottom: 50%;
-	padding: 3rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
 	align-items: start;
 	height: 30dvh;
-	width: 20%;
+	width: 30%;
 	color: rgba($color: #ffffff, $alpha: 0.5);
 	font-size: 1.5rem;
 	font-family: "方正基础像素体";

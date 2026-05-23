@@ -202,7 +202,7 @@ const handleUpdate = () => {
 
 	Matter.Events.on(mouseConstraint, "enddrag", () => {
 		if (containerRef.value) {
-			containerRef.value.style.cursor = "default";
+			containerRef.value.style.cursor = "pointer";
 		}
 	});
 
@@ -320,5 +320,6 @@ onUnmounted(() => {
 	justify-content: center;
 	width: 100%;
 	height: 100%;
+	cursor: pointer;
 }
 </style>
