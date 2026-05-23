@@ -48,9 +48,7 @@ const handleChangeName = () => {
 			ease: "power2.out",
 			onUpdate: () => {
 				const rotate = parseFloat(String(gsap.getProperty(line1Ref.value, "rotateX")));
-				if (rotate >= 88 && rotate <= 92) {
-					line1CurrentName.value = nextName;
-				}
+				if (rotate >= 88 && rotate <= 92) line1CurrentName.value = nextName;
 			},
 			onComplete: createLine1WaitAnim,
 		},
@@ -130,8 +128,8 @@ onUnmounted(() => {
 
 <template>
 	<div class="introduce_info" ref="infoRef">
-		<div class="introduce_line1" ref="line1Ref" @mouseout="handleChangeName">
-			昵称：{{ line1CurrentName }}
+		<div class="introduce_line1" @mouseout="handleChangeName">
+			<div class="line1_container" ref="line1Ref">昵称：{{ line1CurrentName }}</div>
 		</div>
 		<div class="introduce_line2" ref="line2Ref">昵称</div>
 		<div class="introduce_line3" ref="line3Ref">爱好</div>
@@ -144,6 +142,10 @@ onUnmounted(() => {
 	left: 20%;
 	top: 25%;
 	padding: 3rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: start;
 	height: 30dvh;
 	width: 20%;
 	color: rgba($color: #ffffff, $alpha: 0.5);
@@ -157,7 +159,14 @@ onUnmounted(() => {
 	.introduce_line1,
 	.introduce_line2,
 	.introduce_line3 {
-		margin-bottom: 3rem;
+		display: flex;
+		align-items: center;
+		height: 3rem;
+		width: auto;
+
+		div {
+			pointer-events: none;
+		}
 	}
 }
 </style>

@@ -7,13 +7,15 @@ gsap.registerPlugin(ScrollTrigger);
 
 const { text, direction } = defineProps<DetailPartitionParams>();
 const containerRef = ref<HTMLDivElement | null>(null);
+const itemRefs = ref<HTMLDivElement[]>([]);
 const anim = ref<gsap.core.Tween | null>(null);
 
 const itemNum: number = 15;
 
 onMounted(() => {
-	const start = direction === "left" ? 0 : -1000;
-	const end = direction === "left" ? -1000 : 0;
+	if (!itemRefs.value[0]) return;
+	const start = direction === "left" ? 0 : -2 * itemRefs.value[0]?.offsetWidth;
+	const end = direction === "left" ? -2 * itemRefs.value[0]?.offsetWidth : 0;
 	anim.value = gsap.fromTo(
 		containerRef.value,
 		{ x: start },
@@ -22,6 +24,14 @@ onMounted(() => {
 			scrollTrigger: { scrub: true },
 		},
 	);
+	itemRefs.value.forEach(el => {
+		anim.value = gsap.to(el, {
+			x: direction === "left" ? `-=${el.offsetWidth}` : `+=${el.offsetWidth}`,
+			ease: "none",
+			duration: 3,
+			repeat: -1,
+		});
+	});
 });
 
 onUnmounted(() => {
@@ -33,7 +43,11 @@ onUnmounted(() => {
 <template>
 	<div class="detail_partition">
 		<div class="partition_container" ref="containerRef">
-			<div class="partition_item" v-for="i in itemNum">
+			<div
+				class="partition_item"
+				v-for="i in itemNum"
+				:ref="el => itemRefs.push(el as HTMLDivElement)"
+			>
 				<div class="partition_text">{{ text.toUpperCase() }}</div>
 				<svg
 					id="partition_arrow"
