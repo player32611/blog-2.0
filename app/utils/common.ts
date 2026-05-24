@@ -135,3 +135,12 @@ export const throttle = (func: Function, delay: number) => {
 export const isMobile = () => {
 	return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 };
+
+/**
+ * 将角度制转换为弧度制
+ * @param {number} degrees - 角度值
+ * @returns {number} 弧度值
+ */
+export const degreesToRadians = (degrees: number): number => {
+	return (degrees * Math.PI) / 180;
+};

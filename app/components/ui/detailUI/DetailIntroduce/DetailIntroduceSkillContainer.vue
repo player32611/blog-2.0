@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import Matter, { Engine, Render, World, Bodies, Mouse, MouseConstraint, Runner } from "matter-js";
+import Matter, {
+	Engine,
+	Render,
+	World,
+	Bodies,
+	Body,
+	Mouse,
+	MouseConstraint,
+	Runner,
+} from "matter-js";
 import { ScrollSmoother } from "gsap/all";
 import type { ItemParams } from "~/types/components";
 
@@ -63,26 +72,9 @@ const init = () => {
 	render.mouse = mouse;
 
 	runner = Runner.create();
-
-	// 创建地面
-	const ground = Bodies.rectangle(width / 2, height + 15, width, 30, {
-		isStatic: true,
-		render: { fillStyle: "rgba(0, 0, 0, 0)" },
-	});
-
-	// 创建墙壁
-	const leftWall = Bodies.rectangle(-15, height / 2, 30, height, {
-		isStatic: true,
-		render: { fillStyle: "rgba(0, 0, 0, 0)" },
-	});
-
-	const rightWall = Bodies.rectangle(width + 15, height / 2, 30, height, {
-		isStatic: true,
-		render: { fillStyle: "rgba(0, 0, 0, 0)" },
-	});
-
+	createBorder();
 	createItems();
-	World.add(engine.world, [ground, leftWall, rightWall]);
+
 	World.add(engine.world, Array.from(itemInstances.value.values()));
 	World.add(engine.world, mouseConstraint);
 
@@ -90,13 +82,66 @@ const init = () => {
 	Runner.run(runner, engine);
 };
 
+const createBorder = () => {
+	if (!containerRef.value) return;
+
+	const width = containerRef.value.clientWidth;
+	const height = containerRef.value.clientHeight;
+
+	const cx = width / 2;
+	const cy = height / 2;
+	const rectWid = 10;
+	const segments = 12;
+	const lackAngle = 45;
+
+	const outerRadius = width / 2;
+	const angleStep =
+		(Math.PI * 2 - degreesToRadians(lackAngle) - segments * degreesToRadians(5)) / segments;
+	const parts = [];
+
+	// 矩形的宽度（弧长），不重叠的关键：宽度略小于弧长
+	const arcLength = outerRadius * angleStep;
+	const rectWidth = arcLength * 0.98; // 留 2% 间隙，确保不重叠
+
+	for (let i = 0; i < segments; i++) {
+		const angle = i * (angleStep + degreesToRadians(5)) - degreesToRadians(55);
+		// 矩形中心在圆周上
+		const centerX = cx + outerRadius * Math.cos(angle);
+		const centerY = cy + outerRadius * Math.sin(angle);
+
+		// 创建矩形
+		const rect = Bodies.rectangle(centerX, centerY, rectWidth, rectWid, {
+			isStatic: true,
+			restitution: 0.85,
+			friction: 0.4,
+			angle: angle + Math.PI / 2, // 旋转使矩形指向圆心切线方向
+			render: {
+				fillStyle: "rgba(0, 0, 0, 0)",
+				strokeStyle: "rgba(0, 0, 0, 0)",
+				lineWidth: 1,
+			},
+		});
+
+		parts.push(rect);
+	}
+
+	const container = Body.create({
+		parts: parts,
+		isStatic: true,
+		restitution: 0.85,
+		friction: 0.4,
+	});
+
+	World.add(engine.world, [container]);
+};
+
 const createItems = () => {
 	if (!containerRef.value) return;
 	const width = containerRef.value.clientWidth;
 
 	skills.forEach((skill, index) => {
-		const x = itemPositions.value.get(`${skill}Item`)?.x ?? Math.random() * width;
-		const y = itemPositions.value.get(`${skill}Item`)?.y ?? Math.random() * -100;
+		const x = itemPositions.value.get(`${skill}Item`)?.x ?? width / 2;
+		const y = itemPositions.value.get(`${skill}Item`)?.y ?? (index + 1) * -100;
 		const angle = itemPositions.value.get(`${skill}Item`)?.angle ?? 0;
 		const itemRef = itemRefs.value.get(`${skill}Item`);
 		if (itemRef) {
@@ -210,5 +255,6 @@ onUnmounted(() => {
 	height: 100%;
 	user-select: none;
 	cursor: pointer;
+	touch-action: none;
 }
 </style>

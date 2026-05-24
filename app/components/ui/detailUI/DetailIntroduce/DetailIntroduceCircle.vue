@@ -41,8 +41,9 @@ onMounted(() => {
 			duration: 2,
 			scrollTrigger: {
 				trigger: rightCircleRef.value,
-				start: "top 80%", // 当元素顶部到达视口 80% 位置时触发
+				start: "bottom 90%",
 				toggleActions: "play none none reverse", // 进入时播放，离开时反向播放
+				// markers: true,
 			},
 			onUpdate: () => {
 				if (compareCircle()) gsap.set(leftCircleRef.value, { opacity: 1 });
@@ -89,7 +90,7 @@ $base-size: 0.8;
 .introduce_circle_container {
 	position: absolute;
 	left: 0;
-	bottom: 52.6%;
+	bottom: 50%;
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;

@@ -80,4 +80,52 @@ defineExpose<ItemInstance>({
 		z-index: 0;
 	}
 }
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.7;
+
+	.introduce_skill {
+		height: 50px * $base-size;
+		width: 50px * $base-size;
+		font-size: 1.5rem * $base-size;
+		border-width: 2px * $base-size;
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.9;
+
+	.introduce_skill {
+		height: 50px * $base-size;
+		width: 50px * $base-size;
+		font-size: 1.5rem * $base-size;
+		border-width: 2px * $base-size;
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.8;
+
+	.introduce_skill {
+		height: 50px * $base-size;
+		width: 50px * $base-size;
+		font-size: 1.5rem * $base-size;
+		border-width: 2px * $base-size;
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.9;
+
+	.introduce_skill {
+		height: 50px * $base-size;
+		width: 50px * $base-size;
+		font-size: 1.5rem * $base-size;
+		border-width: 2px * $base-size;
+	}
+}
 </style>
