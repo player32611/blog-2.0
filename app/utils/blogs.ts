@@ -33,6 +33,10 @@ export const getLangIcon = (language: string) => {
 		case "C++":
 		case "cpp":
 			return "&#xe61a;";
+		case "gamemaker":
+		case "GameMaker":
+		case "gml":
+			return "&#xeba7;";
 		case "htm":
 		case "html":
 		case "HTML":
@@ -91,6 +95,10 @@ export const getLangIconColor = (language: string) => {
 		case "C++":
 		case "cpp":
 			return "#1D88E5";
+		case "gamemaker":
+		case "GameMaker":
+		case "gml":
+			return "#FFFFFF";
 		case "htm":
 		case "html":
 		case "HTML":

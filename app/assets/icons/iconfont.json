@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "42076630",
+      "name": "gamemaker",
+      "font_class": "gamemaker",
+      "unicode": "eba7",
+      "unicode_decimal": 60327
+    },
+    {
       "icon_id": "7597999",
       "name": "24gf-arrowRight3",
       "font_class": "24gf-arrowRight3",

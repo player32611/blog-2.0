@@ -93,9 +93,9 @@ const createWordAnim = () => {
 onMounted(() => {
 	mountAnim.value = gsap.fromTo(
 		infoRef.value,
-		{ height: 0, y: "15dvh", opacity: 0 },
+		{ height: 0, y: "15vh", opacity: 0 },
 		{
-			height: "30dvh",
+			height: "30vh",
 			y: 0,
 			opacity: 1,
 			ease: "power4.out",

@@ -135,10 +135,10 @@ $base-size: 1;
 
 .blog_navigation_box {
 	position: fixed;
-	top: 10dvh;
+	top: 10vh;
 	right: -18rem * $base-size;
 	padding: 2rem * $base-size;
-	height: 80dvh;
+	height: 80vh;
 	width: 15rem * $base-size;
 	background-color: #000000;
 	border-width: 0.3rem * $base-size;

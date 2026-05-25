@@ -165,10 +165,17 @@ const handleUpdate = () => {
 	});
 
 	Matter.Events.on(engine, "beforeUpdate", () => {
-		if (!smootherRef.value) return;
+		if (!smootherRef.value || !containerRef.value) return;
+
+		const width = containerRef.value.clientWidth;
+		const height = containerRef.value.clientHeight;
+
 		const speed = smootherRef.value.getVelocity() / 2000;
 		itemInstances.value.forEach(item => {
 			Matter.Body.setVelocity(item, { x: item.velocity.x, y: (item.velocity.y -= speed) });
+			if (item.position.y > height + 100) {
+				Matter.Body.setPosition(item, { x: width / 2, y: -100 });
+			}
 		});
 	});
 

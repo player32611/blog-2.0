@@ -218,7 +218,7 @@ const word3FourthCharAnim = () => {
 				}, 3000);
 			},
 		})
-		.set(word3Split.value.chars[3], { y: "-70dvh", rotate: 90 })
+		.set(word3Split.value.chars[3], { y: "-70vh", rotate: 90 })
 		.to(word3Split.value.chars[3], {
 			y: 0,
 			ease: "bounce.out",

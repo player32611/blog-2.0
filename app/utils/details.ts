@@ -4,7 +4,7 @@ const job = "还是学生";
 
 const hobby = "大概是 coding...";
 
-const skills = ["html", "css", "javascript", "ts", "vue", "java", "c++"];
+const skills = ["html", "css", "javascript", "ts", "vue", "java", "c++", "gml"];
 
 export const getDetailName = (index: number) => {
 	if (!names[index]) return "null";

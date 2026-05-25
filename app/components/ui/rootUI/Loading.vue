@@ -159,7 +159,7 @@ defineExpose({
 	position: fixed;
 	top: 0;
 	left: 0;
-	height: 100dvh;
+	height: 100vh;
 	width: 100dvw;
 	z-index: variables.$loading_zIndex;
 	overflow: hidden;

@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollSmoother, ScrollTrigger } from "gsap/all";
 
 import Button from "~/components/ui/common/Button.vue";
+import DetailDoing from "~/components/ui/detailUI/DetailDoing/DetailDoing.vue";
 import DetailIntroduce from "~/components/ui/detailUI/DetailIntroduce/DetailIntroduce.vue";
 import DetailTitle from "~/components/ui/detailUI/DetailTitle/DetailTitle.vue";
 import DetailPartition from "~/components/ui/detailUI/DetailPartition.vue";
@@ -38,6 +39,7 @@ onUnmounted(() => {
 				<DetailPartition text="introduce" :direction="'left'" />
 				<DetailPartition text="introduce" :direction="'right'" />
 				<DetailIntroduce />
+				<DetailDoing />
 				<DetailPartition text="work" :direction="'left'" />
 				<DetailPartition text="work" :direction="'right'" />
 			</div>
