@@ -65,7 +65,6 @@ onUnmounted(() => {
 		background-color: #171717;
 
 		.details_content {
-			height: 500dvh;
 			width: 100%;
 		}
 	}

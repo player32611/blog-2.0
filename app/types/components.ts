@@ -53,13 +53,18 @@ export interface BlogNavigationParams {
 	page: globalThis.Ref<any, any>;
 }
 
-export interface DetailPartitionParams {
-	text: string;
-	direction: "left" | "right";
+export interface DetailIntroduceSkillContainerInstance {
+	resume: () => void;
+	pause: () => void;
 }
 
 export interface DetailIntroduceSkillItemParams extends ItemParams {
 	skill: string;
+}
+
+export interface DetailPartitionParams {
+	text: string;
+	direction: "left" | "right";
 }
 
 export interface ItemParams {

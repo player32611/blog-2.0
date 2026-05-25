@@ -10,7 +10,7 @@ import Matter, {
 	Runner,
 } from "matter-js";
 import { ScrollSmoother } from "gsap/all";
-import type { ItemParams } from "~/types/components";
+import type { DetailIntroduceSkillContainerInstance, ItemParams } from "~/types/components";
 
 import DetailIntroduceSkillItem from "./DetailIntroduceSkillItem.vue";
 
@@ -18,7 +18,6 @@ const containerRef = ref<HTMLDivElement | null>(null);
 const itemRefs = ref<Map<string, InstanceType<typeof DetailIntroduceSkillItem>>>(new Map());
 const itemPositions = ref<Map<string, ItemParams>>(new Map());
 const itemInstances = ref<Map<string, Matter.Body>>(new Map());
-const smootherRef = ref<ScrollSmoother | null>(ScrollSmoother.get() || null);
 
 const skills = getDetailSkills();
 
@@ -34,6 +33,7 @@ const resize = () => {
 	Engine.clear(engine);
 	containerRef.value?.removeChild(render.canvas);
 	init();
+	handleUpdate();
 };
 
 const init = () => {
@@ -41,6 +41,8 @@ const init = () => {
 
 	const width = containerRef.value.clientWidth;
 	const height = containerRef.value.clientHeight;
+	let state = false;
+	if (runner && runner.enabled) state = runner.enabled;
 
 	// 创建引擎
 	engine = Engine.create();
@@ -71,7 +73,10 @@ const init = () => {
 	});
 	render.mouse = mouse;
 
-	runner = Runner.create();
+	runner = Runner.create({
+		delta: 1000 / 60, // 保持60fps的更新目标
+		maxFrameTime: 50, // 设置一个保护上限，避免你的53ms场景导致物理崩溃
+	});
 	createBorder();
 	createItems();
 
@@ -80,6 +85,9 @@ const init = () => {
 
 	Render.run(render);
 	Runner.run(runner, engine);
+
+	if (state) resume();
+	else pause();
 };
 
 const createBorder = () => {
@@ -164,19 +172,24 @@ const handleUpdate = () => {
 		}
 	});
 
-	Matter.Events.on(engine, "beforeUpdate", () => {
-		if (!smootherRef.value || !containerRef.value) return;
+	Matter.Events.on(engine, "afterUpdate", () => {
+		const smoother = ScrollSmoother.get();
+		if (smoother && containerRef.value) {
+			const width = containerRef.value.clientWidth;
+			const height = containerRef.value.clientHeight;
+			const speed = smoother.getVelocity() / -500000;
 
-		const width = containerRef.value.clientWidth;
-		const height = containerRef.value.clientHeight;
-
-		const speed = smootherRef.value.getVelocity() / 2000;
-		itemInstances.value.forEach(item => {
-			Matter.Body.setVelocity(item, { x: item.velocity.x, y: (item.velocity.y -= speed) });
-			if (item.position.y > height + 100) {
-				Matter.Body.setPosition(item, { x: width / 2, y: -100 });
-			}
-		});
+			itemInstances.value.forEach(item => {
+				Matter.Body.applyForce(item, item.position, {
+					x: 0,
+					y: speed * item.mass,
+				});
+				if (item.position.y > height + 100) {
+					Matter.Body.setPosition(item, { x: width / 2, y: -100 });
+					Matter.Body.setVelocity(item, { x: 0, y: 0 });
+				}
+			});
+		}
 	});
 
 	Matter.Events.on(engine, "afterUpdate", () => {
@@ -215,6 +228,14 @@ const handleTouchLeave = (event: TouchEvent) => {
 	}
 };
 
+const resume = () => {
+	runner.enabled = true;
+};
+
+const pause = () => {
+	runner.enabled = false;
+};
+
 onMounted(() => {
 	init();
 	handleUpdate();
@@ -228,6 +249,11 @@ onUnmounted(() => {
 	if (render && render.canvas && render.canvas.parentNode)
 		render.canvas.parentNode.removeChild(render.canvas);
 	window.removeEventListener("resize", resize);
+});
+
+defineExpose<DetailIntroduceSkillContainerInstance>({
+	resume,
+	pause,
 });
 </script>
 

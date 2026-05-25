@@ -1,13 +1,20 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import DetailDoingCoding from "./DetailDoingCoding.vue";
+</script>
 
 <template>
-	<div class="detail_doing"></div>
+	<div class="detail_doing">
+		<DetailDoingCoding />
+	</div>
 </template>
 
 <style scoped lang="scss">
 .detail_doing {
-	height: 100vh;
+	display: grid;
+	grid-template-rows: repeat(3, 1fr);
+	justify-items: center;
+	align-items: center;
+	height: 150vh;
 	width: 100%;
-	background-color: blue;
 }
 </style>

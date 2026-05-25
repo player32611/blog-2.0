@@ -1,32 +1,41 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
+import type { DetailIntroduceSkillContainerInstance } from "~/types/components";
 
 import DetailIntroduceSkillContainer from "./DetailIntroduceSkillContainer.vue";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const skillRef = ref<HTMLDivElement | null>(null);
+const containerRef = ref<DetailIntroduceSkillContainerInstance | null>(null);
 const mountAnim = ref<gsap.core.Tween | null>(null);
-const showContainer = ref<boolean>(false);
 
 onMounted(() => {
 	mountAnim.value = gsap.fromTo(
 		skillRef.value,
-		{ height: 0, opacity: 0 },
+		{ clipPath: "inset(100% 0% 0% 0%)" },
 		{
-			height: "auto",
-			opacity: 1,
-			ease: "power4.out",
+			clipPath: "inset(0% 0% 0% 0%)",
+			ease: "line",
 			duration: 1,
 			scrollTrigger: {
 				trigger: skillRef.value,
 				start: "bottom 90%",
 				toggleActions: "play none none reverse", // 进入时播放，离开时反向播放
 				// markers: true,
-			},
-			onComplete: () => {
-				showContainer.value = true;
+				onEnter: () => {
+					containerRef.value?.resume();
+				},
+				onEnterBack: () => {
+					containerRef.value?.resume();
+				},
+				onLeave: () => {
+					containerRef.value?.pause();
+				},
+				onLeaveBack: () => {
+					containerRef.value?.pause();
+				},
 			},
 		},
 	);
@@ -93,7 +102,9 @@ onUnmounted(() => {
 				/>
 			</g>
 		</svg>
-		<div class="skill_wrapper"><DetailIntroduceSkillContainer v-if="showContainer" /></div>
+		<div class="skill_wrapper">
+			<DetailIntroduceSkillContainer ref="containerRef" />
+		</div>
 	</div>
 </template>
 
