@@ -52,11 +52,6 @@ body {
 	width: 100%;
 	// overscroll-behavior: none;
 
-	pre.shiki code .sgsFI,
-	code.shiki .sgsFI {
-		--shiki-default: #ffffff !important; /* 改为纯黑色 */
-	}
-
 	&:has(.home) {
 		overflow: hidden;
 	}

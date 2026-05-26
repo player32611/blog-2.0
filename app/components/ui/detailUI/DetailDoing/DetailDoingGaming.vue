@@ -42,7 +42,10 @@ onMounted(() => {
 	);
 });
 
-onUnmounted(() => {});
+onUnmounted(() => {
+	mountAnim.value?.kill();
+	handleShakeAnim.value?.kill();
+});
 </script>
 
 <template>

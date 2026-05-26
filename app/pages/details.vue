@@ -6,6 +6,7 @@ import Button from "~/components/ui/common/Button.vue";
 import DetailDoing from "~/components/ui/detailUI/DetailDoing/DetailDoing.vue";
 import DetailIntroduce from "~/components/ui/detailUI/DetailIntroduce/DetailIntroduce.vue";
 import DetailTitle from "~/components/ui/detailUI/DetailTitle/DetailTitle.vue";
+import DetailWork from "~/components/ui/detailUI/DetailWork/DetailWork.vue";
 import DetailPartition from "~/components/ui/detailUI/DetailPartition.vue";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
@@ -22,6 +23,8 @@ onMounted(() => {
 		wrapper: wrapperRef.value,
 		content: contentRef.value,
 		smooth: 1,
+		effects: true,
+		normalizeScroll: true,
 	});
 	document.title = "个人介绍";
 });
@@ -40,6 +43,9 @@ onUnmounted(() => {
 				<DetailPartition text="introduce" :direction="'right'" />
 				<DetailIntroduce />
 				<DetailDoing />
+				<DetailPartition text="work" :direction="'left'" />
+				<DetailPartition text="work" :direction="'right'" />
+				<DetailWork />
 				<DetailPartition text="work" :direction="'left'" />
 				<DetailPartition text="work" :direction="'right'" />
 			</div>

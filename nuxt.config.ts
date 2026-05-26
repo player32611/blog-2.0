@@ -8,7 +8,7 @@ export default defineNuxtConfig({
 			markdown: {
 				highlight: {
 					langs: ["c", "cpp", "java", "properties", "python", "vue", "xml"],
-					theme: "github-light",
+					theme: "github-dark",
 				},
 				toc: {
 					depth: 2,

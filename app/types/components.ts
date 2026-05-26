@@ -62,6 +62,10 @@ export interface DetailIntroduceSkillItemParams extends ItemParams {
 	skill: string;
 }
 
+export interface DetailWorkMaskParams {
+	containerRef: HTMLDivElement | null;
+}
+
 export interface DetailPartitionParams {
 	text: string;
 	direction: "left" | "right";

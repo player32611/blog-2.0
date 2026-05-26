@@ -74,10 +74,6 @@ const loadingIn = (next: () => void) => {
 const loadingOut = () => {
 	gsap
 		.timeline({
-			// onStart: () => {
-			// 	console.log("start");
-			// 	gsap.set(animRef.value, { opacity: 1 });
-			// },
 			onComplete: () => {
 				loadingStore.setIsLoading(false);
 			},
@@ -119,9 +115,6 @@ const loadingOut = () => {
 
 onMounted(() => {
 	createBlocks();
-	// setTimeout(() => {
-	// 	loadingOut();
-	// }, 1000);
 });
 
 defineExpose({
