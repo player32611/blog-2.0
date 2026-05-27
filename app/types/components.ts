@@ -62,8 +62,8 @@ export interface DetailIntroduceSkillItemParams extends ItemParams {
 	skill: string;
 }
 
-export interface DetailWorkMaskParams {
-	containerRef: HTMLDivElement | null;
+export interface DetailWorkMaskInstance {
+	triggerAnim: (onComplete: () => void) => void;
 }
 
 export interface DetailPartitionParams {
