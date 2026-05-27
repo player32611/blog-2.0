@@ -27,6 +27,16 @@ export type BlogActions = {
 	changeBlogMenuState: () => void;
 };
 
+export type DetailState = {
+	smootherInstance: Ref<ScrollSmoother | null>;
+};
+
+export type DetailGetter = {};
+
+export type DetailActions = {
+	setSmootherInstance: (smoother: ScrollSmoother | null) => void;
+};
+
 export type ImageState = {
 	allImagePosData: Ref<ImagePosData[]>;
 	activeImageData: Ref<ImagePosData | null>;

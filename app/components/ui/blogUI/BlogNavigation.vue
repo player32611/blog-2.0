@@ -50,6 +50,7 @@ const handleClick = (id: string) => {
 		activeHeadingId.value = id;
 	}
 };
+
 const getAllHeadings = () => {
 	headings.value = [];
 	const allElements = document.querySelectorAll("h2[id], h3[id]");

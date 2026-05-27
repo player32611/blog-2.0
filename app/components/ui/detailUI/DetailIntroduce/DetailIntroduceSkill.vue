@@ -23,7 +23,6 @@ onMounted(() => {
 				trigger: skillRef.value,
 				start: "bottom 90%",
 				toggleActions: "play none none reverse", // 进入时播放，离开时反向播放
-				// markers: true,
 				onEnter: () => {
 					containerRef.value?.resume();
 				},
