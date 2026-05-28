@@ -62,6 +62,11 @@ export interface DetailIntroduceSkillItemParams extends ItemParams {
 	skill: string;
 }
 
+export interface DetailWorkFloatInstance {
+	startFloating: () => void;
+	stopFloating: () => void;
+}
+
 export interface DetailWorkMaskInstance {
 	triggerAnim: (onComplete: () => void) => void;
 }

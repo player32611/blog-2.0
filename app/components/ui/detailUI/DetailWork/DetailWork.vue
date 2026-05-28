@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
-import type { DetailWorkMaskInstance } from "~/types/components.js";
+import type { DetailWorkFloatInstance, DetailWorkMaskInstance } from "~/types/components.js";
 
 import DetailWorkBackground from "./DetailWorkBackground.vue";
 import DetailWorkFloat from "./DetailWorkFloat.vue";
@@ -12,6 +12,7 @@ import DetailWorkMask from "./DetailWorkMask.vue";
 gsap.registerPlugin(ScrollTrigger);
 
 const containerRef = ref<HTMLDivElement | null>(null);
+const floatRef = ref<DetailWorkFloatInstance | null>(null);
 const maskRef = ref<DetailWorkMaskInstance | null>(null);
 const scrollAnim = ref<ScrollTrigger | null>(null);
 const activeIndex = ref<number>(-1);
@@ -24,6 +25,23 @@ onMounted(() => {
 		start: "top top", // 元素顶部 触达 视口顶部时开始
 		end: `+=${5 * window.innerHeight}`,
 		pin: true, // 开启固定
+		markers: true,
+		onEnter: () => {
+			console.log("enter");
+			floatRef.value?.startFloating();
+		},
+		onEnterBack: () => {
+			console.log("enterback");
+			floatRef.value?.startFloating();
+		},
+		onLeave: () => {
+			console.log("leave");
+			floatRef.value?.stopFloating();
+		},
+		onLeaveBack: () => {
+			console.log("leaveback");
+			floatRef.value?.stopFloating();
+		},
 		onUpdate: self => {
 			const scrolledDistance = self.scroll() - self.start;
 			triggerPoints.forEach((point, index) => {
@@ -43,7 +61,7 @@ onMounted(() => {
 		<DetailWorkBackground v-if="activeIndex === -1" />
 		<DetailWorkItem1 v-if="activeIndex === 0" />
 		<DetailWorkItem2 v-if="activeIndex === 1" />
-		<!-- <DetailWorkFloat /> -->
+		<DetailWorkFloat ref="floatRef" />
 		<DetailWorkMask ref="maskRef" />
 	</div>
 </template>
@@ -52,13 +70,5 @@ onMounted(() => {
 .detail_work {
 	position: relative;
 	height: 100vh;
-	overflow: hidden;
-
-	.item {
-		position: relative;
-		height: 100px;
-		width: 100px;
-		background-color: black;
-	}
 }
 </style>

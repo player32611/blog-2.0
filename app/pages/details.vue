@@ -11,29 +11,26 @@ import DetailPartition from "~/components/ui/detailUI/DetailPartition.vue";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-const detailStore = useDetailStore();
 const loadingStore = useLoadingStore();
+const smoother = ref<ScrollSmoother | null>(null);
 const wrapperRef = ref<HTMLDivElement | null>(null);
 const contentRef = ref<HTMLDivElement | null>(null);
 
 usePageReady();
 
 onMounted(() => {
-	detailStore.setSmootherInstance(
-		ScrollSmoother.create({
-			wrapper: wrapperRef.value,
-			content: contentRef.value,
-			smooth: 1,
-			effects: true,
-			normalizeScroll: true,
-		}),
-	);
+	smoother.value = ScrollSmoother.create({
+		wrapper: wrapperRef.value,
+		content: contentRef.value,
+		smooth: 1,
+		effects: true,
+		normalizeScroll: true,
+	});
 	document.title = "个人介绍";
 });
 
 onUnmounted(() => {
-	detailStore.smootherInstance?.kill();
-	detailStore.setSmootherInstance(null);
+	smoother.value?.kill();
 });
 </script>
 
