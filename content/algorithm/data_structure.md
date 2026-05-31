@@ -1619,11 +1619,44 @@ int main() {
 
 例题：[P1901 发射站](https://www.luogu.com.cn/problem/P1901)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+const int N = 1e6+10;
 
-::
+int n;
+int h[N];
+int v[N];
+int r[N];
+int mmax;
+
+stack<int> st;
+
+int main(){
+    cin>>n;
+    for(int i = 1;i <= n;i++){
+        cin>>h[i]>>v[i];
+    }
+    for(int i = 1;i <= n;i++){
+        while (st.size() && h[st.top()] <= h[i]){
+            r[i] += v[st.top()];
+            st.pop();
+        }
+        st.push(i);
+    }
+    while(st.size()) st.pop();
+    for(int i = n;i >= 1;i--){
+        while (st.size() && h[st.top()] <= h[i]){
+            r[i] += v[st.top()];
+            st.pop();
+        }
+        mmax = max(mmax, r[i]);
+        st.push(i);
+    }
+    cout<<mmax<<endl;
+}
+```
 
 ## 单调队列
 
