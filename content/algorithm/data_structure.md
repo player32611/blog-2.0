@@ -1710,11 +1710,33 @@ int main() {
 
 例题：[P2251 质量检测](https://www.luogu.com.cn/problem/P2251)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+const int N = 1e5+10;
 
-::
+int n, m;
+int a[N];
+deque<int> qu;
+
+int main(){
+    cin>>n>>m;
+    for(int i = 1;i <= n;i++){
+        cin>>a[i];
+        if(i <= m){
+            while (qu.size() && a[qu.back()] >= a[i])qu.pop_back();
+            qu.push_back(i);
+        }
+    }
+    for (int i = m; i <= n; i++) {
+        while (qu.size() && a[qu.back()] >= a[i])qu.pop_back();
+        while (qu.size() && qu.front() <= i - m)qu.pop_front();
+        qu.push_back(i);
+        cout << a[qu.front()] << endl;
+    }
+}
+```
 
 ## 并查集
 
