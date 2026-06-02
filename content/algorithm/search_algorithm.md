@@ -531,11 +531,49 @@ int main() {
 
 例题：[P1588 [USACO07OPEN] Catch That Cow S](https://www.luogu.com.cn/problem/P1588)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+typedef pair<int, int> pii;
 
-::
+const int N = 1e6+10;
+
+int t,x,y;
+int res = INT_MAX;
+deque<pii> de;
+bool visited[N];
+
+int main(){
+    cin>>t;
+    while(t){
+        cin>>x>>y;
+        de.push_back({x, 0});
+        while(de.size()){
+            pii pos = de.front();
+            de.pop_front();
+            visited[pos.first] = true;
+            if(pos.first == y){
+                res = pos.second;
+                break;
+            }
+            else {
+                if(pos.first + 1 < 1e6 && !visited[pos.first + 1])
+                    de.push_back({pos.first + 1, pos.second + 1});
+                if(pos.first - 1 > 0 && !visited[pos.first - 1])
+                    de.push_back({pos.first - 1, pos.second + 1});
+                if(pos.first * 2 < 1e6 && !visited[pos.first * 2])
+                    de.push_back({pos.first * 2, pos.second + 1});
+            }
+        }
+        cout<<res<<endl;
+        de.clear();
+        res = INT_MAX;
+        for(int i = 0;i < N;i++)visited[i] = false;
+        t--;
+    }
+}
+```
 
 例题：[P1379 八数码难题](https://www.luogu.com.cn/problem/P1379)
 
