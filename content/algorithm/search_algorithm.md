@@ -603,7 +603,31 @@ int main(){
 
 例题：[P4554 小明的游戏](https://www.luogu.com.cn/problem/P4554)
 
-例题：[P1047 涂色](https://www.luogu.com.cn/problem/P1047)
+例题：[P1047 [NOIP 2005 普及组] 校门外的树](https://www.luogu.com.cn/problem/P1047)
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = 1e4 + 10;
+
+int l, m;
+bool a[N];
+
+int main(){
+    cin>>l>>m;
+    for(int i = 0;i < m;i++){
+        int u,v;
+        cin>>u>>v;
+        for(int i = u;i <= v;i++)a[i] = true;
+    }
+    int sum = 0;
+    for(int i = 0;i <= l;i++){
+        if(!a[i])sum++;
+    }
+    cout<<sum<<endl;
+}
+```
 
 ## FloodFill 问题
 
