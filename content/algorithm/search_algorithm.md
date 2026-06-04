@@ -639,4 +639,47 @@ int main(){
 
 例题：[P1596 [USACO10OCT] Lake Counting S](https://www.luogu.com.cn/problem/P1596)
 
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = 110;
+
+int n, m;
+int ans;
+
+char field[N][N];
+bool visited[N][N];
+
+void search(int x, int y) {
+    for (int i = x - 1; i <= x + 1; i++) {
+        for (int j = y - 1; j <= y + 1; j++) {
+            if (0 < i && i <= n && 0 < j && j <= m && !visited[i][j] && field[i][j] == 'W') {
+                visited[i][j] = true;
+                search(i, j);
+            }
+        }
+    }
+}
+
+int main() {
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            scanf(" %c", &field[i][j]);
+        }
+    }
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            if (!visited[i][j] && field[i][j] == 'W') {
+                visited[i][j] = true;
+                search(i, j);
+                ans++;
+            }
+        }
+    }
+    cout << ans << endl;
+}
+```
+
 例题：[P1162 填涂颜色](https://www.luogu.com.cn/problem/P1162)
