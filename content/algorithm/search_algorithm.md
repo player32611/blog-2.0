@@ -631,12 +631,6 @@ int main(){
 
 ## FloodFill 问题
 
-::danger
-
-该部分尚未完工!
-
-::
-
 例题：[P1596 [USACO10OCT] Lake Counting S](https://www.luogu.com.cn/problem/P1596)
 
 ```cpp
@@ -683,3 +677,76 @@ int main() {
 ```
 
 例题：[P1162 填涂颜色](https://www.luogu.com.cn/problem/P1162)
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef pair<int, int> pii;
+
+const int N = 35;
+
+int n;
+int a[N][N];
+deque<pii> dq;
+stack<pii> st;
+bool visited[N][N];
+
+void search(int x,int y){
+    for(int i = x - 1;i <= x + 1;i++){
+        for(int j = y - 1;j <= y + 1;j++){
+            if(i==x-1&&j==y-1)continue;
+            else if(i==x+1&&j==y-1)continue;
+            else if(i==x-1&&j==y+1)continue;
+            else if(i==x+1&&j==y+1)continue;
+            if(0 < i && i <= n && 0 < j && j <= n){
+                if(a[i][j] == 0 && !visited[i][j]){
+                    dq.push_back({i, j});
+                    visited[i][j] = true;
+                    search(i, j);
+                }
+            }
+        }
+    }
+}
+
+int main(){
+    cin>>n;
+    for(int i = 1;i <= n;i++){
+        for(int j = 1;j <= n;j++){
+            cin>>a[i][j];
+        }
+    }
+    for(int i = 1;i <= n;i++){
+        for(int j = 1;j <= n;j++){
+            if(!visited[i][j] && a[i][j] == 0){
+                visited[i][j] = true;
+                dq.push_back({i, j});
+                search(i, j);
+                bool sign = true;
+                while(dq.size()){
+                    int ii = dq.front().first;
+                    int jj = dq.front().second;
+                    if(ii == 1 || ii == n || jj == 1 || jj == n)sign = false;
+                    st.push(dq.front());
+                    dq.pop_front();
+                }
+                if(sign){
+                    while(st.size()){
+                        a[st.top().first][st.top().second] = 2;
+                        st.pop();
+                    }
+                } else {
+                    while(st.size())st.pop();
+                }
+            }
+        }
+    }
+    for(int i = 1;i <= n;i++){
+        for(int j = 1;j <= n;j++){
+            cout<<a[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+}
+```
