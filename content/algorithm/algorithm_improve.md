@@ -583,11 +583,93 @@ int main(){
 
 例题：[P3870 [TJOI2009] 开关](https://www.luogu.com.cn/problem/P3870)
 
-::danger
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-该部分尚未完工!
+const int N = 1e5 + 10;
 
-::
+#define lc p * 2
+#define rc p * 2 + 1
+
+struct Node{
+    int l, r;
+    int sum, ch;
+}tr[N * 4];
+
+int n, m;
+
+void lazy(int p){
+    tr[p].sum = tr[p].r - tr[p].l + 1 - tr[p].sum;
+    tr[p].ch++;
+}
+
+void pushup(int p){
+    tr[p].sum = tr[lc].sum + tr[rc].sum;
+}
+
+void pushdown(int p){
+    if(tr[p].ch % 2 != 0){
+        lazy(lc);
+        lazy(rc);
+        tr[p].ch = 0;
+    }
+}
+
+void build(int p,int l,int r){
+    tr[p] = {l, r, 0, 0};
+    if(l == r)return;
+    int mid = (l + r)/2;
+    build(lc, l, mid);
+    build(rc, mid + 1, r);
+}
+
+void change(int p, int x, int y){
+    int l = tr[p].l, r = tr[p].r;
+    if(x <= l && r <= y){
+        lazy(p);
+        return;
+    }
+    pushdown(p);
+    int mid = (l + r)/2;
+    if(x <= mid){
+        change(lc, x, y);
+    }
+    if(y > mid){
+        change(rc, x, y);
+    }
+    pushup(p);
+}
+
+int get(int p, int x, int y){
+    int l = tr[p].l, r = tr[p].r;
+    if(x <= l && r <= y) return tr[p].sum;
+    pushdown(p);
+    int mid = (l + r)/2;
+    int sum = 0;
+    if(x <= mid)sum += get(lc, x, y);
+    if(y > mid)sum += get(rc, x, y);
+    return sum;
+}
+
+int main(){
+    cin>>n>>m;
+    build(1, 1, n);
+    for(int i = 1;i <= m;i++){
+        int a,b,c;
+        cin>>c>>a>>b;
+        switch(c){
+            case 0:
+                change(1, a, b);
+                break;
+            case 1:
+                cout<<get(1, a, b)<<endl;
+                break;
+        }
+    }
+
+}
+```
 
 例题：[P2184 贪婪大陆](https://www.luogu.com.cn/problem/P2184)
 
