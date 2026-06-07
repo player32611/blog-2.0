@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import { ScrollTrigger, TextPlugin } from "gsap/all";
+import Lottie, { type AnimationItem } from "lottie-web";
+
+import animPath from "@/assets/anims/doingGaming.json";
 
 gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
+const animContainerRef = ref<HTMLDivElement | null>(null);
 const contentRef = ref<HTMLDivElement | null>(null);
 const handleRef = ref<HTMLDivElement | null>(null);
+const lottieAnim = ref<AnimationItem | null>(null);
 const mountAnim = ref<gsap.core.Tween | null>(null);
 const handleShakeAnim = ref<gsap.core.Tween | null>(null);
 
@@ -13,6 +18,16 @@ const mountDuration: number = 1;
 const handleShakeDuration: number = 0.5;
 
 onMounted(() => {
+	if (animContainerRef.value) {
+		lottieAnim.value = Lottie.loadAnimation({
+			container: animContainerRef.value,
+			renderer: "svg",
+			loop: true,
+			autoplay: true,
+			animationData: animPath,
+		});
+	}
+
 	mountAnim.value = gsap.fromTo(
 		contentRef.value,
 		{ text: "" },
@@ -43,6 +58,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+	lottieAnim.value?.destroy();
 	mountAnim.value?.kill();
 	handleShakeAnim.value?.kill();
 });
@@ -54,7 +70,7 @@ onUnmounted(() => {
 			<div class="gaming_content" ref="contentRef"></div>
 			<span class="gaming_content_handle" ref="handleRef"></span>
 		</div>
-		<div class="gaming_anim"></div>
+		<div class="gaming_anim" ref="animContainerRef"></div>
 	</div>
 </template>
 
@@ -90,7 +106,7 @@ onUnmounted(() => {
 	.gaming_anim {
 		height: 100%;
 		width: 50%;
-		background-color: green;
+		background-color: #000000;
 	}
 }
 
