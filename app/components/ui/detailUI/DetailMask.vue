@@ -11,7 +11,7 @@ const maskIn = (options?: gsap.TweenVars) => {
 	isNavigating.value = true;
 	gsap.to(maskRef.value, {
 		backgroundColor: "#ffff00ff",
-		ease: "power1.out",
+		ease: "power2.out",
 		duration: maskEaseDuration,
 		...options,
 	});
@@ -22,7 +22,7 @@ const maskOut = (options?: gsap.TweenVars) => {
 
 	gsap.to(maskRef.value, {
 		backgroundColor: "#ffff0000",
-		ease: "power1.in",
+		ease: "power2.in",
 		duration: maskEaseDuration,
 		onComplete: () => {
 			isNavigating.value = false;

@@ -52,8 +52,8 @@ onUnmounted(() => {
 				<DetailPartition text="work" :direction="'left'" />
 				<DetailPartition text="work" :direction="'right'" />
 				<DetailWork />
-				<DetailPartition text="work" :direction="'left'" />
-				<DetailPartition text="work" :direction="'right'" />
+				<DetailPartition text="contact" :direction="'left'" />
+				<DetailPartition text="contact" :direction="'right'" />
 				<DetailBottom />
 			</div>
 		</div>

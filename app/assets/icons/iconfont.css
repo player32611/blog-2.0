@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 5129219 */
-  src: url('iconfont.woff2?t=1779697127852') format('woff2'),
-       url('iconfont.woff?t=1779697127852') format('woff'),
-       url('iconfont.ttf?t=1779697127852') format('truetype');
+  src: url('iconfont.woff2?t=1781263461918') format('woff2'),
+       url('iconfont.woff?t=1781263461918') format('woff'),
+       url('iconfont.ttf?t=1781263461918') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-github-fill:before {
+  content: "\e885";
+}
+
+.icon-gamejolt:before {
+  content: "\e600";
+}
+
+.icon-bilibili:before {
+  content: "\e6d3";
 }
 
 .icon-gamemaker:before {

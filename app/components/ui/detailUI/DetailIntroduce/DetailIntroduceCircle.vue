@@ -41,9 +41,8 @@ onMounted(() => {
 			duration: 2,
 			scrollTrigger: {
 				trigger: rightCircleRef.value,
-				start: "bottom 90%",
+				start: "bottom bottom",
 				toggleActions: "play none none reverse", // 进入时播放，离开时反向播放
-				// markers: true,
 			},
 			onUpdate: () => {
 				if (compareCircle()) gsap.set(leftCircleRef.value, { opacity: 1 });

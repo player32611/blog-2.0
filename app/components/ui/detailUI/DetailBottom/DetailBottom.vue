@@ -1,10 +1,14 @@
 <script setup lang="ts">
+import DetailBottomContent from "./DetailBottomContent.vue";
+import DetailBottomLinks from "./DetailBottomLinks.vue";
 import DetailBottomNavigation from "./DetailBottomNavigation.vue";
 </script>
 
 <template>
 	<div class="detail_bottom">
+		<DetailBottomContent />
 		<DetailBottomNavigation />
+		<DetailBottomLinks />
 	</div>
 </template>
 
@@ -12,10 +16,9 @@ import DetailBottomNavigation from "./DetailBottomNavigation.vue";
 .detail_bottom {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
 	height: 100vh;
 	width: 100%;
-	background-color: blue;
 }
 </style>
