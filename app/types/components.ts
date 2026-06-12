@@ -76,6 +76,11 @@ export interface DetailPartitionParams {
 	direction: "left" | "right";
 }
 
+export interface DetailMaskInstance {
+	maskIn: (options?: gsap.TweenVars) => void;
+	maskOut: (options?: gsap.TweenVars) => void;
+}
+
 export interface ItemParams {
 	x: number;
 	y: number;

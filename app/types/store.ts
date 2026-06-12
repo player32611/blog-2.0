@@ -6,7 +6,12 @@ import type {
 	MusicInfo,
 } from "./common";
 import type { BlogCollections, MusicPlayingMode } from "./config";
-import type { BlogMaskInstance, BlogMenuInstance, LoadingInstance } from "./components";
+import type {
+	BlogMaskInstance,
+	BlogMenuInstance,
+	DetailMaskInstance,
+	LoadingInstance,
+} from "./components";
 
 export type BlogState = {
 	activeBlogCollection: Ref<BlogCollections>;
@@ -25,6 +30,16 @@ export type BlogActions = {
 	useBlogContent: () => Ref<any>;
 	setBlogInstance: (mask: BlogMaskInstance | null, menu: BlogMenuInstance | null) => void;
 	changeBlogMenuState: () => void;
+};
+
+export type DetailState = {
+	maskInstance: Ref<DetailMaskInstance | null>;
+};
+
+export type DetailGetter = {};
+
+export type DetailActions = {
+	setMaskInstance: (mask: DetailMaskInstance | null) => void;
 };
 
 export type ImageState = {

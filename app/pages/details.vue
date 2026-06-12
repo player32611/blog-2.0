@@ -1,20 +1,25 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import { ScrollSmoother, ScrollTrigger } from "gsap/all";
+import type { DetailMaskInstance } from "~/types/components";
 
 import Button from "~/components/ui/common/Button.vue";
+import DetailBottom from "~/components/ui/detailUI/DetailBottom/DetailBottom.vue";
 import DetailDoing from "~/components/ui/detailUI/DetailDoing/DetailDoing.vue";
 import DetailIntroduce from "~/components/ui/detailUI/DetailIntroduce/DetailIntroduce.vue";
 import DetailTitle from "~/components/ui/detailUI/DetailTitle/DetailTitle.vue";
 import DetailWork from "~/components/ui/detailUI/DetailWork/DetailWork.vue";
+import DetailMask from "~/components/ui/detailUI/DetailMask.vue";
 import DetailPartition from "~/components/ui/detailUI/DetailPartition.vue";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
+const detailStore = useDetailStore();
 const loadingStore = useLoadingStore();
 const smoother = ref<ScrollSmoother | null>(null);
 const wrapperRef = ref<HTMLDivElement | null>(null);
 const contentRef = ref<HTMLDivElement | null>(null);
+const maskRef = ref<DetailMaskInstance | null>(null);
 
 usePageReady();
 
@@ -26,6 +31,7 @@ onMounted(() => {
 		effects: true,
 		normalizeScroll: true,
 	});
+	detailStore.setMaskInstance(maskRef.value);
 	document.title = "个人介绍";
 });
 
@@ -48,8 +54,10 @@ onUnmounted(() => {
 				<DetailWork />
 				<DetailPartition text="work" :direction="'left'" />
 				<DetailPartition text="work" :direction="'right'" />
+				<DetailBottom />
 			</div>
 		</div>
+		<DetailMask ref="maskRef" />
 		<Button
 			:text="'back'"
 			:icon="'&#xeb06;'"

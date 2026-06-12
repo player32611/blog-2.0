@@ -25,7 +25,7 @@ onMounted(() => {
 		start: "top top", // 元素顶部 触达 视口顶部时开始
 		end: `+=${5 * window.innerHeight}`,
 		pin: true, // 开启固定
-		markers: true,
+		// markers: true,
 		onEnter: () => {
 			console.log("enter");
 			floatRef.value?.startFloating();

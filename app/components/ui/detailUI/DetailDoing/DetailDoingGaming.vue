@@ -104,7 +104,6 @@ onUnmounted(() => {
 	}
 
 	.gaming_anim {
-		height: 100%;
 		width: 50%;
 		background-color: #000000;
 	}

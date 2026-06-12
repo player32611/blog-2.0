@@ -11,6 +11,8 @@ const skillRef = ref<HTMLDivElement | null>(null);
 const containerRef = ref<DetailIntroduceSkillContainerInstance | null>(null);
 const mountAnim = ref<gsap.core.Tween | null>(null);
 
+const mountDuration: number = 0.5;
+
 onMounted(() => {
 	mountAnim.value = gsap.fromTo(
 		skillRef.value,
@@ -18,10 +20,10 @@ onMounted(() => {
 		{
 			clipPath: "inset(0% 0% 0% 0%)",
 			ease: "line",
-			duration: 1,
+			duration: mountDuration,
 			scrollTrigger: {
 				trigger: skillRef.value,
-				start: "bottom 90%",
+				start: "bottom bottom",
 				toggleActions: "play none none reverse", // 进入时播放，离开时反向播放
 				onEnter: () => {
 					containerRef.value?.resume();
