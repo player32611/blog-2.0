@@ -24,11 +24,11 @@ const maskOut = (options?: gsap.TweenVars) => {
 		backgroundColor: "#ffff0000",
 		ease: "power2.in",
 		duration: maskEaseDuration,
+		...options,
 		onComplete: () => {
 			isNavigating.value = false;
 			originalOnComplete?.();
 		},
-		...options,
 	});
 };
 

@@ -148,12 +148,15 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
+@use "../../../assets/styles/variables.scss";
+
 .detail_partition {
 	position: relative;
 	display: flex;
 	height: 5rem;
 	width: 100%;
 	overflow: hidden;
+	z-index: variables.$bar_zIndex;
 
 	.partition_container {
 		position: relative;

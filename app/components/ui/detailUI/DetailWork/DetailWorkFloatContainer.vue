@@ -5,18 +5,20 @@ import type { DetailWorkFloatInstance } from "~/types/components";
 
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
 
-const containerRef = ref<HTMLDivElement | null>(null);
-const itemRef = ref<HTMLDivElement | null>(null);
+const itemRefs = ref<HTMLDivElement[]>([]);
+
+const itemNum: number = 5;
+const floatingRate: number[] = Array.from({ length: itemNum }, () => Math.random() * 0.3 + 0.1);
 
 const ticking = () => {
 	const smoother = ScrollSmoother.get();
 	if (!smoother) return;
-	const y = smoother.scrollTop();
-	const top = containerRef.value?.getBoundingClientRect().top;
-	console.log(y);
+	const y = smoother.scrollTop() - 5 * window.innerHeight;
 
-	gsap.set(itemRef.value, {
-		y: y * 0.1,
+	itemRefs.value.forEach((el, i) => {
+		gsap.set(el, {
+			y: y * (floatingRate[i] || 0),
+		});
 	});
 };
 
@@ -39,8 +41,12 @@ defineExpose<DetailWorkFloatInstance>({
 </script>
 
 <template>
-	<div class="work_float_container" ref="containerRef">
-		<div class="float_item" ref="itemRef"></div>
+	<div class="work_float_container">
+		<div
+			class="float_item"
+			v-for="_ in itemNum"
+			:ref="el => itemRefs.push(el as HTMLDivElement)"
+		></div>
 	</div>
 </template>
 
@@ -48,13 +54,17 @@ defineExpose<DetailWorkFloatInstance>({
 .work_float_container {
 	position: absolute;
 	top: 0;
+	display: flex;
+	justify-content: space-around;
 	height: 100vh;
 	width: 100%;
-	background-color: rgba($color: #000000, $alpha: 0.5);
+	overflow: hidden;
 
 	.float_item {
-		height: 100px;
-		width: 100px;
+		position: relative;
+		top: -50px;
+		height: 50px;
+		width: 50px;
 		background-color: #ffffff;
 	}
 }

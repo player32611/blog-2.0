@@ -67,8 +67,8 @@ export interface DetailWorkFloatInstance {
 	stopFloating: () => void;
 }
 
-export interface DetailWorkMaskInstance {
-	triggerAnim: (onComplete: () => void) => void;
+export interface DetailWorkTransitionInstance {
+	transitionAnim: (inOptions?: gsap.TweenVars, outOptions?: gsap.TweenVars) => void;
 }
 
 export interface DetailPartitionParams {
