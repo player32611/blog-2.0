@@ -19,18 +19,6 @@ export interface FaultTextParams {
 	style?: Record<string, string | number>;
 }
 
-export interface TooltipInstance {
-	width: ComputedRef<number>;
-	height: ComputedRef<number>;
-}
-
-export interface TooltipParams {
-	style?: Record<string, string | number>;
-	text?: string;
-	visable: boolean;
-	onClick?: () => void;
-}
-
 export interface BlogMaskInstance {
 	changeMask: () => void;
 }
