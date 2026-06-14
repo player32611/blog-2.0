@@ -6,13 +6,15 @@ gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
 
 const containerRef = ref<HTMLDivElement | null>(null);
 const appearInterval = ref<number | null>(null);
+const currentAnim = ref<gsap.core.Tween | null>(null);
 
 const appearDelay: number = 5000;
 const shakeDuration: number = 1;
 const shakeOpacity: number = 0.7;
 
 const handleScrollStart = () => {
-	gsap.to(containerRef.value, {
+	currentAnim.value?.kill();
+	currentAnim.value = gsap.to(containerRef.value, {
 		opacity: 0,
 		ease: "power2.out",
 		duration: shakeDuration,
@@ -22,7 +24,7 @@ const handleScrollStart = () => {
 const handleScrollEnd = () => {
 	if (appearInterval.value) clearTimeout(appearInterval.value);
 	appearInterval.value = setTimeout(() => {
-		gsap.to(containerRef.value, {
+		currentAnim.value = gsap.to(containerRef.value, {
 			opacity: shakeOpacity,
 			ease: "power2.out",
 			duration: shakeDuration,
@@ -37,6 +39,8 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+	currentAnim.value?.kill();
+	if (appearInterval.value) clearTimeout(appearInterval.value);
 	ScrollTrigger.removeEventListener("scrollStart", handleScrollStart);
 	ScrollTrigger.removeEventListener("scrollEnd", handleScrollEnd);
 });

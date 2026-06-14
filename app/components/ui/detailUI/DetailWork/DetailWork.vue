@@ -79,7 +79,7 @@ onMounted(() => {
 					maskRef.value?.transitionAnim(
 						{
 							onStart: () => {
-								smoother?.paused(true);
+								// smoother?.paused(true);
 							},
 							onComplete: () => {
 								activeIndex.value = index;
@@ -87,7 +87,7 @@ onMounted(() => {
 						},
 						{
 							onComplete: () => {
-								smoother?.paused(false);
+								// smoother?.paused(false);
 							},
 						},
 					);
