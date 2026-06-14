@@ -5,7 +5,7 @@ import type { DetailMaskInstance } from "~/types/components";
 const isNavigating = ref<boolean>(false);
 const maskRef = ref<HTMLDivElement | null>(null);
 
-const maskEaseDuration: number = 1;
+const maskEaseDuration: number = 0.5;
 
 const maskIn = (options?: gsap.TweenVars) => {
 	isNavigating.value = true;

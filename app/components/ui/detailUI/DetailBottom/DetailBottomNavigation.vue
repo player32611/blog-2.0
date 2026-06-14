@@ -35,8 +35,10 @@ onUnmounted(() => {
 
 <template>
 	<div class="bottom_navigation" @click="handleClick">
-		<img v-if="imageFrame" src="/images/sprites/savePoint1.png" alt="加载失败" />
-		<img v-else src="/images/sprites/savePoint2.png" alt="加载失败" />
+		<img
+			:src="imageFrame ? '/images/sprites/savePoint1.png' : '/images/sprites/savePoint2.png'"
+			alt="加载失败"
+		/>
 	</div>
 </template>
 
@@ -50,6 +52,47 @@ onUnmounted(() => {
 		height: 100%;
 		width: 100%;
 		image-rendering: crisp-edges; /* 强制锐利边缘，无平滑 */
+		user-select: none;
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.5;
+
+	.bottom_navigation {
+		height: 200px * $base-size;
+		width: 200px * $base-size;
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.7;
+
+	.bottom_navigation {
+		height: 200px * $base-size;
+		width: 200px * $base-size;
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.8;
+
+	.bottom_navigation {
+		height: 200px * $base-size;
+		width: 200px * $base-size;
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.9;
+
+	.bottom_navigation {
+		height: 200px * $base-size;
+		width: 200px * $base-size;
 	}
 }
 </style>

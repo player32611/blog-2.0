@@ -7,6 +7,7 @@ gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
 const containerRef = ref<HTMLDivElement | null>(null);
 const appearInterval = ref<number | null>(null);
 const currentAnim = ref<gsap.core.Tween | null>(null);
+const tooltipDirection = ref<"top" | "bottom">("bottom");
 
 const appearDelay: number = 5000;
 const shakeDuration: number = 1;
@@ -28,6 +29,15 @@ const handleScrollEnd = () => {
 			opacity: shakeOpacity,
 			ease: "power2.out",
 			duration: shakeDuration,
+			onStart: () => {
+				const smoother = ScrollSmoother.get();
+				if (smoother) {
+					const maxScroll = ScrollTrigger.maxScroll(window);
+					const currentScroll = smoother.scrollTop();
+					if (currentScroll + 1 >= maxScroll) tooltipDirection.value = "top";
+					else tooltipDirection.value = "bottom";
+				}
+			},
 		});
 	}, appearDelay);
 };
@@ -49,7 +59,10 @@ onUnmounted(() => {
 <template>
 	<div class="detail_tooltip" ref="containerRef">
 		<!-- From Uiverse.io by mrhyddenn -->
-		<div class="scrolldown" style="--color: skyblue">
+		<div
+			class="scrolldown"
+			:style="{ '--color': 'skyblue', rotate: tooltipDirection === 'top' ? '180deg' : '0deg' }"
+		>
 			<div class="chevrons">
 				<div class="chevrondown"></div>
 				<div class="chevrondown"></div>
@@ -82,7 +95,6 @@ onUnmounted(() => {
 		border-radius: 50px;
 		box-sizing: border-box;
 		margin-bottom: 16px;
-		cursor: pointer;
 
 		&::before {
 			content: "";
