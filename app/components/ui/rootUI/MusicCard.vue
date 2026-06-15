@@ -122,7 +122,6 @@ $base-size: 1;
 	border-radius: 10px * $base-size;
 	cursor: pointer;
 	user-select: none;
-	-webkit-tap-highlight-color: transparent;
 	z-index: 10;
 
 	.card_content {
@@ -222,7 +221,6 @@ $base-size: 1;
 				border: none;
 				user-select: none;
 				cursor: pointer;
-				-webkit-tap-highlight-color: transparent;
 
 				.icon {
 					font-size: 13px * $base-size;
@@ -599,7 +597,6 @@ $base-size: 1;
 		border-radius: 10px * $base-size;
 		cursor: pointer;
 		user-select: none;
-		-webkit-tap-highlight-color: transparent;
 		z-index: 10;
 
 		.card_content {
@@ -705,7 +702,6 @@ $base-size: 1;
 					border: none;
 					user-select: none;
 					cursor: pointer;
-					-webkit-tap-highlight-color: transparent;
 
 					.icon {
 						font-size: 13px * $base-size;
@@ -815,7 +811,6 @@ $base-size: 1;
 		border-radius: 10px * $base-size;
 		cursor: pointer;
 		user-select: none;
-		-webkit-tap-highlight-color: transparent;
 		z-index: 10;
 
 		.card_content {
@@ -921,7 +916,6 @@ $base-size: 1;
 					border: none;
 					user-select: none;
 					cursor: pointer;
-					-webkit-tap-highlight-color: transparent;
 
 					.icon {
 						font-size: 13px * $base-size;

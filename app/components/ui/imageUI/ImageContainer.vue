@@ -1,15 +1,13 @@
 <script setup lang="ts">
 const imageStore = useImageStore();
-const { rowMax, imageBorderRadius } = imageStore.getLayoutAttribute();
-const { drawImage, drawPlaceholder } = useCanvasDrawing();
-
 const canvasRef = ref<HTMLCanvasElement | null>(null);
-const content = ref<CanvasRenderingContext2D | null | undefined>(null);
 const allImagePath = ref<string[]>([]);
 const currentImageWidth = ref<number>(0);
 const currentImageHeight = ref<number>(0);
 const currentImageMargin = ref<number>(0);
-const animationFrameId = ref<number | null>(null); // 添加 animationFrameId 引用来存储 requestAnimationFrame 的 ID
+const animationFrameId = ref<number | null>(null);
+const { rowMax, imageBorderRadius, imagePlaceHolderColor } = imageStore.getLayoutAttribute();
+const { drawImage, drawPlaceholder } = useCanvasDrawing(canvasRef);
 
 // 物理模型参数
 const isDragging = ref<boolean>(false);
@@ -136,7 +134,7 @@ const createImgDatas = () => {
 		imageStore.setAllImagePosData([
 			...imageStore.allImagePosData,
 			{
-				img: drawPlaceholder(imageWidth, imageHeight, imageBorderRadius, "#ffffff"),
+				img: null,
 				path: path,
 				x,
 				y,
@@ -149,7 +147,7 @@ const createImgDatas = () => {
 		const loadPromise = new Promise<void>(resolve => {
 			img.onload = () => {
 				const currentAllImage = imageStore.allImagePosData;
-				currentAllImage[i]!.img = drawImage(img, imageWidth, imageHeight, imageBorderRadius);
+				currentAllImage[i]!.img = img;
 				imageStore.setAllImagePosData(currentAllImage);
 				drawFrame();
 				resolve();
@@ -200,21 +198,34 @@ const updatePosition = () => {
 };
 
 const drawFrame = () => {
-	if (!canvasRef.value || !content.value) return;
+	if (!canvasRef.value) return;
+	const ctx = canvasRef.value.getContext("2d");
+	if (!ctx) return;
 	const rect = canvasRef.value.getBoundingClientRect();
-	content.value.clearRect(0, 0, rect.width, rect.height);
+	ctx.clearRect(0, 0, rect.width, rect.height);
 
 	updatePosition();
 
 	imageStore.allImagePosData.forEach(img => {
-		if (!img.img) return;
-		content.value?.drawImage(
-			img.img,
-			img.x,
-			img.y,
-			currentImageWidth.value,
-			currentImageHeight.value,
-		);
+		if (img.img) {
+			drawImage(
+				img.x,
+				img.y,
+				img.img,
+				currentImageWidth.value,
+				currentImageHeight.value,
+				imageBorderRadius,
+			);
+		} else {
+			drawPlaceholder(
+				img.x,
+				img.y,
+				currentImageWidth.value,
+				currentImageHeight.value,
+				imageBorderRadius,
+				imagePlaceHolderColor,
+			);
+		}
 	});
 
 	// 只在有速度或正在拖动时继续动画循环
@@ -252,7 +263,6 @@ const resize = () => {
 		const ctx = canvasRef.value.getContext("2d");
 		if (ctx) {
 			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-			content.value = ctx;
 			// 只有当图片尺寸或间距需要改变时才重新生成
 			if (imageStore.getLayoutAttribute().imageWidth !== currentImageWidth.value) {
 				createImgDatas();
@@ -265,15 +275,7 @@ const resize = () => {
 onMounted(() => {
 	allImagePath.value = getAllImages();
 
-	const dpr = window.devicePixelRatio || 1;
-	const rect = canvasRef.value!.getBoundingClientRect();
-
-	canvasRef.value!.width = rect.width * dpr;
-	canvasRef.value!.height = rect.height * dpr;
-
-	content.value = canvasRef.value!.getContext("2d");
-	if (content.value) content.value.setTransform(dpr, 0, 0, dpr, 0, 0);
-
+	resize();
 	createImgDatas();
 	drawFrame();
 
@@ -316,24 +318,14 @@ onUnmounted(() => {
 	position: absolute;
 	width: 100%;
 	height: 100%;
+	overflow: hidden;
+	overscroll-behavior: none;
 	cursor: pointer;
 
 	.image_container {
 		position: absolute;
 		width: 100%;
 		height: 100%;
-	}
-
-	.loading_indicator {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		font-size: 24px;
-		color: white;
-		font-family: "Mars Needs Cunnilingus", "方正基础像素体", sans-serif;
-		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-		pointer-events: none;
 	}
 }
 </style>

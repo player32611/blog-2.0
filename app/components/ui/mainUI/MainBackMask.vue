@@ -22,7 +22,6 @@ $star-color: yellow;
 	width: 100%;
 	overflow: hidden;
 	pointer-events: none;
-	-webkit-tap-highlight-color: transparent;
 	user-select: none;
 
 	#stars {

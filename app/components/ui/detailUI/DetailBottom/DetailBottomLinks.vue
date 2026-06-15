@@ -53,12 +53,14 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .bottom_links {
-	position: relative;
+	position: absolute;
+	bottom: 0;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	height: 100px;
 	width: 100%;
+	overflow: hidden;
 
 	/* From Uiverse.io by deamelo */
 	.links_container {

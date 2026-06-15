@@ -6,9 +6,12 @@ import DetailTitleCode from "./DetailTitleCode.vue";
 
 gsap.registerPlugin(SplitText);
 
+const word1Ref = ref<HTMLDivElement | null>(null);
 const word1Split = ref<SplitText | null>(null);
 const word1Interval = ref<number | null>(null);
+const word2Ref = ref<HTMLDivElement | null>(null);
 const word2Split = ref<SplitText | null>(null);
+const word3Ref = ref<HTMLDivElement | null>(null);
 const word3Split = ref<SplitText | null>(null);
 const word3Interval = ref<number | null>(null);
 
@@ -288,9 +291,9 @@ const word2Anim = () => {
 };
 
 onMounted(() => {
-	word1Split.value = SplitText.create(".title_word1", { type: "chars" });
-	word2Split.value = SplitText.create(".title_word2", { type: "words" });
-	word3Split.value = SplitText.create(".title_word3", { type: "chars, words" });
+	word1Split.value = SplitText.create(word1Ref.value, { type: "chars" });
+	word2Split.value = SplitText.create(word2Ref.value, { type: "words" });
+	word3Split.value = SplitText.create(word3Ref.value, { type: "chars, words" });
 	word1FirstCharAnim();
 	word1SecondCharAnim();
 	word1ThirdCharAnim();
@@ -318,9 +321,9 @@ onUnmounted(() => {
 <template>
 	<div class="title_content">
 		<div class="content_word">
-			<div class="title_word1">CODING</div>
-			<div class="title_word2">ANY</div>
-			<div class="title_word3">THINGS</div>
+			<div class="title_word1" ref="word1Ref">CODING</div>
+			<div class="title_word2" ref="word2Ref">ANY</div>
+			<div class="title_word3" ref="word3Ref">THINGS</div>
 		</div>
 		<div class="content_code">
 			<DetailTitleCode />

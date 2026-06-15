@@ -660,7 +660,6 @@ onUnmounted(() => {
 				height: 200px;
 				width: 200px;
 				z-index: variables.$float_zIndex + 1;
-				-webkit-tap-highlight-color: transparent;
 				cursor: pointer;
 			}
 		}

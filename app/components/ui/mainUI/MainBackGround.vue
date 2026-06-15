@@ -139,7 +139,6 @@ onUnmounted(() => {
 	width: 100%;
 	overflow: hidden;
 	overscroll-behavior: none;
-	-webkit-tap-highlight-color: transparent;
 	user-select: none;
 
 	img {

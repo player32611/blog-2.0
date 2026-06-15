@@ -13,6 +13,7 @@ export const useImageStore = defineStore("image", (): ImageState & ImageGetter &
 		let imageHeight = 500;
 		let imageMargin = 200;
 		const imageBorderRadius = 16;
+		const imagePlaceHolderColor = "#ffffff";
 		const screenWidth = window.innerWidth;
 		// 小屏幕（手机）
 		if (screenWidth < 768) {
@@ -34,6 +35,7 @@ export const useImageStore = defineStore("image", (): ImageState & ImageGetter &
 			imageHeight,
 			imageMargin,
 			imageBorderRadius,
+			imagePlaceHolderColor,
 			totalWidth: imageWidth * rowMax + imageMargin * (rowMax - 1),
 			totalHeight: imageHeight * lineMax + imageMargin * (lineMax - 1),
 		};

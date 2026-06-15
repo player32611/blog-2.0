@@ -53,6 +53,7 @@ export type ImageLayoutData = {
 	imageHeight: number;
 	imageMargin: number;
 	imageBorderRadius: number;
+	imagePlaceHolderColor: string;
 	totalWidth: number;
 	totalHeight: number;
 };
@@ -69,7 +70,7 @@ export type ImageLayoutData = {
  * @property animation - GSAP 动画实例或 null
  */
 export interface ImagePosData {
-	img: CanvasImageSource | null;
+	img: HTMLImageElement | null;
 	path: string;
 	x: number;
 	y: number;

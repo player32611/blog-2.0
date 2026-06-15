@@ -50,6 +50,7 @@ body {
 	padding: 0;
 	height: 100dvh;
 	width: 100%;
+	-webkit-tap-highlight-color: transparent;
 	// overscroll-behavior: none;
 
 	&:has(.home) {
