@@ -16,17 +16,15 @@ const circleRingWidth: number = 2;
 
 const handleMouseDown = (e: MouseEvent) => {
 	posArray.value.push({ x: e.x, y: e.y, radius: 0 });
-	if (animationFrameId.value === null) {
-		animationFrameId.value = requestAnimationFrame(drawFrame);
-	}
+	if (animationFrameId.value === null) animationFrameId.value = requestAnimationFrame(drawFrame);
 };
 
-const handleUpdate = () => {
+const update = () => {
 	if (!canvasRef.value) return;
 	const rect = canvasRef.value.getBoundingClientRect();
 	posArray.value = posArray.value.filter(info => {
 		info.radius += circleRingSpeed;
-		if (info.radius >= rect.width) return false;
+		if (info.radius >= Math.max(rect.width, rect.height)) return false;
 		return true;
 	});
 };
@@ -45,7 +43,7 @@ const drawFrame = () => {
 	const rect = canvasRef.value.getBoundingClientRect();
 	const ctx = canvasRef.value.getContext("2d");
 	ctx?.clearRect(0, 0, rect.width, rect.height);
-	handleUpdate();
+	update();
 	posArray.value.forEach(info => {
 		drawCircleRing(info.x, info.y, info.radius, info.radius - circleRingWidth, circleRingColor);
 	});

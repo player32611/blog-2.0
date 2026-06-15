@@ -22,7 +22,7 @@ const handleClick = () => {
 		markAnim.value = gsap.fromTo(
 			contentSplit.value.chars.at(-1) || null,
 			{
-				x: "-2rem",
+				x: "-0.25em",
 				opacity: 0,
 			},
 			{
@@ -52,12 +52,12 @@ const handleClick = () => {
 				duration: clickAnimDuration / 4,
 			})
 			.to(contentSplit.value.chars.slice(0, -1), {
-				x: "4rem",
+				x: "1em",
 				ease: "power1.inOut",
 				duration: clickAnimDuration / 2,
 			})
 			.to(contentSplit.value.chars.slice(0, -1), {
-				x: "2rem",
+				x: "0.5em",
 				ease: "power1.in",
 				duration: clickAnimDuration / 4,
 			});
@@ -70,12 +70,12 @@ onMounted(() => {
 	mountAnim.value = gsap.fromTo(
 		contentSplit.value.chars.slice(0, -1),
 		{
-			x: "3rem",
+			x: "1em",
 			yPercent: -50,
 			opacity: 0,
 		},
 		{
-			x: "2rem",
+			x: "0.5em",
 			yPercent: 0,
 			opacity: 1,
 			stagger: 0.05,
@@ -97,16 +97,63 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="bottom_content" ref="contentRef" @click="handleClick">The End?</div>
+	<div class="bottom_content">
+		<div class="content_inner" ref="contentRef" @click="handleClick">The End?</div>
+	</div>
 </template>
 
 <style scoped lang="scss">
 .bottom_content {
+	position: relative;
+	width: 100%;
 	color: #ff7f27;
 	font-size: 8rem;
 	font-family: "Coustard Black";
 	text-align: center;
 	user-select: none;
+	overflow: hidden;
+	pointer-events: none;
 	cursor: pointer;
+
+	.content_inner {
+		width: auto;
+		pointer-events: all;
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.4;
+
+	.bottom_content {
+		font-size: 8rem * $base-size;
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.5;
+
+	.bottom_content {
+		font-size: 8rem * $base-size;
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.6;
+
+	.bottom_content {
+		font-size: 8rem * $base-size;
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.8;
+
+	.bottom_content {
+		font-size: 8rem * $base-size;
+	}
 }
 </style>

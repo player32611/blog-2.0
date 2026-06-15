@@ -15,4 +15,8 @@ const loadingStore = useLoadingStore();
 	</div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.bottom_more {
+	position: relative;
+}
+</style>

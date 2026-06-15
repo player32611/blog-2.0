@@ -44,6 +44,7 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .bottom_navigation {
+	position: relative;
 	height: 200px;
 	width: 200px;
 	cursor: pointer;

@@ -60,6 +60,7 @@ onUnmounted(() => {
 	align-items: center;
 	height: 100px;
 	width: 100%;
+	pointer-events: none;
 	overflow: hidden;
 
 	/* From Uiverse.io by deamelo */
@@ -70,6 +71,7 @@ onUnmounted(() => {
 		position: relative;
 		bottom: -55%;
 		border-radius: 50%;
+		pointer-events: all;
 
 		.up {
 			display: flex;
