@@ -13,18 +13,28 @@ const normalAnims = ref<gsap.core.Tween[]>([]);
 
 const itemNum: number = 20;
 
-onMounted(() => {
+const resize = () => {
 	if (!itemRefs.value[0]) return;
 	const rect = itemRefs.value[0].getBoundingClientRect();
+
+	if (scrollAnim.value) scrollAnim.value.progress(0).kill();
+
+	gsap.set(containerRef.value, { x: 0 });
 	scrollAnim.value = gsap.to(containerRef.value, {
+		x: direction === "left" ? `-=${2 * rect.width}px` : `+=${2 * rect.width}px`,
 		onStart: () => {
 			if (direction === "left") gsap.set(containerRef.value, { right: 2 * rect.width });
 			else gsap.set(containerRef.value, { right: 4 * rect.width });
 		},
-		x: direction === "left" ? `-=${2 * rect.width}px` : `+=${2 * rect.width}px`,
 		scrollTrigger: { scrub: true },
 	});
+
+	normalAnims.value.forEach(el => {
+		el.progress(0).kill();
+	});
+	normalAnims.value.length = 0;
 	itemRefs.value.forEach(el => {
+		gsap.set(el, { x: 0 });
 		normalAnims.value.push(
 			gsap.to(el, {
 				x: direction === "left" ? `-=${2 * rect.width}px` : `+=${2 * rect.width}px`,
@@ -34,12 +44,18 @@ onMounted(() => {
 			}),
 		);
 	});
+};
+
+onMounted(() => {
+	resize();
+	window.addEventListener("resize", resize);
 });
 
 onUnmounted(() => {
 	scrollAnim.value?.scrollTrigger?.kill();
 	scrollAnim.value?.kill();
 	normalAnims.value.forEach(item => item.kill());
+	window.removeEventListener("resize", resize);
 });
 </script>
 
@@ -179,6 +195,94 @@ onUnmounted(() => {
 
 			#partition_arrow {
 				height: 5rem;
+			}
+		}
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.5;
+
+	.detail_partition {
+		height: 5rem * $base-size;
+
+		.partition_container {
+			height: 5rem * $base-size;
+
+			.partition_item {
+				width: 250px * $base-size;
+				font-size: 2rem * $base-size;
+
+				#partition_arrow {
+					height: 5rem * $base-size;
+				}
+			}
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.7;
+
+	.detail_partition {
+		height: 5rem * $base-size;
+
+		.partition_container {
+			height: 5rem * $base-size;
+
+			.partition_item {
+				width: 250px * $base-size;
+				font-size: 2rem * $base-size;
+
+				#partition_arrow {
+					height: 5rem * $base-size;
+				}
+			}
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.8;
+
+	.detail_partition {
+		height: 5rem * $base-size;
+
+		.partition_container {
+			height: 5rem * $base-size;
+
+			.partition_item {
+				width: 250px * $base-size;
+				font-size: 2rem * $base-size;
+
+				#partition_arrow {
+					height: 5rem * $base-size;
+				}
+			}
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.9;
+
+	.detail_partition {
+		height: 5rem * $base-size;
+
+		.partition_container {
+			height: 5rem * $base-size;
+
+			.partition_item {
+				width: 250px * $base-size;
+				font-size: 2rem * $base-size;
+
+				#partition_arrow {
+					height: 5rem * $base-size;
+				}
 			}
 		}
 	}
