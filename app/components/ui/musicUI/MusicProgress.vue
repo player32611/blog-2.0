@@ -13,7 +13,6 @@ const handleClickProgress = (e: MouseEvent) => {
 	);
 };
 
-// 启动条纹动画
 const startStripeAnimation = () => {
 	if (!barRef.value) return;
 	stripeAnimation.value = gsap.to(barRef.value, {
@@ -24,7 +23,6 @@ const startStripeAnimation = () => {
 	});
 };
 
-// 停止条纹动画
 const stopStripeAnimation = () => {
 	stripeAnimation.value?.kill();
 	stripeAnimation.value = null;

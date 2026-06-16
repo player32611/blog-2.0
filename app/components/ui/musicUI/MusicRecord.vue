@@ -16,7 +16,6 @@ const titleText = computed(() => {
 	const title = currentTitle.value;
 	let repeatedTitle = title;
 	repeatedTitle += "     " + title + "     ";
-
 	return repeatedTitle;
 });
 const rotationStep = computed(() => {
@@ -62,6 +61,10 @@ onMounted(() => {
 		paused: !soundStore.playingMusic,
 		ease: "linear",
 	});
+});
+
+onUnmounted(() => {
+	animationRef.value?.kill();
 });
 </script>
 

@@ -8,6 +8,7 @@ const normalAnimation = ref<GSAPAnimation | null>(null);
 const rotateAnimation = ref<GSAPAnimation | null>(null);
 const traceRef = ref<HTMLDivElement | null>(null);
 const currentMousePos = ref<{ x: number; y: number }>({ x: -100, y: -100 });
+
 const easeTime: number = 0.2; // 缓动时间（s）
 const outTime: number = 0.5; // 离开变化时间（s）
 const traceDuration: number = 1; // 轨迹持续时间（s）
@@ -87,10 +88,10 @@ onMounted(() => {
 		gsap.set(cursorRef.value, { opacity: 0 });
 		normalAnimation.value.pause();
 		rotateAnimation.value = gsap.timeline().to(cursorRef.value, {
-			rotation: "+=360", // 每次增加360度，实现无限旋转
-			duration: 0.2, // 旋转一周的时间（秒）
-			repeat: -1, // 无限重复
-			ease: "none", // 匀速旋转
+			rotation: "+=360",
+			duration: 0.2,
+			repeat: -1,
+			ease: "none",
 		});
 		rotateAnimation.value.pause();
 	}
@@ -108,7 +109,7 @@ onUnmounted(() => {
 	<div class="main_cursor" ref="cursorRef" v-if="!isMobile()">
 		<img :src="brushImg" alt="加载失败" />
 	</div>
-	<div class="main_trace" ref="traceRef">
+	<div class="main_trace" ref="traceRef" v-if="!isMobile()">
 		<div class="trace_circle"></div>
 	</div>
 </template>

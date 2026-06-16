@@ -589,119 +589,49 @@ $base-size: 1;
 	$base-size: 0.9;
 
 	.music_card {
-		position: fixed;
-		left: 0;
-		top: 0;
 		width: 190px * $base-size;
-		height: auto;
 		border-radius: 10px * $base-size;
-		cursor: pointer;
-		user-select: none;
-		z-index: 10;
 
 		.card_content {
 			width: 190px * $base-size;
-			z-index: 10;
-			position: relative;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			background: rgba(255, 255, 255, 0.55);
 			box-shadow: 0 8px * $base-size 32px * $base-size 0 rgba(31, 38, 135, 0.37);
 			backdrop-filter: blur(8.5px * $base-size);
 			-webkit-backdrop-filter: blur(8.5px * $base-size);
 			border-radius: 10px * $base-size;
 			border-width: 1px * $base-size;
-			border-style: solid;
-			border-color: rgba(255, 255, 255, 0.18);
-			overflow: hidden;
 
 			.card_title {
 				border-width: 1px * $base-size;
-				border-style: solid;
-				border-color: rgba(180, 177, 177, 0.308);
-				display: block;
 				margin: 12px * $base-size auto;
-				text-align: center;
 				font-size: 0.6rem * $base-size;
 				border-radius: 12px * $base-size;
-				font-family: Roboto, sans-serif;
-				color: rgba(102, 100, 100, 0.911);
 			}
 
 			.cover_container {
 				width: 80px * $base-size;
 				min-height: 80px * $base-size;
-				background: rgba(216, 212, 212, 0.726);
 				margin-top: 20px * $base-size;
 				border-radius: 15px * $base-size;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				overflow: hidden;
-
-				.music_cover {
-					height: 100%;
-					width: 100%;
-
-					&.loading {
-						display: none;
-					}
-				}
 			}
 
 			.music_name {
-				width: auto;
 				height: 20px * $base-size;
 				font-size: 0.7rem * $base-size;
-				font-weight: 500;
-				font-family: Roboto, sans-serif;
 				padding: 0 5px * $base-size;
 				margin: 10px * $base-size auto 0px;
-				display: block;
-				text-align: center;
-				color: rgba(50, 49, 51, 0.637);
-				mask-image: linear-gradient(
-					to right,
-					transparent 0%,
-					black 10%,
-					black 90%,
-					transparent 100%
-				);
-				overflow: hidden;
 			}
 
 			.music_artist {
 				font-size: 0.6rem * $base-size;
-				font-weight: 500;
-				font-family: Roboto, sans-serif;
 				padding: 0 5px * $base-size;
-				margin: 0px auto;
-				display: block;
-				overflow: hidden;
-				text-align: center;
-				color: rgba(50, 49, 51, 0.637);
 			}
 
 			.music_control {
-				display: flex;
-				align-items: center;
-				justify-content: space-evenly;
 				padding: 0 5px * $base-size;
-				cursor: pointer;
 
 				.control_btn {
-					position: relative;
-					display: flex;
-					align-items: center;
-					justify-content: center;
 					width: 30px * $base-size;
 					height: 30px * $base-size;
-					color: rgba($color: #000000, $alpha: 0.5);
-					background: transparent;
-					border: none;
-					user-select: none;
-					cursor: pointer;
 
 					.icon {
 						font-size: 13px * $base-size;
@@ -711,27 +641,17 @@ $base-size: 1;
 		}
 
 		.backgound1 {
-			position: absolute;
 			top: 30px * $base-size;
 			left: 20px * $base-size;
 			width: 60px * $base-size;
 			height: 60px * $base-size;
-			background-color: rgb(131, 25, 163);
-			filter: drop-shadow(0 0 10px rgb(131, 25, 163));
-			border-radius: 50%;
-			animation: one 5s infinite;
 		}
 
 		.backgound2 {
-			position: absolute;
 			top: 90px * $base-size;
 			left: 90px * $base-size;
 			width: 60px * $base-size;
 			height: 60px * $base-size;
-			background-color: rgb(29, 209, 149);
-			filter: drop-shadow(0 0 10px rgb(29, 209, 149));
-			border-radius: 50%;
-			animation: two 5s infinite;
 		}
 	}
 
@@ -803,119 +723,49 @@ $base-size: 1;
 	$base-size: 0.9;
 
 	.music_card {
-		position: fixed;
-		left: 0;
-		top: 0;
 		width: 190px * $base-size;
-		height: auto;
 		border-radius: 10px * $base-size;
-		cursor: pointer;
-		user-select: none;
-		z-index: 10;
 
 		.card_content {
 			width: 190px * $base-size;
-			z-index: 10;
-			position: relative;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			background: rgba(255, 255, 255, 0.55);
 			box-shadow: 0 8px * $base-size 32px * $base-size 0 rgba(31, 38, 135, 0.37);
 			backdrop-filter: blur(8.5px * $base-size);
 			-webkit-backdrop-filter: blur(8.5px * $base-size);
 			border-radius: 10px * $base-size;
 			border-width: 1px * $base-size;
-			border-style: solid;
-			border-color: rgba(255, 255, 255, 0.18);
-			overflow: hidden;
 
 			.card_title {
 				border-width: 1px * $base-size;
-				border-style: solid;
-				border-color: rgba(180, 177, 177, 0.308);
-				display: block;
 				margin: 12px * $base-size auto;
-				text-align: center;
 				font-size: 0.6rem * $base-size;
 				border-radius: 12px * $base-size;
-				font-family: Roboto, sans-serif;
-				color: rgba(102, 100, 100, 0.911);
 			}
 
 			.cover_container {
 				width: 80px * $base-size;
 				min-height: 80px * $base-size;
-				background: rgba(216, 212, 212, 0.726);
 				margin-top: 20px * $base-size;
 				border-radius: 15px * $base-size;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				overflow: hidden;
-
-				.music_cover {
-					height: 100%;
-					width: 100%;
-
-					&.loading {
-						display: none;
-					}
-				}
 			}
 
 			.music_name {
-				width: auto;
 				height: 20px * $base-size;
 				font-size: 0.7rem * $base-size;
-				font-weight: 500;
-				font-family: Roboto, sans-serif;
 				padding: 0 5px * $base-size;
 				margin: 10px * $base-size auto 0px;
-				display: block;
-				text-align: center;
-				color: rgba(50, 49, 51, 0.637);
-				mask-image: linear-gradient(
-					to right,
-					transparent 0%,
-					black 10%,
-					black 90%,
-					transparent 100%
-				);
-				overflow: hidden;
 			}
 
 			.music_artist {
 				font-size: 0.6rem * $base-size;
-				font-weight: 500;
-				font-family: Roboto, sans-serif;
 				padding: 0 5px * $base-size;
-				margin: 0px auto;
-				display: block;
-				overflow: hidden;
-				text-align: center;
-				color: rgba(50, 49, 51, 0.637);
 			}
 
 			.music_control {
-				display: flex;
-				align-items: center;
-				justify-content: space-evenly;
 				padding: 0 5px * $base-size;
-				cursor: pointer;
 
 				.control_btn {
-					position: relative;
-					display: flex;
-					align-items: center;
-					justify-content: center;
 					width: 30px * $base-size;
 					height: 30px * $base-size;
-					color: rgba($color: #000000, $alpha: 0.5);
-					background: transparent;
-					border: none;
-					user-select: none;
-					cursor: pointer;
 
 					.icon {
 						font-size: 13px * $base-size;
@@ -925,27 +775,17 @@ $base-size: 1;
 		}
 
 		.backgound1 {
-			position: absolute;
 			top: 30px * $base-size;
 			left: 20px * $base-size;
 			width: 60px * $base-size;
 			height: 60px * $base-size;
-			background-color: rgb(131, 25, 163);
-			filter: drop-shadow(0 0 10px rgb(131, 25, 163));
-			border-radius: 50%;
-			animation: one 5s infinite;
 		}
 
 		.backgound2 {
-			position: absolute;
 			top: 90px * $base-size;
 			left: 90px * $base-size;
 			width: 60px * $base-size;
 			height: 60px * $base-size;
-			background-color: rgb(29, 209, 149);
-			filter: drop-shadow(0 0 10px rgb(29, 209, 149));
-			border-radius: 50%;
-			animation: two 5s infinite;
 		}
 	}
 
