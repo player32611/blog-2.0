@@ -11,9 +11,7 @@ const undertaleSound = useSoundEffect("sounds/effects/undertale-button.wav");
 const handleClick = () => {
 	if (onClick) {
 		onClick();
-		if (effectsVolume) {
-			undertaleSound.play();
-		}
+		if (effectsVolume) undertaleSound.play();
 	}
 };
 </script>

@@ -40,6 +40,10 @@ export interface BlogMenuSelectionParams {
 export interface BlogNavigationParams {
 	page: globalThis.Ref<any, any>;
 }
+``;
+export interface DetailBottomMoreInstance {
+	triggerAnim: () => void;
+}
 
 export interface DetailIntroduceSkillContainerInstance {
 	resume: () => void;

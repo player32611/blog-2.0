@@ -100,6 +100,8 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+	normalAnimation.value?.kill();
+	rotateAnimation.value?.kill();
 	window.removeEventListener("mousemove", handleMouseMove);
 	window.removeEventListener("mouseout", handleMouseOut);
 });

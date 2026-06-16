@@ -9,6 +9,7 @@ import type { BlogCollections, MusicPlayingMode } from "./config";
 import type {
 	BlogMaskInstance,
 	BlogMenuInstance,
+	DetailBottomMoreInstance,
 	DetailMaskInstance,
 	LoadingInstance,
 } from "./components";
@@ -33,12 +34,14 @@ export type BlogActions = {
 };
 
 export type DetailState = {
+	bottomMoreInstance: Ref<DetailBottomMoreInstance | null>;
 	maskInstance: Ref<DetailMaskInstance | null>;
 };
 
 export type DetailGetter = {};
 
 export type DetailActions = {
+	setBottomMoreInstance: (instance: DetailBottomMoreInstance | null) => void;
 	setMaskInstance: (mask: DetailMaskInstance | null) => void;
 };
 

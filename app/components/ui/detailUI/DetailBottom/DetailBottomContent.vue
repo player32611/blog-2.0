@@ -4,6 +4,7 @@ import { ScrollTrigger, SplitText } from "gsap/all";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
+const detailStore = useDetailStore();
 const contentSplit = ref<SplitText | null>(null);
 const contentRef = ref<HTMLDivElement | null>(null);
 const mountAnim = ref<gsap.core.Tween | null>(null);
@@ -37,6 +38,7 @@ const handleClick = () => {
 			ease: "power1.out",
 			duration: markAnimDuration,
 		});
+		detailStore.bottomMoreInstance?.triggerAnim();
 		mountAnim.value?.kill();
 	} else {
 		clickAnim.value = gsap
@@ -103,9 +105,15 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
+@use "../../../../assets/styles/variables.scss";
+
 .bottom_content {
 	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	width: 100%;
+	background-color: transparent;
 	color: #ff7f27;
 	font-size: 8rem;
 	font-family: "Coustard Black";
@@ -113,10 +121,11 @@ onUnmounted(() => {
 	user-select: none;
 	overflow: hidden;
 	pointer-events: none;
+	z-index: variables.$float_zIndex;
 	cursor: pointer;
 
 	.content_inner {
-		width: auto;
+		width: max-content;
 		pointer-events: all;
 	}
 }

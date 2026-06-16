@@ -1,9 +1,18 @@
 <script setup lang="ts">
+import type { DetailBottomMoreInstance } from "~/types/components.js";
+
 import DetailBottomBackground from "./DetailBottomBackground.vue";
 import DetailBottomContent from "./DetailBottomContent.vue";
 import DetailBottomLinks from "./DetailBottomLinks.vue";
 import DetailBottomMore from "./DetailBottomMore.vue";
 import DetailBottomNavigation from "./DetailBottomNavigation.vue";
+
+const detailStore = useDetailStore();
+const moreRef = ref<DetailBottomMoreInstance | null>(null);
+
+onMounted(() => {
+	detailStore.setBottomMoreInstance(moreRef.value);
+});
 </script>
 
 <template>
@@ -11,7 +20,7 @@ import DetailBottomNavigation from "./DetailBottomNavigation.vue";
 		<DetailBottomBackground />
 		<DetailBottomContent />
 		<DetailBottomNavigation />
-		<DetailBottomMore />
+		<DetailBottomMore ref="moreRef" />
 		<DetailBottomLinks />
 	</div>
 </template>

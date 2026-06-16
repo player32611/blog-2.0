@@ -91,21 +91,20 @@ watch(
 );
 
 onMounted(() => {
-	if (cursorRef.value) {
-		rotateAnimation.value = gsap.to(cursorRef.value, {
-			rotate: 720,
-			duration: 2,
-			repeat: -1,
-			yoyo: true,
-			ease: "power1.inOut",
-		});
-	}
+	rotateAnimation.value = gsap.to(cursorRef.value, {
+		rotate: 720,
+		duration: 2,
+		repeat: -1,
+		yoyo: true,
+		ease: "power1.inOut",
+	});
 	window.addEventListener("mousedown", handleMouseDown);
 	window.addEventListener("mousemove", handleMouseMove);
 	window.addEventListener("mouseout", handleMouseOut);
 });
 
 onUnmounted(() => {
+	rotateAnimation.value?.kill();
 	window.removeEventListener("mousedown", handleMouseDown);
 	window.removeEventListener("mousemove", handleMouseMove);
 	window.removeEventListener("mouseout", handleMouseOut);
