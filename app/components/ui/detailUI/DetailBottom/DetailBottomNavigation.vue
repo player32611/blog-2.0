@@ -36,7 +36,11 @@ onUnmounted(() => {
 <template>
 	<div class="bottom_navigation" @click="handleClick">
 		<img
-			:src="imageFrame ? '/images/sprites/savePoint1.png' : '/images/sprites/savePoint2.png'"
+			:src="
+				imageFrame
+					? '/blog-2.0/images/sprites/savePoint1.png'
+					: '/blog-2.0/images/sprites/savePoint2.png'
+			"
 			alt="加载失败"
 		/>
 	</div>
