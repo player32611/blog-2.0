@@ -17,7 +17,7 @@ const ticking = () => {
 
 	itemRefs.value.forEach((el, i) => {
 		gsap.set(el, {
-			y: y * (floatingRate[i] || 0),
+			y: (y * (floatingRate[i] || 0)) % (window.innerHeight + el.offsetHeight),
 		});
 	});
 };

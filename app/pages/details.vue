@@ -3,7 +3,6 @@ import gsap from "gsap";
 import { ScrollSmoother, ScrollTrigger } from "gsap/all";
 import type { DetailMaskInstance } from "~/types/components";
 
-import Button from "~/components/ui/common/Button.vue";
 import DetailBottom from "~/components/ui/detailUI/DetailBottom/DetailBottom.vue";
 import DetailDoing from "~/components/ui/detailUI/DetailDoing/DetailDoing.vue";
 import DetailIntroduce from "~/components/ui/detailUI/DetailIntroduce/DetailIntroduce.vue";
@@ -16,7 +15,6 @@ import DetailTooltip from "~/components/ui/detailUI/DetailTooltip.vue";
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 const detailStore = useDetailStore();
-const loadingStore = useLoadingStore();
 const smoother = ref<ScrollSmoother | null>(null);
 const wrapperRef = ref<HTMLDivElement | null>(null);
 const contentRef = ref<HTMLDivElement | null>(null);
@@ -60,13 +58,6 @@ onUnmounted(() => {
 		</div>
 		<DetailTooltip />
 		<DetailMask ref="maskRef" />
-		<Button
-			:text="'back'"
-			:icon="'&#xeb06;'"
-			:size="'small'"
-			@click="loadingStore.loadingNavigate('/')"
-			:style="{ position: 'fixed', left: '20px', top: '20px' }"
-		></Button>
 	</div>
 </template>
 
