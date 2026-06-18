@@ -160,18 +160,6 @@ const createItems = () => {
 };
 
 const handleUpdate = () => {
-	Matter.Events.on(mouseConstraint, "startdrag", () => {
-		if (containerRef.value) {
-			containerRef.value.style.cursor = "grabbing";
-		}
-	});
-
-	Matter.Events.on(mouseConstraint, "enddrag", () => {
-		if (containerRef.value) {
-			containerRef.value.style.cursor = "pointer";
-		}
-	});
-
 	Matter.Events.on(engine, "afterUpdate", () => {
 		const smoother = ScrollSmoother.get();
 		if (smoother && containerRef.value) {
@@ -287,7 +275,6 @@ defineExpose<DetailIntroduceSkillContainerInstance>({
 	width: 100%;
 	height: 100%;
 	user-select: none;
-	cursor: pointer;
 	touch-action: none;
 }
 </style>

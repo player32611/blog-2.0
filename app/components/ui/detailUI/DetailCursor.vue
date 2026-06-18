@@ -12,10 +12,9 @@ const handleMouseMove = (event: MouseEvent) => {
 		gsap.to(cursorRef.value, { scale: 1, opacity: 1, duration: outTime });
 		isOut.value = false;
 	}
-	gsap.to(cursorRef.value, {
+	gsap.set(cursorRef.value, {
 		x: event.clientX,
 		y: event.clientY,
-		duration: easeTime,
 	});
 	if (
 		Array.from(document.querySelectorAll(".hoverable")).some(node => {
@@ -30,7 +29,7 @@ const handleMouseMove = (event: MouseEvent) => {
 	) {
 		gsap.to(cursorRef.value, {
 			color: "#ff0000ff",
-			textShadow: "#ff0000bf",
+			textShadow: "#ff0000ff",
 			duration: easeTime,
 		});
 	} else {
@@ -83,7 +82,7 @@ onUnmounted(() => {
 	.icon {
 		display: block;
 		font-size: 30px;
-		text-shadow: 0px 0px 5px #ff000060;
+		text-shadow: 0px 0px 20px #ff000060;
 		rotate: 135deg;
 	}
 }

@@ -18,7 +18,7 @@ onMounted(() => {
 		<MainBackMask />
 		<MainContainer />
 		<MainUIBox />
-		<MainCursor />
+		<MainCursor v-if="!isMobile()" />
 	</div>
 </template>
 

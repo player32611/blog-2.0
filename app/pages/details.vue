@@ -58,7 +58,7 @@ onUnmounted(() => {
 			</div>
 		</div>
 		<DetailTooltip />
-		<DetailCursor />
+		<DetailCursor v-if="!isMobile()" />
 		<DetailMask ref="maskRef" />
 	</div>
 </template>
@@ -67,6 +67,7 @@ onUnmounted(() => {
 .details {
 	width: 100%;
 	font-size: 1rem;
+	cursor: none;
 
 	.details_wrapper {
 		height: auto;

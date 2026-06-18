@@ -45,7 +45,6 @@ onUnmounted(() => {
 	position: relative;
 	height: 200px;
 	width: 200px;
-	cursor: pointer;
 
 	img {
 		height: 100%;

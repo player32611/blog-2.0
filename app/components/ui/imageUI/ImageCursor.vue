@@ -114,7 +114,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="image_cursor" ref="cursorRef" v-if="!isMobile()">
+	<div class="image_cursor" ref="cursorRef">
 		<div></div>
 		<div></div>
 		<div></div>

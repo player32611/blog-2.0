@@ -125,7 +125,6 @@ onUnmounted(() => {
 	overflow: hidden;
 	pointer-events: none;
 	z-index: variables.$float_zIndex;
-	cursor: pointer;
 
 	.content_inner {
 		width: max-content;

@@ -164,6 +164,7 @@ onUnmounted(() => {
 		width: auto;
 
 		div {
+			white-space: nowrap;
 			pointer-events: none;
 		}
 	}

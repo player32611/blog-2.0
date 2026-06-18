@@ -108,10 +108,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="main_cursor" ref="cursorRef" v-if="!isMobile()">
+	<div class="main_cursor" ref="cursorRef">
 		<img :src="brushImg" alt="加载失败" />
 	</div>
-	<div class="main_trace" ref="traceRef" v-if="!isMobile()">
+	<div class="main_trace" ref="traceRef">
 		<div class="trace_circle"></div>
 	</div>
 </template>

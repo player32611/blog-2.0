@@ -2,8 +2,6 @@
 import gsap from "gsap";
 import { Physics2DPlugin } from "gsap/all";
 
-import DetailTitleSavePoint from "./DetailTitleSavePoint.vue";
-
 gsap.registerPlugin(Physics2DPlugin);
 
 const leftBulletContainerRef = ref<HTMLDivElement | null>(null);
@@ -442,7 +440,6 @@ onUnmounted(() => {
 			</div>
 			<div class="bullet_container" ref="leftBulletContainerRef"></div>
 		</div>
-		<DetailTitleSavePoint />
 		<div class="right_cannon">
 			<div class="cannon" ref="rightCannonRef">
 				<svg
@@ -660,7 +657,6 @@ onUnmounted(() => {
 				height: 200px;
 				width: 200px;
 				z-index: variables.$float_zIndex + 1;
-				cursor: pointer;
 			}
 		}
 

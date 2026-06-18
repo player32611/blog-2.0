@@ -28,7 +28,7 @@ onMounted(() => {
 			@click="loadingNavigate('/')"
 			:style="{ position: 'fixed', left: '20px', top: '20px' }"
 		></Button>
-		<ImageCursor />
+		<ImageCursor v-if="!isMobile()" />
 	</div>
 </template>
 

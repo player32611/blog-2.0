@@ -17,7 +17,12 @@ const handleClick = () => {
 </script>
 
 <template>
-	<button :class="`${size} ${classList}`" @click="handleClick" :style="style" draggable="false">
+	<button
+		:class="`${size} ${classList ? classList : ''}`"
+		@click="handleClick"
+		:style="style"
+		draggable="false"
+	>
 		<div class="container">
 			<span class="icon">{{ icon }}</span>
 			<span v-for="(char, index) in text.toUpperCase().split('')" :key="index">{{ char }}</span>
