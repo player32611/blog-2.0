@@ -91,13 +91,15 @@ watch(
 );
 
 onMounted(() => {
-	rotateAnimation.value = gsap.to(cursorRef.value, {
-		rotate: 720,
-		duration: 2,
-		repeat: -1,
-		yoyo: true,
-		ease: "power1.inOut",
-	});
+	rotateAnimation.value = gsap
+		.to(cursorRef.value, {
+			rotate: 720,
+			duration: 2,
+			repeat: -1,
+			yoyo: true,
+			ease: "power1.inOut",
+		})
+		.pause();
 	window.addEventListener("mousedown", handleMouseDown);
 	window.addEventListener("mousemove", handleMouseMove);
 	window.addEventListener("mouseout", handleMouseOut);
@@ -131,6 +133,7 @@ $base-size: 1;
 	left: -20px * $base-size;
 	width: 40px * $base-size;
 	height: 40px * $base-size;
+	opacity: 0;
 	z-index: variables.$cursor_zIndex;
 	pointer-events: none;
 

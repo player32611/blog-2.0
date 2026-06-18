@@ -31,7 +31,7 @@ export type BlogContent = string;
 export type ImageHoverData = {
 	width: number;
 	height: number;
-	center: { x: number; y: number };
+	center: Point;
 };
 
 /**
@@ -69,11 +69,9 @@ export type ImageLayoutData = {
  * @property targetY - 目标 y 坐标位置
  * @property animation - GSAP 动画实例或 null
  */
-export interface ImagePosData {
+export interface ImagePosData extends Point {
 	img: HTMLImageElement | null;
 	path: string;
-	x: number;
-	y: number;
 	targetX: number;
 	targetY: number;
 	animation: GSAPAnimation | null;

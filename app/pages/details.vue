@@ -8,6 +8,7 @@ import DetailDoing from "~/components/ui/detailUI/DetailDoing/DetailDoing.vue";
 import DetailIntroduce from "~/components/ui/detailUI/DetailIntroduce/DetailIntroduce.vue";
 import DetailTitle from "~/components/ui/detailUI/DetailTitle/DetailTitle.vue";
 import DetailWork from "~/components/ui/detailUI/DetailWork/DetailWork.vue";
+import DetailCursor from "~/components/ui/detailUI/DetailCursor.vue";
 import DetailMask from "~/components/ui/detailUI/DetailMask.vue";
 import DetailPartition from "~/components/ui/detailUI/DetailPartition.vue";
 import DetailTooltip from "~/components/ui/detailUI/DetailTooltip.vue";
@@ -57,6 +58,7 @@ onUnmounted(() => {
 			</div>
 		</div>
 		<DetailTooltip />
+		<DetailCursor />
 		<DetailMask ref="maskRef" />
 	</div>
 </template>

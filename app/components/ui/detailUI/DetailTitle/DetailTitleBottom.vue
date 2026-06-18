@@ -291,7 +291,7 @@ onUnmounted(() => {
 				</svg>
 				<svg
 					id="wheel"
-					class="left_wheel"
+					class="left_wheel hoverable"
 					data-name="wheel"
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 40 40"
@@ -475,7 +475,7 @@ onUnmounted(() => {
 				</svg>
 				<svg
 					id="wheel"
-					class="right_wheel"
+					class="right_wheel hoverable"
 					data-name="wheel"
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 40 40"

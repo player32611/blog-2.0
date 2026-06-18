@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import gsap from "gsap";
+import type { Point } from "~/types/common";
+
 import brushImg from "@/assets/images/sprites/brush.png";
 
 const mainStore = useMainStore();
@@ -7,7 +9,7 @@ const cursorRef = ref<HTMLDivElement | null>(null);
 const normalAnimation = ref<GSAPAnimation | null>(null);
 const rotateAnimation = ref<GSAPAnimation | null>(null);
 const traceRef = ref<HTMLDivElement | null>(null);
-const currentMousePos = ref<{ x: number; y: number }>({ x: -100, y: -100 });
+const currentMousePos = ref<Point>({ x: -100, y: -100 });
 
 const easeTime: number = 0.2; // 缓动时间（s）
 const outTime: number = 0.5; // 离开变化时间（s）
@@ -30,7 +32,6 @@ const makeTrace = () => {
 };
 
 const handleMouseMove = (event: MouseEvent) => {
-	if (!cursorRef.value) return;
 	if (!normalAnimation.value?.isActive() && !rotateAnimation.value?.isActive()) {
 		gsap.to(cursorRef.value, { scale: 1, opacity: 1, duration: outTime });
 		normalAnimation.value?.resume();
@@ -85,7 +86,6 @@ onMounted(() => {
 				yoyo: true,
 				ease: "power1.inOut",
 			});
-		gsap.set(cursorRef.value, { opacity: 0 });
 		normalAnimation.value.pause();
 		rotateAnimation.value = gsap.timeline().to(cursorRef.value, {
 			rotation: "+=360",
@@ -123,6 +123,7 @@ onUnmounted(() => {
 	position: fixed;
 	left: -5px;
 	top: -30px;
+	opacity: 0;
 	pointer-events: none;
 	z-index: variables.$cursor_zIndex;
 }
