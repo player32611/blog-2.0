@@ -1,4 +1,9 @@
 export function useCanvasDrawing(canvasRef: Ref<HTMLCanvasElement | null>) {
+	const ctx = computed<CanvasRenderingContext2D | null>(() => {
+		if (!canvasRef.value) return null;
+		else return canvasRef.value.getContext("2d");
+	});
+
 	/**
 	 * 绘制带有圆角的图片到离屏 canvas 上
 	 *
@@ -20,27 +25,26 @@ export function useCanvasDrawing(canvasRef: Ref<HTMLCanvasElement | null>) {
 		height: number,
 		radius: number = 0,
 	): void => {
-		const ctx = canvasRef.value?.getContext("2d");
-		if (!canvasRef.value || !ctx) return;
+		if (!canvasRef.value || !ctx.value) return;
 
 		// 绘制圆角路径
-		ctx.beginPath();
-		ctx.moveTo(x + radius, y);
-		ctx.lineTo(x + width - radius, y);
-		ctx.arcTo(x + width, y, x + width, y + radius, radius);
-		ctx.lineTo(x + width, y + height - radius);
-		ctx.arcTo(x + width, y + height, x + width - radius, y + height, radius);
-		ctx.lineTo(x + radius, y + height);
-		ctx.arcTo(x, y + height, x, y + height - radius, radius);
-		ctx.lineTo(x, y + radius);
-		ctx.arcTo(x, y, x + radius, y, radius);
-		ctx.closePath();
+		ctx.value.beginPath();
+		ctx.value.moveTo(x + radius, y);
+		ctx.value.lineTo(x + width - radius, y);
+		ctx.value.arcTo(x + width, y, x + width, y + radius, radius);
+		ctx.value.lineTo(x + width, y + height - radius);
+		ctx.value.arcTo(x + width, y + height, x + width - radius, y + height, radius);
+		ctx.value.lineTo(x + radius, y + height);
+		ctx.value.arcTo(x, y + height, x, y + height - radius, radius);
+		ctx.value.lineTo(x, y + radius);
+		ctx.value.arcTo(x, y, x + radius, y, radius);
+		ctx.value.closePath();
 
 		// 裁剪并绘制图片
-		ctx.save();
-		ctx.clip();
-		ctx.drawImage(img, x, y, width, height);
-		ctx.restore();
+		ctx.value.save();
+		ctx.value.clip();
+		ctx.value.drawImage(img, x, y, width, height);
+		ctx.value.restore();
 	};
 
 	/**
@@ -61,22 +65,21 @@ export function useCanvasDrawing(canvasRef: Ref<HTMLCanvasElement | null>) {
 		radius: number = 0,
 		color: string = "#ffffff",
 	): void => {
-		const ctx = canvasRef.value?.getContext("2d");
-		if (!canvasRef.value || !ctx) return;
+		if (!canvasRef.value || !ctx.value) return;
 
-		ctx.fillStyle = color;
-		ctx.beginPath();
-		ctx.moveTo(x + radius, y);
-		ctx.lineTo(x + width - radius, y);
-		ctx.arcTo(x + width, y, x + width, y + radius, radius);
-		ctx.lineTo(x + width, y + height - radius);
-		ctx.arcTo(x + width, y + height, x + width - radius, y + height, radius);
-		ctx.lineTo(x + radius, y + height);
-		ctx.arcTo(x, y + height, x, y + height - radius, radius);
-		ctx.lineTo(x, y + radius);
-		ctx.arcTo(x, y, x + radius, y, radius);
-		ctx.closePath();
-		ctx.fill();
+		ctx.value.fillStyle = color;
+		ctx.value.beginPath();
+		ctx.value.moveTo(x + radius, y);
+		ctx.value.lineTo(x + width - radius, y);
+		ctx.value.arcTo(x + width, y, x + width, y + radius, radius);
+		ctx.value.lineTo(x + width, y + height - radius);
+		ctx.value.arcTo(x + width, y + height, x + width - radius, y + height, radius);
+		ctx.value.lineTo(x + radius, y + height);
+		ctx.value.arcTo(x, y + height, x, y + height - radius, radius);
+		ctx.value.lineTo(x, y + radius);
+		ctx.value.arcTo(x, y, x + radius, y, radius);
+		ctx.value.closePath();
+		ctx.value.fill();
 	};
 
 	/**
@@ -95,8 +98,7 @@ export function useCanvasDrawing(canvasRef: Ref<HTMLCanvasElement | null>) {
 		innerRadius: number,
 		color: string,
 	): void => {
-		const ctx = canvasRef.value?.getContext("2d");
-		if (!canvasRef.value || !ctx) return;
+		if (!canvasRef.value || !ctx.value) return;
 
 		const rect = canvasRef.value.getBoundingClientRect();
 		const scaleX = canvasRef.value.width / rect.width; // 处理 canvas 实际像素 vs CSS 像素
@@ -104,11 +106,11 @@ export function useCanvasDrawing(canvasRef: Ref<HTMLCanvasElement | null>) {
 		x = (x - rect.left) * scaleX;
 		y = (y - rect.top) * scaleY;
 
-		ctx.beginPath();
-		ctx.arc(x, y, outerRadius, 0, Math.PI * 2);
-		ctx.arc(x, y, Math.max(0, innerRadius), 0, Math.PI * 2, true);
-		ctx.fillStyle = color;
-		ctx.fill();
+		ctx.value.beginPath();
+		ctx.value.arc(x, y, outerRadius, 0, Math.PI * 2);
+		ctx.value.arc(x, y, Math.max(0, innerRadius), 0, Math.PI * 2, true);
+		ctx.value.fillStyle = color;
+		ctx.value.fill();
 	};
 
 	return {

@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1138465",
+      "name": "骨头",
+      "font_class": "gutou",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "44313233",
+      "name": "子弹2",
+      "font_class": "zidan2",
+      "unicode": "e7c9",
+      "unicode_decimal": 59337
+    },
+    {
       "icon_id": "689320",
       "name": "心2",
       "font_class": "xin2",

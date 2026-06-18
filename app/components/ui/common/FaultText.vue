@@ -58,11 +58,7 @@ onUnmounted(() => {
 			:style="style"
 			:key="index"
 			:data-text="text"
-			:ref="
-				el => {
-					if (el) textRefs[index] = el as HTMLParagraphElement;
-				}
-			"
+			ref="textRefs"
 		>
 			{{ text }}
 		</p>

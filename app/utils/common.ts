@@ -144,3 +144,11 @@ export const isMobile = () => {
 export const degreesToRadians = (degrees: number): number => {
 	return (degrees * Math.PI) / 180;
 };
+
+/**
+ * 随机生成 1 或 -1
+ * @returns {number} 结果
+ */
+export const randomSign = (): number => {
+	return Math.random() < 0.5 ? -1 : 1;
+};

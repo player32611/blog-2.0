@@ -55,7 +55,11 @@ export interface DetailIntroduceSkillItemParams extends ItemParams {
 	skill: string;
 }
 
-export interface DetailWorkFloatInstance {
+export interface DetailWorkFloatContainerParams {
+	activeIndex: number;
+}
+
+export interface DetailWorkFloatContainerInstance {
 	startFloating: () => void;
 	stopFloating: () => void;
 }

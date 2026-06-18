@@ -1,23 +1,33 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import { ScrollSmoother, ScrollTrigger } from "gsap/all";
-import type { DetailWorkFloatInstance } from "~/types/components";
+import type {
+	DetailWorkFloatContainerParams,
+	DetailWorkFloatContainerInstance,
+} from "~/types/components";
 
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
+
+const { activeIndex } = defineProps<DetailWorkFloatContainerParams>();
 
 const itemRefs = ref<HTMLDivElement[]>([]);
 
 const itemNum: number = 5;
-const floatingRate: number[] = Array.from({ length: itemNum }, () => Math.random() * 0.3 + 0.1);
+const floatingSpeed: number[] = Array.from({ length: itemNum }, () => Math.random() * 0.4 + 0.1);
+const rotateAngle: number[] = Array.from({ length: itemNum }, () => Math.random() * 360);
+const rotateSpeed: number[] = Array.from(
+	{ length: itemNum },
+	() => randomSign() * (Math.random() * 2 + 0.5),
+);
 
 const ticking = () => {
 	const smoother = ScrollSmoother.get();
 	if (!smoother) return;
 	const y = smoother.scrollTop() - 5 * window.innerHeight;
-
 	itemRefs.value.forEach((el, i) => {
 		gsap.set(el, {
-			y: (y * (floatingRate[i] || 0)) % (window.innerHeight + el.offsetHeight),
+			y: (y * (floatingSpeed[i] || 0)) % (window.innerHeight + el.offsetHeight),
+			rotate: ((rotateAngle[i] || 0) + y * (rotateSpeed[i] || 0)) % 360,
 		});
 	});
 };
@@ -34,7 +44,7 @@ onUnmounted(() => {
 	gsap.ticker.remove(ticking);
 });
 
-defineExpose<DetailWorkFloatInstance>({
+defineExpose<DetailWorkFloatContainerInstance>({
 	startFloating,
 	stopFloating,
 });
@@ -42,11 +52,10 @@ defineExpose<DetailWorkFloatInstance>({
 
 <template>
 	<div class="work_float_container">
-		<div
-			class="float_item"
-			v-for="_ in itemNum"
-			:ref="el => itemRefs.push(el as HTMLDivElement)"
-		></div>
+		<div class="float_item" v-for="_ in itemNum" ref="itemRefs">
+			<span class="icon" v-if="activeIndex === 0">&#xe7c9;</span>
+			<span class="icon" v-else-if="activeIndex === 1">&#xe62e;</span>
+		</div>
 	</div>
 </template>
 
@@ -62,10 +71,15 @@ defineExpose<DetailWorkFloatInstance>({
 
 	.float_item {
 		position: relative;
-		top: -50px;
-		height: 50px;
-		width: 50px;
-		background-color: #ffffff;
+		top: -30px;
+		height: 30px;
+		width: 30px;
+		user-select: none;
+
+		.icon {
+			color: #000000;
+			font-size: 30px;
+		}
 	}
 }
 </style>

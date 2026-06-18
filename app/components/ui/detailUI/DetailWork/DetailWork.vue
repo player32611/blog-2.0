@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import { ScrollTrigger, ScrollSmoother } from "gsap/all";
-import type { DetailWorkFloatInstance, DetailWorkTransitionInstance } from "~/types/components.js";
+import type {
+	DetailWorkFloatContainerInstance,
+	DetailWorkTransitionInstance,
+} from "~/types/components.js";
 
 import DetailWorkBackground from "./DetailWorkBackground.vue";
 import DetailWorkFloatContainer from "./DetailWorkFloatContainer.vue";
@@ -13,31 +16,22 @@ import DetailWorkTransition from "./DetailWorkTransition.vue";
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 const containerRef = ref<HTMLDivElement | null>(null);
-const floatRef = ref<DetailWorkFloatInstance | null>(null);
+const floatRef = ref<DetailWorkFloatContainerInstance | null>(null);
 const maskRef = ref<DetailWorkTransitionInstance | null>(null);
 const scrollAnim = ref<ScrollTrigger | null>(null);
 const activeIndex = ref<number>(-1);
 const direction = ref<"forward" | "backward">("forward");
 
 const totalHeight: number = 5 * window.innerHeight;
-const triggerPoints: { start: number; end: number }[] = [
-	{
-		start: 0,
-		end: window.innerHeight,
+const triggerPoints: { start: number; end: number }[] = Array.from(
+	{ length: totalHeight },
+	(_, index) => {
+		return {
+			start: index * window.innerHeight,
+			end: (index + 1) * window.innerHeight,
+		};
 	},
-	{
-		start: window.innerHeight,
-		end: 2 * window.innerHeight,
-	},
-	{
-		start: 2 * window.innerHeight,
-		end: 3 * window.innerHeight,
-	},
-	{
-		start: 3 * window.innerHeight,
-		end: 4 * window.innerHeight,
-	},
-];
+);
 
 onMounted(() => {
 	scrollAnim.value = ScrollTrigger.create({
@@ -104,7 +98,7 @@ onMounted(() => {
 		<DetailWorkItem1 v-else-if="activeIndex === 0" />
 		<DetailWorkItem2 v-else-if="activeIndex === 1" />
 		<DetailWorkItemEmpty v-else />
-		<DetailWorkFloatContainer ref="floatRef" />
+		<DetailWorkFloatContainer ref="floatRef" :activeIndex="activeIndex" />
 		<DetailWorkTransition ref="maskRef" />
 	</div>
 </template>

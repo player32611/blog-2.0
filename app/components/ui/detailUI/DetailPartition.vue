@@ -62,11 +62,7 @@ onUnmounted(() => {
 <template>
 	<div class="detail_partition">
 		<div class="partition_container" ref="containerRef">
-			<div
-				class="partition_item"
-				v-for="i in itemNum"
-				:ref="el => itemRefs.push(el as HTMLDivElement)"
-			>
+			<div class="partition_item" v-for="i in itemNum" ref="itemRefs">
 				<div class="partition_text">{{ text.toUpperCase() }}</div>
 				<svg
 					id="partition_arrow"
