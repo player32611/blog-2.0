@@ -44,7 +44,7 @@ defineExpose<DetailBottomMoreInstance>({
 <template>
 	<div class="bottom_more" ref="containerRef">
 		<div class="button_container">
-			<div class="button_wrapper" ref="buttonRef">
+			<div class="button_wrapper hoverable" ref="buttonRef">
 				<Button
 					text="more"
 					size="large"

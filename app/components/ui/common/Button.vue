@@ -4,7 +4,7 @@ import { useSoundStore } from "@/stores/soundStore";
 import type { ButtonParams } from "@/types/components";
 
 const { effectsVolume } = useSoundStore();
-const { text, size, icon, onClick, style } = defineProps<ButtonParams>();
+const { text, size, icon, onClick, classList, style } = defineProps<ButtonParams>();
 
 const undertaleSound = useSoundEffect("sounds/effects/undertale-button.wav");
 
@@ -17,7 +17,7 @@ const handleClick = () => {
 </script>
 
 <template>
-	<button :class="`${size}`" @click="handleClick" :style="style" draggable="false">
+	<button :class="`${size} ${classList}`" @click="handleClick" :style="style" draggable="false">
 		<div class="container">
 			<span class="icon">{{ icon }}</span>
 			<span v-for="(char, index) in text.toUpperCase().split('')" :key="index">{{ char }}</span>

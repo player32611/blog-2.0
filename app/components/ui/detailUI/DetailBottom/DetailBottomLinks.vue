@@ -30,20 +30,20 @@ onUnmounted(() => {
 		<div class="links_container" ref="containerRef">
 			<div class="up">
 				<button
-					class="card1"
+					class="card1 hoverable"
 					@click="handleClick('https://space.bilibili.com/495270127?spm_id_from=333.1007.0.0')"
 				>
 					<span class="icon bilibili">&#xe6d3;</span>
 				</button>
-				<button class="card2" @click="handleClick('https://gamejolt.com/@player32611')">
+				<button class="card2 hoverable" @click="handleClick('https://gamejolt.com/@player32611')">
 					<span class="icon gamejolt">&#xe600;</span>
 				</button>
 			</div>
 			<div class="down">
-				<button class="card3" @click="handleClick('https://github.com/player32611')">
+				<button class="card3 hoverable" @click="handleClick('https://github.com/player32611')">
 					<span class="icon github">&#xe885;</span>
 				</button>
-				<button class="card4">
+				<button class="card4 hoverable">
 					<div class="text">社交链接</div>
 				</button>
 			</div>

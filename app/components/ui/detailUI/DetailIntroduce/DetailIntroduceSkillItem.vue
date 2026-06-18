@@ -25,7 +25,7 @@ defineExpose<ItemInstance>({
 
 <template>
 	<div
-		class="introduce_skill"
+		class="introduce_skill hoverable"
 		:style="{
 			left: x - (itemRef ? itemRef.offsetWidth / 2 : 0) + 'px',
 			top: y - (itemRef ? itemRef.offsetHeight / 2 : 0) + 'px',

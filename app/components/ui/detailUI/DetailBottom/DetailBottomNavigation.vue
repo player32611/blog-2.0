@@ -34,15 +34,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="bottom_navigation" @click="handleClick">
-		<img
-			:src="
-				imageFrame
-					? '/blog-2.0/images/sprites/savePoint1.png'
-					: '/blog-2.0/images/sprites/savePoint2.png'
-			"
-			alt="加载失败"
-		/>
+	<div class="bottom_navigation hoverable" @click="handleClick">
+		<img v-show="imageFrame === 0" src="/images/sprites/savePoint1.png" alt="加载失败" />
+		<img v-show="imageFrame === 1" src="/images/sprites/savePoint2.png" alt="加载失败" />
 	</div>
 </template>
 

@@ -11,6 +11,7 @@ export interface ButtonParams {
 	icon?: any;
 	size: "small" | "medium" | "large";
 	onClick: () => void;
+	classList?: string;
 	style?: Record<string, string | number>;
 }
 
