@@ -1,0 +1,86 @@
+<script setup lang="ts"></script>
+
+<template>
+	<!-- From Uiverse.io by Dennyhml -->
+	<div class="bubble">
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+	</div>
+</template>
+
+<style scoped lang="scss">
+/* From Uiverse.io by Dennyhml */
+.bubble {
+	position: absolute;
+	width: 200px;
+	height: 200px;
+	border-radius: 50%;
+	box-shadow: inset 0 0 25px rgba (255, 255, 255, 0.25);
+	transform-origin: center center;
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: 50px;
+		left: 45px;
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		background: #fff;
+		z-index: 10;
+		filter: blur(2px);
+	}
+
+	&::after {
+		content: "";
+		position: absolute;
+		top: 80px;
+		left: 80px;
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
+		background: #fff;
+		z-index: 10;
+		filter: blur(2px);
+	}
+
+	span {
+		position: absolute;
+		border-radius: 50%;
+
+		&:nth-child(1) {
+			inset: 10px;
+			border-left: 15px solid #0fb4ff;
+			filter: blur(8px);
+		}
+
+		&:nth-child(2) {
+			inset: 10px;
+			border-right: 15px solid #ff4484;
+			filter: blur(8px);
+		}
+
+		&:nth-child(3) {
+			inset: 10px;
+			border-top: 15px solid #ffeb3b;
+			filter: blur(8px);
+		}
+
+		&:nth-child(4) {
+			inset: 30px;
+			border-left: 15px solid #ff4484;
+			filter: blur(12px);
+		}
+
+		&:nth-child(5) {
+			inset: 10px;
+			border-bottom: 10px solid #fff;
+			filter: blur(8px);
+			transform: rotate(330deg);
+		}
+	}
+}
+</style>

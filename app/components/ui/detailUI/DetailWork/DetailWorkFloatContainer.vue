@@ -6,6 +6,8 @@ import type {
 	DetailWorkFloatContainerInstance,
 } from "~/types/components";
 
+import Bubble from "~/components/exhibit/Bubble.vue";
+
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
 
 const { activeIndex } = defineProps<DetailWorkFloatContainerParams>();
@@ -55,6 +57,7 @@ defineExpose<DetailWorkFloatContainerInstance>({
 		<div class="float_item" v-for="_ in itemNum" ref="itemRefs">
 			<span class="icon" v-if="activeIndex === 0">&#xe7c9;</span>
 			<span class="icon" v-else-if="activeIndex === 1">&#xe62e;</span>
+			<Bubble v-else style="scale: 0.2" />
 		</div>
 	</div>
 </template>
@@ -72,8 +75,12 @@ defineExpose<DetailWorkFloatContainerInstance>({
 	.float_item {
 		position: relative;
 		top: -30px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		height: 30px;
 		width: 30px;
+		transform-origin: center center;
 		user-select: none;
 
 		.icon {
