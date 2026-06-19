@@ -39,23 +39,18 @@ onMounted(() => {
 		start: "top top", // 元素顶部 触达 视口顶部时开始
 		end: `+=${totalHeight}`,
 		pin: true, // 开启固定
-		markers: true,
 		onEnter: () => {
-			console.log("enter");
 			direction.value = "forward";
 			floatRef.value?.startFloating();
 		},
 		onEnterBack: () => {
-			console.log("enterback");
 			direction.value = "backward";
 			floatRef.value?.startFloating();
 		},
 		onLeave: () => {
-			console.log("leave");
 			floatRef.value?.stopFloating();
 		},
 		onLeaveBack: () => {
-			console.log("leaveback");
 			floatRef.value?.stopFloating();
 		},
 		onUpdate: self => {
