@@ -11,10 +11,10 @@ const posArray = ref<CircleRing[]>([]);
 const { drawCircleRing } = useCanvasDrawing(canvasRef);
 
 const circleRingSpeed: number = 2;
-const circleRingColor: string = "#ffffff";
+const circleRingColor: string = "#ffffff40";
 const circleRingWidth: number = 2;
 
-const handleMouseDown = (e: MouseEvent) => {
+const handleClick = (e: MouseEvent) => {
 	posArray.value.push({ x: e.x, y: e.y, radius: 0 });
 	if (animationFrameId.value === null) animationFrameId.value = requestAnimationFrame(drawFrame);
 };
@@ -53,7 +53,7 @@ const drawFrame = () => {
 
 onMounted(() => {
 	resize();
-	canvasRef.value?.addEventListener("mousedown", handleMouseDown);
+	window.addEventListener("click", handleClick);
 	window.addEventListener("resize", resize);
 });
 
@@ -62,23 +62,23 @@ onUnmounted(() => {
 		cancelAnimationFrame(animationFrameId.value);
 		animationFrameId.value = null;
 	}
-	canvasRef.value?.removeEventListener("mousedown", handleMouseDown);
+	window.removeEventListener("click", handleClick);
 	window.addEventListener("resize", resize);
 });
 </script>
 
 <template>
-	<canvas class="bottom_background" ref="canvasRef"></canvas>
+	<canvas class="detail_background" ref="canvasRef"></canvas>
 </template>
 
 <style scoped lang="scss">
-@use "../../../../assets/styles/variables.scss";
+@use "../../../assets/styles/variables.scss";
 
-.bottom_background {
-	position: absolute;
+.detail_background {
+	position: fixed;
 	height: 100vh;
 	width: 100%;
-	opacity: 0.4;
+	background-color: #171717;
 	z-index: variables.$background_zIndex;
 }
 </style>

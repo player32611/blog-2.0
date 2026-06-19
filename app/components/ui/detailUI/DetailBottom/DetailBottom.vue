@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { DetailBottomMoreInstance } from "~/types/components.js";
 
-import DetailBottomBackground from "./DetailBottomBackground.vue";
 import DetailBottomContent from "./DetailBottomContent.vue";
 import DetailBottomLinks from "./DetailBottomLinks.vue";
 import DetailBottomMore from "./DetailBottomMore.vue";
@@ -17,7 +16,6 @@ onMounted(() => {
 
 <template>
 	<div class="detail_bottom">
-		<DetailBottomBackground />
 		<DetailBottomContent />
 		<DetailBottomNavigation />
 		<DetailBottomMore ref="moreRef" />

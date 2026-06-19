@@ -8,6 +8,7 @@ import DetailDoing from "~/components/ui/detailUI/DetailDoing/DetailDoing.vue";
 import DetailIntroduce from "~/components/ui/detailUI/DetailIntroduce/DetailIntroduce.vue";
 import DetailTitle from "~/components/ui/detailUI/DetailTitle/DetailTitle.vue";
 import DetailWork from "~/components/ui/detailUI/DetailWork/DetailWork.vue";
+import DetaiBackground from "~/components/ui/detailUI/DetaiBackground.vue";
 import DetailCursor from "~/components/ui/detailUI/DetailCursor.vue";
 import DetailMask from "~/components/ui/detailUI/DetailMask.vue";
 import DetailPartition from "~/components/ui/detailUI/DetailPartition.vue";
@@ -42,6 +43,7 @@ onUnmounted(() => {
 
 <template>
 	<div class="details">
+		<DetaiBackground />
 		<div class="details_wrapper" ref="wrapperRef">
 			<div class="details_content" ref="contentRef">
 				<DetailTitle />
@@ -72,7 +74,6 @@ onUnmounted(() => {
 	.details_wrapper {
 		height: auto;
 		width: 100%;
-		background-color: #171717;
 
 		.details_content {
 			width: 100%;

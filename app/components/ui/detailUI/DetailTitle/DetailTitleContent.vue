@@ -221,12 +221,16 @@ const word3FourthCharAnim = () => {
 				}, 3000);
 			},
 		})
-		.set(word3Split.value.chars[3], { y: "-70vh", rotate: 90 })
+		.set(word3Split.value.chars[3], { y: "-70vh", rotate: 90, opacity: 0 })
 		.to(word3Split.value.chars[3], {
 			y: 0,
 			ease: "bounce.out",
 			duration: singleDuration,
 			delay: initDelay + singleInterval.value * 9,
+			onStart: () => {
+				if (!word3Split.value || !word3Split.value.chars[3]) return;
+				gsap.set(word3Split.value.chars[3], { opacity: 1 });
+			},
 		})
 		.to(word3Split.value.chars[3], {
 			rotate: 0,
@@ -385,6 +389,7 @@ $base_size: 1;
 		grid-template-rows: repeat(2, 1fr);
 		justify-items: center;
 		align-items: center;
+		margin-bottom: 10%;
 
 		.content_word {
 			grid-area: 2/1/3/2;
@@ -408,6 +413,7 @@ $base_size: 1;
 		grid-template-rows: repeat(2, 1fr);
 		justify-items: center;
 		align-items: center;
+		margin-bottom: 5%;
 
 		.content_word {
 			grid-area: 2/1/3/2;
@@ -427,6 +433,8 @@ $base_size: 1;
 	$base_size: 0.8;
 
 	.title_content {
+		margin-bottom: 10%;
+
 		.content_word {
 			margin-left: 90px * $base_size;
 			font-size: 8rem * $base_size;

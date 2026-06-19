@@ -281,6 +281,7 @@ onUnmounted(() => {
 	position: absolute;
 	width: 100%;
 	height: 100svh;
+	pointer-events: none;
 
 	canvas {
 		height: 100%;
