@@ -17,7 +17,7 @@ import DetailIntroduceSkill from "./DetailIntroduceSkill.vue";
 <style scoped lang="scss">
 .detail_introduce {
 	position: relative;
-	height: 200vh;
+	height: 100vh;
 	width: 100%;
 }
 </style>

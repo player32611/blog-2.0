@@ -15,6 +15,7 @@ const allBulletRefs = computed(() => {
 });
 
 const bulletNum: number = 40;
+const bulletDuration: number = 10;
 const cannonRunDuration: number = 5;
 const cannonFireDuration: number = 1;
 const cannonFireScale: number = 0.9;
@@ -47,7 +48,8 @@ const createBullets = (delayTime: number, direction: "left" | "right") => {
 			currentBullets.push(leftFlairBullet);
 		}
 		gsap.to(currentBullets, {
-			duration: 40,
+			rotate: () => 360 * Math.random() + 360,
+			duration: bulletDuration,
 			delay: delayTime,
 			physics2D: {
 				velocity: "random(600, 850)",
@@ -68,6 +70,7 @@ const createBullets = (delayTime: number, direction: "left" | "right") => {
 			currentBullets.push(rightFlairBullet);
 		}
 		gsap.to(currentBullets, {
+			rotate: () => -360 * Math.random() - 360,
 			duration: 40,
 			delay: delayTime,
 			physics2D: {

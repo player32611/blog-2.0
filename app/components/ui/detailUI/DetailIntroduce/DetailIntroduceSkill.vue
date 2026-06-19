@@ -113,7 +113,7 @@ onUnmounted(() => {
 .introduce_skill {
 	position: absolute;
 	right: 10%;
-	bottom: 50%;
+	bottom: 0;
 	display: flex;
 	justify-content: center;
 	width: 72px * 4;
@@ -135,7 +135,7 @@ onUnmounted(() => {
 
 	.introduce_skill {
 		right: 25%;
-		bottom: 40%;
+		bottom: 0%;
 		width: 50%;
 
 		.skill_wrapper {
@@ -150,7 +150,7 @@ onUnmounted(() => {
 
 	.introduce_skill {
 		right: 25%;
-		bottom: 30%;
+		bottom: 0;
 		width: 50%;
 
 		.skill_wrapper {
@@ -165,7 +165,7 @@ onUnmounted(() => {
 
 	.introduce_skill {
 		right: 5%;
-		bottom: 50%;
+		bottom: 0%;
 		width: 72px * 5 * $base-size;
 
 		.skill_wrapper {
@@ -180,7 +180,7 @@ onUnmounted(() => {
 
 	.introduce_skill {
 		right: 5%;
-		bottom: 50%;
+		bottom: 0%;
 		width: 72px * 5 * $base-size;
 
 		.skill_wrapper {
