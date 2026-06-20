@@ -134,9 +134,9 @@ onUnmounted(() => {
 	$base-size: 0.5;
 
 	.introduce_skill {
-		right: 25%;
+		right: calc(50% - 72px * 3 / 2);
 		bottom: 0%;
-		width: 50%;
+		width: 72px * 3;
 
 		.skill_wrapper {
 			border-radius: 100px * $base-size;
@@ -149,9 +149,9 @@ onUnmounted(() => {
 	$base-size: 0.7;
 
 	.introduce_skill {
-		right: 25%;
+		right: calc(50% - 72px * 4 / 2);
 		bottom: 0;
-		width: 50%;
+		width: 72px * 4;
 
 		.skill_wrapper {
 			border-radius: 100px * $base-size;

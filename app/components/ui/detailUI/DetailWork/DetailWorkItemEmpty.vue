@@ -81,6 +81,7 @@ onUnmounted(() => {
 	);
 	background-size: 100% 100%;
 	background-color: #840b2a;
+	overflow: hidden;
 
 	.bubble_container {
 		position: absolute;

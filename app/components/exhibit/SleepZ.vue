@@ -14,7 +14,8 @@
 /* From Uiverse.io by necatimertmetin */
 .z {
 	position: absolute;
-	font-size: 32px;
+	color: #ffffff;
+	font-size: 1em;
 	opacity: 0;
 
 	&.z-1 {

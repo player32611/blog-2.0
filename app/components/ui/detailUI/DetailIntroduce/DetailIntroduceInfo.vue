@@ -176,7 +176,7 @@ onUnmounted(() => {
 
 	.introduce_info {
 		left: 20%;
-		top: 5%;
+		top: 25%;
 		padding: 3rem * $base-size;
 		width: 50%;
 		font-size: 2rem * $base-size;
@@ -195,6 +195,8 @@ onUnmounted(() => {
 	$base-size: 0.7;
 
 	.introduce_info {
+		left: calc(50% - 50% / 2 - 5px * $base-size - 3rem * $base-size);
+		top: 27%;
 		padding: 3rem * $base-size;
 		width: 50%;
 		font-size: 2rem * $base-size;

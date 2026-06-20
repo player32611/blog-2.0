@@ -2,7 +2,7 @@
 import gsap from "gsap";
 import type { Point } from "~/types/common";
 
-import brushImg from "@/assets/images/sprites/brush.png";
+import brushImg from "/images/sprites/brush.png";
 
 const mainStore = useMainStore();
 const cursorRef = ref<HTMLDivElement | null>(null);

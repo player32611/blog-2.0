@@ -20,4 +20,18 @@ import DetailIntroduceSkill from "./DetailIntroduceSkill.vue";
 	height: 100vh;
 	width: 100%;
 }
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	.detail_introduce {
+		height: 150vh;
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	.detail_introduce {
+		height: 150vh;
+	}
+}
 </style>

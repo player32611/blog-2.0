@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import { ScrollTrigger, TextPlugin } from "gsap/all";
-import Lottie, { type AnimationItem } from "lottie-web";
+import Lottie from "lottie-web";
+import type { AnimationItem } from "lottie-web";
 
 import animPath from "@/assets/anims/doingGaming.json";
 

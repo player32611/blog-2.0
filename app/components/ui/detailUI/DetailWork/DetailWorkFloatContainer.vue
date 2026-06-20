@@ -25,7 +25,7 @@ const rotateSpeed: number[] = Array.from(
 const ticking = () => {
 	const smoother = ScrollSmoother.get();
 	if (!smoother) return;
-	const y = smoother.scrollTop() - 4 * window.innerHeight;
+	const y = smoother.scrollTop() - 4.5 * window.innerHeight;
 	itemRefs.value.forEach((el, i) => {
 		gsap.set(el, {
 			y: (y * (floatingSpeed[i] || 0)) % (window.innerHeight + el.offsetHeight),

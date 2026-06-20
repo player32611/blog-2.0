@@ -135,7 +135,7 @@ $base-size: 0.8;
 	$base-size: 0.6;
 
 	.introduce_circle_container {
-		bottom: 40%;
+		bottom: 35%;
 		width: 100%;
 
 		.introduce_circle_content {
