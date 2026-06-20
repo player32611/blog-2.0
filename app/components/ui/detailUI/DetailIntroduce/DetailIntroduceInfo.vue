@@ -5,90 +5,7 @@ import { ScrollTrigger, SplitText } from "gsap/all";
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const infoRef = ref<HTMLDivElement | null>(null);
-const line1Ref = ref<HTMLDivElement | null>(null);
-const line1Split = ref<SplitText | null>(null);
-const line1WaitAnim = ref<gsap.core.Tween | null>(null); // line1 待机动画
-const line1ReserveAnim = ref<gsap.core.Tween | null>(null); // line1 翻转动画
-const line1CurrentName = ref<string>(getDetailName(0));
-const line2Ref = ref<HTMLDivElement | null>(null);
-const line2Split = ref<SplitText | null>(null);
-const line3Ref = ref<HTMLDivElement | null>(null);
-const line3Split = ref<SplitText | null>(null);
 const mountAnim = ref<gsap.core.Tween | null>(null);
-const wordAnim = ref<gsap.core.Timeline | null>(null);
-
-const createLine1WaitAnim = () => {
-	if (line1WaitAnim.value) line1WaitAnim.value.kill();
-	line1WaitAnim.value = gsap.fromTo(
-		line1Ref.value,
-		{ rotateX: 0 },
-		{
-			rotateX: 360,
-			ease: "power2.out",
-			duration: 1,
-			delay: 2,
-			repeat: -1,
-			repeatDelay: 2,
-		},
-	);
-};
-
-const handleChangeName = () => {
-	let nextName = getDetailName(Math.floor(Math.random() * 3));
-	while (nextName === line1CurrentName.value)
-		nextName = getDetailName(Math.floor(Math.random() * 3));
-	line1WaitAnim.value?.kill();
-	line1ReserveAnim.value?.kill();
-	line1ReserveAnim.value = gsap.fromTo(
-		line1Ref.value,
-		{ rotateX: 0 },
-		{
-			rotateX: 360,
-			duration: 1,
-			ease: "power2.out",
-			onUpdate: () => {
-				const rotate = parseFloat(String(gsap.getProperty(line1Ref.value, "rotateX")));
-				if (rotate >= 88 && rotate <= 92) line1CurrentName.value = nextName;
-			},
-			onComplete: createLine1WaitAnim,
-		},
-	);
-};
-
-const createWordAnim = () => {
-	line1Split.value?.revert();
-	line2Split.value?.revert();
-	line3Split.value?.revert();
-	line1Split.value = SplitText.create(line1Ref.value, { type: "chars" });
-	line2Split.value = SplitText.create(line2Ref.value, { type: "chars" });
-	line3Split.value = SplitText.create(line3Ref.value, { type: "chars" });
-	wordAnim.value = gsap
-		.timeline()
-		.fromTo(
-			line1Split.value?.chars,
-			{ y: -100, opacity: 0 },
-			{
-				y: 0,
-				opacity: 1,
-				ease: "bounce.out",
-				duration: 1,
-				stagger: 0.1,
-				onComplete: createLine1WaitAnim,
-			},
-		)
-		.fromTo(
-			line2Split.value?.chars,
-			{ y: -100, opacity: 0 },
-			{ y: 0, opacity: 1, ease: "bounce.out", duration: 1, stagger: 0.1 },
-			"-=0.9",
-		)
-		.fromTo(
-			line3Split.value?.chars,
-			{ y: -100, opacity: 0 },
-			{ y: 0, opacity: 1, ease: "bounce.out", duration: 1, stagger: 0.1 },
-			"-=0.9",
-		);
-};
 
 onMounted(() => {
 	mountAnim.value = gsap.fromTo(
@@ -105,34 +22,49 @@ onMounted(() => {
 				start: "top 80%", // 当元素顶部到达视口 80% 位置时触发
 				toggleActions: "play none none reverse", // 进入时播放，离开时反向播放
 			},
-			onStart: createWordAnim,
-			onReverseComplete: () => {
-				wordAnim.value?.kill();
-				line1WaitAnim.value?.kill();
-				line1ReserveAnim.value?.kill();
-			},
 		},
 	);
 });
 
 onUnmounted(() => {
-	line1Split.value?.revert();
-	line1WaitAnim.value?.kill();
-	line2Split.value?.revert();
-	line3Split.value?.revert();
 	mountAnim.value?.scrollTrigger?.kill();
 	mountAnim.value?.kill();
-	wordAnim.value?.kill();
 });
 </script>
 
 <template>
 	<div class="introduce_info" ref="infoRef">
-		<div class="introduce_line1" @mouseout="handleChangeName">
+		<!-- From Uiverse.io by Nykolas94 -->
+		<label class="folder hoverable">
+			<input type="checkbox" class="folder__toggle" aria-label="Open folder" />
+			<span class="folder__shape">
+				<span class="folder__back"></span>
+				<span class="folder__papers">
+					<span class="paper paper--1">
+						<div>姓名：{{ getDetailEmpty() }}</div>
+						<div>性别：{{ getDetailEmpty() }}</div>
+						<div>年龄：{{ getDetailEmpty() }}</div>
+					</span>
+					<span class="paper paper--2">
+						<div>状态：{{ getDetailState() }}</div>
+					</span>
+					<span class="paper paper--3">
+						<div>昵称：{{ getDetailName() }}</div>
+						<div>爱好：{{ getDetailHobby() }}</div>
+					</span>
+				</span>
+				<span class="folder__front"></span>
+			</span>
+			<span class="folder__meta">
+				<span class="folder__title">个人简介</span>
+				<span class="folder__count">看不到我</span>
+			</span>
+		</label>
+		<!-- <div class="introduce_line1" @mouseout="handleChangeName">
 			<div class="line1_container" ref="line1Ref">昵称：{{ line1CurrentName }}</div>
 		</div>
 		<div class="introduce_line2" ref="line2Ref">职业：{{ getDetailJob() }}</div>
-		<div class="introduce_line3" ref="line3Ref">爱好：{{ getDetailHobby() }}</div>
+		<div class="introduce_line3" ref="line3Ref">爱好：{{ getDetailHobby() }}</div> -->
 	</div>
 </template>
 
@@ -148,25 +80,223 @@ onUnmounted(() => {
 	align-items: start;
 	width: 20%;
 	color: rgba($color: #ffffff, $alpha: 0.5);
-	font-size: 1.5rem;
-	font-family: "方正基础像素体";
 	border-color: rgba($color: #ffffff, $alpha: 0.5);
 	border-width: 5px;
 	border-style: solid;
 	overflow: hidden;
 
-	.introduce_line1,
-	.introduce_line2,
-	.introduce_line3 {
-		display: flex;
-		align-items: center;
-		height: 3rem;
-		width: auto;
+	/* From Uiverse.io by Nykolas94 */
+	.folder {
+		--folder-back-1: #f7c14b;
+		--folder-back-2: #e9a52f;
+		--folder-front-1: #ffd970;
+		--folder-front-2: #fbc548;
+		--folder-edge: #d68f23;
+		--paper: #fdfdfb;
+		--paper-2: #f1f0ea;
+		--ink: #2a2520;
+		--ink-soft: #7c736a;
+		--ring: #1d6cf5;
+		--radius: 0.875em;
+		--ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 
-		div {
-			white-space: nowrap;
-			pointer-events: none;
+		position: relative;
+		display: inline-block;
+		width: 100%;
+		font-size: 1rem;
+		font-family: "方正基础像素体";
+		color: var(--ink);
+		cursor: none;
+		user-select: none;
+
+		&:active {
+			.folder__shape {
+				transform: translateY(-0.125em) scale(0.99);
+			}
 		}
+
+		.folder__toggle {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			opacity: 0;
+			pointer-events: none;
+
+			&:checked ~ .folder__shape {
+				transform: translateY(-0.375em);
+
+				.paper {
+					transform: translateY(-26%);
+				}
+
+				.paper--1 {
+					transform: translate(-26%, -18%) rotate(-7deg);
+				}
+
+				.paper--2 {
+					transform: translate(22%, -22%) rotate(6deg);
+				}
+
+				.folder__front {
+					transform: rotateX(-32deg);
+				}
+			}
+
+			&:focus-visible ~ .folder__shape {
+				.folder__back {
+					outline: 3px solid var(--ring);
+					outline-offset: 4px;
+					border-radius: var(--radius);
+				}
+			}
+		}
+
+		.folder__shape {
+			position: relative;
+			display: block;
+			width: 100%;
+			aspect-ratio: 5 / 4;
+			transition: transform 0.45s var(--ease);
+
+			.folder__back {
+				position: absolute;
+				inset: 14% 0 0 0;
+				background: linear-gradient(135deg, var(--folder-back-1), var(--folder-back-2));
+				border-radius: 0.25em var(--radius) var(--radius) var(--radius);
+				box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+
+				&::before {
+					content: "";
+					position: absolute;
+					top: -13%;
+					left: 0;
+					width: 46%;
+					height: 16%;
+					background: linear-gradient(135deg, var(--folder-back-1), var(--folder-back-2));
+					border-radius: 0.375em 0.375em 0 0;
+					clip-path: polygon(0 0, 82% 0, 100% 100%, 0 100%);
+				}
+			}
+
+			.folder__papers {
+				position: absolute;
+				inset: 6% 8% 12% 8%;
+				z-index: 2;
+				display: block;
+
+				.paper {
+					position: absolute;
+					left: 50%;
+					bottom: 0;
+					padding: 1rem;
+					width: calc(86% - 2rem);
+					height: calc(78% - 2rem);
+					color: var(--ink);
+					translate: -50% 0;
+					background: var(--paper);
+					border-radius: 0.375em;
+					box-shadow: 0 0.25em 0.875em rgba(60, 40, 10, 0.12);
+					transition:
+						transform 0.45s var(--ease),
+						bottom 0.45s var(--ease);
+					overflow: hidden;
+
+					div {
+						margin-bottom: 1rem;
+					}
+				}
+
+				.paper--1 {
+					width: 78%;
+					height: 70%;
+					background: #f6f4ee;
+				}
+				.paper--2 {
+					width: 82%;
+					height: 74%;
+					background: #fbfaf6;
+				}
+				.paper--3 {
+					width: 86%;
+				}
+			}
+
+			.folder__front {
+				position: absolute;
+				inset: 38% 0 0 0;
+				z-index: 3;
+				background: linear-gradient(150deg, var(--folder-front-1), var(--folder-front-2));
+				border-radius: var(--radius);
+				box-shadow:
+					inset 0 1px 0 rgba(255, 255, 255, 0.55),
+					0 -1px 0 var(--folder-edge),
+					0 0.875em 1.375em -0.75em rgba(120, 80, 10, 0.35);
+				transform-origin: bottom center;
+				transition: transform 0.45s var(--ease);
+
+				&::after {
+					content: "";
+					position: absolute;
+					inset: 0;
+					border-radius: var(--radius);
+					background: linear-gradient(120deg, rgba(255, 255, 255, 0.35) 0%, transparent 45%);
+					pointer-events: none;
+				}
+			}
+		}
+
+		.folder__meta {
+			display: block;
+			margin-top: 1.1em;
+			text-align: center;
+
+			.folder__title {
+				display: block;
+				font-weight: 700;
+				font-size: 1.05em;
+				letter-spacing: -0.01em;
+				color: var(--ink-soft);
+			}
+			.folder__count {
+				display: block;
+				margin-top: 0.15em;
+				font-size: 0.6em;
+			}
+		}
+	}
+}
+
+@media (hover: hover) {
+	.folder {
+		&:hover {
+			.folder__shape {
+				transform: translateY(-0.375em);
+
+				.paper {
+					transform: translateY(-26%);
+				}
+
+				.paper--1 {
+					transform: translate(-26%, -18%) rotate(-7deg);
+				}
+
+				.paper--2 {
+					transform: translate(22%, -22%) rotate(6deg);
+				}
+
+				.folder__front {
+					transform: rotateX(-32deg);
+				}
+			}
+		}
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.folder__shape,
+	.folder__front,
+	.paper {
+		transition: none;
 	}
 }
 
