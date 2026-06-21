@@ -10,12 +10,11 @@ const mountAnim = ref<gsap.core.Tween | null>(null);
 onMounted(() => {
 	mountAnim.value = gsap.fromTo(
 		infoRef.value,
-		{ height: 0, y: "15vh", opacity: 0 },
+		{ height: 0, opacity: 0 },
 		{
-			height: "30vh",
-			y: 0,
+			height: "auto",
 			opacity: 1,
-			ease: "power4.out",
+			ease: "power2.out",
 			duration: 1,
 			scrollTrigger: {
 				trigger: infoRef.value,
@@ -60,11 +59,6 @@ onUnmounted(() => {
 				<span class="folder__count">看不到我</span>
 			</span>
 		</label>
-		<!-- <div class="introduce_line1" @mouseout="handleChangeName">
-			<div class="line1_container" ref="line1Ref">昵称：{{ line1CurrentName }}</div>
-		</div>
-		<div class="introduce_line2" ref="line2Ref">职业：{{ getDetailJob() }}</div>
-		<div class="introduce_line3" ref="line3Ref">爱好：{{ getDetailHobby() }}</div> -->
 	</div>
 </template>
 
@@ -309,13 +303,10 @@ onUnmounted(() => {
 		top: 25%;
 		padding: 3rem * $base-size;
 		width: 50%;
-		font-size: 2rem * $base-size;
 		border-width: 5px * $base-size;
 
-		.introduce_line1,
-		.introduce_line2,
-		.introduce_line3 {
-			height: 3rem * $base-size;
+		.folder {
+			font-size: 1.7rem * $base-size;
 		}
 	}
 }
@@ -325,17 +316,14 @@ onUnmounted(() => {
 	$base-size: 0.7;
 
 	.introduce_info {
-		left: calc(50% - 50% / 2 - 5px * $base-size - 3rem * $base-size);
-		top: 27%;
+		left: 20%;
+		top: 25%;
 		padding: 3rem * $base-size;
 		width: 50%;
-		font-size: 2rem * $base-size;
 		border-width: 5px * $base-size;
 
-		.introduce_line1,
-		.introduce_line2,
-		.introduce_line3 {
-			height: 3rem * $base-size;
+		.folder {
+			font-size: 1.5rem * $base-size;
 		}
 	}
 }
@@ -348,13 +336,10 @@ onUnmounted(() => {
 		left: 5%;
 		padding: 3rem * $base-size;
 		width: 30%;
-		font-size: 2rem * $base-size;
-		border-width: 8px * $base-size;
+		border-width: 5px * $base-size;
 
-		.introduce_line1,
-		.introduce_line2,
-		.introduce_line3 {
-			height: 3rem * $base-size;
+		.folder {
+			font-size: 1.5rem * $base-size;
 		}
 	}
 }
@@ -367,13 +352,10 @@ onUnmounted(() => {
 		left: 10%;
 		padding: 3rem * $base-size;
 		width: 30%;
-		font-size: 2rem * $base-size;
 		border-width: 5px * $base-size;
 
-		.introduce_line1,
-		.introduce_line2,
-		.introduce_line3 {
-			height: 3rem * $base-size;
+		.folder {
+			font-size: 1.5rem * $base-size;
 		}
 	}
 }

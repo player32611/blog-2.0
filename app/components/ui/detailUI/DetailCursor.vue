@@ -3,8 +3,9 @@ import gsap from "gsap";
 
 const cursorRef = ref<HTMLDivElement | null>(null);
 const isOut = ref<boolean>(true);
+const isHover = ref<boolean>(false);
 
-const easeTime: number = 0.2; // 缓动时间（s）
+const easeTime: number = 1; // 缓动时间（s）
 const outTime: number = 0.5; // 离开变化时间（s）
 
 const handleMouseMove = (event: MouseEvent) => {
@@ -27,17 +28,35 @@ const handleMouseMove = (event: MouseEvent) => {
 			);
 		})
 	) {
-		gsap.to(cursorRef.value, {
-			color: "#ff0000ff",
-			textShadow: "#ff0000ff",
-			duration: easeTime,
-		});
+		if (!isHover.value)
+			gsap
+				.timeline({
+					onStart: () => {
+						isHover.value = true;
+					},
+				})
+				.to(cursorRef.value, {
+					color: "#ff0000",
+					textShadow: "0 0 8px #ff0000",
+					duration: easeTime,
+				})
+				.to(cursorRef.value, { rotate: "10deg", ease: "power1.out", duration: easeTime / 4 }, "<")
+				.to(
+					cursorRef.value,
+					{ rotate: "-10deg", ease: "power1.inOut", duration: easeTime / 2 },
+					">",
+				)
+				.to(cursorRef.value, { rotate: "0deg", ease: "power1.out", duration: easeTime / 4 }, ">");
 	} else {
-		gsap.to(cursorRef.value, {
-			color: "#ff000040",
-			textShadow: "#ff000060",
-			duration: easeTime,
-		});
+		if (isHover.value)
+			gsap.to(cursorRef.value, {
+				color: "#ff000040",
+				textShadow: "0px 0px 20px #ff000060",
+				duration: easeTime,
+				onStart: () => {
+					isHover.value = false;
+				},
+			});
 	}
 };
 

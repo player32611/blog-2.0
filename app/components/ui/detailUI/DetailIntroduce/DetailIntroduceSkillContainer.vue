@@ -162,7 +162,6 @@ const createItems = () => {
 };
 
 const handleAfterUpdate = () => {
-	console.log("up");
 	const smoother = ScrollSmoother.get();
 	if (smoother && containerRef.value) {
 		const width = containerRef.value.clientWidth;
