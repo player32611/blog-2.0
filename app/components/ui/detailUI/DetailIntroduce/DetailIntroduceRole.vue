@@ -71,7 +71,7 @@ onUnmounted(() => {
 @media screen and (min-width: 576px) and (max-width: 768px) {
 	.introduce_role {
 		right: calc(50% - 50% / 2);
-		top: 5%;
+		top: 3%;
 		width: 50%;
 
 		.content_container {

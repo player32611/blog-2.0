@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/all";
 import type { Point } from "~/types/common";
+
+gsap.registerPlugin(ScrollTrigger);
 
 type CircleRing = Point & {
 	radius: number;
@@ -30,6 +34,7 @@ const update = () => {
 };
 
 const resize = () => {
+	console.log("resize");
 	if (!canvasRef.value) return;
 	const canvas = canvasRef.value;
 	const rect = canvas.getBoundingClientRect();
@@ -54,7 +59,7 @@ const drawFrame = () => {
 onMounted(() => {
 	resize();
 	window.addEventListener("click", handleClick);
-	window.addEventListener("resize", resize);
+	ScrollTrigger.addEventListener("refresh", resize);
 });
 
 onUnmounted(() => {
@@ -63,7 +68,7 @@ onUnmounted(() => {
 		animationFrameId.value = null;
 	}
 	window.removeEventListener("click", handleClick);
-	window.addEventListener("resize", resize);
+	ScrollTrigger.removeEventListener("refresh", resize);
 });
 </script>
 

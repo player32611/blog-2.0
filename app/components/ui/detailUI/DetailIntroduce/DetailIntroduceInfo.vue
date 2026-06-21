@@ -316,10 +316,10 @@ onUnmounted(() => {
 	$base-size: 0.7;
 
 	.introduce_info {
-		left: 20%;
+		left: calc(50% - 40% / 2 - 3rem * $base-size);
 		top: 25%;
 		padding: 3rem * $base-size;
-		width: 50%;
+		width: 40%;
 		border-width: 5px * $base-size;
 
 		.folder {
