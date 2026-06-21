@@ -28,12 +28,12 @@ let mouse: Mouse;
 let mouseConstraint: MouseConstraint | null;
 
 const resize = () => {
+	Matter.Events.off(engine, "afterUpdate", handleAfterUpdate);
 	World.clear(engine.world, true);
 	Render.stop(render);
 	Engine.clear(engine);
 	containerRef.value?.removeChild(render.canvas);
 	init();
-	handleUpdate();
 };
 
 const init = () => {
@@ -82,6 +82,8 @@ const init = () => {
 
 	World.add(engine.world, Array.from(itemInstances.value.values()));
 	World.add(engine.world, mouseConstraint);
+
+	Matter.Events.on(engine, "afterUpdate", handleAfterUpdate);
 
 	Render.run(render);
 	Runner.run(runner, engine);
@@ -159,34 +161,30 @@ const createItems = () => {
 	});
 };
 
-const handleUpdate = () => {
-	Matter.Events.on(engine, "afterUpdate", () => {
-		const smoother = ScrollSmoother.get();
-		if (smoother && containerRef.value) {
-			const width = containerRef.value.clientWidth;
-			const height = containerRef.value.clientHeight;
-			const speed = smoother.getVelocity() / -500000;
+const handleAfterUpdate = () => {
+	console.log("up");
+	const smoother = ScrollSmoother.get();
+	if (smoother && containerRef.value) {
+		const width = containerRef.value.clientWidth;
+		const height = containerRef.value.clientHeight;
+		const speed = smoother.getVelocity() / -500000;
 
-			itemInstances.value.forEach(item => {
-				Matter.Body.applyForce(item, item.position, {
-					x: 0,
-					y: speed * item.mass,
-				});
-				if (item.position.y > height + 100) {
-					Matter.Body.setPosition(item, { x: width / 2, y: -100 });
-					Matter.Body.setVelocity(item, { x: 0, y: 0 });
-				}
+		itemInstances.value.forEach(item => {
+			Matter.Body.applyForce(item, item.position, {
+				x: 0,
+				y: speed * item.mass,
 			});
-		}
-	});
-
-	Matter.Events.on(engine, "afterUpdate", () => {
-		itemInstances.value.forEach((item, key) => {
-			itemPositions.value?.set(key, {
-				x: item.position.x,
-				y: item.position.y,
-				angle: item.angle,
-			});
+			if (item.position.y > height + 100) {
+				Matter.Body.setPosition(item, { x: width / 2, y: -100 });
+				Matter.Body.setVelocity(item, { x: 0, y: 0 });
+			}
+		});
+	}
+	itemInstances.value.forEach((item, key) => {
+		itemPositions.value?.set(key, {
+			x: item.position.x,
+			y: item.position.y,
+			angle: item.angle,
 		});
 	});
 };
@@ -226,11 +224,12 @@ const pause = () => {
 
 onMounted(() => {
 	init();
-	handleUpdate();
 	window.addEventListener("resize", resize);
 });
 
 onUnmounted(() => {
+	Matter.Events.off(engine, "afterUpdate", handleAfterUpdate);
+
 	if (runner) Runner.stop(runner);
 	if (render) Render.stop(render);
 	if (render && render.canvas) render.canvas.remove();

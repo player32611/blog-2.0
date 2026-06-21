@@ -4,11 +4,11 @@ import { Draggable, InertiaPlugin } from "gsap/all";
 
 gsap.registerPlugin(Draggable, InertiaPlugin);
 
+const mainStore = useMainStore();
 const soundStore = useSoundStore();
 const isLoading = ref<boolean>(true); // 封面加载状态
 const loadingError = ref<boolean>(false); // 封面是否加载错误
 const cardRef = ref<HTMLDivElement | null>(null); // 卡片容器 Ref
-const position = ref<{ x: number; y: number }>({ x: 100, y: 100 }); // 卡片位置
 
 const handleLoad = () => {
 	isLoading.value = false;
@@ -34,15 +34,12 @@ onMounted(() => {
 		bounds: "body", // 限制拖拽范围
 		edgeResistance: 0.65, // 边界阻力
 		throwProps: true, // 启用投掷效果（需要 InertiaPlugin）
-		onDrag: function () {
-			position.value.x = this.x;
-			position.value.y = this.y;
+		allowEventDefault: true,
+		onPress: () => {
+			mainStore.setIsDragging(true);
 		},
-
-		// 拖拽结束时的回调（包括投掷结束）
-		onThrowUpdate: function () {
-			position.value.x = this.x;
-			position.value.y = this.y;
+		onRelease: () => {
+			mainStore.setIsDragging(false);
 		},
 	});
 });
