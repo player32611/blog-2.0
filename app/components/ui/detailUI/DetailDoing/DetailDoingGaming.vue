@@ -107,6 +107,10 @@ onUnmounted(() => {
 	.gaming_anim {
 		width: 50%;
 		background-color: #000000;
+		border-radius: 10px;
+		border-width: 5px;
+		border-style: solid;
+		border-color: rgba($color: #ffffff, $alpha: 0.7);
 	}
 }
 
@@ -116,7 +120,7 @@ onUnmounted(() => {
 		justify-self: center;
 		flex-direction: column;
 		margin-left: 0;
-		width: 80%;
+		width: 60%;
 
 		.gaming_content_container {
 			margin-bottom: 10%;
@@ -124,6 +128,7 @@ onUnmounted(() => {
 
 		.gaming_anim {
 			width: 100%;
+			border-width: 3px;
 		}
 	}
 }
@@ -134,7 +139,7 @@ onUnmounted(() => {
 		justify-self: center;
 		flex-direction: column;
 		margin-left: 0;
-		width: 80%;
+		width: 60%;
 
 		.gaming_content_container {
 			margin-bottom: 10%;
@@ -142,6 +147,7 @@ onUnmounted(() => {
 
 		.gaming_anim {
 			width: 100%;
+			border-width: 4px;
 		}
 	}
 }
@@ -152,11 +158,12 @@ onUnmounted(() => {
 		justify-self: start;
 		margin-left: 5%;
 		height: 100%;
-		width: 80%;
+		width: 70%;
 		font-size: 1rem;
 
 		.gaming_anim {
-			width: 50%;
+			width: 40%;
+			border-width: 3px;
 		}
 	}
 }
@@ -171,7 +178,8 @@ onUnmounted(() => {
 		font-size: 1rem;
 
 		.gaming_anim {
-			width: 50%;
+			width: 45%;
+			border-width: 4px;
 		}
 	}
 }

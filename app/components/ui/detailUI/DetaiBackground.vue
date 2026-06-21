@@ -34,7 +34,6 @@ const update = () => {
 };
 
 const resize = () => {
-	console.log("resize");
 	if (!canvasRef.value) return;
 	const canvas = canvasRef.value;
 	const rect = canvas.getBoundingClientRect();

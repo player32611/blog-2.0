@@ -104,7 +104,35 @@ onUnmounted(() => {
 	}
 
 	.coding_anim {
+		position: relative;
+		padding: 3px 5px 0;
 		width: 50%;
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
+		// From Uiverse.io by omar-alghaish
+		background: linear-gradient(
+			45deg,
+			#ff7f27 25%,
+			#ff7f27 25%,
+			#444 25%,
+			#444 50%,
+			#ff7f27 50%,
+			#ff7f27 75%,
+			#444 75%,
+			#444 100%
+		);
+		animation: animate_6810 10s linear infinite;
+		overflow: hidden;
+	}
+}
+
+@keyframes animate_6810 {
+	0% {
+		background-position: 0px;
+	}
+
+	100% {
+		background-position: 1000px;
 	}
 }
 
@@ -114,7 +142,7 @@ onUnmounted(() => {
 		justify-self: center;
 		flex-direction: column-reverse;
 		margin-right: 0;
-		width: 80%;
+		width: 60%;
 
 		.coding_content_container {
 			margin-left: 0;
@@ -131,7 +159,10 @@ onUnmounted(() => {
 		}
 
 		.coding_anim {
+			padding: 0 5px;
 			width: 100%;
+			border-top-left-radius: 13px;
+			border-top-right-radius: 13px;
 		}
 	}
 }
@@ -142,7 +173,7 @@ onUnmounted(() => {
 		justify-self: center;
 		flex-direction: column-reverse;
 		margin-right: 0;
-		width: 80%;
+		width: 60%;
 
 		.coding_content_container {
 			margin-left: 0;
@@ -159,7 +190,10 @@ onUnmounted(() => {
 		}
 
 		.coding_anim {
+			padding: 0 5px;
 			width: 100%;
+			border-top-left-radius: 15px;
+			border-top-right-radius: 15px;
 		}
 	}
 }
@@ -168,7 +202,7 @@ onUnmounted(() => {
 @media screen and (min-width: 768px) and (max-width: 991px) {
 	.doing_coding {
 		justify-self: flex-end;
-		width: 70%;
+		width: 60%;
 
 		.coding_content_container {
 			margin-left: 10%;
@@ -184,7 +218,10 @@ onUnmounted(() => {
 		}
 
 		.coding_anim {
-			width: 50%;
+			padding: 2px 5px 0;
+			width: 45%;
+			border-top-left-radius: 15px;
+			border-top-right-radius: 15px;
 		}
 	}
 }
@@ -209,7 +246,10 @@ onUnmounted(() => {
 		}
 
 		.coding_anim {
+			padding: 2px 5px 0;
 			width: 50%;
+			border-top-left-radius: 15px;
+			border-top-right-radius: 15px;
 		}
 	}
 }
