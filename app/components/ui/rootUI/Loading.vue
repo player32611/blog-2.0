@@ -1,14 +1,29 @@
 <script setup lang="ts">
 import gsap from "gsap";
+import { SlowMo, SplitText } from "gsap/all";
+import Lottie from "lottie-web";
+import type { AnimationItem } from "lottie-web";
 
-import Loading1 from "~/components/exhibit/Loading1.vue";
+import animPath from "@/assets/anims/dog.json";
 
-const row = 13;
-const line = 15;
+gsap.registerPlugin(SlowMo, SplitText);
+
+const loadingStore = useLoadingStore();
 const loadingRef = ref<SVGSVGElement | null>(null);
 const blocks = ref<SVGUseElement[]>([]);
-const animRef = ref<HTMLDivElement | null>(null);
-const loadingStore = useLoadingStore();
+const maskRef = ref<HTMLDivElement | null>(null);
+const animContainerRef = ref<HTMLDivElement | null>(null);
+const animItem = ref<AnimationItem | null>(null);
+const animContainerAnim = ref<gsap.core.Timeline | null>(null);
+const contentContainerRef = ref<HTMLDivElement | null>(null);
+const contentSplit = ref<SplitText | null>(null);
+const contentAnim = ref<gsap.core.Timeline | null>(null);
+
+const row: number = 13;
+const line: number = 15;
+const animContainerAnimInterval: number = 1.5;
+const contentAnimDuration: number = 3;
+const contentAnimStagger: number = 0.2;
 
 const createBlocks = () => {
 	if (!loadingRef.value) return;
@@ -32,6 +47,10 @@ const createBlocks = () => {
 const loadingIn = (next: () => void) => {
 	gsap
 		.timeline({
+			onStart: () => {
+				animItem.value?.play();
+				contentAnim.value?.resume();
+			},
 			onComplete: () => {
 				next();
 			},
@@ -61,7 +80,7 @@ const loadingIn = (next: () => void) => {
 			"<0.5",
 		)
 		.to(
-			animRef.value,
+			maskRef.value,
 			{
 				opacity: 1,
 				duration: 0.5,
@@ -76,9 +95,11 @@ const loadingOut = () => {
 		.timeline({
 			onComplete: () => {
 				loadingStore.setIsLoading(false);
+				animItem.value?.pause();
+				contentAnim.value?.pause();
 			},
 		})
-		.to(animRef.value, {
+		.to(maskRef.value, {
 			opacity: 0,
 			duration: 0.5,
 			ease: "linear",
@@ -115,6 +136,83 @@ const loadingOut = () => {
 
 onMounted(() => {
 	createBlocks();
+	if (animContainerRef.value) {
+		animItem.value = Lottie.loadAnimation({
+			container: animContainerRef.value,
+			renderer: "svg",
+			loop: true,
+			autoplay: true,
+			animationData: animPath,
+		});
+	}
+	animContainerAnim.value = gsap
+		.timeline({ repeat: -1 })
+		.set(animContainerRef.value, { rotateY: 180, delay: animContainerAnimInterval })
+		.to(animContainerRef.value, {
+			y: -100,
+			ease: "slow(0.1,2,true)",
+			duration: animContainerAnimInterval,
+			delay: animContainerAnimInterval,
+		})
+		.set(animContainerRef.value, { rotateY: 0, delay: animContainerAnimInterval })
+		.to(animContainerRef.value, {
+			y: -100,
+			ease: "slow(0.1,2,true)",
+			duration: animContainerAnimInterval,
+			delay: animContainerAnimInterval,
+		});
+	contentSplit.value = SplitText.create(contentContainerRef.value, { type: "chars" });
+	contentAnim.value = gsap
+		.timeline({ repeat: -1 })
+		.fromTo(
+			contentSplit.value.chars,
+			{ x: -150 },
+			{
+				x: 150,
+				ease: "slow(0.3,0.7,false)",
+				duration: contentAnimDuration,
+				stagger: {
+					each: contentAnimStagger,
+					from: "end",
+				},
+			},
+		)
+		.fromTo(
+			contentSplit.value.chars,
+			{
+				rotate: 90,
+				opacity: 0,
+			},
+			{
+				rotate: 0,
+				opacity: 1,
+				ease: "power1.out",
+				duration: contentAnimDuration / 2,
+				stagger: {
+					each: contentAnimStagger,
+					from: "end",
+				},
+			},
+			"<",
+		)
+		.to(
+			contentSplit.value.chars,
+			{
+				rotate: -90,
+				opacity: 0,
+				ease: "power1.in",
+				duration: contentAnimDuration / 2,
+				stagger: {
+					each: contentAnimStagger,
+					from: "end",
+				},
+			},
+			`<${contentAnimDuration / 2}`,
+		);
+});
+
+onUnmounted(() => {
+	animItem.value?.destroy();
 });
 
 defineExpose({
@@ -139,8 +237,9 @@ defineExpose({
 				/>
 			</defs>
 		</svg>
-		<div class="loading_anim" ref="animRef">
-			<Loading1 />
+		<div class="loading_mask" ref="maskRef">
+			<div class="loading_anim" ref="animContainerRef"></div>
+			<div class="loading_content" ref="contentContainerRef">LOADING</div>
 		</div>
 	</div>
 </template>
@@ -173,16 +272,28 @@ defineExpose({
 		}
 	}
 
-	.loading_anim {
+	.loading_mask {
 		position: absolute;
 		top: 0;
 		left: 0;
 		display: flex;
-		align-items: center;
+		flex-direction: column;
 		justify-content: center;
+		align-items: center;
 		height: 100%;
 		width: 100%;
 		background-color: #000000;
+		image-rendering: crisp-edges;
+
+		.loading_anim {
+			height: 15vmin;
+			width: 15vmin;
+		}
+
+		.loading_content {
+			color: #ffffff;
+			font-family: "方正基础像素体";
+		}
 	}
 }
 </style>
