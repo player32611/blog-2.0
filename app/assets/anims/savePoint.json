@@ -1,0 +1,73 @@
+{
+	"v": "5.9.4",
+	"fr": 25,
+	"ip": 0,
+	"op": 10,
+	"w": 20,
+	"h": 20,
+	"nm": "存档点",
+	"ddd": 0,
+	"assets": [
+		{
+			"id": "savePoint1.png",
+			"w": 20,
+			"h": 20,
+			"u": "/blog-2.0/images/sprites/",
+			"p": "savePoint1.png",
+			"e": 0
+		},
+		{
+			"id": "savePoint2.png",
+			"w": 20,
+			"h": 20,
+			"u": "/blog-2.0/images/sprites/",
+			"p": "savePoint2.png",
+			"e": 0
+		}
+	],
+	"layers": [
+		{
+			"ddd": 0,
+			"ind": 1,
+			"ty": 2,
+			"nm": "savePoint1.png",
+			"cl": "png",
+			"refId": "savePoint1.png",
+			"sr": 1,
+			"ks": {
+				"o": { "a": 0, "k": 100, "ix": 11 },
+				"r": { "a": 0, "k": 0, "ix": 10 },
+				"p": { "a": 0, "k": [10, 10, 0], "ix": 2, "l": 2 },
+				"a": { "a": 0, "k": [10, 10, 0], "ix": 1, "l": 2 },
+				"s": { "a": 0, "k": [100, 100, 100], "ix": 6, "l": 2 }
+			},
+			"ao": 0,
+			"ip": 0,
+			"op": 5,
+			"st": 0,
+			"bm": 0
+		},
+		{
+			"ddd": 0,
+			"ind": 2,
+			"ty": 2,
+			"nm": "savePoint2.png",
+			"cl": "png",
+			"refId": "savePoint2.png",
+			"sr": 1,
+			"ks": {
+				"o": { "a": 0, "k": 100, "ix": 11 },
+				"r": { "a": 0, "k": 0, "ix": 10 },
+				"p": { "a": 0, "k": [10, 10, 0], "ix": 2, "l": 2 },
+				"a": { "a": 0, "k": [10, 10, 0], "ix": 1, "l": 2 },
+				"s": { "a": 0, "k": [100, 100, 100], "ix": 6, "l": 2 }
+			},
+			"ao": 0,
+			"ip": 5,
+			"op": 10,
+			"st": 0,
+			"bm": 0
+		}
+	],
+	"markers": []
+}

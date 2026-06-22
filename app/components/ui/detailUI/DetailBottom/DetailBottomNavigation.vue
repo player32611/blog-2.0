@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
+import Lottie from "lottie-web";
+import type { AnimationItem } from "lottie-web";
 
-import savePoint1 from "/images/sprites/savePoint1.png";
-import savePoint2 from "/images/sprites/savePoint2.png";
+import animPath from "@/assets/anims/savePoint.json";
 
 gsap.registerPlugin(ScrollSmoother);
 
 const detailStore = useDetailStore();
-const imageFrame = ref<number>(0);
-const animInterval = ref<number | null>(null);
-
-const changeInterval: number = 200;
+const animContainer = ref<HTMLDivElement | null>(null);
+const animItem = ref<AnimationItem | null>(null);
 
 const handleClick = () => {
 	const smoother = ScrollSmoother.get();
@@ -26,21 +25,24 @@ const handleClick = () => {
 };
 
 onMounted(() => {
-	animInterval.value = setInterval(() => {
-		imageFrame.value = imageFrame.value ? 0 : 1;
-	}, changeInterval);
+	if (animContainer.value) {
+		animItem.value = Lottie.loadAnimation({
+			container: animContainer.value,
+			renderer: "svg",
+			loop: true,
+			autoplay: true,
+			animationData: animPath,
+		});
+	}
 });
 
 onUnmounted(() => {
-	if (animInterval.value) clearInterval(animInterval.value);
+	animItem.value?.destroy();
 });
 </script>
 
 <template>
-	<div class="bottom_navigation hoverable" @click="handleClick">
-		<img v-show="imageFrame === 0" :src="savePoint1" alt="加载失败" />
-		<img v-show="imageFrame === 1" :src="savePoint2" alt="加载失败" />
-	</div>
+	<div class="bottom_navigation hoverable" @click="handleClick" ref="animContainer"></div>
 </template>
 
 <style scoped lang="scss">
@@ -48,13 +50,8 @@ onUnmounted(() => {
 	position: relative;
 	height: 200px;
 	width: 200px;
-
-	img {
-		height: 100%;
-		width: 100%;
-		image-rendering: crisp-edges; /* 强制锐利边缘，无平滑 */
-		user-select: none;
-	}
+	image-rendering: crisp-edges; /* 强制锐利边缘，无平滑 */
+	user-select: none;
 }
 
 /* ========== 超小屏（< 576px）========== */

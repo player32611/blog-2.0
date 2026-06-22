@@ -5,13 +5,13 @@ import type { AnimationItem } from "lottie-web";
 import SleepZ from "~/components/exhibit/SleepZ.vue";
 import rolePath from "@/assets/anims/role.json";
 
-const roleContainerRef = ref<HTMLDivElement | null>(null);
-const roleAnim = ref<AnimationItem | null>(null);
+const animContainerRef = ref<HTMLDivElement | null>(null);
+const animItem = ref<AnimationItem | null>(null);
 
 onMounted(() => {
-	if (roleContainerRef.value) {
-		roleAnim.value = Lottie.loadAnimation({
-			container: roleContainerRef.value,
+	if (animContainerRef.value) {
+		animItem.value = Lottie.loadAnimation({
+			container: animContainerRef.value,
 			renderer: "svg",
 			loop: true,
 			autoplay: true,
@@ -21,13 +21,13 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-	roleAnim.value?.destroy();
+	animItem.value?.destroy();
 });
 </script>
 
 <template>
 	<div class="introduce_role">
-		<div class="role_container" ref="roleContainerRef"></div>
+		<div class="role_container" ref="animContainerRef"></div>
 		<div class="content_container"><SleepZ /></div>
 	</div>
 </template>
