@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { gsap } from "gsap";
-import Background from "@/assets/images/background/main_background.png";
+import gsap from "gsap";
+
+import backgroundImg from "/images/background/main_background.png";
 
 const mainStore = useMainStore();
 const viewBoxRef = ref<HTMLDivElement | null>(null);
@@ -117,7 +118,7 @@ onUnmounted(() => {
 		@touchcancel="handleMouseUp"
 	>
 		<img
-			:src="Background"
+			:src="backgroundImg"
 			alt="background"
 			:width="6016 / 3"
 			:height="3541 / 3"

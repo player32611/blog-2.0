@@ -2,6 +2,9 @@
 import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 
+import savePoint1 from "/images/sprites/savePoint1.png";
+import savePoint2 from "/images/sprites/savePoint2.png";
+
 gsap.registerPlugin(ScrollSmoother);
 
 const detailStore = useDetailStore();
@@ -35,8 +38,8 @@ onUnmounted(() => {
 
 <template>
 	<div class="bottom_navigation hoverable" @click="handleClick">
-		<img v-show="imageFrame === 0" src="/images/sprites/savePoint1.png" alt="加载失败" />
-		<img v-show="imageFrame === 1" src="/images/sprites/savePoint2.png" alt="加载失败" />
+		<img v-show="imageFrame === 0" :src="savePoint1" alt="加载失败" />
+		<img v-show="imageFrame === 1" :src="savePoint2" alt="加载失败" />
 	</div>
 </template>
 

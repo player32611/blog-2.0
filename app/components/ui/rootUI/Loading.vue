@@ -49,6 +49,7 @@ const loadingIn = (next: () => void) => {
 		.timeline({
 			onStart: () => {
 				animItem.value?.play();
+				animContainerAnim.value?.resume();
 				contentAnim.value?.resume();
 			},
 			onComplete: () => {
@@ -96,6 +97,7 @@ const loadingOut = () => {
 			onComplete: () => {
 				loadingStore.setIsLoading(false);
 				animItem.value?.pause();
+				animContainerAnim.value?.pause();
 				contentAnim.value?.pause();
 			},
 		})
@@ -213,6 +215,8 @@ onMounted(() => {
 
 onUnmounted(() => {
 	animItem.value?.destroy();
+	animContainerAnim.value?.kill();
+	contentAnim.value?.kill();
 });
 
 defineExpose({
