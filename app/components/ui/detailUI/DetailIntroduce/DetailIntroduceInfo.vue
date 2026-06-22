@@ -68,7 +68,8 @@ onUnmounted(() => {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	width: 40%;
+	padding-left: 50px;
+	padding-right: 50px;
 	color: rgba($color: #ffffff, $alpha: 0.5);
 	border-color: rgba($color: #ffffff, $alpha: 0.5);
 	border-width: 5px;
@@ -92,7 +93,7 @@ onUnmounted(() => {
 
 		position: relative;
 		display: inline-block;
-		width: 35vmin;
+		width: 350px;
 		font-size: 1rem;
 		font-family: "方正基础像素体";
 		color: var(--ink);
@@ -301,11 +302,10 @@ onUnmounted(() => {
 	$base-size: 0.5;
 
 	.introduce_info {
-		width: 70%;
 		border-width: 5px * $base-size;
 
 		.folder {
-			width: 70%;
+			width: 250px;
 			font-size: 1.7rem * $base-size;
 		}
 	}
@@ -316,7 +316,6 @@ onUnmounted(() => {
 	$base-size: 0.7;
 
 	.introduce_info {
-		width: 70%;
 		border-width: 5px * $base-size;
 
 		.folder {
@@ -331,10 +330,10 @@ onUnmounted(() => {
 	$base-size: 0.5;
 
 	.introduce_info {
-		width: 40%;
 		border-width: 5px * $base-size;
 
 		.folder {
+			width: 250px;
 			font-size: 1.5rem * $base-size;
 		}
 	}
@@ -345,10 +344,10 @@ onUnmounted(() => {
 	$base-size: 0.7;
 
 	.introduce_info {
-		width: 40%;
 		border-width: 5px * $base-size;
 
 		.folder {
+			width: 300px;
 			font-size: 1.3rem * $base-size;
 		}
 	}
