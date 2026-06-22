@@ -57,31 +57,49 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
+// From Uiverse.io by ariba_9087
 .work_empty {
 	position: relative;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	height: 100vh;
-	width: 100%;
-	/* From Uiverse.io by csemszepp */
-	background: linear-gradient(
-		45deg,
-		#343702 0%,
-		#184500 20%,
-		#187546 30%,
-		#006782 40%,
-		#0b1284 50%,
-		#760ea1 60%,
-		#83096e 70%,
-		#840b2a 80%,
-		#b13e12 90%,
-		#e27412 100%
-	);
-	background-size: 100% 100%;
-	background-color: #840b2a;
+	width: 100%; /* Fill the entire screen */
+	height: 100%;
 	overflow: hidden;
+	background: radial-gradient(circle, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.1));
+
+	&::before,
+	&::after {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 200%;
+		height: 200%;
+		background: conic-gradient(
+			from 0deg,
+			#ff9aa2,
+			/* Soft pink */ #ffb7b2,
+			/* Light peach */ #ffdac1,
+			/* Pastel yellow */ #e2f0cb,
+			/* Mint green */ #a2e4ff,
+			/* Baby blue */ #c9afff,
+			/* Lavender */ #ffb7b2,
+			#ff9aa2
+		);
+		transform: translate(-50%, -50%);
+		animation: rotate 8s linear infinite;
+		filter: blur(50px); /* Create a soft glowing effect */
+		opacity: 0.8;
+	}
+
+	&::after {
+		width: 180%;
+		height: 180%;
+		animation: rotate-reverse 10s linear infinite;
+		opacity: 0.6;
+	}
 
 	.bubble_container {
 		position: absolute;
@@ -91,7 +109,7 @@ onUnmounted(() => {
 	}
 
 	.empty_content_english {
-		color: rgba($color: #ff7f27, $alpha: 0.6);
+		color: #ffffff;
 		font-family: "Coustard Black";
 		font-size: 5rem;
 		text-shadow: 0px 0px 10px rgba($color: #ff7f27, $alpha: 0.8);
@@ -102,7 +120,7 @@ onUnmounted(() => {
 		color: #00000000;
 		font-family: "方正基础像素体";
 		font-size: 4rem;
-		-webkit-text-stroke: calc(0.2rem) rgba($color: #ff7f27, $alpha: 0.6);
+		-webkit-text-stroke: calc(0.2rem) #ffffff;
 		text-shadow: 0px 0px 10px rgba($color: #ff7f27, $alpha: 0.8);
 		animation: animate_4010 8s ease-in-out infinite;
 	}
@@ -116,6 +134,24 @@ onUnmounted(() => {
 
 	50% {
 		transform: translateY(20px);
+	}
+}
+
+@keyframes rotate {
+	0% {
+		transform: translate(-50%, -50%) rotate(0deg);
+	}
+	100% {
+		transform: translate(-50%, -50%) rotate(360deg);
+	}
+}
+
+@keyframes rotate-reverse {
+	0% {
+		transform: translate(-50%, -50%) rotate(0deg);
+	}
+	100% {
+		transform: translate(-50%, -50%) rotate(-360deg);
 	}
 }
 </style>

@@ -10,8 +10,9 @@ const mountAnim = ref<gsap.core.Tween | null>(null);
 onMounted(() => {
 	mountAnim.value = gsap.fromTo(
 		infoRef.value,
-		{ height: 0, opacity: 0 },
+		{ paddingTop: 0, height: 0, opacity: 0 },
 		{
+			paddingTop: "1.5rem",
 			height: "auto",
 			opacity: 1,
 			ease: "power2.out",
@@ -52,11 +53,9 @@ onUnmounted(() => {
 						<div>爱好：{{ getDetailHobby() }}</div>
 					</span>
 				</span>
-				<span class="folder__front"></span>
-			</span>
-			<span class="folder__meta">
-				<span class="folder__title">个人简介</span>
-				<span class="folder__count">看不到我</span>
+				<span class="folder__front">
+					<span class="folder__title">个人简介</span>
+				</span>
 			</span>
 		</label>
 	</div>
@@ -65,12 +64,11 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .introduce_info {
 	position: relative;
-	padding: 3rem;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-around;
-	align-items: start;
-	width: 20%;
+	justify-content: center;
+	align-items: center;
+	width: 40%;
 	color: rgba($color: #ffffff, $alpha: 0.5);
 	border-color: rgba($color: #ffffff, $alpha: 0.5);
 	border-width: 5px;
@@ -94,7 +92,7 @@ onUnmounted(() => {
 
 		position: relative;
 		display: inline-block;
-		width: 100%;
+		width: 35vmin;
 		font-size: 1rem;
 		font-family: "方正基础像素体";
 		color: var(--ink);
@@ -205,6 +203,9 @@ onUnmounted(() => {
 
 					div {
 						margin-bottom: 1rem;
+						overflow: hidden;
+						white-space: nowrap; /* 禁止换行 */
+						text-overflow: ellipsis; /* 显示省略号 */
 					}
 				}
 
@@ -225,6 +226,10 @@ onUnmounted(() => {
 
 			.folder__front {
 				position: absolute;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
 				inset: 38% 0 0 0;
 				z-index: 3;
 				background: linear-gradient(150deg, var(--folder-front-1), var(--folder-front-2));
@@ -244,25 +249,14 @@ onUnmounted(() => {
 					background: linear-gradient(120deg, rgba(255, 255, 255, 0.35) 0%, transparent 45%);
 					pointer-events: none;
 				}
-			}
-		}
 
-		.folder__meta {
-			display: block;
-			margin-top: 1.1em;
-			text-align: center;
-
-			.folder__title {
-				display: block;
-				font-weight: 700;
-				font-size: 1.05em;
-				letter-spacing: -0.01em;
-				color: var(--ink-soft);
-			}
-			.folder__count {
-				display: block;
-				margin-top: 0.15em;
-				font-size: 0.6em;
+				.folder__title {
+					display: block;
+					font-weight: 700;
+					font-size: 1.05em;
+					letter-spacing: -0.01em;
+					color: var(--ink-soft);
+				}
 			}
 		}
 	}
@@ -307,11 +301,11 @@ onUnmounted(() => {
 	$base-size: 0.5;
 
 	.introduce_info {
-		padding: 3rem * $base-size;
-		width: 60%;
+		width: 70%;
 		border-width: 5px * $base-size;
 
 		.folder {
+			width: 70%;
 			font-size: 1.7rem * $base-size;
 		}
 	}
@@ -322,11 +316,11 @@ onUnmounted(() => {
 	$base-size: 0.7;
 
 	.introduce_info {
-		padding: 3rem * $base-size;
-		width: 40%;
+		width: 70%;
 		border-width: 5px * $base-size;
 
 		.folder {
+			width: 280px;
 			font-size: 1.3rem * $base-size;
 		}
 	}
@@ -337,8 +331,7 @@ onUnmounted(() => {
 	$base-size: 0.5;
 
 	.introduce_info {
-		padding: 3rem * $base-size;
-		width: 30%;
+		width: 40%;
 		border-width: 5px * $base-size;
 
 		.folder {
@@ -352,12 +345,11 @@ onUnmounted(() => {
 	$base-size: 0.7;
 
 	.introduce_info {
-		padding: 3rem * $base-size;
-		width: 30%;
+		width: 40%;
 		border-width: 5px * $base-size;
 
 		.folder {
-			font-size: 1.5rem * $base-size;
+			font-size: 1.3rem * $base-size;
 		}
 	}
 }

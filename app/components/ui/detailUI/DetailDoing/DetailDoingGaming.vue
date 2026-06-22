@@ -119,15 +119,19 @@ onUnmounted(() => {
 	.doing_gaming {
 		justify-self: center;
 		flex-direction: column;
+		justify-content: center;
 		margin-left: 0;
-		width: 60%;
+		width: 100%;
 
 		.gaming_content_container {
-			margin-bottom: 10%;
+			.gaming_content {
+				font-size: 1.5rem;
+			}
 		}
 
 		.gaming_anim {
-			width: 100%;
+			margin-top: 20px;
+			width: 60%;
 			border-width: 3px;
 		}
 	}
@@ -139,14 +143,11 @@ onUnmounted(() => {
 		justify-self: center;
 		flex-direction: column;
 		margin-left: 0;
-		width: 60%;
-
-		.gaming_content_container {
-			margin-bottom: 10%;
-		}
+		width: 100%;
 
 		.gaming_anim {
-			width: 100%;
+			margin-top: 20px;
+			width: 40%;
 			border-width: 4px;
 		}
 	}

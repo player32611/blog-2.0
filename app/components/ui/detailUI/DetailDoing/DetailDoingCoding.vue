@@ -141,15 +141,15 @@ onUnmounted(() => {
 	.doing_coding {
 		justify-self: center;
 		flex-direction: column-reverse;
+		justify-content: center;
 		margin-right: 0;
-		width: 60%;
+		width: 100%;
 
 		.coding_content_container {
 			margin-left: 0;
-			margin-bottom: 10%;
 
 			.coding_content {
-				font-size: 2rem;
+				font-size: 1.5rem;
 			}
 
 			.coding_content_handle {
@@ -159,8 +159,9 @@ onUnmounted(() => {
 		}
 
 		.coding_anim {
+			margin-top: 20px;
 			padding: 0 5px;
-			width: 100%;
+			width: 60%;
 			border-top-left-radius: 13px;
 			border-top-right-radius: 13px;
 		}
@@ -173,11 +174,10 @@ onUnmounted(() => {
 		justify-self: center;
 		flex-direction: column-reverse;
 		margin-right: 0;
-		width: 60%;
+		width: 100%;
 
 		.coding_content_container {
 			margin-left: 0;
-			margin-bottom: 10%;
 
 			.coding_content {
 				font-size: 2rem;
@@ -190,8 +190,9 @@ onUnmounted(() => {
 		}
 
 		.coding_anim {
+			margin-top: 20px;
 			padding: 0 5px;
-			width: 100%;
+			width: 40%;
 			border-top-left-radius: 15px;
 			border-top-right-radius: 15px;
 		}
