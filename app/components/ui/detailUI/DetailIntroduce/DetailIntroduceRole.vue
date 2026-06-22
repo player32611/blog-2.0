@@ -34,10 +34,8 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .introduce_role {
-	position: absolute;
-	right: 15%;
-	top: 5%;
-	width: 25%;
+	position: relative;
+	width: 30%;
 
 	.role_container {
 		width: 100%;
@@ -55,9 +53,7 @@ onUnmounted(() => {
 /* ========== 超小屏（< 576px）========== */
 @media screen and (max-width: 576px) {
 	.introduce_role {
-		right: calc(50% - 50% / 2);
-		top: 5%;
-		width: 50%;
+		width: 70%;
 
 		.content_container {
 			top: 15%;
@@ -70,8 +66,6 @@ onUnmounted(() => {
 /* ========== 小屏（576px - 768px）========== */
 @media screen and (min-width: 576px) and (max-width: 768px) {
 	.introduce_role {
-		right: calc(50% - 50% / 2);
-		top: 3%;
 		width: 50%;
 
 		.content_container {
@@ -85,8 +79,6 @@ onUnmounted(() => {
 /* ========== 中等屏（768px - 991px）========== */
 @media screen and (min-width: 768px) and (max-width: 991px) {
 	.introduce_role {
-		right: 5%;
-		top: 5%;
 		width: 40%;
 
 		.content_container {
@@ -100,8 +92,6 @@ onUnmounted(() => {
 /* ========== 大屏（991px - 1199px）========== */
 @media screen and (min-width: 991px) and (max-width: 1199px) {
 	.introduce_role {
-		right: 10%;
-		top: 5%;
 		width: 35%;
 
 		.content_container {

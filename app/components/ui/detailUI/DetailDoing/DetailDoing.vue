@@ -8,19 +8,19 @@ import DetailDoingOther from "./DetailDoingOther.vue";
 	<div class="detail_doing">
 		<DetailDoingCoding />
 		<DetailDoingGaming />
-		<DetailDoingOther />
+		<!-- <DetailDoingOther /> -->
 	</div>
 </template>
 
 <style scoped lang="scss">
 .detail_doing {
 	display: grid;
-	grid-template-rows: repeat(3, 1fr);
+	grid-template-rows: repeat(2, 1fr);
 	justify-items: center;
 	align-items: center;
 	margin-top: 10vh;
 	gap: 5vh;
-	height: 150vh;
+	height: 100vh;
 	width: 100%;
 }
 </style>

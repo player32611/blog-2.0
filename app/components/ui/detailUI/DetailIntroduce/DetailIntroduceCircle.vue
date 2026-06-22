@@ -87,9 +87,7 @@ onUnmounted(() => {
 $base-size: 0.8;
 
 .introduce_circle_container {
-	position: absolute;
-	left: 0;
-	bottom: 0;
+	position: relative;
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
@@ -115,7 +113,6 @@ $base-size: 0.8;
 	$base-size: 0.5;
 
 	.introduce_circle_container {
-		bottom: 30%;
 		width: 100%;
 
 		.introduce_circle_content {
@@ -135,7 +132,6 @@ $base-size: 0.8;
 	$base-size: 0.6;
 
 	.introduce_circle_container {
-		bottom: 35%;
 		width: 100%;
 
 		.introduce_circle_content {

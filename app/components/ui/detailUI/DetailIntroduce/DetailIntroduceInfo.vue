@@ -64,9 +64,7 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .introduce_info {
-	position: absolute;
-	left: 10%;
-	top: 5%;
+	position: relative;
 	padding: 3rem;
 	display: flex;
 	flex-direction: column;
@@ -195,6 +193,16 @@ onUnmounted(() => {
 						bottom 0.45s var(--ease);
 					overflow: hidden;
 
+					&::after {
+						content: "";
+						position: absolute;
+						left: 1rem;
+						right: 24%;
+						height: 6%;
+						border-radius: 0.2em;
+						background: var(--paper-2);
+					}
+
 					div {
 						margin-bottom: 1rem;
 					}
@@ -299,10 +307,8 @@ onUnmounted(() => {
 	$base-size: 0.5;
 
 	.introduce_info {
-		left: 20%;
-		top: 25%;
 		padding: 3rem * $base-size;
-		width: 50%;
+		width: 60%;
 		border-width: 5px * $base-size;
 
 		.folder {
@@ -316,14 +322,12 @@ onUnmounted(() => {
 	$base-size: 0.7;
 
 	.introduce_info {
-		left: calc(50% - 40% / 2 - 3rem * $base-size);
-		top: 25%;
 		padding: 3rem * $base-size;
 		width: 40%;
 		border-width: 5px * $base-size;
 
 		.folder {
-			font-size: 1.5rem * $base-size;
+			font-size: 1.3rem * $base-size;
 		}
 	}
 }
@@ -333,7 +337,6 @@ onUnmounted(() => {
 	$base-size: 0.5;
 
 	.introduce_info {
-		left: 5%;
 		padding: 3rem * $base-size;
 		width: 30%;
 		border-width: 5px * $base-size;
@@ -349,7 +352,6 @@ onUnmounted(() => {
 	$base-size: 0.7;
 
 	.introduce_info {
-		left: 10%;
 		padding: 3rem * $base-size;
 		width: 30%;
 		border-width: 5px * $base-size;
