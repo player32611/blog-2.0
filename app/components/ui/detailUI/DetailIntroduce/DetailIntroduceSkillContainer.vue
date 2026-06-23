@@ -1,14 +1,5 @@
 <script setup lang="ts">
-import Matter, {
-	Engine,
-	Render,
-	World,
-	Bodies,
-	Body,
-	Mouse,
-	MouseConstraint,
-	Runner,
-} from "matter-js";
+import Matter, { Engine, Render, World, Bodies, Mouse, MouseConstraint, Runner } from "matter-js";
 import { ScrollSmoother } from "gsap/all";
 import type { DetailIntroduceSkillContainerInstance, ItemParams } from "~/types/components";
 
@@ -18,6 +9,7 @@ const containerRef = ref<HTMLDivElement | null>(null);
 const itemRefs = ref<Map<string, InstanceType<typeof DetailIntroduceSkillItem>>>(new Map());
 const itemPositions = ref<Map<string, ItemParams>>(new Map());
 const itemInstances = ref<Map<string, Matter.Body>>(new Map());
+const smoother = ref<ScrollSmoother | null>(null);
 
 const skills = getDetailSkills();
 
@@ -45,7 +37,11 @@ const init = () => {
 	if (runner && runner.enabled) state = runner.enabled;
 
 	// 创建引擎
-	engine = Engine.create();
+	engine = Engine.create({
+		enableSleeping: true,
+	});
+	engine.positionIterations = 2;
+	engine.velocityIterations = 2;
 
 	// 创建渲染器
 	render = Render.create({
@@ -85,7 +81,7 @@ const init = () => {
 
 	Matter.Events.on(engine, "afterUpdate", handleAfterUpdate);
 
-	Render.run(render);
+	// Render.run(render);
 	Runner.run(runner, engine);
 
 	if (state) resume();
@@ -135,14 +131,7 @@ const createBorder = () => {
 		parts.push(rect);
 	}
 
-	const container = Body.create({
-		parts: parts,
-		isStatic: true,
-		restitution: 0.85,
-		friction: 0.4,
-	});
-
-	World.add(engine.world, [container]);
+	World.add(engine.world, parts);
 };
 
 const createItems = () => {
@@ -162,13 +151,13 @@ const createItems = () => {
 };
 
 const handleAfterUpdate = () => {
-	const smoother = ScrollSmoother.get();
-	if (smoother && containerRef.value) {
+	if (!smoother.value) smoother.value = ScrollSmoother.get() || null;
+	if (smoother.value && containerRef.value) {
 		const width = containerRef.value.clientWidth;
 		const height = containerRef.value.clientHeight;
-		const speed = smoother.getVelocity() / -500000;
+		const speed = smoother.value.getVelocity() / -500000;
 
-		itemInstances.value.forEach(item => {
+		itemInstances.value.forEach((item, key) => {
 			Matter.Body.applyForce(item, item.position, {
 				x: 0,
 				y: speed * item.mass,
@@ -177,15 +166,13 @@ const handleAfterUpdate = () => {
 				Matter.Body.setPosition(item, { x: width / 2, y: -100 });
 				Matter.Body.setVelocity(item, { x: 0, y: 0 });
 			}
+			itemPositions.value?.set(key, {
+				x: item.position.x,
+				y: item.position.y,
+				angle: item.angle,
+			});
 		});
 	}
-	itemInstances.value.forEach((item, key) => {
-		itemPositions.value?.set(key, {
-			x: item.position.x,
-			y: item.position.y,
-			angle: item.angle,
-		});
-	});
 };
 
 const handleMouseLeave = () => {
@@ -223,6 +210,7 @@ const pause = () => {
 
 onMounted(() => {
 	init();
+	smoother.value = ScrollSmoother.get() || null;
 	window.addEventListener("resize", resize);
 });
 

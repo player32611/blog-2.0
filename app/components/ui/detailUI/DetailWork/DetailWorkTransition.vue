@@ -5,7 +5,6 @@ import type { DetailWorkTransitionInstance } from "~/types/components";
 
 gsap.registerPlugin(MorphSVGPlugin, ScrollTrigger);
 
-const transitionRef = ref<HTMLDivElement | null>(null);
 const pathRef = ref<SVGPathElement | null>(null);
 const activeAnim = ref<gsap.core.Timeline | null>(null);
 
