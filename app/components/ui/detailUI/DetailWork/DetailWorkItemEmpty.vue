@@ -75,8 +75,8 @@ onUnmounted(() => {
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		width: 200%;
-		height: 200%;
+		width: 300%;
+		height: 300%;
 		background: conic-gradient(
 			from 0deg,
 			#ff9aa2,
@@ -95,8 +95,6 @@ onUnmounted(() => {
 	}
 
 	&::after {
-		width: 180%;
-		height: 180%;
 		animation: rotate-reverse 10s linear infinite;
 		opacity: 0.6;
 	}

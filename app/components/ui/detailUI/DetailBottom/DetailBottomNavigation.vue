@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import gsap from "gsap";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { ScrollSmoother } from "gsap/all";
 import Lottie from "lottie-web";
 import type { AnimationItem } from "lottie-web";
 
