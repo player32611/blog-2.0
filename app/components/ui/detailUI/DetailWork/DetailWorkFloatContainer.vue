@@ -84,7 +84,7 @@ defineExpose<DetailWorkFloatContainerInstance>({
 		user-select: none;
 
 		.icon {
-			color: #000000;
+			color: #ffffff;
 			font-size: 30px;
 		}
 	}

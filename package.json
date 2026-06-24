@@ -19,10 +19,12 @@
 		"nuxt": "^4.3.1",
 		"pinia": "^3.0.4",
 		"sakana-widget": "^3.0.0",
-		"sass": "^1.97.3"
+		"sass": "^1.97.3",
+		"three": "^0.184.0"
 	},
 	"devDependencies": {
 		"@types/matter-js": "^0.20.2",
+		"@types/three": "^0.184.1",
 		"prettier": "^3.8.1"
 	}
 }

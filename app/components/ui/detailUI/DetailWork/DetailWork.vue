@@ -8,7 +8,7 @@ import type {
 
 import DetailWorkBackground from "./DetailWorkBackground.vue";
 import DetailWorkFloatContainer from "./DetailWorkFloatContainer.vue";
-import DetailWorkItem1 from "./DetailWorkItem1.vue";
+import DetailWorkGame from "./DetailWorkGame.vue/DetailWorkGame.vue";
 import DetailWorkItem2 from "./DetailWorkItem2.vue";
 import DetailWorkItemEmpty from "./DetailWorkItemEmpty.vue";
 import DetailWorkTransition from "./DetailWorkTransition.vue";
@@ -87,7 +87,7 @@ onMounted(() => {
 <template>
 	<div class="detail_work" ref="containerRef">
 		<DetailWorkBackground v-if="activeIndex === -1" />
-		<DetailWorkItem1 v-else-if="activeIndex === 0" />
+		<DetailWorkGame v-else-if="activeIndex === 0" />
 		<DetailWorkItem2 v-else-if="activeIndex === 1" />
 		<DetailWorkItemEmpty v-else />
 		<DetailWorkFloatContainer ref="floatRef" :activeIndex="activeIndex" />

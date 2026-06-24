@@ -1,12 +1,18 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import { MorphSVGPlugin, ScrollTrigger } from "gsap/all";
+import Lottie from "lottie-web";
+import type { AnimationItem } from "lottie-web";
 import type { DetailWorkTransitionInstance } from "~/types/components";
+
+import animPath from "@/assets/anims/dog.json";
 
 gsap.registerPlugin(MorphSVGPlugin, ScrollTrigger);
 
 const pathRef = ref<SVGPathElement | null>(null);
 const activeAnim = ref<gsap.core.Timeline | null>(null);
+const animContainerRef = ref<HTMLDivElement | null>(null);
+const lottieAnim = ref<AnimationItem | null>(null);
 
 const start = "M 0 100 V 100 Q 50 100 100 100 V 100 z";
 const mid1 = "M 0 100 V 50 Q 50 0 100 50 V 100 z";
@@ -42,11 +48,43 @@ const transitionAnim = (inOptions?: gsap.TweenVars, outOptions?: gsap.TweenVars)
 				activeAnim.value = null;
 				optionOnComplete?.();
 			},
-		});
+		})
+		.fromTo(
+			animContainerRef.value,
+			{
+				rotate: 0,
+				y: "100vh",
+				ease: "none",
+			},
+			{
+				rotate: () => randomSign() * 720,
+				y: "-100vh",
+				ease: "none",
+				duration: easeDuration,
+			},
+			0,
+		);
 };
 
 defineExpose<DetailWorkTransitionInstance>({
 	transitionAnim,
+});
+
+onMounted(() => {
+	if (animContainerRef.value) {
+		lottieAnim.value = Lottie.loadAnimation({
+			container: animContainerRef.value,
+			renderer: "svg",
+			loop: true,
+			autoplay: true,
+			animationData: animPath,
+		});
+	}
+	gsap.set(animContainerRef.value, { y: "100vh" });
+});
+
+onUnmounted(() => {
+	lottieAnim.value?.destroy();
 });
 </script>
 
@@ -69,6 +107,7 @@ defineExpose<DetailWorkTransitionInstance>({
 				ref="pathRef"
 			/>
 		</svg>
+		<div class="anim_container" ref="animContainerRef"></div>
 	</div>
 </template>
 
@@ -76,13 +115,21 @@ defineExpose<DetailWorkTransitionInstance>({
 .work_transition {
 	position: absolute;
 	top: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	height: 100vh;
 	width: 100%;
+	overflow: hidden;
+
+	.anim_container {
+		position: absolute;
+		left: 35%;
+		top: 35%;
+		height: 30%;
+		width: 30%;
+		image-rendering: crisp-edges;
+	}
 
 	.transition {
+		position: absolute;
 		width: 100%;
 		height: 100%;
 	}
