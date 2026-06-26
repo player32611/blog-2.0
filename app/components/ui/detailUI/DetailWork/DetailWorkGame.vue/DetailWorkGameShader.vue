@@ -85,13 +85,16 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<canvas class="item1_background" ref="canvasRef"></canvas>
+	<canvas class="game_shader" ref="canvasRef"></canvas>
 </template>
 
 <style scoped lang="scss">
-.item1_background {
+@use "@/assets/styles/variables.scss";
+
+.game_shader {
 	position: absolute;
 	height: 100%;
 	width: 100%;
+	z-index: variables.$background_zIndex;
 }
 </style>

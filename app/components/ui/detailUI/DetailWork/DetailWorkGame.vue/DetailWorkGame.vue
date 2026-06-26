@@ -1,19 +1,20 @@
 <script setup lang="ts">
+import DetailWorkGameBattle from "./DetailWorkGameBattle.vue";
+import DetailWorkGameButtonUI from "./DetailWorkGameButtonUI.vue";
 import DetailWorkGameShader from "./DetailWorkGameShader.vue";
-import Button from "~/components/ui/common/Button.vue";
 </script>
 
 <template>
 	<div class="work_game">
+		<DetailWorkGameBattle />
+		<DetailWorkGameButtonUI />
 		<DetailWorkGameShader />
-		<div class="game_buttons">
-			<Button text="fight" icon="" size="medium" @click="" />
-		</div>
-		<!-- <div class="text">item1</div> -->
 	</div>
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 .work_game {
 	position: relative;
 	display: flex;
@@ -21,10 +22,6 @@ import Button from "~/components/ui/common/Button.vue";
 	align-items: center;
 	height: 100vh;
 	width: 100%;
-	background-color: blue;
-
-	.text {
-		font-size: 5rem;
-	}
+	z-index: variables.$float_zIndex;
 }
 </style>

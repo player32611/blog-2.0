@@ -112,12 +112,16 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 .work_transition {
 	position: absolute;
 	top: 0;
 	height: 100vh;
 	width: 100%;
 	overflow: hidden;
+	pointer-events: none;
+	z-index: variables.$loading_zIndex;
 
 	.anim_container {
 		position: absolute;

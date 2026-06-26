@@ -55,7 +55,8 @@ defineExpose<DetailWorkFloatContainerInstance>({
 <template>
 	<div class="work_float_container">
 		<div class="float_item" v-for="_ in itemNum" ref="itemRefs">
-			<span class="icon" v-if="activeIndex === 0">&#xe7c9;</span>
+			<span v-if="activeIndex < 0"></span>
+			<span class="icon" v-else-if="activeIndex === 0">&#xe7c9;</span>
 			<span class="icon" v-else-if="activeIndex === 1">&#xe62e;</span>
 			<Bubble v-else style="scale: 0.2" />
 		</div>

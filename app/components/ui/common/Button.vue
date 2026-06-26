@@ -54,6 +54,13 @@ button {
 		border-width: 0.25rem * $base-size;
 	}
 
+	&.medium {
+		height: $base-height * $base-size * 1.5;
+		width: $base-width * $base-size * 1.5;
+		font-size: 2rem * $base-size;
+		border-width: 0.35rem * $base-size;
+	}
+
 	&.large {
 		height: $base-height * $base-size * 2;
 		width: $base-width * $base-size * 2;
