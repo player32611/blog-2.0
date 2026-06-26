@@ -4,7 +4,7 @@ import { useSoundStore } from "@/stores/soundStore";
 import type { ButtonParams } from "@/types/components";
 
 const { effectsVolume } = useSoundStore();
-const { text, size, icon, onClick, classList, style } = defineProps<ButtonParams>();
+const { text, size, icon, onClick, classList, style, iconStyle } = defineProps<ButtonParams>();
 
 const undertaleSound = useSoundEffect("sounds/effects/undertale-button.wav");
 
@@ -24,7 +24,7 @@ const handleClick = () => {
 		draggable="false"
 	>
 		<div class="container">
-			<span class="icon">{{ icon }}</span>
+			<span class="icon" :style="iconStyle">{{ icon }}</span>
 			<span v-for="(char, index) in text.toUpperCase().split('')" :key="index">{{ char }}</span>
 		</div>
 	</button>
@@ -77,6 +77,10 @@ button {
 		display: flex;
 		justify-content: space-evenly;
 		align-items: center;
+
+		.icon {
+			transform: translateY(-1px);
+		}
 	}
 }
 

@@ -249,7 +249,7 @@ defineExpose({
 </template>
 
 <style scoped lang="scss">
-@use "../../../assets/styles/variables.scss";
+@use "@/assets/styles/variables.scss";
 
 .root_loading {
 	position: fixed;

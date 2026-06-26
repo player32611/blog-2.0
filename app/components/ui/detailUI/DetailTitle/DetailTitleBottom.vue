@@ -630,7 +630,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-@use "../../../../assets/styles/variables.scss";
+@use "@/assets/styles/variables.scss";
 
 .title_bottom {
 	position: relative;

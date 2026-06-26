@@ -66,7 +66,7 @@ defineExpose<DetailBottomMoreInstance>({
 </template>
 
 <style scoped lang="scss">
-@use "../../../../assets/styles/variables.scss";
+@use "@/assets/styles/variables.scss";
 
 .bottom_more {
 	position: relative;

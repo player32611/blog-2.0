@@ -13,6 +13,7 @@ export interface ButtonParams {
 	onClick: () => void;
 	classList?: string;
 	style?: Record<string, string | number>;
+	iconStyle?: Record<string, string | number>;
 }
 
 export interface FaultTextParams {

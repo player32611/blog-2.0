@@ -2,6 +2,7 @@
 import Button from "~/components/ui/common/Button.vue";
 
 const style: Record<string, string | number> = { cursor: "none" };
+const iconStyle: Record<string, string | number> = { fontSize: "1.5rem" };
 
 const handleClick = () => {
 	window.open("https://gamejolt.com/@player32611", "_blank", "noopener,noreferrer");
@@ -10,10 +11,42 @@ const handleClick = () => {
 
 <template>
 	<div class="game_buttonUI">
-		<Button class-list="hoverable" text="fight" icon="" size="large" @click="handleClick" :style />
-		<Button class-list="hoverable" text="act" icon="" size="large" @click="handleClick" :style />
-		<Button class-list="hoverable" text="item" icon="" size="large" @click="handleClick" :style />
-		<Button class-list="hoverable" text="mercy" icon="" size="large" @click="handleClick" :style />
+		<Button
+			class-list="hoverable"
+			text="fight"
+			icon="&#xe601;"
+			size="large"
+			@click="handleClick"
+			:style
+			:iconStyle
+		/>
+		<Button
+			class-list="hoverable"
+			text="act"
+			icon="&#xe63d;"
+			size="large"
+			@click="handleClick"
+			:style
+			:iconStyle
+		/>
+		<Button
+			class-list="hoverable"
+			text="item"
+			icon="&#xe602;"
+			size="large"
+			@click="handleClick"
+			:style
+			:iconStyle
+		/>
+		<Button
+			class-list="hoverable"
+			text="mercy"
+			icon="&#xe62f;"
+			size="large"
+			@click="handleClick"
+			:style
+			:iconStyle
+		/>
 	</div>
 </template>
 

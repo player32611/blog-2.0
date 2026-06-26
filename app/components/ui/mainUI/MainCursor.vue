@@ -117,7 +117,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-@use "../../../assets/styles/variables.scss";
+@use "@/assets/styles/variables.scss";
 
 .main_cursor {
 	position: fixed;

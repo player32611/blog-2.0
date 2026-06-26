@@ -62,6 +62,7 @@ onUnmounted(() => {
 
 .game_battle {
 	position: relative;
+	margin-top: 30vh;
 	background-color: rgba($color: #000000, $alpha: 0.5);
 	border-color: #ffffff;
 	border-style: solid;
@@ -78,7 +79,6 @@ onUnmounted(() => {
 		position: absolute;
 		color: red;
 		font-size: 25px;
-		background-color: black;
 	}
 }
 </style>

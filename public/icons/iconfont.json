@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "329491",
+      "name": "小刀",
+      "font_class": "iconfontdaocha",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "24869768",
+      "name": "麻袋",
+      "font_class": "madai0",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "10944657",
+      "name": "声波",
+      "font_class": "shengbo",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    },
+    {
+      "icon_id": "8988248",
+      "name": "叉叉",
+      "font_class": "chacha",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
       "icon_id": "1138465",
       "name": "骨头",
       "font_class": "gutou",

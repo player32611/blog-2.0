@@ -160,7 +160,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-@use "../../../assets/styles/variables.scss";
+@use "@/assets/styles/variables.scss";
 
 .detail_partition {
 	position: relative;

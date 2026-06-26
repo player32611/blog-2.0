@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import DetailWorkGameBattle from "./DetailWorkGameBattle.vue";
 import DetailWorkGameButtonUI from "./DetailWorkGameButtonUI.vue";
+import DetailWorkGameRole from "./DetailWorkGameRole.vue";
 import DetailWorkGameShader from "./DetailWorkGameShader.vue";
 </script>
 
 <template>
 	<div class="work_game">
+		<DetailWorkGameRole />
 		<DetailWorkGameBattle />
 		<DetailWorkGameButtonUI />
 		<DetailWorkGameShader />
