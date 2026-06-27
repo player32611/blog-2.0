@@ -9,12 +9,11 @@ import {
 	PlaneGeometry,
 } from "three";
 
-import vertexShader from "@/assets/shaders/snowy.vert?raw";
-import fragmentShader from "@/assets/shaders/snowy.frag?raw";
+import vertexShader from "@/assets/shaders/Snowy.vert?raw";
+import fragmentShader from "@/assets/shaders/Snowy.frag?raw";
 
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 
-let startTime = performance.now();
 let scene: Scene;
 let camera: OrthographicCamera;
 let renderer: WebGLRenderer;
@@ -35,39 +34,40 @@ const resize = () => {
 const animate = () => {
 	animationId = requestAnimationFrame(animate);
 
-	if (material.uniforms.uTime)
-		material.uniforms.uTime.value = (performance.now() - startTime) * 0.001;
+	if (material.uniforms.uTime) material.uniforms.uTime.value = performance.now() / 1000;
 
 	renderer.render(scene, camera);
 };
 
 onMounted(() => {
-	scene = new Scene();
+	if (canvasRef.value) {
+		scene = new Scene();
 
-	camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+		camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-	renderer = new WebGLRenderer({
-		canvas: canvasRef.value!,
-		antialias: true,
-		alpha: true,
-	});
-	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-	renderer.setSize(window.innerWidth, window.innerHeight);
+		renderer = new WebGLRenderer({
+			canvas: canvasRef.value!,
+			antialias: true,
+			alpha: true,
+		});
+		renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+		renderer.setSize(window.innerWidth, window.innerHeight);
 
-	material = new ShaderMaterial({
-		uniforms: {
-			uTime: { value: 0 },
-			uResolution: { value: new Vector2(window.innerWidth, window.innerHeight) },
-			uMirror: { value: 1 },
-		},
-		vertexShader,
-		fragmentShader,
-	});
+		material = new ShaderMaterial({
+			uniforms: {
+				uTime: { value: 0 },
+				uResolution: { value: new Vector2(window.innerWidth, window.innerHeight) },
+				uMirror: { value: 1 },
+			},
+			vertexShader,
+			fragmentShader,
+		});
 
-	const geometry = new PlaneGeometry(2, 2);
-	const mesh = new Mesh(geometry, material);
+		const geometry = new PlaneGeometry(2, 2);
+		const mesh = new Mesh(geometry, material);
 
-	scene.add(mesh);
+		scene.add(mesh);
+	}
 
 	window.addEventListener("resize", resize);
 

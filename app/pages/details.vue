@@ -12,6 +12,7 @@ import DetaiBackground from "~/components/ui/detailUI/DetaiBackground.vue";
 import DetailCursor from "~/components/ui/detailUI/DetailCursor.vue";
 import DetailMask from "~/components/ui/detailUI/DetailMask.vue";
 import DetailPartition from "~/components/ui/detailUI/DetailPartition.vue";
+import DetailShader from "~/components/ui/detailUI/DetailShader.vue";
 import DetailTooltip from "~/components/ui/detailUI/DetailTooltip.vue";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
@@ -61,6 +62,7 @@ onUnmounted(() => {
 		</div>
 		<DetailTooltip />
 		<DetailCursor v-if="!isMobile()" />
+		<DetailShader />
 		<DetailMask ref="maskRef" />
 	</div>
 </template>

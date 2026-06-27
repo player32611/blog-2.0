@@ -6,6 +6,7 @@ export const useDetailStore = defineStore(
 	(): DetailState & DetailGetter & DetailActions => {
 		const bottomMoreInstance = ref<DetailBottomMoreInstance | null>(null);
 		const maskInstance = ref<DetailMaskInstance | null>(null);
+		const shaderType = ref<"none" | "VCR distortion">("none");
 
 		const setBottomMoreInstance = (instance: DetailBottomMoreInstance | null) => {
 			bottomMoreInstance.value = instance;
@@ -15,6 +16,17 @@ export const useDetailStore = defineStore(
 			maskInstance.value = mask;
 		};
 
-		return { bottomMoreInstance, maskInstance, setBottomMoreInstance, setMaskInstance };
+		const setShaderType = (type: "none" | "VCR distortion") => {
+			shaderType.value = type;
+		};
+
+		return {
+			bottomMoreInstance,
+			maskInstance,
+			shaderType,
+			setBottomMoreInstance,
+			setMaskInstance,
+			setShaderType,
+		};
 	},
 );

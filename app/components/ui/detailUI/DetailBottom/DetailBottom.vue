@@ -10,6 +10,10 @@ import Television from "~/components/exhibit/Television.vue";
 const detailStore = useDetailStore();
 const moreRef = ref<DetailBottomMoreInstance | null>(null);
 
+const handleClick = () => {
+	detailStore.setShaderType("VCR distortion");
+};
+
 onMounted(() => {
 	detailStore.setBottomMoreInstance(moreRef.value);
 });
@@ -21,7 +25,7 @@ onMounted(() => {
 		<DetailBottomNavigation />
 		<DetailBottomMore ref="moreRef" />
 		<div class="bottom_bar">
-			<div class="exhibit_container hoverable"><Television /></div>
+			<div class="exhibit_container hoverable" @click="handleClick"><Television /></div>
 			<DetailBottomLinks />
 			<div class="exhibit_container hoverable"><Television /></div>
 		</div>

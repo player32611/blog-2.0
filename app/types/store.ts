@@ -36,6 +36,7 @@ export type BlogActions = {
 export type DetailState = {
 	bottomMoreInstance: Ref<DetailBottomMoreInstance | null>;
 	maskInstance: Ref<DetailMaskInstance | null>;
+	shaderType: Ref<"none" | "VCR distortion">;
 };
 
 export type DetailGetter = {};
@@ -43,6 +44,7 @@ export type DetailGetter = {};
 export type DetailActions = {
 	setBottomMoreInstance: (instance: DetailBottomMoreInstance | null) => void;
 	setMaskInstance: (mask: DetailMaskInstance | null) => void;
+	setShaderType: (type: "none" | "VCR distortion") => void;
 };
 
 export type ImageState = {
