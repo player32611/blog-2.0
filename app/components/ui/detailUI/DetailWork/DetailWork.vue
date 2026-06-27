@@ -23,7 +23,7 @@ const activeIndex = ref<number>(-1);
 const direction = ref<"forward" | "backward">("forward");
 
 const totalHeight: number = 5 * window.innerHeight;
-const triggerPoints: { start: number; end: number }[] = Array.from({ length: 5 }, (_, index) => {
+const triggerPoints: { start: number; end: number }[] = Array.from({ length: 3 }, (_, index) => {
 	return {
 		start: index * window.innerHeight,
 		end: (index + 1) * window.innerHeight,

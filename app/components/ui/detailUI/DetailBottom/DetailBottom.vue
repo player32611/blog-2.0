@@ -5,6 +5,7 @@ import DetailBottomContent from "./DetailBottomContent.vue";
 import DetailBottomLinks from "./DetailBottomLinks.vue";
 import DetailBottomMore from "./DetailBottomMore.vue";
 import DetailBottomNavigation from "./DetailBottomNavigation.vue";
+import Television from "~/components/exhibit/Television.vue";
 
 const detailStore = useDetailStore();
 const moreRef = ref<DetailBottomMoreInstance | null>(null);
@@ -19,7 +20,11 @@ onMounted(() => {
 		<DetailBottomContent />
 		<DetailBottomNavigation />
 		<DetailBottomMore ref="moreRef" />
-		<DetailBottomLinks />
+		<div class="bottom_bar">
+			<div class="exhibit_container hoverable"><Television /></div>
+			<DetailBottomLinks />
+			<div class="exhibit_container hoverable"><Television /></div>
+		</div>
 	</div>
 </template>
 
@@ -28,9 +33,16 @@ onMounted(() => {
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
 	height: 100vh;
 	width: 100%;
+
+	.bottom_bar {
+		display: flex;
+		justify-content: space-evenly;
+		align-items: end;
+		width: 100%;
+	}
 }
 </style>
