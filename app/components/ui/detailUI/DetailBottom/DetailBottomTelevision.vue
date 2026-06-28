@@ -1,8 +1,15 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const detailStore = useDetailStore();
+
+const handleClick = () => {
+	if (detailStore.shaderType === "none") detailStore.setShaderType("VCR distortion");
+	else detailStore.setShaderType("none");
+};
+</script>
 
 <template>
 	<!-- From Uiverse.io by Sophiek9h -->
-	<div class="television">
+	<div class="bottom_television hoverable" @click="handleClick">
 		<div class="antenna">
 			<div class="antenna_shadow"></div>
 			<div class="a1"></div>
@@ -66,7 +73,7 @@
 /* From Uiverse.io by Sophiek9h */
 /* Design Inspired by one of Stefan Devai's Design on Dribble */
 
-.television {
+.bottom_television {
 	display: flex;
 	flex-direction: column;
 	align-items: center;

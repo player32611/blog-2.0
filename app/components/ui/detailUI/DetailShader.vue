@@ -15,11 +15,11 @@ import fragmentShader from "@/assets/shaders/VCR_distortion.frag?raw";
 const detailStore = useDetailStore();
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 
-let renderer: WebGLRenderer;
-let scene: Scene;
-let camera: OrthographicCamera;
-let material: ShaderMaterial;
-let animationId = 0;
+let renderer: WebGLRenderer | null = null;
+let scene: Scene | null = null;
+let camera: OrthographicCamera | null = null;
+let material: ShaderMaterial | null = null;
+let animationId: number | null = 0;
 
 const resize = () => {
 	if (!renderer || !material) return;
@@ -36,13 +36,13 @@ const animate = () => {
 	console.log("anim");
 	animationId = requestAnimationFrame(animate);
 
-	if (material.uniforms.uTime) material.uniforms.uTime.value = performance.now() / 1000;
-
-	renderer.render(scene, camera);
+	if (material && material.uniforms.uTime) material.uniforms.uTime.value = performance.now() / 1000;
+	if (renderer && scene && camera) renderer.render(scene, camera);
 };
 
 const createShader = () => {
 	if (!canvasRef.value) return;
+
 	renderer = new WebGLRenderer({
 		canvas: canvasRef.value,
 		alpha: true,
@@ -77,18 +77,33 @@ const createShader = () => {
 	scene.add(new Mesh(new PlaneGeometry(2, 2), material));
 };
 
+const clearShader = () => {
+	if (animationId) {
+		cancelAnimationFrame(animationId);
+		animationId = null;
+	}
+
+	if (material) {
+		material.dispose();
+		material = null;
+	}
+
+	if (renderer) {
+		renderer.dispose();
+		renderer = null;
+	}
+};
+
 watch(
 	() => detailStore.shaderType,
 	newState => {
-		if (material) material.dispose();
-		if (renderer) renderer.dispose();
+		clearShader();
 		switch (newState) {
 			case "VCR distortion":
 				createShader();
 				animate();
 				break;
 			default:
-				cancelAnimationFrame(animationId);
 				break;
 		}
 	},
@@ -99,15 +114,13 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-	cancelAnimationFrame(animationId);
+	clearShader();
 	window.removeEventListener("resize", resize);
-	if (material) material.dispose();
-	if (renderer) renderer.dispose();
 });
 </script>
 
 <template>
-	<canvas class="detail_shader" ref="canvasRef"></canvas>
+	<canvas class="detail_shader" ref="canvasRef" v-show="detailStore.shaderType !== 'none'"></canvas>
 </template>
 
 <style scoped lang="scss">
