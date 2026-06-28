@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Walking from "~/components/exhibit/Walking.vue";
+
 const detailStore = useDetailStore();
 
 const handleClick = () => {
@@ -38,7 +40,7 @@ const handleClick = () => {
 				<div class="screen_out">
 					<div class="screen_out1">
 						<div class="screen">
-							<span class="notfound_text">Check Your Network :(</span>
+							<Walking v-if="detailStore.shaderType === 'VCR distortion'" />
 						</div>
 					</div>
 				</div>
@@ -255,17 +257,6 @@ const handleClick = () => {
 						color: #252525;
 						letter-spacing: 0.15em;
 						text-align: center;
-
-						.notfound_text {
-							background-color: black;
-							padding-left: 0.3em;
-							padding-right: 0.3em;
-							font-size: 0.75em;
-							color: white;
-							letter-spacing: 0;
-							border-radius: 5px;
-							z-index: 10;
-						}
 					}
 				}
 			}
