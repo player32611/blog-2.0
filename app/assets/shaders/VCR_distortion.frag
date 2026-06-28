@@ -1,3 +1,5 @@
+// 作者：ryk
+
 precision highp float;
 
 uniform float uTime;

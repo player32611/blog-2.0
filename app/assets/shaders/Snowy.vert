@@ -1,3 +1,5 @@
+// 作者：HeGu
+
 varying vec2 vUv;
 
 void main() {

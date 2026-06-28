@@ -1,3 +1,5 @@
+// 作者：HeGu
+
 precision highp float;
 
 uniform float uTime;

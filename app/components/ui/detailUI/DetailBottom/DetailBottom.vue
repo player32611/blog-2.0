@@ -23,6 +23,7 @@ onMounted(() => {
 		<div class="bottom_bar">
 			<DetailBottomTelevision />
 			<DetailBottomLinks />
+			<DetailBottomTelevision />
 			<!-- <div class="exhibit_container hoverable"><Television /></div> -->
 		</div>
 	</div>
