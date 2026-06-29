@@ -5,7 +5,7 @@ import type {
 	ImagePosData,
 	MusicInfo,
 } from "./common";
-import type { BlogCollections, MusicPlayingMode } from "./config";
+import type { BlogCollections, BlogCollectionItems, MusicPlayingMode } from "./config";
 import type {
 	BlogMaskInstance,
 	BlogMenuInstance,
@@ -15,20 +15,14 @@ import type {
 } from "./components";
 
 export type BlogState = {
-	activeBlogCollection: Ref<BlogCollections>;
-	activeBlogContent: Ref<BlogContent>;
 	maskInstance: Ref<BlogMaskInstance | null>;
 	menuInstance: Ref<BlogMenuInstance | null>;
 };
 
-export type BlogGetter = {
-	activePath: ComputedRef<string>;
-};
+export type BlogGetter = {};
 
 export type BlogActions = {
-	setActiveBlogCollection: (newCollection: BlogCollections) => void;
-	setActiveBlogContent: (newContent: BlogContent) => void;
-	useBlogContent: () => Ref<any>;
+	useBlogContent: (content: BlogCollections) => Promise<BlogCollectionItems | null>;
 	setBlogInstance: (mask: BlogMaskInstance | null, menu: BlogMenuInstance | null) => void;
 	changeBlogMenuState: () => void;
 };

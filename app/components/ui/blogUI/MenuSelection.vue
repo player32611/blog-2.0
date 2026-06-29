@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import type { BlogMenuSelectionParams } from "~/types/components";
 
-const { collections, contentPath, contentTitle } = defineProps<BlogMenuSelectionParams>();
-const { setActiveBlogCollection, setActiveBlogContent, changeBlogMenuState } = useBlogStore();
+const { contentPath, contentTitle } = defineProps<BlogMenuSelectionParams>();
+const { loadingNavigate } = useLoadingStore();
 
 const handleClick = () => {
-	setActiveBlogCollection(collections);
-	setActiveBlogContent(contentPath);
-	changeBlogMenuState();
+	loadingNavigate(`/blogs/${contentPath}`);
 };
 </script>
 

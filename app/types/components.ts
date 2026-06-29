@@ -34,7 +34,6 @@ export interface BlogMenuSelecterParams {
 }
 
 export interface BlogMenuSelectionParams {
-	collections: BlogCollections;
 	contentPath: BlogContent;
 	contentTitle?: string;
 }
@@ -42,7 +41,7 @@ export interface BlogMenuSelectionParams {
 export interface BlogNavigationParams {
 	page: globalThis.Ref<any, any>;
 }
-``;
+
 export interface DetailBottomMoreInstance {
 	triggerAnim: () => void;
 }

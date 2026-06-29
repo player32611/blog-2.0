@@ -2,6 +2,7 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
+import type { BlogCollectionItems, BlogCollections } from "~/types/config";
 import type { BlogMaskInstance, BlogMenuInstance } from "~/types/components";
 
 import BlogBackGround from "~/components/ui/blogUI/BlogBackGround.vue";
@@ -13,21 +14,22 @@ import Button from "~/components/ui/common/Button.vue";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
+const route = useRoute();
+
 const blogStore = useBlogStore();
 const { loadingNavigate } = useLoadingStore();
 const maskRef = ref<BlogMaskInstance | null>(null);
 const menuRef = ref<BlogMenuInstance | null>(null);
-const page = blogStore.useBlogContent();
+const page = ref<BlogCollectionItems | null>(null);
 const smoother = ref<ScrollSmoother | null>(null);
+
+const slug = computed(() => route.params.slug as BlogCollections);
 
 usePageReady();
 
-watch(
-	() => blogStore.activeBlogContent,
-	() => {
-		document.title = blogStore.activeBlogContent;
-	},
-);
+blogStore.useBlogContent(slug.value).then(res => {
+	page.value = res;
+});
 
 onMounted(() => {
 	smoother.value = ScrollSmoother.create({
@@ -36,12 +38,11 @@ onMounted(() => {
 		smooth: 1,
 	});
 	blogStore.setBlogInstance(maskRef.value, menuRef.value);
-	document.title = blogStore.activeBlogContent;
+	document.title = slug.value;
 });
 
 onUnmounted(() => {
 	smoother.value?.kill();
-	blogStore.setBlogInstance(null, null);
 });
 </script>
 

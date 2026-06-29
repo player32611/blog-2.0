@@ -5,30 +5,8 @@ import type { BlogCollections } from "~/types/config";
 import type { BlogState, BlogGetter, BlogActions } from "@/types/store";
 
 export const useBlogStore = defineStore("blog", (): BlogState & BlogGetter & BlogActions => {
-	const activeBlogCollection = ref<BlogCollections>("front_end");
-	const activeBlogContent = ref<BlogContent>("html");
 	const maskInstance = ref<BlogMaskInstance | null>(null);
 	const menuInstance = ref<BlogMenuInstance | null>(null);
-
-	const activePath = computed(() => {
-		return `/${activeBlogCollection.value}/${activeBlogContent.value}`;
-	});
-
-	/**
-	 * 设置当前激活的博客分类
-	 * @param newCollection - 新的博客分类，类型为 BlogCollections
-	 */
-	function setActiveBlogCollection(newCollection: BlogCollections) {
-		activeBlogCollection.value = newCollection;
-	}
-
-	/**
-	 * 设置当前激活的博客内容
-	 * @param newContent - 新的博客内容，类型为 BlogContent（字符串类型）
-	 */
-	function setActiveBlogContent(newContent: BlogContent) {
-		activeBlogContent.value = newContent;
-	}
 
 	/**
 	 * 获取当前激活路径对应的博客内容数据
@@ -38,17 +16,18 @@ export const useBlogStore = defineStore("blog", (): BlogState & BlogGetter & Blo
 	 *
 	 * @returns 返回包含博客页面数据的响应式引用对象，类型为 MaybeRef<unknown>
 	 */
-	function useBlogContent() {
-		const { data: page } = useAsyncData(
-			activePath.value,
-			() => {
-				return queryCollection(activeBlogCollection.value).path(activePath.value).first();
-			},
-			{
-				watch: [activePath],
-			},
-		);
-		return page;
+	async function useBlogContent(content: BlogCollections) {
+		for (const collection of BLOG_COLLECTIONS) {
+			try {
+				const result = await queryCollection(collection).path(`/${collection}/${content}`).first();
+				if (result) {
+					return result;
+				}
+			} catch (error) {
+				continue;
+			}
+		}
+		return null;
 	}
 
 	function setBlogInstance(mask: BlogMaskInstance | null, menu: BlogMenuInstance | null) {
@@ -62,14 +41,10 @@ export const useBlogStore = defineStore("blog", (): BlogState & BlogGetter & Blo
 			menuInstance.value.changeMenu();
 		}
 	}
+
 	return {
-		activeBlogCollection,
-		activeBlogContent,
 		maskInstance,
 		menuInstance,
-		activePath,
-		setActiveBlogCollection,
-		setActiveBlogContent,
 		useBlogContent,
 		setBlogInstance,
 		changeBlogMenuState,

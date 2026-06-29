@@ -3,8 +3,7 @@ import type { DayTime } from "~/types/common";
 import Button from "~/components/ui/common/Button.vue";
 import FaultText from "../common/FaultText.vue";
 
-const hp = ref<number>(92);
-
+const blogStore = useBlogStore();
 const { loadingNavigate } = useLoadingStore();
 const currentTime = ref<DayTime>(formatDateTime(Date.now()));
 const timeInterval = ref<number>(1000);
@@ -43,7 +42,7 @@ onUnmounted(() => {
 				:text="'blog'"
 				:size="'large'"
 				:icon="'&#xe99c;'"
-				@click="loadingNavigate('/blogs')"
+				@click="loadingNavigate('/blogs/html')"
 			></Button>
 			<Button
 				:text="'music'"

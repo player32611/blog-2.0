@@ -46,7 +46,6 @@ const handleClick = () => {
 			<MenuSelection
 				v-for="content in contents"
 				:key="content.path"
-				:collections="collections"
 				:content-path="getContentPath(content)"
 				:content-title="getContentTitle(content, getContentPath(content))"
 			/>

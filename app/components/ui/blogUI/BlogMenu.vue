@@ -9,13 +9,6 @@ import Astronaut from "~/components/exhibit/Astronaut.vue";
 const menuRef = ref<HTMLDivElement | null>(null);
 const menuState = ref<"in" | "out">("in");
 const time = ref<number>(0.75);
-const blogCollections: BlogCollections[] = [
-	"front_end",
-	"back_end",
-	"gms2",
-	"algorithm",
-	"deep_learning",
-];
 
 const menuIn = () => {
 	gsap.timeline().to(menuRef.value, {
@@ -59,7 +52,7 @@ defineExpose({
 			</div>
 			<div class="menu_selecter_box">
 				<MenuSelecter
-					v-for="collection in blogCollections"
+					v-for="collection in BLOG_COLLECTIONS"
 					:key="collection"
 					:collections="collection"
 				/>

@@ -1,4 +1,19 @@
+import type {
+	AlgorithmCollectionItem,
+	BackEndCollectionItem,
+	DeepLearningCollectionItem,
+	FrontEndCollectionItem,
+	Gms2CollectionItem,
+} from "@nuxt/content";
+
 export type BlogCollections = "front_end" | "back_end" | "gms2" | "algorithm" | "deep_learning";
+
+export type BlogCollectionItems =
+	| FrontEndCollectionItem
+	| BackEndCollectionItem
+	| Gms2CollectionItem
+	| AlgorithmCollectionItem
+	| DeepLearningCollectionItem;
 
 /**
  * 音乐播放模式类型定义
