@@ -751,7 +751,7 @@ int size() {
 
 2：对于 i 的孩子，直接`edges[i].push_back;`进去即可。
 
-![treelist-vector](/images/algorithm/data-structure/treelist-vector.png)
+![treelist-vector](/images/content/algorithm/data-structure/treelist-vector.png)
 
 ```cpp
 #include<iostream>
@@ -819,7 +819,7 @@ int main() {
 
 深度优先遍历，英文缩写为 DFS，全称是 Depth First Search，是一种用于遍历或搜索树或图的算法。所谓深度优先，就是说每次都尝试向更深的结点走，也就是一条路走到黑。当一条路走完，走到不能再走的时候，那就回去，继续找别的路。
 
-![DFS](/images/algorithm/data-structure/DFS.png)
+![DFS](/images/content/algorithm/data-structure/DFS.png)
 
 ::code-group
 
@@ -1972,7 +1972,7 @@ Trie 树又叫字典树或前缀树，是一种能够快速插入和查询字符
 #default
 例如，要存储 `"abc"`、`"abd"`、`"acde"` 以及 `"cd"` 时，构建的字典树如下：
 
-![创建的 Trie 树](/images/algorithm/data-structure/trie-tree.png)
+![创建的 Trie 树](/images/content/algorithm/data-structure/trie-tree.png)
 
 ::
 

@@ -12,7 +12,7 @@ SGD 是一个简单的方法，比起胡乱地搜索参数空间，也算是 “
 
 用数学式可以将 SGD 写成如下的式：
 
-![SGD数学式](/images/deep-learning/learning-skill/SGD.png)
+![SGD数学式](/images/content/deep-learning/learning-skill/SGD.png)
 
 > $W$：需要更新的权重参数
 >
@@ -83,7 +83,7 @@ optimizer.update(params, grads)
 
 $$ f(x, y) = \frac{1}{20}x^2 + y^2 $$
 
-![图形（左图）和等高线（右图）](/images/deep-learning/learning-skill/SGD-example.png)
+![图形（左图）和等高线（右图）](/images/content/deep-learning/learning-skill/SGD-example.png)
 
 > $f(x, y) = \frac{1}{20}x^2 + y^2$ 的图形（左图）和它的等高线（右图）
 
@@ -91,13 +91,13 @@ $$ f(x, y) = \frac{1}{20}x^2 + y^2 $$
 
 如果用图表示梯度的话，则如下所示：
 
-![梯度图](/images/deep-learning/learning-skill/SGD-gradient.png)
+![梯度图](/images/content/deep-learning/learning-skill/SGD-gradient.png)
 
 这个梯度的特征是，y 轴方向上大，x 轴方向上小。换句话说，就是 y 轴方向的坡度大，而 x 轴方向的坡度小。这里需要注意的是，虽然这个函数的最小值在 (x,y)=(0,0) 处，但是图中的梯度在很多地方并没有指向(0,0)。
 
 我们来尝试对这种形状的函数应用 SGD。从 (x,y)=(−7.0,2.0) 处（初始值）开始搜索：
 
-![基于SGD的最优化的更新路径：呈 “之” 字形朝最小值(0,0)移动，效率低](/images/deep-learning/learning-skill/SGD-search.png)
+![基于SGD的最优化的更新路径：呈 “之” 字形朝最小值(0,0)移动，效率低](/images/content/deep-learning/learning-skill/SGD-search.png)
 
 结果显示，SGD 呈 “之” 字形移动。这是一个相当低效的路径。也就是说，SGD 的缺点是，如果函数的形状非均向（anisotropic），比如呈延伸状，搜索的路径就会非常低效。
 
@@ -111,7 +111,7 @@ $$ f(x, y) = \frac{1}{20}x^2 + y^2 $$
 
 **Momentum**是 “动量” 的意思，和物理有关。用数学式表示 Momentum 方法，如下所示：
 
-![Momentum 数学式](/images/deep-learning/learning-skill/Momentum.png)
+![Momentum 数学式](/images/content/deep-learning/learning-skill/Momentum.png)
 
 > $W$：需要更新的权重参数
 >
@@ -134,7 +134,7 @@ $$ f(x, y) = \frac{1}{20}x^2 + y^2 $$
 #default
 Momentum 方法给人的感觉就像是小球在地面上滚动：
 
-![小球滚动](/images/deep-learning/learning-skill/Momentum-ball.png)
+![小球滚动](/images/content/deep-learning/learning-skill/Momentum-ball.png)
 
 ::
 
@@ -167,7 +167,7 @@ class Momentum:
 
 现在尝试使用 Momentum 解决函数 $f(x, y) = \frac{1}{20}x^2 + y^2$ 的最优化问题：
 
-![基于 Momentum 的最优化的更新路径](/images/deep-learning/learning-skill/Momentum-search.png)
+![基于 Momentum 的最优化的更新路径](/images/content/deep-learning/learning-skill/Momentum-search.png)
 
 可以看到，更新路径就像小球在碗中滚动一样。
 
@@ -185,7 +185,7 @@ class Momentum:
 
 AdaGrad 会为参数的每个元素适当地调整学习率，与此同时进行学习（AdaGrad 的 Ada 来自英文单词 Adaptive，即 “适当的” 的意思）。
 
-![AdaGrad 数学式](/images/deep-learning/learning-skill/AdaGrad.png)
+![AdaGrad 数学式](/images/content/deep-learning/learning-skill/AdaGrad.png)
 
 > $W$：需要更新的权重参数
 >
@@ -233,7 +233,7 @@ class AdaGrad:
 
 现在，让我们试着使用 AdaGrad 解决函数 $f(x, y) = \frac{1}{20}x^2 + y^2$ 的最优化问题：
 
-![基于 AdaGrad 的最优化的更新路径](/images/deep-learning/learning-skill/AdaGrad-search.png)
+![基于 AdaGrad 的最优化的更新路径](/images/content/deep-learning/learning-skill/AdaGrad-search.png)
 
 可知，函数的取值高效地向着最小值移动。由于 y 轴方向上的梯度较大，因此刚开始变动较大，但是后面会根据这个较大的变动按比例进行调整，减小更新的步伐。因此，y 轴方向上的更新程度被减弱，“之” 字形的变动程度有所衰减。
 
@@ -268,7 +268,7 @@ class Adam:
 
 现在尝试使用 Adam 解决函数 $f(x, y) = \frac{1}{20}x^2 + y^2$ 的最优化问题：
 
-![基于 Adam 的最优化的更新路径](/images/deep-learning/learning-skill/Adam-search.png)
+![基于 Adam 的最优化的更新路径](/images/content/deep-learning/learning-skill/Adam-search.png)
 
 基于 Adam 的更新过程就像小球在碗中滚动一样。虽然 Momentun 也有类似的移动，但是相比之下，Adam 的小球左右摇晃的程度有所减轻。这得益于学习的更新程度被适当地调整了。
 
@@ -348,7 +348,7 @@ for key in optimizers:
 plt.show()
 ```
 
-![最优化方法的比较：SGD、Momentum、AdaGrad、Adam](/images/deep-learning/learning-skill/optimizer-compare.png)
+![最优化方法的比较：SGD、Momentum、AdaGrad、Adam](/images/content/deep-learning/learning-skill/optimizer-compare.png)
 
 根据使用的方法不同，参数更新的路径也不同。只看这个图的话，AdaGrad 似乎是最好的，不过也要注意，结果会根据要解决的问题而变。并且，很显然，超参数（学习率等）的设定值不同，结果也会发生变化。
 
@@ -432,7 +432,7 @@ plt.show()
 
 > 这个实验以一个 5 层神经网络为对象，其中每层有 100 个神经元。激活函数使用的是 ReLU。
 
-![基于MNIST数据集的更新方法的比较](/images/deep-learning/learning-skill/optimizer-compare-mnist.png)
+![基于MNIST数据集的更新方法的比较](/images/content/deep-learning/learning-skill/optimizer-compare-mnist.png)
 
 从图中结果可知，与 SGD 相比，其他 3 种方法学习得更快，而且速度基本相同，仔细看的话，AdaGrad 的学习进行得稍微快一点。这个实验需要注意的地方是，实验结果会随学习率等超参数、神经网络的结构（几层深等）的不同而发生变化。不过，一般而言，与 SGD 相比，其他 3 种方法可以学习得更快，有时最终的识别精度也更高。
 
@@ -533,7 +533,7 @@ plt.show()
 
 运行这段代码后，可以得到使用标准差为 **1** 的高斯分布作为权重初始值时的各层激活值的分布：
 
-![使用标准差为 1 的高斯分布作为权重初始值时的各层激活值的分布](/images/deep-learning/learning-skill/activation-distribution-1.png)
+![使用标准差为 1 的高斯分布作为权重初始值时的各层激活值的分布](/images/content/deep-learning/learning-skill/activation-distribution-1.png)
 
 观察结果，可以发现，各层的激活值呈偏向 0 和 1 的分布。
 
@@ -541,7 +541,7 @@ plt.show()
 
 下面，将权重的标准差设为 **0.01**，进行相同的实验：
 
-![使用标准差为 0.01 的高斯分布作为权重初始值时的各层激活值的分布](/images/deep-learning/learning-skill/activation-distribution-0.01.png)
+![使用标准差为 0.01 的高斯分布作为权重初始值时的各层激活值的分布](/images/content/deep-learning/learning-skill/activation-distribution-0.01.png)
 
 这次呈集中在 0.5 附近的分布。因为不像刚才的例子那样偏向 0 和 1，所以不会发生梯度消失的问题。
 
@@ -566,13 +566,13 @@ plt.show()
 
 Xavier 的论文中，为了使各层的激活值呈现出具有相同广度的分布，推导了合适的权重尺度。推导出的结论是，**如果前一层的节点数为 $n$，则初始值使用标准差为 $\sqrt{\frac{1}{n}}$ 的分布**。
 
-![Xavier 初始值](/images/deep-learning/learning-skill/xavier-initial-value.png)
+![Xavier 初始值](/images/content/deep-learning/learning-skill/xavier-initial-value.png)
 
 使用 Xavier 初始值后，前一层的节点数越多，要设定为目标节点的初始值的权重尺度就越小。
 
 ::
 
-![使用 Xavier 初始值作为权重初始值时的各层激活值的分布](/images/deep-learning/learning-skill/activation-distribution-xavier.png)
+![使用 Xavier 初始值作为权重初始值时的各层激活值的分布](/images/content/deep-learning/learning-skill/activation-distribution-xavier.png)
 
 从这个结果可知，越是后面的层，图像变得越歪斜，但是呈现了比之前更有广度的分布。因为各层间传递的数据有适当的广度，所以 sigmoid 函数的表现力不受限制，有望进行高效的学习。
 
@@ -604,7 +604,7 @@ Xavier 初始值与 He 初始值的对比
 
 现在来看一下激活函数使用 ReLU 时激活值的分布，依次是权重初始值为标准差是 0.01 的高斯分布时、初始值为 Xavier 初始值时、初始值为 He 初始值时的结果：
 
-![激活函数使用ReLU时,不同权重初始值的激活值分布的变化](/images/deep-learning/learning-skill/activation-distribution-relu.png)
+![激活函数使用ReLU时,不同权重初始值的激活值分布的变化](/images/content/deep-learning/learning-skill/activation-distribution-relu.png)
 
 - 当初始值为标准差是 0.01 的高斯分布时，各层的激活值非常小。神经网络上传递的是非常小的值，说明逆向传播时权重的梯度也同样很小。这是很严重的问题，实际上学习基本上没有进展。
 
@@ -692,7 +692,7 @@ plt.show()
 
 ::
 
-![基于MNIST数据集的权重初始值的比较：横轴是学习的迭代次数（iterations），纵轴是损失函数的值（loss）](/images/deep-learning/learning-skill/weight-init-comparison.png)
+![基于MNIST数据集的权重初始值的比较：横轴是学习的迭代次数（iterations），纵轴是损失函数的值（loss）](/images/content/deep-learning/learning-skill/weight-init-comparison.png)
 
 从图中的结果可知，初始值为标准差是 0.01 的高斯分布时完全无法进行学习。这和刚才观察到的激活值的分布一样，是因为正向传播中传递的值很小（集中在 0 附近的数据）。因此，逆向传播时求到的梯度也很小，权重几乎不进行更新。
 
@@ -726,11 +726,11 @@ Batch Norm 的优点：
 
 Batch Norm 的思路是调整各层的激活值分布使其拥有适当的广度。为此，要向神经网络中插入对数据分布进行正规化的层，即 Batch Normalization 层（下文简称 Batch Norm 层）：
 
-![使用了 Batch Normalization 的神经网络的例子（Batch Norm 层的背景为灰色）](/images/deep-learning/learning-skill/batch-norm.png)
+![使用了 Batch Normalization 的神经网络的例子（Batch Norm 层的背景为灰色）](/images/content/deep-learning/learning-skill/batch-norm.png)
 
 Batch Norm，顾名思义，以进行学习时的 mini-batch 为单位，按 minibatch 进行正规化。具体而言，就是进行使数据分布的均值为 0、方差为 1 的正规化。用数学式表示的话，如下所示：
 
-![Batch Norm 的算法](/images/deep-learning/learning-skill/batch-norm-algorithm.png)
+![Batch Norm 的算法](/images/content/deep-learning/learning-skill/batch-norm-algorithm.png)
 
 > $\mu_B$： minibatch 中数据的均值
 >
@@ -742,13 +742,13 @@ Batch Norm，顾名思义，以进行学习时的 mini-batch 为单位，按 min
 
 接着，Batch Norm 层会对正规化后的数据进行缩放和平移的变换，用数学式可以如下表示：
 
-![Batch Norm 层对输入数据的变换](/images/deep-learning/learning-skill/batch-norm-transform.png)
+![Batch Norm 层对输入数据的变换](/images/content/deep-learning/learning-skill/batch-norm-transform.png)
 
 > $\gamma$ 和 $\beta$：两个参数，分别对输入数据进行缩放和平移的变换，一开始设置为 1 和 0，然后再通过学习调整到合适的值。
 
 上面就是 Batch Norm 的算法。这个算法是神经网络上的正向传播。如果使用计算图，Batch Norm 可以表示为：
 
-![Batch Norm 的计算图](/images/deep-learning/learning-skill/batch-norm-graph.png)
+![Batch Norm 的计算图](/images/content/deep-learning/learning-skill/batch-norm-graph.png)
 
 ### Batch Normalization 的评估
 
@@ -842,13 +842,13 @@ for i, w in enumerate(weight_scale_list):
 plt.show()
 ```
 
-![基于 Batch Norm 的效果：使用 Batch Norm 后，学习进行得更快了](/images/deep-learning/learning-skill/batch-norm-result.png)
+![基于 Batch Norm 的效果：使用 Batch Norm 后，学习进行得更快了](/images/content/deep-learning/learning-skill/batch-norm-result.png)
 
 从图中的结果可知，使用 Batch Norm 后，学习进行得更快了。
 
 接着，给予不同的初始值尺度，观察学习的过程如何变化：
 
-![图中的实线是使用了 Batch Norm时的结果，虚线是没有使用 Batch Norm 时的结果：图的标题处标明了权重初始值的标准差](/images/deep-learning/learning-skill/weight-init-scale-result.png)
+![图中的实线是使用了 Batch Norm时的结果，虚线是没有使用 Batch Norm 时的结果：图的标题处标明了权重初始值的标准差](/images/content/deep-learning/learning-skill/weight-init-scale-result.png)
 
 我们发现，几乎所有的情况下都是使用 Batch Norm 时学习进行得更快。同时也可以发现，实际上，在不使用 Batch Norm 的情况下，如果不赋予一个尺度好的初始值，学习将完全无法进行。
 
@@ -950,7 +950,7 @@ plt.legend(loc='lower right')
 plt.show()
 ```
 
-![训练数据（train）和测试数据（test）的识别精度的变化](/images/deep-learning/learning-skill/overfitting-result.png)
+![训练数据（train）和测试数据（test）的识别精度的变化](/images/content/deep-learning/learning-skill/overfitting-result.png)
 
 过了 100 个 epoch 左右后，用训练数据测量到的识别精度几乎都为 100%。但是，对于测试数据，离 100% 的识别精度还有较大的差距。如此大的识别精度差距，是只拟合了训练数据的结果。从图中可知，模型对训练时没有使用的一般数据（测试数据）拟合得不是很好。
 
@@ -988,7 +988,7 @@ L2 范数、L1 范数、L∞ 范数都可以用作正则化项，它们各有各
 
 现在我们来进行实验。对于刚刚进行的实验，应用 λ=0.1 的权值衰减：
 
-![使用了权值衰减的训练数据（train）和测试数据（test）的识别精度的变化](/images/deep-learning/learning-skill/weight-decay-result.png)
+![使用了权值衰减的训练数据（train）和测试数据（test）的识别精度的变化](/images/content/deep-learning/learning-skill/weight-decay-result.png)
 
 虽然训练数据的识别精度和测试数据的识别精度之间有差距，但是与没有使用权值衰减的结果相比，差距变小了。这说明过拟合受到了抑制。
 
@@ -1000,7 +1000,7 @@ L2 范数、L1 范数、L∞ 范数都可以用作正则化项，它们各有各
 
 Dropout 是一种在学习的过程中随机删除神经元的方法。训练时，随机选出隐藏层的神经元，然后将其删除。被删除的神经元不再进行信号的传递。
 
-![Dropout的概念图：左边是一般的神经网络，右边是应用了 Dropout 的网络](/images/deep-learning/learning-skill/dropout.png)
+![Dropout的概念图：左边是一般的神经网络，右边是应用了 Dropout 的网络](/images/content/deep-learning/learning-skill/dropout.png)
 
 > 左边是一般的神经网络，右边是应用了 Dropout 的网络
 >
@@ -1175,7 +1175,7 @@ class Trainer:
 
 Dropout 的实验和前面的实验一样，使用 7 层网络（每层有 100 个神经元，激活函数为 ReLU），一个使用 Dropout，另一个不使用 Dropout，实验的结果如下图所示：
 
-![左边没有使用 Dropout，右边使用了 Dropout（dropout_rate=0.15）](/images/deep-learning/learning-skill/dropout-example.png)
+![左边没有使用 Dropout，右边使用了 Dropout（dropout_rate=0.15）](/images/content/deep-learning/learning-skill/dropout-example.png)
 
 > 左边没有使用 Dropout，右边使用了 Dropout（dropout_rate=0.15）
 
@@ -1396,7 +1396,7 @@ plt.show()
 
 结果如下图所示：
 
-![超参数的验证](/images/deep-learning/learning-skill/hyper-parameter-verification.png)
+![超参数的验证](/images/content/deep-learning/learning-skill/hyper-parameter-verification.png)
 
 > 实线是验证数据的识别精度，虚线是训练数据的识别精度
 

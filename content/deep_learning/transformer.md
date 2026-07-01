@@ -76,13 +76,13 @@
 
 为了创建一个神经网络来弄清楚我们应该将哪些数字与每个词关联，我们首先为每个独特的词创建输入：
 
-<img src="/images/deep-learning/transformer/words-input.png" alt="词的输入" width="60" />
+<img src="/images/content/deep-learning/transformer/words-input.png" alt="词的输入" width="60" />
 
 > 在这个例子中我们的训练数据中有四个独特的词，因此我们有四个输入
 
 现在我们将每个输入链接到至少一个激活函数：
 
-<img src="/images/deep-learning/transformer/words-activation.png" alt="词的激活" width="160" />
+<img src="/images/content/deep-learning/transformer/words-activation.png" alt="词的激活" width="160" />
 
 > 这个激活函数使用恒等函数
 
@@ -90,7 +90,7 @@
 
 如果我们想要与每个词关联两个数字，这意味着我们将使用两个激活函数，并且连接到第二个激活函数的权重将是与每个词关联的另一个数字：
 
-<img src="/images/deep-learning/transformer/words-activation-two.png" alt="两个激活函数" width="170" />
+<img src="/images/content/deep-learning/transformer/words-activation-two.png" alt="两个激活函数" width="170" />
 
 像往常一样，这些权重一开始都是随机值，这些权重将通过反向传播进行优化。
 
@@ -102,11 +102,11 @@
 
 <div style="display: flex;align-items: center;">
 
-<img src="/images/deep-learning/transformer/words-prediction-1000.png" alt="输入 Troll 2" width="60" />
+<img src="/images/content/deep-learning/transformer/words-prediction-1000.png" alt="输入 Troll 2" width="60" />
 
 ——> 经过计算 ——>
 
-<img src="/images/deep-learning/transformer/words-result-0100.png" alt="输出 is" width="60" />
+<img src="/images/content/deep-learning/transformer/words-result-0100.png" alt="输出 is" width="60" />
 
 </div>
 
@@ -114,11 +114,11 @@
 
 <div style="display: flex;align-items: center;">
 
-<img src="/images/deep-learning/transformer/words-prediction-0100.png" alt="输入 is" width="60" />
+<img src="/images/content/deep-learning/transformer/words-prediction-0100.png" alt="输入 is" width="60" />
 
 ——> 经过计算 ——>
 
-<img src="/images/deep-learning/transformer/words-result-0010.png" alt="输出 great" width="60" />
+<img src="/images/content/deep-learning/transformer/words-result-0010.png" alt="输出 great" width="60" />
 
 </div>
 
@@ -126,7 +126,7 @@
 
 然后我们通过 Softmax 函数运行输出，因为我们有多个分类输出。
 
-![预测结果](/images/deep-learning/transformer/words-softmax.png)
+![预测结果](/images/content/deep-learning/transformer/words-softmax.png)
 
 这意味着我们可以使用交叉熵损失函数进行反向传播。
 
@@ -136,17 +136,17 @@
 
 假设在训练之前，该神经网络能正确处理 "Troll 2" 的输入计算并正确预测下一个词 "is"：
 
-![正确预测](/images/deep-learning/transformer/words-prediction-true.png)
+![正确预测](/images/content/deep-learning/transformer/words-prediction-true.png)
 
 但还无法正确处理 "is" 的输入计算并预测：
 
-![错误预测](/images/deep-learning/transformer/words-prediction-false.png)
+![错误预测](/images/content/deep-learning/transformer/words-prediction-false.png)
 
 所以我们需要训练这个神经网络。
 
 在我们优化所有权重之前，我们可以在图表上绘制每个词
 
-![词的图表](/images/deep-learning/transformer/words-graph.png)
+![词的图表](/images/content/deep-learning/transformer/words-graph.png)
 
 > 图表的 x 轴是连接到顶部激活函数的权重值，y 轴是连接到底部激活函数的权重值
 
@@ -154,7 +154,7 @@
 
 然而，由于这两个词在训练数据中出现在相同的上下文中，我们希望反向传播会使它们的权重变得更加相似。
 
-![词的图表 2](/images/deep-learning/transformer/words-graph-2.png)
+![词的图表 2](/images/content/deep-learning/transformer/words-graph-2.png)
 
 当我们使用新的权重绘制词汇时，我们看到 "Troll 2" 和 "Gymkata" 现在相对于其他词汇更接近。
 
@@ -202,7 +202,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 因此，Word2Vec 不是只有四个单词和短语的词汇量，而是可能拥有大约 300 万词的词汇表。
 
-![Word2Vec](/images/deep-learning/transformer/word2vec.png)
+![Word2Vec](/images/content/deep-learning/transformer/word2vec.png)
 
 因此，我们需要优化的这个神经网络中的权重总数是 300 万词汇，至少乘以 100（每个词到激活函数的权重的数量），再乘以 2（从激活函数到输出的权重也是 300 万乘以 100），总共 6 亿个权重。因此训练可能会很慢。
 
@@ -217,11 +217,11 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 这意味着只有单词 "aardvark" 中有一个 1，而所有其他单词都是 0。
 
-<img src="/images/deep-learning/transformer/words-prediction-aardvark.png" alt="预测单词 aardvark" width="60" />
+<img src="/images/content/deep-learning/transformer/words-prediction-aardvark.png" alt="预测单词 aardvark" width="60" />
 
 这意味着我们可以忽略来自除了 "aardvark" 之外所有其他单词的权重，因为其他单词将他们的权重乘以 0。
 
-![忽略权重](/images/deep-learning/transformer/words-ignore-weights.png)
+![忽略权重](/images/content/deep-learning/transformer/words-ignore-weights.png)
 
 这单独就从这个优化步骤中移除了接近 3 亿个权重。
 
@@ -233,7 +233,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 所以现在，Word2Vec 只使用 "A" 和 "abandon" 的输出值。这意味着在这轮反向传播中，我们可以忽略导致所有其他可能输出的权重：
 
-![忽略权重 2](/images/deep-learning/transformer/words-ignore-weights-2.png)
+![忽略权重 2](/images/content/deep-learning/transformer/words-ignore-weights-2.png)
 
 所以最终，在这个神经网络中总共有 6 亿个权重，我们每步只优化 300 个。这是 Word2Vec 有效创建大词汇量中每个单词的大量词嵌入的一种方式。
 
@@ -277,7 +277,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 #default
 例如，如果输入的句子是 "Let's go!"，然后我们把 "Let's" 放入 LSTM 的输入中，然后展开 LSTM，然后将 "go" 插入第二个输入
 
-![处理 "Let's go!"](/images/deep-learning/transformer/lstm-letsgo.png)
+![处理 "Let's go!"](/images/content/deep-learning/transformer/lstm-letsgo.png)
 
 ::
 
@@ -295,13 +295,13 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 >
 > 在此示例中，我们只是在创造每个 token 两个嵌入值，而不是数百或数千
 
-![微型词嵌入](/images/deep-learning/transformer/word-embedding-small.png)
+![微型词嵌入](/images/content/deep-learning/transformer/word-embedding-small.png)
 
 ::
 
 现在我们有了输入的嵌入层词汇表，我们可以把它放在 LSTM 的输入前面
 
-![连接词嵌入与 LSTM](/images/deep-learning/transformer/word-embedding-to%20lstm.png)
+![连接词嵌入与 LSTM](/images/content/deep-learning/transformer/word-embedding-to%20lstm.png)
 
 现在当我们输入句子 "Let's go!"，我们在 "Let's" 输入中输入 1 且其他都为 0；然后我们展开 LSTM 和嵌入层，并在 "go" 的输入中输入 1 且其他都为 0
 
@@ -317,7 +317,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 然而，在实践中，为了有更多的权重的偏置使模型适合我们的数据，人们经常在输入中添加额外的 LSTM 单元。
 
-![两层 LSTM](/images/deep-learning/transformer/two-lstm.png)
+![两层 LSTM](/images/content/deep-learning/transformer/two-lstm.png)
 
 > 为了保持简单，我们只需在此阶段添加一个额外的 LSTM 单元
 >
@@ -327,7 +327,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 为了说明这是如何工作的，我们将在编码其中再添加一层 LSTM 层，这意味着第二层中展开的 LSTM 单元以第一层中展开的 LSTM 单元的输出值、短期记忆或隐藏层作为输入。
 
-![更多 LSTM](/images/deep-learning/transformer/more-lstm.png)
+![更多 LSTM](/images/content/deep-learning/transformer/more-lstm.png)
 
 ::warning
 
@@ -341,7 +341,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 现在我们完成了创建编码器-解码器模型的**编码器**部分。
 
-![编码器](/images/deep-learning/transformer/encoder.png)
+![编码器](/images/content/deep-learning/transformer/encoder.png)
 
 总结一下，在此示例中，我们有两层 LSTM，每层分别有两个 LSTM 单元。
 
@@ -355,7 +355,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 所以我们要做的第一件事是从上下文向量中连接出长期记忆和短期记忆（隐藏状态的细胞），使其传输到一组新的 LSTM。
 
-![新的 LSTM](/images/deep-learning/transformer/new-lstm-layer.png)
+![新的 LSTM](/images/content/deep-learning/transformer/new-lstm-layer.png)
 
 就像编码器一样，有两层，每层有两个单元。
 
@@ -367,7 +367,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 无论如何，上下文向量用于初始化解码器 LSTM 中的长期和短期记忆（隐藏状态单元）。解码器的最终目标是解码上下文向量作为输出句子。
 
-![解码器第 1 层的输入](/images/deep-learning/transformer/decoder-input-1.png)
+![解码器第 1 层的输入](/images/content/deep-learning/transformer/decoder-input-1.png)
 
 就像在编码器中一样，第一层 LSTM 单元的输入来自嵌入层，但现在的嵌入层创建了西班牙语单词的嵌入值。
 
@@ -376,7 +376,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 #title
 编码器与解码器的嵌入层
 #default
-![两个嵌入层](/images/deep-learning/transformer/two-embedding-layer.png)
+![两个嵌入层](/images/content/deep-learning/transformer/two-embedding-layer.png)
 
 > 左边是我们在编码器中使用的嵌入层
 >
@@ -394,13 +394,13 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 解码器 LSTM 单元顶层的输出值通过格外的权重和偏置 transform 到全连接层中。
 
-![解码器到全连接层](/images/deep-learning/transformer/decoder-to-fullconnected.png)
+![解码器到全连接层](/images/content/deep-learning/transformer/decoder-to-fullconnected.png)
 
 这个全连接层具有来自顶层 LSTM 单元的两个值的两个输入，且输出对应西班牙词汇表中的每个词汇。
 
 在这两者之间，我们在每个输入和输出之间都有权重的偏置的联系，然后我们通过 softmax 函数运行全连接层的输出来提取输出词：
 
-![全连接层](/images/deep-learning/transformer/fullconnected.png)
+![全连接层](/images/content/deep-learning/transformer/fullconnected.png)
 
 现在回到完整的编码器-解码器模型，我们就可以看到 softmax 函数的输出是 "vamos"，西班牙语 "Let's go" 的翻译。
 
@@ -410,7 +410,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 所以我们把 "vamos" 插入解码器展开的嵌入层，并扩展 LSTM 单元，然后将输出值运行到相同的全连接层：
 
-![解码器最终输出](/images/deep-learning/transformer/decoder-output.png)
+![解码器最终输出](/images/content/deep-learning/transformer/decoder-output.png)
 
 下一个预测 token 是 EOS，这意味着我们翻译了英文句子 "Let's go" 到正确的西班牙语句子 "Vamos"。
 
@@ -434,7 +434,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 换句话说，如果第一个预测的标记时西班牙语单词 "y"，在英语中翻译为 "and"，是错误的词，那么在训练期间我们仍然会使用 "vamos" 将正确的西班牙语单词作为无规则 LSTM 的输入。
 
-![解码器的训练](/images/deep-learning/transformer/decoder-trainning-example.png)
+![解码器的训练](/images/content/deep-learning/transformer/decoder-trainning-example.png)
 
 另外，在训练过程中，不仅仅是预测标记直到解码器预测出 EOS token，每个输出短语在已知短语结束的地方结束。
 
@@ -465,7 +465,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 所以**注意力机制**的主要思想是从编码器到解码器添加一堆新路径，每个输入值一条路径。
 
-![注意力机制](/images/deep-learning/transformer/attention.png)
+![注意力机制](/images/content/deep-learning/transformer/attention.png)
 
 这样解码器的每一步就可以直接访问输入值。
 
@@ -475,7 +475,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 我们先用 1 代表句子结束符 EOS 输入到嵌入层：
 
-<img src="/images/deep-learning/transformer/decoder-input-eos.png" alt="EOS 输入到嵌入层" width="200" />
+<img src="/images/content/deep-learning/transformer/decoder-input-eos.png" alt="EOS 输入到嵌入层" width="200" />
 
 > 因为我们刚刚完成了对 "Let's go" 的编码
 >
@@ -499,7 +499,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 换句话说，我们想要一个相似性分数，在编码器第一步的 LSTM 输出（即短期记忆或隐藏状态）与解码器第一步的 LSTM 输出之间；还有编码器第二步的 LSTM 输出与解码器第一步的 LSTM 输出之间。
 
-![相似性分数](/images/deep-learning/transformer/similar-score.png)
+![相似性分数](/images/content/deep-learning/transformer/similar-score.png)
 
 比较单词，或更准确地说是表示单词的数值序列（表示文字的序列）的相似性有很多种方法，以及不同的注意力算法。使用不同的方法都可以来比较这些序列。
 
@@ -520,7 +520,7 @@ $$Cosine Siilarity = \frac{{\sum_{i=1}^{n}}{A_i}{B_i}}{\sqrt{{\sum_{i=1}^{n}}A_i
 
 为了解释余弦相似度在这种情况下是如何计算的，我们先计算编码器中以下两者的相似度：第一对 LSTM 单元（对应单词 "Let's" 的输出值）与解码器中第一对 LSTM 单元（对应 EOS 标记的输出值）。
 
-![第一对比较计算](/images/deep-learning/transformer/attention-first-pair.png)
+![第一对比较计算](/images/content/deep-learning/transformer/attention-first-pair.png)
 
 计算得编码器的两个 LSTM 单元对应 "Let's" 的输出值是 -0.76 和 0.75，解码器的两个 LSTM 单元对应 "EOS" 的输出值是 0.91 和 0.38
 
@@ -537,7 +537,7 @@ $$Cosine Siilarity = \frac{{\sum_{i=1}^{n}}{A_i}{B_i}}{\sqrt{{\sum_{i=1}^{n}}A_i
 
 因此，编码器中两个 LSTM 单元（对应单词 "Let's" 的输出值）与解码器器中两个 LSTM 单元（对应 EOS 标记的输出值）之间的余弦相似度为 -0.39。
 
-![第一对单元的余弦相似度](/images/deep-learning/transformer/attention-first-pair-result.png)
+![第一对单元的余弦相似度](/images/content/deep-learning/transformer/attention-first-pair-result.png)
 
 不过，在注意力机制中计算相似性更常见的做法是只计算余弦相似度的分子部分，这是因为分母只是将相似度分数缩放到 -1 到 1 之间而已。如果我们想比较两个（或更多） LSTM 单元的相似度分数，这种缩放是很有用的。换句话说，分母去除了相似度的量级影响。
 
@@ -549,7 +549,7 @@ $$Cosine Siilarity = \frac{{\sum_{i=1}^{n}}{A_i}{B_i}}{\sqrt{{\sum_{i=1}^{n}}A_i
 
 同样，我们可以计算第二个输入单词 "go" 与 EOS 标记之间的相似度分数的点积，结果为 0.01。
 
-![所有单元的余弦相似度](/images/deep-learning/transformer/attention-all-pair-result.png)
+![所有单元的余弦相似度](/images/content/deep-learning/transformer/attention-all-pair-result.png)
 
 现在我们得到了输入单词 "Let's" 和 "go" 相对于解码器中的 EOS 标记的相似度分数。
 
@@ -561,7 +561,7 @@ $$Cosine Siilarity = \frac{{\sum_{i=1}^{n}}{A_i}{B_i}}{\sqrt{{\sum_{i=1}^{n}}A_i
 
 为此，我们首先要将这些分数通过 softmax 函数运算：
 
-![相似度分数通过 softmax 计算](/images/deep-learning/transformer/attention-after-softmax.png)
+![相似度分数通过 softmax 计算](/images/content/deep-learning/transformer/attention-after-softmax.png)
 
 所以我们可以将 softmax 函数的输出看作是决定在解码时我们应该使用每个编码后输入单词的百分比。
 
@@ -569,11 +569,11 @@ $$Cosine Siilarity = \frac{{\sum_{i=1}^{n}}{A_i}{B_i}}{\sqrt{{\sum_{i=1}^{n}}A_i
 
 所以我们将第一个编码单词 "Let's" 的值乘以 0.4，将第二个编码单词 "go" 的值乘以 0.6，最后将这些缩放后的值相加。这个总和结合了输入单词 "Let's" 和 "go" 的单独编码与它们相对于 EOS 的相似度。这些总和就是 EOS 的注意力值。
 
-![注意力值总和](/images/deep-learning/transformer/attention-after-softmax-sum.png)
+![注意力值总和](/images/content/deep-learning/transformer/attention-after-softmax-sum.png)
 
 现在，要确定第一个输出单词，我们只需要将这些注意力值输入到全连接层中，并将 EOS 的编码输入到同一个全连接层中进行计算。然后将输出值通过 softmax 函数运算来选择第一个输出单词 "vamos"。
 
-![结果](/images/deep-learning/transformer/attention-result.png)
+![结果](/images/content/deep-learning/transformer/attention-result.png)
 
 现在由于输出不是 EOS 标记，我们需要继续展开解码器中的嵌入层和 LSTM，并将翻译出的单词 "vamos" 输入到解码器展开后的嵌入层中，重复上述计算过程。直到输出 EOS 标记为止。
 
@@ -589,7 +589,7 @@ Transformer 使用词嵌入将单词转换为数字，位置编码来跟踪单�
 
 现在，因为 Transformer 是一种神经网络，而神经网络通常只接受数字作为输入值，所以我们首先需要做的是使用词嵌入来将输入单词编码为数字。
 
-![词嵌入](/images/deep-learning/transformer/transformer-embedding.png)
+![词嵌入](/images/content/deep-learning/transformer/transformer-embedding.png)
 
 ### 位置编码
 
@@ -614,7 +614,7 @@ Transformer 的核心是自注意力机制。它的工作方式是：当处理�
 
 也就是说，首先我们用词嵌入的方法先将句子转换为数字，再为每个单词的嵌入值添加一组对应词序的数字：
 
-![位置编码](/images/deep-learning/transformer/transformer-position-encoding.png)
+![位置编码](/images/content/deep-learning/transformer/transformer-position-encoding.png)
 
 代表词序的数字，来自一系列交替的正弦和余弦曲线，每条曲线为每个词的嵌入提供特定的位置值。
 
@@ -623,7 +623,7 @@ Transformer 的核心是自注意力机制。它的工作方式是：当处理�
 #title
 如何提供位置值
 #default
-![正余弦曲线](/images/deep-learning/transformer/transformer-position-encoding-sin-cos.png)
+![正余弦曲线](/images/content/deep-learning/transformer/transformer-position-encoding-sin-cos.png)
 
 具体来说，第一个词的位置值位于 x 轴的 1st 坐标上，第一个嵌入的位置值绿色曲线上的 y 轴坐标 0，第二个嵌入的位置值来自橙色曲线对应的 y 轴坐标 1。同理依次类推。
 
@@ -637,13 +637,13 @@ Transformer 的核心是自注意力机制。它的工作方式是：当处理�
 
 现在我们所要做的就是将位置值添加到嵌入值中：
 
-![位置编码结果](/images/deep-learning/transformer/transformer-position-encoding-result.png)
+![位置编码结果](/images/content/deep-learning/transformer/transformer-position-encoding-result.png)
 
 我们最终得到了词嵌入加上整个句子 "Squatch eats pizza" 的位置编码。
 
 同理，我们可以计算句子 "Let's go" 的位置编码：
 
-![位置编码结果](/images/deep-learning/transformer/transformer-position-encoding-result-2.png)
+![位置编码结果](/images/content/deep-learning/transformer/transformer-position-encoding-result-2.png)
 
 ::detail
 
@@ -654,7 +654,7 @@ Transformer 的核心是自注意力机制。它的工作方式是：当处理�
 
 当我们将位置值添加到嵌入值中，我们又会得到第一个和第三个词的新位置编码，而第二个词由于没有移动，所以保持不变。
 
-![位置编码结果](/images/deep-learning/transformer/transformer-position-encoding-result-reverse.png)
+![位置编码结果](/images/content/deep-learning/transformer/transformer-position-encoding-result-reverse.png)
 
 因此位置编码允许 Transformer 保持词序的跟踪。
 
@@ -687,13 +687,13 @@ Transformer 的核心是自注意力机制。它的工作方式是：当处理�
 
 我们刚刚将位置编码添加到单词 "Let's" 和 "go" 的嵌入值中：
 
-![位置编码结果](/images/deep-learning/transformer/transformer-position-encoding-result-3.png)
+![位置编码结果](/images/content/deep-learning/transformer/transformer-position-encoding-result-3.png)
 
 我们首先将单词 "Let's" 的位置编码值乘以一对权重，并将这些乘积相加得到 -1.0。然后我们用不同的一对权重做同样的事情，得到 3.7。
 
 我们这样做两次，因为我们一开始有两个表示单词 "Let's" 的位置编码值，经过两次数学运算后，我们仍有两个表示单词 "Let's" 的值。
 
-![query 值](/images/deep-learning/transformer/transformer-query.png)
+![query 值](/images/content/deep-learning/transformer/transformer-query.png)
 
 ::detail
 
@@ -710,13 +710,13 @@ Transformer 的核心是自注意力机制。它的工作方式是：当处理�
 
 我们需要再创建两个新值来实现这一点，并也为 "go" 做同样的事情：
 
-![key 值](/images/deep-learning/transformer/transformer-key.png)
+![key 值](/images/content/deep-learning/transformer/transformer-key.png)
 
 这两组新值都称为 **key**。
 
 我们用它们来计算与 "Let's" 的 query 值之间的相似度。计算它们之间的相似度的一种方法是计算点积。我们只需将每对数字相乘，然后将乘积相加。
 
-![计算点积](/images/deep-learning/transformer/transformer-similarity.png)
+![计算点积](/images/content/deep-learning/transformer/transformer-similarity.png)
 
 "Let's" 与自身的相似度值为 11.7，比 "let's" 与单词 "go" 之间的相似度值 -2.6 更大。所以 "let's" 与它自己比单词 "go" 更加相似。
 
@@ -724,7 +724,7 @@ Transformer 的核心是自注意力机制。它的工作方式是：当处理�
 
 我们通过将相似度得分输入 softmax 函数来实现这一点：
 
-![相似度得分比例](/images/deep-learning/transformer/transformer-similarity-score.png)
+![相似度得分比例](/images/content/deep-learning/transformer/transformer-similarity-score.png)
 
 我们可以把 softmax 函数的输出看作一种确定我们应该为每个输入词用多少百分比来编码 "Let's" 的方式。
 
@@ -732,11 +732,11 @@ Transformer 的核心是自注意力机制。它的工作方式是：当处理�
 
 我们创建两个新值用来表示 "Let's"，并按 1.0 比例缩放 "let's" 的值。同时也创建两个新值来表示 "go"，并按 0.0 比例缩放 "go" 的值。最后我们将这些缩放值相加，就是 "Let's" 的自注意力值：
 
-!["Let's" 的自注意力值](/images/deep-learning/transformer/transformer-attention.png)
+!["Let's" 的自注意力值](/images/content/deep-learning/transformer/transformer-attention.png)
 
 接下来，我们以同样的方式计算单词 "go" 的自注意力值。好消息是，我们不需要重新计算 key 和 value。我们只需要创建表示单词 "go" 的 query 并进行数学计算：
 
-!["go" 的自注意力值](/images/deep-learning/transformer/transformer-attention-2.png)
+!["go" 的自注意力值](/images/content/deep-learning/transformer/transformer-attention-2.png)
 
 ::warning
 
@@ -774,13 +774,13 @@ query、key 与 value
 
 整理一下：
 
-![Transformer 自注意力](/images/deep-learning/transformer/transformer-attention-result.png)
+![Transformer 自注意力](/images/content/deep-learning/transformer/transformer-attention-result.png)
 
 我们还需要做一件事来对输入进行编码。
 
 我们取位置编码好的值，并将它们添加到自注意力值中：
 
-![残差链接](/images/deep-learning/transformer/transformer-residual-connection.png)
+![残差链接](/images/content/deep-learning/transformer/transformer-residual-connection.png)
 
 这些旁路称为**残差连接**。它们使训练复杂的神经网络变得更容易。
 
@@ -798,7 +798,7 @@ query、key 与 value
 
 词嵌入、位置编码、自注意力和残差连接所组成的部分是 transformer 的编码器部分：
 
-![Transformer 编码器](/images/deep-learning/transformer/transformer-encoder.png)
+![Transformer 编码器](/images/content/deep-learning/transformer/transformer-encoder.png)
 
 ### 解码器
 
@@ -808,11 +808,11 @@ query、key 与 value
 
 同样的，与编码&解码神经网络相同，我们使用 EOS 标记来启动解码，创建词嵌入，并添加位置编码：
 
-<img src="/images/deep-learning/transformer/transformer-decoder-input.png" alt="西班牙语输入" width="160">
+<img src="/images/content/deep-learning/transformer/transformer-decoder-input.png" alt="西班牙语输入" width="160">
 
 接下来为 EOS 标记创建 query、key 和 value，像以前一样计算它的自注意力值，并添加残差连接：
 
-<img src="/images/deep-learning/transformer/transformer-decoder-attention.png" alt="西班牙语输入" width="160">
+<img src="/images/content/deep-learning/transformer/transformer-decoder-attention.png" alt="西班牙语输入" width="160">
 
 ::detail
 
@@ -827,7 +827,7 @@ query、key 与 value
 
 让我们整合数学和图表：
 
-![Transformer 编码器与解码器](/images/deep-learning/transformer/transformer-encoder-decoder.png)
+![Transformer 编码器与解码器](/images/content/deep-learning/transformer/transformer-encoder-decoder.png)
 
 到目前为止，我们已经讨论了自注意力机制如何帮助 transformer 跟踪单词在句子中的关系。
 
@@ -850,13 +850,13 @@ query、key 与 value
 
 就像我们为自注意力做的那样，我们创建两个新值来表示解码器中 EOS 标记的 query 值，然后我们为编码器中的每个单词创建 key 值，并计算解码器中 EOS 标记与编码器中每个单词之间的相似性。像以前一样通过点积计算，通过 softmax 函数处理相似性：
 
-!["EOS" 的自注意力值](/images/deep-learning/transformer/transformer-encoder-decoder-attention-percent.png)
+!["EOS" 的自注意力值](/images/content/deep-learning/transformer/transformer-encoder-decoder-attention-percent.png)
 
 结果告诉我们在解码器确定第一个翻译单词时，应该使用第一个单词的 100% 和第二个的 0%。现在我们知道了每个输入单词在决定第一个单词该被翻译成什么时应当被使用的百分比。
 
 我们计算每个输入单词的 value，然后按 softmax 百分比缩放这些值，然后将两对缩放值相加，得到编码器解码器的注意力值：
 
-![编码器解码器的注意力值](/images/deep-learning/transformer/transformer-encoder-decoder-attention.png)
+![编码器解码器的注意力值](/images/content/deep-learning/transformer/transformer-encoder-decoder-attention.png)
 
 ::warning
 
@@ -868,7 +868,7 @@ query、key 与 value
 
 我们整合图表中编码器解码器注意力，并添加另一组残差连接：
 
-![编码器解码器的残差连接](/images/deep-learning/transformer/transformer-encoder-decoder-residual-connection.png)
+![编码器解码器的残差连接](/images/content/deep-learning/transformer/transformer-encoder-decoder-residual-connection.png)
 
 这使编码器解码器注意力能够专注于输出单词和输入单词之间的关系，而不必保留之前发生的自注意力或之前发生的单词和位置编码。
 
@@ -878,11 +878,11 @@ query、key 与 value
 
 因此，我们将这两个值通过一个全连接层和 softmax 函数来选择输出：
 
-![编码器解码器的全连接](/images/deep-learning/transformer/transformer-encoder-decoder-fullconnected.png)
+![编码器解码器的全连接](/images/content/deep-learning/transformer/transformer-encoder-decoder-fullconnected.png)
 
 接着整合我们的图表，并将翻译的词 "vamos"，插入下一个解码器嵌入层中进行数学计算：
 
-![编码器解码器的全部计算](/images/deep-learning/transformer/transformer-all.png)
+![编码器解码器的全部计算](/images/content/deep-learning/transformer/transformer-all.png)
 
 终于，我们展示了 transformer 如何编码一个简单的输入短语 "Let's go"，并将其编码解码成翻译短语 "Vamos"。
 

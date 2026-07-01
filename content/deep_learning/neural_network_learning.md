@@ -8,13 +8,13 @@
 
 现在我们来思考一个具体的问题，比如如何实现数字 “5” 的识别，我们的目标是实现能区别是否是 5 的程序。
 
-![手写数字5的例子](/images/deep-learning/neural-network-learning/fives.png)
+![手写数字5的例子](/images/content/deep-learning/neural-network-learning/fives.png)
 
 如果让我们自己来设计一个能将 5 正确分类的程序，就会意外地发现这是一个很难的问题。人可以简单地识别出 5，但却很难明确说出是基于何种规律而识别出了 5。
 
 因此，与其绞尽脑汁，从零开始想出一个可以识别 5 的算法，不如考虑通过有效利用数据来解决这个问题。一种方案是，先从图像中提取**特征量**，再用机器学习技术学习这些特征量的模式。
 
-![从人工设计规则转变为由机器从数据中学习：没有人为介入的方块用灰色表示](/images/deep-learning/neural-network-learning/human-to-machine.png)
+![从人工设计规则转变为由机器从数据中学习：没有人为介入的方块用灰色表示](/images/content/deep-learning/neural-network-learning/human-to-machine.png)
 
 ### 训练数据和测试数据
 
@@ -254,7 +254,7 @@ def function_2(x):
 
 ::
 
-![函数图像](/images/deep-learning/neural-network-learning/function_2.png)
+![函数图像](/images/content/deep-learning/neural-network-learning/function_2.png)
 
 现在我们来求该函数的导数。这里需要注意的是，该函数有两个变量，所以有必要区分对哪个变量求导数，即对 $x_0$ 和 $x_1$ 两个变量中的哪一个求导数。另外，我们把这里讨论的有多个变量的函数的导数称为**偏导数**。用数学式表示的话，可以写成 $\frac{\partial f}{\partial x_0}$、$\frac{\partial f}{\partial x_1}$。
 
@@ -368,7 +368,7 @@ print(gradient_descent(function_2, init_x=init_x, lr=0.1, step_num=100))
 
 如果用图来表示梯度法的更新过程，则可以发现，原点处是最低的地方，函数的取值一点点在向其靠近。
 
-![梯度法的更新过程](/images/deep-learning/neural-network-learning/gradient-method.png)
+![梯度法的更新过程](/images/content/deep-learning/neural-network-learning/gradient-method.png)
 
 ::
 
@@ -665,7 +665,7 @@ for i in range(iters_num):
 
 用图像来表示这个损失函数的值的推移：
 
-![损失函数的推移](/images/deep-learning/neural-network-learning/loss-function.png)
+![损失函数的推移](/images/content/deep-learning/neural-network-learning/loss-function.png)
 
 可以发现随着学习的进行，损失函数的值在不断减小。这是学习正常进行的信号，表示神经网络的权重参数在逐渐拟合数据。也就是说，神经网络的确在学习！通过反复地向它浇灌（输入）数据，神经网络正在逐渐向最优参数靠近。
 
@@ -758,7 +758,7 @@ plt.show()
 
 把从上面的代码中得到的结果用图表示的话，如下：
 
-![训练数据和测试数据的识别精度的推移（横轴的单位是epoch）](/images/deep-learning/neural-network-learning/recognition-accuracy.png)
+![训练数据和测试数据的识别精度的推移（横轴的单位是epoch）](/images/content/deep-learning/neural-network-learning/recognition-accuracy.png)
 
 > 图中实线表示训练数据的识别精度，虚线表示测试数据的识别精度。
 

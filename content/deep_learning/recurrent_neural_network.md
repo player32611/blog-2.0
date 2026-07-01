@@ -94,7 +94,7 @@ Tanh 激活函数
 #default
 Tanh 激活函数或双曲正切激活函数将任何 x 轴坐标转换为介于 -1 和 1 之间的 y 轴坐标。
 
-![Tanh 激活函数](/images/deep-learning/recurrent-neural-network/tanh.png)
+![Tanh 激活函数](/images/content/deep-learning/recurrent-neural-network/tanh.png)
 
 ::
 
@@ -104,19 +104,19 @@ LSTM 背后的主要思想是它不使用相同的反馈环连接。
 
 当使用很久以前的事件，和昨天刚发生的事件，来预测明天时，LSTM 使用两条独立的路径来对明天做出预测。一条用于长期记忆，另一条用于短期记忆。
 
-![LSTM](/images/deep-learning/recurrent-neural-network/lstm.png)
+![LSTM](/images/content/deep-learning/recurrent-neural-network/lstm.png)
 
 即它使用不同的路径处理长期和短期记忆。
 
 坏消息是，与从一个相对简单单元展开的基本、普通循环神经网络相比，LSTM 基于一个更复杂的单元的长短期记忆。
 
-![LSTM 工作原理](/images/deep-learning/recurrent-neural-network/lstm-work.png)
+![LSTM 工作原理](/images/content/deep-learning/recurrent-neural-network/lstm-work.png)
 
 ### 遗忘门
 
 首先，这条贯穿单元顶部的绿线被称为细胞状态，代表长期记忆：
 
-![长期记忆](/images/deep-learning/recurrent-neural-network/long-term-memory.png)
+![长期记忆](/images/content/deep-learning/recurrent-neural-network/long-term-memory.png)
 
 尽管长期记忆可以通过乘法，稍后再通过加法被修改，你会注意到这里没有权重和偏置可以直接修改它。
 
@@ -124,7 +124,7 @@ LSTM 背后的主要思想是它不使用相同的反馈环连接。
 
 现在，这条被称为隐藏状态的粉色线代表短期记忆：
 
-![短期记忆](/images/deep-learning/recurrent-neural-network/short-term-memory.png)
+![短期记忆](/images/content/deep-learning/recurrent-neural-network/short-term-memory.png)
 
 短期记忆直接连接到可以修改它们的权重。
 
@@ -135,17 +135,17 @@ LSTM 背后的主要思想是它不使用相同的反馈环连接。
 #default
 我们假设之前的长期记忆是 2，之前的短期记忆是 1，并将输入值设为 1：
 
-![长期记忆](/images/deep-learning/recurrent-neural-network/long-term-memory-example.png)
+![长期记忆](/images/content/deep-learning/recurrent-neural-network/long-term-memory-example.png)
 
-![短期记忆](/images/deep-learning/recurrent-neural-network/short-term-memory-example.png)
+![短期记忆](/images/content/deep-learning/recurrent-neural-network/short-term-memory-example.png)
 
 让我们进行计算，看看在长短期记忆单元的第一阶段会发生什么：
 
-<img src="/images/deep-learning/recurrent-neural-network/calculation-phase1.png" alt="第一阶段" width="120">
+<img src="/images/content/deep-learning/recurrent-neural-network/calculation-phase1.png" alt="第一阶段" width="120">
 
 我们从短期记忆 1 开始，乘以它的权重 2.7；然后我们将输入 1 乘以 它的权重 1.63；然后将这两个项相加，并添加偏置 1.62，得到 5.95；再通过 Sigmoid 激活函数，得到 0.997；最后我们将长期记忆 2 乘以 0.997，得到 1.99。
 
-<img src="/images/deep-learning/recurrent-neural-network/calculation-phase1-result.png" alt="第一阶段的计算结果" width="140">
+<img src="/images/content/deep-learning/recurrent-neural-network/calculation-phase1-result.png" alt="第一阶段的计算结果" width="140">
 
 所以这个长短期记忆单元的第一阶段稍微减少了长期记忆。
 
@@ -163,13 +163,13 @@ LSTM 背后的主要思想是它不使用相同的反馈环连接。
 
 让我们回到输入为 1 的情况，并讨论第二部分的作用。
 
-<img src="/images/deep-learning/recurrent-neural-network/potential-memory-creation.png" alt="潜在记忆的创建" width="300">
+<img src="/images/content/deep-learning/recurrent-neural-network/potential-memory-creation.png" alt="潜在记忆的创建" width="300">
 
 > 右侧的模块将短期记忆和输入结合，创建潜在的长期记忆，左侧的模块确定将这个潜在记忆中的那个百分比加入到长期记忆中。
 
 从最右侧的模块开始，我们将短期记忆和输入乘以各自的权重，然后将这些值相加，并添加一个偏置项，得到 2.03，这是 Tanh 激活函数的输入值。计算后得到 0.97。
 
-<img src="/images/deep-learning/recurrent-neural-network/potential-memory-creation-result.png" alt="potential-memory-creation-result" width="300">
+<img src="/images/content/deep-learning/recurrent-neural-network/potential-memory-creation-result.png" alt="potential-memory-creation-result" width="300">
 
 > 在这种情况下，当 LSTM 的输入为 1 时，Tanh 激活函数的输出接近 1
 >
@@ -179,7 +179,7 @@ LSTM 背后的主要思想是它不使用相同的反馈环连接。
 
 现在 LSTM 需要决定要保存多少这个潜在记忆，这是通过我们之前使用的相同方法（确定要记住的长期记忆的百分比）完成的。
 
-<img src="/images/deep-learning/recurrent-neural-network/potential-memory-creation-phase2.png" alt="potential-memory-creation-phase2" width="300">
+<img src="/images/content/deep-learning/recurrent-neural-network/potential-memory-creation-phase2.png" alt="potential-memory-creation-phase2" width="300">
 
 换句话说，在将短期记忆和输入通过权重相乘后，将这些乘积相加，并添加一个偏置，通过 Sigmoid 激活函数，得到 1.0。这意味这全部潜在的长期记忆被保留（因为乘以 1 不会改变它）。
 
@@ -187,7 +187,7 @@ LSTM 背后的主要思想是它不使用相同的反馈环连接。
 
 我们将计算后的 0.97 添加到现有的长期记忆中，我们得到一个新的长期记忆 2.96
 
-<img src="/images/deep-learning/recurrent-neural-network/add-long-term-memory.png" alt="添加长期记忆" width="300">
+<img src="/images/content/deep-learning/recurrent-neural-network/add-long-term-memory.png" alt="添加长期记忆" width="300">
 
 尽管这部分 LSTM 单元确定我们应该如何更新长期记忆，它通常被称为**输入门**。
 
@@ -195,7 +195,7 @@ LSTM 背后的主要思想是它不使用相同的反馈环连接。
 
 现在我们有了一个新的长期记忆，并准备讨论 LSTM 中的最后一个阶段。这个最终阶段更新短期记忆。
 
-![更新短期记忆](/images/deep-learning/recurrent-neural-network/update-short-term-memory.png)
+![更新短期记忆](/images/content/deep-learning/recurrent-neural-network/update-short-term-memory.png)
 
 我们从新的长期记忆开始，使用它作为输入到 Tanh 激活函数，得到 0.99，代表潜在的短期记忆。
 
@@ -203,7 +203,7 @@ LSTM 背后的主要思想是它不使用相同的反馈环连接。
 
 我们通过将 0.99 乘以 0.99 得到 0.98。
 
-![更新短期记忆](/images/deep-learning/recurrent-neural-network/update-short-term-memory-phase2.png)
+![更新短期记忆](/images/content/deep-learning/recurrent-neural-network/update-short-term-memory-phase2.png)
 
 因为这个新的短期记忆 0.98 也是整个 LSTM 单元的输出，这个阶段被称为**输出门**。
 
@@ -218,7 +218,7 @@ LSTM 背后的主要思想是它不使用相同的反馈环连接。
 #default
 这里我们有两家公司的股价：
 
-![股价示例](/images/deep-learning/recurrent-neural-network/stock-example.png)
+![股价示例](/images/content/deep-learning/recurrent-neural-network/stock-example.png)
 
 > y 轴上是股价，x 轴上是记录价值的日期
 >
@@ -230,23 +230,23 @@ LSTM 背后的主要思想是它不使用相同的反馈环连接。
 
 所以让我们回到 LSTM，并将长期记忆和短期记忆初始化为 0：
 
-<img src="/images/deep-learning/recurrent-neural-network/lstm-example-day1.png" alt="第 1 天的输入" width="140" />
+<img src="/images/content/deep-learning/recurrent-neural-network/lstm-example-day1.png" alt="第 1 天的输入" width="140" />
 
 如果我们想通过这个 LSTM 依次运行公司 A 从第 1 天到第 4 天的值，那么我们将从第 1 天的值 0 开始输入，像之前一样进行计算。更新后的长期记忆是 -0.20，更新后的短期记忆是 -0.13，因此我们输入 -0.2 作为更新后的长期记忆和 -0.1 作为更新后的短期记忆：
 
-<img src="/images/deep-learning/recurrent-neural-network/lstm-example-day1-result.png" alt="第 1 天的输出" width="160" />
+<img src="/images/content/deep-learning/recurrent-neural-network/lstm-example-day1-result.png" alt="第 1 天的输出" width="160" />
 
 现在我们使用更新后的记忆展开 LSTM，并将第 2 天的值 0.5 输入，然后 LSTM 进行计算，使用之前相同的权重的偏置，我们又得到了更新后的长期和短期记忆。
 
 重复进行计算直到第 4 天的数据计算完毕：
 
-![第 4 天的输出](/images/deep-learning/recurrent-neural-network/lstm-example-day4-result.png)
+![第 4 天的输出](/images/content/deep-learning/recurrent-neural-network/lstm-example-day4-result.png)
 
 在最终的短期记忆中，0.0 是从展开的 LSTM 中得到的输出，这意味着 LSTM 正确预测了公司 A 第 5 天的值。
 
 同理，相同的 LSTM，使用相同的权重和偏置，也能正确预测公司 B 第 5 天的值：
 
-![公司 B 的预测结果](/images/deep-learning/recurrent-neural-network/lstm-example-company-b.png)
+![公司 B 的预测结果](/images/content/deep-learning/recurrent-neural-network/lstm-example-company-b.png)
 
 ::
 

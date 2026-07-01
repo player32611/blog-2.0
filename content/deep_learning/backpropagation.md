@@ -22,13 +22,13 @@
 
 - **问题 1**： 太郎在超市买了 2 个 100 日元一个的苹果，消费税是 10%，请计算支付金额。
 
-![基于计算图求解的问题 1 的答案](/images/deep-learning/backpropagation/question1-answer1.png)
+![基于计算图求解的问题 1 的答案](/images/content/deep-learning/backpropagation/question1-answer1.png)
 
 开始时，苹果的 100 日元流到 “×2” 节点，变成 200 日元，然后被传递给下一个节点。接着，这个 200 日元流向 “×1.1” 节点，变成 220 日元。因此，从这个计算图的结果可知，答案为 220 日元。
 
 图中把 “×2” “×1.1” 等作为一个运算整体用 ○ 括起来了，不过只用 ○ 表示乘法运算 “×” 也是可行的。此时，如下所示，可以将 “2” 和 “1.1” 别作为变量 “苹果的个数” 和 “消费税” 标在 ○ 外面。
 
-![基于计算图求解的问题 1 的答案：“苹果的个数” 和 “消费税” 作为变量标在 ○ 外面](/images/deep-learning/backpropagation/question1-answer2.png)
+![基于计算图求解的问题 1 的答案：“苹果的个数” 和 “消费税” 作为变量标在 ○ 外面](/images/content/deep-learning/backpropagation/question1-answer2.png)
 
 ::
 
@@ -40,7 +40,7 @@
 
 - **问题 2**： 太郎在超市买了 2 个苹果、3 个橘子。其中，苹果每个 100 日元，橘子每个 150 日元。消费税是 10%，请计算支付金额。
 
-![基于计算图求解的问题 2 的答案](/images/deep-learning/backpropagation/question2.png)
+![基于计算图求解的问题 2 的答案](/images/content/deep-learning/backpropagation/question2.png)
 
 这个问题中新增了加法节点 “+”，用来合计苹果和橘子的金额。构建了计算图后，从左向右进行计算。就像电路中的电流流动一样，计算结果从左向右传递。到达最右边的计算结果后，计算过程就结束了。
 
@@ -67,7 +67,7 @@
 #default
 比如，在超市买了2个苹果和其他很多东西：
 
-![买了2个苹果和其他很多东西的例子](/images/deep-learning/backpropagation/buy-many.png)
+![买了2个苹果和其他很多东西的例子](/images/content/deep-learning/backpropagation/buy-many.png)
 
 > 假设（经过复杂的计算）购买的其他很多东西总共花费 4000 日元。
 
@@ -100,7 +100,7 @@
 
 可以通过计算图的反向传播求导数：
 
-![基于反向传播的导数的传递](/images/deep-learning/backpropagation/question1-reverse.png)
+![基于反向传播的导数的传递](/images/content/deep-learning/backpropagation/question1-reverse.png)
 
 如图所示，反向传播使用与正方向相反的箭头（粗线）表示。反向传播传递 “局部导数”，将导数的值写在箭头的下方。
 
@@ -120,7 +120,7 @@
 
 假设存在 $y = f(x)$ 的计算，这个计算的反向传播如下图所示：
 
-![计算图的反向传播：沿着与正方向相反的方向，乘上局部导数](/images/deep-learning/backpropagation/chart-backpropagation.png)
+![计算图的反向传播：沿着与正方向相反的方向，乘上局部导数](/images/content/deep-learning/backpropagation/chart-backpropagation.png)
 
 反向传播的计算顺序是，**将信号 $E$ 乘以节点的局部导数**（$\frac{\partial y}{\partial x}$），**然后将结果传递给下一个节点**。
 
@@ -153,7 +153,7 @@ $$t=x+y$$
 
 现在我们尝试将 $z=(x+y)^2$ 的链式法则的计算用计算图表示出来。如果用 “\*\*2” 节点表示平方运算的话，则计算图如下图所示：
 
-![计算图：沿着与正方向相反的方向，乘上局部导数后传递](/images/deep-learning/backpropagation/chain-backpropagation.png)
+![计算图：沿着与正方向相反的方向，乘上局部导数后传递](/images/content/deep-learning/backpropagation/chain-backpropagation.png)
 
 如图所示，计算图的反向传播从右到左传播信号。反向传播的计算顺序是：先将节点的输入信号乘以节点的局部导数（偏导数），然后再传递给下一个节点。
 
@@ -165,7 +165,7 @@ $$t=x+y$$
 
 结果如下图所示，$\frac{\partial z}{\partial x}$ 的结果为 $2(x+y)$：
 
-![根据计算图的反向传播的结果](/images/deep-learning/backpropagation/chain-backpropagation-result.png)
+![根据计算图的反向传播的结果](/images/content/deep-learning/backpropagation/chain-backpropagation-result.png)
 
 ## 反向传播
 
@@ -181,7 +181,7 @@ $$ \frac{\partial z}{\partial y} = 1$$
 
 用计算图表示的话，如下图所示（左图是正向传播，右图是反向传播）：
 
-![加法节点的反向传播：左图是正向传播，右图是反向传播](/images/deep-learning/backpropagation/add-backpropagation.png)
+![加法节点的反向传播：左图是正向传播，右图是反向传播](/images/content/deep-learning/backpropagation/add-backpropagation.png)
 
 反向传播将从上游传过来的导数（本例中是 $\frac{\partial L}{\partial z}$）乘以 1，然后传向下游。也就是说，因为加法节点的反向传播只乘以1，所以输入的值会原封不动地流向下一个节点。
 
@@ -191,7 +191,7 @@ $$ \frac{\partial z}{\partial y} = 1$$
 
 这是因为，如下图所示，我们假定了一个最终输出值为 $L$ 的大型计算图。$z=x+y$ 的计算位于这个大型计算图的某个地方，从上游会传来 $\frac{\partial L}{\partial z}$ 的值，并向下游传递 $\frac{\partial L}{\partial x}$ 和 $\frac{\partial L}{\partial y}$。
 
-![反向传播的计算顺序](/images/deep-learning/backpropagation/large-computational-graph.png)
+![反向传播的计算顺序](/images/content/deep-learning/backpropagation/large-computational-graph.png)
 
 ::
 
@@ -202,7 +202,7 @@ $$ \frac{\partial z}{\partial y} = 1$$
 #default
 假设有 `10 + 5 = 15` 这一计算，反向传播时，从上游会传来值 1.3。用计算图表示的话如下：
 
-![加法节点的反向传播](/images/deep-learning/backpropagation/add-backpropagation-example.png)
+![加法节点的反向传播](/images/content/deep-learning/backpropagation/add-backpropagation-example.png)
 
 因为加法节点的反向传播只是将输入信号输出到下一个节点，所以反向传播将 1.3 向下一个节点传递。
 
@@ -218,7 +218,7 @@ $$ \frac{\partial z}{\partial y} = x$$
 
 乘法的反向传播会将上游的值乘以正向传播时的输入信号的 “翻转值” 后传递给下游。翻转值表示一种翻转关系，正向传播时信号是 x 的话，反向传播时则是 y；正向传播时信号是 y 的话，反向传播时则是 x。
 
-![乘法节点的反向传播](/images/deep-learning/backpropagation/multiply-backpropagation.png)
+![乘法节点的反向传播](/images/content/deep-learning/backpropagation/multiply-backpropagation.png)
 
 ::detail
 
@@ -227,7 +227,7 @@ $$ \frac{\partial z}{\partial y} = x$$
 #default
 假设有 `10 × 5 = 50` 这一计算，反向传播时，从上游会传来值 1.3。用计算图表示的话，如下图所示：
 
-![乘法节点的反向传播](/images/deep-learning/backpropagation/multiply-backpropagation-example.png)
+![乘法节点的反向传播](/images/content/deep-learning/backpropagation/multiply-backpropagation-example.png)
 
 因为乘法的反向传播会乘以输入信号的翻转值，所以各自可按 `1.3 × 5 = 6.5`、`1.3 × 10 = 13` 计算。
 
@@ -249,7 +249,7 @@ $$ \frac{\partial z}{\partial y} = x$$
 
 用计算图的反向传播来解的话，求解过程如下图所示：
 
-![求解苹果的导数](/images/deep-learning/backpropagation/apple-backpropagation.png)
+![求解苹果的导数](/images/content/deep-learning/backpropagation/apple-backpropagation.png)
 
 从上图的结果可知，苹果的价格的导数是 2.2，苹果的个数的导数是 110，消费税的导数是 200。
 
@@ -298,7 +298,7 @@ class MulLayer:
 
 ::
 
-![购买2个苹果](/images/deep-learning/backpropagation/apple-backpropagation.png)
+![购买2个苹果](/images/content/deep-learning/backpropagation/apple-backpropagation.png)
 
 使用这个乘法层的话，苹果的例子的正向传播可以像下面这样实现：
 
@@ -370,7 +370,7 @@ class AddLayer:
 
 现在，我们使用加法层和乘法层，实现购买2个苹果和3个橘子的例子：
 
-![购买2个苹果和3个橘子](/images/deep-learning/backpropagation/buy-apple-orange.png)
+![购买2个苹果和3个橘子](/images/content/deep-learning/backpropagation/buy-apple-orange.png)
 
 ```python
 apple = 100
@@ -450,7 +450,7 @@ $$
 
 在该式中，如果正向传播时的输入 `x` 大于 0，则反向传播会将上游的值原封不动地传给下游。反过来，如果正向传播时的 `x` 小于等于 0，则反向传播中传给下游的信号将停在此处。用计算图表示的话，如下图所示：
 
-![ReLU](/images/deep-learning/backpropagation/relu-multiply.png)
+![ReLU](/images/content/deep-learning/backpropagation/relu-multiply.png)
 
 现在我们来实现 ReLU 层（在神经网络的层的实现中，一般假定 `forward()` 和 `backward()` 的参数是 NumPy 数组。）：
 
@@ -510,7 +510,7 @@ $$y = \frac{1}{1 + e^{-x}}$$
 
 用计算图表示的话，如下图所示：
 
-![sigmoid层的计算图（仅正向传播）](/images/deep-learning/backpropagation/sigmoid-multiply-forward.png)
+![sigmoid层的计算图（仅正向传播）](/images/content/deep-learning/backpropagation/sigmoid-multiply-forward.png)
 
 这里除了 **×** 和 **+** 节点外，还出现了新的 **exp** 和 **/** 节点。**exp** 节点会进行 $y=e^x$ 的计算，**/** 节点会进行 $y=\frac{1}{x}$ 的计算。
 
@@ -518,23 +518,23 @@ $$y = \frac{1}{1 + e^{-x}}$$
 
 - **步骤一**：**/** 结点表示 $\frac{1}{x}$，它的导数可以解析性地表示为 $\frac{\partial y}{\partial x} = -\frac{1}{x^2} = -y^2$。反向传播时，会将上游的值乘以 $−y^2$（正向传播的输出的平方乘以 −1 后的值）后，再传给下游。
 
-![sigmoid层的计算图（反向传播）-步骤一](/images/deep-learning/backpropagation/sigmoid-multiply-backward-step1.png)
+![sigmoid层的计算图（反向传播）-步骤一](/images/content/deep-learning/backpropagation/sigmoid-multiply-backward-step1.png)
 
 - **步骤二**：**+** 节点将上游的值原封不动地传给下游。
 
-![sigmoid层的计算图（反向传播）-步骤二](/images/deep-learning/backpropagation/sigmoid-multiply-backward-step2.png)
+![sigmoid层的计算图（反向传播）-步骤二](/images/content/deep-learning/backpropagation/sigmoid-multiply-backward-step2.png)
 
 - **步骤三**：**exp** 节点表示 $y=e^x$，它的导数表示为 $\frac{\partial y}{\partial x} = e^x$。计算图中，上游的值乘以正向传播时的输出（这个例子中是 $e^x$）后，再传给下游。
 
-![sigmoid层的计算图（反向传播）-步骤三](/images/deep-learning/backpropagation/sigmoid-multiply-backward-step3.png)
+![sigmoid层的计算图（反向传播）-步骤三](/images/content/deep-learning/backpropagation/sigmoid-multiply-backward-step3.png)
 
 - **步骤四**：**×** 节点将正向传播时的值翻转后做乘法运算。因此，这里要乘以 −1。
 
-![sigmoid层的计算图](/images/deep-learning/backpropagation/sigmoid-multiply-backward.png)
+![sigmoid层的计算图](/images/content/deep-learning/backpropagation/sigmoid-multiply-backward.png)
 
 由结果可知：反向传播的输出为 $\frac{\partial L}{\partial y}y^2 e^{-x}$，这个值会传播给下游的节点。这里要注意，$\frac{\partial L}{\partial y}y^2 e^{-x}$ 这个值只根据正向传播时的输入 $x$ 和输出 $y$ 就可以算出来。因此，可以画成集约化的 **sigmoid** 节点：
 
-![Sigmoid层的计算图（简洁版）](/images/deep-learning/backpropagation/sigmoid-multiply-backward-compact.png)
+![Sigmoid层的计算图（简洁版）](/images/content/deep-learning/backpropagation/sigmoid-multiply-backward-compact.png)
 
 简洁版的计算图可以省略反向传播中的计算过程，因此计算效率更高。此外，通过对节点进行集约化，可以不用在意Sigmoid层中琐碎的细节，而只需要专注它的输入和输出，这一点也很重要。
 
@@ -550,7 +550,7 @@ $$
 
 因此，Sigmoid 层的反向传播，只根据正向传播的输出就能计算出来：
 
-![Sigmoid层的计算图：可以根据正向传播的输出y计算反向传播](/images/deep-learning/backpropagation/sigmoid-multiply-backward-optimization.png)
+![Sigmoid层的计算图：可以根据正向传播的输出y计算反向传播](/images/content/deep-learning/backpropagation/sigmoid-multiply-backward-optimization.png)
 
 ::
 
@@ -604,7 +604,7 @@ Y = np.dot(X, W) + B
 
 现在将这里进行的求矩阵的乘积与偏置的和的运算用计算图表示出来（将乘积运算用 **dot** 节点表示）：
 
-![Affine层的计算图（仅正向传播）](/images/deep-learning/backpropagation/affine-multiply.png)
+![Affine层的计算图（仅正向传播）](/images/content/deep-learning/backpropagation/affine-multiply.png)
 
 ::warning
 
@@ -620,7 +620,7 @@ $$\frac{\partial L}{\partial W}=X^T · \frac{\partial L}{\partial Y}$$
 
 现在，我们根据上式，尝试写出计算图的反向传播：
 
-![Affine层的反向传播：注意变量是多维数组。反向传播时各个变量的下方标记了该变量的形状](/images/deep-learning/backpropagation/affine-multiply-backward.png)
+![Affine层的反向传播：注意变量是多维数组。反向传播时各个变量的下方标记了该变量的形状](/images/content/deep-learning/backpropagation/affine-multiply-backward.png)
 
 我们看一下计算图中各个变量的形状。尤其要注意，$X$ 和 $\frac{\partial L}{\partial X}$ 形状相同，$W$ 和 $\frac{\partial L}{\partial W}$ 形状相同。从下面的数学式可以很明确地看出 $X$ 和 $\frac{\partial L}{\partial X}$ 形状相同：
 
@@ -635,7 +635,7 @@ $$X^T=(\frac{\partial L}{\partial x_0},\frac{\partial L}{\partial x_1},···,\f
 #default
 因为矩阵的乘积运算要求对应维度的元素个数保持一致，通过确认一致性。比如，$\frac{\partial L}{\partial Y}$ 的形状是 (3,)，$W$ 的形状是 (2,3) 时，思考 $\frac{\partial L}{\partial Y}$ 和 $W$ 的乘积，使得 $\frac{\partial L}{\partial X}$ 的形状为 (2,)。
 
-![矩阵的乘积（dot 节点）的反向传播可以通过组建使矩阵对应维度的元素个数一致的乘积运算而推导出来](/images/deep-learning/backpropagation/matrix-multiply-backward.png)
+![矩阵的乘积（dot 节点）的反向传播可以通过组建使矩阵对应维度的元素个数一致的乘积运算而推导出来](/images/content/deep-learning/backpropagation/matrix-multiply-backward.png)
 
 ::
 
@@ -645,7 +645,7 @@ $$X^T=(\frac{\partial L}{\partial x_0},\frac{\partial L}{\partial x_1},···,\f
 
 先给出批版本的 Affine 层的计算图：
 
-![批版本的Affine层的计算图](/images/deep-learning/backpropagation/affine-multiply-batch.png)
+![批版本的Affine层的计算图](/images/content/deep-learning/backpropagation/affine-multiply-batch.png)
 
 与刚刚不同的是，现在输入 X 的形状是(N,2)。之后就和前面一样，在计算图上进行单纯的矩阵计算。反向传播时，如果注意矩阵的形状，就可以和前面一样推导出 $\frac{\partial L}{\partial X}$ 和 $\frac{\partial L}{\partial W}$。
 
@@ -721,7 +721,7 @@ $$y_k = \frac{e^{a_i}}{\sum_{i=1}^{n} e^{a_j}}$$
 
 比如手写数字识别时，Softmax层的输出如下图所示：
 
-![Softmax 函数](/images/deep-learning/backpropagation/softmax.png)
+![Softmax 函数](/images/content/deep-learning/backpropagation/softmax.png)
 
 Softmax 层将输入值正规化（将输出值的和调整为 1）之后再输出。另外，因为手写数字识别要进行 10 类分类，所以向 Softmax 层的输入也有 10 个。
 
@@ -729,13 +729,13 @@ Softmax 层将输入值正规化（将输出值的和调整为 1）之后再输�
 
 下面来实现 Softmax 层。考虑到这里也包含作为损失函数的交叉熵误差（cross entropy error），所以称为**Softmax-with-Loss层**。 Softmax-withLoss 层（Softmax 函数和交叉熵误差）的计算图如下图所示：
 
-![Softmax-with-Loss 层的计算图](/images/deep-learning/backpropagation/softmax-with-loss-multiply.png)
+![Softmax-with-Loss 层的计算图](/images/content/deep-learning/backpropagation/softmax-with-loss-multiply.png)
 
 > 推导过程见附录。
 
 也可以简化为下图：
 
-![Softmax-with-Loss 层的计算图](/images/deep-learning/backpropagation/softmax-with-loss-multiply-simplified.png)
+![Softmax-with-Loss 层的计算图](/images/content/deep-learning/backpropagation/softmax-with-loss-multiply-simplified.png)
 
 > softmax 函数记为 Softmax 层，交叉熵误差记为 Cross Entropy Error 层。
 >

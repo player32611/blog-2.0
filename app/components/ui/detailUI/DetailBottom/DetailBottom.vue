@@ -24,7 +24,6 @@ onMounted(() => {
 			<DetailBottomTelevision />
 			<DetailBottomLinks />
 			<DetailBottomTelevision />
-			<!-- <div class="exhibit_container hoverable"><Television /></div> -->
 		</div>
 	</div>
 </template>
@@ -34,7 +33,7 @@ onMounted(() => {
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: end;
 	align-items: center;
 	height: 100vh;
 	width: 100%;

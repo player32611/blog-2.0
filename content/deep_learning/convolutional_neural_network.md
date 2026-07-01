@@ -8,7 +8,7 @@ CNN 和之前介绍的神经网络一样，可以像乐高积木一样通过组�
 
 之前介绍的神经网络中，相邻层的所有神经元之间都有连接，这称为**全连接**（fully-connected），并用 Affine 层实现了全连接层。
 
-![基于全连接层（Affine 层）的网络的例子](/images/deep-learning/convolutional-neural-network/fully-connected.png)
+![基于全连接层（Affine 层）的网络的例子](/images/content/deep-learning/convolutional-neural-network/fully-connected.png)
 
 > 全连接的神经网络中，Affine 层后面跟着激活函数 ReLU 层（或者 Sigmoid 层）。
 >
@@ -16,7 +16,7 @@ CNN 和之前介绍的神经网络一样，可以像乐高积木一样通过组�
 
 那么，CNN 会是什么样的结构呢：
 
-![基于 CNN 的网络的例子](/images/deep-learning/convolutional-neural-network/cnn-struct.png)
+![基于 CNN 的网络的例子](/images/content/deep-learning/convolutional-neural-network/cnn-struct.png)
 
 > 新增了 Convolution 层和 Pooling 层（用灰色的方块表示）
 
@@ -50,19 +50,19 @@ CNN 中新增了 Convolution 层和 Pooling 层。CNN 的层的连接顺序是 �
 
 卷积运算对输入数据应用滤波器。在这个例子中，输入数据是有高长方向的形状的数据，滤波器也一样，有高长方向上的维度。假设用（height, width）表示数据和滤波器的形状，则在本例中，输入大小是 (4, 4)，滤波器大小是 (3, 3)，输出大小是 (2, 2)。
 
-![卷积运算的例子](/images/deep-learning/convolutional-neural-network/convolution-operation.png)
+![卷积运算的例子](/images/content/deep-learning/convolutional-neural-network/convolution-operation.png)
 
 > 仅应用滤波器
 
 现在来解释一下图中的卷积运算例子都进行了什么样的计算：
 
-![卷积运算的计算顺序](/images/deep-learning/convolutional-neural-network/convolution-operation-calculation.png)
+![卷积运算的计算顺序](/images/content/deep-learning/convolutional-neural-network/convolution-operation-calculation.png)
 
 对于输入数据，卷积运算以一定间隔滑动滤波器的窗口并应用。这里所说的窗口是指图中灰色的 3×3 的部分，将各个位置上滤波器的元素和输入的对应元素相乘，然后再求和（有时将这个计算称为**乘积累加运算**）。然后，将这个结果保存到输出的对应位置。将这个过程在所有位置都进行一遍，就可以得到卷积运算的输出。
 
 在全连接的神经网络中，除了权重参数，还存在偏置。CNN 中，滤波器的参数就对应之前的权重。并且，CNN 中也存在偏置：
 
-![卷积运算的偏置：向应用了滤波器的元素加上某个固定值（偏置）](/images/deep-learning/convolutional-neural-network/convolution-operation-bias.png)
+![卷积运算的偏置：向应用了滤波器的元素加上某个固定值（偏置）](/images/content/deep-learning/convolutional-neural-network/convolution-operation-bias.png)
 
 上图在应用了滤波器的基础上加上了偏置。偏置通常只有 1 个（1×1），这个值会被加到应用了滤波器的所有元素上。
 
@@ -72,7 +72,7 @@ CNN 中新增了 Convolution 层和 Pooling 层。CNN 的层的连接顺序是 �
 
 比如，对大小为 (4, 4) 的输入数据应用了幅度为 1 的填充。“幅度为 1 的填充” 是指用幅度为 1 像素的 0 填充周围：
 
-![卷积运算的填充处理：向输入数据的周围填入 0](/images/deep-learning/convolutional-neural-network/convolution-operation-padding.png)
+![卷积运算的填充处理：向输入数据的周围填入 0](/images/content/deep-learning/convolutional-neural-network/convolution-operation-padding.png)
 
 > 图中用虚线表示填充，并省略了填充的内容 “0”
 
@@ -102,7 +102,7 @@ CNN 中新增了 Convolution 层和 Pooling 层。CNN 的层的连接顺序是 �
 
 之前的例子中步幅都是 1，如果将步幅设为 2，则应用滤波器的窗口的间隔变为 2 个元素：
 
-![步幅为2的卷积运算的例子](/images/deep-learning/convolutional-neural-network/convolution-operation-stride.png)
+![步幅为2的卷积运算的例子](/images/content/deep-learning/convolutional-neural-network/convolution-operation-stride.png)
 
 > 对输入大小为 (7, 7) 的数据，以步幅 2 应用了滤波器。通过将步幅设为 2，输出大小变为 (3, 3)。
 
@@ -159,11 +159,11 @@ $$OW = \frac{31 + 2 \times 2 - 5}{3} + 1 = 11$$
 
 这里，我们按照与之前相同的顺序，看一下对加上了通道方向的 3 维数据进行卷积运算的例子：
 
-![对 3 维数据进行卷积运算的例子](/images/deep-learning/convolutional-neural-network/convolution-operation-3d.png)
+![对 3 维数据进行卷积运算的例子](/images/content/deep-learning/convolutional-neural-network/convolution-operation-3d.png)
 
 > 对 3 维数据进行卷积运算的例子
 
-![对 3 维数据进行卷积运算的计算顺序](/images/deep-learning/convolutional-neural-network/convolution-operation-3d-calculation.png)
+![对 3 维数据进行卷积运算的计算顺序](/images/content/deep-learning/convolutional-neural-network/convolution-operation-3d-calculation.png)
 
 > 对 3 维数据进行卷积运算的计算顺序
 
@@ -181,7 +181,7 @@ $$OW = \frac{31 + 2 \times 2 - 5}{3} + 1 = 11$$
 
 将数据和滤波器结合长方体的方块来考虑，3 维数据的卷积运算会很容易理解。
 
-![结合方块思考卷积运算](/images/deep-learning/convolutional-neural-network/convolution-operation-3d-block.png)
+![结合方块思考卷积运算](/images/content/deep-learning/convolutional-neural-network/convolution-operation-3d-block.png)
 
 > 方块是如图所示的 3 维长方体。
 >
@@ -195,7 +195,7 @@ $$OW = \frac{31 + 2 \times 2 - 5}{3} + 1 = 11$$
 
 如果要在通道方向上也拥有多个卷积运算的输出，就需要用到多个滤波器（权重）：
 
-![基于多个滤波器的卷积运算的例子](/images/deep-learning/convolutional-neural-network/convolution-operation-3d-multiple-filters.png)
+![基于多个滤波器的卷积运算的例子](/images/content/deep-learning/convolutional-neural-network/convolution-operation-3d-multiple-filters.png)
 
 通过应用 $FN$ 个滤波器，输出特征图也生成了 $FN$ 个。如果将这 $FN$ 个特征图汇集在一起，就得到了形状为 ($FN$, $OH$, $OW$)的方块。将这个方块传给下一层，就是 CNN 的处理流。
 
@@ -203,7 +203,7 @@ $$OW = \frac{31 + 2 \times 2 - 5}{3} + 1 = 11$$
 
 如果进一步追加偏置的加法运算处理：
 
-![卷积运算的处理流（追加了偏置项）](/images/deep-learning/convolutional-neural-network/convolution-operation-3d-block-with-bias.png)
+![卷积运算的处理流（追加了偏置项）](/images/content/deep-learning/convolutional-neural-network/convolution-operation-3d-block-with-bias.png)
 
 > 每个通道只有一个偏置。这里，偏置的形状是 ($FN$, 1, 1)，滤波器的输出结果的形状是 ($FN$, $OH$, $OW$)。
 
@@ -217,7 +217,7 @@ $$OW = \frac{31 + 2 \times 2 - 5}{3} + 1 = 11$$
 
 比如，将之前的处理改成对 N 个数据进行批处理：
 
-![卷积运算的处理流（批处理）](/images/deep-learning/convolutional-neural-network/convolution-operation-3d-batch.png)
+![卷积运算的处理流（批处理）](/images/content/deep-learning/convolutional-neural-network/convolution-operation-3d-batch.png)
 
 图中的批处理版的数据流中，在各个数据的开头添加了批用的维度。像这样，数据作为 4 维的形状在各层间传递。
 
@@ -235,7 +235,7 @@ $$OW = \frac{31 + 2 \times 2 - 5}{3} + 1 = 11$$
 
 比如，进行将 2×2 的区域集约成 1 个元素的处理，缩小空间大小。
 
-![池化的处理顺序](/images/deep-learning/convolutional-neural-network/pooling-calculation.png)
+![池化的处理顺序](/images/content/deep-learning/convolutional-neural-network/pooling-calculation.png)
 
 > 按步幅 2 进行 2×2 的 Max 池化的处理顺序
 >
@@ -262,11 +262,11 @@ $$OW = \frac{31 + 2 \times 2 - 5}{3} + 1 = 11$$
 
 - **通道数不发生变化**：经过池化运算，输入数据和输出数据的通道数不会发生变化。如下图所示，计算是按通道独立进行的。
 
-![池化中通道数不变](/images/deep-learning/convolutional-neural-network/pooling-channel-unchanged.png)
+![池化中通道数不变](/images/content/deep-learning/convolutional-neural-network/pooling-channel-unchanged.png)
 
 - **对微小的位置变化具有鲁棒性（健壮）**：输入数据发生微小偏差时，池化仍会返回相同的结果。比如，3×3 的池化的情况下，池化会吸收输入数据的偏差（根据数据的不同，结果有可能不一致）
 
-![输入数据在宽度方向上只偏离 1 个元素时，输出仍为相同的结果](/images/deep-learning/convolutional-neural-network/pooling-robust.png)
+![输入数据在宽度方向上只偏离 1 个元素时，输出仍为相同的结果](/images/content/deep-learning/convolutional-neural-network/pooling-robust.png)
 
 ## 卷积层和池化层的实现
 
@@ -300,9 +300,9 @@ print(x[0, 0]) # 或者x[0][0]
 
 im2col 是一个函数，将输入数据展开以适合滤波器（权重）。对 3 维的输入数据应用 im2col 后，数据转换为 2 维矩阵（正确地讲，是把包含批数量的 4 维数据转换成了 2 维数据）：
 
-![im2col的示意图](/images/deep-learning/convolutional-neural-network/im2col-intent.png)
+![im2col的示意图](/images/content/deep-learning/convolutional-neural-network/im2col-intent.png)
 
-![将滤波器的应用区域从头开始依次横向展开为 1 列](/images/deep-learning/convolutional-neural-network/im2col-expand.png)
+![将滤波器的应用区域从头开始依次横向展开为 1 列](/images/content/deep-learning/convolutional-neural-network/im2col-expand.png)
 
 > 为了便于观察，将步幅设置得很大，以使滤波器的应用区域不重叠
 >
@@ -316,7 +316,7 @@ im2col 是一个函数，将输入数据展开以适合滤波器（权重）。�
 
 使用 im2col 展开输入数据后，之后就只需将卷积层的滤波器（权重）纵向展开为 1 列，并计算 2 个矩阵的乘积即可。这和全连接层的 Affine 层进行的处理基本相同：
 
-![卷积运算的滤波器处理的细节](/images/deep-learning/convolutional-neural-network/convolution-calculation.png)
+![卷积运算的滤波器处理的细节](/images/content/deep-learning/convolutional-neural-network/convolution-calculation.png)
 
 > 将滤波器纵向展开为 1 列，并计算和 im2col 展开的数据的矩阵乘积，最后转换（reshape）为输出数据的大小
 >
@@ -453,7 +453,7 @@ class Convolution:
 
 forward 的实现中，最后会将输出大小转换为合适的形状。转换时使用了 NumPy 的 `transpose` 函数。`transpose` 会更改多维数组的轴的顺序。通过指定从 0 开始的索引（编号）序列，就可以更改轴的顺序：
 
-![基于 NumPy 的 transpose 的轴顺序的更改：通过指定索引（编号），更改轴的顺序](/images/deep-learning/convolutional-neural-network/transpose.png)
+![基于 NumPy 的 transpose 的轴顺序的更改：通过指定索引（编号），更改轴的顺序](/images/content/deep-learning/convolutional-neural-network/transpose.png)
 
 `reshape(N, out_h, out_w, FN)` 将输出恢复为 4 维，`transpose(0, 3, 1, 2)` 将通道维度放到第 1 维。
 
@@ -565,11 +565,11 @@ def col2im(col, input_shape, filter_h, filter_w, stride=1, pad=0):
 
 不过，池化的情况下，在通道方向上是独立的，这一点和卷积层不同。池化的应用区域按通道单独展开：
 
-![对输入数据展开池化的应用区域（2×2的池化的例子）](/images/deep-learning/convolutional-neural-network/pooling.png)
+![对输入数据展开池化的应用区域（2×2的池化的例子）](/images/content/deep-learning/convolutional-neural-network/pooling.png)
 
 像这样展开之后，只需对展开的矩阵求各行的最大值，并转换为合适的形状即可：
 
-![池化层的实现流程：池化的应用区域内的最大值元素用灰色表示](/images/deep-learning/convolutional-neural-network/pooling-implementation.png)
+![池化层的实现流程：池化的应用区域内的最大值元素用灰色表示](/images/content/deep-learning/convolutional-neural-network/pooling-implementation.png)
 
 > 池化层的实现流程：池化的应用区域内的最大值元素用灰色表示
 
@@ -642,7 +642,7 @@ class Pooling:
 
 先来观察一下简单 CNN 的结构：
 
-![简单 CNN 的网络构成](/images/deep-learning/convolutional-neural-network/cnn-simple.png)
+![简单 CNN 的网络构成](/images/content/deep-learning/convolutional-neural-network/cnn-simple.png)
 
 网络的构成是 “Convolution - ReLU - Pooling - Affine - ReLU - Affine - Softmax”，我们将它实现为名为 `SimpleConvNet` 的类。
 
@@ -920,7 +920,7 @@ network.load_params("params.pkl")
 filter_show(network.params['W1'])
 ```
 
-![学习前和学习后的第 1 层的卷积层的权重](/images/deep-learning/convolutional-neural-network/filter.png)
+![学习前和学习后的第 1 层的卷积层的权重](/images/content/deep-learning/convolutional-neural-network/filter.png)
 
 > 虽然权重的元素是实数，但是在图像的显示上，统一将最小值显示为黑色（0），最大值显示为白色（255）
 
@@ -932,7 +932,7 @@ filter_show(network.params['W1'])
 
 比如，左半部分为白色、右半部分为黑色的滤波器的情况下，会对垂直方向上的边缘有响应：
 
-![对水平方向上和垂直方向上的边缘有响应的滤波器](/images/deep-learning/convolutional-neural-network/filter2.png)
+![对水平方向上和垂直方向上的边缘有响应的滤波器](/images/content/deep-learning/convolutional-neural-network/filter2.png)
 
 > 输出图像 1 中，垂直方向的边缘上出现白色像素，输出图像 2 中，水平方向的边缘上出现很多白色像素
 
@@ -953,7 +953,7 @@ filter_show(network.params['W1'])
 #title
 具体示例
 #default
-![进行一般物体识别（车或狗等）的 8 层 CNN](/images/deep-learning/convolutional-neural-network/cnn-8.png)
+![进行一般物体识别（车或狗等）的 8 层 CNN](/images/content/deep-learning/convolutional-neural-network/cnn-8.png)
 
 > 进行一般物体识别（车或狗等）的 8 层 CNN（AlexNet）。
 
@@ -977,7 +977,7 @@ filter_show(network.params['W1'])
 
 LeNet 在 1998 年被提出，是进行手写数字识别的网络。它有连续的卷积层和池化层（正确地讲，是只 “抽选元素” 的子采样层），最后经全连接层输出结果。
 
-![LeNet 的网络结构](/images/deep-learning/convolutional-neural-network/lenet.png)
+![LeNet 的网络结构](/images/content/deep-learning/convolutional-neural-network/lenet.png)
 
 和 “现在的 CNN” 相比，LeNet 有几个不同点。第一个不同点在于激活函数。LeNet 中使用 sigmoid 函数，而现在的 CNN 中主要使用 ReLU 函数。此外，原始的 LeNet 中使用子采样（subsampling）缩小中间数据的大小，而现在的 CNN 中 Max 池化是主流。
 
@@ -987,7 +987,7 @@ LeNet 在 1998 年被提出，是进行手写数字识别的网络。它有连�
 
 在 LeNet 问世 20 多年后，AlexNet 被发布出来。AlexNet 是引发深度学习热潮的导火线，不过它的网络结构和 LeNet 基本上没有什么不同：
 
-![AlexNet 的网络结构](/images/deep-learning/convolutional-neural-network/alexnet.png)
+![AlexNet 的网络结构](/images/content/deep-learning/convolutional-neural-network/alexnet.png)
 
 AlexNet 叠有多个卷积层和池化层，最后经由全连接层输出结果。虽然结构上 AlexNet 和 LeNet 没有大的不同，但有以下几点差异：
 

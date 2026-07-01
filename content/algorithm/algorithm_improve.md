@@ -43,7 +43,7 @@
 #default
 以数组 $a=[5,1,3,0,2,2,7,4,5,8]$ 为例，如果查询的是区间和，我们会创建出来这样一棵树来维护信息：
 
-![线段树](/images/algorithm/algorithm-improve/segment-tree.png)
+![线段树](/images/content/algorithm/algorithm-improve/segment-tree.png)
 
 ::
 
@@ -147,7 +147,7 @@ LL query(int p, int x, int y) {
 #default
 以数组 $a=[5,1,3,0,2,2,7,4,5,8]$ 为例，如果将 $x=6$ 位置上的元素增加 3，维护的信息如下：
 
-![线段树单点修改](/images/algorithm/algorithm-improve/segment-tree-single-point-modify.png)
+![线段树单点修改](/images/content/algorithm/algorithm-improve/segment-tree-single-point-modify.png)
 
 ::
 
@@ -977,7 +977,7 @@ s = ' ' + s;
 
 原理就是 border 的传递性：字符串 border 的 border 还是 border。
 
-![前缀函数](/images/algorithm/algorithm-improve/prefix-function.png)
+![前缀函数](/images/content/algorithm/algorithm-improve/prefix-function.png)
 
 - 首先 $\pi[i]$ 存的是最长的 border 的长度，母庸置疑；
 
@@ -1020,7 +1020,7 @@ void get_border(int i) {
 
 那么，我们就可以从大到小枚举长度为 i - 1 的前缀中所有的 border，然后判断这个 border 的下一个字符是否和 s[i] 相等：
 
-![前缀函数的计算 ](/images/algorithm/algorithm-improve/prefix-function-calculation.png)
+![前缀函数的计算 ](/images/content/algorithm/algorithm-improve/prefix-function-calculation.png)
 
 - 如果相等，说明这个就是最长的；
 

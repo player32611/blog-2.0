@@ -1536,7 +1536,7 @@ app.use("/api", apiRouter);
 
 ### 主界面组成部分
 
-![MySQL Workbench 主界面](/images/back-end/nodejs/mysql.png)
+![MySQL Workbench 主界面](/images/content/back-end/nodejs/mysql.png)
 
 ### 创建数据
 
@@ -1544,7 +1544,7 @@ app.use("/api", apiRouter);
 
 ① 点击新建数据库按钮
 
-![新建数据库](/images/back-end/nodejs/mysql-new-schema.png)
+![新建数据库](/images/content/back-end/nodejs/mysql-new-schema.png)
 
 ② 填写数据库的名称
 
@@ -2204,7 +2204,7 @@ Cookie 的几大特性：自动发送、域名独立、过期时限、4 KB 限�
 
 **Session 的工作原理**：
 
-![Session 的工作原理](/images/back-end/nodejs/session.png)
+![Session 的工作原理](/images/content/back-end/nodejs/session.png)
 
 在 Express 项目中，只需要安装 express-session 中间件，即可在项目中使用 Session 认证：
 
@@ -2286,7 +2286,7 @@ Session 认证机制需要配合 Cookie 才能实现。由于 Cookie 默认不�
 
 **JWT 的工作原理**：
 
-![JWT 的工作原理](/images/back-end/nodejs/jwt.png)
+![JWT 的工作原理](/images/content/back-end/nodejs/jwt.png)
 
 用户的信息通过 Token 字符串的形式，保存在客户端浏览器中。服务器通过还原 Token 字符串的形式来认证用户的身份。
 

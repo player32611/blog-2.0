@@ -18,9 +18,9 @@ https://developers.weixin.qq.com/miniprogram/dev/devtools/stable.html
 
 ### 工具栏
 
-**编译**: 在模拟器中查看最新的项目效果![An image](/images/front-end/WeChatMiniProgram/compile.png)
+**编译**: 在模拟器中查看最新的项目效果![An image](/images/content/front-end/WeChatMiniProgram/compile.png)
 
-**预览**: 在真机中查看最新的项目效果![An image](/images/front-end/WeChatMiniProgram/preview.png)
+**预览**: 在真机中查看最新的项目效果![An image](/images/content/front-end/WeChatMiniProgram/preview.png)
 
 ### 项目结构
 
@@ -86,7 +86,7 @@ https://developers.weixin.qq.com/miniprogram/dev/devtools/stable.html
 
 ### 小程序窗口的组成部分
 
-![An image](/images/front-end/WeChatMiniProgram/windowComponents.png)
+![An image](/images/content/front-end/WeChatMiniProgram/windowComponents.png)
 
 其中导航栏区域和背景区域可以通过全局的 **window** 节点来进行相关的配置
 
@@ -1027,8 +1027,8 @@ onReachBottom() {
       {
           "pagePath": "pages/logs/logs",
           "text": "logs",
-          "iconPath": "/images/logs.png",
-          "selectedIconPath": "/images/logs-selected.png"
+          "iconPath": "/images/content/logs.png",
+          "selectedIconPath": "/images/content/logs-selected.png"
       },
       {
           "pagePath": "pages/index/index",
@@ -1929,11 +1929,11 @@ onLoad(){
 
 想要为小程序项目进行分包，首先需要调整小程序目录结构：
 
-![An image](/images/front-end/WeChatMiniProgram/packagesLists.png)
+![An image](/images/content/front-end/WeChatMiniProgram/packagesLists.png)
 
 同时在 `app.json` 的 **subpackages** 节点中声明分包的结构
 
-![An image](/images/front-end/WeChatMiniProgram/packagesConfigures.png)
+![An image](/images/content/front-end/WeChatMiniProgram/packagesConfigures.png)
 
 ```json
 {

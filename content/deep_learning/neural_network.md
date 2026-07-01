@@ -4,7 +4,7 @@
 
 神经网络和感知机有很多共同点。用图来表示神经网络的话，我们把最左边的一列称为**输入层**，最右边的一列称为**输出层**，中间的一列称为**中间层**。中间层有时也称为**隐藏层**。
 
-![神经网络的例子](/images/deep-learning/neural-network/example.png)
+![神经网络的例子](/images/content/deep-learning/neural-network/example.png)
 
 ## 激活函数
 
@@ -92,7 +92,7 @@ plt.show()
 
 ::
 
-![阶跃函数的图形](/images/deep-learning/neural-network/step-function.png)
+![阶跃函数的图形](/images/content/deep-learning/neural-network/step-function.png)
 
 阶跃函数以 0 为界，输出从 0 切换为 1（或者从 1 切换为 0）。它的值呈阶梯式变化，所以称为阶跃函数。
 
@@ -131,7 +131,7 @@ plt.show()
 
 ::
 
-![sigmoid 函数的图形](/images/deep-learning/neural-network/sigmoid-function.png)
+![sigmoid 函数的图形](/images/content/deep-learning/neural-network/sigmoid-function.png)
 
 ### 阶跃函数和 sigmoid 函数的比较
 
@@ -192,7 +192,7 @@ plt.show()
 
 ::
 
-![ReLU 函数](/images/deep-learning/neural-network/relu-function.png)
+![ReLU 函数](/images/content/deep-learning/neural-network/relu-function.png)
 
 ## 3 层神经网络的实现
 
@@ -200,13 +200,13 @@ plt.show()
 
 如下图所示，只突出显示了从输入层神经元 $x_2$ 到后一层的神经元 $a_1^{(1)}$ 的权重。
 
-![权重的符号](/images/deep-learning/neural-network/weight.png)
+![权重的符号](/images/content/deep-learning/neural-network/weight.png)
 
 ### 各层间信号传递的实现
 
 如下图所示，从输入层到第 1 层的第 1 个神经元的信号传递过程。
 
-![从输入层到第1层的信号传递](/images/deep-learning/neural-network/signal-transmission-1.png)
+![从输入层到第1层的信号传递](/images/content/deep-learning/neural-network/signal-transmission-1.png)
 
 图中增加了表示偏置的神经元 “1”。请注意，偏置的右下角的索引号只有一个。这是因为前一层的偏置神经元（神经元 “1”）只有一个。
 
@@ -237,7 +237,7 @@ A1 = np.dot(X, W1) + B1
 
 接下来，我们观察第 1 层中激活函数的计算过程。
 
-![从输入层到第1层的信号传递](/images/deep-learning/neural-network/signal-transmission-2.png)
+![从输入层到第1层的信号传递](/images/content/deep-learning/neural-network/signal-transmission-2.png)
 
 如图所示，隐藏层的加权和（加权信号和偏置的总和）用 $a$ 表示，被激活函数转换后的信号用 $z$ 表示，图中 $h()$ 表示激活函数。
 
@@ -254,7 +254,7 @@ print(Z1) # [0.57444252, 0.66818777, 0.75026011]
 #title
 第 1 层到第 2 层的信号传递
 #default
-![第1层到第2层的信号传递](/images/deep-learning/neural-network/signal-transmission-3.png)
+![第1层到第2层的信号传递](/images/content/deep-learning/neural-network/signal-transmission-3.png)
 
 ```python
 W2 = np.array([[0.1, 0.4], [0.2, 0.5], [0.3, 0.6]])
@@ -273,7 +273,7 @@ Z2 = sigmoid(A2)
 #title
 第 2 层到输出层的信号传递
 #default
-![第2层到输出层的信号传递](/images/deep-learning/neural-network/signal-transmission-4.png)
+![第2层到输出层的信号传递](/images/content/deep-learning/neural-network/signal-transmission-4.png)
 
 ```python
 def identity_function(x):
@@ -351,7 +351,7 @@ print(y) # [ 0.31682708  0.69627909]
 
 因此，在输出层使用恒等函数时，输入信号会原封不动地被输出。
 
-![恒等函数](/images/deep-learning/neural-network/identity-function.png)
+![恒等函数](/images/content/deep-learning/neural-network/identity-function.png)
 
 ### softmax 函数
 
@@ -361,7 +361,7 @@ $$y_k = \frac{e^{a_i}}{\sum_{i=1}^{n} e^{a_j}}$$
 
 该式表示假设输出层共有 n 个神经元，计算第 k 个神经元的输出 $y_k$。
 
-![softmax 函数](/images/deep-learning/neural-network/softmax-function.png)
+![softmax 函数](/images/content/deep-learning/neural-network/softmax-function.png)
 
 图中 softmax 函数的输出通过箭头与所有的输入信号相连。这是因为输出层的各个神经元都受到所有输入信号的影响。
 
@@ -420,7 +420,7 @@ print(np.sum(y)) # 1.0
 
 输出层的神经元数量需要根据待解决的问题来决定。对于分类问题，输出层的神经元数量一般设定为类别的数量。
 
-![输出层神经元的数量](/images/deep-learning/neural-network/neurons.png)
+![输出层神经元的数量](/images/content/deep-learning/neural-network/neurons.png)
 
 ## 小结
 

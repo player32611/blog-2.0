@@ -4,11 +4,11 @@
 
 感知机接收多个输入信号，输出一个信号。这里所说的 “信号” 可以想象成电流或河流那样具备 “流动性” 的东西。像电流流过导线，向前方输送电子一样，感知机的信号也会形成流，向前方输送信息。
 
-![有两个输入的感知机](/images/deep-learning/perceptron/perceptron.png)
+![有两个输入的感知机](/images/content/deep-learning/perceptron/perceptron.png)
 
 ## 简单逻辑电路
 
-![与门、与非门、或门的符号](/images/deep-learning/perceptron/gates.png)
+![与门、与非门、或门的符号](/images/content/deep-learning/perceptron/gates.png)
 
 ### 与门
 
@@ -93,7 +93,7 @@ def OR(x1, x2):
 
 异或门的制作方法有很多，其中之一就是组合我们前面做好的与门、与非门、或门进行配置。
 
-![通过组合与门、与非门、或门实现异或门](/images/deep-learning/perceptron/xor-gate.png)
+![通过组合与门、与非门、或门实现异或门](/images/content/deep-learning/perceptron/xor-gate.png)
 
 | x1  | x2  | s1  | s2  |  y  |
 | :-: | :-: | :-: | :-: | :-: |

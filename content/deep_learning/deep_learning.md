@@ -12,7 +12,7 @@
 
 我们来创建一个更深的网络结构的 CNN（一个比之前的网络都深的网络）：
 
-![进行手写数字识别的深度CNN](/images/deep-learning/deep-learning/deep-cnn.png)
+![进行手写数字识别的深度CNN](/images/content/deep-learning/deep-learning/deep-cnn.png)
 
 这里使用的卷积层全都是 3×3 的小型滤波器，特点是随着层的加深，通道数变大（卷积层的通道数从前面的层开始按顺序以 16、16、32、32、64、64 的方式增加）
 
@@ -218,7 +218,7 @@ print("Saved Network Parameters!")
 
 这里我们实际看一下在什么样的图像上发生了识别错误：
 
-![识别错误的图像的例子](/images/deep-learning/deep-learning/recognition-error-example.png)
+![识别错误的图像的例子](/images/content/deep-learning/deep-learning/recognition-error-example.png)
 
 > 各个图像的左上角显示了正确解标签，右下角显示了本网络的推理结果
 
@@ -232,7 +232,7 @@ print("Saved Network Parameters!")
 
 在一个标题为 “What is the class of this image ?” 的网站上，以排行榜的形式刊登了目前为止通过论文等渠道发表的针对各种数据集的方法的识别精度：
 
-![针对MNIST数据集的各种方法的排行](/images/deep-learning/deep-learning/mnist-ranking.png)
+![针对MNIST数据集的各种方法的排行](/images/content/deep-learning/deep-learning/mnist-ranking.png)
 
 可以发现 “Neural Networks”“Deep”“Convolutional” 等关键词特别显眼。实际上，排行榜上的前几名大都是基于 CNN 的方法。
 
@@ -266,7 +266,7 @@ Data Augmentation 基于算法 “人为地” 扩充输入图像（训练图像
 
 具体地说，对于输入图像，通过施加旋转、垂直或水平方向上的移动等微小变化，增加图像的数量：
 
-![Data Augmentation 的例子](/images/deep-learning/deep-learning/data-augmentation-example.png)
+![Data Augmentation 的例子](/images/content/deep-learning/deep-learning/data-augmentation-example.png)
 
 这在数据集的图像数量有限时尤其有效。
 
@@ -293,7 +293,7 @@ Data Augmentation 基于算法 “人为地” 扩充输入图像（训练图像
 #default
 比如，下图展示了由 5×5 的滤波器构成的卷积层：
 
-![5×5 的卷积运算的例子](/images/deep-learning/deep-learning/convolution-example.png)
+![5×5 的卷积运算的例子](/images/content/deep-learning/deep-learning/convolution-example.png)
 
 > 这里希望大家考虑一下输出数据的各个节点是从输入数据的哪个区域计算出来的。
 
@@ -301,7 +301,7 @@ Data Augmentation 基于算法 “人为地” 扩充输入图像（训练图像
 
 接下来我们思考一下图中重复两次 3×3 的卷积运算的情形：
 
-![重复两次 3×3 的卷积层的例子](/images/deep-learning/deep-learning/convolution-example-2.png)
+![重复两次 3×3 的卷积层的例子](/images/content/deep-learning/deep-learning/convolution-example-2.png)
 
 此时，每个输出节点将由中间数据的某个 3×3 的区域计算出来。
 
@@ -362,13 +362,13 @@ Data Augmentation 基于算法 “人为地” 扩充输入图像（训练图像
 
 ImageNet 是拥有超过 100 万张图像的数据集。它包含了各种各样的图像，并且每张图像都被关联了标签（类别名）。每年都会举办使用这个巨大数据集的 ILSVRC 图像识别大赛。\
 
-![大规模数据集 ImageNet 的数据例](/images/deep-learning/deep-learning/imagenet-example.png)
+![大规模数据集 ImageNet 的数据例](/images/content/deep-learning/deep-learning/imagenet-example.png)
 
 > 大规模数据集 ImageNet 的数据例
 
 ILSVRC 大赛有多个测试项目，其中之一是 “类别分类”（classification），在该项目中，会进行 1000 个类别的分类，比试识别精度。
 
-![ILSCRV 优胜队伍的成绩演变](/images/deep-learning/deep-learning/imagenet-result.png)
+![ILSCRV 优胜队伍的成绩演变](/images/content/deep-learning/deep-learning/imagenet-result.png)
 
 > 从 2010 年到 2015 年的优胜队伍的成绩
 >
@@ -386,7 +386,7 @@ ILSVRC 大赛有多个测试项目，其中之一是 “类别分类”（classi
 
 VGG 是由卷积层和池化层构成的基础的 CNN。
 
-![VGG](/images/deep-learning/deep-learning/vgg.png)
+![VGG](/images/content/deep-learning/deep-learning/vgg.png)
 
 它的特点在于将有权重的层（卷积层或者全连接层）叠加至 16 层（或者 19 层），具备了深度（根据层的深度，有时也称为 “VGG16” 或 “VGG19”）
 
@@ -398,7 +398,7 @@ VGG 中需要注意的地方是，基于 3×3 的小型滤波器的卷积层的�
 
 GoogLeNet 的网络结构如下图所示：
 
-![GoogLeNet](/images/deep-learning/deep-learning/googlenet.png)
+![GoogLeNet](/images/content/deep-learning/deep-learning/googlenet.png)
 
 > 图中的矩形表示卷积层、池化层等
 
@@ -408,7 +408,7 @@ GoogLeNet 的网络结构如下图所示：
 
 GoogLeNet 在横向上有“宽度”，这称为 “Inception 结构”，以下图的结构为基础：
 
-![GoogLeNet 的 Inception 结构](/images/deep-learning/deep-learning/googlenet-inception.png)
+![GoogLeNet 的 Inception 结构](/images/content/deep-learning/deep-learning/googlenet-inception.png)
 
 Inception 结构使用了多个大小不同的滤波器（和池化），最后再合并它们的结果。
 
@@ -424,7 +424,7 @@ ResNet 是微软团队开发的网络。它的特征在于具有比以前的网�
 
 ResNet 中，为了解决这类问题，导入了 “快捷结构”（也称为 “捷径” 或 “小路”）。导入这个快捷结构后，就可以随着层的加深而不断提高性能了（当然，层的加深也是有限度的）。
 
-![ResNet 的构成要素](/images/deep-learning/deep-learning/resnet-structure.png)
+![ResNet 的构成要素](/images/content/deep-learning/deep-learning/resnet-structure.png)
 
 > 这里的 “weight layer” 是指卷积层
 
@@ -449,7 +449,7 @@ ResNet 中，为了解决这类问题，导入了 “快捷结构”（也称为
 
 ResNet 以 VGG 网络为基础，引入快捷结构以加深层：
 
-![ResNet](/images/deep-learning/deep-learning/resnet.png)
+![ResNet](/images/content/deep-learning/deep-learning/resnet.png)
 
 > 方块对应 3×3 的卷积层，其特征在于引入了横跨层的快捷结构
 
@@ -482,7 +482,7 @@ ResNet 通过以 2 个卷积层为间隔跳跃式地连接来加深层。
 
 我们先来看一下深度学习中什么样的处理比较耗时：
 
-![AlexNet 的 forward 处理中各层的时间比](/images/deep-learning/deep-learning/alexnet-forward.png)
+![AlexNet 的 forward 处理中各层的时间比](/images/content/deep-learning/deep-learning/alexnet-forward.png)
 
 > AlexNet 的 forward 处理中各层的时间比
 >
@@ -516,7 +516,7 @@ GPU 原本是作为图像专用的显卡使用的，但最近不仅用于图像�
 
 我们看一下基于 GPU 可以实现多大程度的高速化：
 
-![基于 GPU 的高速化](/images/deep-learning/deep-learning/gpu-computing.png)
+![基于 GPU 的高速化](/images/content/deep-learning/deep-learning/gpu-computing.png)
 
 > 使用 CPU 的 “16-core Xeon CPU” 和 GPU 的 “Titan 系列” 进行 AlexNet 的学习时分别所需的时间
 >
@@ -559,7 +559,7 @@ im2col 与 GPU
 
 下面中显示基于 TensorFlow 的分布式学习的效果：
 
-![基于 TensorFlow 的分布式学习的效果](/images/deep-learning/deep-learning/tensorflow-distributed-learning.png)
+![基于 TensorFlow 的分布式学习的效果](/images/content/deep-learning/deep-learning/tensorflow-distributed-learning.png)
 
 > 横轴是 GPU 的个数，纵轴是与单个 GPU 相比时的高速化率
 
@@ -618,7 +618,7 @@ NumPy 中提供了 16 位的半精度浮点数类型（不过，只有 16 位类
 
 比如下图就是要从图像中确定物体的种类和物体的位置：
 
-![物体检测的例子](/images/deep-learning/deep-learning/object-detection.png)
+![物体检测的例子](/images/content/deep-learning/deep-learning/object-detection.png)
 
 物体检测是比物体识别更难的问题。之前介绍的物体识别是以整个图像为对象的，但是物体检测需要从图像中确定类别的位置，而且还有可能存在多个物体。
 
@@ -626,7 +626,7 @@ NumPy 中提供了 16 位的半精度浮点数类型（不过，只有 16 位类
 
 在使用 CNN 进行物体检测的方法中，有一个叫作 R-CNN 的有名的方法:
 
-![R-CNN 的处理流](/images/deep-learning/deep-learning/rcnn-processing-flow.png)
+![R-CNN 的处理流](/images/content/deep-learning/deep-learning/rcnn-processing-flow.png)
 
 > 注意图中的 “2.Extract region proposals”（候选区域的提取）和 “3.Compute CNN features”（CNN 特征的计算）的处理部分
 
@@ -656,7 +656,7 @@ R-CNN 中会将图像变形为正方形，或者在分类时使用 SVM（支持�
 
 ::
 
-![图像分割的例子](/images/deep-learning/deep-learning/image-segmentation.png)
+![图像分割的例子](/images/content/deep-learning/deep-learning/image-segmentation.png)
 
 > 左边是输入图像，右边是监督用的带标签图像
 
@@ -670,7 +670,7 @@ R-CNN 中会将图像变形为正方形，或者在分类时使用 SVM（支持�
 
 为了解决这个无意义的计算问题，有人提出了一个名为 FCN（Fully Convolutional Network）的方法。该方法通过一次 forward 处理，对所有像素进行分类：
 
-![FCN 的概略图](/images/deep-learning/deep-learning/fcn-overview.png)
+![FCN 的概略图](/images/content/deep-learning/deep-learning/fcn-overview.png)
 
 > FCN 的概略图
 
@@ -699,13 +699,13 @@ FCN 最后进行的扩大处理是基于双线性插值法的扩大（双线性�
 
 有一项融合了计算机视觉和自然语言的有趣的研究，该研究如下图所示，给出一个图像后，会自动生成介绍这个图像的文字（图像的标题）。
 
-![基于深度学习的图像标题生成的例子](/images/deep-learning/deep-learning/image-title-generation.png)
+![基于深度学习的图像标题生成的例子](/images/content/deep-learning/deep-learning/image-title-generation.png)
 
 比如，左上角的第一幅图像生成了文本 “A person riding a motorcycle on a dirt road.”（在没有铺装的道路上骑摩托车的人），而且这个文本只从该图像自动生成。文本的内容和图像确实是一致的。并且，令人惊讶的是，除了 “骑摩托车” 之外，连 “没有铺装的道路” 都被正确理解了。
 
 一个基于深度学习生成图像标题的代表性方法是被称为 NIC（NeuralImage Caption）的模型。
 
-![Neural Image Caption（NIC）的整体结构](/images/deep-learning/deep-learning/nic-overview.png)
+![Neural Image Caption（NIC）的整体结构](/images/content/deep-learning/deep-learning/nic-overview.png)
 
 > Neural Image Caption（NIC）的整体结构
 
@@ -738,7 +738,7 @@ NIC 基于 CNN 从图像中提取特征，并将这个特征传给 RNN。RNN 以
 
 有一项研究是使用深度学习来 “绘制” 带有艺术气息的画：输入两个图像后，会生成一个新的图像。两个输入图像中，一个称为 “内容图像”，另一个称为 “风格图像”。
 
-![图像风格变换的例子](/images/deep-learning/deep-learning/image-style-transfer.png)
+![图像风格变换的例子](/images/content/deep-learning/deep-learning/image-style-transfer.png)
 
 > 左上角是风格图像，右上角是内容图像，下面的图像是新生成的图像
 
@@ -754,7 +754,7 @@ NIC 基于 CNN 从图像中提取特征，并将这个特征传给 RNN。RNN 以
 
 刚才的图像风格变换的例子在生成新的图像时输入了两个图像。不同于这种研究，现在有一种研究是生成新的图像时不需要任何图像（虽然需要事先使用大量的图像进行学习，但在 “画” 新图像时不需要任何图像）：
 
-![基于 DCGAN 生成的新的卧室图像](/images/deep-learning/deep-learning/image-generation.png)
+![基于 DCGAN 生成的新的卧室图像](/images/content/deep-learning/deep-learning/image-generation.png)
 
 > 基于 DCGAN（Deep Convolutional Generative Adversarial Network） 生成的新的卧室图像
 
@@ -791,7 +791,7 @@ Generator 生成近似真品的图像，Discriminator 判别它是不是真图�
 
 最近，在识别周围环境的技术中，深度学习的力量备受期待。比如，基于 CNN 的神经网络 SegNet，可以高精度地识别行驶环境：
 
-![基于深度学习的图像分割的例子](/images/deep-learning/deep-learning/image-segmentation-car.png)
+![基于深度学习的图像分割的例子](/images/content/deep-learning/deep-learning/image-segmentation-car.png)
 
 观察结果可知，在某种程度上正确地识别了道路、建筑物、人行道、树木、车辆等。今后若能基于深度学习使这种技术进一步实现高精度化、高速化的话，自动驾驶的实用化可能也就没那么遥远了。
 
@@ -801,7 +801,7 @@ Generator 生成近似真品的图像，Discriminator 判别它是不是真图�
 
 强化学习的基本框架是，代理（Agent）根据环境选择行动，然后通过这个行动改变环境。根据环境的变化，代理获得某种报酬。强化学习的目的是决定代理的行动方针，以获得更好的报酬。
 
-![强化学习的基本框架](/images/deep-learning/deep-learning/reinforcement-learning.png)
+![强化学习的基本框架](/images/content/deep-learning/deep-learning/reinforcement-learning.png)
 
 > 强化学习的基本框架：代理自主地进行学习，以获得更好的报酬
 
@@ -829,7 +829,7 @@ Generator 生成近似真品的图像，Discriminator 判别它是不是真图�
 #default
 在 DQN 的研究中，有让电子游戏自动学习，并实现了超过人类水平的操作的例子。
 
-![基于 Deep Q-Network 学习电子游戏的操作](/images/deep-learning/deep-learning/dqn-game.png)
+![基于 Deep Q-Network 学习电子游戏的操作](/images/content/deep-learning/deep-learning/dqn-game.png)
 
 > 输入是电子游戏的图像，经过摸索试验，学习出让专业玩家都自愧不如的游戏手柄（操作杆）的操作手法
 
