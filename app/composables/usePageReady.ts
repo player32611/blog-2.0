@@ -16,22 +16,23 @@ export const usePageReady = (before?: () => void | Promise<void>) => {
 
 	const init = async () => {
 		try {
-			console.log("111 - 开始初始化");
+			if (before) {
+				await before();
+				console.log("111 - before 执行完成");
+			}
+
+			console.log("222 - 开始初始化");
 
 			// 等待 Vue 完成 DOM 更新
 			await nextTick();
-			console.log("222 - nextTick 完成");
+			console.log("333 - nextTick 完成");
 
 			// 等待两次渲染帧（第一次用于布局，第二次用于绘制）
 			await waitForRender();
 			await waitForRender();
-			console.log("333 - 渲染完成");
+			console.log("444 - 渲染完成");
 
 			// 执行用户的 before 回调（可能包含异步操作）
-			if (before) {
-				await before();
-				console.log("444 - before 执行完成");
-			}
 
 			// 等待字体加载（带超时保护）
 			if (document.fonts) {

@@ -26,10 +26,14 @@ const page = ref<BlogCollectionItems | null>(null);
 const slug = computed(() => route.params.slug as BlogCollections);
 
 usePageReady(() =>
-	blogStore.useBlogContent(slug.value).then(res => {
-		console.log(res);
-		page.value = res;
-	}),
+	blogStore
+		.useBlogContent(slug.value)
+		.then(res => {
+			page.value = res;
+		})
+		.then(() => {
+			return nextTick();
+		}),
 );
 
 onMounted(() => {

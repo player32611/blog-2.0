@@ -3,11 +3,20 @@ import { gsap } from "gsap/gsap-core";
 
 const slots = useSlots();
 const activeTab = ref<number>(0);
-const tabs = ref<Array<{ label: string; code?: string; language?: string; filename?: string }>>([]);
 const tabsRef = ref<Array<HTMLElement>>([]);
 const barRef = ref<HTMLDivElement | null>(null);
 const blocksRef = ref<Array<HTMLElement>>([]);
 const blockContainerRef = ref<HTMLDivElement | null>(null);
+
+const slotChildren = computed(() => slots.default?.() ?? []);
+const tabs = computed(() =>
+	slotChildren.value.map((vnode: any, index) => ({
+		label: vnode.props?.filename ?? vnode.props?.language ?? `Tab ${index + 1}`,
+		code: vnode.props?.code ?? "",
+		language: vnode.props?.language ?? "",
+		filename: vnode.props?.filename ?? "",
+	})),
+);
 
 const handleClickTab = (index: number) => {
 	if (index === activeTab.value) return;
@@ -31,18 +40,7 @@ const handleClickTab = (index: number) => {
 		.to(blockContainerRef.value, { height: "auto", duration: 0.5, ease: "power1.out" });
 };
 
-onMounted(async () => {
-	const defaultSlot = slots.default?.();
-	if (defaultSlot) {
-		defaultSlot.forEach((vnode: any, index: number) => {
-			const label = vnode.props?.filename || vnode.props?.language || `Tab ${index + 1}`;
-			const code = vnode.props?.code || "";
-			const language = vnode.props?.language || "";
-			const filename = vnode.props?.filename || "";
-			tabs.value.push({ label, code, language, filename });
-		});
-	}
-	await nextTick();
+onMounted(() => {
 	const firstTab = tabsRef.value[0];
 	const firstBlock = blocksRef.value[0];
 	if (firstTab && firstBlock) {
@@ -65,11 +63,7 @@ onMounted(async () => {
 				class="tab"
 				:class="{ active: activeTab === index }"
 				@click="() => handleClickTab(index)"
-				:ref="
-					el => {
-						if (el) tabsRef[index] = el as HTMLElement;
-					}
-				"
+				ref="tabsRef"
 			>
 				{{ tab.label }}
 			</button>
@@ -80,7 +74,7 @@ onMounted(async () => {
 		<div class="blocks" ref="blockContainerRef">
 			<template v-if="$slots.default">
 				<div
-					v-for="(vnode, index) in $slots.default()"
+					v-for="(vnode, index) in slotChildren"
 					:key="index"
 					class="block"
 					:class="{ active: activeTab === index }"
