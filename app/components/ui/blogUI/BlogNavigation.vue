@@ -92,8 +92,6 @@ watch(
 );
 
 onMounted(() => {
-	getAllHeadings();
-	getActiveHeading();
 	window.addEventListener("scroll", getActiveHeading);
 	window.addEventListener("resize", getActiveHeading);
 });

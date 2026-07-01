@@ -1,5 +1,5 @@
 import type { Body } from "matter-js";
-import type { BlogCollections } from "./config";
+import type { BlogCollectionItems, BlogCollections } from "./config";
 import type { BlogContent, MusicInfo } from "./common";
 
 export interface Arrow1Params {
@@ -39,7 +39,7 @@ export interface BlogMenuSelectionParams {
 }
 
 export interface BlogNavigationParams {
-	page: globalThis.Ref<any, any>;
+	page: BlogCollectionItems | null;
 }
 
 export interface DetailBottomMoreInstance {

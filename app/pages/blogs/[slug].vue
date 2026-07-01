@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { ScrollSmoother, ScrollTrigger } from "gsap/all";
 import type { BlogCollectionItems, BlogCollections } from "~/types/config";
 import type { BlogMaskInstance, BlogMenuInstance } from "~/types/components";
 
@@ -20,36 +19,38 @@ const blogStore = useBlogStore();
 const { loadingNavigate } = useLoadingStore();
 const maskRef = ref<BlogMaskInstance | null>(null);
 const menuRef = ref<BlogMenuInstance | null>(null);
-const page = ref<BlogCollectionItems | null>(null);
+const wrapperRef = ref<HTMLDivElement | null>(null);
+const contentRef = ref<HTMLDivElement | null>(null);
 const smoother = ref<ScrollSmoother | null>(null);
+const page = ref<BlogCollectionItems | null>(null);
 
 const slug = computed(() => route.params.slug as BlogCollections);
 
-usePageReady();
-
-blogStore.useBlogContent(slug.value).then(res => {
-	page.value = res;
-});
+usePageReady(() =>
+	blogStore.useBlogContent(slug.value).then(res => {
+		page.value = res;
+	}),
+);
 
 onMounted(() => {
 	smoother.value = ScrollSmoother.create({
-		wrapper: ".blog_content",
-		content: ".blog_content_container",
+		wrapper: wrapperRef.value,
+		content: contentRef.value,
 		smooth: 1,
 	});
 	blogStore.setBlogInstance(maskRef.value, menuRef.value);
 	document.title = slug.value;
 });
 
-onUnmounted(() => {
+onBeforeUnmount(() => {
 	smoother.value?.kill();
 });
 </script>
 
 <template>
 	<div class="blogs">
-		<div class="blog_content">
-			<div class="blog_content_container">
+		<div class="blog_content" ref="wrapperRef">
+			<div class="blog_content_container" ref="contentRef">
 				<div class="blog_content_container_text">
 					<ContentRenderer v-if="page" :value="page" />
 				</div>
@@ -57,7 +58,7 @@ onUnmounted(() => {
 		</div>
 		<BlogBackGround />
 		<BlogScrollBar />
-		<BlogNavigation :page="page" />
+		<BlogNavigation :page="page as BlogCollectionItems | null" />
 		<BlogMenu ref="menuRef" />
 		<BlogMask ref="maskRef" />
 		<Button
