@@ -30,7 +30,11 @@
 
 例题：[B3622 枚举子集（递归实现指数型枚举）](https://www.luogu.com.cn/problem/B3622)
 
-<p><font color="blue">解法：深度优先搜索</font></p>
+::tip
+
+解法：深度优先搜索
+
+::
 
 ```cpp
 #include<iostream>
@@ -151,7 +155,11 @@ int main(){
 
 例题：[P1036 [NOIP 2002 普及组] 选数](https://www.luogu.com.cn/problem/P1036)
 
-<p><font color="blue">解法：暴力搜索</font></p>
+::tip
+
+解法：暴力搜索
+
+::
 
 ```cpp
 #include<iostream>
@@ -358,7 +366,11 @@ int main(){
 
 例题：[P1025 [NOIP 2001 提高组] 数的划分](https://www.luogu.com.cn/problem/P1025)
 
-<p><font color="blue">解法：暴力搜索（剪枝：排除等效冗余、可行性剪枝）</font></p>
+::tip
+
+解法：暴力搜索（剪枝：排除等效冗余、可行性剪枝）
+
+::
 
 ```cpp
 #include<iostream>
@@ -430,7 +442,11 @@ int main() {
 
 例题：[509. 斐波那契数](https://leetcode.cn/problems/fibonacci-number/description/)
 
-<p><font color="blue">解法：递归/暴力搜索</font></p>
+::tip
+
+解法：递归/暴力搜索
+
+::
 
 ```cpp
 class Solution {
@@ -477,7 +493,11 @@ public:
 
 例题：[P1443 马的遍历](https://www.luogu.com.cn/problem/P1443)
 
-<p><font color="blue">解法：从[1, 1]开始，按照马的跳跃规则，来一次 BFS 即可。</font></p>
+::tip
+
+解法：从[1, 1]开始，按照马的跳跃规则，来一次 BFS 即可。
+
+::
 
 ```cpp
 #include<iostream>

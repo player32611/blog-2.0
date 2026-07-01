@@ -1007,9 +1007,17 @@ void get_border(int i) {
 
 对于字符串 s：
 
-<p><font color="blue">状态表示：pi[i] 表示字符串 s 长度为 i 的前缀，最长的 border 长度（最长真公共前后缀）</font></p>
+::tip
 
-<p><font color="blue">状态转移方程：f[i][j] = min(f[i + 1][j - 1], f[i + 1][j] + 1, f[i][j - 1] + 1)</font></p>
+状态表示：pi[i] 表示字符串 s 长度为 i 的前缀，最长的 border 长度（最长真公共前后缀）
+
+::
+
+::tip
+
+状态转移方程：f[i][j] = min(f[i + 1][j - 1], f[i + 1][j] + 1, f[i][j - 1] + 1)
+
+::
 
 ::detail
 

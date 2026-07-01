@@ -12,7 +12,11 @@
 
 [P2669 [NOIP 2015 普及组] 金币](https://www.luogu.com.cn/problem/P2669)
 
-<p><font color="blue">解法：模拟</font></p>
+::tip
+
+解法：模拟
+
+::
 
 ```cpp
 #include<iostream>
@@ -36,7 +40,11 @@ int main() {
 
 [P1190 [NOIP 2010 普及组] 接水问题](https://www.luogu.com.cn/problem/P1190)
 
-<p><font color="blue">解法：模拟，找出所有的水龙头中最早结束的那一个</font></p>
+::tip
+
+解法：模拟，找出所有的水龙头中最早结束的那一个
+
+::
 
 ```cpp
 #include<iostream>
@@ -71,7 +79,11 @@ int main() {
 
 [P1774 最接近神的人](https://www.luogu.com.cn/problem/P1774)
 
-<p><font color="blue">解法：逆序对</font></p>
+::tip
+
+解法：逆序对
+
+::
 
 ```cpp
 #include<iostream>
@@ -113,7 +125,11 @@ int main() {
 
 [P1455 搭配购买](https://www.luogu.com.cn/problem/P1455)
 
-<p><font color="blue">解法：01 背包 + bfs/dfs/并查集，将连接的物品合并为一个大物品</font></p>
+::tip
+
+解法：01 背包 + bfs/dfs/并查集，将连接的物品合并为一个大物品
+
+::
 
 ```cpp
 #include<iostream>
@@ -170,7 +186,11 @@ int main() {
 
 [P1548 [NOIP 1997 普及组] 棋盘问题](https://www.luogu.com.cn/problem/P1548)
 
-<p><font color="blue">解法：暴力枚举</font></p>
+::tip
+
+解法：暴力枚举
+
+::
 
 ```cpp
 #include<iostream>
@@ -194,7 +214,11 @@ int main() {
 
 [P1208 [USACO1.3] 混合牛奶 Mixing Milk](https://www.luogu.com.cn/problem/P1208)
 
-<p><font color="blue">解法：贪心策略，每次选取单价最小的</font></p>
+::tip
+
+解法：贪心策略，每次选取单价最小的
+
+::
 
 ```cpp
 #include<iostream>
@@ -229,11 +253,23 @@ int main() {
 
 [P1060 [NOIP 2006 普及组] 开心的金明](https://www.luogu.com.cn/problem/P1060)
 
-<p><font color="blue">解法：01 背包</font></p>
+::tip
 
-<p><font color="blue">状态表示：f[i][j] 表示在前 i 个物品中挑选，总价格不超过 j 的情况下，最大的价值。</font></p>
+解法：01 背包
 
-<p><font color="blue">状态转移方程：f[i][j] = max(f[i - 1][j], f[i - 1][j - v[i]] + v[i] * p[i])</font></p>
+::
+
+::tip
+
+状态表示：f[i][j] 表示在前 i 个物品中挑选，总价格不超过 j 的情况下，最大的价值。
+
+::
+
+::tip
+
+状态转移方程：f[i][j] = max(f[i - 1][j], f[i - 1]\[j - v[i]] + v[i] \* p[i])
+
+::
 
 ```cpp
 #include<iostream>
@@ -261,7 +297,11 @@ int main() {
 
 [P1083 [NOIP 2012 提高组] 借教室](https://www.luogu.com.cn/problem/P1083)
 
-<p><font color="blue">解法：差分 + 二分答案</font></p>
+::tip
+
+解法：差分 + 二分答案
+
+::
 
 ```cpp
 #include<iostream>
@@ -316,7 +356,11 @@ int main() {
 
 [CF25B Phone numbers](https://www.luogu.com.cn/problem/CF25B)
 
-<p><font color="blue">解法：分类讨论</font></p>
+::tip
+
+解法：分类讨论
+
+::
 
 ```cpp
 #include<iostream>
@@ -344,7 +388,11 @@ int main() {
 
 [P2660 zzc 种田](https://www.luogu.com.cn/problem/P2660)
 
-<p><font color="blue">解法：尽可能的选择较大的正方形</font></p>
+::tip
+
+解法：尽可能的选择较大的正方形
+
+::
 
 ```cpp
 #include<iostream>
@@ -369,7 +417,11 @@ int main() {
 
 [P2661 [NOIP 2015 提高组] 信息传递](https://www.luogu.com.cn/problem/P2661)
 
-<p><font color="blue">解法：拓扑排序 + DFS/BFS 计数</font></p>
+::tip
+
+解法：拓扑排序 + DFS/BFS 计数
+
+::
 
 ```cpp
 #include<iostream>
@@ -431,7 +483,11 @@ int main() {
 
 [P6070 『MdOI R1』Decrease](https://www.luogu.com.cn/problem/P6070)
 
-<p><font color="blue">解法：二维差分</font></p>
+::tip
+
+解法：二维差分
+
+::
 
 ```cpp
 #include<iostream>
@@ -510,7 +566,11 @@ int main() {
 
 [P1478 陶陶摘苹果（升级版）](https://www.luogu.com.cn/problem/P1478)
 
-<p><font color="blue">解法：贪心</font></p>
+::tip
+
+解法：贪心
+
+::
 
 ```cpp
 #include<iostream>
@@ -546,7 +606,11 @@ int main() {
 
 [P2969 [USACO09DEC] Music Notes S](https://www.luogu.com.cn/problem/P2969)
 
-<p><font color="blue">解法：前缀和 + 二分</font></p>
+::tip
+
+解法：前缀和 + 二分
+
+::
 
 ```cpp
 #include<iostream>
@@ -580,7 +644,11 @@ int main() {
 
 [P1032 [NOIP 2002 提高组] 字串变换（疑似错题）](https://www.luogu.com.cn/problem/P1032)
 
-<p><font color="blue">解法：BFS</font></p>
+::tip
+
+解法：BFS
+
+::
 
 ```cpp
 #include<iostream>
@@ -638,7 +706,11 @@ int main() {
 
 [P7071 [CSP-J 2020] 优秀的拆分](https://www.luogu.com.cn/problem/P7071)
 
-<p><font color="blue">解法：数的二进制表示</font></p>
+::tip
+
+解法：数的二进制表示
+
+::
 
 ```cpp
 #include<iostream>
@@ -660,7 +732,11 @@ int main() {
 
 [P1106 删数问题](https://www.luogu.com.cn/problem/P1106)
 
-<p><font color="blue">解法：贪心，删除极大值点</font></p>
+::tip
+
+解法：贪心，删除极大值点
+
+::
 
 ```cpp
 #include<iostream>
@@ -690,15 +766,35 @@ int main() {
 
 [P1466 [USACO2.2] 集合 Subset Sums](https://www.luogu.com.cn/problem/P1466)
 
-<p><font color="blue">解法：01 背包</font></p>
+::tip
 
-<p><font color="blue">状态表示：f[i][j] 表示从 [1, i] 中挑选，总和为 j 时，一共有多少种方案</font></p>
+解法：01 背包
 
-<p><font color="blue">状态转移方程：f[i][j] = f[i - 1][j] + f[i - 1][j - i]</font></p>
+::
 
-<p><font color="blue">初始化：f[0][0] = 1</font></p>
+::tip
 
-<p><font color="blue">最终结果：f[n][sum / 2] / 2</font></p>
+状态表示：f[i][j] 表示从 [1, i] 中挑选，总和为 j 时，一共有多少种方案
+
+::
+
+::tip
+
+状态转移方程：f[i][j] = f[i - 1][j] + f[i - 1][j - i]
+
+::
+
+::tip
+
+初始化：f[0][0] = 1
+
+::
+
+::tip
+
+最终结果：f[n][sum / 2] / 2
+
+::
 
 ```cpp
 #include<iostream>
@@ -729,7 +825,11 @@ int main() {
 
 [P4537 [CQOI2007] 矩形](https://www.luogu.com.cn/problem/P4537)
 
-<p><font color="blue">解法：DFS 暴力搜索；任何一种分割方式，都可以看作在矩阵的四边选择一个非四角的点进入，然后在矩阵中随意行走，直到走到一个边界为止</font></p>
+::tip
+
+解法：DFS 暴力搜索；任何一种分割方式，都可以看作在矩阵的四边选择一个非四角的点进入，然后在矩阵中随意行走，直到走到一个边界为止
+
+::
 
 ```cpp
 #include<iostream>

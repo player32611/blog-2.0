@@ -127,7 +127,11 @@ int main() {
 
 例题：[P1601 A+B Problem（高精）](https://www.luogu.com.cn/problem/P1601)
 
-<font color="blue">解法：模拟小学列竖式计算的过程</font>
+::tip
+
+解法：模拟小学列竖式计算的过程
+
+::
 
 1. 先用字符串读入，拆分每一位，逆序放在数组中
 
@@ -174,7 +178,11 @@ int main() {
 
 例题：[P2142 高精度减法](https://www.luogu.com.cn/problem/P2142)
 
-<font color="blue">解法：模拟小学列竖式计算的过程</font>
+::tip
+
+解法：模拟小学列竖式计算的过程
+
+::
 
 1. 先比较大小，然后用较大的数减去较小的数（用字符串比较之前，先比较一下长度）
 
@@ -237,7 +245,11 @@ int main() {
 
 例题：[P1303 A\*B Problem](https://www.luogu.com.cn/problem/P1303)
 
-<font color="blue">解法：模拟列竖式计算的过程</font>
+::tip
+
+解法：模拟列竖式计算的过程
+
+::
 
 1. 先用字符串读入，拆分每一位，逆序放在数组中
 
@@ -290,7 +302,11 @@ int main() {
 
 例题：[P1480 A/B Problem](https://www.luogu.com.cn/problem/P1480)
 
-<font color="blue">解法：模拟列竖式计算除法过程</font>
+::tip
+
+解法：模拟列竖式计算除法过程
+
+::
 
 1. 先用字符串读入，拆分每一位，逆序放在数组中
 
@@ -347,7 +363,11 @@ int main() {
 
 例题：[P1003 [NOIP 2011 提高组] 铺地毯](https://www.luogu.com.cn/problem/P1003)
 
-<font color="blue">解法：枚举所有的地毯，找出最后覆盖题目中点的那个地毯即可</font>
+::tip
+
+解法：枚举所有的地毯，找出最后覆盖题目中点的那个地毯即可
+
+::
 
 ```cpp
 #include<iostream>
@@ -506,7 +526,11 @@ int main(){
 
 例题：[78. 子集](https://leetcode.cn/problems/subsets/description/)
 
-<font color="blue">解法：利用二进制枚举的方式，把所有情况都枚举出来</font>
+::tip
+
+解法：利用二进制枚举的方式，把所有情况都枚举出来
+
+::
 
 ```cpp
 class Solution {
@@ -535,7 +559,11 @@ public:
 > 2. 按法的先后顺序，是不影响最终结果的：不用关心按的顺序，只用关心按了什么
 > 3. 第一行的按法确定之后，后续灯的按法就跟着确定了
 
-<font color="blue">解法：暴力枚举第一行所有的按法，并根据第一行的按法，计算出当前行以及下一行被按之后的结果，推导出下一行的按法。直到按到最后一行，然后判断所有灯是否全亮。</font>
+::tip
+
+解法：暴力枚举第一行所有的按法，并根据第一行的按法，计算出当前行以及下一行被按之后的结果，推导出下一行的按法。直到按到最后一行，然后判断所有灯是否全亮。
+
+::
 
 ::tip
 
@@ -628,7 +656,11 @@ int main() {
 
 例题：[【模板】前缀和](https://ac.nowcoder.com/acm/problem/226282)
 
-<font color="blue">解法：先预处理出来一个前缀和数组 f ，f[i]表示区间[1, i]中，所有元素的和</font>
+::tip
+
+解法：先预处理出来一个前缀和数组 f ，f[i]表示区间[1, i]中，所有元素的和
+
+::
 
 ```cpp
 #include<iostream>
@@ -668,7 +700,11 @@ int main() {
 
 例题：[P1115 最大子段和](https://www.luogu.com.cn/problem/P1115)
 
-<font color="blue">解法：利用前缀和</font>
+::tip
+
+解法：利用前缀和
+
+::
 
 ```cpp
 #include<iostream>
@@ -754,9 +790,17 @@ int main(){
 
 例题：[【模板】差分](https://ac.nowcoder.com/acm/problem/226303)
 
-<p><font color="blue">解法一：暴力解法 -> 直接模拟</font></p>
+::tip
 
-<p><font color="blue">解法二：利用差分数组解决问题（快速解决“将某一个区间所有元素统一加上一个数”操作）</font></p>
+解法一：暴力解法 -> 直接模拟
+
+::
+
+::tip
+
+解法二：利用差分数组解决问题（快速解决“将某一个区间所有元素统一加上一个数”操作）
+
+::
 
 1. 预处理出来差分数组 f, f[i] 表示当前元素与前一个元素的差值
 
@@ -853,7 +897,11 @@ int main() {
 
 例题：[P3406 海底高铁](https://www.luogu.com.cn/problem/P3406)
 
-<p><font color="blue">解法：利用差分计算出每段路程经的次数，并判断最小花费</font></p>
+::tip
+
+解法：利用差分计算出每段路程经的次数，并判断最小花费
+
+::
 
 ```cpp
 #include<iostream>
@@ -951,9 +999,17 @@ int main(){
 
 例题：[UVA11572 唯一的雪花 Unique Snowflakes](https://www.luogu.com.cn/problem/UVA11572)
 
-<p><font color="blue">解法一：暴力枚举 -> 枚举出所有符合要求的子数组</font></p>
+::tip
 
-<p><font color="blue">解法二：利用单调性，使用“同向双指针”来优化（在暴力枚举的过程中，left 以及 right 其实是可以不回退的）</font></p>
+解法一：暴力枚举 -> 枚举出所有符合要求的子数组
+
+::
+
+::tip
+
+解法二：利用单调性，使用“同向双指针”来优化（在暴力枚举的过程中，left 以及 right 其实是可以不回退的）
+
+::
 
 ```cpp
 #include<iostream>
@@ -1075,9 +1131,17 @@ int main(){
 
 例题：[在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/description/)
 
-<p><font color="blue">解法一：暴力解法 -> 从前往后扫描数组</font></p>
+::tip
 
-<p><font color="blue">解法二：二分算法</font></p>
+解法一：暴力解法 -> 从前往后扫描数组
+
+::
+
+::tip
+
+解法二：二分算法
+
+::
 
 ::warning
 
@@ -1244,9 +1308,17 @@ int main(){
 
 例题：[P2440 木材加工](https://www.luogu.com.cn/problem/P2440)
 
-<p><font color="blue">解法一：暴力枚举，枚举所有的切割长度 x</font></p>
+::tip
 
-<p><font color="blue">解法二：利用二分来优化</font></p>
+解法一：暴力枚举，枚举所有的切割长度 x
+
+::
+
+::tip
+
+解法二：利用二分来优化
+
+::
 
 ```cpp
 #include<iostream>
@@ -1614,7 +1686,11 @@ int main(){
 
 例题：[哈夫曼编码](https://ac.nowcoder.com/acm/problem/233601)
 
-<p><font color="blue">解法：编码后的字符串长度等于带权路径长度</font></p>
+::tip
+
+解法：编码后的字符串长度等于带权路径长度
+
+::
 
 ```cpp
 #include<iostream>
@@ -1797,7 +1873,11 @@ int main(){
 
 例题：[P1226 【模板】快速幂](https://www.luogu.com.cn/problem/P1226)
 
-<p><font color="blue">解法：利用倍增 + 二进制</font></p>
+::tip
+
+解法：利用倍增 + 二进制
+
+::
 
 ```cpp
 #include<iostream>
@@ -1999,7 +2079,11 @@ int main(){
 
 例题：[1205：汉诺塔问题](https://ybt.ssoier.cn/problem_show.php?pid=1205)
 
-<p><font color="yellowgreen">相同的问题：x 柱子上有 n 个盘子，需要借助 y 的帮助，转移到 z 上</font></p>
+::tip
+
+相同的问题：x 柱子上有 n 个盘子，需要借助 y 的帮助，转移到 z 上
+
+::
 
 ```cpp
 #include<iostream>
@@ -2155,9 +2239,17 @@ int main(){
 
 例题：[P1908 逆序对](https://www.luogu.com.cn/problem/P1908)
 
-<p><font color="blue">解法一：两层 for 循环</font></p>
+::tip
 
-<p><font color="blue">解法二：利用 分治 + 归并排序 来解决（全在左边选、全在右边选、一左一右）</font></p>
+解法一：两层 for 循环
+
+::
+
+::tip
+
+解法二：利用 分治 + 归并排序 来解决（全在左边选、全在右边选、一左一右）
+
+::
 
 ```cpp
 #include<iostream>
