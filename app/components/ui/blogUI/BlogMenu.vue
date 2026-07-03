@@ -3,16 +3,17 @@ import gsap from "gsap";
 
 import BlogMenuBackGround from "./BlogMenuBackGround.vue";
 import BlogMenuSelecter from "./BlogMenuSelecter.vue";
-import Astronaut from "~/components/exhibit/Astronaut.vue";
+import RotatePencil from "~/components/exhibit/RotatePencil.vue";
 
 const menuRef = ref<HTMLDivElement | null>(null);
 const menuState = ref<"in" | "out">("in");
-const time = ref<number>(0.75);
+
+const easeTime: number = 0.75;
 
 const menuIn = () => {
 	gsap.timeline().to(menuRef.value, {
 		top: "0",
-		duration: time.value,
+		duration: easeTime,
 		ease: "power1.inOut",
 	});
 };
@@ -20,7 +21,7 @@ const menuIn = () => {
 const menuOut = () => {
 	gsap.to(menuRef.value, {
 		top: "-100%",
-		duration: time.value,
+		duration: easeTime,
 		ease: "power1.inOut",
 	});
 };
@@ -47,7 +48,7 @@ defineExpose({
 		<BlogMenuBackGround />
 		<div class="menu_container">
 			<div class="menu_card">
-				<Astronaut />
+				<RotatePencil />
 			</div>
 			<div class="menu_selecter_box">
 				<BlogMenuSelecter
@@ -89,7 +90,7 @@ $base-size: 1;
 			position: relative;
 			height: 100%;
 			width: 50%;
-			overflow-y: hidden;
+			overflow: hidden;
 		}
 
 		.menu_selecter_box {
