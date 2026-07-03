@@ -2,9 +2,11 @@
 import gsap from "gsap";
 import type { Point } from "~/types/common";
 
+import heartImg from "/images/sprites/heart.png";
+
 const borderRef = ref<HTMLDivElement | null>(null);
 const soulPos = ref<Point>({ x: 0, y: 0 });
-const soulRef = ref<HTMLDivElement | null>(null);
+const soulRef = ref<HTMLImageElement | null>(null);
 const pressKeys = ref<Set<string>>(new Set());
 const animationId = ref<number | null>(null);
 
@@ -52,7 +54,7 @@ onUnmounted(() => {
 <template>
 	<div class="game_battle">
 		<div class="battle_border" ref="borderRef">
-			<span class="icon battle_soul" ref="soulRef">&#xe82b;</span>
+			<img class="battle_soul" :src="heartImg" alt="加载失败" ref="soulRef" draggable="false" />
 		</div>
 	</div>
 </template>
@@ -77,8 +79,11 @@ onUnmounted(() => {
 
 	.battle_soul {
 		position: absolute;
-		color: red;
-		font-size: 25px;
+		width: 25px;
+		-webkit-user-drag: none;
+		image-rendering: crisp-edges;
+		user-select: none;
+		pointer-events: none;
 	}
 }
 </style>

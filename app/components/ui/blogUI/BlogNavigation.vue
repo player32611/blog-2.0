@@ -130,7 +130,6 @@ $base-size: 1;
 		display: flex;
 		flex-direction: column;
 		align-items: start;
-		margin-top: 20px;
 
 		.link_h2,
 		.link_h3 {
@@ -179,18 +178,14 @@ $base-size: 1;
 		border-width: 0.3rem * $base-size;
 
 		.navigation_links {
-			margin-top: 0.5rem * $base-size;
+			.link_h2 {
+				padding: 1rem * $base-size 0;
+				font-size: 1.5rem * $base-size;
+			}
 
-			.navigation_link {
-				&.h2 {
-					padding: 1rem * $base-size 0;
-					font-size: 1.5rem * $base-size;
-				}
-
-				&.h3 {
-					padding: 0.5rem * $base-size 0;
-					font-size: 1.2rem * $base-size;
-				}
+			.link_h3 {
+				padding: 0.5rem * $base-size 0;
+				font-size: 1.2rem * $base-size;
 			}
 		}
 	}
@@ -207,18 +202,14 @@ $base-size: 1;
 		border-width: 0.3rem * $base-size;
 
 		.navigation_links {
-			margin-top: 0.5rem * $base-size;
+			.link_h2 {
+				padding: 1rem * $base-size 0;
+				font-size: 1.5rem * $base-size;
+			}
 
-			.navigation_link {
-				&.h2 {
-					padding: 1rem * $base-size 0;
-					font-size: 1.5rem * $base-size;
-				}
-
-				&.h3 {
-					padding: 0.5rem * $base-size 0;
-					font-size: 1.2rem * $base-size;
-				}
+			.link_h3 {
+				padding: 0.5rem * $base-size 0;
+				font-size: 1.2rem * $base-size;
 			}
 		}
 	}
@@ -235,18 +226,14 @@ $base-size: 1;
 		border-width: 0.3rem * $base-size;
 
 		.navigation_links {
-			margin-top: 0.5rem * $base-size;
+			.link_h2 {
+				padding: 1rem * $base-size 0;
+				font-size: 1.3rem * $base-size;
+			}
 
-			.navigation_link {
-				&.h2 {
-					padding: 1rem * $base-size 0;
-					font-size: 1.3rem * $base-size;
-				}
-
-				&.h3 {
-					padding: 0.5rem * $base-size 0;
-					font-size: 1.1rem * $base-size;
-				}
+			.link_h3 {
+				padding: 0.5rem * $base-size 0;
+				font-size: 1.1rem * $base-size;
 			}
 		}
 	}
@@ -263,18 +250,14 @@ $base-size: 1;
 		border-width: 0.3rem * $base-size;
 
 		.navigation_links {
-			margin-top: 0.5rem * $base-size;
+			.link_h2 {
+				padding: 1rem * $base-size 0;
+				font-size: 1.3rem * $base-size;
+			}
 
-			.navigation_link {
-				&.h2 {
-					padding: 1rem * $base-size 0;
-					font-size: 1.3rem * $base-size;
-				}
-
-				&.h3 {
-					padding: 0.5rem * $base-size 0;
-					font-size: 1.1rem * $base-size;
-				}
+			.link_h3 {
+				padding: 0.5rem * $base-size 0;
+				font-size: 1.1rem * $base-size;
 			}
 		}
 	}

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import gsap from "gsap";
 
+import heartImg from "/images/sprites/heart.png";
+
 const cursorRef = ref<HTMLDivElement | null>(null);
 const isOut = ref<boolean>(true);
 const isHover = ref<boolean>(false);
@@ -80,7 +82,7 @@ onUnmounted(() => {
 
 <template>
 	<div class="detail_cursor" ref="cursorRef">
-		<span class="icon">&#xe82b;</span>
+		<img :src="heartImg" alt="加载失败" />
 	</div>
 </template>
 
@@ -98,11 +100,10 @@ onUnmounted(() => {
 	z-index: variables.$cursor_zIndex;
 	pointer-events: none;
 
-	.icon {
-		display: block;
-		font-size: 30px;
-		text-shadow: 0px 0px 20px #ff000060;
+	img {
+		width: 20px;
 		rotate: 135deg;
+		image-rendering: crisp-edges;
 	}
 }
 </style>

@@ -105,6 +105,7 @@ defineExpose<DetailBottomMoreInstance>({
 			border-style: dashed;
 			border-width: 0.25rem;
 			z-index: variables.$float_zIndex - 1;
+			user-select: none;
 		}
 	}
 }
