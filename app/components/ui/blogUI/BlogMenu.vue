@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import gsap from "gsap";
-import type { BlogCollections } from "~/types/config";
 
 import BlogMenuBackGround from "./BlogMenuBackGround.vue";
-import MenuSelecter from "./MenuSelecter.vue";
+import BlogMenuSelecter from "./BlogMenuSelecter.vue";
 import Astronaut from "~/components/exhibit/Astronaut.vue";
 
 const menuRef = ref<HTMLDivElement | null>(null);
@@ -51,7 +50,7 @@ defineExpose({
 				<Astronaut />
 			</div>
 			<div class="menu_selecter_box">
-				<MenuSelecter
+				<BlogMenuSelecter
 					v-for="collection in BLOG_COLLECTIONS"
 					:key="collection"
 					:collections="collection"

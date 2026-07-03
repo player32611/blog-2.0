@@ -42,6 +42,10 @@ export interface BlogNavigationParams {
 	page: BlogCollectionItems | null;
 }
 
+export interface BlogNavigationInstance {
+	handleScroll: () => void;
+}
+
 export interface DetailBottomMoreInstance {
 	triggerAnim: () => void;
 }

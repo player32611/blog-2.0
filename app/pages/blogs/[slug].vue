@@ -2,7 +2,11 @@
 import { gsap } from "gsap";
 import { ScrollSmoother, ScrollTrigger } from "gsap/all";
 import type { BlogCollectionItems, BlogCollections } from "~/types/config";
-import type { BlogMaskInstance, BlogMenuInstance } from "~/types/components";
+import type {
+	BlogMaskInstance,
+	BlogMenuInstance,
+	BlogNavigationInstance,
+} from "~/types/components";
 
 import BlogBackGround from "~/components/ui/blogUI/BlogBackGround.vue";
 import BlogMask from "~/components/ui/blogUI/BlogMask.vue";
@@ -16,11 +20,12 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 const route = useRoute();
 const blogStore = useBlogStore();
 const { loadingNavigate } = useLoadingStore();
-const maskRef = ref<BlogMaskInstance | null>(null);
-const menuRef = ref<BlogMenuInstance | null>(null);
 const wrapperRef = ref<HTMLDivElement | null>(null);
 const contentRef = ref<HTMLDivElement | null>(null);
 const smoother = ref<ScrollSmoother | null>(null);
+const navigationRef = ref<BlogNavigationInstance | null>(null);
+const menuRef = ref<BlogMenuInstance | null>(null);
+const maskRef = ref<BlogMaskInstance | null>(null);
 const page = ref<BlogCollectionItems | null>(null);
 
 const slug = computed(() => route.params.slug as BlogCollections);
@@ -41,6 +46,7 @@ onMounted(() => {
 		wrapper: wrapperRef.value,
 		content: contentRef.value,
 		smooth: 1,
+		onUpdate: navigationRef.value?.handleScroll,
 	});
 	blogStore.setBlogInstance(maskRef.value, menuRef.value);
 	document.title = slug.value;
@@ -62,7 +68,7 @@ onBeforeUnmount(() => {
 		</div>
 		<BlogBackGround />
 		<BlogScrollBar />
-		<BlogNavigation :page="page as BlogCollectionItems | null" />
+		<BlogNavigation ref="navigationRef" :page="page as BlogCollectionItems | null" />
 		<BlogMenu ref="menuRef" />
 		<BlogMask ref="maskRef" />
 		<Button

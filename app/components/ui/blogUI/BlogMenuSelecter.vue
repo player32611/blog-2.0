@@ -2,7 +2,7 @@
 import { gsap } from "gsap";
 import type { BlogMenuSelecterParams } from "~/types/components";
 
-import MenuSelection from "./MenuSelection.vue";
+import BlogMenuSelection from "./BlogMenuSelection.vue";
 
 const isActive = ref<boolean>(false);
 const arrowRef = ref<SVGAElement | null>(null);
@@ -43,7 +43,7 @@ const handleClick = () => {
 			</svg>
 		</div>
 		<div class="selecter_container" ref="containerRef">
-			<MenuSelection
+			<BlogMenuSelection
 				v-for="content in contents"
 				:key="content.path"
 				:content-path="getContentPath(content)"

@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import { gsap } from "gsap/gsap-core";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
-import type { BlogNavigationParams } from "~/types/components";
+import gsap from "gsap";
+import { ScrollSmoother } from "gsap/all";
+import type { BlogNavigationParams, BlogNavigationInstance } from "~/types/components";
 
 const { page } = defineProps<BlogNavigationParams>();
 const boxRef = ref<HTMLDivElement | null>(null);
-const easeTime = ref<number>(1);
-const headings = ref<Array<{ id: string; text: string; level: number }>>([]);
-const activeHeadingId = ref<string | null>(null);
+const activeId = ref<string | null>(null);
+
+const links = computed(() => page?.body.toc?.links);
+
+const easeTime: number = 1;
 
 const handleMouseEnter = () => {
 	gsap.to(boxRef.value, {
 		right: 0,
-		duration: easeTime.value,
+		duration: easeTime,
 		ease: "power2.out",
 	});
 };
@@ -32,7 +34,7 @@ const handleMouseLeave = () => {
 	}
 	gsap.to(boxRef.value, {
 		right: offset,
-		duration: easeTime.value,
+		duration: easeTime,
 		ease: "power2.out",
 	});
 };
@@ -40,66 +42,37 @@ const handleMouseLeave = () => {
 const handleClick = (id: string) => {
 	const element = document.getElementById(id);
 	if (element) {
-		const contentSmoother = ScrollSmoother.get();
-		if (contentSmoother) {
+		const smoother = ScrollSmoother.get();
+		if (smoother) {
 			const rect = element.getBoundingClientRect();
 			const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-			const elementTop = rect.top + scrollTop;
-			contentSmoother.scrollTo(elementTop, true);
+			const elementTop = rect.top + scrollTop - 20;
+			smoother.scrollTo(elementTop, true);
 		}
-		activeHeadingId.value = id;
+		activeId.value = id;
 	}
 };
 
-const getAllHeadings = () => {
-	headings.value = [];
-	const allElements = document.querySelectorAll("h2[id], h3[id]");
-	allElements.forEach(el => {
-		const id = el.getAttribute("id");
-		const text = el.textContent || "";
-		const level = el.tagName === "H2" ? 2 : 3;
-		if (id && text) {
-			headings.value.push({ id, text, level });
-		}
-	});
-};
-
-const getActiveHeading = () => {
-	let currentActiveId = "";
-	for (let i = headings.value.length - 1; i >= 0; i--) {
-		const heading = headings.value[i];
-		if (!heading) continue;
-		const element = document.getElementById(heading.id);
-		if (element) {
-			const rect = element.getBoundingClientRect();
-			if (rect.top <= 100) {
-				currentActiveId = heading.id;
-				break;
+const handleScroll = () => {
+	if (!links.value) return;
+	for (const h2 of links.value) {
+		const h2Rect = document.getElementById(h2.id)?.getBoundingClientRect();
+		if (!h2Rect) continue;
+		for (const h3 of h2.children || []) {
+			const h3Rect = document.getElementById(h3.id)?.getBoundingClientRect();
+			if (!h3Rect) continue;
+			if (h2Rect.top > 0 && h3Rect.top > 0) {
+				activeId.value = h2.id;
+				return;
+			} else if (h2Rect.top < 0 && h3Rect.top > 0) {
+				activeId.value = h3.id;
+				return;
 			}
 		}
 	}
-	activeHeadingId.value = currentActiveId || null;
 };
 
-watch(
-	() => page,
-	() => {
-		setTimeout(() => {
-			getAllHeadings();
-			getActiveHeading();
-		}, 100);
-	},
-);
-
-onMounted(() => {
-	window.addEventListener("scroll", getActiveHeading);
-	window.addEventListener("resize", getActiveHeading);
-});
-
-onUnmounted(() => {
-	window.removeEventListener("scroll", getActiveHeading);
-	window.removeEventListener("resize", getActiveHeading);
-});
+defineExpose<BlogNavigationInstance>({ handleScroll });
 </script>
 
 <template>
@@ -110,19 +83,17 @@ onUnmounted(() => {
 		@mouseleave="handleMouseLeave"
 	>
 		<div class="navigation_title">在此页面上</div>
-		<div class="navigation_links" v-if="headings.length > 0">
+		<div v-if="page" v-for="h2 in links" :key="h2.id" class="navigation_links">
+			<div :class="'link_h2 ' + (activeId === h2.id ? 'active' : null)" @click="handleClick(h2.id)">
+				{{ h2.text }}
+			</div>
 			<div
-				v-for="heading in headings"
-				:key="heading.id"
-				class="navigation_link"
-				:class="{
-					active: activeHeadingId === heading.id,
-					h2: heading.level === 2,
-					h3: heading.level === 3,
-				}"
-				@click="handleClick(heading.id)"
+				v-for="h3 in h2.children"
+				:key="h3.id"
+				:class="'link_h3 ' + (activeId === h3.id ? 'active' : null)"
+				@click="handleClick(h3.id)"
 			>
-				{{ heading.text }}
+				{{ h3.text }}
 			</div>
 		</div>
 		<div v-else class="no_headings">无二级标题</div>
@@ -161,7 +132,8 @@ $base-size: 1;
 		align-items: start;
 		margin-top: 20px;
 
-		.navigation_link {
+		.link_h2,
+		.link_h3 {
 			width: 100%;
 			color: rgba($color: #ffffff, $alpha: 0.5);
 			white-space: nowrap;
@@ -179,19 +151,19 @@ $base-size: 1;
 			&:hover {
 				background-color: rgba($color: #ffffff, $alpha: 0.5);
 			}
+		}
 
-			&.h2 {
-				padding: 10px 0;
-				font-size: 16px;
-				font-weight: 600;
-			}
+		.link_h2 {
+			padding: 10px 0;
+			font-size: 16px;
+			font-weight: 600;
+		}
 
-			&.h3 {
-				padding: 5px 0;
-				text-indent: 1rem;
-				font-size: 14px;
-				font-weight: 400;
-			}
+		.link_h3 {
+			padding: 5px 0;
+			text-indent: 1rem;
+			font-size: 14px;
+			font-weight: 400;
 		}
 	}
 }
