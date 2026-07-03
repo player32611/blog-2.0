@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import type { DayTime } from "~/types/common";
 import Button from "~/components/ui/common/Button.vue";
 import FaultText from "../common/FaultText.vue";
+import type { DayTime } from "~/types/common";
 
-const blogStore = useBlogStore();
 const { loadingNavigate } = useLoadingStore();
 const currentTime = ref<DayTime>(formatDateTime(Date.now()));
 const timeInterval = ref<number>(1000);

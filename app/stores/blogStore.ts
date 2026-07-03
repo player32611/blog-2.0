@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import type { BlogContent } from "~/types/common";
 import type { BlogMaskInstance, BlogMenuInstance } from "~/types/components";
 import type { BlogCollections } from "~/types/config";
 import type { BlogState, BlogGetter, BlogActions } from "@/types/store";

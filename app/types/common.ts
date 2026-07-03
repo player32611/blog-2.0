@@ -20,11 +20,6 @@ export type DayTime = {
 };
 
 /**
- * 博客内容类型，表示博客文章的文本内容
- */
-export type BlogContent = string;
-
-/**
  * 图片悬停数据类型
  * 包含图片的尺寸信息和中心点坐标
  */
@@ -86,14 +81,20 @@ export interface ImagePosData extends Point {
  * @property path - 音乐文件路径
  * @property folder - 音乐所属专辑
  */
-export interface MusicInfo {
+export type MusicInfo = {
 	name: string;
 	cover: string;
 	artist: string;
 	path: string;
 	folder: string;
-}
+};
 
+/**
+ * 用于表示坐标的数据结构类型。
+ *
+ * @property x - 水平坐标位置（向右为正）
+ * @property y - 垂直坐标位置（向下为正）
+ */
 export type Point = {
 	x: number;
 	y: number;

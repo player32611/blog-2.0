@@ -1,6 +1,6 @@
 import type { Body } from "matter-js";
 import type { BlogCollectionItems, BlogCollections } from "./config";
-import type { BlogContent, MusicInfo } from "./common";
+import type { MusicInfo } from "./common";
 
 export interface Arrow1Params {
 	direction: "left" | "right" | "up" | "down" | null;
@@ -34,7 +34,7 @@ export interface BlogMenuSelecterParams {
 }
 
 export interface BlogMenuSelectionParams {
-	contentPath: BlogContent;
+	contentPath: string;
 	contentTitle?: string;
 }
 

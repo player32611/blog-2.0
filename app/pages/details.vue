@@ -71,6 +71,7 @@ onUnmounted(() => {
 .details {
 	width: 100%;
 	font-size: 1rem;
+	overflow: hidden;
 	cursor: none;
 
 	.details_wrapper {

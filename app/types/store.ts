@@ -1,10 +1,4 @@
-import type {
-	BlogContent,
-	ImageHoverData,
-	ImageLayoutData,
-	ImagePosData,
-	MusicInfo,
-} from "./common";
+import type { ImageHoverData, ImageLayoutData, ImagePosData, MusicInfo } from "./common";
 import type { BlogCollections, BlogCollectionItems, MusicPlayingMode } from "./config";
 import type {
 	BlogMaskInstance,
