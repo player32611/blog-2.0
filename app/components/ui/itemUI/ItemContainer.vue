@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import Matter, {
-	Constraint,
-	Engine,
-	Render,
-	World,
-	Bodies,
-	Mouse,
-	MouseConstraint,
-	Runner,
+import Matter from "matter-js";
+import type {
+	Engine as EngineType,
+	Render as RenderType,
+	Runner as RunnerType,
+	Mouse as MouseType,
+	MouseConstraint as MouseConstraintType,
 } from "matter-js";
 import type { ItemParams } from "~/types/components";
 
@@ -15,6 +13,8 @@ import ItemBookConstraint from "./ItemBookConstraint.vue";
 import ItemMagnetConstraint from "./ItemMagnetConstraint.vue";
 import ItemPhoneCard from "./ItemPhoneCard.vue";
 import ItemSwitchCard from "./ItemSwitchCard.vue";
+
+const { Constraint, Engine, Render, World, Bodies, Mouse, MouseConstraint, Runner } = Matter;
 
 const itemStore = useItemStore();
 const containerRef = ref<HTMLDivElement>();
@@ -25,11 +25,11 @@ const ItemSwitchCardRef = ref<InstanceType<typeof ItemSwitchCard> | null>(null);
 const itemPositions = ref<Map<string, ItemParams>>(new Map());
 const items = ref<Map<string, Matter.Body>>(new Map());
 
-let engine: Engine;
-let render: Render;
-let runner: Runner;
-let mouse: Mouse;
-let mouseConstraint: MouseConstraint;
+let engine: EngineType;
+let render: RenderType;
+let runner: RunnerType;
+let mouse: MouseType;
+let mouseConstraint: MouseConstraintType;
 
 const resize = () => {
 	World.clear(engine.world, true);

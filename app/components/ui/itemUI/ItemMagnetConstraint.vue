@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import gsap from "gsap";
-import { Bodies } from "matter-js";
+import Matter from "matter-js";
 import type { Body } from "matter-js";
 import type { ItemParams, ItemInstance } from "~/types/components";
+
+const { Bodies } = Matter;
 
 const itemStore = useItemStore();
 const { x, y, angle } = defineProps<ItemParams>();

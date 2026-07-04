@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import Matter, {
-	Constraint,
-	Engine,
-	Render,
-	World,
-	Mouse,
-	MouseConstraint,
-	Runner,
+import Matter from "matter-js";
+import type {
+	Engine as EngineType,
+	Render as RenderType,
+	Runner as RunnerType,
+	Mouse as MouseType,
+	MouseConstraint as MouseConstraintType,
 } from "matter-js";
 import type { ItemParams } from "~/types/components";
 
 import MainColorVial from "./MainColorVial.vue";
+
+const { Constraint, Engine, Render, World, Mouse, MouseConstraint, Runner } = Matter;
 
 const mainStore = useMainStore();
 const containerRef = ref<HTMLDivElement | null>(null);
@@ -18,11 +19,11 @@ const vialRefs = ref<Map<string, InstanceType<typeof MainColorVial>>>(new Map())
 const vialPositions = ref<Map<string, ItemParams>>(new Map());
 const vials = ref<Map<string, Matter.Body>>(new Map());
 
-let engine: Engine;
-let render: Render;
-let runner: Runner;
-let mouse: Mouse;
-let mouseConstraint: MouseConstraint | null;
+let engine: EngineType;
+let render: RenderType;
+let runner: RunnerType;
+let mouse: MouseType;
+let mouseConstraint: MouseConstraintType | null;
 const colors = ["red", "purple", "pink", "blue", "cyan", "green", "yellow", "orange"];
 const ropeLength = Array.from({ length: colors.length }, () => Math.random() * 100 + 50);
 

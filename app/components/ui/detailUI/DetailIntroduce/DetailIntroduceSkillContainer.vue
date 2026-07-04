@@ -1,9 +1,18 @@
 <script setup lang="ts">
-import Matter, { Engine, Render, World, Bodies, Mouse, MouseConstraint, Runner } from "matter-js";
+import Matter from "matter-js";
 import { ScrollSmoother } from "gsap/all";
+import type {
+	Engine as EngineType,
+	Render as RenderType,
+	Runner as RunnerType,
+	Mouse as MouseType,
+	MouseConstraint as MouseConstraintType,
+} from "matter-js";
 import type { DetailIntroduceSkillContainerInstance, ItemParams } from "~/types/components";
 
 import DetailIntroduceSkillItem from "./DetailIntroduceSkillItem.vue";
+
+const { Engine, Render, World, Bodies, Mouse, MouseConstraint, Runner } = Matter;
 
 const containerRef = ref<HTMLDivElement | null>(null);
 const itemRefs = ref<Map<string, InstanceType<typeof DetailIntroduceSkillItem>>>(new Map());
@@ -11,11 +20,11 @@ const itemPositions = ref<Map<string, ItemParams>>(new Map());
 const itemInstances = ref<Map<string, Matter.Body>>(new Map());
 const smoother = ref<ScrollSmoother | null>(null);
 
-let engine: Engine;
-let render: Render;
-let runner: Runner;
-let mouse: Mouse;
-let mouseConstraint: MouseConstraint | null;
+let engine: EngineType;
+let render: RenderType;
+let runner: RunnerType;
+let mouse: MouseType;
+let mouseConstraint: MouseConstraintType | null;
 
 const resize = () => {
 	Matter.Events.off(engine, "afterUpdate", handleAfterUpdate);

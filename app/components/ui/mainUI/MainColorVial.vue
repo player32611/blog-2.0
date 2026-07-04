@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { Bodies } from "matter-js";
+import Matter from "matter-js";
 import type { Body } from "matter-js";
 import type { ItemInstance, MainColorVialParams } from "~/types/components";
+
+const { Bodies } = Matter;
 
 const { x, y, angle, color } = defineProps<MainColorVialParams>();
 const vialRef = ref<HTMLDivElement | null>(null);

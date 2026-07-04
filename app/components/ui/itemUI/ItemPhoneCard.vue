@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { Bodies } from "matter-js";
+import Matter from "matter-js";
 import type { Body } from "matter-js";
 import type { ItemParams, ItemInstance } from "~/types/components";
+
+const { Bodies } = Matter;
 
 const { x, y, angle, visible } = defineProps<ItemParams>();
 const itemRef = ref<HTMLDivElement | null>(null);
