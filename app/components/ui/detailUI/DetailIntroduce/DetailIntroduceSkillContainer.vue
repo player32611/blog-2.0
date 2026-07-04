@@ -11,8 +11,6 @@ const itemPositions = ref<Map<string, ItemParams>>(new Map());
 const itemInstances = ref<Map<string, Matter.Body>>(new Map());
 const smoother = ref<ScrollSmoother | null>(null);
 
-const skills = getDetailSkills();
-
 let engine: Engine;
 let render: Render;
 let runner: Runner;
@@ -138,7 +136,7 @@ const createItems = () => {
 	if (!containerRef.value) return;
 	const width = containerRef.value.clientWidth;
 
-	skills.forEach((skill, index) => {
+	DETAIL_SKILLS.forEach((skill, index) => {
 		const x = itemPositions.value.get(`${skill}Item`)?.x ?? width / 2;
 		const y = itemPositions.value.get(`${skill}Item`)?.y ?? (index + 1) * -100;
 		const angle = itemPositions.value.get(`${skill}Item`)?.angle ?? 0;
@@ -240,7 +238,7 @@ defineExpose<DetailIntroduceSkillContainerInstance>({
 		@touchmove.passive="handleTouchLeave"
 	>
 		<DetailIntroduceSkillItem
-			v-for="skill in skills"
+			v-for="skill in DETAIL_SKILLS"
 			:x="itemPositions.get(`${skill}Item`)?.x ?? 0"
 			:y="itemPositions.get(`${skill}Item`)?.y ?? 0"
 			:angle="itemPositions.get(`${skill}Item`)?.angle ?? 0"

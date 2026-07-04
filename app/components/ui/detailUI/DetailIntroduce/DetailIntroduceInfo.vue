@@ -41,16 +41,16 @@ onUnmounted(() => {
 				<span class="folder__back"></span>
 				<span class="folder__papers">
 					<span class="paper paper--1">
-						<div>姓名：{{ getDetailEmpty() }}</div>
-						<div>性别：{{ getDetailEmpty() }}</div>
-						<div>年龄：{{ getDetailEmpty() }}</div>
+						<div>姓名：{{ DETAIL_EMPTY }}</div>
+						<div>性别：{{ DETAIL_EMPTY }}</div>
+						<div>年龄：{{ DETAIL_EMPTY }}</div>
 					</span>
 					<span class="paper paper--2">
-						<div>状态：{{ getDetailState() }}</div>
+						<div>状态：{{ DETAIL_STATE }}</div>
 					</span>
 					<span class="paper paper--3">
-						<div>昵称：{{ getDetailName() }}</div>
-						<div>爱好：{{ getDetailHobby() }}</div>
+						<div>昵称：{{ DETAIL_NAME }}</div>
+						<div>爱好：{{ DETAIL_HOBBY }}</div>
 					</span>
 				</span>
 				<span class="folder__front">

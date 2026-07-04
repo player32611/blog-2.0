@@ -5,12 +5,13 @@ defineProps<{
 	src?: string;
 	alt?: string;
 	title?: string;
+	width?: number;
 }>();
 </script>
 
 <template>
 	<!-- From Uiverse.io by gharsh11032000 -->
-	<div class="prose_image">
+	<div class="prose_image" :style="{ width: `${width}px` }">
 		<img :src="`/blog-2.0${src}`" :alt="alt" />
 		<div class="img_content">
 			<div v-if="alt || title">
@@ -26,8 +27,8 @@ defineProps<{
 /* From Uiverse.io by gharsh11032000 */
 .prose_image {
 	position: relative;
-	margin: 0 15px;
-	width: calc(100% - 30px - 0.4rem);
+	margin: 0 auto;
+	width: calc(100% - 0.4rem);
 	background-color: #f2f2f2;
 	border-radius: 10px;
 	display: flex;
