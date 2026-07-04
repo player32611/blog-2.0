@@ -23,3 +23,5 @@ export type BlogCollectionItems =
  * - OrderAll: 顺序播放
  */
 export type MusicPlayingMode = "RepeatSingle" | "RepeatAll" | "RandomAll" | "OrderAll";
+
+export type NetworkLoadingState = "loading" | "success" | "error";

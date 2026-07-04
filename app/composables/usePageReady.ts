@@ -55,7 +55,7 @@ export const usePageReady = (before?: () => void | Promise<void>) => {
 	};
 
 	onMounted(() => {
-		void init();
+		init();
 	});
 
 	return {

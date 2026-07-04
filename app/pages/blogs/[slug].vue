@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { gsap } from "gsap";
 import { ScrollSmoother, ScrollTrigger } from "gsap/all";
-import type { BlogCollectionItems, BlogCollections } from "~/types/config";
+import type { BlogCollectionItems, BlogCollections, NetworkLoadingState } from "~/types/config";
 import type {
 	BlogMaskInstance,
 	BlogMenuInstance,
@@ -30,15 +30,12 @@ const page = ref<BlogCollectionItems | null>(null);
 
 const slug = computed(() => route.params.slug as BlogCollections);
 
+blogPreloadComponents();
+
 usePageReady(() =>
-	blogStore
-		.useBlogContent(slug.value)
-		.then(res => {
-			page.value = res;
-		})
-		.then(() => {
-			return nextTick();
-		}),
+	blogStore.useBlogContent(slug.value).then(res => {
+		page.value = res;
+	}),
 );
 
 onMounted(() => {

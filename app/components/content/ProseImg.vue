@@ -1,5 +1,24 @@
 <script setup lang="ts">
+import type { NetworkLoadingState } from "~/types/config.js";
+
 import Ghost from "../exhibit/Ghost.vue";
+import ImageLoading from "../exhibit/ImageLoading.vue";
+import TextFlipLoading from "../exhibit/TextFlipLoading.vue";
+
+const imgRef = ref<HTMLImageElement | null>(null);
+const loadingState = ref<NetworkLoadingState>("loading");
+
+onMounted(() => {
+	if (imgRef.value) {
+		onImageLoading(imgRef.value)
+			.then(() => {
+				loadingState.value = "success";
+			})
+			.catch(() => {
+				loadingState.value = "error";
+			});
+	}
+});
 
 defineProps<{
 	src?: string;
@@ -12,7 +31,15 @@ defineProps<{
 <template>
 	<!-- From Uiverse.io by gharsh11032000 -->
 	<div class="prose_image" :style="{ width: `${width}px` }">
-		<img :src="`/blog-2.0${src}`" :alt="alt" />
+		<img :src="`/blog-2.0${src}`" :alt="alt" ref="imgRef" v-show="loadingState === 'success'" />
+		<div class="loading_container" v-if="loadingState === 'loading'">
+			<ImageLoading />
+			<TextFlipLoading />
+		</div>
+		<div class="error_container" v-if="loadingState === 'error'">
+			<span class="icon">&#xe7f3;</span>
+			加载失败
+		</div>
 		<div class="img_content">
 			<div v-if="alt || title">
 				<p class="content_alt" v-if="alt">{{ alt }}</p>
@@ -53,6 +80,28 @@ defineProps<{
 
 	img {
 		width: 100%;
+	}
+
+	.loading_container {
+		padding-top: 10px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+		font-size: 1rem;
+	}
+
+	.error_container {
+		padding: 2px 0 5px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+		color: #ff0000;
+
+		.icon {
+			font-size: 3rem;
+		}
 	}
 
 	.img_content {
@@ -105,6 +154,19 @@ defineProps<{
 			box-shadow: 0 8px * $base-size 16px * $base-size rgba(255, 255, 255, 0.2);
 		}
 
+		.loading_container {
+			padding-top: 10px * $base-size;
+			font-size: 1rem * $base-size;
+		}
+
+		.error_container {
+			padding: 2px * $base-size 0 5px * $base-size;
+
+			.icon {
+				font-size: 3rem * $base-size;
+			}
+		}
+
 		.img_content {
 			padding: 20px * $base-size;
 
@@ -133,6 +195,19 @@ defineProps<{
 
 		&:hover {
 			box-shadow: 0 8px * $base-size 16px * $base-size rgba(255, 255, 255, 0.2);
+		}
+
+		.loading_container {
+			padding-top: 10px * $base-size;
+			font-size: 1rem * $base-size;
+		}
+
+		.error_container {
+			padding: 2px * $base-size 0 5px * $base-size;
+
+			.icon {
+				font-size: 3rem * $base-size;
+			}
 		}
 
 		.img_content {
@@ -165,6 +240,18 @@ defineProps<{
 			box-shadow: 0 8px * $base-size 16px * $base-size rgba(255, 255, 255, 0.2);
 		}
 
+		.loading_container {
+			padding-top: 10px * $base-size;
+			font-size: 1rem * $base-size;
+		}
+		.error_container {
+			padding: 2px * $base-size 0 5px * $base-size;
+
+			.icon {
+				font-size: 3rem * $base-size;
+			}
+		}
+
 		.img_content {
 			padding: 20px * $base-size;
 
@@ -193,6 +280,19 @@ defineProps<{
 
 		&:hover {
 			box-shadow: 0 8px * $base-size 16px * $base-size rgba(255, 255, 255, 0.2);
+		}
+
+		.loading_container {
+			padding-top: 10px * $base-size;
+			font-size: 1rem * $base-size;
+		}
+
+		.error_container {
+			padding: 2px * $base-size 0 5px * $base-size;
+
+			.icon {
+				font-size: 3rem * $base-size;
+			}
 		}
 
 		.img_content {

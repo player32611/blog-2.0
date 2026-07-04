@@ -18,6 +18,17 @@ export const getCollectionTitle = (collection: BlogCollections) => {
 };
 
 /**
+ * 博客组件预加载
+ *
+ * 该函数用于提前预加载文章中所有可能用到的组件
+ */
+export const blogPreloadComponents = () => {
+	import.meta.glob("~/components/content/**/*.vue", {
+		eager: true,
+	});
+};
+
+/**
  * 根据编程语言获取对应的图标 Unicode 字符
  *
  * @param language - 编程语言名称，类型为 string

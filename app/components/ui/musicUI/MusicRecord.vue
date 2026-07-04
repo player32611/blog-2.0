@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { gsap } from "gsap/gsap-core";
+import type { NetworkLoadingState } from "~/types/config";
 
-import Loading1 from "~/components/exhibit/Loading1.vue";
+import RadarLoading from "~/components/exhibit/RadarLoading.vue";
 
 const soundStore = useSoundStore();
 const containerRef = ref<HTMLElement | null>(null);
 const animationRef = ref<GSAPAnimation | null>(null);
-const isLoading = ref<boolean>(true);
-const loadingError = ref<boolean>(false);
+const loadingState = ref<NetworkLoadingState>("loading");
+
 const currentTitle = computed(() => {
 	if (!soundStore.musicCurrent) return "DISCORD";
 	return soundStore.musicCurrent.name;
@@ -25,31 +26,25 @@ const rotationStep = computed(() => {
 });
 
 const handleLoad = () => {
-	isLoading.value = false;
-	loadingError.value = false;
+	loadingState.value = "success";
 };
 
 const handleError = () => {
-	isLoading.value = false;
-	loadingError.value = true;
+	loadingState.value = "error";
 };
 
 watch(
 	() => soundStore.musicCurrent?.cover,
 	() => {
-		isLoading.value = true;
-		loadingError.value = false;
+		loadingState.value = "loading";
 	},
 );
 
 watch(
 	() => soundStore.playingMusic,
 	isPlaying => {
-		if (isPlaying) {
-			animationRef.value?.play();
-		} else {
-			animationRef.value?.pause();
-		}
+		if (isPlaying) animationRef.value?.play();
+		else animationRef.value?.pause();
 	},
 );
 
@@ -79,18 +74,21 @@ onUnmounted(() => {
 				{{ char }}
 			</span>
 			<img
-				v-if="!loadingError"
+				v-if="loadingState !== 'error'"
 				class="music_cover"
-				:class="{ loading: isLoading }"
+				:class="{ loading: loadingState === 'loading' }"
 				:src="soundStore.musicCurrent?.cover"
 				:alt="soundStore.musicCurrent?.cover"
 				@load="handleLoad"
 				@error="handleError"
 			/>
-			<span v-if="isLoading && soundStore.musicCurrent?.cover" class="cover_loading">
-				<Loading1 />
+			<span
+				v-if="loadingState === 'loading' && soundStore.musicCurrent?.cover"
+				class="cover_loading"
+			>
+				<RadarLoading />
 			</span>
-			<span v-else-if="!isLoading && loadingError" class="loading_error">加载失败</span>
+			<span v-else-if="loadingState === 'error'" class="loading_error">加载失败</span>
 		</p>
 	</button>
 </template>

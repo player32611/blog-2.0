@@ -1,4 +1,5 @@
 import type { DayTime } from "~/types/common";
+import type { NetworkLoadingState } from "~/types/config";
 
 /**
  * 将秒数格式化为 MM:SS 格式的时间字符串
@@ -151,4 +152,25 @@ export const degreesToRadians = (degrees: number): number => {
  */
 export const randomSign = (): number => {
 	return Math.random() < 0.5 ? -1 : 1;
+};
+
+/**
+ * 根据传入的 img 节点，返回加载 Promise
+ * @returns {Promise<NetworkLoadingState>} 加载 Promise
+ */
+export const onImageLoading = (img: HTMLImageElement): Promise<NetworkLoadingState> => {
+	return new Promise(
+		(
+			resolve: (value: NetworkLoadingState) => void,
+			reject: (value: NetworkLoadingState) => void,
+		) => {
+			if (img.complete && img.naturalWidth > 0) {
+				resolve("success");
+				return;
+			}
+
+			img.addEventListener("load", () => resolve("success"), { once: true });
+			img.addEventListener("error", () => reject("error"), { once: true });
+		},
+	);
 };
