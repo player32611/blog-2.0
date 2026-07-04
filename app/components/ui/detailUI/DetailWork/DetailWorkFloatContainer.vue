@@ -64,6 +64,8 @@ defineExpose<DetailWorkFloatContainerInstance>({
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 .work_float_container {
 	position: absolute;
 	top: 0;
@@ -71,6 +73,7 @@ defineExpose<DetailWorkFloatContainerInstance>({
 	justify-content: space-around;
 	height: 100vh;
 	width: 100%;
+	z-index: variables.$float_zIndex;
 	overflow: hidden;
 
 	.float_item {
