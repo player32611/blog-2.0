@@ -22,19 +22,17 @@ const scrollAnim = ref<ScrollTrigger | null>(null);
 const activeIndex = ref<number>(-1);
 const direction = ref<"forward" | "backward">("forward");
 
-const totalHeight: number = 5 * window.innerHeight;
-const triggerPoints: { start: number; end: number }[] = Array.from({ length: 3 }, (_, index) => {
-	return {
-		start: index * window.innerHeight,
-		end: (index + 1) * window.innerHeight,
-	};
-});
-
 onMounted(() => {
+	const triggerPoints: { start: number; end: number }[] = Array.from({ length: 3 }, (_, index) => {
+		return {
+			start: index * window.innerHeight,
+			end: (index + 1) * window.innerHeight,
+		};
+	});
 	scrollAnim.value = ScrollTrigger.create({
 		trigger: containerRef.value, // 要固定的元素
 		start: "top top", // 元素顶部 触达 视口顶部时开始
-		end: `+=${totalHeight}`,
+		end: `+=${5 * window.innerHeight}`,
 		pin: true, // 开启固定
 		onEnter: () => {
 			direction.value = "forward";

@@ -6,7 +6,6 @@ const currentImageWidth = ref<number>(0);
 const currentImageHeight = ref<number>(0);
 const currentImageMargin = ref<number>(0);
 const animationFrameId = ref<number | null>(null);
-const { rowMax, imageBorderRadius, imagePlaceHolderColor } = imageStore.getLayoutAttribute();
 const { drawImage, drawPlaceholder } = useCanvasDrawing(canvasRef);
 
 // 物理模型参数
@@ -114,6 +113,8 @@ const handleTouchCancel = () => {
 };
 
 const createImgDatas = () => {
+	const { rowMax } = imageStore.getLayoutAttribute();
+
 	imageStore.setAllImagePosData([]);
 	const loadPromises: Promise<void>[] = [];
 	const { imageWidth, imageHeight, imageMargin } = imageStore.getLayoutAttribute();
@@ -201,6 +202,8 @@ const drawFrame = () => {
 	if (!canvasRef.value) return;
 	const ctx = canvasRef.value.getContext("2d");
 	if (!ctx) return;
+	const { imageBorderRadius, imagePlaceHolderColor } = imageStore.getLayoutAttribute();
+
 	const rect = canvasRef.value.getBoundingClientRect();
 	ctx.clearRect(0, 0, rect.width, rect.height);
 
