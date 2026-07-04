@@ -1028,7 +1028,7 @@ void get_border(int i) {
 
 那么，我们就可以从大到小枚举长度为 i - 1 的前缀中所有的 border，然后判断这个 border 的下一个字符是否和 s[i] 相等：
 
-![前缀函数的计算 ](/images/content/algorithm/algorithm-improve/prefix-function-calculation.png)
+![前缀函数的计算](/images/content/algorithm/algorithm-improve/prefix-function-calculation.png)
 
 - 如果相等，说明这个就是最长的；
 

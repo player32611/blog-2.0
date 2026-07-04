@@ -11,7 +11,7 @@ defineProps<{
 <template>
 	<!-- From Uiverse.io by gharsh11032000 -->
 	<div class="prose_image">
-		<img :src="src" :alt="alt" />
+		<img :src="`/blog-2.0${src}`" :alt="alt" />
 		<div class="img_content">
 			<div v-if="alt || title">
 				<p class="content_alt" v-if="alt">{{ alt }}</p>

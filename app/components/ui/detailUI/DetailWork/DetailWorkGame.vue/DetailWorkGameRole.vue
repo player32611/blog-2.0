@@ -10,8 +10,8 @@
 .game_role {
 	position: absolute;
 	top: 20px;
-	width: 100px;
-	height: 200px;
+	width: 200px;
+	height: 400px;
 	background-color: purple;
 	z-index: variables.$float_zIndex;
 }
