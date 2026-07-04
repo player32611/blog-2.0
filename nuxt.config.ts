@@ -1,5 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+	app: {
+		baseURL: "/blog-2.0/",
+	},
 	modules: ["@nuxt/content", "@pinia/nuxt", "@nuxt/fonts"],
 	devtools: { enabled: true },
 	compatibilityDate: "2024-04-03",
@@ -43,8 +46,9 @@ export default defineNuxtConfig({
 			},
 		],
 	},
-	ssr: false,
-	app: {
-		baseURL: "/blog-2.0/",
+	nitro: {
+		prerender: {
+			crawlLinks: true,
+		},
 	},
 });
