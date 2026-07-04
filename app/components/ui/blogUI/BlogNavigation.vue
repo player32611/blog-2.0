@@ -40,11 +40,18 @@ const handleMouseLeave = () => {
 };
 
 const handleClick = (id: string) => {
-	const smoother = ScrollSmoother.get();
-	if (!smoother) return;
-	gsap.killTweensOf(smoother);
-	smoother.scrollTo(`#${id}`, true);
-	activeId.value = id;
+	const element = document.getElementById(id);
+	if (element) {
+		const smoother = ScrollSmoother.get();
+		if (smoother) {
+			gsap.killTweensOf(smoother);
+			const rect = element.getBoundingClientRect();
+			const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+			const elementTop = rect.top + scrollTop - 20;
+			smoother.scrollTo(elementTop, true);
+		}
+		activeId.value = id;
+	}
 };
 
 const handleScroll = () => {
