@@ -85,7 +85,9 @@ const handleClick = () => {
 		width: 5em;
 		height: 5em;
 		border-radius: 50%;
-		border: 2px solid black;
+		border-width: 2px;
+		border-color: #000000;
+		border-style: solid;
 		background-color: #f27405;
 		margin-bottom: -6em;
 		margin-left: 0em;
@@ -123,7 +125,9 @@ const handleClick = () => {
 			margin-left: 1.68em;
 			border-radius: 45%;
 			transform: rotate(140deg);
-			border: 4px solid transparent;
+			border-width: 4px;
+			border-style: solid;
+			border-color: transparent;
 			box-shadow:
 				inset 0px 16px #a85103,
 				inset 0px 16px 1px 1px #a85103;
@@ -142,6 +146,7 @@ const handleClick = () => {
 			background-image: linear-gradient(#171717, #171717, #353535, #353535, #171717);
 			transform: rotate(-29deg);
 			clip-path: polygon(50% 0%, 49% 100%, 52% 100%);
+			-webkit-clip-path: polygon(50% 0%, 49% 100%, 52% 100%);
 		}
 
 		.a1d {
@@ -152,7 +157,9 @@ const handleClick = () => {
 			width: 0.5em;
 			height: 0.5em;
 			border-radius: 50%;
-			border: 2px solid black;
+			border-width: 2px;
+			border-style: solid;
+			border-color: #000000;
 			background-color: #979797;
 			z-index: 99;
 		}
@@ -168,6 +175,16 @@ const handleClick = () => {
 			background-image: linear-gradient(#171717, #171717, #353535, #353535, #171717);
 			margin-right: 5em;
 			clip-path: polygon(47% 0, 47% 0, 34% 34%, 54% 25%, 32% 100%, 29% 96%, 49% 32%, 30% 38%);
+			-webkit-clip-path: polygon(
+				47% 0,
+				47% 0,
+				34% 34%,
+				54% 25%,
+				32% 100%,
+				29% 96%,
+				49% 32%,
+				30% 38%
+			);
 			transform: rotate(-8deg);
 		}
 
@@ -178,7 +195,9 @@ const handleClick = () => {
 			width: 0.5em;
 			height: 0.5em;
 			border-radius: 50%;
-			border: 2px solid black;
+			border-width: 2px;
+			border-style: solid;
+			border-color: #000000;
 			background-color: #979797;
 			z-index: 99;
 		}
@@ -192,7 +211,9 @@ const handleClick = () => {
 		background-color: #d36604;
 		display: flex;
 		justify-content: center;
-		border: 2px solid #1d0e01;
+		border-width: 2px;
+		border-style: solid;
+		border-color: #1d0e01;
 		box-shadow: inset 0.2em 0.2em #e69635;
 
 		&::after {
@@ -241,7 +262,9 @@ const handleClick = () => {
 						width: 13em;
 						height: 7.85em;
 						font-family: Montserrat;
-						border: 2px solid #1d0e01;
+						border-width: 2px;
+						border-style: solid;
+						border-color: #1d0e01;
 						background:
 							repeating-radial-gradient(#000 0 0.0001%, #ffffff 0 0.0002%) 50% 0/2500px 2500px,
 							repeating-conic-gradient(#000 0 0.0001%, #ffffff 0 0.0002%) 60% 60%/2500px 2500px;
@@ -288,7 +311,9 @@ const handleClick = () => {
 			align-self: center;
 			height: 7em;
 			background-color: #e69635;
-			border: 2px solid #1d0e01;
+			border-width: 2px;
+			border-style: solid;
+			border-color: #1d0e01;
 			padding: 0.6em;
 			border-radius: 10px;
 			display: flex;
@@ -303,7 +328,9 @@ const handleClick = () => {
 				height: 1.5em;
 				border-radius: 50%;
 				background-color: #7f5934;
-				border: 2px solid black;
+				border-width: 2px;
+				border-style: solid;
+				border-color: #000000;
 				box-shadow:
 					inset 2px 2px 1px #b49577,
 					-2px 0px #513721,
@@ -350,7 +377,9 @@ const handleClick = () => {
 				height: 1.5em;
 				border-radius: 50%;
 				background-color: #7f5934;
-				border: 2px solid black;
+				border-width: 2px;
+				border-style: solid;
+				border-color: #000000;
 				box-shadow:
 					inset 2px 2px 1px #b49577,
 					-2px 0px #513721,
@@ -396,7 +425,9 @@ const handleClick = () => {
 						height: 0.65em;
 						border-radius: 50%;
 						background-color: #7f5934;
-						border: 2px solid black;
+						border-width: 2px;
+						border-style: solid;
+						border-color: #000000;
 						box-shadow: inset 1.25px 1.25px 1px #b49577;
 					}
 				}
@@ -421,7 +452,9 @@ const handleClick = () => {
 		.base1 {
 			height: 1em;
 			width: 2em;
-			border: 2px solid #171717;
+			border-width: 2px;
+			border-style: solid;
+			border-color: #171717;
 			border-bottom-width: 0;
 			background-color: #4d4d4d;
 			margin-top: -0.15em;
@@ -430,7 +463,9 @@ const handleClick = () => {
 		.base2 {
 			height: 1em;
 			width: 2em;
-			border: 2px solid #171717;
+			border-width: 2px;
+			border-style: solid;
+			border-color: #171717;
 			border-bottom-width: 0;
 			background-color: #4d4d4d;
 			margin-top: -0.15em;
@@ -444,6 +479,245 @@ const handleClick = () => {
 		background-position:
 			50% 0,
 			60% 50%;
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.5;
+
+	.bottom_television {
+		font-size: 15px * $base-size;
+
+		.antenna {
+			width: 5em;
+			height: 5em;
+			border-width: 2px * $base-size;
+			margin-bottom: -6em;
+
+			&::after {
+				margin-top: -9.4em;
+				margin-left: 0.4em;
+				width: 1em;
+				height: 0.5em;
+			}
+
+			&::before {
+				margin-top: 0.2em;
+				margin-left: 1.25em;
+				width: 1.5em;
+				height: 0.8em;
+			}
+
+			.antenna_shadow {
+				width: 50px * $base-size;
+				height: 56px * $base-size;
+				margin-left: 1.68em;
+				border-width: 4px * $base-size;
+				box-shadow:
+					inset 0px 16px * $base-size #a85103,
+					inset 0px 16px * $base-size 1px * $base-size 1px * $base-size #a85103;
+				-moz-box-shadow:
+					inset 0px 16px * $base-size #a85103,
+					inset 0px 16px * $base-size 1px * $base-size 1px * $base-size #a85103;
+			}
+
+			.a1 {
+				width: 12em;
+				height: 5.5em;
+				border-radius: 50px * $base-size;
+			}
+
+			.a1d {
+				width: 0.5em;
+				height: 0.5em;
+				border-width: 2px * $base-size;
+			}
+
+			.a2 {
+				width: 12em;
+				height: 4em;
+				border-radius: 50px * $base-size;
+				margin-right: 5em;
+			}
+
+			.a2d {
+				width: 0.5em;
+				height: 0.5em;
+				border-width: 2px * $base-size;
+			}
+		}
+
+		.tv {
+			width: 17em;
+			height: 9em;
+			margin-top: 3em;
+			border-radius: 15px * $base-size;
+			border-width: 2px * $base-size;
+			box-shadow: inset 0.2em 0.2em #e69635;
+
+			&::after {
+				width: 17em;
+				height: 9em;
+				border-radius: 15px * $base-size;
+			}
+
+			.curve_svg {
+				margin-top: 0.25em;
+				margin-left: -0.25em;
+				height: 12px * $base-size;
+				width: 12px * $base-size;
+			}
+
+			.display_div {
+				border-radius: 15px * $base-size;
+				box-shadow: 3.5px * $base-size 3.5px * $base-size 0px #e69635;
+
+				.screen_out {
+					border-radius: 10px * $base-size;
+
+					.screen_out1 {
+						width: 11em;
+						height: 7.75em;
+						border-radius: 10px * $base-size;
+
+						.screen {
+							width: 13em;
+							height: 7.85em;
+							border-width: 2px * $base-size;
+							background:
+								repeating-radial-gradient(#000 0 0.0001%, #ffffff 0 0.0002%) 50% 0/2500px 2500px,
+								repeating-conic-gradient(#000 0 0.0001%, #ffffff 0 0.0002%) 60% 60%/2500px 2500px;
+							border-radius: 10px * $base-size;
+							letter-spacing: 0.15em;
+						}
+					}
+				}
+			}
+
+			.lines {
+				column-gap: 0.1em;
+
+				.line1,
+				.line3 {
+					width: 2px * $base-size;
+					height: 0.5em;
+					border-radius: 25px * $base-size 25px * $base-size 0px 0px;
+					margin-top: 0.5em;
+				}
+				.line2 {
+					width: 2px * $base-size;
+					height: 1em;
+					border-radius: 25px * $base-size 25px * $base-size 0px 0px;
+				}
+			}
+
+			.buttons_div {
+				width: 2.75em;
+				height: 7em;
+				border-width: 2px * $base-size;
+				padding: 0.6em;
+				border-radius: 10px * $base-size;
+				row-gap: 0.75em;
+				box-shadow: 3px * $base-size 3px * $base-size 0px #e69635;
+
+				.b1 {
+					width: 1.5em;
+					height: 1.5em;
+					border-width: 2px * $base-size;
+					box-shadow:
+						inset 2px * $base-size 2px * $base-size 1px * $base-size #b49577,
+						-2px * $base-size 0px #513721,
+						-2px * $base-size 0px 0px 1px * $base-size black;
+
+					&::before {
+						margin-top: 1em;
+						margin-left: 0.5em;
+						border-radius: 5px * $base-size;
+						width: 0.1em;
+						height: 0.4em;
+					}
+
+					&::after {
+						margin-top: 0.9em;
+						margin-left: 0.8em;
+						border-radius: 5px * $base-size;
+						width: 0.1em;
+						height: 0.55em;
+					}
+
+					div {
+						margin-top: -0.1em;
+						margin-left: 0.65em;
+						width: 0.15em;
+						height: 1.5em;
+					}
+				}
+
+				.b2 {
+					width: 1.5em;
+					height: 1.5em;
+					border-width: 2px * $base-size;
+					box-shadow:
+						inset 2px * $base-size 2px * $base-size 1px * $base-size #b49577,
+						-2px * $base-size 0px #513721,
+						-2px * $base-size 0px 0px 1px * $base-size black;
+
+					&::before {
+						margin-top: 1.05em;
+						margin-left: 0.8em;
+						border-radius: 5px * $base-size;
+						width: 0.15em;
+						height: 0.4em;
+					}
+
+					&::after {
+						margin-top: -0.1em;
+						margin-left: 0.65em;
+						width: 0.15em;
+						height: 1.5em;
+					}
+				}
+
+				.speakers {
+					row-gap: 0.5em;
+
+					.g1 {
+						column-gap: 0.25em;
+
+						.g11,
+						.g12,
+						.g13 {
+							width: 0.65em;
+							height: 0.65em;
+							border-width: 2px * $base-size;
+							box-shadow: inset 1.25px * $base-size 1.25px * $base-size 1px * $base-size #b49577;
+						}
+					}
+
+					.g {
+						height: 2px * $base-size;
+					}
+				}
+			}
+		}
+
+		.bottom {
+			column-gap: 8.7em;
+
+			.base1 {
+				height: 1em;
+				width: 2em;
+				border-width: 2px * $base-size;
+				margin-top: -0.15em;
+			}
+			.base2 {
+				height: 1em;
+				width: 2em;
+				border-width: 2px * $base-size;
+				margin-top: -0.15em;
+			}
+		}
 	}
 }
 </style>
