@@ -81,7 +81,7 @@ defineExpose<DetailBottomMoreInstance>({
 		display: flex;
 		justify-content: center;
 		align-items: end;
-		height: 20rem;
+		height: 23rem;
 		width: 20rem;
 		overflow: hidden;
 
@@ -118,7 +118,7 @@ defineExpose<DetailBottomMoreInstance>({
 		height: 6rem * $base-size;
 
 		.button_container {
-			height: 20rem * $base-size;
+			height: 27rem * $base-size;
 			width: 20rem * $base-size;
 
 			.button_wrapper {
@@ -143,7 +143,7 @@ defineExpose<DetailBottomMoreInstance>({
 		height: 6rem * $base-size;
 
 		.button_container {
-			height: 20rem * $base-size;
+			height: 24rem * $base-size;
 			width: 20rem * $base-size;
 
 			.button_wrapper {
@@ -168,7 +168,7 @@ defineExpose<DetailBottomMoreInstance>({
 		height: 6rem * $base-size;
 
 		.button_container {
-			height: 20rem * $base-size;
+			height: 22.5rem * $base-size;
 			width: 20rem * $base-size;
 
 			.button_wrapper {
@@ -193,7 +193,7 @@ defineExpose<DetailBottomMoreInstance>({
 		height: 6rem * $base-size;
 
 		.button_container {
-			height: 20rem * $base-size;
+			height: 22rem * $base-size;
 			width: 20rem * $base-size;
 
 			.button_wrapper {

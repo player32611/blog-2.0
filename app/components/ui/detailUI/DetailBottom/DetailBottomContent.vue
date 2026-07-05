@@ -111,10 +111,11 @@ onUnmounted(() => {
 @use "@/assets/styles/variables.scss";
 
 .bottom_content {
+	flex-grow: 2;
 	position: relative;
 	display: flex;
 	justify-content: center;
-	align-items: center;
+	align-items: end;
 	width: 100%;
 	background-color: transparent;
 	color: #ff7f27;

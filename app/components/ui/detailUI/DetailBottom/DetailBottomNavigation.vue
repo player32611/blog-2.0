@@ -47,6 +47,7 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .bottom_navigation {
+	flex-grow: 0.5;
 	position: relative;
 	height: 200px;
 	width: 200px;

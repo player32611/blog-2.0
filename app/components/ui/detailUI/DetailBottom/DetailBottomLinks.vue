@@ -53,6 +53,7 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .bottom_links {
+	grid-area: 1/2/2/3;
 	position: relative;
 	display: flex;
 	justify-content: center;

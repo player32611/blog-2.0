@@ -11,14 +11,12 @@ const easeTime: number = 1; // 缓动时间（s）
 const outTime: number = 0.5; // 离开变化时间（s）
 
 const handleMouseMove = (event: MouseEvent) => {
+	if (!cursorRef.value) return;
 	if (isOut.value) {
 		gsap.to(cursorRef.value, { scale: 1, opacity: 1, duration: outTime });
 		isOut.value = false;
 	}
-	gsap.set(cursorRef.value, {
-		x: event.clientX,
-		y: event.clientY,
-	});
+	gsap.set(cursorRef.value, { x: event.clientX, y: event.clientY });
 	if (
 		Array.from(document.querySelectorAll(".hoverable")).some(node => {
 			const rect = node.getBoundingClientRect();
@@ -63,7 +61,7 @@ const handleMouseMove = (event: MouseEvent) => {
 };
 
 const handleMouseOut = (event: MouseEvent) => {
-	if (event.relatedTarget === null) {
+	if (event.relatedTarget === null && cursorRef.value) {
 		gsap.to(cursorRef.value, { scale: 0, opacity: 0, duration: outTime });
 		isOut.value = true;
 	}
@@ -81,9 +79,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="detail_cursor" ref="cursorRef">
-		<img :src="heartImg" alt="加载失败" />
-	</div>
+	<ClientOnly>
+		<div class="detail_cursor" ref="cursorRef" v-if="!isMobile()">
+			<img :src="heartImg" alt="加载失败" />
+		</div>
+	</ClientOnly>
 </template>
 
 <style scoped lang="scss">

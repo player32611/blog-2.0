@@ -34,12 +34,13 @@ onMounted(() => {
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	justify-content: end;
+	justify-content: space-between;
 	align-items: center;
 	height: 100vh;
 	width: 100%;
 
 	.bottom_bar {
+		flex-grow: 1;
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		justify-items: center;
