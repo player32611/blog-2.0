@@ -6,6 +6,7 @@ import DetailBottomLinks from "./DetailBottomLinks.vue";
 import DetailBottomMore from "./DetailBottomMore.vue";
 import DetailBottomNavigation from "./DetailBottomNavigation.vue";
 import DetailBottomTelevision from "./DetailBottomTelevision.vue";
+import DetailBottomTextarea from "./DetailBottomTextarea.vue";
 
 const detailStore = useDetailStore();
 const moreRef = ref<DetailBottomMoreInstance | null>(null);
@@ -23,7 +24,7 @@ onMounted(() => {
 		<div class="bottom_bar">
 			<DetailBottomTelevision />
 			<DetailBottomLinks />
-			<DetailBottomTelevision />
+			<DetailBottomTextarea />
 		</div>
 	</div>
 </template>
@@ -39,8 +40,9 @@ onMounted(() => {
 	width: 100%;
 
 	.bottom_bar {
-		display: flex;
-		justify-content: space-evenly;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		justify-items: center;
 		align-items: end;
 		width: 100%;
 	}

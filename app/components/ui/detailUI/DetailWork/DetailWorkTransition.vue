@@ -92,7 +92,7 @@ onUnmounted(() => {
 	<div class="work_transition" ref="transitionRef">
 		<svg class="transition" viewBox="0 0 100 100" preserveAspectRatio="xMidYMin slice">
 			<defs>
-				<linearGradient id="grad" x1="0" y1="0" x2="99" y2="99" gradientUnits="userSpaceOnUse">
+				<linearGradient id="grad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
 					<stop offset="0.2" stop-color="rgb(255, 135, 9)" />
 					<stop offset="0.7" stop-color="rgb(247, 189, 248)" />
 				</linearGradient>
