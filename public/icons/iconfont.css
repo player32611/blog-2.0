@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 5129219 */
-  src: url('iconfont.woff2?t=1783148763775') format('woff2'),
-       url('iconfont.woff?t=1783148763775') format('woff'),
-       url('iconfont.ttf?t=1783148763775') format('truetype');
+  src: url('iconfont.woff2?t=1783224668673') format('woff2'),
+       url('iconfont.woff?t=1783224668673') format('woff'),
+       url('iconfont.ttf?t=1783224668673') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-24gf-ellipsis:before {
+  content: "\eb10";
+}
+
+.icon-quanping:before {
+  content: "\e78e";
+}
+
+.icon-shouqi:before {
+  content: "\e78f";
 }
 
 .icon-tulie:before {

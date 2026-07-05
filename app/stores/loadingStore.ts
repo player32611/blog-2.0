@@ -6,6 +6,7 @@ export const useLoadingStore = defineStore(
 	(): LoadingState & LoadingGetter & LoadingActions => {
 		const loadingRef = ref<LoadingInstance | null>(null);
 		const isLoading = ref<boolean>(true);
+		const router = useRouter();
 
 		function initLoadingRef(loading: LoadingInstance) {
 			loadingRef.value = loading;
@@ -26,9 +27,10 @@ export const useLoadingStore = defineStore(
 			loadingRef.value?.loadingOut();
 		}
 
-		function loadingNavigate(target: string) {
+		function loadingNavigate(target: string | number) {
 			if (isLoading.value) return;
-			navigateTo(target);
+			if (typeof target === "string") navigateTo(target);
+			else if (typeof target === "number") router.go(target);
 		}
 
 		return {

@@ -30,7 +30,7 @@ onUnmounted(() => {
 			:text="'back'"
 			:icon="'&#xeb06;'"
 			:size="'small'"
-			@click="loadingNavigate('/')"
+			@click="loadingNavigate(-1)"
 			:style="{ position: 'fixed', left: '20px', top: '20px' }"
 		></Button>
 	</div>

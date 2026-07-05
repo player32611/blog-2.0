@@ -1,30 +1,53 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import { Draggable, InertiaPlugin } from "gsap/all";
+import type { NetworkLoadingState } from "~/types/config";
 
 gsap.registerPlugin(Draggable, InertiaPlugin);
 
+const loadingStore = useLoadingStore();
 const mainStore = useMainStore();
 const soundStore = useSoundStore();
-const isLoading = ref<boolean>(true); // 封面加载状态
-const loadingError = ref<boolean>(false); // 封面是否加载错误
-const cardRef = ref<HTMLDivElement | null>(null); // 卡片容器 Ref
+const cardRef = ref<HTMLDivElement | null>(null);
+const btnRef = ref<HTMLButtonElement | null>(null);
+const loadingState = ref<NetworkLoadingState>("loading");
+const isSmall = ref<boolean>(false);
+const sizeAnim = ref<gsap.core.Tween | null>(null);
+
+const changeTime: number = 0.5;
 
 const handleLoad = () => {
-	isLoading.value = false;
-	loadingError.value = false;
+	loadingState.value = "success";
 };
 
 const handleError = () => {
-	isLoading.value = false;
-	loadingError.value = true;
+	loadingState.value = "error";
+};
+
+const handleChangeSize = () => {
+	sizeAnim.value?.kill();
+	if (isSmall.value) {
+		sizeAnim.value = gsap.to(cardRef.value, {
+			height: "auto",
+			width: "auto",
+			ease: "power2.out",
+			duration: changeTime,
+		});
+	} else {
+		sizeAnim.value = gsap.to(cardRef.value, {
+			height: btnRef.value?.offsetWidth || 20,
+			width: btnRef.value?.offsetWidth || 20,
+			ease: "power2.out",
+			duration: changeTime,
+		});
+	}
+	isSmall.value = !isSmall.value;
 };
 
 watch(
 	() => soundStore.musicCurrent?.cover,
 	() => {
-		isLoading.value = true;
-		loadingError.value = false;
+		loadingState.value = "loading";
 	},
 );
 
@@ -49,20 +72,32 @@ onMounted(() => {
 	<!-- From Uiverse.io by Tsiangana -->
 	<div class="music_card" ref="cardRef">
 		<div class="card_content">
-			<div class="card_title">Music</div>
+			<div class="card_title">
+				<button class="control_btn" title="最大化" @click="handleChangeSize" ref="btnRef">
+					<span class="icon" v-if="isSmall">&#xe78e;</span>
+				</button>
+				<div class="title_content">Music</div>
+				<button class="control_btn" title="窗口化" @click="handleChangeSize">
+					<span class="icon" v-if="!isSmall">&#xe78f;</span>
+				</button>
+			</div>
 			<div class="cover_container">
 				<img
-					v-if="!loadingError"
+					v-if="loadingState !== 'error'"
 					class="music_cover"
 					draggable="false"
-					:class="{ loading: isLoading }"
+					:class="{ loading: loadingState === 'loading' }"
 					:src="soundStore.musicCurrent?.cover"
 					:alt="soundStore.musicCurrent?.cover"
 					@load="handleLoad"
 					@error="handleError"
 				/>
-				<span v-if="isLoading && soundStore.musicCurrent?.cover" class="cover_loading">加载中</span>
-				<span v-else-if="!isLoading && loadingError" class="loading_error">加载失败</span>
+				<span
+					v-if="loadingState === 'loading' && soundStore.musicCurrent?.cover"
+					class="cover_loading"
+					>加载中</span
+				>
+				<span v-else-if="loadingState === 'error'" class="loading_error">加载失败</span>
 			</div>
 			<div class="music_name">
 				{{ soundStore.musicCurrent?.name || "未选择音乐" }}
@@ -99,6 +134,13 @@ onMounted(() => {
 					<span v-else-if="soundStore.musicPlayingMode == 'RandomAll'" class="icon">&#xe87a;</span>
 					<span v-else-if="soundStore.musicPlayingMode == 'OrderAll'" class="icon">&#xe87e;</span>
 				</button>
+				<button
+					class="control_btn"
+					title="播放列表"
+					@click="loadingStore.loadingNavigate('/musics')"
+				>
+					<span class="icon">&#xeb10;</span>
+				</button>
 			</div>
 		</div>
 		<div class="backgound1"></div>
@@ -107,6 +149,8 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 $base-size: 1;
 
 /* From Uiverse.io by Tsiangana */
@@ -114,16 +158,14 @@ $base-size: 1;
 	position: fixed;
 	left: 0;
 	top: 0;
-	width: 190px * $base-size;
-	height: auto;
 	border-radius: 10px * $base-size;
-	cursor: pointer;
+	z-index: variables.$float_zIndex;
+	overflow: hidden;
 	user-select: none;
-	z-index: 10;
 
 	.card_content {
 		width: 190px * $base-size;
-		z-index: 10;
+		z-index: variables.$float_zIndex;
 		position: relative;
 		display: flex;
 		flex-direction: column;
@@ -139,21 +181,27 @@ $base-size: 1;
 		overflow: hidden;
 
 		.card_title {
-			border-width: 1px * $base-size;
-			border-style: solid;
-			border-color: rgba(180, 177, 177, 0.308);
-			display: block;
-			margin: 12px * $base-size auto;
-			text-align: center;
-			font-size: 0.6rem * $base-size;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+
 			border-radius: 12px * $base-size;
-			font-family: Roboto, sans-serif;
-			color: rgba(102, 100, 100, 0.911);
+
+			.title_content {
+				color: rgba(102, 100, 100, 0.911);
+				font-size: 0.6rem * $base-size;
+				font-family: Roboto, sans-serif;
+				text-align: center;
+				border-width: 1px * $base-size;
+				border-style: solid;
+				border-color: rgba(180, 177, 177, 0.308);
+			}
 		}
 
 		.cover_container {
 			width: 80px * $base-size;
-			min-height: 80px * $base-size;
+			height: 80px * $base-size;
 			background: rgba(216, 212, 212, 0.726);
 			margin-top: 20px * $base-size;
 			border-radius: 15px * $base-size;
@@ -205,23 +253,23 @@ $base-size: 1;
 			justify-content: space-evenly;
 			padding: 0 5px * $base-size;
 			cursor: pointer;
+		}
 
-			.control_btn {
-				position: relative;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				width: 30px * $base-size;
-				height: 30px * $base-size;
-				color: rgba($color: #000000, $alpha: 0.5);
-				background: transparent;
-				border: none;
-				user-select: none;
-				cursor: pointer;
+		.control_btn {
+			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 30px * $base-size;
+			height: 30px * $base-size;
+			color: rgba($color: #000000, $alpha: 0.5);
+			background: transparent;
+			border: none;
+			user-select: none;
+			cursor: pointer;
 
-				.icon {
-					font-size: 13px * $base-size;
-				}
+			.icon {
+				font-size: 13px * $base-size;
 			}
 		}
 	}

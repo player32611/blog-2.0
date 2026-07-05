@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "7596589",
+      "name": "24gf-ellipsis",
+      "font_class": "24gf-ellipsis",
+      "unicode": "eb10",
+      "unicode_decimal": 60176
+    },
+    {
+      "icon_id": "43696703",
+      "name": "全屏展开",
+      "font_class": "quanping",
+      "unicode": "e78e",
+      "unicode_decimal": 59278
+    },
+    {
+      "icon_id": "43696707",
+      "name": "全屏收起",
+      "font_class": "shouqi",
+      "unicode": "e78f",
+      "unicode_decimal": 59279
+    },
+    {
       "icon_id": "43711313",
       "name": "图裂",
       "font_class": "tulie",
