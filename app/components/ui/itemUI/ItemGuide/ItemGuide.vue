@@ -1,17 +1,42 @@
 <script setup lang="ts">
 import gsap from "gsap";
 
+import ItemGuideHelp from "./ItemGuideHelp.vue";
+import ItemGuideIntroduce from "./ItemGuideIntroduce.vue";
+
 const itemStore = useItemStore();
 const guideRef = ref<HTMLDivElement | null>(null);
+const pageRefs = ref<HTMLDivElement[]>([]);
+const currentPage = ref<number>(0);
+
+const pageNum: number = 2;
+const changeDuration: number = 1;
+
+const handleChangePage = (step: -1 | 1) => {
+	if (currentPage.value + step < 0 || pageNum <= currentPage.value + step) return;
+	gsap.fromTo(
+		pageRefs.value[currentPage.value] || null,
+		{ opacity: 1 },
+		{
+			opacity: 0,
+			duration: changeDuration,
+			onComplete: () => {
+				currentPage.value += step;
+				gsap.fromTo(
+					pageRefs.value[currentPage.value] || null,
+					{ opacity: 0 },
+					{ opacity: 1, duration: changeDuration },
+				);
+			},
+		},
+	);
+};
 
 watch(
 	() => itemStore.showingGuide,
 	newValue => {
-		if (newValue) {
-			gsap.to(guideRef.value, { top: "0", duration: 0.5, ease: "back.out" });
-		} else {
-			gsap.to(guideRef.value, { top: "-100%", duration: 0.5, ease: "power1.out" });
-		}
+		if (newValue) gsap.to(guideRef.value, { top: "0", duration: 0.5, ease: "back.out" });
+		else gsap.to(guideRef.value, { top: "-100%", duration: 0.5, ease: "power1.out" });
 	},
 );
 </script>
@@ -32,31 +57,44 @@ watch(
 				d="M50 10C27.9 10 10 27.9 10 50C10 72.1 27.9 90 50 90C72.1 90 90 72.1 90 50C90 32.3 75.7 18 58 18C44.3 18 33 29.3 33 43C33 53.5 41.5 62 52 62C59.7 62 66 55.7 66 48"
 			></path>
 		</svg>
-
-		<div class="guide_photo"></div>
-
-		<div class="guide_title">
-			参考小册<br />
-			<span>命令行指南</span>
+		<div class="guide_page" :ref="el => pageRefs.push(el as HTMLDivElement)">
+			<ItemGuideIntroduce v-if="currentPage === 0" />
 		</div>
-
-		<div class="guide_content"><span>add xxx</span>添加物品</div>
-		<div class="guide_content"><span>delete xxx</span>删除物品</div>
-
+		<div class="guide_page" :ref="el => pageRefs.push(el as HTMLDivElement)">
+			<ItemGuideHelp v-if="currentPage === 1" />
+		</div>
 		<div class="guide_links">
-			<button class="guide_links_btn previous" aria-label="previous">
-				<span class="icon">&#xeb79;</span>
-			</button>
-			<button
-				class="guide_links_btn close"
-				aria-label="close"
-				@click="itemStore.toggleShowingGuide"
-			>
-				<span class="icon">&#xe781;</span>
-			</button>
-			<button class="guide_links_btn next" aria-label="next">
-				<span class="icon">&#xeb77;</span>
-			</button>
+			<div class="link_container">
+				<button
+					class="guide_links_btn previous"
+					aria-label="previous"
+					v-if="currentPage"
+					@click="handleChangePage(-1)"
+				>
+					<span class="icon">&#xeb79;</span>
+				</button>
+			</div>
+
+			<div class="link_container">
+				<button
+					class="guide_links_btn close"
+					aria-label="close"
+					@click="itemStore.toggleShowingGuide"
+				>
+					<span class="icon">&#xe781;</span>
+				</button>
+			</div>
+
+			<div class="link_container">
+				<button
+					class="guide_links_btn next"
+					aria-label="next"
+					v-if="currentPage < pageNum - 1"
+					@click="handleChangePage(1)"
+				>
+					<span class="icon">&#xeb77;</span>
+				</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -171,97 +209,6 @@ watch(
 		}
 	}
 
-	.guide_photo {
-		width: 6.5em;
-		height: 6.5em;
-		position: relative;
-		margin-bottom: 1.2em;
-		background:
-    /* Spiky Hair */
-			radial-gradient(circle at 25% 10%, var(--accent-lavender) 15%, transparent 16%),
-			radial-gradient(circle at 50% 5%, var(--accent-lavender) 18%, transparent 19%),
-			radial-gradient(circle at 75% 10%, var(--accent-lavender) 15%, transparent 16%),
-			/* Hair Base */
-			radial-gradient(ellipse at 50% 20%, var(--accent-lavender) 45%, transparent 46%),
-			/* Skin Tone */ #ffdeb3;
-		border: 0.2em solid var(--ink-color);
-		border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%;
-		box-shadow: 0.3em 0.3em 0 var(--accent-coral);
-		animation: avatarBounce 4s ease-in-out infinite;
-		overflow: hidden;
-		z-index: 2;
-
-		&::before {
-			content: "";
-			position: absolute;
-			width: 0.55em;
-			height: 0.55em;
-			background: var(--ink-color);
-			border-radius: 50%;
-			top: 3.2em;
-			left: 1.8em;
-			/* Right eye + two pink blushes */
-			box-shadow:
-				2.3em 0 0 var(--ink-color),
-				-0.4em 0.9em 0.3em rgba(255, 139, 167, 0.8),
-				2.7em 0.9em 0.3em rgba(255, 139, 167, 0.8);
-			animation: avatarBlink 5s infinite;
-			transform-origin: center;
-		}
-
-		&::after {
-			content: "";
-			position: absolute;
-			width: 1.4em;
-			height: 1.2em;
-			border: 0.2em solid transparent;
-			border-bottom-color: var(--ink-color);
-			border-radius: 50%;
-			top: 2.2em;
-			left: 2.35em;
-			animation: smileMove 3s ease-in-out infinite alternate;
-		}
-	}
-
-	.guide_title,
-	.guide_content {
-		text-align: center;
-		color: var(--ink-color);
-		font-size: 1.3em;
-		font-weight: 900;
-		font-family: "Comic Sans MS", "Chalkboard SE", "Marker Felt", sans-serif;
-		letter-spacing: 0.05em;
-		margin-bottom: 0.5em;
-		text-shadow: 0.08em 0.08em 0 var(--accent-lavender);
-		z-index: 2;
-
-		span {
-			display: inline-block;
-			font-size: 0.55em;
-			color: var(--ink-color);
-			background: var(--accent-mint);
-			padding: 0.4em 1em;
-			border: 0.15em solid var(--ink-color);
-			border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-			margin-top: 0.8em;
-			font-weight: bold;
-			text-transform: uppercase;
-			letter-spacing: 0.1em;
-			box-shadow: 0.2em 0.2em 0 var(--ink-color);
-			animation: badgeFloat 3s ease-in-out infinite alternate;
-			text-shadow: none;
-		}
-	}
-
-	.guide_content {
-		font-size: 1em;
-
-		span {
-			margin: 0 1em;
-			font-size: 0.8em;
-		}
-	}
-
 	.guide_links {
 		display: flex;
 		justify-content: space-between;
@@ -274,53 +221,59 @@ watch(
 		transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 		z-index: 2;
 
-		.guide_links_btn {
-			display: flex;
-			align-items: center;
-			justify-content: center;
+		.link_container {
 			width: 2.8em;
 			height: 2.8em;
-			font-weight: 600;
-			border: 0.15em solid var(--ink-color);
-			background: #fff;
-			border-radius: 50% 40% 60% 40% / 40% 60% 40% 50%; /* Skewed circle */
-			cursor: pointer;
-			box-shadow: 0.2em 0.2em 0 var(--ink-color);
-			transition: all 0.2s ease;
 
-			&:hover {
-				transform: translateY(-0.3em);
-				animation: btnWiggle 0.6s ease-in-out infinite;
+			.guide_links_btn {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 2.8em;
+				height: 2.8em;
+				font-weight: 600;
+				border: 0.15em solid var(--ink-color);
+				background: #fff;
+				border-radius: 50% 40% 60% 40% / 40% 60% 40% 50%; /* Skewed circle */
+				box-shadow: 0.2em 0.2em 0 var(--ink-color);
+				transition: all 0.2s ease;
+				user-select: none;
+				cursor: pointer;
 
-				&.previous {
-					background: var(--accent-lavender);
+				&:hover {
+					transform: translateY(-0.3em);
+					animation: btnWiggle 0.6s ease-in-out infinite;
+
+					&.previous {
+						background: var(--accent-lavender);
+					}
+
+					&.close {
+						background: var(--accent-coral);
+					}
+					&.next {
+						background: var(--accent-mint);
+					}
 				}
 
-				&.close {
-					background: var(--accent-coral);
+				&:focus-visible {
+					outline: 0.2em dashed var(--accent-coral);
+					outline-offset: 0.3em;
+					transform: translateY(-0.3em);
 				}
-				&.next {
-					background: var(--accent-mint);
+
+				&:active {
+					transform: translate(0.1em, 0.1em);
+					box-shadow: 0.05em 0.05em 0 var(--ink-color);
+					animation: none;
 				}
-			}
 
-			&:focus-visible {
-				outline: 0.2em dashed var(--accent-coral);
-				outline-offset: 0.3em;
-				transform: translateY(-0.3em);
-			}
-
-			&:active {
-				transform: translate(0.1em, 0.1em);
-				box-shadow: 0.05em 0.05em 0 var(--ink-color);
-				animation: none;
-			}
-
-			svg {
-				width: 1.4em;
-				height: 1.4em;
-				fill: var(--ink-color);
-				transition: transform 0.2s ease;
+				svg {
+					width: 1.4em;
+					height: 1.4em;
+					fill: var(--ink-color);
+					transition: transform 0.2s ease;
+				}
 			}
 		}
 	}
@@ -366,55 +319,12 @@ watch(
 	}
 }
 
-@keyframes avatarBounce {
-	0%,
-	100% {
-		transform: translateY(0) scale(1);
-		border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%;
-	}
-	50% {
-		transform: translateY(-0.3em) scale(1.02);
-		border-radius: 45% 55% 50% 50% / 45% 50% 50% 55%;
-	}
-}
-
-@keyframes avatarBlink {
-	0%,
-	4%,
-	10%,
-	100% {
-		transform: scaleY(1);
-	}
-	5%,
-	8% {
-		transform: scaleY(0.1);
-	}
-}
-
-@keyframes smileMove {
-	0% {
-		transform: translateY(0) scaleX(1);
-	}
-	100% {
-		transform: translateY(-0.1em) scaleX(1.1);
-	}
-}
-
 @keyframes titleWobble {
 	0% {
 		transform: rotate(-2deg) scale(1.02);
 	}
 	100% {
 		transform: rotate(2deg) scale(1.02);
-	}
-}
-
-@keyframes badgeFloat {
-	0% {
-		transform: translateY(0) rotate(-1deg);
-	}
-	100% {
-		transform: translateY(-0.2em) rotate(1deg);
 	}
 }
 
@@ -437,9 +347,14 @@ watch(
 		font-size: 10px;
 
 		.guide_links {
-			.guide_links_btn {
+			.link_container {
 				width: 2.2em;
 				height: 2.2em;
+
+				.guide_links_btn {
+					width: 2.2em;
+					height: 2.2em;
+				}
 			}
 		}
 	}
@@ -451,9 +366,14 @@ watch(
 		font-size: 13px;
 
 		.guide_links {
-			.guide_links_btn {
+			.link_container {
 				width: 2.4em;
 				height: 2.4em;
+
+				.guide_links_btn {
+					width: 2.4em;
+					height: 2.4em;
+				}
 			}
 		}
 	}
@@ -465,9 +385,14 @@ watch(
 		font-size: 14px;
 
 		.guide_links {
-			.guide_links_btn {
+			.link_container {
 				width: 2.5em;
 				height: 2.5em;
+
+				.guide_links_btn {
+					width: 2.5em;
+					height: 2.5em;
+				}
 			}
 		}
 	}
@@ -479,9 +404,14 @@ watch(
 		font-size: 15px;
 
 		.guide_links {
-			.guide_links_btn {
+			.link_container {
 				width: 2.6em;
 				height: 2.6em;
+
+				.guide_links_btn {
+					width: 2.6em;
+					height: 2.6em;
+				}
 			}
 		}
 	}
