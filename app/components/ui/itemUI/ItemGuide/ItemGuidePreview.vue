@@ -176,6 +176,8 @@
 </template>
 
 <style scoped lang="scss">
+@use "sass:math";
+
 $base-size: 0.85;
 
 /* From Uiverse.io by mamyapro123 */
@@ -286,8 +288,8 @@ $base-size: 0.85;
 			background: var(--dl-card);
 			padding: 2.6em * $base-size 3.6em * $base-size 2.1em * $base-size;
 			border: 0.13em * $base-size solid var(--dl-ink);
-			border-radius: 0.2em * $base-size 0.5em * $base-size 0.3em * $base-size 0.65em *
-				$base-size/0.45em * $base-size 0.2em * $base-size 0.6em * $base-size 0.3em * $base-size;
+			border-radius: 0.2em * $base-size 0.5em * $base-size 0.3em * $base-size 0.65em/0.45em 0.2em *
+				$base-size 0.6em * $base-size 0.3em * $base-size;
 			box-shadow: 0.4em * $base-size 0.4em * $base-size 0 0 var(--dl-ink);
 			transition:
 				box-shadow 0.2s ease,
@@ -607,8 +609,8 @@ $base-size: 0.85;
 				padding: 2em * $base-size 2.7em * $base-size 1.6em * $base-size;
 				padding: 2.6em * $base-size 3.6em * $base-size 2.1em * $base-size;
 				border: 0.13em * $base-size solid var(--dl-ink);
-				border-radius: 0.2em * $base-size 0.5em * $base-size 0.3em * $base-size 0.65em *
-					$base-size/0.45em * $base-size 0.2em * $base-size 0.6em * $base-size 0.3em * $base-size;
+				border-radius: 0.2em * $base-size 0.5em * $base-size 0.3em * $base-size 0.65em/0.45em
+					0.2em * $base-size 0.6em * $base-size 0.3em * $base-size;
 				box-shadow: 0.4em * $base-size 0.4em * $base-size 0 0 var(--dl-ink);
 
 				&::before {
@@ -776,8 +778,8 @@ $base-size: 0.85;
 				padding: 2em * $base-size 2.7em * $base-size 1.6em * $base-size;
 				padding: 2.6em * $base-size 3.6em * $base-size 2.1em * $base-size;
 				border: 0.13em * $base-size solid var(--dl-ink);
-				border-radius: 0.2em * $base-size 0.5em * $base-size 0.3em * $base-size 0.65em *
-					$base-size/0.45em * $base-size 0.2em * $base-size 0.6em * $base-size 0.3em * $base-size;
+				border-radius: 0.2em * $base-size 0.5em * $base-size 0.3em * $base-size 0.65em/0.45em
+					0.2em * $base-size 0.6em * $base-size 0.3em * $base-size;
 				box-shadow: 0.4em * $base-size 0.4em * $base-size 0 0 var(--dl-ink);
 
 				&::before {
@@ -945,8 +947,8 @@ $base-size: 0.85;
 				padding: 2em * $base-size 2.7em * $base-size 1.6em * $base-size;
 				padding: 2.6em * $base-size 3.6em * $base-size 2.1em * $base-size;
 				border: 0.13em * $base-size solid var(--dl-ink);
-				border-radius: 0.2em * $base-size 0.5em * $base-size 0.3em * $base-size 0.65em *
-					$base-size/0.45em * $base-size 0.2em * $base-size 0.6em * $base-size 0.3em * $base-size;
+				border-radius: 0.2em * $base-size 0.5em * $base-size 0.3em * $base-size 0.65em/0.45em
+					0.2em * $base-size 0.6em * $base-size 0.3em * $base-size;
 				box-shadow: 0.4em * $base-size 0.4em * $base-size 0 0 var(--dl-ink);
 
 				&::before {

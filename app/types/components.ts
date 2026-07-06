@@ -93,6 +93,11 @@ export interface ItemInstance {
 	createItem: (x: number, y: number, angle: number) => Body | null;
 }
 
+export interface ItemGuideContentParams {
+	title?: string;
+	content?: string;
+}
+
 export interface MainColorVialParams extends ItemParams {
 	color: string;
 }

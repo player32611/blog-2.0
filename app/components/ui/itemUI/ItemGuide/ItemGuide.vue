@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import gsap from "gsap";
 
+import ItemGuideControl from "./ItemGuideControl.vue";
 import ItemGuideHelp from "./ItemGuideHelp.vue";
 import ItemGuideIntroduce from "./ItemGuideIntroduce.vue";
 
@@ -8,24 +9,32 @@ const itemStore = useItemStore();
 const guideRef = ref<HTMLDivElement | null>(null);
 const pageRefs = ref<HTMLDivElement[]>([]);
 const currentPage = ref<number>(0);
+const changeAnim = ref<GSAPTween | null>(null);
 
-const pageNum: number = 2;
+const pageNum: number = 3;
 const changeDuration: number = 1;
 
 const handleChangePage = (step: -1 | 1) => {
-	if (currentPage.value + step < 0 || pageNum <= currentPage.value + step) return;
-	gsap.fromTo(
+	if (currentPage.value + step < 0 || pageNum <= currentPage.value + step || changeAnim.value)
+		return;
+	changeAnim.value = gsap.fromTo(
 		pageRefs.value[currentPage.value] || null,
 		{ opacity: 1 },
 		{
 			opacity: 0,
-			duration: changeDuration,
+			duration: changeDuration / 2,
 			onComplete: () => {
 				currentPage.value += step;
-				gsap.fromTo(
+				changeAnim.value = gsap.fromTo(
 					pageRefs.value[currentPage.value] || null,
 					{ opacity: 0 },
-					{ opacity: 1, duration: changeDuration },
+					{
+						opacity: 1,
+						duration: changeDuration / 2,
+						onComplete: () => {
+							changeAnim.value = null;
+						},
+					},
 				);
 			},
 		},
@@ -62,6 +71,9 @@ watch(
 		</div>
 		<div class="guide_page" :ref="el => pageRefs.push(el as HTMLDivElement)">
 			<ItemGuideHelp v-if="currentPage === 1" />
+		</div>
+		<div class="guide_page" :ref="el => pageRefs.push(el as HTMLDivElement)">
+			<ItemGuideControl v-if="currentPage === 2" />
 		</div>
 		<div class="guide_links">
 			<div class="link_container">
