@@ -103,7 +103,7 @@ onUnmounted(() => {
 	img {
 		width: 20px;
 		rotate: 135deg;
-		image-rendering: crisp-edges;
+		image-rendering: pixelated;
 	}
 }
 </style>

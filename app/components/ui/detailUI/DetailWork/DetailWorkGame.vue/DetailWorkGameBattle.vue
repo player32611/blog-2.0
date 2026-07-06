@@ -81,7 +81,7 @@ onUnmounted(() => {
 		position: absolute;
 		width: 25px;
 		-webkit-user-drag: none;
-		image-rendering: crisp-edges;
+		image-rendering: pixelated;
 		user-select: none;
 		pointer-events: none;
 	}

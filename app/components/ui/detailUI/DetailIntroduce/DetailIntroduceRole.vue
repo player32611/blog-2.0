@@ -39,7 +39,7 @@ onUnmounted(() => {
 
 	.role_container {
 		width: 100%;
-		image-rendering: crisp-edges;
+		image-rendering: pixelated;
 	}
 
 	.content_container {

@@ -129,7 +129,7 @@ onUnmounted(() => {
 		top: 35%;
 		height: 30%;
 		width: 30%;
-		image-rendering: crisp-edges;
+		image-rendering: pixelated;
 	}
 
 	.transition {

@@ -287,7 +287,7 @@ defineExpose({
 		height: 100%;
 		width: 100%;
 		background-color: #000000;
-		image-rendering: crisp-edges;
+		image-rendering: pixelated;
 
 		.loading_anim {
 			height: 15vmin;

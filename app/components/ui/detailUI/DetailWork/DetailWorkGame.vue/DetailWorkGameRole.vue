@@ -36,7 +36,7 @@ onUnmounted(() => {
 	top: 0;
 	width: 300px;
 	height: 500px;
-	image-rendering: crisp-edges;
+	image-rendering: pixelated;
 	z-index: variables.$float_zIndex;
 }
 </style>

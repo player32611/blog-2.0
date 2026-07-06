@@ -124,7 +124,7 @@ onUnmounted(() => {
 	left: -5px;
 	top: -30px;
 	opacity: 0;
-	image-rendering: crisp-edges;
+	image-rendering: pixelated;
 	pointer-events: none;
 	z-index: variables.$cursor_zIndex;
 }
