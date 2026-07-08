@@ -55,7 +55,7 @@ const init = () => {
 		options: {
 			width,
 			height,
-			background: "#1a1a2e",
+			background: "#00000000",
 			wireframes: false,
 			showAngleIndicator: false,
 		},
@@ -77,27 +77,11 @@ const init = () => {
 	runner = Runner.create();
 
 	// 创建地面
-	const ground = Bodies.rectangle(width / 2, height + 30, width, 60, {
-		isStatic: true,
-		render: {
-			fillStyle: "#16213e",
-		},
-	});
+	const ground = Bodies.rectangle(width / 2, height + 30, width, 60, { isStatic: true });
 
 	// 创建墙壁
-	const leftWall = Bodies.rectangle(-30, height / 2, 60, height, {
-		isStatic: true,
-		render: {
-			fillStyle: "#16213e",
-		},
-	});
-
-	const rightWall = Bodies.rectangle(width + 30, height / 2, 60, height, {
-		isStatic: true,
-		render: {
-			fillStyle: "#16213e",
-		},
-	});
+	const leftWall = Bodies.rectangle(-30, height / 2, 60, height, { isStatic: true });
+	const rightWall = Bodies.rectangle(width + 30, height / 2, 60, height, { isStatic: true });
 
 	createConstraints();
 	createCards();

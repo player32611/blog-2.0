@@ -8,7 +8,7 @@ onMounted(() => {
 </script>
 
 <template>
-	<div id="sakana-widget"></div>
+	<div id="sakana-widget" class="item_sakana_widget"></div>
 </template>
 
 <style scoped lang="scss">

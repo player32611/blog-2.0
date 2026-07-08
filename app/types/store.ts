@@ -51,6 +51,7 @@ export type ImageActions = {
 };
 
 export type ItemState = {
+	backgroundTheme: Ref<"light" | "dark">;
 	showingCommandBar: Ref<boolean>;
 	showingGuide: Ref<boolean>;
 	currentCommand: Ref<string>;
@@ -59,6 +60,7 @@ export type ItemState = {
 export type ItemGetter = {};
 
 export type ItemActions = {
+	setBackgroundTheme: (theme: "light" | "dark") => void;
 	toggleShowingCommandBar: () => void;
 	toggleShowingGuide: () => void;
 	setCurrentCommand: (command: string) => void;

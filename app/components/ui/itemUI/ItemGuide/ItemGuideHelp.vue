@@ -6,9 +6,7 @@ import ItemGuideContent from "./ItemGuideContent.vue";
 <template>
 	<div class="guide_help">
 		<ItemGuidePhoto />
-
 		<ItemGuideContent content="参考书" />
-
 		<ItemGuideContent title="add xxx" content="添加物品" />
 		<ItemGuideContent title="delete xxx" content="删除物品" />
 	</div>

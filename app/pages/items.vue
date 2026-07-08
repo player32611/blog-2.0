@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import Button from "~/components/ui/common/Button.vue";
+import ItemBackground from "~/components/ui/itemUI/ItemBackground.vue";
 import ItemCommandBar from "~/components/ui/itemUI/ItemCommandBar.vue";
 import ItemContainer from "~/components/ui/itemUI/ItemContainer.vue";
 import ItemGuide from "~/components/ui/itemUI/ItemGuide/ItemGuide.vue";
-import SakanaWidget from "~/components/ui/itemUI/SakanaWidget.vue";
+import ItemSakanaWidget from "~/components/ui/itemUI/ItemSakanaWidget.vue";
+import Button from "~/components/ui/common/Button.vue";
 
 const { loadingNavigate } = useLoadingStore();
 
@@ -16,9 +17,10 @@ onMounted(() => {
 
 <template>
 	<div class="items">
+		<ItemBackground />
 		<ItemContainer />
 		<ClientOnly>
-			<SakanaWidget />
+			<ItemSakanaWidget />
 		</ClientOnly>
 		<ItemCommandBar />
 		<ItemGuide />
