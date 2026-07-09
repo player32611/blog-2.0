@@ -2,9 +2,11 @@
 import ImageBackground from "~/components/ui/imageUI/ImageBackground.vue";
 import ImageContainer from "~/components/ui/imageUI/ImageContainer.vue";
 import ImageCursor from "~/components/ui/imageUI/ImageCursor.vue";
-import ImageViewbox from "~/components/ui/imageUI/ImageViewbox.vue";
-import Button from "~/components/ui/common/Button.vue";
 import ImageDetailSign from "~/components/ui/imageUI/ImageDetailSign.vue";
+import ImageDownload from "~/components/ui/imageUI/ImageDownload.vue";
+import ImageViewbox from "~/components/ui/imageUI/ImageViewbox.vue";
+
+import Button from "~/components/ui/common/Button.vue";
 
 const { loadingNavigate } = useLoadingStore();
 
@@ -21,6 +23,7 @@ onMounted(() => {
 		<ImageContainer />
 		<ImageViewbox />
 		<ImageDetailSign />
+		<ImageDownload />
 		<Button
 			:text="'back'"
 			:icon="'&#xeb06;'"
@@ -28,7 +31,9 @@ onMounted(() => {
 			@click="loadingNavigate('/')"
 			:style="{ position: 'fixed', left: '20px', top: '20px' }"
 		></Button>
-		<ImageCursor v-if="!isMobile()" />
+		<ClientOnly>
+			<ImageCursor v-if="!isMobile()" />
+		</ClientOnly>
 	</div>
 </template>
 

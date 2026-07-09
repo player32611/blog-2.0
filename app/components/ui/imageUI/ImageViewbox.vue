@@ -82,8 +82,8 @@ watch(
 				class="image_shadow"
 				:src="currentImage?.path"
 				alt="加载失败"
-				:width="imageStore.getLayoutAttribute().imageWidth * 1.1"
-				:height="imageStore.getLayoutAttribute().imageHeight * 1.1"
+				:width="imageStore.getLayoutAttribute().imageWidth + 10"
+				:height="imageStore.getLayoutAttribute().imageHeight + 10"
 			/>
 			<img
 				class="active_image"
@@ -119,7 +119,8 @@ watch(
 
 		.image_shadow {
 			position: absolute;
-			filter: blur(4rem);
+			border-radius: 1rem;
+			filter: blur(20px);
 		}
 
 		.active_image {

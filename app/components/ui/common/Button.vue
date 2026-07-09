@@ -31,6 +31,8 @@ const handleClick = () => {
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 $base-height: 42px;
 $base-width: 110px;
 $base-size: 1;
@@ -44,8 +46,9 @@ button {
 	font-family: "Mars Needs Cunnilingus";
 	border-color: #ff7f27;
 	border-style: solid;
-	cursor: pointer;
+	z-index: variables.$float_zIndex;
 	user-select: none;
+	cursor: pointer;
 
 	&.small {
 		height: $base-height * $base-size;

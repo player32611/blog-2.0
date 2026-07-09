@@ -176,3 +176,11 @@ export const onImageLoading = (img: HTMLImageElement): Promise<NetworkLoadingSta
 		},
 	);
 };
+
+export const downloadFile = (url: string, fileName?: string) => {
+	const a = document.createElement("a");
+	a.href = url;
+	if (fileName) a.download = fileName;
+	else a.download = url;
+	a.click();
+};

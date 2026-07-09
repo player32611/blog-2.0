@@ -33,7 +33,9 @@ onUnmounted(() => {
 				<div>KR 92/92</div>
 			</div>
 			<div class="ui_time">
-				{{ currentTime.hour + ":" + currentTime.minute + ":" + currentTime.second }}
+				<ClientOnly>
+					{{ currentTime.hour + ":" + currentTime.minute + ":" + currentTime.second }}
+				</ClientOnly>
 			</div>
 		</div>
 		<div class="buttons">
