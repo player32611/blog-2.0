@@ -122,10 +122,7 @@ const createConstraints = () => {
 	if (magnetConstraint) {
 		ropes.push(
 			Constraint.create({
-				pointA: {
-					x: width / 3,
-					y: 0,
-				},
+				pointA: { x: width / 3, y: 0 },
 				bodyB: magnetConstraint, // 被悬挂的物体
 				length: 120, // 绳子长度
 				stiffness: 0.1, // 刚度（接近1表示更像刚性杆，较低值更像弹性绳）
@@ -138,10 +135,7 @@ const createConstraints = () => {
 	if (bookConstraint) {
 		ropes.push(
 			Constraint.create({
-				pointA: {
-					x: (width / 3) * 2,
-					y: 0,
-				},
+				pointA: { x: (width / 3) * 2, y: 0 },
 				bodyB: bookConstraint, // 被悬挂的物体
 				length: 120, // 绳子长度
 				stiffness: 0.1, // 刚度（接近1表示更像刚性杆，较低值更像弹性绳）

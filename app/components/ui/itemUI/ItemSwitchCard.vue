@@ -120,6 +120,7 @@ $base-size: 1;
 	user-select: none;
 	pointer-events: none;
 	z-index: variables.$float_zIndex;
+	filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.137));
 
 	.screen-outline {
 		display: flex;
