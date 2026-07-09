@@ -177,6 +177,11 @@ export const onImageLoading = (img: HTMLImageElement): Promise<NetworkLoadingSta
 	);
 };
 
+/**
+ * 调用此函数，浏览器将会下载对应 url 的文件
+ * @param {string} url - 文件路径
+ * @param {string} fileName - 文件名称，默认为文件路径
+ */
 export const downloadFile = (url: string, fileName?: string) => {
 	const a = document.createElement("a");
 	a.href = url;

@@ -53,7 +53,6 @@ const handleMouseLeave = () => {
 };
 
 const handleClick = () => {
-	console.log(imageStore.activeImageData?.path);
 	if (!imageStore.activeImageData) return;
 	downloadFile(imageStore.activeImageData.path);
 };

@@ -7,9 +7,9 @@
 <style scoped lang="scss">
 /* From Uiverse.io by Shoh2008 */
 .image_loading {
+	position: relative;
 	width: 64px;
 	height: 64px;
-	position: relative;
 	background: #fff;
 	border-radius: 4px;
 	overflow: hidden;

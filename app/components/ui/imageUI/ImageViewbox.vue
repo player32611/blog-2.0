@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import gsap from "gsap";
-import type { ImagePosData } from "~/types/common";
+import type { NetworkLoadingState } from "~/types/config";
+
+import ImageLoading from "~/components/exhibit/ImageLoading.vue";
+import ProgressLoading from "~/components/exhibit/ProgressLoading.vue";
 
 const imageStore = useImageStore();
 const viewboxRef = ref<HTMLDivElement | null>(null);
 const imageRef = ref<HTMLImageElement | null>(null);
 const animationRef = ref<GSAPAnimation | null>(null);
-const currentImage = ref<ImagePosData | null>(null);
+const loadingState = ref<NetworkLoadingState>("loading");
 const isShowingBox = ref<boolean>(false);
 
 const handleAnimShow = () => {
@@ -64,13 +67,18 @@ const handleMouseLeave = () => {
 	imageStore.setHoverImage(null);
 };
 
+const handleLoad = () => {
+	loadingState.value = "success";
+};
+
+const handleError = () => {
+	loadingState.value = "error";
+};
+
 watch(
 	() => imageStore.activeImageData,
 	newData => {
-		if (newData) {
-			currentImage.value = imageStore.activeImageData;
-			handleAnimShow();
-		}
+		if (newData) handleAnimShow();
 	},
 );
 </script>
@@ -80,7 +88,7 @@ watch(
 		<div class="viewbox_container" v-if="isShowingBox" @click="handleClickOutside">
 			<img
 				class="image_shadow"
-				:src="currentImage?.path"
+				:src="imageStore.activeImageData?.path"
 				alt="加载失败"
 				:width="imageStore.getLayoutAttribute().imageWidth + 10"
 				:height="imageStore.getLayoutAttribute().imageHeight + 10"
@@ -89,13 +97,25 @@ watch(
 				class="active_image"
 				alt="加载失败"
 				ref="imageRef"
+				v-if="loadingState !== 'error'"
+				:src="imageStore.activeImageData?.path"
+				:class="{ loading: loadingState === 'loading' }"
+				:width="imageStore.getLayoutAttribute().imageWidth"
+				:height="imageStore.getLayoutAttribute().imageHeight"
 				@click="handleClickImage"
 				@mouseenter="handleMouseEnter"
 				@mouseleave="handleMouseLeave"
-				:src="currentImage?.path"
-				:width="imageStore.getLayoutAttribute().imageWidth"
-				:height="imageStore.getLayoutAttribute().imageHeight"
+				@load="handleLoad"
+				@error="handleError"
 			/>
+			<div class="loading_container" v-if="loadingState === 'loading'">
+				<ImageLoading />
+				<ProgressLoading />
+			</div>
+			<div class="error_container" v-if="loadingState === 'error'">
+				<span class="icon">&#xe7f3;</span>
+				加载失败
+			</div>
 		</div>
 	</div>
 </template>
@@ -126,6 +146,33 @@ watch(
 		.active_image {
 			position: absolute;
 			cursor: pointer;
+
+			&.loading {
+				display: none;
+			}
+		}
+
+		.loading_container {
+			position: absolute;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			gap: 20px;
+		}
+
+		.error_container {
+			position: absolute;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			color: #ff0000;
+			font-family: "方正基础像素体";
+
+			.icon {
+				font-size: 3rem;
+			}
 		}
 	}
 }
