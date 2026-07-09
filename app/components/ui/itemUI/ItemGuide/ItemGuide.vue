@@ -112,6 +112,8 @@ watch(
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 .item_guide {
 	/* Cute Doodle Palette */
 	--bg-color: #fdfbf7;
@@ -145,7 +147,7 @@ watch(
 		box-shadow 0.4s ease,
 		border-radius 0.4s ease;
 	animation: floatCard 6s ease-in-out infinite;
-	z-index: 1;
+	z-index: variables.$bar_zIndex;
 
 	&::before {
 		content: "";
@@ -159,7 +161,7 @@ watch(
 		border: 0.1em solid rgba(0, 0, 0, 0.1);
 		box-shadow: 0.1em 0.1em 0.2em rgba(0, 0, 0, 0.1);
 		border-radius: 2px 4px 2px 5px;
-		z-index: 10;
+		z-index: variables.$bar_zIndex + 9;
 		animation: tapeFlutter 4s infinite alternate ease-in-out;
 	}
 
@@ -189,7 +191,7 @@ watch(
 		stroke-width: 2;
 		stroke-linecap: round;
 		stroke-linejoin: round;
-		z-index: 0;
+		z-index: variables.$bar_zIndex - 1;
 
 		&.star {
 			width: 1.8em;
@@ -231,7 +233,7 @@ watch(
 		margin-top: 0;
 		overflow: hidden;
 		transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-		z-index: 2;
+		z-index: variables.$bar_zIndex + 1;
 
 		.link_container {
 			width: 2.8em;

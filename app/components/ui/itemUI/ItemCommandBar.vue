@@ -40,12 +40,15 @@ watch(
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 /* From Uiverse.io by chase2k25 */
 .item_command_bar {
 	position: fixed;
 	bottom: -70px;
 	margin: 0 10px;
 	width: calc(100% - 10px * 2);
+	z-index: variables.$bar_zIndex;
 
 	&::after {
 		content: "_";

@@ -106,6 +106,8 @@ defineExpose<ItemInstance>({
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 $base-size: 1;
 
 /* From Uiverse.io by necatimertmetin */
@@ -117,6 +119,7 @@ $base-size: 1;
 	height: 196.5px * $base-size; /* 104px * 3 */
 	user-select: none;
 	pointer-events: none;
+	z-index: variables.$float_zIndex;
 
 	.screen-outline {
 		display: flex;

@@ -87,6 +87,8 @@ defineExpose<ItemInstance>({
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 /* From Uiverse.io by Cybercom682 */
 .item_magnet {
 	position: absolute;
@@ -97,6 +99,7 @@ defineExpose<ItemInstance>({
 	transform: rotate(90deg);
 	user-select: none;
 	pointer-events: none;
+	z-index: variables.$float_zIndex;
 
 	&::before {
 		content: "";

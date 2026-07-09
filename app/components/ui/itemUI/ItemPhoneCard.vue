@@ -74,6 +74,8 @@ defineExpose<ItemInstance>({
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 $base-size: 0.8;
 
 /* From Uiverse.io by imtausef */
@@ -91,6 +93,7 @@ $base-size: 0.8;
 	background-color: #f9fafb; /* Light gray background */
 	user-select: none;
 	pointer-events: none;
+	z-index: variables.$float_zIndex;
 
 	/* Top border styles */
 	.top-border {

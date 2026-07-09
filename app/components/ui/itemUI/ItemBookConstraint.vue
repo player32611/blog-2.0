@@ -115,7 +115,10 @@ defineExpose<ItemInstance>({
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 $base-size: 0.5;
+
 /* From Uiverse.io by vinodjangid07 */
 .item_book {
 	position: absolute;
@@ -124,6 +127,7 @@ $base-size: 0.5;
 	justify-content: center;
 	user-select: none;
 	pointer-events: none;
+	z-index: variables.$float_zIndex;
 
 	.book-wrapper {
 		width: 150px * $base-size;

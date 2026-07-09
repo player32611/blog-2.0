@@ -55,9 +55,8 @@ const init = () => {
 		options: {
 			width,
 			height,
-			background: "#00000000",
+			background: "transparent",
 			wireframes: false,
-			showAngleIndicator: false,
 		},
 	});
 
@@ -131,9 +130,7 @@ const createConstraints = () => {
 				length: 120, // 绳子长度
 				stiffness: 0.1, // 刚度（接近1表示更像刚性杆，较低值更像弹性绳）
 				render: {
-					visible: true, // 可视化绳子（调试时可开启）
-					strokeStyle: "#ffffff", // 绳子颜色
-					lineWidth: 2,
+					strokeStyle: "#d5ad72", // 绳子颜色
 				},
 			}),
 		);
@@ -149,9 +146,7 @@ const createConstraints = () => {
 				length: 120, // 绳子长度
 				stiffness: 0.1, // 刚度（接近1表示更像刚性杆，较低值更像弹性绳）
 				render: {
-					visible: true, // 可视化绳子（调试时可开启）
-					strokeStyle: "#ffffff", // 绳子颜色
-					lineWidth: 2,
+					strokeStyle: "#d5ad72", // 绳子颜色
 				},
 			}),
 		);
@@ -269,6 +264,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+	<div ref="containerRef" class="item_container"></div>
 	<ItemBookConstraint
 		:x="itemPositions.get('ItemBookConstraint')?.x ?? 0"
 		:y="itemPositions.get('ItemBookConstraint')?.y ?? 0"
@@ -295,16 +291,19 @@ onUnmounted(() => {
 		:visible="itemPositions.has('ItemSwitchCard')"
 		ref="ItemSwitchCardRef"
 	/>
-	<div ref="containerRef" class="item_container"></div>
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 .item_container {
+	position: relative;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	width: 100%;
 	height: 100%;
+	z-index: variables.$float_zIndex;
 	cursor: pointer;
 }
 </style>

@@ -12,10 +12,13 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 #sakana-widget {
 	position: fixed;
 	right: 0px;
 	bottom: -25px;
+	z-index: variables.$float_zIndex;
 }
 
 /* ========== 超小屏（< 576px）========== */
