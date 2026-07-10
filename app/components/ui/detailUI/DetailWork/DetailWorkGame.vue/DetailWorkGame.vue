@@ -7,10 +7,10 @@ import DetailWorkGameShader from "./DetailWorkGameShader.vue";
 
 <template>
 	<div class="work_game">
+		<DetailWorkGameShader />
 		<DetailWorkGameRole />
 		<DetailWorkGameBattle />
 		<DetailWorkGameUI />
-		<DetailWorkGameShader />
 	</div>
 </template>
 

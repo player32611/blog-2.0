@@ -167,6 +167,16 @@ export const randomInt = (min: number, max: number): number => {
 };
 
 /**
+ * 在给定的范围内随机生成浮点数
+ * @param {number} min - 范围下界
+ * @param {number} max - 范围上界
+ * @returns {number} 随机浮点数/
+ */
+export const randomFloat = (min: number, max: number): number => {
+	return Math.random() * (max - min) + min;
+};
+
+/**
  * 根据传入的 img 节点，返回加载 Promise
  * @returns {Promise<NetworkLoadingState>} 加载 Promise
  */

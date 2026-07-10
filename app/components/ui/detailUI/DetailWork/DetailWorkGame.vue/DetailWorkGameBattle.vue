@@ -7,6 +7,7 @@ const borderRef = ref<HTMLDivElement | null>(null);
 const soulRef = ref<HTMLImageElement | null>(null);
 const soulPos = ref<Point>({ x: 0, y: 0 });
 const bulletRefs = ref<HTMLDivElement[]>([]);
+const bulletAnims = ref<GSAPTimeline[]>([]);
 const pressKeys = ref<Set<string>>(new Set());
 const animationId = ref<number | null>(null);
 
@@ -25,22 +26,27 @@ const handleKeyUp = (e: KeyboardEvent) => {
 	if (pressKeys.value.has(e.key)) pressKeys.value.delete(e.key);
 };
 
+const hurt = () => {};
+
 const frame = () => {
 	const soul = soulRef.value?.getBoundingClientRect();
 	const border = borderRef.value?.getBoundingClientRect();
-	if (!border || !soul) return;
-	if (pressKeys.value.has("ArrowLeft"))
-		soulPos.value.x = Math.max(0, soulPos.value.x - easeDistance);
-	if (pressKeys.value.has("ArrowRight"))
-		soulPos.value.x = Math.min(border.width - soul.width, soulPos.value.x + easeDistance);
-	if (pressKeys.value.has("ArrowUp")) soulPos.value.y = Math.max(0, soulPos.value.y - easeDistance);
-	if (pressKeys.value.has("ArrowDown"))
-		soulPos.value.y = Math.min(border.height - soul.height, soulPos.value.y + easeDistance);
-	gsap.to(soulRef.value, { ...soulPos.value, duration: easeDuration });
-	animationId.value = requestAnimationFrame(frame);
+	if (border && soul) {
+		if (pressKeys.value.has("ArrowLeft"))
+			soulPos.value.x = Math.max(0, soulPos.value.x - easeDistance);
+		if (pressKeys.value.has("ArrowRight"))
+			soulPos.value.x = Math.min(border.width - soul.width, soulPos.value.x + easeDistance);
+		if (pressKeys.value.has("ArrowUp"))
+			soulPos.value.y = Math.max(0, soulPos.value.y - easeDistance);
+		if (pressKeys.value.has("ArrowDown"))
+			soulPos.value.y = Math.min(border.height - soul.height, soulPos.value.y + easeDistance);
+		gsap.to(soulRef.value, { ...soulPos.value, duration: easeDuration });
+		animationId.value = requestAnimationFrame(frame);
+	}
 };
 
 onMounted(() => {
+	console.log(bulletRefs.value);
 	window.addEventListener("keydown", handleKeyPress);
 	window.addEventListener("keyup", handleKeyUp);
 	animationId.value = requestAnimationFrame(frame);
@@ -55,61 +61,79 @@ onUnmounted(() => {
 
 <template>
 	<div class="game_battle">
-		<div class="battle_border" ref="borderRef">
-			<svg
-				id="soul"
-				ref="soulRef"
-				data-name="soul"
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 16 16"
-			>
-				<g id="_soul" data-name="_soul">
-					<g>
-						<rect x="6.5" y="4.5" width="3" height="11" style="fill: red" />
-						<path d="M9,5v10h-2V5h2M10,4h-4v12h4V4h0Z" style="fill: red" />
+		<div class="battle_border_container">
+			<div class="battle_border" ref="borderRef">
+				<svg
+					id="soul"
+					ref="soulRef"
+					data-name="soul"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 16 16"
+				>
+					<g id="_soul" data-name="soul">
+						<g>
+							<rect x="10.5" y="1.5" width="4" height="8" style="fill: red" />
+							<path d="M14,2v7h-3V2h3M15,1h-5v9h5V1h0Z" style="fill: red" />
+						</g>
+						<g>
+							<rect x="1.5" y="1.5" width="4" height="8" style="fill: red" />
+							<path d="M5,2v7h-3V2h3M6,1H1v9h5V1h0Z" style="fill: red" />
+						</g>
+						<g>
+							<rect x=".5" y="2.5" width="6" height="7" style="fill: red" />
+							<path d="M6,3v6H1V3h5M7,2H0v8h7V2h0Z" style="fill: red" />
+						</g>
+						<g>
+							<rect x="9.5" y="2.5" width="6" height="7" style="fill: red" />
+							<path d="M15,3v6h-5V3h5M16,2h-7v8h7V2h0Z" style="fill: red" />
+						</g>
+						<g>
+							<rect x="6.5" y="4.5" width="3" height="11" style="fill: red" />
+							<path d="M9,5v10h-2V5h2M10,4h-4v12h4V4h0Z" style="fill: red" />
+						</g>
+						<g>
+							<rect x="4.5" y="4.5" width="7" height="9" style="fill: red" />
+							<path d="M11,5v8h-6V5h6M12,4H4v10h8V4h0Z" style="fill: red" />
+						</g>
+						<g>
+							<rect x="2.5" y="4.5" width="11" height="7" style="fill: red" />
+							<path d="M13,5v6H3v-6h10M14,4H2v8h12V4h0Z" style="fill: red" />
+						</g>
+						<g>
+							<rect x=".5" y="4.5" width="15" height="5" style="fill: red" />
+							<path d="M15,5v4H1v-4h14M16,4H0v6h16v-6h0Z" style="fill: red" />
+						</g>
+						<g>
+							<rect x=".5" y="2.5" width="6" height="1" style="fill: red" />
+							<polygon points="7 2 0 2 0 4 7 4 7 2 7 2" style="fill: red" />
+						</g>
+						<g>
+							<rect x="1" y="1" width="5" height="1" style="fill: red" />
+							<polygon points="6 1 1 1 1 2 6 2 6 1 6 1" style="fill: red" />
+						</g>
+						<g>
+							<rect x="2" width="2" height="1" style="fill: red" />
+							<polygon points="4 0 2 0 2 1 4 1 4 0 4 0" style="fill: red" />
+						</g>
+						<g>
+							<rect x="9.5" y="2.5" width="6" height="1" style="fill: red" />
+							<polygon points="16 2 9 2 9 4 16 4 16 2 16 2" style="fill: red" />
+						</g>
+						<g>
+							<rect x="10" y="1" width="5" height="1" style="fill: red" />
+							<polygon points="15 1 10 1 10 2 15 2 15 1 15 1" style="fill: red" />
+						</g>
+						<g>
+							<rect x="12" width="2" height="1" style="fill: red" />
+							<polygon points="14 0 12 0 12 1 14 1 14 0 14 0" style="fill: red" />
+						</g>
 					</g>
-					<g>
-						<rect x="4.5" y="4.5" width="7" height="9" style="fill: red" />
-						<path d="M11,5v8h-6V5h6M12,4H4v10h8V4h0Z" style="fill: red" />
-					</g>
-					<g>
-						<rect x="2.5" y="4.5" width="11" height="7" style="fill: red" />
-						<path d="M13,5v6H3v-6h10M14,4H2v8h12V4h0Z" style="fill: red" />
-					</g>
-					<g>
-						<rect x=".5" y="4.5" width="15" height="5" style="fill: red" />
-						<path d="M15,5v4H1v-4h14M16,4H0v6h16v-6h0Z" style="fill: red" />
-					</g>
-					<g>
-						<rect x=".5" y="2.5" width="6" height="1" style="fill: red" />
-						<polygon points="7 2 0 2 0 4 7 4 7 2 7 2" style="fill: red" />
-					</g>
-					<g>
-						<rect x="1" y="1" width="5" height="1" style="fill: red" />
-						<polygon points="6 1 1 1 1 2 6 2 6 1 6 1" style="fill: red" />
-					</g>
-					<g>
-						<rect x="2" width="2" height="1" style="fill: red" />
-						<polygon points="4 0 2 0 2 1 4 1 4 0 4 0" style="fill: red" />
-					</g>
-					<g>
-						<rect x="9.5" y="2.5" width="6" height="1" style="fill: red" />
-						<polygon points="16 2 9 2 9 4 16 4 16 2 16 2" style="fill: red" />
-					</g>
-					<g>
-						<rect x="10" y="1" width="5" height="1" style="fill: red" />
-						<polygon points="15 1 10 1 10 2 15 2 15 1 15 1" style="fill: red" />
-					</g>
-					<g>
-						<rect x="12" width="2" height="1" style="fill: red" />
-						<polygon points="14 0 12 0 12 1 14 1 14 0 14 0" style="fill: red" />
-					</g>
-				</g>
-			</svg>
+				</svg>
+			</div>
 		</div>
-		<!-- <div class="battle_bullet">
-			<svg id="_bullet" data-name="bullet" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 17">
-				<g id="_bullet" data-name="bullet">
+		<div class="battle_bullet" v-for="_ in bulletNum" ref="bulletRefs">
+			<svg id="bullet" data-name="bullet" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 17">
+				<g id="_bullet" data-name="_bullet">
 					<g>
 						<rect x="2.5" y=".5" width="3" height="16" />
 						<path d="M5,1v15h-2V1h2M6,0H2v17h4V0h0Z" />
@@ -140,7 +164,7 @@ onUnmounted(() => {
 					</g>
 				</g>
 			</svg>
-		</div> -->
+		</div>
 	</div>
 </template>
 
@@ -148,26 +172,42 @@ onUnmounted(() => {
 @use "@/assets/styles/variables.scss";
 
 .game_battle {
-	position: relative;
-	margin-top: 30vh;
-	background-color: rgba($color: #000000, $alpha: 0.5);
-	border-color: #ffffff;
-	border-style: solid;
-	border-width: 5px;
-	z-index: variables.$float_zIndex;
+	position: absolute;
+	height: 100%;
+	width: 100%;
 
-	.battle_border {
-		position: relative;
-		width: 30vh;
-		height: 30vh;
+	.battle_border_container {
+		position: absolute;
+		left: calc(50% - 5px - 15vh);
+		margin-top: 30vh;
+		background-color: rgba($color: #000000, $alpha: 0.5);
+		border-color: #ffffff;
+		border-style: solid;
+		border-width: 5px;
+		z-index: variables.$float_zIndex;
 
-		#soul {
-			position: absolute;
-			width: 25px;
-			-webkit-user-drag: none;
-			image-rendering: pixelated;
-			user-select: none;
-			pointer-events: none;
+		.battle_border {
+			position: relative;
+			width: 30vh;
+			height: 30vh;
+
+			#soul {
+				position: absolute;
+				width: 25px;
+				user-select: none;
+				pointer-events: none;
+			}
+		}
+	}
+
+	.battle_bullet {
+		position: absolute;
+		height: 30px;
+		width: 30px;
+
+		#bullet {
+			height: 100%;
+			width: 100%;
 		}
 	}
 }
