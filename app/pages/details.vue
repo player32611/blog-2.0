@@ -61,7 +61,9 @@ onUnmounted(() => {
 			</div>
 		</div>
 		<DetailTooltip />
-		<DetailCursor />
+		<ClientOnly>
+			<DetailCursor v-if="!isMobile()" />
+		</ClientOnly>
 		<DetailShader />
 		<DetailMask ref="maskRef" />
 	</div>

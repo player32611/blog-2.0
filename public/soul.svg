@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_图层_2" data-name="图层 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <g id="_图层_1-2" data-name="图层 1">
+    <g>
+      <rect x="6.5" y="4.5" width="3" height="11" style="fill: red;"/>
+      <path d="M9,5v10h-2V5h2M10,4h-4v12h4V4h0Z" style="fill: red;"/>
+    </g>
+    <g>
+      <rect x="4.5" y="4.5" width="7" height="9" style="fill: red;"/>
+      <path d="M11,5v8h-6V5h6M12,4H4v10h8V4h0Z" style="fill: red;"/>
+    </g>
+    <g>
+      <rect x="2.5" y="4.5" width="11" height="7" style="fill: red;"/>
+      <path d="M13,5v6H3v-6h10M14,4H2v8h12V4h0Z" style="fill: red;"/>
+    </g>
+    <g>
+      <rect x=".5" y="4.5" width="15" height="5" style="fill: red;"/>
+      <path d="M15,5v4H1v-4h14M16,4H0v6h16v-6h0Z" style="fill: red;"/>
+    </g>
+    <g>
+      <rect x=".5" y="2.5" width="6" height="1" style="fill: red;"/>
+      <polygon points="7 2 0 2 0 4 7 4 7 2 7 2" style="fill: red;"/>
+    </g>
+    <g>
+      <rect x="1" y="1" width="5" height="1" style="fill: red;"/>
+      <polygon points="6 1 1 1 1 2 6 2 6 1 6 1" style="fill: red;"/>
+    </g>
+    <g>
+      <rect x="2" width="2" height="1" style="fill: red;"/>
+      <polygon points="4 0 2 0 2 1 4 1 4 0 4 0" style="fill: red;"/>
+    </g>
+    <g>
+      <rect x="9.5" y="2.5" width="6" height="1" style="fill: red;"/>
+      <polygon points="16 2 9 2 9 4 16 4 16 2 16 2" style="fill: red;"/>
+    </g>
+    <g>
+      <rect x="10" y="1" width="5" height="1" style="fill: red;"/>
+      <polygon points="15 1 10 1 10 2 15 2 15 1 15 1" style="fill: red;"/>
+    </g>
+    <g>
+      <rect x="12" width="2" height="1" style="fill: red;"/>
+      <polygon points="14 0 12 0 12 1 14 1 14 0 14 0" style="fill: red;"/>
+    </g>
+  </g>
+</svg>
