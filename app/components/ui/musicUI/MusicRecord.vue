@@ -77,7 +77,7 @@ onUnmounted(() => {
 				v-if="loadingState !== 'error'"
 				class="music_cover"
 				:class="{ loading: loadingState === 'loading' }"
-				:src="`/blog-2.0${soundStore.musicCurrent?.cover}`"
+				:src="soundStore.musicCurrent ? `/blog-2.0${soundStore.musicCurrent.cover}` : undefined"
 				:alt="soundStore.musicCurrent?.cover"
 				@load="handleLoad"
 				@error="handleError"

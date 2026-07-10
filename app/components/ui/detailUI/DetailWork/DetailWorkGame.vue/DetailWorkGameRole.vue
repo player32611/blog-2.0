@@ -39,4 +39,47 @@ onUnmounted(() => {
 	image-rendering: pixelated;
 	z-index: variables.$float_zIndex;
 }
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.65;
+
+	.game_role {
+		top: 60px;
+		width: 300px * $base-size;
+		height: 500px * $base-size;
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.7;
+
+	.game_role {
+		top: 40px;
+		width: 300px * $base-size;
+		height: 500px * $base-size;
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.8;
+
+	.game_role {
+		width: 300px * $base-size;
+		height: 500px * $base-size;
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.9;
+
+	.game_role {
+		top: -40px;
+		width: 300px * $base-size;
+		height: 500px * $base-size;
+	}
+}
 </style>

@@ -33,7 +33,7 @@ const resize = () => {
 };
 
 onMounted(() => {
-	gsap.set(buttonRef.value, { y: -350 });
+	gsap.set(buttonRef.value, { y: -400 });
 	resize();
 	window.addEventListener("resize", resize);
 });

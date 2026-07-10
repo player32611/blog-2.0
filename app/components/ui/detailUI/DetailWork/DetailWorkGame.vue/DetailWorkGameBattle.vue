@@ -86,4 +86,42 @@ onUnmounted(() => {
 		pointer-events: none;
 	}
 }
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.9;
+
+	.game_battle {
+		margin-top: 30vh;
+		border-width: 5px * $base-size;
+
+		.battle_border {
+			width: 30vh * $base-size;
+			height: 30vh * $base-size;
+		}
+
+		.battle_soul {
+			width: 25px * $base-size;
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.95;
+
+	.game_battle {
+		margin-top: 30vh;
+		border-width: 5px * $base-size;
+
+		.battle_border {
+			width: 30vh * $base-size;
+			height: 30vh * $base-size;
+		}
+
+		.battle_soul {
+			width: 25px * $base-size;
+		}
+	}
+}
 </style>

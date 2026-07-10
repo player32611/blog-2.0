@@ -94,10 +94,6 @@ $base-size: 1;
 
 		.state_name {
 			justify-self: start;
-
-			:first-child {
-				font-size: 1em * $base-size;
-			}
 		}
 
 		.state_hp {
@@ -117,6 +113,116 @@ $base-size: 1;
 	.ui_button {
 		display: flex;
 		justify-content: space-between;
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.35;
+
+	.game_ui {
+		margin: 0 50px * $base-size;
+		bottom: 20px * $base-size;
+		width: calc(100% - 100px * $base-size);
+
+		.ui_state {
+			margin: 0.3rem * $base-size;
+			grid-template-columns: 1.5fr 3fr;
+			font-size: 2.5rem * $base-size;
+
+			.state_hp {
+				margin-left: 2rem * $base-size;
+				font-size: 2.5rem * $base-size;
+
+				.hp_progress {
+					margin: 0 0.5rem * $base-size;
+					height: 2rem * $base-size;
+					width: 15rem * $base-size;
+				}
+			}
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.6;
+
+	.game_ui {
+		margin: 0 50px * $base-size;
+		bottom: 20px * $base-size;
+		width: calc(100% - 100px * $base-size);
+
+		.ui_state {
+			margin: 0.3rem * $base-size;
+			grid-template-columns: 1.5fr 3fr;
+			font-size: 2.5rem * $base-size;
+
+			.state_hp {
+				margin-left: 2rem * $base-size;
+				font-size: 2.5rem * $base-size;
+
+				.hp_progress {
+					margin: 0 0.5rem * $base-size;
+					height: 2rem * $base-size;
+					width: 15rem * $base-size;
+				}
+			}
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.7;
+
+	.game_ui {
+		margin: 0 50px * $base-size;
+		bottom: 20px * $base-size;
+		width: calc(100% - 100px * $base-size);
+
+		.ui_state {
+			margin: 0.3rem * $base-size;
+			font-size: 2.5rem * $base-size;
+
+			.state_hp {
+				margin-left: 2rem * $base-size;
+				font-size: 2.5rem * $base-size;
+
+				.hp_progress {
+					margin: 0 0.5rem * $base-size;
+					height: 2rem * $base-size;
+					width: 15rem * $base-size;
+				}
+			}
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.9;
+
+	.game_ui {
+		margin: 0 50px * $base-size;
+		bottom: 20px * $base-size;
+		width: calc(100% - 100px * $base-size);
+
+		.ui_state {
+			margin: 0.3rem * $base-size;
+			font-size: 2.5rem * $base-size;
+
+			.state_hp {
+				margin-left: 2rem * $base-size;
+				font-size: 2.5rem * $base-size;
+
+				.hp_progress {
+					margin: 0 0.5rem * $base-size;
+					height: 2rem * $base-size;
+					width: 15rem * $base-size;
+				}
+			}
+		}
 	}
 }
 </style>
