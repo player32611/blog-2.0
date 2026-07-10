@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const skillRef = ref<HTMLDivElement | null>(null);
 const containerRef = ref<DetailIntroduceSkillContainerInstance | null>(null);
-const mountAnim = ref<gsap.core.Tween | null>(null);
+const mountAnim = ref<GSAPTween | null>(null);
 
 const mountDuration: number = 0.5;
 

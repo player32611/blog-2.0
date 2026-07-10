@@ -7,9 +7,9 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
 const detailStore = useDetailStore();
 const contentSplit = ref<SplitText | null>(null);
 const contentRef = ref<HTMLDivElement | null>(null);
-const mountAnim = ref<gsap.core.Tween | null>(null);
-const clickAnim = ref<gsap.core.Timeline | null>(null);
-const markAnim = ref<gsap.core.Tween | null>(null);
+const mountAnim = ref<GSAPTween | null>(null);
+const clickAnim = ref<GSAPTimeline | null>(null);
+const markAnim = ref<GSAPTween | null>(null);
 const clickNums = ref<number>(0);
 
 const clickAnimDuration: number = 0.2;

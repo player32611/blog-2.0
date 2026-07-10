@@ -2,7 +2,7 @@
 import gsap from "gsap";
 
 const containerRef = ref<HTMLDivElement | null>(null);
-const rotateAnim = ref<gsap.core.Tween | null>(null);
+const rotateAnim = ref<GSAPTween | null>(null);
 
 const rotateDuration: number = 4;
 

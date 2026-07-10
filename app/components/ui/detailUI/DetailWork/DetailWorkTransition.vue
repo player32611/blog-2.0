@@ -10,7 +10,7 @@ import animPath from "@/assets/anims/dog.json";
 gsap.registerPlugin(MorphSVGPlugin, ScrollTrigger);
 
 const pathRef = ref<SVGPathElement | null>(null);
-const activeAnim = ref<gsap.core.Timeline | null>(null);
+const activeAnim = ref<GSAPTimeline | null>(null);
 const animContainerRef = ref<HTMLDivElement | null>(null);
 const lottieAnim = ref<AnimationItem | null>(null);
 

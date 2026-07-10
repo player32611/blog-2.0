@@ -5,7 +5,7 @@ import { ScrollTrigger, SplitText } from "gsap/all";
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const infoRef = ref<HTMLDivElement | null>(null);
-const mountAnim = ref<gsap.core.Tween | null>(null);
+const mountAnim = ref<GSAPTween | null>(null);
 
 onMounted(() => {
 	mountAnim.value = gsap.fromTo(

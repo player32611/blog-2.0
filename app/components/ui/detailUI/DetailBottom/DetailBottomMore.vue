@@ -7,7 +7,7 @@ import Button from "../../common/Button.vue";
 const loadingStore = useLoadingStore();
 const buttonRef = ref<HTMLDivElement | null>(null);
 const placeHolderRef = ref<HTMLDivElement | null>(null);
-const anim = ref<gsap.core.Timeline | null>(null);
+const anim = ref<GSAPTimeline | null>(null);
 
 const animDuration: number = 1;
 

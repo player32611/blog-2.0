@@ -8,7 +8,7 @@ const splitContent = ref<SplitText | null>(null);
 const contentRef = ref<HTMLDivElement | null>(null);
 const leftCircleRef = ref<HTMLDivElement | null>(null);
 const rightCircleRef = ref<HTMLDivElement | null>(null);
-const mountAnim = ref<gsap.core.Tween | null>(null);
+const mountAnim = ref<GSAPTween | null>(null);
 
 const getContentPrecent = () => {
 	if (!contentRef.value || !rightCircleRef.value) return "0%";

@@ -14,10 +14,10 @@ const blocks = ref<SVGUseElement[]>([]);
 const maskRef = ref<HTMLDivElement | null>(null);
 const animContainerRef = ref<HTMLDivElement | null>(null);
 const animItem = ref<AnimationItem | null>(null);
-const animContainerAnim = ref<gsap.core.Timeline | null>(null);
+const animContainerAnim = ref<GSAPTimeline | null>(null);
 const contentContainerRef = ref<HTMLDivElement | null>(null);
 const contentSplit = ref<SplitText | null>(null);
-const contentAnim = ref<gsap.core.Timeline | null>(null);
+const contentAnim = ref<GSAPTimeline | null>(null);
 
 const row: number = 13;
 const line: number = 15;

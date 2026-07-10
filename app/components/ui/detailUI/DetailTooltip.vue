@@ -6,7 +6,7 @@ gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
 
 const containerRef = ref<HTMLDivElement | null>(null);
 const appearInterval = ref<number | null>(null);
-const currentAnim = ref<gsap.core.Tween | null>(null);
+const currentAnim = ref<GSAPTween | null>(null);
 const tooltipDirection = ref<"top" | "bottom">("bottom");
 
 const appearDelay: number = 5000;

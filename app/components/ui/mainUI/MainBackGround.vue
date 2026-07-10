@@ -16,7 +16,7 @@ const movedata = ref<{ moveable: boolean; x: number; y: number; movX: number; mo
 	movX: 0,
 	movY: 0,
 });
-const ani = ref<gsap.core.Tween | null>(null); // gsap 动画
+const ani = ref<GSAPTween | null>(null); // gsap 动画
 const standardWidth = ref<number>(1700); // 标准宽度
 const scalesNums = ref<number>(1); // 缩放比例
 const resistance: number = 0.2;

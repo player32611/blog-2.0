@@ -4,7 +4,7 @@ import { gsap } from "gsap/gsap-core";
 const soundStore = useSoundStore();
 const barContainerRef = ref<HTMLDivElement | null>(null);
 const barRef = ref<HTMLDivElement | null>(null);
-const stripeAnimation = ref<gsap.core.Tween | null>(null);
+const stripeAnimation = ref<GSAPTween | null>(null);
 
 const handleClickProgress = (e: MouseEvent) => {
 	if (!barContainerRef.value || !soundStore.musicAudio) return;

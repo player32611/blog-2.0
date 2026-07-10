@@ -3,6 +3,8 @@ import gsap from "gsap";
 import { Draggable, InertiaPlugin } from "gsap/all";
 import type { NetworkLoadingState } from "~/types/config";
 
+import CircleRingLoading from "~/components/exhibit/CircleRingLoading.vue";
+
 gsap.registerPlugin(Draggable, InertiaPlugin);
 
 const loadingStore = useLoadingStore();
@@ -12,7 +14,7 @@ const cardRef = ref<HTMLDivElement | null>(null);
 const btnRef = ref<HTMLButtonElement | null>(null);
 const loadingState = ref<NetworkLoadingState>("loading");
 const isSmall = ref<boolean>(false);
-const sizeAnim = ref<gsap.core.Tween | null>(null);
+const sizeAnim = ref<GSAPTween | null>(null);
 
 const changeTime: number = 0.5;
 
@@ -93,10 +95,11 @@ onMounted(() => {
 					@error="handleError"
 				/>
 				<span
-					v-if="loadingState === 'loading' && soundStore.musicCurrent?.cover"
 					class="cover_loading"
-					>加载中</span
+					v-if="loadingState === 'loading' && soundStore.musicCurrent?.cover"
 				>
+					<CircleRingLoading />
+				</span>
 				<span v-else-if="loadingState === 'error'" class="loading_error">加载失败</span>
 			</div>
 			<div class="music_name">

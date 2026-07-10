@@ -8,8 +8,8 @@ const containerRef = ref<HTMLDivElement | null>(null);
 const line1Ref = ref<HTMLDivElement | null>(null);
 const line2Ref = ref<HTMLDivElement | null>(null);
 const line3Ref = ref<HTMLDivElement | null>(null);
-const appearAnim = ref<gsap.core.Tween | null>(null);
-const codingAnim = ref<gsap.core.Timeline | null>(null);
+const appearAnim = ref<GSAPTween | null>(null);
+const codingAnim = ref<GSAPTimeline | null>(null);
 
 const appearDelay: number = 7;
 const appearDuration: number = 1;

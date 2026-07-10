@@ -12,8 +12,8 @@ const animContainerRef = ref<HTMLDivElement | null>(null);
 const contentRef = ref<HTMLDivElement | null>(null);
 const handleRef = ref<HTMLDivElement | null>(null);
 const lottieAnim = ref<AnimationItem | null>(null);
-const mountAnim = ref<gsap.core.Tween | null>(null);
-const handleShakeAnim = ref<gsap.core.Tween | null>(null);
+const mountAnim = ref<GSAPTween | null>(null);
+const handleShakeAnim = ref<GSAPTween | null>(null);
 
 const mountDuration: number = 1;
 const handleShakeDuration: number = 0.5;

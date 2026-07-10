@@ -8,8 +8,8 @@ gsap.registerPlugin(ScrollTrigger);
 const { text, direction } = defineProps<DetailPartitionParams>();
 const containerRef = ref<HTMLDivElement | null>(null);
 const itemRefs = ref<HTMLDivElement[]>([]);
-const scrollAnim = ref<gsap.core.Tween | null>(null);
-const normalAnims = ref<gsap.core.Tween[]>([]);
+const scrollAnim = ref<GSAPTween | null>(null);
+const normalAnims = ref<GSAPTween[]>([]);
 
 const itemNum: number = 20;
 
