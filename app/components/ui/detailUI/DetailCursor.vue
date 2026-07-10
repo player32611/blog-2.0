@@ -10,6 +10,14 @@ const isHover = ref<boolean>(false);
 const easeTime: number = 1; // 缓动时间（s）
 const outTime: number = 0.5; // 离开变化时间（s）
 
+const handleMouseDown = () => {
+	gsap.to(cursorRef.value, { scale: 0.8, duration: outTime });
+};
+
+const handleMouseUp = () => {
+	gsap.to(cursorRef.value, { scale: 1, duration: outTime });
+};
+
 const handleMouseMove = (event: MouseEvent) => {
 	if (!cursorRef.value) return;
 	if (isOut.value) {
@@ -68,11 +76,15 @@ const handleMouseOut = (event: MouseEvent) => {
 };
 
 onMounted(() => {
+	window.addEventListener("mousedown", handleMouseDown);
+	window.addEventListener("mouseup", handleMouseUp);
 	window.addEventListener("mousemove", handleMouseMove);
 	window.addEventListener("mouseout", handleMouseOut);
 });
 
 onUnmounted(() => {
+	window.removeEventListener("mousedown", handleMouseDown);
+	window.removeEventListener("mouseup", handleMouseUp);
 	window.removeEventListener("mousemove", handleMouseMove);
 	window.removeEventListener("mouseout", handleMouseOut);
 });

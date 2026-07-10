@@ -77,10 +77,11 @@ onMounted(() => {
 			<div class="card_title">
 				<button class="control_btn" title="最大化" @click="handleChangeSize" ref="btnRef">
 					<span class="icon" v-if="isSmall">&#xe78e;</span>
+					<span class="icon" v-else>&#xe78f;</span>
 				</button>
 				<div class="title_content">Music</div>
-				<button class="control_btn" title="窗口化" @click="handleChangeSize">
-					<span class="icon" v-if="!isSmall">&#xe78f;</span>
+				<button class="control_btn" title="关闭" @click="soundStore.setMusicCardVisible(false)">
+					<span class="icon">&#xe781;</span>
 				</button>
 			</div>
 			<div class="cover_container">

@@ -73,6 +73,7 @@ defineExpose<DetailWorkFloatContainerInstance>({
 	justify-content: space-around;
 	height: 100vh;
 	width: 100%;
+	pointer-events: none;
 	z-index: variables.$float_zIndex;
 	overflow: hidden;
 
