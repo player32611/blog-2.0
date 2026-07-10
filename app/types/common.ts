@@ -19,6 +19,12 @@ export type DayTime = {
 	second: string;
 };
 
+export type ImageInfo = {
+	name: string;
+	author: string;
+	path: string;
+};
+
 /**
  * 图片悬停数据类型
  * 包含图片的尺寸信息和中心点坐标
@@ -64,7 +70,7 @@ export type ImageLayoutData = {
  * @property targetY - 目标 y 坐标位置
  * @property animation - GSAP 动画实例或 null
  */
-export interface ImagePosData extends Point {
+export interface ImagePosData extends Point, ImageInfo {
 	img: HTMLImageElement | null;
 	path: string;
 	targetX: number;

@@ -88,7 +88,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 
 	function initAudio(music: MusicInfo) {
 		if (!musicAudio.value) {
-			musicAudio.value = new Audio(music.path);
+			musicAudio.value = new Audio(`/blog-2.0${music.path}`);
 			musicAudio.value.volume = musicVolume.value;
 			musicAudio.value.addEventListener("canplay", handleCanPlay);
 			musicAudio.value.addEventListener("timeupdate", handleTimeUpdate);

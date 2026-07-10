@@ -58,7 +58,10 @@ watch(
 			@mouseenter="handleMouseEnter"
 			@mouseleave="handleMouseLeave"
 		>
-			<div class="sign_content">点击输入文本</div>
+			<div class="sign_content">
+				<div class="content_line">名称：{{ imageStore.activeImageData?.name }}</div>
+				<div class="content_line">作者：{{ imageStore.activeImageData?.author }}</div>
+			</div>
 		</div>
 		<div class="sign_body"></div>
 	</div>
@@ -95,6 +98,12 @@ $base-size: 1;
 			font-size: 1rem * $base-size;
 			font-weight: 600;
 			font-family: "方正基础像素体";
+
+			.content_line {
+				white-space: nowrap; /* 不换行 */
+				overflow: hidden; /* 隐藏超出内容 */
+				text-overflow: ellipsis; /* 显示省略号 */
+			}
 		}
 	}
 

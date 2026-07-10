@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const imageStore = useImageStore();
 const canvasRef = ref<HTMLCanvasElement | null>(null);
-const allImagePath = ref<string[]>([]);
 const currentImageWidth = ref<number>(0);
 const currentImageHeight = ref<number>(0);
 const currentImageMargin = ref<number>(0);
@@ -123,21 +122,22 @@ const createImgDatas = () => {
 	currentImageHeight.value = imageHeight;
 	currentImageMargin.value = imageMargin;
 
-	for (let i = 0; i < allImagePath.value.length; i++) {
+	IMAGE_DATAS.forEach((data, index) => {
 		const img = new window.Image();
-		const colIndex = i % rowMax;
-		const lineIndex = Math.floor(i / rowMax);
+		const colIndex = index % rowMax;
+		const lineIndex = Math.floor(index / rowMax);
 		// 奇数列垂直偏移半个间距，实现交错效果
 		const offsetY = colIndex % 2 === 1 ? (imageHeight + imageMargin) / 2 : 0;
 		const x = colIndex * (imageWidth + imageMargin);
 		const y = lineIndex * (imageHeight + imageMargin) + offsetY;
-		const path = allImagePath.value[i];
-		if (!path) continue;
+
 		imageStore.setAllImagePosData([
 			...imageStore.allImagePosData,
 			{
+				name: data.name,
+				author: data.author,
+				path: data.path,
 				img: null,
-				path: path,
 				x,
 				y,
 				targetX: x,
@@ -149,22 +149,24 @@ const createImgDatas = () => {
 		const loadPromise = new Promise<void>(resolve => {
 			img.onload = () => {
 				const currentAllImage = imageStore.allImagePosData;
-				currentAllImage[i]!.img = img;
+				if (!currentAllImage[index]) return;
+				currentAllImage[index]!.img = img;
 				imageStore.setAllImagePosData(currentAllImage);
 				drawFrame();
 				resolve();
 			};
 			img.onerror = () => {
 				const currentAllImage = imageStore.allImagePosData;
-				currentAllImage[i]!.img = null;
+				if (!currentAllImage[index]) return;
+				currentAllImage[index].img = null;
 				imageStore.setAllImagePosData(currentAllImage);
 				resolve();
 			};
 		});
 
-		img.src = allImagePath.value[i]!;
+		img.src = data.path;
 		loadPromises.push(loadPromise);
-	}
+	});
 
 	Promise.all(loadPromises);
 };
@@ -280,8 +282,6 @@ const resize = () => {
 };
 
 onMounted(() => {
-	allImagePath.value = getAllImages();
-
 	resize();
 	createImgDatas();
 	drawFrame();
@@ -297,8 +297,6 @@ onUnmounted(() => {
 		cancelAnimationFrame(animationFrameId.value);
 		animationFrameId.value = null;
 	}
-
-	allImagePath.value = [];
 });
 </script>
 

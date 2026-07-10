@@ -87,7 +87,7 @@ onMounted(() => {
 					class="music_cover"
 					draggable="false"
 					:class="{ loading: loadingState === 'loading' }"
-					:src="soundStore.musicCurrent?.cover"
+					:src="`/blog-2.0${soundStore.musicCurrent?.cover}`"
 					:alt="soundStore.musicCurrent?.cover"
 					@load="handleLoad"
 					@error="handleError"
