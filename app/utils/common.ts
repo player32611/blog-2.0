@@ -1,4 +1,4 @@
-import type { DayTime } from "~/types/common";
+import type { DayTime, RGBColor } from "~/types/common";
 import type { NetworkLoadingState } from "~/types/config";
 
 /**
@@ -78,7 +78,7 @@ export const extractPathPart = (urlOrPath: string): string => {
  * @param delay - 延迟时间（毫秒），在该时间间隔内若无新的调用才会执行原始函数
  * @returns 返回一个新的函数，该函数具有防抖功能
  */
-export const debounce = (func: Function, delay: number) => {
+export const debounce = (func: Function, delay: number): Function => {
 	let timeoutId: number | null = null;
 
 	return (...args: any[]) => {
@@ -99,7 +99,7 @@ export const debounce = (func: Function, delay: number) => {
  * @param delay - 节流延迟时间（毫秒）
  * @returns 节流后的函数
  */
-export const throttle = (func: Function, delay: number) => {
+export const throttle = (func: Function, delay: number): Function => {
 	let lastExecTime = 0;
 	let timeoutId: number | null = null;
 
@@ -157,6 +157,16 @@ export const randomSign = (): number => {
 };
 
 /**
+ * 在给定的范围内随机生成整数
+ * @param {number} min - 范围下界
+ * @param {number} max - 范围上界
+ * @returns {number} 随机整数
+ */
+export const randomInt = (min: number, max: number): number => {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+/**
  * 根据传入的 img 节点，返回加载 Promise
  * @returns {Promise<NetworkLoadingState>} 加载 Promise
  */
@@ -182,10 +192,132 @@ export const onImageLoading = (img: HTMLImageElement): Promise<NetworkLoadingSta
  * @param {string} url - 文件路径
  * @param {string} fileName - 文件名称，默认为文件路径
  */
-export const downloadFile = (url: string, fileName?: string) => {
+export const downloadFile = (url: string, fileName?: string): void => {
 	const a = document.createElement("a");
 	a.href = url;
 	if (fileName) a.download = fileName;
 	else a.download = url;
 	a.click();
+};
+
+/**
+ * 将 RGB 格式的颜色转换为 hex 格式（十六进制字符串）（不含 #）
+ * @param {RGBColor} color - RGB 格式的颜色
+ * @returns {string} hex 格式的颜色
+ */
+export const rgbColorToHexColor = (color: RGBColor): string => {
+	return [color.r, color.g, color.b].map(c => c.toString(16).padStart(2, "0")).join("");
+};
+
+/**
+ * 在指定范围内随机生成颜色
+ * @param {Object} options 配置参数
+ * @param {number} options.minBrightness 最小亮度 (0-255)，默认 50
+ * @param {number} options.maxBrightness 最大亮度 (0-255)，默认 205
+ * @param {number} options.minSaturation 最小饱和度 (0-100)，默认 30
+ * @param {number} options.maxSaturation 最大饱和度 (0-100)，默认 100
+ * @param {string} options.format 输出格式：'hex' | 'rgb' | 'hsl'，默认 'hex'
+ * @param {number} options.alpha 透明度 (0-1)，默认 1
+ * @param {string[]} options.exclude 排除的颜色数组（十六进制格式）
+ * @param {string[]} options.include 只包含的颜色数组（十六进制格式）
+ * @returns {string} 随机生成的颜色字符串
+ */
+export const randomColor = ({
+	minBrightness = 50,
+	maxBrightness = 205,
+	minSaturation = 30,
+	maxSaturation = 100,
+	format = "hex",
+	alpha = 1,
+	exclude = [],
+	include = [],
+}: {
+	minBrightness?: number;
+	maxBrightness?: number;
+	minSaturation?: number;
+	maxSaturation?: number;
+	format?: "hex" | "rgb" | "hsl";
+	alpha?: number;
+	exclude?: string[];
+	include?: string[];
+}): string => {
+	// 参数验证
+	if (minBrightness < 0 || maxBrightness > 255 || minBrightness > maxBrightness)
+		throw new Error("亮度参数无效，范围应在 0-255 之间，且最小值不能大于最大值");
+
+	if (minSaturation < 0 || maxSaturation > 100 || minSaturation > maxSaturation)
+		throw new Error("饱和度参数无效，范围应在 0-100 之间，且最小值不能大于最大值");
+
+	if (alpha < 0 || alpha > 1) throw new Error("透明度参数无效，范围应在 0-1 之间");
+
+	// 检查是否在排除列表中
+	const isExcluded = (hex: string) => {
+		return exclude.some(ex => ex.toLowerCase() === hex.toLowerCase());
+	};
+
+	// 检查是否在包含列表中
+	const isIncluded = (hex: string) => {
+		if (include.length === 0) return true;
+		return include.some(inc => inc.toLowerCase() === hex.toLowerCase());
+	};
+
+	// 生成颜色
+	let attempts = 0;
+	const maxAttempts = 100;
+	let r, g, b, hex, saturation;
+
+	do {
+		// 在 RGB 空间中生成颜色
+		r = randomInt(minBrightness, maxBrightness);
+		g = randomInt(minBrightness, maxBrightness);
+		b = randomInt(minBrightness, maxBrightness);
+
+		// 计算饱和度（简化版）
+		const max = Math.max(r, g, b);
+		const min = Math.min(r, g, b);
+		saturation = max === 0 ? 0 : ((max - min) / max) * 100;
+
+		hex = rgbColorToHexColor({ r, g, b });
+
+		attempts++;
+		if (attempts > maxAttempts) {
+			// 如果尝试次数过多，返回最接近的参数组合
+			break;
+		}
+	} while (
+		saturation < minSaturation ||
+		saturation > maxSaturation ||
+		isExcluded(hex) ||
+		!isIncluded(hex)
+	);
+
+	// 根据指定格式返回
+	switch (format.toLowerCase()) {
+		case "rgb":
+			return alpha < 1 ? `rgba(${r}, ${g}, ${b}, ${alpha})` : `rgb(${r}, ${g}, ${b})`;
+		case "hsl": {
+			// 将 RGB 转换为 HSL
+			const max = Math.max(r, g, b);
+			const min = Math.min(r, g, b);
+			const delta = max - min;
+			let h = 0;
+			if (delta !== 0) {
+				if (max === r) h = ((g - b) / delta) % 6;
+				else if (max === g) h = (b - r) / delta + 2;
+				else h = (r - g) / delta + 4;
+				h = Math.round(h * 60);
+				if (h < 0) h += 360;
+			}
+			const l = Math.round(((max + min) / 255) * 50);
+			const s = max === 0 ? 0 : Math.round((delta / max) * 100);
+			return alpha < 1 ? `hsla(${h}, ${s}%, ${l}%, ${alpha})` : `hsl(${h}, ${s}%, ${l}%)`;
+		}
+		case "hex":
+		default:
+			return alpha < 1
+				? `#${hex}${Math.round(alpha * 255)
+						.toString(16)
+						.padStart(2, "0")}`
+				: `#${hex}`;
+	}
 };

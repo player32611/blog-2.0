@@ -21,6 +21,10 @@ export interface FaultTextParams {
 	style?: Record<string, string | number>;
 }
 
+export interface VialParams {
+	color: string;
+}
+
 export interface BlogMaskInstance {
 	changeMask: () => void;
 }

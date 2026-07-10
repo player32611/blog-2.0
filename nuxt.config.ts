@@ -3,7 +3,7 @@ export default defineNuxtConfig({
 	app: {
 		baseURL: "/blog-2.0/",
 		head: {
-			link: [{ rel: "icon", type: "image/svg+xml", href: "/soul.svg" }],
+			link: [{ rel: "icon", type: "image/svg+xml", href: "/blog-2.0/soul.svg" }],
 		},
 	},
 	modules: ["@nuxt/content", "@pinia/nuxt", "@nuxt/fonts"],
