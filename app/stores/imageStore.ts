@@ -5,6 +5,7 @@ export const useImageStore = defineStore("image", (): ImageState & ImageGetter &
 	const allImagePosData = ref<ImagePosData[]>([]);
 	const activeImageData = ref<ImagePosData | null>(null);
 	const hoverImageData = ref<ImageHoverData | null>(null);
+	const currentMountAnim = ref<GSAPAnimation | null>(null);
 
 	const getLayoutAttribute = (): ImageLayoutData => {
 		const rowMax = 4;
@@ -44,21 +45,28 @@ export const useImageStore = defineStore("image", (): ImageState & ImageGetter &
 	const setAllImagePosData = (data: ImagePosData[]) => {
 		allImagePosData.value = data;
 	};
-	const setActiveImage = (data: ImagePosData | null) => {
+
+	const setActiveImageData = (data: ImagePosData | null) => {
 		activeImageData.value = data;
 	};
 
-	const setHoverImage = (data: ImageHoverData | null) => {
+	const setHoverImageData = (data: ImageHoverData | null) => {
 		hoverImageData.value = data;
+	};
+
+	const setCurrentMountAnim = (anim: GSAPAnimation | null) => {
+		currentMountAnim.value = anim;
 	};
 
 	return {
 		allImagePosData,
 		activeImageData,
 		hoverImageData,
+		currentMountAnim,
 		getLayoutAttribute,
 		setAllImagePosData,
-		setActiveImage,
-		setHoverImage,
+		setActiveImageData,
+		setHoverImageData,
+		setCurrentMountAnim,
 	};
 });

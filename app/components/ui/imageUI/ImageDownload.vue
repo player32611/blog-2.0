@@ -39,16 +39,16 @@ const resize = () => {
 const handleMouseEnter = () => {
 	if (!imageStore.activeImageData || !containerRef.value) return;
 	const rect = containerRef.value.getBoundingClientRect();
-	imageStore.setHoverImage({
-		width: containerRef.value.offsetWidth,
-		height: containerRef.value.offsetHeight,
+	imageStore.setHoverImageData({
+		width: rect.width,
+		height: rect.height,
 		center: { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
 	});
 	moveAnim.value?.pause();
 };
 
 const handleMouseLeave = () => {
-	imageStore.setHoverImage(null);
+	imageStore.setHoverImageData(null);
 	moveAnim.value?.resume();
 };
 
@@ -182,6 +182,238 @@ onUnmounted(() => {
 	100% {
 		transform: translateY(0px);
 		opacity: 1;
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.7;
+
+	.image_download {
+		top: 100px * $base-size;
+		width: 110px * $base-size;
+		height: 30px * $base-size;
+		border-radius: 100px * $base-size;
+
+		&:hover {
+			.icon2 {
+				border-bottom: 2px * $base-size solid rgb(235, 235, 235);
+				border-left: 2px * $base-size solid rgb(235, 235, 235);
+				border-right: 2px * $base-size solid rgb(235, 235, 235);
+			}
+		}
+
+		&::before {
+			top: -20px * $base-size;
+			left: 10px * $base-size;
+			width: 30px * $base-size;
+			height: 30px * $base-size;
+			box-shadow: 40px * $base-size 0 0 20px * $base-size #fff;
+		}
+
+		.download_container {
+			bottom: 40px * $base-size;
+			height: calc(100% + 40px * $base-size);
+
+			.icon2 {
+				width: 18px * $base-size;
+				height: 5px * $base-size;
+				border-bottom: 2px * $base-size solid rgb(70, 70, 70);
+				border-left: 2px * $base-size solid rgb(70, 70, 70);
+				border-right: 2px * $base-size solid rgb(70, 70, 70);
+			}
+
+			.download_content {
+				margin: 5px * $base-size;
+				font-size: 0.8rem * $base-size;
+			}
+		}
+	}
+
+	@keyframes slide-in-top {
+		0% {
+			transform: translateY(-10px * $base-size);
+			opacity: 0;
+		}
+
+		100% {
+			transform: translateY(0px);
+			opacity: 1;
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.8;
+
+	.image_download {
+		top: 100px * $base-size;
+		width: 110px * $base-size;
+		height: 30px * $base-size;
+		border-radius: 100px * $base-size;
+
+		&:hover {
+			.icon2 {
+				border-bottom: 2px * $base-size solid rgb(235, 235, 235);
+				border-left: 2px * $base-size solid rgb(235, 235, 235);
+				border-right: 2px * $base-size solid rgb(235, 235, 235);
+			}
+		}
+
+		&::before {
+			top: -20px * $base-size;
+			left: 10px * $base-size;
+			width: 30px * $base-size;
+			height: 30px * $base-size;
+			box-shadow: 40px * $base-size 0 0 20px * $base-size #fff;
+		}
+
+		.download_container {
+			bottom: 40px * $base-size;
+			height: calc(100% + 40px * $base-size);
+
+			.icon2 {
+				width: 18px * $base-size;
+				height: 5px * $base-size;
+				border-bottom: 2px * $base-size solid rgb(70, 70, 70);
+				border-left: 2px * $base-size solid rgb(70, 70, 70);
+				border-right: 2px * $base-size solid rgb(70, 70, 70);
+			}
+
+			.download_content {
+				margin: 5px * $base-size;
+				font-size: 0.8rem * $base-size;
+			}
+		}
+	}
+
+	@keyframes slide-in-top {
+		0% {
+			transform: translateY(-10px * $base-size);
+			opacity: 0;
+		}
+
+		100% {
+			transform: translateY(0px);
+			opacity: 1;
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.9;
+
+	.image_download {
+		top: 100px * $base-size;
+		width: 110px * $base-size;
+		height: 30px * $base-size;
+		border-radius: 100px * $base-size;
+
+		&:hover {
+			.icon2 {
+				border-bottom: 2px * $base-size solid rgb(235, 235, 235);
+				border-left: 2px * $base-size solid rgb(235, 235, 235);
+				border-right: 2px * $base-size solid rgb(235, 235, 235);
+			}
+		}
+
+		&::before {
+			top: -20px * $base-size;
+			left: 10px * $base-size;
+			width: 30px * $base-size;
+			height: 30px * $base-size;
+			box-shadow: 40px * $base-size 0 0 20px * $base-size #fff;
+		}
+
+		.download_container {
+			bottom: 40px * $base-size;
+			height: calc(100% + 40px * $base-size);
+
+			.icon2 {
+				width: 18px * $base-size;
+				height: 5px * $base-size;
+				border-bottom: 2px * $base-size solid rgb(70, 70, 70);
+				border-left: 2px * $base-size solid rgb(70, 70, 70);
+				border-right: 2px * $base-size solid rgb(70, 70, 70);
+			}
+
+			.download_content {
+				margin: 5px * $base-size;
+				font-size: 0.8rem * $base-size;
+			}
+		}
+	}
+
+	@keyframes slide-in-top {
+		0% {
+			transform: translateY(-10px * $base-size);
+			opacity: 0;
+		}
+
+		100% {
+			transform: translateY(0px);
+			opacity: 1;
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 1;
+
+	.image_download {
+		top: 100px * $base-size;
+		width: 110px * $base-size;
+		height: 30px * $base-size;
+		border-radius: 100px * $base-size;
+
+		&:hover {
+			.icon2 {
+				border-bottom: 2px * $base-size solid rgb(235, 235, 235);
+				border-left: 2px * $base-size solid rgb(235, 235, 235);
+				border-right: 2px * $base-size solid rgb(235, 235, 235);
+			}
+		}
+
+		&::before {
+			top: -20px * $base-size;
+			left: 10px * $base-size;
+			width: 30px * $base-size;
+			height: 30px * $base-size;
+			box-shadow: 40px * $base-size 0 0 20px * $base-size #fff;
+		}
+
+		.download_container {
+			bottom: 40px * $base-size;
+			height: calc(100% + 40px * $base-size);
+
+			.icon2 {
+				width: 18px * $base-size;
+				height: 5px * $base-size;
+				border-bottom: 2px * $base-size solid rgb(70, 70, 70);
+				border-left: 2px * $base-size solid rgb(70, 70, 70);
+				border-right: 2px * $base-size solid rgb(70, 70, 70);
+			}
+
+			.download_content {
+				margin: 5px * $base-size;
+				font-size: 0.8rem * $base-size;
+			}
+		}
+	}
+
+	@keyframes slide-in-top {
+		0% {
+			transform: translateY(-10px * $base-size);
+			opacity: 0;
+		}
+
+		100% {
+			transform: translateY(0px);
+			opacity: 1;
+		}
 	}
 }
 </style>

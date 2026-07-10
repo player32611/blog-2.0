@@ -4,6 +4,7 @@ import gsap from "gsap";
 const imageStore = useImageStore();
 const cursorRef = ref<HTMLDivElement | null>(null);
 const rotateAnimation = ref<GSAPAnimation | null>(null); // 旋转动画引用
+
 const easeTime: number = 0.2; // 缓动时间
 const outTime: number = 0.5; // 离开变化时间（s）
 const cursorScale: number = 1.1; // 光标缩放比例

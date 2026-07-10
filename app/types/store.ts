@@ -39,6 +39,7 @@ export type ImageState = {
 	allImagePosData: Ref<ImagePosData[]>;
 	activeImageData: Ref<ImagePosData | null>;
 	hoverImageData: Ref<ImageHoverData | null>;
+	currentMountAnim: Ref<GSAPAnimation | null>;
 };
 
 export type ImageGetter = {};
@@ -46,8 +47,9 @@ export type ImageGetter = {};
 export type ImageActions = {
 	getLayoutAttribute: () => ImageLayoutData;
 	setAllImagePosData: (data: ImagePosData[]) => void;
-	setActiveImage: (data: ImagePosData | null) => void;
-	setHoverImage: (data: ImageHoverData | null) => void;
+	setActiveImageData: (data: ImagePosData | null) => void;
+	setHoverImageData: (data: ImageHoverData | null) => void;
+	setCurrentMountAnim: (anim: GSAPAnimation | null) => void;
 };
 
 export type ItemState = {

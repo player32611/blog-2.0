@@ -24,7 +24,7 @@ const handleMouseDown = () => {
 	isDragging.value = true;
 	velocityX.value = 0;
 	velocityY.value = 0;
-	imageStore.setHoverImage(null);
+	imageStore.setHoverImageData(null);
 	// 如果动画循环未运行，启动它
 	if (animationFrameId.value === null) {
 		animationFrameId.value = requestAnimationFrame(drawFrame);
@@ -38,7 +38,7 @@ const handleTouchStart = (e: TouchEvent) => {
 	velocityY.value = 0;
 	lastTouchX.value = e.touches[0].clientX;
 	lastTouchY.value = e.touches[0].clientY;
-	imageStore.setHoverImage(null);
+	imageStore.setHoverImageData(null);
 	if (animationFrameId.value === null) {
 		animationFrameId.value = requestAnimationFrame(drawFrame);
 	}
@@ -66,7 +66,7 @@ const handleMouseMove = (e: MouseEvent) => {
 				e.y < img.y + currentImageHeight.value,
 		);
 		if (img) {
-			imageStore.setHoverImage({
+			imageStore.setHoverImageData({
 				width: currentImageWidth.value,
 				height: currentImageHeight.value,
 				center: {
@@ -75,7 +75,7 @@ const handleMouseMove = (e: MouseEvent) => {
 				},
 			});
 		} else {
-			imageStore.setHoverImage(null);
+			imageStore.setHoverImageData(null);
 		}
 	}
 };
@@ -101,7 +101,8 @@ const handleMouseup = (e: MouseEvent) => {
 
 const handleTouchEnd = (e: TouchEvent) => {
 	isDragging.value = false;
-	checkImg(e.touches[0]?.clientX, e.touches[0]?.clientY);
+	if (!e.touches[0]) return;
+	checkImg(e.touches[0].clientX, e.touches[0].clientY);
 };
 
 const handleMouseLeave = () => {
@@ -239,9 +240,14 @@ const drawFrame = () => {
 	}
 };
 
-const checkImg = throttle((x: number, y: number) => {
-	if (Math.abs(velocityX.value) > interactVelocity || Math.abs(velocityY.value) > interactVelocity)
+const checkImg = (x: number, y: number) => {
+	if (
+		imageStore.currentMountAnim ||
+		Math.abs(velocityX.value) > interactVelocity ||
+		Math.abs(velocityY.value) > interactVelocity
+	)
 		return;
+
 	let img = imageStore.allImagePosData.find(
 		img =>
 			x >= img.x &&
@@ -249,10 +255,8 @@ const checkImg = throttle((x: number, y: number) => {
 			y >= img.y &&
 			y < img.y + currentImageHeight.value,
 	);
-	if (img) {
-		imageStore.setActiveImage(img);
-	}
-}, 1000);
+	if (img) imageStore.setActiveImageData(img);
+};
 
 const resize = () => {
 	if (!canvasRef.value) return;

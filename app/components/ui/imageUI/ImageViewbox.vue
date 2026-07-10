@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import type { NetworkLoadingState } from "~/types/config";
+import type { ImagePosData } from "~/types/common";
 
 import ImageLoading from "~/components/exhibit/ImageLoading.vue";
 import ProgressLoading from "~/components/exhibit/ProgressLoading.vue";
@@ -10,42 +11,57 @@ const viewboxRef = ref<HTMLDivElement | null>(null);
 const imageRef = ref<HTMLImageElement | null>(null);
 const animationRef = ref<GSAPAnimation | null>(null);
 const loadingState = ref<NetworkLoadingState>("loading");
+const currentImageData = ref<ImagePosData | null>(null);
 const isShowingBox = ref<boolean>(false);
 
 const handleAnimShow = () => {
-	if (!imageStore.activeImageData) return;
-	if (animationRef.value) animationRef.value.totalProgress(1).kill();
+	if (!imageStore.activeImageData || animationRef.value) return;
 	animationRef.value = gsap.to(viewboxRef.value, {
 		backgroundColor: "#000000af",
 		opacity: 1,
 		duration: 0.3,
 		onStart: () => {
 			isShowingBox.value = true;
+			currentImageData.value = imageStore.activeImageData;
 			gsap.set(viewboxRef.value, { pointerEvents: "all" });
 		},
+		onComplete: () => {
+			animationRef.value = null;
+			imageStore.setCurrentMountAnim(null);
+		},
 	});
+	imageStore.setCurrentMountAnim(animationRef.value);
 };
 
 const handleAnimHide = () => {
-	if (!imageStore.activeImageData || !isShowingBox) return;
-	if (animationRef.value) animationRef.value.totalProgress(1).kill();
+	if (
+		!imageStore.activeImageData ||
+		!isShowingBox.value ||
+		imageStore.currentMountAnim ||
+		animationRef.value
+	)
+		return;
 	animationRef.value = gsap.to(viewboxRef.value, {
 		backgroundColor: "#00000000",
 		opacity: 0,
 		duration: 0.3,
 		onStart: () => {
-			imageStore.setActiveImage(null);
+			imageStore.setActiveImageData(null);
 			gsap.set(viewboxRef.value, { pointerEvents: "none" });
 		},
 		onComplete: () => {
+			currentImageData.value = null;
 			isShowingBox.value = false;
+			animationRef.value = null;
+			imageStore.setCurrentMountAnim(null);
 		},
 	});
+	imageStore.setCurrentMountAnim(animationRef.value);
 };
 
-const handleClickOutside = throttle(() => {
+const handleClickOutside = () => {
 	handleAnimHide();
-}, 1000);
+};
 
 const handleClickImage = (event: MouseEvent) => {
 	event.stopPropagation();
@@ -53,7 +69,7 @@ const handleClickImage = (event: MouseEvent) => {
 
 const handleMouseEnter = () => {
 	if (!imageStore.activeImageData || !imageRef.value) return;
-	imageStore.setHoverImage({
+	imageStore.setHoverImageData({
 		width: imageRef.value.offsetWidth,
 		height: imageRef.value.offsetHeight,
 		center: {
@@ -64,7 +80,7 @@ const handleMouseEnter = () => {
 };
 
 const handleMouseLeave = () => {
-	imageStore.setHoverImage(null);
+	imageStore.setHoverImageData(null);
 };
 
 const handleLoad = () => {
@@ -78,7 +94,10 @@ const handleError = () => {
 watch(
 	() => imageStore.activeImageData,
 	newData => {
-		if (newData) handleAnimShow();
+		if (newData) {
+			handleAnimShow();
+			loadingState.value = "loading";
+		}
 	},
 );
 </script>
@@ -88,7 +107,7 @@ watch(
 		<div class="viewbox_container" v-if="isShowingBox" @click="handleClickOutside">
 			<img
 				class="image_shadow"
-				:src="imageStore.activeImageData?.path"
+				:src="currentImageData?.path"
 				alt="加载失败"
 				:width="imageStore.getLayoutAttribute().imageWidth + 10"
 				:height="imageStore.getLayoutAttribute().imageHeight + 10"
@@ -98,7 +117,7 @@ watch(
 				alt="加载失败"
 				ref="imageRef"
 				v-if="loadingState !== 'error'"
-				:src="imageStore.activeImageData?.path"
+				:src="currentImageData?.path"
 				:class="{ loading: loadingState === 'loading' }"
 				:width="imageStore.getLayoutAttribute().imageWidth"
 				:height="imageStore.getLayoutAttribute().imageHeight"
@@ -111,6 +130,7 @@ watch(
 			<div class="loading_container" v-if="loadingState === 'loading'">
 				<ImageLoading />
 				<ProgressLoading />
+				加载中
 			</div>
 			<div class="error_container" v-if="loadingState === 'error'">
 				<span class="icon">&#xe7f3;</span>
@@ -159,6 +179,7 @@ watch(
 			justify-content: center;
 			align-items: center;
 			gap: 20px;
+			color: #0071e2;
 		}
 
 		.error_container {

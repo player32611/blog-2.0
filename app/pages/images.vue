@@ -8,7 +8,23 @@ import ImageViewbox from "~/components/ui/imageUI/ImageViewbox.vue";
 
 import Button from "~/components/ui/common/Button.vue";
 
+const imageStore = useImageStore();
 const { loadingNavigate } = useLoadingStore();
+const buttonRef = ref<HTMLDivElement | null>(null);
+
+const handleMouseEnter = () => {
+	if (!buttonRef.value) return;
+	const rect = buttonRef.value.getBoundingClientRect();
+	imageStore.setHoverImageData({
+		width: rect.width,
+		height: rect.height,
+		center: { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
+	});
+};
+
+const handleMouseLeave = () => {
+	imageStore.setHoverImageData(null);
+};
 
 usePageReady();
 
@@ -24,13 +40,19 @@ onMounted(() => {
 		<ImageViewbox />
 		<ImageDetailSign />
 		<ImageDownload />
-		<Button
-			:text="'back'"
-			:icon="'&#xeb06;'"
-			:size="'small'"
-			@click="loadingNavigate('/')"
-			:style="{ position: 'fixed', left: '20px', top: '20px' }"
-		></Button>
+		<div
+			class="button_container"
+			@mouseenter="handleMouseEnter"
+			@mouseleave="handleMouseLeave"
+			ref="buttonRef"
+		>
+			<Button
+				:text="'back'"
+				:icon="'&#xeb06;'"
+				:size="'small'"
+				@click="loadingNavigate('/')"
+			></Button>
+		</div>
 		<ClientOnly>
 			<ImageCursor v-if="!isMobile()" />
 		</ClientOnly>
@@ -43,5 +65,11 @@ onMounted(() => {
 	width: 100%;
 	height: 100dvh;
 	user-select: none;
+
+	.button_container {
+		position: fixed;
+		left: 20px;
+		top: 20px;
+	}
 }
 </style>

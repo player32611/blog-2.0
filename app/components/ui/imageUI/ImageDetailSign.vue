@@ -10,7 +10,7 @@ const easeTime: number = 0.5;
 const handleMouseEnter = () => {
 	if (!imageStore.activeImageData || !signHeadRef.value) return;
 	const rect = signHeadRef.value.getBoundingClientRect();
-	imageStore.setHoverImage({
+	imageStore.setHoverImageData({
 		width: signHeadRef.value.offsetWidth,
 		height: signHeadRef.value.offsetHeight,
 		center: {
@@ -21,7 +21,7 @@ const handleMouseEnter = () => {
 };
 
 const handleMouseLeave = () => {
-	imageStore.setHoverImage(null);
+	imageStore.setHoverImageData(null);
 };
 
 watch(
