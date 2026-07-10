@@ -107,7 +107,7 @@ watch(
 		<div class="viewbox_container" v-if="isShowingBox" @click="handleClickOutside">
 			<img
 				class="image_shadow"
-				:src="currentImageData?.path"
+				:src="`/blog-2.0${currentImageData?.path}`"
 				alt="加载失败"
 				:width="imageStore.getLayoutAttribute().imageWidth + 10"
 				:height="imageStore.getLayoutAttribute().imageHeight + 10"
@@ -117,7 +117,7 @@ watch(
 				alt="加载失败"
 				ref="imageRef"
 				v-if="loadingState !== 'error'"
-				:src="currentImageData?.path"
+				:src="`/blog-2.0${currentImageData?.path}`"
 				:class="{ loading: loadingState === 'loading' }"
 				:width="imageStore.getLayoutAttribute().imageWidth"
 				:height="imageStore.getLayoutAttribute().imageHeight"

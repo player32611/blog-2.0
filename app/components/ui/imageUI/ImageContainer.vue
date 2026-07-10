@@ -164,7 +164,7 @@ const createImgDatas = () => {
 			};
 		});
 
-		img.src = data.path;
+		img.src = `/blog-2.0${data.path}`;
 		loadPromises.push(loadPromise);
 	});
 
