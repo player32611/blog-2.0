@@ -11,11 +11,11 @@ const easeTime: number = 1; // 缓动时间（s）
 const outTime: number = 0.5; // 离开变化时间（s）
 
 const handleMouseDown = () => {
-	gsap.to(cursorRef.value, { scale: 0.8, duration: outTime });
+	gsap.to(cursorRef.value, { scale: 0.8, duration: outTime / 2 });
 };
 
 const handleMouseUp = () => {
-	gsap.to(cursorRef.value, { scale: 1, duration: outTime });
+	gsap.to(cursorRef.value, { scale: 1, duration: outTime / 2 });
 };
 
 const handleMouseMove = (event: MouseEvent) => {

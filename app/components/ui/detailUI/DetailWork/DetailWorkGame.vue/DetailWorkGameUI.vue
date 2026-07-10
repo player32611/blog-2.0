@@ -1,25 +1,51 @@
 <script setup lang="ts">
+import gsap from "gsap";
+
 import Button from "~/components/ui/common/Button.vue";
+
+const detailStore = useDetailStore();
+const progressRef = ref<HTMLDivElement | null>(null);
 
 const style: Record<string, string | number> = { cursor: "none" };
 const iconStyle: Record<string, string | number> = { fontSize: "0.7em" };
+const changeTime: number = 1;
 
 const handleClick = () => {
 	window.open("https://gamejolt.com/@player32611", "_blank", "noopener,noreferrer");
 };
+
+const refreshHp = (hp: number) => {
+	gsap.to(progressRef.value, {
+		width: `${(hp / MAIN_HP) * 100}%`,
+		duration: changeTime,
+	});
+};
+
+watch(
+	() => detailStore.workGameCurrentHp,
+	newState => {
+		refreshHp(newState);
+	},
+);
+
+onMounted(() => {
+	refreshHp(detailStore.workGameCurrentHp);
+});
 </script>
 
 <template>
 	<div class="game_ui">
 		<div class="ui_state">
 			<div class="state_name">
-				<div>FRISK</div>
-				<div>LV 19</div>
+				<div>{{ MAIN_NAME }}</div>
+				<div>LV {{ MAIN_LV }}</div>
 			</div>
 			<div class="state_hp">
 				<div>HP</div>
-				<div class="hp_progress"></div>
-				<div>KR 92/92</div>
+				<div class="hp_progress_container">
+					<div class="hp_progress" ref="progressRef"></div>
+				</div>
+				<div>KR {{ detailStore.workGameCurrentHp }}/{{ MAIN_HP }}</div>
 			</div>
 		</div>
 		<div class="ui_button">
@@ -76,13 +102,14 @@ $base-size: 1;
 	z-index: variables.$float_zIndex;
 
 	.ui_state {
-		margin: 0.3rem * $base-size;
+		margin: 1rem * $base-size 0.3rem * $base-size;
 		display: grid;
 		grid-template-columns: 1.5fr 3fr 1fr;
 		justify-items: center;
 		align-items: center;
 		color: #ff7f27;
 		font-size: 2.5rem * $base-size;
+		line-height: 2.5rem * $base-size;
 		font-family: "Mars Needs Cunnilingus";
 
 		.state_name {
@@ -99,13 +126,18 @@ $base-size: 1;
 		.state_hp {
 			display: flex;
 			margin-left: 2.5rem;
-			font-size: 2.5rem * $base-size;
 
-			.hp_progress {
+			.hp_progress_container {
 				margin: 0 0.5rem * $base-size;
+				display: flex;
 				height: 2rem * $base-size;
 				width: 15rem * $base-size;
-				background-color: #ffff00;
+				background-color: red;
+
+				.hp_progress {
+					height: 100%;
+					background-color: #ffff00;
+				}
 			}
 		}
 	}
@@ -126,15 +158,15 @@ $base-size: 1;
 		width: calc(100% - 100px * $base-size);
 
 		.ui_state {
-			margin: 0.3rem * $base-size;
+			margin: 1rem * $base-size 0.3rem * $base-size;
 			grid-template-columns: 1.5fr 3fr;
 			font-size: 2.5rem * $base-size;
+			line-height: 2.5rem * $base-size;
 
 			.state_hp {
 				margin-left: 2rem * $base-size;
-				font-size: 2.5rem * $base-size;
 
-				.hp_progress {
+				.hp_progress_container {
 					margin: 0 0.5rem * $base-size;
 					height: 2rem * $base-size;
 					width: 15rem * $base-size;
@@ -154,15 +186,15 @@ $base-size: 1;
 		width: calc(100% - 100px * $base-size);
 
 		.ui_state {
-			margin: 0.3rem * $base-size;
+			margin: 1rem * $base-size 0.3rem * $base-size;
 			grid-template-columns: 1.5fr 3fr;
 			font-size: 2.5rem * $base-size;
+			line-height: 2.5rem * $base-size;
 
 			.state_hp {
 				margin-left: 2rem * $base-size;
-				font-size: 2.5rem * $base-size;
 
-				.hp_progress {
+				.hp_progress_container {
 					margin: 0 0.5rem * $base-size;
 					height: 2rem * $base-size;
 					width: 15rem * $base-size;
@@ -182,14 +214,14 @@ $base-size: 1;
 		width: calc(100% - 100px * $base-size);
 
 		.ui_state {
-			margin: 0.3rem * $base-size;
+			margin: 1rem * $base-size 0.3rem * $base-size;
 			font-size: 2.5rem * $base-size;
+			line-height: 2.5rem * $base-size;
 
 			.state_hp {
 				margin-left: 2rem * $base-size;
-				font-size: 2.5rem * $base-size;
 
-				.hp_progress {
+				.hp_progress_container {
 					margin: 0 0.5rem * $base-size;
 					height: 2rem * $base-size;
 					width: 15rem * $base-size;
@@ -209,14 +241,15 @@ $base-size: 1;
 		width: calc(100% - 100px * $base-size);
 
 		.ui_state {
-			margin: 0.3rem * $base-size;
+			margin: 1rem * $base-size 0.3rem * $base-size;
 			font-size: 2.5rem * $base-size;
+			line-height: 2.5rem * $base-size;
 
 			.state_hp {
 				margin-left: 2rem * $base-size;
 				font-size: 2.5rem * $base-size;
 
-				.hp_progress {
+				.hp_progress_container {
 					margin: 0 0.5rem * $base-size;
 					height: 2rem * $base-size;
 					width: 15rem * $base-size;

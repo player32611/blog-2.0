@@ -31,6 +31,12 @@ export const DETAIL_SKILLS = [
 
 export const DETAIL_EMPTY = "一般你看不到的";
 
+export const MAIN_NAME = "FRISK";
+
+export const MAIN_LV = 19;
+
+export const MAIN_HP = 92;
+
 export const MUSIC_DATAS: MusicInfo[] = [
 	{
 		name: "散落的烛光　～ Candlelight",

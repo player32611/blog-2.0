@@ -23,14 +23,14 @@ onUnmounted(() => {
 		<div class="ui_state">
 			<div class="ui_name">
 				<div @click="loadingNavigate('/details')">
-					<FaultText text="FRISK" style="color: #ff7f27; cursor: pointer" />
+					<FaultText :text="MAIN_NAME" style="color: #ff7f27; cursor: pointer" />
 				</div>
-				<div>LV 19</div>
+				<div>LV {{ MAIN_LV }}</div>
 			</div>
 			<div class="ui_hp">
 				<div>HP</div>
 				<div class="hp_progress"></div>
-				<div>KR 92/92</div>
+				<div>KR 92/{{ MAIN_HP }}</div>
 			</div>
 			<div class="ui_time">
 				<ClientOnly>

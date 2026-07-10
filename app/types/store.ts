@@ -22,6 +22,7 @@ export type BlogActions = {
 };
 
 export type DetailState = {
+	workGameCurrentHp: Ref<number>;
 	bottomMoreInstance: Ref<DetailBottomMoreInstance | null>;
 	maskInstance: Ref<DetailMaskInstance | null>;
 	shaderType: Ref<"none" | "VCR distortion">;
@@ -30,6 +31,7 @@ export type DetailState = {
 export type DetailGetter = {};
 
 export type DetailActions = {
+	setWorkGameCurrentHp: (hp: number) => void;
 	setBottomMoreInstance: (instance: DetailBottomMoreInstance | null) => void;
 	setMaskInstance: (mask: DetailMaskInstance | null) => void;
 	setShaderType: (type: "none" | "VCR distortion") => void;

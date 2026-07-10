@@ -1,12 +1,17 @@
-import type { DetailBottomMoreInstance, DetailMaskInstance } from "~/types/components";
+import type { DetailBottomMoreInstance, DetailMaskInstance } from "@/types/components";
 import type { DetailState, DetailGetter, DetailActions } from "@/types/store";
 
 export const useDetailStore = defineStore(
 	"detail",
 	(): DetailState & DetailGetter & DetailActions => {
+		const workGameCurrentHp = ref<number>(MAIN_HP);
 		const bottomMoreInstance = ref<DetailBottomMoreInstance | null>(null);
 		const maskInstance = ref<DetailMaskInstance | null>(null);
 		const shaderType = ref<"none" | "VCR distortion">("none");
+
+		const setWorkGameCurrentHp = (hp: number) => {
+			workGameCurrentHp.value = hp;
+		};
 
 		const setBottomMoreInstance = (instance: DetailBottomMoreInstance | null) => {
 			bottomMoreInstance.value = instance;
@@ -21,9 +26,11 @@ export const useDetailStore = defineStore(
 		};
 
 		return {
+			workGameCurrentHp,
 			bottomMoreInstance,
 			maskInstance,
 			shaderType,
+			setWorkGameCurrentHp,
 			setBottomMoreInstance,
 			setMaskInstance,
 			setShaderType,

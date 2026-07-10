@@ -9,7 +9,7 @@ import type {
 import DetailWorkBackground from "./DetailWorkBackground.vue";
 import DetailWorkFloatContainer from "./DetailWorkFloatContainer.vue";
 import DetailWorkGame from "./DetailWorkGame.vue/DetailWorkGame.vue";
-import DetailWorkItem2 from "./DetailWorkItem2.vue";
+import DetailWorkBlog from "./DetailWorkBlog/DetailWorkBlog.vue";
 import DetailWorkItemEmpty from "./DetailWorkItemEmpty.vue";
 import DetailWorkTransition from "./DetailWorkTransition.vue";
 
@@ -60,21 +60,11 @@ onMounted(() => {
 						scrolledDistance <= point.end &&
 						index < activeIndex.value)
 				) {
-					maskRef.value?.transitionAnim(
-						{
-							onStart: () => {
-								// smoother?.paused(true);
-							},
-							onComplete: () => {
-								activeIndex.value = index;
-							},
+					maskRef.value?.transitionAnim({
+						onComplete: () => {
+							activeIndex.value = index;
 						},
-						{
-							onComplete: () => {
-								// smoother?.paused(false);
-							},
-						},
-					);
+					});
 				}
 			});
 		},
@@ -86,7 +76,7 @@ onMounted(() => {
 	<div class="detail_work" ref="containerRef">
 		<DetailWorkBackground v-if="activeIndex === -1" />
 		<DetailWorkGame v-else-if="activeIndex === 0" />
-		<DetailWorkItem2 v-else-if="activeIndex === 1" />
+		<DetailWorkBlog v-else-if="activeIndex === 1" />
 		<DetailWorkItemEmpty v-else />
 		<DetailWorkFloatContainer ref="floatRef" :activeIndex="activeIndex" />
 		<DetailWorkTransition ref="maskRef" />

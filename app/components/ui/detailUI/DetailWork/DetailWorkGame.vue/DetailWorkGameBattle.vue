@@ -5,8 +5,8 @@ import type { Point } from "~/types/common";
 import heartImg from "/images/sprites/heart.png";
 
 const borderRef = ref<HTMLDivElement | null>(null);
-const soulPos = ref<Point>({ x: 0, y: 0 });
 const soulRef = ref<HTMLImageElement | null>(null);
+const soulPos = ref<Point>({ x: 0, y: 0 });
 const pressKeys = ref<Set<string>>(new Set());
 const animationId = ref<number | null>(null);
 
