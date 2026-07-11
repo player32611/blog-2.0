@@ -1,4 +1,5 @@
-import type { DayTime, RGBColor } from "~/types/common";
+import gsap from "gsap";
+import type { DayTime, Point, RGBColor } from "~/types/common";
 import type { NetworkLoadingState } from "~/types/config";
 
 /**
@@ -330,4 +331,35 @@ export const randomColor = ({
 						.padStart(2, "0")}`
 				: `#${hex}`;
 	}
+};
+
+export const calculateDistance = (p1: Point, p2: Point): number => {
+	return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+};
+
+/**
+ * 计算两点连线与起始角度的角度差
+ * @param {Point} start 起点 x
+ * @param {Point} end 终点 x
+ * @param {Point} startAngle 起始角度（单位：°）
+ * @returns {Point} 角度差（单位：°, 范围：[-180, 180]）
+ */
+export const calculateAngleDifference = (start: Point, end: Point, startAngle: number): number => {
+	// 当前连线角度
+	const angleDeg = (Math.atan2(end.y - start.y, end.x - start.x) * 180) / Math.PI;
+
+	// 计算最小角度差
+	let diff = angleDeg - startAngle;
+
+	while (diff > 180) diff -= 360;
+	while (diff < -180) diff += 360;
+
+	return diff;
+};
+
+export const getGSAPPoint = (element: Element): Point => {
+	return {
+		x: gsap.getProperty(element, "x") as number,
+		y: gsap.getProperty(element, "y") as number,
+	};
 };

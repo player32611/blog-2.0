@@ -74,7 +74,7 @@ const getPathLength = (points: Point[]) => {
 	for (let i = 1; i < points.length; i++) {
 		const p1 = points[i - 1];
 		const p2 = points[i];
-		if (p1 && p2) length += getDistance(p1, p2);
+		if (p1 && p2) length += calculateDistance(p1, p2);
 	}
 	return length;
 };
@@ -114,7 +114,7 @@ const drawProgressLine = (
 		const p2 = points[i];
 		if (!p1 || !p2) continue;
 
-		const segmentLength = getDistance(p1, p2);
+		const segmentLength = calculateDistance(p1, p2);
 		const segmentStart = currentLength;
 		const segmentEnd = currentLength + segmentLength;
 

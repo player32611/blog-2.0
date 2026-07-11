@@ -11,10 +11,27 @@ const bulletAnims = ref<GSAPTimeline[]>([]);
 const pressKeys = ref<Set<string>>(new Set());
 const animationId = ref<number | null>(null);
 
-const easeDuration: number = 0.3;
-const easeDistance: number = 1.5;
-const bulletNum: number = 10;
-const bulletDamage: number = 15;
+const soulScreenPos = computed<Point>(() => {
+	const rect = borderRef.value?.getBoundingClientRect();
+	if (!rect) return { x: 0, y: 0 };
+
+	return {
+		x: soulPos.value.x + rect.left,
+		y: soulPos.value.y + rect.top,
+	};
+});
+
+const easeDuration = 0.3;
+const easeDistance = 1.5;
+const bulletNum = 1;
+const bulletDamage = 15;
+const bulletSpeed = 1000;
+const bulletRotateDuration = 0.3;
+const bulletMinYPercent = 0.25;
+const bulletMaxYPercent = 0.75;
+const bulletPerDelay = 1;
+const bulletMinDuration = 2;
+const bulletMaxDuration = 5;
 
 const handleKeyPress = (e: KeyboardEvent) => {
 	e.preventDefault();
@@ -46,16 +63,50 @@ const frame = () => {
 };
 
 onMounted(() => {
-	console.log(bulletRefs.value);
+	bulletAnims.value = bulletRefs.value.map((bullet, index) => {
+		const timeline = gsap
+			.timeline()
+			.set(bullet, {
+				x: randomInt(0, window.innerWidth),
+				y: window.innerHeight + bullet.offsetHeight,
+			})
+			.to(bullet, {
+				y: randomFloat(
+					bulletMinYPercent * window.innerHeight,
+					bulletMaxYPercent * window.innerHeight,
+				),
+				delay: index * bulletPerDelay,
+				duration: randomFloat(bulletMinDuration, bulletMaxDuration),
+			})
+			.to(bullet, {
+				rotate: () => calculateAngleDifference(getGSAPPoint(bullet), soulScreenPos.value, -90),
+				duration: bulletRotateDuration,
+				// onStart: () => {
+				// 	console.log(calculateAngleDifference(getGSAPPoint(bullet), soulScreenPos.value, 0));
+				// },
+				onComplete: () => {
+					timeline.add(
+						gsap.to(bullet, {
+							x: soulScreenPos.value.x,
+							y: soulScreenPos.value.y,
+							ease: "none",
+							duration: calculateDistance(soulScreenPos.value, getGSAPPoint(bullet)) / bulletSpeed,
+						}),
+					);
+				},
+			});
+
+		return timeline;
+	});
+	animationId.value = requestAnimationFrame(frame);
 	window.addEventListener("keydown", handleKeyPress);
 	window.addEventListener("keyup", handleKeyUp);
-	animationId.value = requestAnimationFrame(frame);
 });
 
 onUnmounted(() => {
+	if (animationId.value) cancelAnimationFrame(animationId.value);
 	window.removeEventListener("keydown", handleKeyPress);
 	window.removeEventListener("keyup", handleKeyUp);
-	if (animationId.value) cancelAnimationFrame(animationId.value);
 });
 </script>
 
@@ -178,8 +229,8 @@ onUnmounted(() => {
 
 	.battle_border_container {
 		position: absolute;
+		top: 50vh;
 		left: calc(50% - 5px - 15vh);
-		margin-top: 30vh;
 		background-color: rgba($color: #000000, $alpha: 0.5);
 		border-color: #ffffff;
 		border-style: solid;
@@ -217,16 +268,22 @@ onUnmounted(() => {
 	$base-size: 0.9;
 
 	.game_battle {
-		margin-top: 30vh;
-		border-width: 5px * $base-size;
+		.battle_border_container {
+			left: calc(50% - 5px * $base-size - 15vh);
+			border-width: 5px * $base-size;
 
-		.battle_border {
-			width: 30vh * $base-size;
-			height: 30vh * $base-size;
-
-			#soul {
-				width: 25px * $base-size;
+			.battle_border {
+				#soul {
+					width: 25px * $base-size;
+				}
 			}
+		}
+
+		.battle_bullet {
+			top: -15px * $base-size;
+			left: -15px * $base-size;
+			height: 30px * $base-size;
+			width: 30px * $base-size;
 		}
 	}
 }
@@ -236,16 +293,22 @@ onUnmounted(() => {
 	$base-size: 0.95;
 
 	.game_battle {
-		margin-top: 30vh;
-		border-width: 5px * $base-size;
+		.battle_border_container {
+			left: calc(50% - 5px * $base-size - 15vh);
+			border-width: 5px * $base-size;
 
-		.battle_border {
-			width: 30vh * $base-size;
-			height: 30vh * $base-size;
-
-			#soul {
-				width: 25px * $base-size;
+			.battle_border {
+				#soul {
+					width: 25px * $base-size;
+				}
 			}
+		}
+
+		.battle_bullet {
+			top: -15px * $base-size;
+			left: -15px * $base-size;
+			height: 30px * $base-size;
+			width: 30px * $base-size;
 		}
 	}
 }
