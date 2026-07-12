@@ -136,7 +136,7 @@ onUnmounted(() => {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 100dvh;
+	height: 100%;
 	width: 100%;
 	overflow: hidden;
 	overscroll-behavior: none;

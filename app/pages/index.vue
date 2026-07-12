@@ -24,4 +24,10 @@ onMounted(() => {
 	</div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.home {
+	position: relative;
+	width: 100%;
+	height: 100dvh;
+}
+</style>

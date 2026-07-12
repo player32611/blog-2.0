@@ -7,7 +7,7 @@ export default defineNuxtConfig({
 		},
 	},
 	modules: ["@nuxt/content", "@pinia/nuxt", "@nuxt/fonts"],
-	devtools: { enabled: true },
+	devtools: { enabled: false },
 	compatibilityDate: "2024-04-03",
 	content: {
 		build: {

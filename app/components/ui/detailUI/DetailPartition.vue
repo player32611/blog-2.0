@@ -62,7 +62,7 @@ onUnmounted(() => {
 <template>
 	<div class="detail_partition">
 		<div class="partition_container" ref="containerRef">
-			<div class="partition_item" v-for="i in itemNum" ref="itemRefs">
+			<div class="partition_item" v-for="_ in itemNum" ref="itemRefs">
 				<div class="partition_text">{{ text.toUpperCase() }}</div>
 				<svg
 					id="partition_arrow"
@@ -188,6 +188,7 @@ onUnmounted(() => {
 			align-items: center;
 			width: 250px;
 			font-size: 2rem;
+			user-select: none;
 
 			#partition_arrow {
 				height: 5rem;
