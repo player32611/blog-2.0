@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { useSoundEffect } from "@/composables/useSoundEffect";
-import { useSoundStore } from "@/stores/soundStore";
 import type { ButtonParams } from "@/types/components";
 
-const { effectsVolume } = useSoundStore();
 const { text, size, icon, onClick, classList, style, iconStyle } = defineProps<ButtonParams>();
 
-const undertaleSound = useSoundEffect("sounds/effects/undertale-button.wav");
+const buttonSound = useSoundEffect("/sounds/effects/button.wav");
 
 const handleClick = () => {
 	if (onClick) {
 		onClick();
-		if (effectsVolume) undertaleSound.play();
+		buttonSound.play();
 	}
 };
 </script>

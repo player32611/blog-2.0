@@ -12,10 +12,10 @@
  *   - setEffectsVolume: (volume: number) => void - 设置音效音量的方法
  */
 export const useSoundEffect = (audioSrc: string) => {
-	let isPlaying = ref(false);
-	let isInitialized = ref(false);
-	const audioRef = ref<HTMLAudioElement | null>(null);
 	const { effectsVolume, setEffectsVolume } = useSoundStore();
+	const isPlaying = ref<boolean>(false);
+	const isInitialized = ref<boolean>(false);
+	const audioRef = ref<HTMLAudioElement | null>(null);
 
 	onMounted(() => {
 		audioRef.value = new Audio(audioSrc);
@@ -41,7 +41,7 @@ export const useSoundEffect = (audioSrc: string) => {
 	 * @returns {void} 无返回值
 	 */
 	const play = (): void => {
-		if (!audioRef.value || !isInitialized) return;
+		if (!audioRef.value || !isInitialized || !effectsVolume) return;
 		audioRef.value.currentTime = 0;
 		audioRef.value
 			.play()

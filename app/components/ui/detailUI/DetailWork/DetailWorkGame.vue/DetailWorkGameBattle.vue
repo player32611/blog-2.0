@@ -6,6 +6,7 @@ import type { Point } from "~/types/common";
 gsap.registerPlugin(EasePack);
 
 const detailStore = useDetailStore();
+const hurtSound = useSoundEffect("/sounds/effects/hurt.wav");
 const borderRef = ref<HTMLDivElement | null>(null);
 const soulRef = ref<HTMLImageElement | null>(null);
 const soulPos = ref<Point>({ x: 0, y: 0 });
@@ -72,6 +73,7 @@ const frame = () => {
 		if (!invinAnim.value && calculateDistance(pos, soulScreenPos.value) < damageDistanceRange) {
 			bulletRefs.value[index]?.remove();
 			bulletRefs.value[index] = null;
+			hurtSound.play();
 			detailStore.damageWorkGameHp(bulletDamage);
 			invinAnim.value = gsap
 				.timeline({
