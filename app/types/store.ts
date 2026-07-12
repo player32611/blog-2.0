@@ -32,6 +32,7 @@ export type DetailGetter = {};
 
 export type DetailActions = {
 	setWorkGameCurrentHp: (hp: number) => void;
+	damageWorkGameHp: (damage: number) => void;
 	setBottomMoreInstance: (instance: DetailBottomMoreInstance | null) => void;
 	setMaskInstance: (mask: DetailMaskInstance | null) => void;
 	setShaderType: (type: "none" | "VCR distortion") => void;

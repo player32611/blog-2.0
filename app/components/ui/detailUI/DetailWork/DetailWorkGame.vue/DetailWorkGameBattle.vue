@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import gsap from "gsap";
+import { EasePack } from "gsap/all";
 import type { Point } from "~/types/common";
+
+gsap.registerPlugin(EasePack);
 
 const detailStore = useDetailStore();
 const borderRef = ref<HTMLDivElement | null>(null);
 const soulRef = ref<HTMLImageElement | null>(null);
 const soulPos = ref<Point>({ x: 0, y: 0 });
-const bulletRefs = ref<HTMLDivElement[]>([]);
-const bulletAnims = ref<GSAPTimeline[]>([]);
+const bulletRefs = ref<(HTMLDivElement | null)[]>([]);
+const bulletAnims = ref<(GSAPTimeline | null)[]>([]);
+const invinAnim = ref<GSAPTimeline | null>(null);
 const pressKeys = ref<Set<string>>(new Set());
-const animationId = ref<number | null>(null);
+const frameAnimId = ref<number | null>(null);
 
 const soulScreenPos = computed<Point>(() => {
 	const rect = borderRef.value?.getBoundingClientRect();
@@ -23,15 +27,18 @@ const soulScreenPos = computed<Point>(() => {
 
 const easeDuration = 0.3;
 const easeDistance = 1.5;
-const bulletNum = 1;
+const bulletNum = 20;
 const bulletDamage = 15;
 const bulletSpeed = 1000;
 const bulletRotateDuration = 0.3;
 const bulletMinYPercent = 0.25;
 const bulletMaxYPercent = 0.75;
-const bulletPerDelay = 1;
+const bulletPerDelay = 0.5;
 const bulletMinDuration = 2;
 const bulletMaxDuration = 5;
+const damageDistanceRange = 10;
+const shakeDuration = 1;
+const shakeRepeat = 4;
 
 const handleKeyPress = (e: KeyboardEvent) => {
 	e.preventDefault();
@@ -42,8 +49,6 @@ const handleKeyUp = (e: KeyboardEvent) => {
 	e.preventDefault();
 	if (pressKeys.value.has(e.key)) pressKeys.value.delete(e.key);
 };
-
-const hurt = () => {};
 
 const frame = () => {
 	const soul = soulRef.value?.getBoundingClientRect();
@@ -58,12 +63,37 @@ const frame = () => {
 		if (pressKeys.value.has("ArrowDown"))
 			soulPos.value.y = Math.min(border.height - soul.height, soulPos.value.y + easeDistance);
 		gsap.to(soulRef.value, { ...soulPos.value, duration: easeDuration });
-		animationId.value = requestAnimationFrame(frame);
+		frameAnimId.value = requestAnimationFrame(frame);
 	}
+	bulletRefs.value.forEach((bullet, index) => {
+		if (!bullet) return;
+
+		const pos = getGSAPPoint(bullet);
+		if (!invinAnim.value && calculateDistance(pos, soulScreenPos.value) < damageDistanceRange) {
+			bulletRefs.value[index]?.remove();
+			bulletRefs.value[index] = null;
+			detailStore.damageWorkGameHp(bulletDamage);
+			invinAnim.value = gsap
+				.timeline({
+					onComplete: () => {
+						invinAnim.value?.kill();
+						invinAnim.value = null;
+					},
+				})
+				.to(soulRef.value, {
+					opacity: 0.5,
+					ease: "slow(0.1,0.1,true)",
+					repeat: shakeRepeat,
+					duration: shakeDuration / shakeRepeat,
+				});
+		}
+	});
 };
 
 onMounted(() => {
 	bulletAnims.value = bulletRefs.value.map((bullet, index) => {
+		if (!bullet) return null;
+		let soul: Point;
 		const timeline = gsap
 			.timeline()
 			.set(bullet, {
@@ -79,18 +109,26 @@ onMounted(() => {
 				duration: randomFloat(bulletMinDuration, bulletMaxDuration),
 			})
 			.to(bullet, {
-				rotate: () => calculateAngleDifference(getGSAPPoint(bullet), soulScreenPos.value, -90),
+				rotate: () => {
+					soul = soulScreenPos.value;
+					return calculateAngleDifference(getGSAPPoint(bullet), soulScreenPos.value, -90);
+				},
 				duration: bulletRotateDuration,
-				// onStart: () => {
-				// 	console.log(calculateAngleDifference(getGSAPPoint(bullet), soulScreenPos.value, 0));
-				// },
 				onComplete: () => {
+					const target = calculatePointBeyondWindow(getGSAPPoint(bullet), soul, 200);
+					if (!target) return;
 					timeline.add(
 						gsap.to(bullet, {
-							x: soulScreenPos.value.x,
-							y: soulScreenPos.value.y,
+							x: target.x,
+							y: target.y,
 							ease: "none",
-							duration: calculateDistance(soulScreenPos.value, getGSAPPoint(bullet)) / bulletSpeed,
+							duration: calculateDistance(target, getGSAPPoint(bullet)) / bulletSpeed,
+							onComplete: () => {
+								bulletRefs.value[index]?.remove();
+								bulletRefs.value[index] = null;
+								bulletAnims.value[index]?.kill();
+								bulletAnims.value[index] = null;
+							},
 						}),
 					);
 				},
@@ -98,13 +136,13 @@ onMounted(() => {
 
 		return timeline;
 	});
-	animationId.value = requestAnimationFrame(frame);
+	frameAnimId.value = requestAnimationFrame(frame);
 	window.addEventListener("keydown", handleKeyPress);
 	window.addEventListener("keyup", handleKeyUp);
 });
 
 onUnmounted(() => {
-	if (animationId.value) cancelAnimationFrame(animationId.value);
+	if (frameAnimId.value) cancelAnimationFrame(frameAnimId.value);
 	window.removeEventListener("keydown", handleKeyPress);
 	window.removeEventListener("keyup", handleKeyUp);
 });
@@ -255,6 +293,7 @@ onUnmounted(() => {
 		position: absolute;
 		height: 30px;
 		width: 30px;
+		z-index: variables.$float_zIndex;
 
 		#bullet {
 			height: 100%;

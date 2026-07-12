@@ -13,6 +13,11 @@ export const useDetailStore = defineStore(
 			workGameCurrentHp.value = hp;
 		};
 
+		const damageWorkGameHp = (damage: number) => {
+			if (damage > workGameCurrentHp.value) workGameCurrentHp.value = 1;
+			else workGameCurrentHp.value -= damage;
+		};
+
 		const setBottomMoreInstance = (instance: DetailBottomMoreInstance | null) => {
 			bottomMoreInstance.value = instance;
 		};
@@ -31,6 +36,7 @@ export const useDetailStore = defineStore(
 			maskInstance,
 			shaderType,
 			setWorkGameCurrentHp,
+			damageWorkGameHp,
 			setBottomMoreInstance,
 			setMaskInstance,
 			setShaderType,

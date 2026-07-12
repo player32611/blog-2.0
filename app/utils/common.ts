@@ -333,6 +333,12 @@ export const randomColor = ({
 	}
 };
 
+/**
+ * 计算两点之间的距离
+ * @param {Point} p1 点 1
+ * @param {Point} p2 点 2
+ * @returns {number} 距离
+ */
 export const calculateDistance = (p1: Point, p2: Point): number => {
 	return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
 };
@@ -357,9 +363,98 @@ export const calculateAngleDifference = (start: Point, end: Point, startAngle: n
 	return diff;
 };
 
+/**
+ * 计算元素在 gsap 上的坐标
+ * @param {Element} element 指定 DOM 元素
+ * @returns {Point} gsap 坐标
+ */
 export const getGSAPPoint = (element: Element): Point => {
 	return {
 		x: gsap.getProperty(element, "x") as number,
 		y: gsap.getProperty(element, "y") as number,
 	};
+};
+
+/**
+ * 计算从起点到终点连线方向上，超出终点屏幕外指定距离的点，确保点真正在屏幕外，如果延伸距离不够则继续延伸
+ * @param {Point} start - 起点坐标 {x, y}
+ * @param {Point} end - 终点坐标 {x, y}
+ * @param {number} minDistance - 最小超出距离（像素）
+ * @param {number} screenWidth - 屏幕宽度
+ * @param {number} screenHeight - 屏幕高度
+ * @param {number} maxIterations - 最大迭代次数，防止死循环
+ * @returns {Point|null} 屏幕外的点 {x, y}
+ */
+export const calculatePointBeyondWindow = (
+	start: Point,
+	end: Point,
+	minDistance: number,
+	screenWidth: number = window.innerWidth,
+	screenHeight: number = window.innerHeight,
+	maxIterations: number = 100,
+): Point | null => {
+	const dx = end.x - start.x;
+	const dy = end.y - start.y;
+	const length = Math.sqrt(dx * dx + dy * dy);
+
+	if (length === 0) return null;
+
+	const unitX = dx / length;
+	const unitY = dy / length;
+
+	// 从较小距离开始尝试，逐渐增加直到点在屏幕外
+	let currentDistance = minDistance;
+	let iterations = 0;
+
+	while (iterations < maxIterations) {
+		const point = {
+			x: end.x + unitX * currentDistance,
+			y: end.y + unitY * currentDistance,
+		};
+
+		// 检查点是否在屏幕外
+		const isOutside =
+			point.x < -minDistance ||
+			point.x > screenWidth + minDistance ||
+			point.y < -minDistance ||
+			point.y > screenHeight + minDistance;
+
+		if (isOutside) return point;
+
+		// 如果还在屏幕内，增加距离
+		currentDistance += minDistance;
+		iterations++;
+	}
+
+	// 如果超出最大迭代次数，返回最后的点
+	return {
+		x: end.x + unitX * currentDistance,
+		y: end.y + unitY * currentDistance,
+	};
+};
+
+/**
+ * 判断给定数字是否在一定范围内
+ * @param {number} target - 目标数字
+ * @param {number} base - 范围基准数字
+ * @param {number} range - 范围大小
+ * @returns {boolean} 是否在范围内
+ */
+export const isInRange = (target: number, base: number, range: number): boolean => {
+	return base - range <= target && target <= base + range;
+};
+
+/**
+ * 判断给定坐标是否在屏幕（或增加一定距离）内
+ * @param {Point} target - 目标坐标
+ * @param {number} distance - 格外距离，默认为 0
+ * @returns {boolean} 是否在范围内
+ */
+export const isOutWindow = (target: Point, distance: number = 0): boolean => {
+	return (
+		target.x < -distance ||
+		target.x > window.innerWidth + distance ||
+		target.y < -distance ||
+		target.y > window.innerHeight + distance
+	);
 };
