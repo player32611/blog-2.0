@@ -63,6 +63,10 @@ export interface DetailIntroduceSkillItemParams extends ItemParams {
 	skill: string;
 }
 
+export interface DetailWorkBlogItemParams {
+	image: string;
+}
+
 export interface DetailWorkFloatContainerParams {
 	activeIndex: number;
 }

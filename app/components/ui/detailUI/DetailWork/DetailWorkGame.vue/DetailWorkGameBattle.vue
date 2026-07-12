@@ -52,6 +52,9 @@ const handleKeyUp = (e: KeyboardEvent) => {
 };
 
 const frame = () => {
+	const xTo = gsap.quickTo(soulRef.value, "x", { duration: easeDuration });
+	const yTo = gsap.quickTo(soulRef.value, "y", { duration: easeDuration });
+
 	const soul = soulRef.value?.getBoundingClientRect();
 	const border = borderRef.value?.getBoundingClientRect();
 	if (border && soul) {
@@ -63,7 +66,8 @@ const frame = () => {
 			soulPos.value.y = Math.max(0, soulPos.value.y - easeDistance);
 		if (pressKeys.value.has("ArrowDown"))
 			soulPos.value.y = Math.min(border.height - soul.height, soulPos.value.y + easeDistance);
-		gsap.to(soulRef.value, { ...soulPos.value, duration: easeDuration });
+		xTo(soulPos.value.x);
+		yTo(soulPos.value.y);
 		frameAnimId.value = requestAnimationFrame(frame);
 	}
 	bulletRefs.value.forEach((bullet, index) => {
