@@ -34,29 +34,34 @@ export const DETAIL_EMPTY = "一般你看不到的";
 
 export const DETAIL_WORK_BLOGDATA: DetailWorkBlogCardParams[] = [
 	{
+		title: "main",
+		subtitle: "主页",
 		content: "主页",
 		image: "/images/components/main.png",
-		title: "main",
 	},
 	{
+		title: "blog",
+		subtitle: "笔记",
 		content: "笔记",
 		image: "/images/components/blog.png",
-		title: "blog",
 	},
 	{
+		title: "music",
+		subtitle: "音乐",
 		content: "音乐",
 		image: "/images/components/music.png",
-		title: "music",
 	},
 	{
-		content: "物品",
-		image: "/images/components/item.png",
 		title: "item",
+		subtitle: "沙盒",
+		content: "沙盒",
+		image: "/images/components/item.png",
 	},
 	{
-		content: "图片",
-		image: "/images/components/image.png",
 		title: "image",
+		subtitle: "图片集",
+		content: "图片集",
+		image: "/images/components/image.png",
 	},
 ];
 

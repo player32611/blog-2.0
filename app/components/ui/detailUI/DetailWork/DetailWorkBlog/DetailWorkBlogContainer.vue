@@ -13,10 +13,8 @@ gsap.registerPlugin(Flip);
 const detailStore = useDetailStore();
 const cardParams = ref<params[]>(
 	Array.from(DETAIL_WORK_BLOGDATA, data => ({
+		...data,
 		id: generateId(),
-		content: data.content,
-		image: data.image,
-		title: data.title,
 	})),
 );
 
@@ -76,7 +74,12 @@ onUnmounted(() => {
 <template>
 	<div class="work_blog_container" ref="containerRef">
 		<div class="container_card" v-for="params in cardParams" :key="params.id">
-			<DetailWorkBlogCard :title="params.title" :content="params.content" :image="params.image" />
+			<DetailWorkBlogCard
+				:title="params.title"
+				:subtitle="params.subtitle"
+				:content="params.content"
+				:image="params.image"
+			/>
 		</div>
 	</div>
 </template>

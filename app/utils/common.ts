@@ -466,3 +466,11 @@ export const isOutWindow = (target: Point, distance: number = 0): boolean => {
 export const generateId = (): string => {
 	return Date.now().toString(36) + Math.random().toString(36).substring(2, 8);
 };
+
+/**
+ * 从给定的一系列值中随机选取一个
+ */
+export const randomChoose = <T>(...values: T[]): T | undefined => {
+	if (values.length === 0) return undefined;
+	return values[Math.floor(Math.random() * values.length)];
+};

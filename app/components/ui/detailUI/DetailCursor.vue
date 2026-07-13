@@ -158,11 +158,10 @@ onUnmounted(() => {
 
 .detail_cursor {
 	position: fixed;
-	top: -15px;
-	left: -15px;
+	top: 0px;
+	left: 0px;
 	height: 30px;
 	width: 30px;
-	color: #ff000040;
 	opacity: 0;
 	z-index: variables.$cursor_zIndex;
 	pointer-events: none;

@@ -64,9 +64,10 @@ export interface DetailIntroduceSkillItemParams extends ItemParams {
 }
 
 export interface DetailWorkBlogCardParams {
+	title: PageType;
+	subtitle: string;
 	content: string;
 	image: string;
-	title: PageType;
 }
 
 export interface DetailWorkFloatContainerParams {

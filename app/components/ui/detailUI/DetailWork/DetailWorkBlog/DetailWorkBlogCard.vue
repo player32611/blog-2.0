@@ -2,13 +2,19 @@
 import gsap from "gsap";
 import type { DetailWorkBlogCardParams } from "~/types/components";
 
-const { content, image, title } = defineProps<DetailWorkBlogCardParams>();
+const { title, subtitle, content, image } = defineProps<DetailWorkBlogCardParams>();
+const cardRef = ref<HTMLDivElement | null>(null);
 const previewRef = ref<HTMLDivElement | null>(null);
 const fadeAnim = ref<GSAPTween | null>(null);
 const isFirstEnter = ref<boolean>(true);
 
 let setX: gsap.QuickToFunc;
 let setY: gsap.QuickToFunc;
+const cardColor: { backgroundColor: string; color: string }[] = [
+	{ backgroundColor: "linear-gradient(-45deg, #ff0000 0%, #ffff00 100%)", color: "#ff0000" },
+	{ backgroundColor: "linear-gradient(-45deg, #e81cff 0%, #40c9ff 100%)", color: "#e81cff" },
+	{ backgroundColor: "linear-gradient(-45deg, #74ebd5 0%, #acb6e5 100%)", color: "#74ebd5" },
+];
 
 const move = (e: MouseEvent) => {
 	if (isFirstEnter.value) {
@@ -41,6 +47,9 @@ onMounted(() => {
 		paused: true,
 		duration: 0.1,
 	});
+	const theme = randomChoose(...cardColor);
+	gsap.set(cardRef.value, { "--backgroundColor": theme?.backgroundColor });
+	gsap.set(cardRef.value, { "--color": theme?.color });
 	window.addEventListener("mousemove", move);
 });
 
@@ -51,10 +60,15 @@ onUnmounted(() => {
 
 <template>
 	<!-- From Uiverse.io by gharsh11032000 -->
-	<div class="work_blog_card" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
+	<div
+		class="work_blog_card"
+		@mouseenter="handleMouseEnter"
+		@mouseleave="handleMouseLeave"
+		ref="cardRef"
+	>
 		<p class="heading">{{ title }}</p>
-		<p>Powered By</p>
 		<p>{{ content }}</p>
+		<p>{{ subtitle }}</p>
 	</div>
 	<Teleport to="body">
 		<div class="work_blog_preview" ref="previewRef">
@@ -70,6 +84,8 @@ onUnmounted(() => {
 
 /* From Uiverse.io by gharsh11032000 */
 .work_blog_card {
+	--backgroundColor: none;
+	--color: none;
 	position: relative;
 	padding: 12px;
 	display: flex;
@@ -97,7 +113,7 @@ onUnmounted(() => {
 		width: calc(100% + 10px);
 		height: calc(100% + 10px);
 		border-radius: 10px;
-		background: linear-gradient(-45deg, #e81cff 0%, #40c9ff 100%);
+		background: var(--backgroundColor);
 		z-index: -10;
 		pointer-events: none;
 		transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -105,7 +121,7 @@ onUnmounted(() => {
 
 	p {
 		margin: 0;
-		color: #ffffff;
+		color: var(--color);
 		text-align: center;
 
 		&:not(.heading) {
@@ -119,7 +135,6 @@ onUnmounted(() => {
 		}
 
 		&:last-child {
-			color: #e81cff;
 			font-weight: 600;
 		}
 	}
