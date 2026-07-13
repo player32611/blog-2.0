@@ -84,8 +84,6 @@ onUnmounted(() => {
 
 /* From Uiverse.io by gharsh11032000 */
 .work_blog_card {
-	--backgroundColor: none;
-	--color: none;
 	position: relative;
 	padding: 12px;
 	display: flex;
@@ -116,7 +114,7 @@ onUnmounted(() => {
 		background: var(--backgroundColor);
 		z-index: -10;
 		pointer-events: none;
-		transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 	}
 
 	p {
@@ -125,11 +123,11 @@ onUnmounted(() => {
 		text-align: center;
 
 		&:not(.heading) {
-			font-size: 14px;
+			font-size: 1rem;
 		}
 
-		& .heading {
-			font-size: 20px;
+		&.heading {
+			font-size: 1.2rem;
 			text-transform: capitalize;
 			font-weight: 700;
 		}
@@ -143,7 +141,6 @@ onUnmounted(() => {
 /* From Uiverse.io by Tiagoadag */
 .work_blog_preview {
 	position: fixed;
-	left: -25px;
 	top: -25px;
 	display: flex;
 	justify-content: center;
@@ -162,13 +159,180 @@ onUnmounted(() => {
 		height: 98%;
 		background-color: #1a1a1a;
 		border-radius: 20px;
-		transition: all 0.2s;
 		overflow: hidden;
 
 		.preview_image {
 			height: 100%;
 			width: 100%;
 			object-fit: contain;
+		}
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.6;
+
+	.work_blog_card {
+		padding: 12px * $base-size;
+		gap: 12px * $base-size;
+		width: calc(100% - 12px * 2 * $base-size);
+		height: calc(100% - 12px * 2 * $base-size);
+		border-radius: 8px * $base-size;
+
+		&::before {
+			left: -5px * $base-size;
+			width: calc(100% + 10px * $base-size);
+			height: calc(100% + 10px * $base-size);
+			border-radius: 10px * $base-size;
+		}
+
+		p {
+			&:not(.heading) {
+				font-size: 1rem * $base-size;
+			}
+
+			&.heading {
+				font-size: 1.2rem * $base-size;
+			}
+		}
+	}
+
+	.work_blog_preview {
+		left: -25px * $base-size;
+		top: -25px * $base-size;
+		height: 200px * $base-size;
+		border-radius: 20px * $base-size;
+		box-shadow: 0px 0px 30px * $base-size 1px * $base-size rgba(0, 255, 117, 0.3);
+
+		.preview_inner {
+			border-radius: 20px * $base-size;
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.7;
+
+	.work_blog_card {
+		padding: 12px * $base-size;
+		gap: 12px * $base-size;
+		width: calc(100% - 12px * 2 * $base-size);
+		height: calc(100% - 12px * 2 * $base-size);
+		border-radius: 8px * $base-size;
+
+		&::before {
+			left: -5px * $base-size;
+			width: calc(100% + 10px * $base-size);
+			height: calc(100% + 10px * $base-size);
+			border-radius: 10px * $base-size;
+		}
+
+		p {
+			&:not(.heading) {
+				font-size: 1rem * $base-size;
+			}
+
+			&.heading {
+				font-size: 1.2rem * $base-size;
+			}
+		}
+	}
+
+	.work_blog_preview {
+		left: -25px * $base-size;
+		top: -25px * $base-size;
+		height: 200px * $base-size;
+		border-radius: 20px * $base-size;
+		box-shadow: 0px 0px 30px * $base-size 1px * $base-size rgba(0, 255, 117, 0.3);
+
+		.preview_inner {
+			border-radius: 20px * $base-size;
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.8;
+
+	.work_blog_card {
+		padding: 12px * $base-size;
+		gap: 12px * $base-size;
+		width: calc(100% - 12px * 2 * $base-size);
+		height: calc(100% - 12px * 2 * $base-size);
+		border-radius: 8px * $base-size;
+
+		&::before {
+			left: -5px * $base-size;
+			width: calc(100% + 10px * $base-size);
+			height: calc(100% + 10px * $base-size);
+			border-radius: 10px * $base-size;
+		}
+
+		p {
+			&:not(.heading) {
+				font-size: 1rem * $base-size;
+			}
+
+			&.heading {
+				font-size: 1.2rem * $base-size;
+			}
+		}
+	}
+
+	.work_blog_preview {
+		left: -25px * $base-size;
+		top: -25px * $base-size;
+		height: 200px * $base-size;
+		border-radius: 20px * $base-size;
+		box-shadow: 0px 0px 30px * $base-size 1px * $base-size rgba(0, 255, 117, 0.3);
+
+		.preview_inner {
+			border-radius: 20px * $base-size;
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.9;
+
+	.work_blog_card {
+		padding: 12px * $base-size;
+		gap: 12px * $base-size;
+		width: calc(100% - 12px * 2 * $base-size);
+		height: calc(100% - 12px * 2 * $base-size);
+		border-radius: 8px * $base-size;
+
+		&::before {
+			left: -5px * $base-size;
+			width: calc(100% + 10px * $base-size);
+			height: calc(100% + 10px * $base-size);
+			border-radius: 10px * $base-size;
+		}
+
+		p {
+			&:not(.heading) {
+				font-size: 1rem * $base-size;
+			}
+
+			&.heading {
+				font-size: 1.2rem * $base-size;
+			}
+		}
+	}
+
+	.work_blog_preview {
+		left: -25px * $base-size;
+		top: -25px * $base-size;
+		height: 200px * $base-size;
+		border-radius: 20px * $base-size;
+		box-shadow: 0px 0px 30px * $base-size 1px * $base-size rgba(0, 255, 117, 0.3);
+
+		.preview_inner {
+			border-radius: 20px * $base-size;
 		}
 	}
 }

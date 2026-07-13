@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import DetailWorkBlogBackground from "./DetailWorkBlogBackground.vue";
+import DetailWorkBlogBottom from "./DetailWorkBlogBottom.vue";
 import DetailWorkBlogContainer from "./DetailWorkBlogContainer.vue";
+import DetailWorkBlogTitle from "./DetailWorkBlogTitle.vue";
 </script>
 
 <template>
 	<div class="work_blog">
 		<DetailWorkBlogBackground />
+		<DetailWorkBlogTitle />
 		<DetailWorkBlogContainer />
+		<DetailWorkBlogBottom />
 	</div>
 </template>
 
@@ -14,7 +18,7 @@ import DetailWorkBlogContainer from "./DetailWorkBlogContainer.vue";
 .work_blog {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
 	gap: 20px;
 	height: 100vh;

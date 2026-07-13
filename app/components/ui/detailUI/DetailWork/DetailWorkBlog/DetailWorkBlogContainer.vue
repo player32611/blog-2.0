@@ -129,4 +129,148 @@ onUnmounted(() => {
 		}
 	}
 }
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.6;
+
+	.work_blog_container {
+		height: 500px * $base-size;
+		width: 300px * $base-size;
+		perspective: 100px * $base-size;
+
+		:deep(.container_card) {
+			height: 500px * $base-size;
+			width: 300px * $base-size;
+
+			&:nth-child(4) {
+				left: 20px * $base-size;
+				top: -20px * $base-size;
+			}
+
+			&:nth-child(3) {
+				left: 40px * $base-size;
+				top: -40px * $base-size;
+			}
+
+			&:nth-child(2) {
+				left: 60px * $base-size;
+				top: -60px * $base-size;
+			}
+
+			&:nth-child(1) {
+				left: 80px * $base-size;
+				top: -80px * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.7;
+
+	.work_blog_container {
+		height: 500px * $base-size;
+		width: 300px * $base-size;
+		perspective: 100px * $base-size;
+
+		:deep(.container_card) {
+			height: 500px * $base-size;
+			width: 300px * $base-size;
+
+			&:nth-child(4) {
+				left: 20px * $base-size;
+				top: -20px * $base-size;
+			}
+
+			&:nth-child(3) {
+				left: 40px * $base-size;
+				top: -40px * $base-size;
+			}
+
+			&:nth-child(2) {
+				left: 60px * $base-size;
+				top: -60px * $base-size;
+			}
+
+			&:nth-child(1) {
+				left: 80px * $base-size;
+				top: -80px * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.8;
+
+	.work_blog_container {
+		height: 500px * $base-size;
+		width: 300px * $base-size;
+		perspective: 100px * $base-size;
+
+		:deep(.container_card) {
+			height: 500px * $base-size;
+			width: 300px * $base-size;
+
+			&:nth-child(4) {
+				left: 20px * $base-size;
+				top: -20px * $base-size;
+			}
+
+			&:nth-child(3) {
+				left: 40px * $base-size;
+				top: -40px * $base-size;
+			}
+
+			&:nth-child(2) {
+				left: 60px * $base-size;
+				top: -60px * $base-size;
+			}
+
+			&:nth-child(1) {
+				left: 80px * $base-size;
+				top: -80px * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.9;
+
+	.work_blog_container {
+		height: 500px * $base-size;
+		width: 300px * $base-size;
+		perspective: 100px * $base-size;
+
+		:deep(.container_card) {
+			height: 500px * $base-size;
+			width: 300px * $base-size;
+
+			&:nth-child(4) {
+				left: 20px * $base-size;
+				top: -20px * $base-size;
+			}
+
+			&:nth-child(3) {
+				left: 40px * $base-size;
+				top: -40px * $base-size;
+			}
+
+			&:nth-child(2) {
+				left: 60px * $base-size;
+				top: -60px * $base-size;
+			}
+
+			&:nth-child(1) {
+				left: 80px * $base-size;
+				top: -80px * $base-size;
+			}
+		}
+	}
+}
 </style>
