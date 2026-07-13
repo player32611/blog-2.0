@@ -36,6 +36,7 @@ onMounted(() => {
 	setY = gsap.quickTo(previewRef.value, "y", { duration: 0.4, ease: "power3" });
 	fadeAnim.value = gsap.to(previewRef.value, {
 		autoAlpha: 1,
+		rotate: -10,
 		ease: "none",
 		paused: true,
 		duration: 0.1,
@@ -51,13 +52,15 @@ onUnmounted(() => {
 <template>
 	<!-- From Uiverse.io by gharsh11032000 -->
 	<div class="work_blog_card" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
-		<p class="heading">Popular this month</p>
+		<p class="heading">{{ title }}</p>
 		<p>Powered By</p>
-		<p>Uiverse</p>
+		<p>{{ content }}</p>
 	</div>
 	<Teleport to="body">
 		<div class="work_blog_preview" ref="previewRef">
-			<div class="preview_inner"></div>
+			<div class="preview_inner">
+				<img class="preview_image" :src="image" alt="111" />
+			</div>
 		</div>
 	</Teleport>
 </template>
@@ -68,14 +71,15 @@ onUnmounted(() => {
 /* From Uiverse.io by gharsh11032000 */
 .work_blog_card {
 	position: relative;
-	width: calc(100% - 12px * 2);
-	height: calc(100% - 12px * 2);
-	background-color: #000;
+	padding: 12px;
 	display: flex;
 	flex-direction: column;
-	justify-content: end;
-	padding: 12px;
+	justify-content: space-between;
 	gap: 12px;
+	width: calc(100% - 12px * 2);
+	height: calc(100% - 12px * 2);
+	font-family: "方正基础像素体";
+	background-color: #000000;
 	border-radius: 8px;
 
 	&:hover {
@@ -100,7 +104,9 @@ onUnmounted(() => {
 	}
 
 	p {
+		margin: 0;
 		color: #ffffff;
+		text-align: center;
 
 		&:not(.heading) {
 			font-size: 14px;
@@ -127,8 +133,7 @@ onUnmounted(() => {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 50px;
-	width: 50px;
+	height: 200px;
 	background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
 	border-radius: 20px;
 	box-shadow: 0px 0px 30px 1px rgba(0, 255, 117, 0.3);
@@ -143,6 +148,13 @@ onUnmounted(() => {
 		background-color: #1a1a1a;
 		border-radius: 20px;
 		transition: all 0.2s;
+		overflow: hidden;
+
+		.preview_image {
+			height: 100%;
+			width: 100%;
+			object-fit: contain;
+		}
 	}
 }
 </style>

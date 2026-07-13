@@ -124,6 +124,7 @@ defineExpose<DetailWorkFloatContainerInstance>({
 		height: 30px;
 		width: 30px;
 		transform-origin: center center;
+		filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.237));
 		user-select: none;
 
 		#bullet {

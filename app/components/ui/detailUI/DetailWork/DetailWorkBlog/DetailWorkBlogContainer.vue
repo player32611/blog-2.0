@@ -8,10 +8,9 @@ import DetailWorkBlogCard from "./DetailWorkBlogCard.vue";
 interface params extends DetailWorkBlogCardParams {
 	id: string;
 }
-gsap.registerPlugin(Flip);
 
-const containerRef = ref<HTMLDivElement | null>(null);
-const nextIndex = ref<number>(5);
+gsap.registerPlugin(Flip);
+const detailStore = useDetailStore();
 const cardParams = ref<params[]>(
 	Array.from(DETAIL_WORK_BLOGDATA, data => ({
 		id: generateId(),
@@ -22,13 +21,15 @@ const cardParams = ref<params[]>(
 );
 
 const moveCard = () => {
-	const first = cardParams.value[0];
-	if (!first) return;
+	const first = cardParams.value[DETAIL_WORK_BLOGDATA.length - 1];
+	const second = cardParams.value[DETAIL_WORK_BLOGDATA.length - 2];
+	if (!first || !second) return;
 	cardParams.value.unshift({
 		...first,
 		id: generateId(),
 	});
 	cardParams.value.pop();
+	detailStore.setWorkBlogCurrentCard(second);
 };
 
 const handleClick = async () => {
