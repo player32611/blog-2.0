@@ -100,7 +100,7 @@ defineExpose<ItemInstance>({
 	user-select: none;
 	pointer-events: none;
 	z-index: variables.$float_zIndex;
-	filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.137));
+	filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.337));
 
 	&::before {
 		content: "";

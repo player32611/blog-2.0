@@ -25,3 +25,5 @@ export type BlogCollectionItems =
 export type MusicPlayingMode = "RepeatSingle" | "RepeatAll" | "RandomAll" | "OrderAll";
 
 export type NetworkLoadingState = "loading" | "success" | "error";
+
+export type PageType = "main" | "blog" | "music" | "item" | "image" | "detail";

@@ -54,6 +54,7 @@ $base-size: 0.6;
 	position: absolute;
 	width: 50px * $base-size;
 	height: 120px * $base-size;
+	filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.537));
 	user-select: none;
 	pointer-events: none;
 

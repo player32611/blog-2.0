@@ -1,5 +1,5 @@
 import type { Body } from "matter-js";
-import type { BlogCollectionItems, BlogCollections } from "./config";
+import type { BlogCollectionItems, BlogCollections, PageType } from "./config";
 import type { MusicInfo } from "./common";
 
 export interface Arrow1Params {
@@ -63,8 +63,10 @@ export interface DetailIntroduceSkillItemParams extends ItemParams {
 	skill: string;
 }
 
-export interface DetailWorkBlogItemParams {
+export interface DetailWorkBlogCardParams {
+	content: string;
 	image: string;
+	title: PageType;
 }
 
 export interface DetailWorkFloatContainerParams {

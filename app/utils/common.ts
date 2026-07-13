@@ -458,3 +458,11 @@ export const isOutWindow = (target: Point, distance: number = 0): boolean => {
 		target.y > window.innerHeight + distance
 	);
 };
+
+/**
+ * 随机生成 ID
+ * @returns {string} 随机 ID
+ */
+export const generateId = (): string => {
+	return Date.now().toString(36) + Math.random().toString(36).substring(2, 8);
+};

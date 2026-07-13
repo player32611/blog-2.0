@@ -1,5 +1,6 @@
 import type { BlogCollections } from "~/types/config";
 import type { MusicInfo, ImageInfo } from "~/types/common";
+import type { DetailWorkBlogCardParams } from "~/types/components";
 
 export const BLOG_COLLECTIONS: BlogCollections[] = [
 	"front_end",
@@ -30,6 +31,34 @@ export const DETAIL_SKILLS = [
 ];
 
 export const DETAIL_EMPTY = "一般你看不到的";
+
+export const DETAIL_WORK_BLOGDATA: DetailWorkBlogCardParams[] = [
+	{
+		content: "主页",
+		image: "/images/components/main.png",
+		title: "main",
+	},
+	{
+		content: "笔记",
+		image: "/images/components/blog.png",
+		title: "blog",
+	},
+	{
+		content: "音乐",
+		image: "/images/components/music.png",
+		title: "music",
+	},
+	{
+		content: "物品",
+		image: "/images/components/item.png",
+		title: "item",
+	},
+	{
+		content: "图片",
+		image: "/images/components/image.png",
+		title: "image",
+	},
+];
 
 export const MAIN_NAME = "FRISK";
 

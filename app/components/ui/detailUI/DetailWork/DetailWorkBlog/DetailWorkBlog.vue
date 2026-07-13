@@ -1,25 +1,12 @@
 <script setup lang="ts">
-import DetailWorkBlogCard from "./DetailWorkBlogCard.vue";
+import DetailWorkBlogBackground from "./DetailWorkBlogBackground.vue";
 import DetailWorkBlogContainer from "./DetailWorkBlogContainer.vue";
-import DetailWorkBlogItem from "./DetailWorkBlogItem.vue";
-import blogImg from "/images/components/blog.png";
-import imageImg from "/images/components/image.png";
-import itemImg from "/images/components/item.png";
-import mainImg from "/images/components/main.png";
-import musicImg from "/images/components/music.png";
 </script>
 
 <template>
 	<div class="work_blog">
-		<!-- <DetailWorkBlogCard /> -->
+		<DetailWorkBlogBackground />
 		<DetailWorkBlogContainer />
-		<!-- <DetailWorkBlogItem :image="blogImg" />
-		<DetailWorkBlogItem :image="musicImg" />
-		<DetailWorkBlogItem :image="itemImg" />
-		<DetailWorkBlogItem :image="imageImg" />
-		<div class="main_container">
-			<DetailWorkBlogItem :image="mainImg" />
-		</div> -->
 	</div>
 </template>
 

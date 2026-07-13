@@ -1,29 +1,34 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import { Flip } from "gsap/all";
+import type { DetailWorkBlogCardParams } from "~/types/components";
 
 import DetailWorkBlogCard from "./DetailWorkBlogCard.vue";
 
+interface params extends DetailWorkBlogCardParams {
+	id: string;
+}
 gsap.registerPlugin(Flip);
 
 const containerRef = ref<HTMLDivElement | null>(null);
 const nextIndex = ref<number>(5);
-const cardParams = ref([{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]);
-
-const lastCard = computed<HTMLDivElement | null>(
-	() => containerRef.value?.querySelector(".container_card:last-child") || null,
+const cardParams = ref<params[]>(
+	Array.from(DETAIL_WORK_BLOGDATA, data => ({
+		id: generateId(),
+		content: data.content,
+		image: data.image,
+		title: data.title,
+	})),
 );
 
 const moveCard = () => {
-	if (containerRef.value && lastCard.value) {
-		console.log(cardParams.value);
-		lastCard.value.style.display = "none";
-		cardParams.value.unshift({
-			id: nextIndex.value++,
-		});
-
-		cardParams.value.pop();
-	}
+	const first = cardParams.value[0];
+	if (!first) return;
+	cardParams.value.unshift({
+		...first,
+		id: generateId(),
+	});
+	cardParams.value.pop();
 };
 
 const handleClick = async () => {
@@ -37,8 +42,8 @@ const handleClick = async () => {
 		targets: ".container_card",
 		ease: "sine.inOut",
 		absolute: true,
-		onEnter: elements => {
-			return gsap.from(elements, {
+		onEnter: element => {
+			return gsap.from(element, {
 				duration: 0.3,
 				yPercent: 20,
 				opacity: 0,
@@ -53,23 +58,24 @@ const handleClick = async () => {
 				transformOrigin: "bottom left",
 				opacity: 0,
 				ease: "expo.out",
-				onComplete() {
-					console.log("logging", element[0]);
-				},
 			});
 		},
 	});
 };
 
-onMounted(() => {});
+onMounted(() => {
+	window.addEventListener("click", handleClick);
+});
 
-onUnmounted(() => {});
+onUnmounted(() => {
+	window.removeEventListener("click", handleClick);
+});
 </script>
 
 <template>
-	<div class="work_blog_container" ref="containerRef" @click="handleClick">
+	<div class="work_blog_container" ref="containerRef">
 		<div class="container_card" v-for="params in cardParams" :key="params.id">
-			<DetailWorkBlogCard />
+			<DetailWorkBlogCard :title="params.title" :content="params.content" :image="params.image" />
 		</div>
 	</div>
 </template>
@@ -85,27 +91,37 @@ onUnmounted(() => {});
 		position: absolute;
 		height: 500px;
 		width: 300px;
-		background: red;
+		pointer-events: none;
 
 		&:nth-child(5) {
 			left: 0;
 			top: 0;
+			z-index: 10;
+			pointer-events: all;
 		}
+
 		&:nth-child(4) {
 			left: 20px;
 			top: -20px;
+			z-index: 9;
 		}
+
 		&:nth-child(3) {
 			left: 40px;
 			top: -40px;
+			z-index: 8;
 		}
+
 		&:nth-child(2) {
 			left: 60px;
 			top: -60px;
+			z-index: 7;
 		}
+
 		&:nth-child(1) {
 			left: 80px;
 			top: -80px;
+			z-index: 6;
 		}
 	}
 }

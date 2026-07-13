@@ -19,7 +19,7 @@ onMounted(() => {
 	right: 0px;
 	bottom: -25px;
 	z-index: variables.$float_zIndex;
-	filter: drop-shadow(10px 10px 5px rgba(0, 0, 0, 0.137));
+	filter: drop-shadow(10px 10px 5px rgba(0, 0, 0, 0.337));
 }
 
 /* ========== 超小屏（< 576px）========== */
