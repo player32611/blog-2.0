@@ -11,7 +11,13 @@
 .work_blog_bottom {
 	position: relative;
 	width: 100%;
-	background-color: #fff;
 	text-align: center;
+	background-color: #fff;
+
+	// .bottom_link {
+	// }
+
+	// .bottom_tip {
+	// }
 }
 </style>

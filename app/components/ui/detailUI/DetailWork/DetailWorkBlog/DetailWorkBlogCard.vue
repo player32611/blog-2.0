@@ -2,7 +2,7 @@
 import gsap from "gsap";
 import type { DetailWorkBlogCardParams } from "~/types/components";
 
-const { title, subtitle, content, image } = defineProps<DetailWorkBlogCardParams>();
+const { title, subtitle, icon, content, image } = defineProps<DetailWorkBlogCardParams>();
 const cardRef = ref<HTMLDivElement | null>(null);
 const previewRef = ref<HTMLDivElement | null>(null);
 const fadeAnim = ref<GSAPTween | null>(null);
@@ -66,9 +66,15 @@ onUnmounted(() => {
 		@mouseleave="handleMouseLeave"
 		ref="cardRef"
 	>
-		<p class="heading">{{ title }}</p>
-		<p>{{ content }}</p>
-		<p>{{ subtitle }}</p>
+		<p class="top">{{ title }}</p>
+		<p class="left">{{ subtitle }}</p>
+		<p class="center">
+			<span class="icon" v-html="icon"></span>
+			{{ content }}
+			<span class="icon" v-html="icon"></span>
+		</p>
+		<p class="right">{{ subtitle }}</p>
+		<p class="bottom">{{ title }}</p>
 	</div>
 	<Teleport to="body">
 		<div class="work_blog_preview" ref="previewRef">
@@ -86,15 +92,17 @@ onUnmounted(() => {
 .work_blog_card {
 	position: relative;
 	padding: 12px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	gap: 12px;
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	grid-template-rows: auto 1fr auto;
+	justify-items: center;
+	align-items: center;
 	width: calc(100% - 12px * 2);
 	height: calc(100% - 12px * 2);
 	font-family: "方正基础像素体";
 	background-color: #000000;
 	border-radius: 8px;
+	user-select: none;
 
 	&:hover {
 		&::before {
@@ -122,18 +130,44 @@ onUnmounted(() => {
 		color: var(--color);
 		text-align: center;
 
-		&:not(.heading) {
-			font-size: 1rem;
-		}
-
-		&.heading {
+		&.top {
+			grid-area: 1 / 1 / 2 / 4;
 			font-size: 1.2rem;
 			text-transform: capitalize;
 			font-weight: 700;
 		}
 
-		&:last-child {
-			font-weight: 600;
+		&.left {
+			grid-area: 2 / 1 / 3 / 2;
+			font-size: 0.8rem;
+			text-transform: capitalize;
+			transform: rotate(-90deg);
+		}
+
+		&.center {
+			display: flex;
+			flex-direction: column;
+			gap: 50px;
+			font-size: 1rem;
+
+			.icon {
+				color: var(--color);
+				font-size: 5rem;
+			}
+		}
+
+		&.right {
+			grid-area: 2 / 3 / 3 / 4;
+			font-size: 0.8rem;
+			text-transform: capitalize;
+			transform: rotate(90deg);
+		}
+
+		&.bottom {
+			grid-area: 3 / 1 / 4 / 4;
+			font-size: 1.2rem;
+			text-transform: capitalize;
+			font-weight: 700;
 		}
 	}
 }
@@ -175,7 +209,6 @@ onUnmounted(() => {
 
 	.work_blog_card {
 		padding: 12px * $base-size;
-		gap: 12px * $base-size;
 		width: calc(100% - 12px * 2 * $base-size);
 		height: calc(100% - 12px * 2 * $base-size);
 		border-radius: 8px * $base-size;
@@ -188,11 +221,28 @@ onUnmounted(() => {
 		}
 
 		p {
-			&:not(.heading) {
-				font-size: 1rem * $base-size;
+			&.top {
+				font-size: 1.2rem * $base-size;
 			}
 
-			&.heading {
+			&.left {
+				font-size: 0.8rem * $base-size;
+			}
+
+			&.center {
+				gap: 50px * $base-size;
+				font-size: 1rem * $base-size;
+
+				.icon {
+					font-size: 5rem * $base-size;
+				}
+			}
+
+			&.right {
+				font-size: 0.8rem * $base-size;
+			}
+
+			&.bottom {
 				font-size: 1.2rem * $base-size;
 			}
 		}
@@ -217,7 +267,6 @@ onUnmounted(() => {
 
 	.work_blog_card {
 		padding: 12px * $base-size;
-		gap: 12px * $base-size;
 		width: calc(100% - 12px * 2 * $base-size);
 		height: calc(100% - 12px * 2 * $base-size);
 		border-radius: 8px * $base-size;
@@ -230,11 +279,28 @@ onUnmounted(() => {
 		}
 
 		p {
-			&:not(.heading) {
-				font-size: 1rem * $base-size;
+			&.top {
+				font-size: 1.2rem * $base-size;
 			}
 
-			&.heading {
+			&.left {
+				font-size: 0.8rem * $base-size;
+			}
+
+			&.center {
+				gap: 50px * $base-size;
+				font-size: 1rem * $base-size;
+
+				.icon {
+					font-size: 5rem * $base-size;
+				}
+			}
+
+			&.right {
+				font-size: 0.8rem * $base-size;
+			}
+
+			&.bottom {
 				font-size: 1.2rem * $base-size;
 			}
 		}
@@ -259,7 +325,6 @@ onUnmounted(() => {
 
 	.work_blog_card {
 		padding: 12px * $base-size;
-		gap: 12px * $base-size;
 		width: calc(100% - 12px * 2 * $base-size);
 		height: calc(100% - 12px * 2 * $base-size);
 		border-radius: 8px * $base-size;
@@ -272,11 +337,28 @@ onUnmounted(() => {
 		}
 
 		p {
-			&:not(.heading) {
-				font-size: 1rem * $base-size;
+			&.top {
+				font-size: 1.2rem * $base-size;
 			}
 
-			&.heading {
+			&.left {
+				font-size: 0.8rem * $base-size;
+			}
+
+			&.center {
+				gap: 50px * $base-size;
+				font-size: 1rem * $base-size;
+
+				.icon {
+					font-size: 5rem * $base-size;
+				}
+			}
+
+			&.right {
+				font-size: 0.8rem * $base-size;
+			}
+
+			&.bottom {
 				font-size: 1.2rem * $base-size;
 			}
 		}
@@ -301,7 +383,6 @@ onUnmounted(() => {
 
 	.work_blog_card {
 		padding: 12px * $base-size;
-		gap: 12px * $base-size;
 		width: calc(100% - 12px * 2 * $base-size);
 		height: calc(100% - 12px * 2 * $base-size);
 		border-radius: 8px * $base-size;
@@ -314,11 +395,28 @@ onUnmounted(() => {
 		}
 
 		p {
-			&:not(.heading) {
-				font-size: 1rem * $base-size;
+			&.top {
+				font-size: 1.2rem * $base-size;
 			}
 
-			&.heading {
+			&.left {
+				font-size: 0.8rem * $base-size;
+			}
+
+			&.center {
+				gap: 50px * $base-size;
+				font-size: 1rem * $base-size;
+
+				.icon {
+					font-size: 5rem * $base-size;
+				}
+			}
+
+			&.right {
+				font-size: 0.8rem * $base-size;
+			}
+
+			&.bottom {
 				font-size: 1.2rem * $base-size;
 			}
 		}

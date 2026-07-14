@@ -77,6 +77,7 @@ onUnmounted(() => {
 			<DetailWorkBlogCard
 				:title="params.title"
 				:subtitle="params.subtitle"
+				:icon="params.icon"
 				:content="params.content"
 				:image="params.image"
 			/>
