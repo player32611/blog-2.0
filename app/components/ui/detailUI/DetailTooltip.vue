@@ -9,9 +9,9 @@ const appearInterval = ref<number | null>(null);
 const currentAnim = ref<GSAPTween | null>(null);
 const tooltipDirection = ref<"top" | "bottom">("bottom");
 
-const appearDelay: number = 5000;
-const shakeDuration: number = 1;
-const shakeOpacity: number = 0.7;
+const appearDelay = 5000;
+const shakeDuration = 1;
+const shakeOpacity = 0.7;
 
 const handleScrollStart = () => {
 	currentAnim.value?.kill();

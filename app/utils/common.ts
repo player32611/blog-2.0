@@ -136,8 +136,7 @@ export const throttle = (func: Function, delay: number): Function => {
  */
 export const isMobile = (): boolean => {
 	if (import.meta.server) return false;
-
-	return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+	return window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 };
 
 /**
