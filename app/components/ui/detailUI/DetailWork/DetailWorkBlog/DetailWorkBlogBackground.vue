@@ -34,6 +34,8 @@ watch(
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 .work_blog_background {
 	position: absolute;
 	top: 0;
@@ -42,6 +44,7 @@ watch(
 	height: 100%;
 	filter: blur(10px);
 	user-select: none;
+	z-index: variables.$background_zIndex;
 
 	.background_image {
 		position: absolute;

@@ -5,8 +5,8 @@ import Bubble from "~/components/exhibit/Bubble.vue";
 
 const bubbleRefs = ref<HTMLDivElement[] | null>(null);
 
-const bubbleNum: number = 10;
-const moveDuration: number = 1;
+const bubbleNum = 10;
+const moveDuration = 1;
 
 const handleClick = (event: MouseEvent) => {
 	bubbleRefs.value?.forEach(el => {

@@ -15,30 +15,22 @@ const { activeIndex } = defineProps<DetailWorkFloatContainerParams>();
 
 const itemRefs = ref<HTMLDivElement[]>([]);
 
-const itemNum: number = 5;
-const floatingSpeed: number[] = Array.from({ length: itemNum }, () => Math.random() * 0.4 + 0.1);
-const rotateAngle: number[] = Array.from({ length: itemNum }, () => Math.random() * 360);
-const rotateSpeed: number[] = Array.from(
-	{ length: itemNum },
-	() => randomSign() * (Math.random() * 2 + 0.5),
-);
+const itemNum = 5;
+const floatingSpeed = Array.from({ length: itemNum }, () => randomFloat(0.1, 0.2));
+const rotateAngle = Array.from({ length: itemNum }, () => Math.random() * 360);
+const rotateSpeed = Array.from({ length: itemNum }, () => randomSign() * randomFloat(0.5, 2));
 
 const ticking = () => {
 	const smoother = ScrollSmoother.get();
 	if (!smoother) return;
 	const baseY = smoother.scrollTop() - 4 * window.innerHeight;
 	itemRefs.value.forEach((el, i) => {
+		const innerRope = el.querySelector(".rope_container");
+		if (!innerRope) return;
 		const y = (baseY * (floatingSpeed[i] || 0)) % (window.innerHeight + el.offsetHeight);
 		const rotation = ((rotateAngle[i] || 0) + baseY * (rotateSpeed[i] || 0)) % 360;
-		gsap.set(el, {
-			y,
-			rotation,
-			onUpdate: () => {
-				const innerRope = el.querySelector(".rope_container");
-				// if (!innerRope) return;
-				gsap.set(innerRope, { height: y, rotation: -rotation });
-			},
-		});
+		gsap.set(el, { y, rotation });
+		gsap.set(innerRope, { height: y, rotation: -rotation });
 	});
 };
 

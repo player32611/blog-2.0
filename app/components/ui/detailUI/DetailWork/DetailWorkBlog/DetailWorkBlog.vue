@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import DetailWorkBlogBackground from "./DetailWorkBlogBackground.vue";
-import DetailWorkBlogBottom from "./DetailWorkBlogBottom.vue";
 import DetailWorkBlogContainer from "./DetailWorkBlogContainer.vue";
+import DetailWorkBlogLink from "./DetailWorkBlogLink.vue";
+import DetailWorkBlogTip from "./DetailWorkBlogTip.vue";
 import DetailWorkBlogTitle from "./DetailWorkBlogTitle.vue";
 </script>
 
@@ -10,7 +11,10 @@ import DetailWorkBlogTitle from "./DetailWorkBlogTitle.vue";
 		<DetailWorkBlogBackground />
 		<DetailWorkBlogTitle />
 		<DetailWorkBlogContainer />
-		<DetailWorkBlogBottom />
+		<div>
+			<DetailWorkBlogLink />
+			<DetailWorkBlogTip />
+		</div>
 	</div>
 </template>
 

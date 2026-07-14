@@ -25,8 +25,8 @@ const direction = ref<"forward" | "backward">("forward");
 onMounted(() => {
 	const triggerPoints: { start: number; end: number }[] = Array.from({ length: 3 }, (_, index) => {
 		return {
-			start: index * window.innerHeight,
-			end: (index + 1) * window.innerHeight,
+			start: index * window.innerHeight * 2,
+			end: (index + 1) * window.innerHeight * 2,
 		};
 	});
 	scrollAnim.value = ScrollTrigger.create({
@@ -49,7 +49,6 @@ onMounted(() => {
 			floatRef.value?.stopFloating();
 		},
 		onUpdate: self => {
-			const smoother = ScrollSmoother.get();
 			const scrolledDistance = self.scroll() - self.start;
 			triggerPoints.forEach((point, index) => {
 				if (

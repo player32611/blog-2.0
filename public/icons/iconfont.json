@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "43696527",
+      "name": "确认",
+      "font_class": "queren",
+      "unicode": "e780",
+      "unicode_decimal": 59264
+    },
+    {
+      "icon_id": "44349628",
+      "name": "点击",
+      "font_class": "dianji",
+      "unicode": "e886",
+      "unicode_decimal": 59526
+    },
+    {
       "icon_id": "43701058",
       "name": "首页-4",
       "font_class": "shouye-4",
