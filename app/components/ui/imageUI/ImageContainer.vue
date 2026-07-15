@@ -11,13 +11,14 @@ const { drawImage, drawPlaceholder } = useCanvasDrawing(canvasRef);
 const isDragging = ref<boolean>(false);
 const velocityX = ref<number>(0);
 const velocityY = ref<number>(0);
-const acceleration: number = 0.1; // 加速度系数
-const friction: number = 0.98; // 摩擦力系数（越小减速越快，越大滑动越久）
-const mouseSensitivity: number = 0.5; // 鼠标灵敏度
 // 触摸事件跟踪
 const lastTouchX = ref<number>(0);
 const lastTouchY = ref<number>(0);
-const interactVelocity: number = 2; // 允许交互的速度阈值
+
+const acceleration: number = 0.1; // 加速度系数
+const friction: number = 0.98; // 摩擦力系数（越小减速越快，越大滑动越久）
+const mouseSensitivity: number = 0.5; // 鼠标灵敏度
+const interactVelocity = 2; // 允许交互的速度阈值
 
 const handleMouseDown = () => {
 	isDragging.value = true;

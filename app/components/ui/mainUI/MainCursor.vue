@@ -11,10 +11,10 @@ const rotateAnimation = ref<GSAPAnimation | null>(null);
 const traceRef = ref<HTMLDivElement | null>(null);
 const currentMousePos = ref<Point>({ x: -100, y: -100 });
 
-const easeTime: number = 0.2; // 缓动时间（s）
-const outTime: number = 0.5; // 离开变化时间（s）
-const traceDuration: number = 1; // 轨迹持续时间（s）
-const traceDeg: number = 0.5; // 触发轨迹的角度上下界（deg）
+const easeTime = 0.2; // 缓动时间（s）
+const outTime = 0.5; // 离开变化时间（s）
+const traceDuration = 1; // 轨迹持续时间（s）
+const traceDeg = 0.5; // 触发轨迹的角度上下界（deg）
 
 const makeTrace = () => {
 	if (!traceRef.value || !cursorRef.value || gsap.getProperty(traceRef.value!, "opacity") != 0)

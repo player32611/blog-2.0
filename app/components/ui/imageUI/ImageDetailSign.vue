@@ -5,7 +5,7 @@ const imageStore = useImageStore();
 const signRef = ref<HTMLDivElement | null>(null);
 const signHeadRef = ref<HTMLDivElement | null>(null);
 
-const easeTime: number = 0.5;
+const easeTime = 0.5;
 
 const handleMouseEnter = () => {
 	if (!imageStore.activeImageData || !signHeadRef.value) return;

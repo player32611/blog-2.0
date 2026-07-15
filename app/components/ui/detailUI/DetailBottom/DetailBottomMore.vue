@@ -9,7 +9,7 @@ const buttonRef = ref<HTMLDivElement | null>(null);
 const placeHolderRef = ref<HTMLDivElement | null>(null);
 const anim = ref<GSAPTimeline | null>(null);
 
-const animDuration: number = 1;
+const animDuration = 1;
 
 const triggerAnim = () => {
 	anim.value = gsap.timeline().fromTo(

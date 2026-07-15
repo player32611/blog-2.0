@@ -11,8 +11,8 @@ const pageRefs = ref<HTMLDivElement[]>([]);
 const currentPage = ref<number>(0);
 const changeAnim = ref<GSAPTween | null>(null);
 
-const pageNum: number = 3;
-const changeDuration: number = 1;
+const pageNum = 3;
+const changeDuration = 1;
 
 const handleChangePage = (step: -1 | 1) => {
 	if (currentPage.value + step < 0 || pageNum <= currentPage.value + step || changeAnim.value)

@@ -6,7 +6,7 @@ import DinoGame from "~/components/exhibit/DinoGame.vue";
 const maskRef = ref<HTMLDivElement | null>(null);
 const maskState = ref<"in" | "out">("in");
 
-const easeTime: number = 0.75;
+const easeTime = 0.75;
 
 const maskIn = () => {
 	gsap.timeline().to(maskRef.value, {

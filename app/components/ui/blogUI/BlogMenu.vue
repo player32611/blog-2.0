@@ -8,7 +8,7 @@ import RotatePencil from "~/components/exhibit/RotatePencil.vue";
 const menuRef = ref<HTMLDivElement | null>(null);
 const menuState = ref<"in" | "out">("in");
 
-const easeTime: number = 0.75;
+const easeTime = 0.75;
 
 const menuIn = () => {
 	gsap.timeline().to(menuRef.value, {

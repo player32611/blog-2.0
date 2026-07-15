@@ -6,10 +6,10 @@ const stars = ref<{ left: string; j: number }[]>([]);
 const starRefs = ref<HTMLDivElement[]>([]);
 const starAnims = ref<GSAPAnimation[]>([]);
 
-const moonStarNum: number = 40;
-const moonStarMaxDely: number = 10;
-const moonStarMaxDur: number = 20;
-const moonStarMinDur: number = 5;
+const moonStarNum = 40;
+const moonStarMaxDely = 10;
+const moonStarMaxDur = 20;
+const moonStarMinDur = 5;
 
 const createStars = async () => {
 	stars.value = Array.from({ length: moonStarNum }, () => ({

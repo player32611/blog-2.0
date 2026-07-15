@@ -8,7 +8,7 @@ const progressRef = ref<HTMLDivElement | null>(null);
 
 const style: Record<string, string | number> = { cursor: "none" };
 const iconStyle: Record<string, string | number> = { fontSize: "0.7em" };
-const changeTime: number = 1;
+const changeTime = 1;
 
 const handleClick = () => {
 	window.open("https://gamejolt.com/@player32611", "_blank", "noopener,noreferrer");

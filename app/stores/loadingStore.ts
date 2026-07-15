@@ -8,30 +8,30 @@ export const useLoadingStore = defineStore(
 		const isLoading = ref<boolean>(true);
 		const router = useRouter();
 
-		function initLoadingRef(loading: LoadingInstance) {
+		const initLoadingRef = (loading: LoadingInstance) => {
 			loadingRef.value = loading;
-		}
+		};
 
-		function setIsLoading(state: boolean) {
+		const setIsLoading = (state: boolean) => {
 			isLoading.value = state;
-		}
+		};
 
-		function loadingIn(next: () => void) {
+		const loadingIn = (next: () => void) => {
 			if (isLoading.value) return;
 			loadingRef.value?.loadingIn(next);
 			isLoading.value = true;
-		}
+		};
 
-		function loadingOut() {
+		const loadingOut = () => {
 			if (!isLoading.value) return;
 			loadingRef.value?.loadingOut();
-		}
+		};
 
-		function loadingNavigate(target: string | number) {
+		const loadingNavigate = (target: string | number) => {
 			if (isLoading.value) return;
 			if (typeof target === "string") navigateTo(target);
 			else if (typeof target === "number") router.go(target);
-		}
+		};
 
 		return {
 			loadingRef,

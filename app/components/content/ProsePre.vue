@@ -8,7 +8,7 @@ const props = defineProps({
 	class: { type: String, default: null },
 });
 
-const copied = ref(false);
+const copied = ref<boolean>(false);
 
 const copyCode = async () => {
 	await navigator.clipboard.writeText(props.code);

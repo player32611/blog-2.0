@@ -5,10 +5,11 @@ import type { FaultTextParams } from "~/types/components";
 const { text, style } = defineProps<FaultTextParams>();
 const textRefs = ref<HTMLParagraphElement[]>([]);
 const intervalRef = ref<number | null>(null);
-const faultDuration: number = 0.05;
-const faultTime: number = 1000;
-const faultTextNumber: number = 3;
-const faultTranslate: number = 60;
+
+const faultDuration = 0.05;
+const faultTime = 1000;
+const faultTextNumber = 3;
+const faultTranslate = 60;
 
 onMounted(() => {
 	intervalRef.value = setInterval(() => {

@@ -9,8 +9,8 @@ const handleRef = ref<HTMLDivElement | null>(null);
 const mountAnim = ref<GSAPTween | null>(null);
 const handleShakeAnim = ref<GSAPTween | null>(null);
 
-const mountDuration: number = 1;
-const handleShakeDuration: number = 0.5;
+const mountDuration = 1;
+const handleShakeDuration = 0.5;
 
 onMounted(() => {
 	mountAnim.value = gsap.fromTo(

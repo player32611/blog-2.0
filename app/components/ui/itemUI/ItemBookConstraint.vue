@@ -11,7 +11,8 @@ const { x, y, angle } = defineProps<ItemParams>();
 const itemRef = ref<HTMLDivElement | null>(null);
 const pageRef = ref<SVGAElement | null>(null);
 const animationRef = ref<GSAPAnimation | null>();
-const animationDuration: number = 0.15;
+
+const animationDuration = 0.15;
 
 const createItem = (x: number, y: number, angle: number): Body | null => {
 	if (!itemRef.value) return null;

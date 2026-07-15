@@ -5,10 +5,10 @@ const imageStore = useImageStore();
 const cursorRef = ref<HTMLDivElement | null>(null);
 const rotateAnimation = ref<GSAPAnimation | null>(null); // 旋转动画引用
 
-const easeTime: number = 0.2; // 缓动时间
-const outTime: number = 0.5; // 离开变化时间（s）
-const cursorScale: number = 1.1; // 光标缩放比例
-const dampCoefficient: number = 0.05; // 阻尼系数
+const easeTime = 0.2; // 缓动时间
+const outTime = 0.5; // 离开变化时间（s）
+const cursorScale = 1.1; // 光标缩放比例
+const dampCoefficient = 0.05; // 阻尼系数
 
 const handleMouseDown = (event: MouseEvent) => {
 	if (!cursorRef.value) return;

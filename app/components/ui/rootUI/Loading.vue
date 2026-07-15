@@ -19,11 +19,11 @@ const contentContainerRef = ref<HTMLDivElement | null>(null);
 const contentSplit = ref<SplitText | null>(null);
 const contentAnim = ref<GSAPTimeline | null>(null);
 
-const row: number = 13;
-const line: number = 15;
-const animContainerAnimInterval: number = 1.5;
-const contentAnimDuration: number = 3;
-const contentAnimStagger: number = 0.2;
+const row = 13;
+const line = 15;
+const animContainerAnimInterval = 1.5;
+const contentAnimDuration = 3;
+const contentAnimStagger = 0.2;
 
 const createBlocks = () => {
 	if (!loadingRef.value) return;

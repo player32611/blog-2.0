@@ -16,7 +16,7 @@ const loadingState = ref<NetworkLoadingState>("loading");
 const isSmall = ref<boolean>(false);
 const sizeAnim = ref<GSAPTween | null>(null);
 
-const changeTime: number = 0.5;
+const changeTime = 0.5;
 
 const handleLoad = () => {
 	loadingState.value = "success";

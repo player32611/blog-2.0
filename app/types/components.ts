@@ -2,10 +2,6 @@ import type { Body } from "matter-js";
 import type { BlogCollectionItems, BlogCollections, PageType } from "./config";
 import type { MusicInfo } from "./common";
 
-export interface Arrow1Params {
-	direction: "left" | "right" | "up" | "down" | null;
-}
-
 export interface ButtonParams {
 	text: string;
 	icon?: any;

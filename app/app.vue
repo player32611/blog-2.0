@@ -51,7 +51,8 @@ body {
 	height: 100dvh;
 	width: 100%;
 	-webkit-tap-highlight-color: transparent;
-	// overscroll-behavior: none;
+	overscroll-behavior-x: none;
+	overscroll-behavior-y: none;
 
 	&:has(.home) {
 		overflow: hidden;

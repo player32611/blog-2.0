@@ -14,9 +14,9 @@ const animationFrameId = ref<number | null>(null);
 const posArray = ref<CircleRing[]>([]);
 const { drawCircleRing } = useCanvasDrawing(canvasRef);
 
-const circleRingSpeed: number = 2;
-const circleRingColor: string = "#ffffff40";
-const circleRingWidth: number = 2;
+const circleRingSpeed = 2;
+const circleRingColor = "#ffffff40";
+const circleRingWidth = 2;
 
 const handleClick = (e: MouseEvent) => {
 	posArray.value.push({ x: e.x, y: e.y, radius: 0 });

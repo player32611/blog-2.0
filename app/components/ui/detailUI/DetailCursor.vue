@@ -5,8 +5,8 @@ const cursorRef = ref<HTMLDivElement | null>(null);
 const isOut = ref<boolean>(true);
 const isHover = ref<boolean>(false);
 
-const easeTime: number = 1; // 缓动时间（s）
-const outTime: number = 0.5; // 离开变化时间（s）
+const easeTime = 1; // 缓动时间（s）
+const outTime = 0.5; // 离开变化时间（s）
 
 const handleMouseDown = () => {
 	gsap.to(cursorRef.value, { scale: 0.8, duration: outTime / 2 });

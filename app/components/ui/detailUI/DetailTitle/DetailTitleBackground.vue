@@ -10,8 +10,8 @@ const progressEnd = ref<number>(0);
 
 const activeColor: RGBColor = { r: 0, g: 174, b: 240 };
 const defaultColor: RGBColor = { r: 23, g: 23, b: 23 };
-const initDelay: number = 7;
-const progressInterval: number = 1;
+const initDelay = 7;
+const progressInterval = 1;
 
 const getTopPoints = (width: number, height: number): Point[] => {
 	return [

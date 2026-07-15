@@ -11,10 +11,10 @@ const line3Ref = ref<HTMLDivElement | null>(null);
 const appearAnim = ref<GSAPTween | null>(null);
 const codingAnim = ref<GSAPTimeline | null>(null);
 
-const appearDelay: number = 7;
-const appearDuration: number = 1;
-const codingLineDelay: number = 0.5;
-const singleCharDuration: number = 0.1;
+const appearDelay = 7;
+const appearDuration = 1;
+const codingLineDelay = 0.5;
+const singleCharDuration = 0.1;
 
 const language: string = "html";
 const code1: string[] = ["<span class='box'>", "<span class='word'>text</span>", "</span>"];

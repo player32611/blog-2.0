@@ -15,9 +15,10 @@ const word3Ref = ref<HTMLDivElement | null>(null);
 const word3Split = ref<SplitText | null>(null);
 const word3Interval = ref<number | null>(null);
 
-const initDelay: number = 1; // 初始延迟（s）
-const singleDuration: number = 1.2; // 单字符动画时长（s）
-const singleInterval: Ref<number> = computed(() => singleDuration / 3); // 单字符动画间隔（s）
+const singleInterval = computed<number>(() => singleDuration / 3); // 单字符动画间隔（s）
+
+const initDelay = 1; // 初始延迟（s）
+const singleDuration = 1.2; // 单字符动画时长（s）
 
 const word1FirstCharAnim = () => {
 	if (!word1Split.value || !word1Split.value.chars[0]) return;

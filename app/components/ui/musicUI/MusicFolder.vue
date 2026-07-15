@@ -4,9 +4,9 @@ import type { MusicFolderParams } from "~/types/components";
 
 import MusicItem from "./MusicItem.vue";
 
+const { name } = defineProps<MusicFolderParams>();
 const isactive = ref<boolean>(false);
 const folderRef = ref<HTMLDivElement | null>();
-const { name } = defineProps<MusicFolderParams>();
 
 const handelClick = () => {
 	if (!folderRef.value) return;

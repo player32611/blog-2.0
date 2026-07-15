@@ -19,8 +19,9 @@ const movedata = ref<{ moveable: boolean; x: number; y: number; movX: number; mo
 const ani = ref<GSAPTween | null>(null); // gsap 动画
 const standardWidth = ref<number>(1700); // 标准宽度
 const scalesNums = ref<number>(1); // 缩放比例
-const resistance: number = 0.2;
-const easeTime: number = 1;
+
+const resistance = 0.2;
+const easeTime = 1;
 
 const resize = () => {
 	if (viewBoxRef.value && imageRef.value) {
@@ -117,14 +118,7 @@ onUnmounted(() => {
 		@touchend="handleMouseUp"
 		@touchcancel="handleMouseUp"
 	>
-		<img
-			:src="backgroundImg"
-			alt="background"
-			:width="6016 / 3"
-			:height="3541 / 3"
-			draggable="false"
-			ref="imageRef"
-		/>
+		<img :src="backgroundImg" alt="background" draggable="false" ref="imageRef" />
 	</div>
 </template>
 
@@ -143,6 +137,7 @@ onUnmounted(() => {
 	user-select: none;
 
 	img {
+		object-fit: cover;
 		cursor: pointer;
 	}
 }

@@ -11,7 +11,7 @@ const skillRef = ref<HTMLDivElement | null>(null);
 const containerRef = ref<DetailIntroduceSkillContainerInstance | null>(null);
 const mountAnim = ref<GSAPTween | null>(null);
 
-const mountDuration: number = 0.5;
+const mountDuration = 0.5;
 
 onMounted(() => {
 	mountAnim.value = gsap.fromTo(

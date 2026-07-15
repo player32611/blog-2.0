@@ -14,8 +14,8 @@ const lottieAnim = ref<AnimationItem | null>(null);
 const mountAnim = ref<GSAPTween | null>(null);
 const handleShakeAnim = ref<GSAPTween | null>(null);
 
-const mountDuration: number = 1;
-const handleShakeDuration: number = 0.5;
+const mountDuration = 1;
+const handleShakeDuration = 0.5;
 
 onMounted(() => {
 	if (animContainerRef.value) {
@@ -109,7 +109,7 @@ onUnmounted(() => {
 		width: 50%;
 		border-top-left-radius: 10px;
 		border-top-right-radius: 10px;
-		// From Uiverse.io by omar-alghaish
+		/* From Uiverse.io by omar-alghaish */
 		background: linear-gradient(
 			45deg,
 			#ff7f27 25%,

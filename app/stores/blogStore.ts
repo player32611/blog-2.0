@@ -15,7 +15,7 @@ export const useBlogStore = defineStore("blog", (): BlogState & BlogGetter & Blo
 	 *
 	 * @returns 返回包含博客页面数据的响应式引用对象，类型为 MaybeRef<unknown>
 	 */
-	async function useBlogContent(content: BlogCollections) {
+	const useBlogContent = async (content: BlogCollections) => {
 		for (const collection of BLOG_COLLECTIONS) {
 			try {
 				const result = await queryCollection(collection).path(`/${collection}/${content}`).first();
@@ -27,19 +27,19 @@ export const useBlogStore = defineStore("blog", (): BlogState & BlogGetter & Blo
 			}
 		}
 		return null;
-	}
+	};
 
-	function setBlogInstance(mask: BlogMaskInstance | null, menu: BlogMenuInstance | null) {
+	const setBlogInstance = (mask: BlogMaskInstance | null, menu: BlogMenuInstance | null) => {
 		maskInstance.value = mask;
 		menuInstance.value = menu;
-	}
+	};
 
-	function changeBlogMenuState() {
+	const changeBlogMenuState = () => {
 		if (maskInstance.value && menuInstance.value) {
 			maskInstance.value.changeMask();
 			menuInstance.value.changeMenu();
 		}
-	}
+	};
 
 	return {
 		maskInstance,

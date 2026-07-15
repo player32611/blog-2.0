@@ -12,8 +12,8 @@ const clickAnim = ref<GSAPTimeline | null>(null);
 const markAnim = ref<GSAPTween | null>(null);
 const clickNums = ref<number>(0);
 
-const clickAnimDuration: number = 0.2;
-const markAnimDuration: number = 0.5;
+const clickAnimDuration = 0.2;
+const markAnimDuration = 0.5;
 
 const handleClick = () => {
 	if (!contentSplit.value || mountAnim.value?.isActive() || clickAnim.value || clickNums.value >= 5)

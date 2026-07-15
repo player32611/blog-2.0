@@ -26,32 +26,32 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
     设置音效音量。
     @param volume - 音效音量值，将被限制在 [0, 1] 范围内。0 表示静音，1 表示最大音量。
   **/
-	function setEffectsVolume(volume: number) {
+	const setEffectsVolume = (volume: number) => {
 		effectsVolume.value = Math.max(0, Math.min(1, volume));
-	}
+	};
 
 	/**
     设置背景音乐的音量。
     该函数将音量值限制在 [0, 1] 范围内，并同步更新全局音乐音量状态和音频元素的音量（如果存在）。
     @param volume - 目标音量值，预期范围为 0（静音）到 1（最大音量）。超出范围的值将被自动裁剪。 
   **/
-	function setMusicVolume(volume: number) {
+	const setMusicVolume = (volume: number) => {
 		musicVolume.value = Math.max(0, Math.min(1, volume));
 		if (musicAudio.value) musicAudio.value.volume = volume;
-	}
+	};
 
-	function setMusicCurrentTime(time: number) {
+	const setMusicCurrentTime = (time: number) => {
 		if (!musicAudio.value || time < 0 || time > musicAudio.value.duration) return;
 		musicAudio.value.currentTime = time;
-	}
+	};
 
-	function setSeekTime(time: number) {
+	const setSeekTime = (time: number) => {
 		seekTime.value = time;
-	}
+	};
 
-	function setMusicCardVisible(visible: boolean) {
+	const setMusicCardVisible = (visible: boolean) => {
 		musicCardVisible.value = visible;
-	}
+	};
 
 	const handleCanPlay = () => {
 		if (playingMusic.value && musicAudio.value) {
@@ -86,7 +86,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 		}
 	};
 
-	function initAudio(music: MusicInfo) {
+	const initAudio = (music: MusicInfo) => {
 		if (!musicAudio.value) {
 			musicAudio.value = new Audio(`/blog-2.0${music.path}`);
 			musicAudio.value.volume = musicVolume.value;
@@ -109,7 +109,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 			musicListNameCurrent.value = music.folder;
 			musicListCurrent.value = getMusicsByFolder(music.folder);
 		}
-	}
+	};
 
 	/**
     播放指定的音乐。
@@ -117,7 +117,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
     如果当前播放的音乐与传入的音乐不同，则更新当前播放的音乐信息。
     @param music - 要播放的音乐信息对象，包含音乐路径、文件夹等元数据
   **/
-	function play(music: MusicInfo) {
+	const play = (music: MusicInfo) => {
 		playingMusic.value = true;
 		initAudio(music);
 
@@ -127,7 +127,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 			}
 			musicAudio.value.play();
 		}
-	}
+	};
 
 	/**
 	 * 暂停当前正在播放的音乐。
@@ -135,12 +135,12 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 	 * 该函数检查是否存在有效的音频元素，如果存在则调用其 pause() 方法暂停播放，
 	 * 并将 playingMusic 状态更新为 false。
 	 */
-	function pause() {
+	const pause = () => {
 		if (musicAudio.value) {
 			musicAudio.value.pause();
 			playingMusic.value = false;
 		}
-	}
+	};
 
 	/**
 	 * 切换当前音乐的播放/暂停状态。
@@ -149,14 +149,14 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 	 * 决定是暂停还是继续播放。如果音乐正在播放，则调用 pause() 函数暂停播放；
 	 * 如果音乐未在播放，则调用 play() 函数使用当前音乐信息开始播放。
 	 */
-	function toggle() {
+	const toggle = () => {
 		if (!musicCurrent.value || !musicAudio.value) return;
 		if (playingMusic.value) {
 			pause();
 		} else {
 			play(musicCurrent.value);
 		}
-	}
+	};
 
 	/**
 	 * 切换到上一首音乐
@@ -171,7 +171,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 	 *
 	 * 切换后会自动初始化音频并继续播放（如果之前正在播放）。
 	 */
-	function previous() {
+	const previous = () => {
 		if (musicListCurrent.value.length === 0) return;
 		if (!musicCurrent.value) return;
 		if (
@@ -200,7 +200,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 			initAudio(musicCurrent.value);
 			if (playingMusic.value && musicAudio.value) musicAudio.value.play();
 		}
-	}
+	};
 
 	/**
 	 * 切换到下一首音乐
@@ -216,7 +216,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 	 *
 	 * 注意：当音乐列表为空或当前没有播放音乐时，函数直接返回。
 	 */
-	function next() {
+	const next = () => {
 		if (musicListCurrent.value.length === 0) return;
 		if (!musicCurrent.value) return;
 		if (
@@ -242,21 +242,21 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 			initAudio(musicCurrent.value);
 			if (playingMusic.value && musicAudio.value) musicAudio.value.play();
 		}
-	}
+	};
 
 	/**
 	 * 跳转音频播放位置
 	 *
 	 * @param time - 相对于当前播放位置的时间偏移量（秒），正数表示向后跳转，负数表示向前跳转
 	 */
-	function seek(time: number) {
+	const seek = (time: number) => {
 		if (!musicAudio.value) return;
 		const newTime = musicAudio.value.currentTime + time;
 		if (newTime < 0) musicAudio.value.currentTime = 0;
 		else if (newTime > musicAudio.value.duration)
 			musicAudio.value.currentTime = musicAudio.value.duration;
 		else musicAudio.value.currentTime = newTime;
-	}
+	};
 
 	/**
 	 * 切换到下一个音乐播放模式
@@ -267,7 +267,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 	 *
 	 * 切换模式后会重新绑定音频结束事件监听器，确保播放行为与当前模式一致。
 	 */
-	function nextPlayingMode() {
+	const nextPlayingMode = () => {
 		switch (musicPlayingMode.value) {
 			case "OrderAll":
 				musicPlayingMode.value = "RepeatSingle";
@@ -285,7 +285,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 			musicAudio.value.removeEventListener("ended", handleMusicEnded);
 			musicAudio.value.addEventListener("ended", handleMusicEnded);
 		}
-	}
+	};
 
 	return {
 		effectsVolume,

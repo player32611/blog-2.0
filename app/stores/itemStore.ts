@@ -6,21 +6,21 @@ export const useItemStore = defineStore("item", (): ItemState & ItemGetter & Ite
 	const showingGuide = ref<boolean>(false);
 	const currentCommand = ref<string>("");
 
-	function setBackgroundTheme(theme: "light" | "dark") {
+	const setBackgroundTheme = (theme: "light" | "dark") => {
 		backgroundTheme.value = theme;
-	}
+	};
 
-	function setCurrentCommand(command: string) {
+	const setCurrentCommand = (command: string) => {
 		currentCommand.value = command;
-	}
+	};
 
-	function toggleShowingCommandBar() {
+	const toggleShowingCommandBar = () => {
 		showingCommandBar.value = !showingCommandBar.value;
-	}
+	};
 
-	function toggleShowingGuide() {
+	const toggleShowingGuide = () => {
 		showingGuide.value = !showingGuide.value;
-	}
+	};
 
 	return {
 		backgroundTheme,

@@ -6,8 +6,8 @@ const cloudRef = ref<HTMLDivElement | null>(null);
 const containerRef = ref<HTMLDivElement | null>(null);
 const moveAnim = ref<GSAPTimeline | null>(null);
 
-const easeTime: number = 0.5;
-const moveDuration: number = 20;
+const easeTime = 0.5;
+const moveDuration = 20;
 
 const createMoveAnim = () => {
 	if (!cloudRef.value) return;

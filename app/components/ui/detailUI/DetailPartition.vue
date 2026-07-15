@@ -11,7 +11,7 @@ const itemRefs = ref<HTMLDivElement[]>([]);
 const scrollAnim = ref<GSAPTween | null>(null);
 const normalAnims = ref<GSAPTween[]>([]);
 
-const itemNum: number = 20;
+const itemNum = 20;
 
 const resize = () => {
 	if (!itemRefs.value[0]) return;

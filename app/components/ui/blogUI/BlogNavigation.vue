@@ -9,7 +9,7 @@ const activeId = ref<string | null>(null);
 
 const links = computed(() => page?.body.toc?.links);
 
-const easeTime: number = 1;
+const easeTime = 1;
 
 const handleMouseEnter = () => {
 	gsap.to(boxRef.value, {

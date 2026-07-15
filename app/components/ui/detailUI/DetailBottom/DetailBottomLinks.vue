@@ -4,7 +4,7 @@ import gsap from "gsap";
 const containerRef = ref<HTMLDivElement | null>(null);
 const rotateAnim = ref<GSAPTween | null>(null);
 
-const rotateDuration: number = 4;
+const rotateDuration = 4;
 
 const handleClick = (a: string) => {
 	window.open(a, "_blank", "noopener,noreferrer");

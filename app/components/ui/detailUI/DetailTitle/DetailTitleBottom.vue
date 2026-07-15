@@ -14,11 +14,11 @@ const allBulletRefs = computed(() => {
 	return [...leftBulletRefs.value, ...rightBulletRefs.value];
 });
 
-const bulletNum: number = 40;
-const bulletDuration: number = 10;
-const cannonRunDuration: number = 5;
-const cannonFireDuration: number = 1;
-const cannonFireScale: number = 0.9;
+const bulletNum = 40;
+const bulletDuration = 10;
+const cannonRunDuration = 5;
+const cannonFireDuration = 1;
+const cannonFireScale = 0.9;
 
 const getCarrelRotateAngle = () => {
 	if (window.innerWidth < 576) {
