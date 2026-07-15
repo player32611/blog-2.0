@@ -1,5 +1,5 @@
 import type { BlogCollections } from "~/types/config";
-import type { MusicInfo, ImageInfo } from "~/types/common";
+import type { ImageInfo, MainLinkConfig, MusicInfo } from "~/types/common";
 import type { DetailWorkBlogCardParams } from "~/types/components";
 
 export const BLOG_COLLECTIONS: BlogCollections[] = [
@@ -75,11 +75,113 @@ export const DETAIL_WORK_BLOGDATA: DetailWorkBlogCardParams[] = [
 	},
 ];
 
+export const IMAGE_DATAS: ImageInfo[] = [
+	{
+		name: "",
+		author: "",
+		path: "/images/collections/24774353ACDA0E4C388CDD05200DBD97.jpg",
+	},
+	{
+		name: "",
+		author: "",
+		path: "/images/collections/45CCC416F28D06A37EF558E2371A5365.jpg",
+	},
+	{
+		name: "",
+		author: "",
+		path: "/images/collections/823CE984FC6A7116BF068413E7A6CF56.jpg",
+	},
+	{
+		name: "",
+		author: "",
+		path: "/images/collections/8B195C4CB599EB531839B6418FFE1EBC.jpg",
+	},
+	{
+		name: "",
+		author: "",
+		path: "/images/collections/91CED444465CE7F933F2E1D7CFCE64B6.jpg",
+	},
+	{
+		name: "",
+		author: "",
+		path: "/images/collections/A0D7FD386EBE6A590370C41EE62B05C9.jpg",
+	},
+	{
+		name: "",
+		author: "",
+		path: "/images/collections/B3B1101712E69A5BFBEA9BFACD5BCB7C.jpg",
+	},
+	{
+		name: "",
+		author: "",
+		path: "/images/collections/C1CE8D4B783173C1138D29D10A6F985D.jpg",
+	},
+	{
+		name: "",
+		author: "",
+		path: "/images/collections/C2E15091D71B4CCDABED63199E856D86.jpg",
+	},
+	{
+		name: "",
+		author: "",
+		path: "/images/collections/E13C355319A784BADE390F1EF04FB65F.jpg",
+	},
+	{
+		name: "",
+		author: "",
+		path: "/images/collections/E68BA344B81E00527C8143AD962F4822.jpg",
+	},
+	{
+		name: "",
+		author: "",
+		path: "/images/collections/F0A1BCCC7FA96556F36AB190B1CAADAB.jpg",
+	},
+	{
+		name: "",
+		author: "",
+		path: "/images/collections/FBEF25F790E9007EB3D1D49E93DFFB7E.png",
+	},
+	{
+		name: "",
+		author: "",
+		path: "/images/collections/FCBC31D6A22B6B04602E5C0084F3D29F.jpg",
+	},
+];
+
+export const IMAGE_EMPTY = "未知";
+
 export const MAIN_NAME = "FRISK";
 
 export const MAIN_LV = 19;
 
 export const MAIN_HP = 92;
+
+export const MAIN_LINKS: MainLinkConfig[] = [
+	{
+		pos: {
+			x: 50,
+			y: 500,
+		},
+		size: {
+			width: 50,
+			height: 90,
+		},
+		content: "",
+		target: "",
+	},
+	{
+		pos: {
+			x: 1150,
+			y: 620,
+		},
+		size: {
+			width: 40,
+			height: 90,
+		},
+		content: "",
+		target: "",
+	},
+];
 
 export const MUSIC_DATAS: MusicInfo[] = [
 	{
@@ -515,78 +617,5 @@ export const MUSIC_DATAS: MusicInfo[] = [
 		artist: "Pesot.jp",
 		path: "/sounds/musics/東方宝天京 ～ Treasure Castle Labyrinth OST/28 宵宮の宝石箱.mp3",
 		folder: "東方宝天京 ～ Treasure Castle Labyrinth OST",
-	},
-];
-
-export const IMAGE_DATAS: ImageInfo[] = [
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/24774353ACDA0E4C388CDD05200DBD97.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/45CCC416F28D06A37EF558E2371A5365.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/823CE984FC6A7116BF068413E7A6CF56.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/8B195C4CB599EB531839B6418FFE1EBC.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/91CED444465CE7F933F2E1D7CFCE64B6.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/A0D7FD386EBE6A590370C41EE62B05C9.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/B3B1101712E69A5BFBEA9BFACD5BCB7C.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/C1CE8D4B783173C1138D29D10A6F985D.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/C2E15091D71B4CCDABED63199E856D86.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/E13C355319A784BADE390F1EF04FB65F.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/E68BA344B81E00527C8143AD962F4822.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/F0A1BCCC7FA96556F36AB190B1CAADAB.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/FBEF25F790E9007EB3D1D49E93DFFB7E.png",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/FCBC31D6A22B6B04602E5C0084F3D29F.jpg",
 	},
 ];

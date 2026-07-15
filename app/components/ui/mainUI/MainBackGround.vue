@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import gsap from "gsap";
+import type { Point } from "~/types/common";
 
 import backgroundImg from "/images/background/main_background.png";
 
@@ -9,17 +10,14 @@ const imageRef = ref<HTMLImageElement | null>(null);
 const viewBoxData = ref<{ height: number; width: number }>({ height: 0, width: 0 });
 const imageData = ref<{ height: number; width: number }>({ height: 0, width: 0 });
 const mousePos = ref<{ x: number; y: number }>({ x: 0, y: 0 });
-const movedata = ref<{ moveable: boolean; x: number; y: number; movX: number; movY: number }>({
+const movedata = ref<{ moveable: boolean; movePos: Point }>({
 	moveable: false,
-	x: 0,
-	y: 0,
-	movX: 0,
-	movY: 0,
+	movePos: { x: 0, y: 0 },
 });
 const ani = ref<GSAPTween | null>(null); // gsap 动画
-const standardWidth = ref<number>(1700); // 标准宽度
 const scalesNums = ref<number>(1); // 缩放比例
 
+const standardWidth = 1700; // 标准宽度
 const resistance = 0.2;
 const easeTime = 1;
 
@@ -29,17 +27,10 @@ const resize = () => {
 		viewBoxData.value.width = viewBoxRef.value.offsetWidth;
 		imageData.value.height = imageRef.value.offsetHeight;
 		imageData.value.width = imageRef.value.offsetWidth;
-		movedata.value.x = 0;
-		movedata.value.y = 0;
-		movedata.value.movX = 0;
-		movedata.value.movY = 0;
-		scalesNums.value = document.body.offsetWidth / standardWidth.value;
+		movedata.value.movePos = { x: 0, y: 0 };
+		scalesNums.value = document.body.offsetWidth / standardWidth;
 		imageRef.value.style.transform = `scale(${scalesNums.value})`;
-		gsap.to(imageRef.value, {
-			transform: `translate(0,0)`,
-			duration: 0,
-			ease: "power4.out",
-		});
+		gsap.to(imageRef.value, { transform: `translate(0,0)`, duration: 0, ease: "power4.out" });
 	}
 };
 
@@ -48,18 +39,19 @@ const move = (x: number, y: number) => {
 	const distanceX = ((x - mousePos.value.x) / scalesNums.value) * resistance;
 	const distanceY = ((y - mousePos.value.y) / scalesNums.value) * resistance;
 
-	const newMovX = movedata.value.movX + distanceX;
-	const newMovY = movedata.value.movY + distanceY;
+	const newMovX = movedata.value.movePos.x + distanceX;
+	const newMovY = movedata.value.movePos.y + distanceY;
 
 	const maxOffsetX = Math.max(0, (imageData.value.width - viewBoxData.value.width) / 2);
 	const maxOffsetY = Math.max(0, (imageData.value.height - viewBoxData.value.height) / 2);
 
-	movedata.value.movX = Math.max(-maxOffsetX, Math.min(maxOffsetX, newMovX));
-	movedata.value.movY = Math.max(-maxOffsetY, Math.min(maxOffsetY, newMovY));
+	movedata.value.movePos.x = Math.max(-maxOffsetX, Math.min(maxOffsetX, newMovX));
+	movedata.value.movePos.y = Math.max(-maxOffsetY, Math.min(maxOffsetY, newMovY));
+	mainStore.setBackgroundTransform(movedata.value.movePos);
 
 	if (ani.value) ani.value.kill();
 	ani.value = gsap.to(imageRef.value, {
-		transform: `translate(${movedata.value.movX}px , ${movedata.value.movY}px)`,
+		transform: `translate(${movedata.value.movePos.x}px , ${movedata.value.movePos.y}px)`,
 		duration: easeTime,
 		ease: "power4.out",
 	});

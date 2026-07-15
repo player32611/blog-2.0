@@ -194,7 +194,6 @@ $base-size: 1;
 			--tooltip-padding-x: 7px;
 			--tooltip-padding-y: 7px;
 			--tooltip-offset: 8px;
-			// --tooltip-transition-duration: 0.3s;
 			/* 👆 if you need a transition, 
       just remove the comment,
       but I didn't like the transition :| */

@@ -59,8 +59,10 @@ watch(
 			@mouseleave="handleMouseLeave"
 		>
 			<div class="sign_content">
-				<div class="content_line">名称：{{ imageStore.activeImageData?.name }}</div>
-				<div class="content_line">作者：{{ imageStore.activeImageData?.author }}</div>
+				<div class="content_line">名称：{{ imageStore.activeImageData?.name || IMAGE_EMPTY }}</div>
+				<div class="content_line">
+					作者：{{ imageStore.activeImageData?.author || IMAGE_EMPTY }}
+				</div>
 			</div>
 		</div>
 		<div class="sign_body"></div>

@@ -78,6 +78,14 @@ export interface ImagePosData extends Point, ImageInfo {
 	animation: GSAPAnimation | null;
 }
 
+export type MainLinkConfig = {
+	pos: Point;
+	size: Rectangle;
+	style?: Record<string, string | number>;
+	content: string;
+	target: string;
+};
+
 /**
  * 音乐信息接口，用于描述音乐文件的基本元数据
  *
@@ -104,4 +112,9 @@ export type MusicInfo = {
 export type Point = {
 	x: number;
 	y: number;
+};
+
+export type Rectangle = {
+	width: number;
+	height: number;
 };

@@ -1,4 +1,4 @@
-import type { ImageHoverData, ImageLayoutData, ImagePosData, MusicInfo } from "./common";
+import type { ImageHoverData, ImageLayoutData, ImagePosData, MusicInfo, Point } from "./common";
 import type { BlogCollections, BlogCollectionItems, MusicPlayingMode } from "./config";
 import type {
 	BlogMaskInstance,
@@ -91,12 +91,14 @@ export type LoadingActions = {
 
 export type MainState = {
 	isDragging: Ref<boolean>;
+	backgroundTransform: Ref<Point>;
 };
 
 export type MainGetter = {};
 
 export type MainActions = {
 	setIsDragging: (state: boolean) => void;
+	setBackgroundTransform: (transform: Point) => void;
 };
 
 export type SoundState = {

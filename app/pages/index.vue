@@ -3,6 +3,7 @@ import MainBackGround from "~/components/ui/mainUI/MainBackGround.vue";
 import MainBackMask from "~/components/ui/mainUI/MainBackMask.vue";
 import MainContainer from "~/components/ui/mainUI/MainContainer.vue";
 import MainCursor from "~/components/ui/mainUI/MainCursor.vue";
+import MainLink from "~/components/ui/mainUI/MainLink.vue";
 import MainUIBox from "~/components/ui/mainUI/MainUIBox.vue";
 
 usePageReady();
@@ -13,9 +14,10 @@ onMounted(() => {
 </script>
 
 <template>
-	<div class="home">
+	<div class="main">
 		<MainBackGround />
 		<MainBackMask />
+		<MainLink />
 		<MainContainer />
 		<MainUIBox />
 		<ClientOnly>
@@ -25,7 +27,7 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-.home {
+.main {
 	position: relative;
 	width: 100%;
 	height: 100dvh;
