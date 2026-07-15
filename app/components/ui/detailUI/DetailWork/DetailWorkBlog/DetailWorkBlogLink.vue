@@ -79,7 +79,7 @@ onUnmounted(() => {
 		@mouseleave="handleMouseLeave"
 	>
 		<!-- From Uiverse.io by gharsh11032000 -->
-		<button class="link_button" ref="buttonRef">
+		<button class="link_button hoverable" ref="buttonRef">
 			<div ref="contentRef">立即前往</div>
 		</button>
 	</div>
@@ -91,9 +91,8 @@ onUnmounted(() => {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 250px;
+	height: 200px;
 	width: 400px;
-	background-color: blue;
 
 	/* From Uiverse.io by gharsh11032000 */
 	.link_button {
@@ -118,7 +117,7 @@ onUnmounted(() => {
 		&:hover {
 			color: #212121;
 			scale: 1.1;
-			box-shadow: 0 0px 20px rgba(193, 163, 98, 0.4);
+			box-shadow: 0 0px 20px rgba($color: #ff7f27, $alpha: 0.4);
 
 			&::before {
 				scale: 3;
@@ -150,7 +149,7 @@ onUnmounted(() => {
 	$base-size: 0.8;
 
 	.work_blog_link {
-		height: 250px * $base-size;
+		height: 200px * $base-size;
 		width: 400px * $base-size;
 
 		.link_button {
@@ -176,7 +175,7 @@ onUnmounted(() => {
 	$base-size: 0.85;
 
 	.work_blog_link {
-		height: 250px * $base-size;
+		height: 200px * $base-size;
 		width: 400px * $base-size;
 
 		.link_button {
@@ -202,7 +201,7 @@ onUnmounted(() => {
 	$base-size: 0.9;
 
 	.work_blog_link {
-		height: 250px * $base-size;
+		height: 200px * $base-size;
 		width: 400px * $base-size;
 
 		.link_button {
@@ -228,7 +227,7 @@ onUnmounted(() => {
 	$base-size: 0.95;
 
 	.work_blog_link {
-		height: 250px * $base-size;
+		height: 200px * $base-size;
 		width: 400px * $base-size;
 
 		.link_button {

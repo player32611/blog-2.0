@@ -61,7 +61,7 @@ onUnmounted(() => {
 <template>
 	<!-- From Uiverse.io by gharsh11032000 -->
 	<div
-		class="work_blog_card"
+		class="work_blog_card hoverable"
 		@mouseenter="handleMouseEnter"
 		@mouseleave="handleMouseLeave"
 		ref="cardRef"

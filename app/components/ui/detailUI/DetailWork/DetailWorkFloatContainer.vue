@@ -15,7 +15,7 @@ const { activeIndex } = defineProps<DetailWorkFloatContainerParams>();
 
 const itemRefs = ref<HTMLDivElement[]>([]);
 
-const itemNum = 5;
+const itemNum = 10;
 const floatingSpeed = Array.from({ length: itemNum }, () => randomFloat(0.1, 0.2));
 const rotateAngle = Array.from({ length: itemNum }, () => Math.random() * 360);
 const rotateSpeed = Array.from({ length: itemNum }, () => randomSign() * randomFloat(0.5, 2));
@@ -54,7 +54,12 @@ defineExpose<DetailWorkFloatContainerInstance>({
 
 <template>
 	<div class="work_float_container">
-		<div class="float_item" v-for="_ in itemNum" ref="itemRefs">
+		<div
+			class="float_item"
+			:class="i === itemNum / 2 ? 'left_last' : ''"
+			v-for="i in itemNum"
+			ref="itemRefs"
+		>
 			<div class="rope_container" v-if="activeIndex >= 0"><div class="rope"></div></div>
 			<div class="item_container">
 				<span v-if="activeIndex < 0"></span>
@@ -110,9 +115,9 @@ defineExpose<DetailWorkFloatContainerInstance>({
 	position: absolute;
 	top: 0;
 	display: flex;
-	justify-content: space-around;
 	height: 100vh;
 	width: 100%;
+	gap: 50px;
 	pointer-events: none;
 	z-index: variables.$float_zIndex;
 	overflow: hidden;
@@ -127,6 +132,10 @@ defineExpose<DetailWorkFloatContainerInstance>({
 		width: 30px;
 		transform-origin: center center;
 		user-select: none;
+
+		&.left_last {
+			margin-right: auto;
+		}
 
 		.rope_container {
 			position: absolute;
