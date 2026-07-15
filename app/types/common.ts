@@ -81,6 +81,7 @@ export interface ImagePosData extends Point, ImageInfo {
 export type MainLinkConfig = {
 	pos: Point;
 	size: Rectangle;
+	themeColor: string;
 	style?: Record<string, string | number>;
 	content: string;
 	target: string;
