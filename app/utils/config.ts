@@ -159,8 +159,8 @@ export const MAIN_HP = 92;
 export const MAIN_LINKS: MainLinkConfig[] = [
 	{
 		pos: {
-			x: 50,
-			y: 500,
+			x: 720,
+			y: 760,
 		},
 		size: {
 			width: 50,
@@ -171,8 +171,8 @@ export const MAIN_LINKS: MainLinkConfig[] = [
 	},
 	{
 		pos: {
-			x: 1150,
-			y: 620,
+			x: 1810,
+			y: 860,
 		},
 		size: {
 			width: 40,

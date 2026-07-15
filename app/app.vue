@@ -54,7 +54,7 @@ body {
 	overscroll-behavior-x: none;
 	overscroll-behavior-y: none;
 
-	&:has(.home) {
+	&:has(.main) {
 		overflow: hidden;
 	}
 

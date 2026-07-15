@@ -1,4 +1,11 @@
-import type { ImageHoverData, ImageLayoutData, ImagePosData, MusicInfo, Point } from "./common";
+import type {
+	ImageHoverData,
+	ImageLayoutData,
+	ImagePosData,
+	MusicInfo,
+	Point,
+	Rectangle,
+} from "./common";
 import type { BlogCollections, BlogCollectionItems, MusicPlayingMode } from "./config";
 import type {
 	BlogMaskInstance,
@@ -91,6 +98,8 @@ export type LoadingActions = {
 
 export type MainState = {
 	isDragging: Ref<boolean>;
+	isResized: Ref<boolean>;
+	backgroundSize: Ref<Rectangle>;
 	backgroundTransform: Ref<Point>;
 };
 
@@ -98,6 +107,8 @@ export type MainGetter = {};
 
 export type MainActions = {
 	setIsDragging: (state: boolean) => void;
+	setIsResized: (state: boolean) => void;
+	setBackgroundSize: (rect: Rectangle) => void;
 	setBackgroundTransform: (transform: Point) => void;
 };
 

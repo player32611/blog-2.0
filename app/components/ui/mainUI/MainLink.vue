@@ -7,20 +7,36 @@ const moveAnim = ref<GSAPTween | null>(null);
 
 const easeTime = 1;
 
-const handleClick = () => {};
+const handleClick = () => {
+	console.log("click");
+};
 
-watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransform.y], newState => {
-	if (moveAnim.value) moveAnim.value.kill();
-	moveAnim.value = gsap.to(linkRefs.value, {
-		transform: `translate(${newState[0]}px , ${newState[1]}px)`,
-		duration: easeTime,
-		ease: "power4.out",
-	});
-});
+watch(
+	[
+		() => mainStore.backgroundTransform.x,
+		() => mainStore.backgroundTransform.y,
+		() => mainStore.isResized,
+	],
+	newState => {
+		if (moveAnim.value) moveAnim.value.kill();
+		moveAnim.value = gsap.to(linkRefs.value, {
+			transform: `translate(${newState[0]}px , ${newState[1]}px)`,
+			duration: newState[2] ? 0 : easeTime,
+			ease: "power4.out",
+		});
+		mainStore.setIsResized(false);
+	},
+);
 </script>
 
 <template>
-	<div class="main_link">
+	<div
+		class="main_link"
+		:style="{
+			width: `${mainStore.backgroundSize.width}px`,
+			height: `${mainStore.backgroundSize.height}px`,
+		}"
+	>
 		<div
 			class="paper"
 			v-for="link in MAIN_LINKS"
@@ -40,10 +56,11 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 <style scoped lang="scss">
 .main_link {
 	position: absolute;
-	left: 0;
-	top: 0;
+	left: 50%;
+	top: 50%;
 	height: 100%;
 	width: 100%;
+	transform: translate(-50%, -50%);
 	pointer-events: none;
 	overflow: hidden;
 
