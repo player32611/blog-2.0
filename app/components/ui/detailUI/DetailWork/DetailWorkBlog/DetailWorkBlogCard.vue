@@ -2,7 +2,7 @@
 import gsap from "gsap";
 import type { DetailWorkBlogCardParams } from "~/types/components";
 
-const { title, subtitle, icon, content, image } = defineProps<DetailWorkBlogCardParams>();
+const { title, subtitle, icon, content, previewImage } = defineProps<DetailWorkBlogCardParams>();
 const cardRef = ref<HTMLDivElement | null>(null);
 const previewRef = ref<HTMLDivElement | null>(null);
 const fadeAnim = ref<GSAPTween | null>(null);
@@ -79,7 +79,7 @@ onUnmounted(() => {
 	<Teleport to="body">
 		<div class="work_blog_preview" ref="previewRef">
 			<div class="preview_inner">
-				<img class="preview_image" :src="image" alt="111" />
+				<img class="preview_image" :src="previewImage" alt="111" />
 			</div>
 		</div>
 	</Teleport>

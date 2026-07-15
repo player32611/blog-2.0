@@ -68,7 +68,8 @@ export interface DetailWorkBlogCardParams {
 	subtitle: string;
 	icon: string;
 	content: string;
-	image: string;
+	previewImage: string;
+	backgroundImage: string;
 }
 
 export interface DetailWorkFloatContainerParams {

@@ -3,13 +3,14 @@ import gsap from "gsap";
 
 const detailStore = useDetailStore();
 const backgroundRef = ref<HTMLDivElement | null>(null);
-const currentImage = ref<string>(detailStore.workBlogCurrentCard.image);
+const currentImage = ref<string | null>(detailStore.workBlogCurrentCard?.backgroundImage || null);
 
 const easeDuration = 0.5;
 
 watch(
-	() => detailStore.workBlogCurrentCard.image,
+	() => detailStore.workBlogCurrentCard?.backgroundImage,
 	newState => {
+		if (!newState) return;
 		gsap
 			.timeline()
 			.to(backgroundRef.value, {
@@ -29,7 +30,7 @@ watch(
 
 <template>
 	<div class="work_blog_background" ref="backgroundRef">
-		<img class="background_image" :src="currentImage" />
+		<img class="background_image" :src="currentImage || undefined" />
 	</div>
 </template>
 

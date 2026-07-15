@@ -64,6 +64,7 @@ const handleClick = async () => {
 };
 
 onMounted(() => {
+	detailStore.setWorkBlogCurrentCard(cardParams.value[DETAIL_WORK_BLOGDATA.length - 1] || null);
 	window.addEventListener("click", handleClick);
 });
 
@@ -80,7 +81,8 @@ onUnmounted(() => {
 				:subtitle="params.subtitle"
 				:icon="params.icon"
 				:content="params.content"
-				:image="params.image"
+				:preview-image="params.previewImage"
+				:background-image="params.backgroundImage"
 			/>
 		</div>
 	</div>

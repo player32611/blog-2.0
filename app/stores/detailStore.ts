@@ -9,7 +9,7 @@ export const useDetailStore = defineStore(
 	"detail",
 	(): DetailState & DetailGetter & DetailActions => {
 		const workGameCurrentHp = ref<number>(MAIN_HP);
-		const workBlogCurrentCard = ref<DetailWorkBlogCardParams>(DETAIL_WORK_BLOGDATA[0]!);
+		const workBlogCurrentCard = ref<DetailWorkBlogCardParams | null>(null);
 		const bottomMoreInstance = ref<DetailBottomMoreInstance | null>(null);
 		const maskInstance = ref<DetailMaskInstance | null>(null);
 		const shaderType = ref<"none" | "VCR distortion">("none");
@@ -18,7 +18,7 @@ export const useDetailStore = defineStore(
 			workGameCurrentHp.value = hp;
 		};
 
-		const setWorkBlogCurrentCard = (params: DetailWorkBlogCardParams) => {
+		const setWorkBlogCurrentCard = (params: DetailWorkBlogCardParams | null) => {
 			workBlogCurrentCard.value = params;
 		};
 

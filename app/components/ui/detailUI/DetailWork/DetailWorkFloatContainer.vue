@@ -15,7 +15,7 @@ const { activeIndex } = defineProps<DetailWorkFloatContainerParams>();
 
 const itemRefs = ref<HTMLDivElement[]>([]);
 
-const itemNum = 10;
+const itemNum = isMobile() ? 6 : 10;
 const floatingSpeed = Array.from({ length: itemNum }, () => randomFloat(0.1, 0.2));
 const rotateAngle = Array.from({ length: itemNum }, () => Math.random() * 360);
 const rotateSpeed = Array.from({ length: itemNum }, () => randomSign() * randomFloat(0.5, 2));
@@ -166,6 +166,154 @@ defineExpose<DetailWorkFloatContainerInstance>({
 				position: absolute;
 				height: 100%;
 				width: 100%;
+			}
+		}
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.6;
+
+	.work_float_container {
+		gap: 50px * $base-size;
+
+		.float_item {
+			top: -30px * $base-size;
+			height: 30px * $base-size;
+			width: 30px * $base-size;
+
+			.rope_container {
+				width: 5px * $base-size;
+
+				.rope {
+					width: 5px * $base-size;
+					background: repeating-linear-gradient(
+						45deg,
+						#d5ad72 0 10px * $base-size,
+						#000000 10px * $base-size 11px * $base-size
+					);
+					filter: drop-shadow(
+						5px * $base-size 5px * $base-size 5px * $base-size rgba(0, 0, 0, 0.237)
+					);
+				}
+			}
+
+			.item_container {
+				filter: drop-shadow(
+					5px * $base-size 5px * $base-size 5px * $base-size rgba(0, 0, 0, 0.237)
+				);
+			}
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.7;
+
+	.work_float_container {
+		gap: 50px * $base-size;
+
+		.float_item {
+			top: -30px * $base-size;
+			height: 30px * $base-size;
+			width: 30px * $base-size;
+
+			.rope_container {
+				width: 5px * $base-size;
+
+				.rope {
+					width: 5px * $base-size;
+					background: repeating-linear-gradient(
+						45deg,
+						#d5ad72 0 10px * $base-size,
+						#000000 10px * $base-size 11px * $base-size
+					);
+					filter: drop-shadow(
+						5px * $base-size 5px * $base-size 5px * $base-size rgba(0, 0, 0, 0.237)
+					);
+				}
+			}
+
+			.item_container {
+				filter: drop-shadow(
+					5px * $base-size 5px * $base-size 5px * $base-size rgba(0, 0, 0, 0.237)
+				);
+			}
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.8;
+
+	.work_float_container {
+		gap: 50px * $base-size;
+
+		.float_item {
+			top: -30px * $base-size;
+			height: 30px * $base-size;
+			width: 30px * $base-size;
+
+			.rope_container {
+				width: 5px * $base-size;
+
+				.rope {
+					width: 5px * $base-size;
+					background: repeating-linear-gradient(
+						45deg,
+						#d5ad72 0 10px * $base-size,
+						#000000 10px * $base-size 11px * $base-size
+					);
+					filter: drop-shadow(
+						5px * $base-size 5px * $base-size 5px * $base-size rgba(0, 0, 0, 0.237)
+					);
+				}
+			}
+
+			.item_container {
+				filter: drop-shadow(
+					5px * $base-size 5px * $base-size 5px * $base-size rgba(0, 0, 0, 0.237)
+				);
+			}
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.9;
+
+	.work_float_container {
+		gap: 50px * $base-size;
+
+		.float_item {
+			top: -30px * $base-size;
+			height: 30px * $base-size;
+			width: 30px * $base-size;
+
+			.rope_container {
+				width: 5px * $base-size;
+
+				.rope {
+					width: 5px * $base-size;
+					background: repeating-linear-gradient(
+						45deg,
+						#d5ad72 0 10px * $base-size,
+						#000000 10px * $base-size 11px * $base-size
+					);
+					filter: drop-shadow(
+						5px * $base-size 5px * $base-size 5px * $base-size rgba(0, 0, 0, 0.237)
+					);
+				}
+			}
+
+			.item_container {
+				filter: drop-shadow(
+					5px * $base-size 5px * $base-size 5px * $base-size rgba(0, 0, 0, 0.237)
+				);
 			}
 		}
 	}

@@ -24,7 +24,7 @@ export type BlogActions = {
 
 export type DetailState = {
 	workGameCurrentHp: Ref<number>;
-	workBlogCurrentCard: Ref<DetailWorkBlogCardParams>;
+	workBlogCurrentCard: Ref<DetailWorkBlogCardParams | null>;
 	bottomMoreInstance: Ref<DetailBottomMoreInstance | null>;
 	maskInstance: Ref<DetailMaskInstance | null>;
 	shaderType: Ref<"none" | "VCR distortion">;
@@ -34,7 +34,7 @@ export type DetailGetter = {};
 
 export type DetailActions = {
 	setWorkGameCurrentHp: (hp: number) => void;
-	setWorkBlogCurrentCard: (params: DetailWorkBlogCardParams) => void;
+	setWorkBlogCurrentCard: (params: DetailWorkBlogCardParams | null) => void;
 	damageWorkGameHp: (damage: number) => void;
 	setBottomMoreInstance: (instance: DetailBottomMoreInstance | null) => void;
 	setMaskInstance: (mask: DetailMaskInstance | null) => void;
