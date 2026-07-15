@@ -20,7 +20,7 @@ const handleClick = () => {
 				if (iconRef.value) iconRef.value.innerHTML = "&#xe780;";
 			},
 		})
-		.to(iconRef.value, { scale: 1, ease: "back.out", duration: changeDuration / 3 })
+		.to(iconRef.value, { scale: 1, ease: "elastic.out", duration: changeDuration / 3 })
 		.to(containerRef.value, { scale: 0, ease: "power2.in", duration: changeDuration / 3 });
 	window.removeEventListener("click", handleClick);
 };
@@ -53,13 +53,67 @@ onUnmounted(() => {
 .work_blog_tip {
 	position: relative;
 	display: flex;
+	justify-content: center;
 	width: 100%;
 	color: rgba($color: #ffffff, $alpha: 0.4);
+	font-size: 1rem;
 	font-family: "方正基础像素体";
 
 	.icon {
 		position: relative;
 		top: 1px;
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.6;
+
+	.work_blog_tip {
+		font-size: 1rem * $base-size;
+
+		.icon {
+			top: 1px * $base-size;
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.7;
+
+	.work_blog_tip {
+		font-size: 1rem * $base-size;
+
+		.icon {
+			top: 1px * $base-size;
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.8;
+
+	.work_blog_tip {
+		font-size: 1rem * $base-size;
+
+		.icon {
+			top: 1px * $base-size;
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.9;
+
+	.work_blog_tip {
+		font-size: 1rem * $base-size;
+
+		.icon {
+			top: 1px * $base-size;
+		}
 	}
 }
 </style>

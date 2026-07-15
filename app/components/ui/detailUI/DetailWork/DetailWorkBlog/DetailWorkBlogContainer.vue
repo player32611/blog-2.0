@@ -10,6 +10,7 @@ interface params extends DetailWorkBlogCardParams {
 }
 
 gsap.registerPlugin(Flip);
+
 const detailStore = useDetailStore();
 const cardParams = ref<params[]>(
 	Array.from(DETAIL_WORK_BLOGDATA, data => ({
@@ -87,7 +88,9 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .work_blog_container {
-	position: relative;
+	position: absolute;
+	left: calc(50% - 150px - 40px);
+	top: calc(50% - 250px + 40px);
 	height: 500px;
 	width: 300px;
 	perspective: 100px;
@@ -136,6 +139,8 @@ onUnmounted(() => {
 	$base-size: 0.6;
 
 	.work_blog_container {
+		left: calc(50% - 150px * $base-size - 40px * $base-size);
+		top: calc(50% - 250px * $base-size + 40px * $base-size);
 		height: 500px * $base-size;
 		width: 300px * $base-size;
 		perspective: 100px * $base-size;
@@ -172,6 +177,8 @@ onUnmounted(() => {
 	$base-size: 0.7;
 
 	.work_blog_container {
+		left: calc(50% - 150px * $base-size - 40px * $base-size);
+		top: calc(50% - 250px * $base-size + 40px * $base-size);
 		height: 500px * $base-size;
 		width: 300px * $base-size;
 		perspective: 100px * $base-size;
@@ -208,6 +215,8 @@ onUnmounted(() => {
 	$base-size: 0.8;
 
 	.work_blog_container {
+		left: calc(50% - 150px * $base-size - 40px * $base-size);
+		top: calc(50% - 250px * $base-size + 40px * $base-size);
 		height: 500px * $base-size;
 		width: 300px * $base-size;
 		perspective: 100px * $base-size;
@@ -244,6 +253,8 @@ onUnmounted(() => {
 	$base-size: 0.9;
 
 	.work_blog_container {
+		left: calc(50% - 150px * $base-size - 40px * $base-size);
+		top: calc(50% - 250px * $base-size + 40px * $base-size);
 		height: 500px * $base-size;
 		width: 300px * $base-size;
 		perspective: 100px * $base-size;

@@ -11,7 +11,7 @@ import DetailWorkBlogTitle from "./DetailWorkBlogTitle.vue";
 		<DetailWorkBlogBackground />
 		<DetailWorkBlogTitle />
 		<DetailWorkBlogContainer />
-		<div>
+		<div class="work_blog_bottom">
 			<DetailWorkBlogLink />
 			<DetailWorkBlogTip />
 		</div>
@@ -20,6 +20,7 @@ import DetailWorkBlogTitle from "./DetailWorkBlogTitle.vue";
 
 <style scoped lang="scss">
 .work_blog {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -28,5 +29,11 @@ import DetailWorkBlogTitle from "./DetailWorkBlogTitle.vue";
 	height: 100vh;
 	width: 100%;
 	background-color: #000000;
+
+	.work_blog_bottom {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
 }
 </style>
