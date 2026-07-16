@@ -79,7 +79,10 @@ export const extractPathPart = (urlOrPath: string): string => {
  * @param delay - 延迟时间（毫秒），在该时间间隔内若无新的调用才会执行原始函数
  * @returns 返回一个新的函数，该函数具有防抖功能
  */
-export const debounce = (func: Function, delay: number): Function => {
+export const debounce = <T extends (...args: any[]) => void>(
+	func: T,
+	delay: number,
+): ((...args: Parameters<T>) => void) => {
 	let timeoutId: number | null = null;
 
 	return (...args: any[]) => {
@@ -100,7 +103,10 @@ export const debounce = (func: Function, delay: number): Function => {
  * @param delay - 节流延迟时间（毫秒）
  * @returns 节流后的函数
  */
-export const throttle = (func: Function, delay: number): Function => {
+export const throttle = <T extends (...args: any[]) => void>(
+	func: T,
+	delay: number,
+): ((...args: Parameters<T>) => void) => {
 	let lastExecTime = 0;
 	let timeoutId: number | null = null;
 

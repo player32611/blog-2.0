@@ -48,6 +48,8 @@ defineExpose<ItemInstance>({
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 $base-size: 0.6;
 
 .main_vial {
@@ -57,6 +59,7 @@ $base-size: 0.6;
 	filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.537));
 	user-select: none;
 	pointer-events: none;
+	z-index: variables.$float_zIndex;
 
 	/* From Uiverse.io by pedertanberg */
 	.vial_head {

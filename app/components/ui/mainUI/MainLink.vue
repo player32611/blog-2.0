@@ -17,7 +17,7 @@ const moveTime = 1;
 
 CustomEase.create("custom", "M0,0 C0.23,1 0.32,1 1,1");
 
-const handleMouseEnter = (e: MouseEvent) => {
+const handleMouseEnter = throttle((e: MouseEvent) => {
 	if (!(e.target instanceof HTMLDivElement)) return;
 	const hint = e.target.querySelector(".link_mask");
 	if (maskAnim.value?.getChildren()[0]?.targets()[0] === hint && hintAnim.value) return;
@@ -35,7 +35,7 @@ const handleMouseEnter = (e: MouseEvent) => {
 		})
 		.fromTo(hint, { scaleX: 0 }, { scaleX: 1, ease: "custom", duration: 0.48 }, 0.1)
 		.fromTo(hint, { height: 3 }, { height: "100%", ease: "custom", duration: 0.48 }, 0.4);
-};
+}, 1000);
 
 const handleMouseLeave = () => {
 	if (hintAnim.value) return;
@@ -43,7 +43,7 @@ const handleMouseLeave = () => {
 	maskAnim.value = null;
 };
 
-const handleClickPaper = (e: MouseEvent) => {
+const handleClickPaper = throttle((e: MouseEvent) => {
 	if (!(e.target instanceof HTMLDivElement) || !e.target.classList.contains("link_paper")) return;
 	const hint = e.target.querySelector(".link_hint");
 	const underline = hint?.querySelector(".hint_underline") || null;
@@ -57,7 +57,7 @@ const handleClickPaper = (e: MouseEvent) => {
 		.to(hint, { opacity: 1, visibility: "visible", duration: 0.7 })
 		.to(underline, { width: "100%", duration: 0.4 }, "<")
 		.to(slash, { opacity: 1, visibility: "visible", duration: 0.5 }, "<");
-};
+}, 1000);
 
 watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransform.y], newState => {
 	if (moveAnim.value) moveAnim.value.kill();
@@ -112,6 +112,8 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 .main_link {
 	position: absolute;
 	left: 50%;
@@ -121,6 +123,7 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 	transform: translate(-50%, -50%);
 	pointer-events: none;
 	overflow: hidden;
+	z-index: variables.$background_zIndex;
 
 	.link_paper {
 		position: absolute;
@@ -152,7 +155,6 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 			margin-left: 56px;
 			padding: 35px 0;
 			color: var(--theme-color);
-			z-index: 5;
 			opacity: 0;
 			visibility: hidden;
 			pointer-events: none;
@@ -176,6 +178,7 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 				white-space: nowrap;
 				font-size: 1rem;
 				font-family: "方正基础像素体";
+				z-index: variables.$background_zIndex;
 				user-select: text;
 				pointer-events: all;
 				cursor: default;
