@@ -4,9 +4,9 @@ import ItemCommandBar from "~/components/ui/itemUI/ItemCommandBar.vue";
 import ItemContainer from "~/components/ui/itemUI/ItemContainer.vue";
 import ItemGuide from "~/components/ui/itemUI/ItemGuide/ItemGuide.vue";
 import ItemSakanaWidget from "~/components/ui/itemUI/ItemSakanaWidget.vue";
-import Button from "~/components/ui/common/Button.vue";
+import RectButton from "~/components/ui/common/RectButton.vue";
 
-const { loadingNavigate } = useLoadingStore();
+const loadingStore = useLoadingStore();
 
 usePageReady();
 
@@ -24,13 +24,13 @@ onMounted(() => {
 		</ClientOnly>
 		<ItemCommandBar />
 		<ItemGuide />
-		<Button
+		<RectButton
 			:text="'back'"
 			:icon="'&#xeb06;'"
 			:size="'small'"
-			@click="loadingNavigate('/')"
+			@click="loadingStore.loadingNavigate(-1)"
 			:style="{ position: 'fixed', left: '20px', top: '20px' }"
-		></Button>
+		></RectButton>
 	</div>
 </template>
 

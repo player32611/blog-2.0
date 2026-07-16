@@ -6,10 +6,10 @@ import ImageDetailSign from "~/components/ui/imageUI/ImageDetailSign.vue";
 import ImageDownload from "~/components/ui/imageUI/ImageDownload.vue";
 import ImageViewbox from "~/components/ui/imageUI/ImageViewbox.vue";
 
-import Button from "~/components/ui/common/Button.vue";
+import RectButton from "~/components/ui/common/RectButton.vue";
 
 const imageStore = useImageStore();
-const { loadingNavigate } = useLoadingStore();
+const loadingStore = useLoadingStore();
 const buttonRef = ref<HTMLDivElement | null>(null);
 
 const handleMouseEnter = () => {
@@ -46,12 +46,12 @@ onMounted(() => {
 			@mouseleave="handleMouseLeave"
 			ref="buttonRef"
 		>
-			<Button
+			<RectButton
 				:text="'back'"
 				:icon="'&#xeb06;'"
 				:size="'small'"
-				@click="loadingNavigate('/')"
-			></Button>
+				@click="loadingStore.loadingNavigate(-1)"
+			></RectButton>
 		</div>
 		<ClientOnly>
 			<ImageCursor v-if="!isMobile()" />

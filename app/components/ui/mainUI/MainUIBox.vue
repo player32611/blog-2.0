@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Button from "~/components/ui/common/Button.vue";
+import RectButton from "../common/RectButton.vue";
 import FaultText from "../common/FaultText.vue";
 import type { DayTime } from "~/types/common";
 
@@ -39,30 +39,30 @@ onUnmounted(() => {
 			</div>
 		</div>
 		<div class="buttons">
-			<Button
+			<RectButton
 				:text="'blog'"
 				:size="'large'"
 				:icon="'&#xe99c;'"
 				@click="loadingNavigate('/blogs/html')"
-			></Button>
-			<Button
+			></RectButton>
+			<RectButton
 				:text="'music'"
 				:size="'large'"
 				:icon="'&#xe99a;'"
 				@click="loadingNavigate('/musics')"
-			></Button>
-			<Button
+			></RectButton>
+			<RectButton
 				:text="'items'"
 				:size="'large'"
 				:icon="'&#xe994;'"
 				@click="loadingNavigate('/items')"
-			></Button>
-			<Button
+			></RectButton>
+			<RectButton
 				:text="'image'"
 				:size="'large'"
 				:icon="'&#xe997;'"
 				@click="loadingNavigate('/images')"
-			></Button>
+			></RectButton>
 		</div>
 	</div>
 </template>

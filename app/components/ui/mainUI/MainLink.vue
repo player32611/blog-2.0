@@ -2,7 +2,7 @@
 import gsap from "gsap";
 import { CustomEase } from "gsap/all";
 
-import ArrowButton from "~/components/exhibit/ArrowButton.vue";
+import ArrowButton from "../common/ArrowButton.vue";
 
 gsap.registerPlugin(CustomEase);
 
@@ -100,9 +100,9 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 			<div class="link_hint">
 				<div class="hint_underline"></div>
 				<div class="hint_content">
-					Use Navbar to navigate the website quickly and easily.
+					{{ link.content || MAIN_EMPTY }}
 					<div class="button_container" @click="loadingStore.loadingNavigate(link.target)">
-						<ArrowButton />
+						<ArrowButton :color="link.themeColor" />
 					</div>
 				</div>
 				<div class="hint_slash"></div>
@@ -151,7 +151,6 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 			left: 50%;
 			margin-left: 56px;
 			padding: 35px 0;
-			width: 300px;
 			color: var(--theme-color);
 			z-index: 5;
 			opacity: 0;
@@ -172,7 +171,9 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 				position: relative;
 				display: flex;
 				justify-content: center;
-				align-items: end;
+				align-items: center;
+				width: fit-content;
+				white-space: nowrap;
 				font-size: 1rem;
 				font-family: "方正基础像素体";
 				user-select: text;
@@ -180,9 +181,8 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 				cursor: default;
 
 				.button_container {
-					scale: 50%;
+					margin-left: 5px;
 					rotate: 180deg;
-					transform: translate(100%, -50%);
 				}
 			}
 

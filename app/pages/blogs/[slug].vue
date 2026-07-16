@@ -13,13 +13,13 @@ import BlogMask from "~/components/ui/blogUI/BlogMask.vue";
 import BlogMenu from "~/components/ui/blogUI/BlogMenu.vue";
 import BlogNavigation from "~/components/ui/blogUI/BlogNavigation.vue";
 import BlogScrollBar from "~/components/ui/blogUI/BlogScrollBar.vue";
-import Button from "~/components/ui/common/Button.vue";
+import RectButton from "~/components/ui/common/RectButton.vue";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 const route = useRoute();
 const blogStore = useBlogStore();
-const { loadingNavigate } = useLoadingStore();
+const loadingStore = useLoadingStore();
 const wrapperRef = ref<HTMLDivElement | null>(null);
 const contentRef = ref<HTMLDivElement | null>(null);
 const smoother = ref<ScrollSmoother | null>(null);
@@ -68,20 +68,20 @@ onBeforeUnmount(() => {
 		<BlogNavigation ref="navigationRef" :page="page as BlogCollectionItems | null" />
 		<BlogMenu ref="menuRef" />
 		<BlogMask ref="maskRef" />
-		<Button
+		<RectButton
 			:text="'back'"
 			:icon="'&#xeb06;'"
 			:size="'small'"
-			@click="loadingNavigate('/')"
+			@click="loadingStore.loadingNavigate('/')"
 			:style="{ position: 'fixed', left: '20px', top: '20px' }"
-		></Button>
-		<Button
+		></RectButton>
+		<RectButton
 			:text="'menu'"
 			:icon="'&#xeaf8;'"
 			:size="'small'"
 			@click="blogStore.changeBlogMenuState"
 			:style="{ position: 'fixed', right: '20px', top: '20px' }"
-		></Button>
+		></RectButton>
 	</div>
 </template>
 

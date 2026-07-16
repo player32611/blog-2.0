@@ -158,32 +158,22 @@ export const MAIN_HP = 92;
 
 export const MAIN_LINKS: MainLinkConfig[] = [
 	{
-		pos: {
-			x: 720,
-			y: 760,
-		},
-		size: {
-			width: 50,
-			height: 90,
-		},
+		pos: { x: 720, y: 760 },
+		size: { width: 50, height: 90 },
 		themeColor: "yellow",
-		content: "",
+		content: "前端入门",
 		target: "/blogs/html",
 	},
 	{
-		pos: {
-			x: 1810,
-			y: 860,
-		},
-		size: {
-			width: 40,
-			height: 90,
-		},
+		pos: { x: 1810, y: 860 },
+		size: { width: 40, height: 90 },
 		themeColor: "green",
-		content: "",
-		target: "",
+		content: "后端框架",
+		target: "/blogs/springboot",
 	},
 ];
+
+export const MAIN_EMPTY = "暂无信息";
 
 export const MUSIC_DATAS: MusicInfo[] = [
 	{

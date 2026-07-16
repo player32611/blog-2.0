@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import gsap from "gsap";
 
-import Button from "~/components/ui/common/Button.vue";
+import RectButton from "~/components/ui/common/RectButton.vue";
 
 const detailStore = useDetailStore();
 const progressRef = ref<HTMLDivElement | null>(null);
@@ -49,7 +49,7 @@ onMounted(() => {
 			</div>
 		</div>
 		<div class="ui_button">
-			<Button
+			<RectButton
 				class-list="hoverable"
 				text="fight"
 				icon="&#xe601;"
@@ -58,7 +58,7 @@ onMounted(() => {
 				:style
 				:iconStyle
 			/>
-			<Button
+			<RectButton
 				class-list="hoverable"
 				text="act"
 				icon="&#xe63d;"
@@ -67,7 +67,7 @@ onMounted(() => {
 				:style
 				:iconStyle
 			/>
-			<Button
+			<RectButton
 				class-list="hoverable"
 				text="item"
 				icon="&#xe602;"
@@ -76,7 +76,7 @@ onMounted(() => {
 				:style
 				:iconStyle
 			/>
-			<Button
+			<RectButton
 				class-list="hoverable"
 				text="mercy"
 				icon="&#xe62f;"

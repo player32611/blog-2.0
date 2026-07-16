@@ -3,7 +3,7 @@ import MusicBackground from "~/components/ui/musicUI/MusicBackground.vue";
 import MusicController from "~/components/ui/musicUI/MusicController.vue";
 import MusicList from "~/components/ui/musicUI/MusicList.vue";
 import MusicRecord from "~/components/ui/musicUI/MusicRecord.vue";
-import Button from "~/components/ui/common/Button.vue";
+import RectButton from "~/components/ui/common/RectButton.vue";
 
 const { loadingNavigate } = useLoadingStore();
 const soundStore = useSoundStore();
@@ -26,13 +26,13 @@ onUnmounted(() => {
 		<div class="musics_list_container"><MusicList /></div>
 		<div class="musics_controller_container"><MusicController /></div>
 		<div class="musics_record_container"><MusicRecord /></div>
-		<Button
+		<RectButton
 			:text="'back'"
 			:icon="'&#xeb06;'"
 			:size="'small'"
 			@click="loadingNavigate(-1)"
 			:style="{ position: 'fixed', left: '20px', top: '20px' }"
-		></Button>
+		></RectButton>
 	</div>
 </template>
 

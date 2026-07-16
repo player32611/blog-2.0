@@ -2,6 +2,10 @@ import type { Body } from "matter-js";
 import type { BlogCollectionItems, BlogCollections, PageType } from "./config";
 import type { MusicInfo } from "./common";
 
+export interface ArrowButtonParams {
+	color: string;
+}
+
 export interface ButtonParams {
 	text: string;
 	icon?: any;

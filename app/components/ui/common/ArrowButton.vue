@@ -1,8 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { ArrowButtonParams } from "~/types/components";
+
+const { color } = defineProps<ArrowButtonParams>();
+</script>
 
 <template>
 	<!-- From Uiverse.io by xopc333 -->
-	<button class="button">
+	<button class="arrow_button" :style="{ color, borderColor: color, fill: color }">
 		<div class="button-box">
 			<span class="button-elem">
 				<svg viewBox="0 0 46 40" xmlns="http://www.w3.org/2000/svg">
@@ -23,12 +27,14 @@
 </template>
 
 <style scoped lang="scss">
+$base-size: 0.5;
+
 /* From Uiverse.io by xopc333 */
-.button {
+.arrow_button {
 	display: block;
 	position: relative;
-	width: 56px;
-	height: 56px;
+	width: 56px * $base-size;
+	height: 56px * $base-size;
 	margin: 0;
 	overflow: hidden;
 	outline: none;
@@ -56,7 +62,7 @@
 
 		.button-box {
 			transition: 0.4s;
-			transform: translateX(-56px);
+			transform: translateX(-56px * $base-size);
 		}
 	}
 
@@ -65,18 +71,20 @@
 		content: "";
 		position: absolute;
 		border-radius: 50%;
-		inset: 7px;
+		inset: 7px * $base-size;
 	}
 
 	&::before {
-		border: 4px solid #f0eeef;
+		border-width: 4px * $base-size;
+		border-style: solid;
 		transition:
 			opacity 0.4s cubic-bezier(0.77, 0, 0.175, 1) 80ms,
 			transform 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) 80ms;
 	}
 
 	&::after {
-		border: 4px solid #96daf0;
+		border-width: 4px * $base-size;
+		border-style: solid;
 		transform: scale(1.3);
 		transition:
 			opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
@@ -92,11 +100,10 @@
 
 		.button-elem {
 			display: block;
-			width: 20px;
-			height: 20px;
-			margin: 17px 18px 0 18px;
+			width: 20px * $base-size;
+			height: 20px * $base-size;
+			margin: 11px 18px * $base-size 0 18px * $base-size;
 			transform: rotate(180deg);
-			fill: #f0eeef;
 		}
 	}
 }

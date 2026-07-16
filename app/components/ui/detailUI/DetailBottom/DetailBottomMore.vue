@@ -2,8 +2,7 @@
 import gsap from "gsap";
 import type { DetailBottomMoreInstance } from "~/types/components.js";
 
-import Button from "../../common/Button.vue";
-
+import RectButton from "../../common/RectButton.vue";
 const loadingStore = useLoadingStore();
 const buttonRef = ref<HTMLDivElement | null>(null);
 const placeHolderRef = ref<HTMLDivElement | null>(null);
@@ -52,13 +51,13 @@ defineExpose<DetailBottomMoreInstance>({
 	<div class="bottom_more" ref="containerRef">
 		<div class="button_container">
 			<div class="button_wrapper hoverable" ref="buttonRef">
-				<Button
+				<RectButton
 					text="more"
 					size="large"
 					icon="&#xeaf1;"
 					@click="loadingStore.loadingNavigate('/')"
 					style="cursor: none"
-				></Button>
+				></RectButton>
 			</div>
 			<div class="button_placeholder" ref="placeHolderRef">?</div>
 		</div>
