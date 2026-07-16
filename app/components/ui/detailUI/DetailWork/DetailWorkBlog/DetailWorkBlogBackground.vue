@@ -30,7 +30,7 @@ watch(
 
 <template>
 	<div class="work_blog_background" ref="backgroundRef">
-		<img class="background_image" :src="currentImage || undefined" draggable="false" />
+		<img class="background_image" :src="`/blog-2.0${currentImage}`" draggable="false" />
 	</div>
 </template>
 

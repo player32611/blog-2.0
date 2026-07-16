@@ -140,11 +140,15 @@ export const throttle = <T extends (...args: any[]) => void>(
  * 检测当前设备是否为移动设备
  * @returns 如果用户代理字符串匹配移动设备标识则返回 true，否则返回 false
  */
-export const isMobile = (): boolean => {
+export const isMobile = () => {
 	if (import.meta.server) return false;
-	return window.matchMedia("(hover: none) and (pointer: coarse)").matches;
-};
 
+	const touch = window.matchMedia("(pointer: coarse)").matches;
+
+	const ua = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+	return touch || ua;
+};
 /**
  * 将角度制转换为弧度制
  * @param {number} degrees - 角度值

@@ -95,7 +95,7 @@ onUnmounted(() => {
 	<Teleport to="body">
 		<div class="work_blog_preview" ref="previewRef">
 			<div class="preview_inner">
-				<img class="preview_image" :src="previewImage" alt="111" />
+				<img class="preview_image" :src="`/blog-2.0${previewImage}`" alt="111" />
 			</div>
 		</div>
 	</Teleport>

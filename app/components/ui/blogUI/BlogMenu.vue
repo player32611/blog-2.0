@@ -21,7 +21,7 @@ const menuIn = () => {
 
 const menuOut = () => {
 	gsap.to(menuRef.value, {
-		top: "-100%",
+		top: "-100lvh",
 		duration: easeTime,
 		ease: "power1.inOut",
 	});
@@ -70,7 +70,7 @@ $base-size: 1;
 
 .blog_menu {
 	position: fixed;
-	top: -100%;
+	top: -100lvh;
 	display: flex;
 	justify-content: center;
 	align-items: center;
