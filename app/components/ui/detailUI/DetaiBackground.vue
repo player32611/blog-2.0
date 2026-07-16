@@ -80,7 +80,7 @@ onUnmounted(() => {
 
 .detail_background {
 	position: fixed;
-	height: 100vh;
+	height: 100lvh;
 	width: 100%;
 	background-color: #171717;
 	z-index: variables.$background_zIndex;

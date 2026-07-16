@@ -48,7 +48,7 @@ defineExpose<DetailMaskInstance>({
 .detail_mask {
 	position: fixed;
 	top: 0;
-	height: 100vh;
+	height: 100lvh;
 	width: 100vw;
 	background-color: #ffff0000;
 	z-index: variables.$loading_zIndex;

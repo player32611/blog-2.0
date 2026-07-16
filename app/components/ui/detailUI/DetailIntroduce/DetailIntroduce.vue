@@ -13,7 +13,7 @@ import DetailIntroducePart2 from "./DetailIntroducePart2.vue";
 <style scoped lang="scss">
 .detail_introduce {
 	position: relative;
-	height: 150vh;
+	height: 150dvh;
 	width: 100%;
 }
 </style>

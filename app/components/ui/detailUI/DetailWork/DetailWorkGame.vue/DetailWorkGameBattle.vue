@@ -273,8 +273,8 @@ onUnmounted(() => {
 
 	.battle_border_container {
 		position: absolute;
-		top: 50vh;
-		left: calc(50% - 5px - 15vh);
+		top: 50dvh;
+		left: calc(50% - 5px - 15dvh);
 		background-color: rgba($color: #000000, $alpha: 0.5);
 		border-color: #ffffff;
 		border-style: solid;
@@ -283,8 +283,8 @@ onUnmounted(() => {
 
 		.battle_border {
 			position: relative;
-			width: 30vh;
-			height: 30vh;
+			width: 30dvh;
+			height: 30dvh;
 
 			#soul {
 				position: absolute;
@@ -314,7 +314,7 @@ onUnmounted(() => {
 
 	.game_battle {
 		.battle_border_container {
-			left: calc(50% - 5px * $base-size - 15vh);
+			left: calc(50% - 5px * $base-size - 15dvh);
 			border-width: 5px * $base-size;
 
 			.battle_border {
@@ -339,7 +339,7 @@ onUnmounted(() => {
 
 	.game_battle {
 		.battle_border_container {
-			left: calc(50% - 5px * $base-size - 15vh);
+			left: calc(50% - 5px * $base-size - 15dvh);
 			border-width: 5px * $base-size;
 
 			.battle_border {

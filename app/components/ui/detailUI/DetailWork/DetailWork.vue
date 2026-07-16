@@ -85,6 +85,6 @@ onMounted(() => {
 <style scoped lang="scss">
 .detail_work {
 	position: relative;
-	height: 100svh;
+	height: 100dvh;
 }
 </style>

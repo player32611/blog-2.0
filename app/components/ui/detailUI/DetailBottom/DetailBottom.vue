@@ -36,7 +36,7 @@ onMounted(() => {
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
-	height: 100svh;
+	height: 100dvh;
 	width: 100%;
 
 	.bottom_bar {

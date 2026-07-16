@@ -18,7 +18,7 @@ import DetailTitleContent from "./DetailTitleContent.vue";
 	flex-direction: column;
 	justify-content: end;
 	align-items: center;
-	height: 100svh;
+	height: 100dvh;
 	width: 100%;
 	font-size: 1rem;
 	overflow: hidden;

@@ -18,9 +18,9 @@ import DetailDoingOther from "./DetailDoingOther.vue";
 	grid-template-rows: repeat(2, 1fr);
 	justify-items: center;
 	align-items: center;
-	margin-top: 10vh;
-	gap: 5vh;
-	height: 100vh;
+	margin-top: 10dvh;
+	gap: 5dvh;
+	height: 100dvh;
 	width: 100%;
 }
 </style>
