@@ -1,34 +1,59 @@
 <script setup lang="ts">
 import gsap from "gsap";
+import { CustomEase } from "gsap/all";
+
+gsap.registerPlugin(CustomEase);
 
 const mainStore = useMainStore();
 const linkRefs = ref<HTMLDivElement[]>([]);
-const hintAnim = ref<GSAPTween | null>(null);
+const maskAnim = ref<GSAPTimeline | null>(null);
+const hintAnim = ref<GSAPTimeline | null>(null);
 const moveAnim = ref<GSAPTween | null>(null);
 
 const moveTime = 1;
-const hintAppearDuration = 0.7;
+
+CustomEase.create("custom", "M0,0 C0.23,1 0.32,1 1,1");
 
 const handleMouseEnter = (e: MouseEvent) => {
 	if (!(e.target instanceof HTMLDivElement)) return;
-	console.log("enter");
+	const hint = e.target.querySelector(".link_mask");
+	if (maskAnim.value?.getChildren()[0]?.targets()[0] === hint && hintAnim.value) return;
+	else {
+		maskAnim.value?.reverse();
+		maskAnim.value = null;
+		hintAnim.value?.reverse();
+		hintAnim.value = null;
+	}
+	maskAnim.value = gsap
+		.timeline({
+			onReverseComplete: () => {
+				maskAnim.value?.kill();
+			},
+		})
+		.fromTo(hint, { scaleX: 0 }, { scaleX: 1, ease: "custom", duration: 0.48 }, 0.1)
+		.fromTo(hint, { height: 3 }, { height: "100%", ease: "custom", duration: 0.48 }, 0.4);
 };
 
 const handleMouseLeave = (e: MouseEvent) => {
-	if (!(e.target instanceof HTMLDivElement)) return;
-	console.log("leave");
+	if (hintAnim.value) return;
+	maskAnim.value?.reverse();
+	maskAnim.value = null;
 };
 
 const handleClickPaper = (e: MouseEvent) => {
 	if (!(e.target instanceof HTMLDivElement)) return;
 	const hint = e.target.querySelector(".link_hint");
-	console.log(hint);
-	hintAnim.value = gsap.to(hint, {
-		opacity: 1,
-		visibility: "visible",
-		ease: "power1.out",
-		duration: hintAppearDuration,
-	});
+	const underline = hint?.querySelector(".hint_underline") || null;
+	const slash = hint?.querySelector(".hint_slash") || null;
+	hintAnim.value = gsap
+		.timeline({
+			onReverseComplete: () => {
+				hintAnim.value?.kill();
+			},
+		})
+		.to(hint, { opacity: 1, visibility: "visible", duration: 0.7 })
+		.to(underline, { width: 180, duration: 0.4 }, "<")
+		.to(slash, { opacity: 1, visibility: "visible", duration: 0.5 }, "<");
 };
 
 watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransform.y], newState => {
@@ -50,6 +75,7 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 			height: `${mainStore.backgroundSize.height}px`,
 		}"
 	>
+		<!-- From Uiverse.io by gharsh11032000 -->
 		<div
 			class="link_paper"
 			v-for="link in MAIN_LINKS"
@@ -66,9 +92,12 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 			@mouseenter="handleMouseEnter"
 			@mouseleave="handleMouseLeave"
 		>
+			<div class="link_mask"></div>
 			<!-- From Uiverse.io by vnuny -->
 			<div class="link_hint">
+				<div class="hint_underline"></div>
 				<p>Use Navbar to navigate the website quickly and easily.</p>
+				<div class="hint_slash"></div>
 			</div>
 		</div>
 	</div>
@@ -94,29 +123,17 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 		cursor: pointer;
 
 		/* From Uiverse.io by gharsh11032000 */
-		&:hover {
-			&::before {
-				transform: translateX(-50%) scaleX(1);
-				height: 100%;
-				transition:
-					transform 0.48s 0.1s cubic-bezier(0.23, 1, 0.32, 1),
-					height 0.48s 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-			}
-		}
-
-		&::before {
-			content: "";
+		.link_mask {
 			position: absolute;
 			z-index: -1;
 			left: 50%;
 			top: 0%;
-			transform: translateX(-50%) scaleX(0);
 			width: 100%;
 			height: 3px;
 			background: var(--theme-color);
-			transition:
-				transform 0.48s 0.4s cubic-bezier(0.23, 1, 0.32, 1),
-				height 0.48s 0.1s cubic-bezier(0.23, 1, 0.32, 1);
+			opacity: 0.5;
+			transform: translateX(-50%) scaleX(0);
+			pointer-events: none;
 		}
 
 		/* From Uiverse.io by vnuny */
@@ -130,67 +147,39 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 			color: var(--theme-color);
 			z-index: 5;
 			opacity: 0;
-			transition:
-				opacity 0.7s ease,
-				visibility 0.7s ease;
 			visibility: hidden;
 			pointer-events: none;
 
-			&::before {
-				width: 0px;
+			.hint_underline {
+				position: absolute;
 				bottom: 29px;
 				left: 0;
-				content: "";
-				background-color: var(--theme-color);
 				height: 1px;
-				position: absolute;
+				width: 0px;
+				background-color: var(--theme-color);
 				transition: width 0.4s;
 			}
 
-			&::after {
+			.hint_slash {
+				position: absolute;
+				bottom: 29px;
+				left: 0;
+				height: 1px;
+				width: 80px;
+				background-color: var(--theme-color);
+				opacity: 1;
 				-webkit-transform-origin: 0 50%;
 				transform-origin: 0 50%;
 				-webkit-transform: rotate(-225deg);
 				transform: rotate(-225deg);
-				bottom: 29px;
-				left: 0;
-				width: 80px;
-				content: "";
-				background-color: var(--theme-color);
-				height: 1px;
-				position: absolute;
-				opacity: 1;
-				-webkit-transition: opacity 0.5s ease;
-				transition: opacity 0.5s ease;
-				-webkit-transition-delay: 0s;
-				transition-delay: 0s;
+			}
+
+			p {
+				user-select: text;
+				pointer-events: all;
+				cursor: default;
 			}
 		}
-
-		/*
-		&:hover {
-			.hint-content {
-				opacity: 1;
-				-webkit-transition:
-					opacity 0.7s ease,
-					visibility 0.7s ease;
-				transition:
-					opacity 0.7s ease,
-					visibility 0.7s ease;
-				visibility: visible;
-
-				&::before {
-					width: 180px;
-					transition: width 0.4s;
-				}
-
-				::after {
-					opacity: 1;
-					visibility: visible;
-				}
-			}
-		}
-    */
 	}
 }
 </style>
