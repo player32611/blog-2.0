@@ -128,7 +128,7 @@ onUnmounted(() => {
 	position: fixed;
 	top: 0;
 	left: 0;
-	height: 100%;
+	height: 100lvh;
 	width: 100%;
 	background-color: #1c1c2d;
 	z-index: -1;

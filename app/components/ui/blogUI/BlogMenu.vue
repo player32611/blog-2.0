@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import gsap from "gsap";
+import { ScrollSmoother } from "gsap/all";
 
 import BlogMenuBackGround from "./BlogMenuBackGround.vue";
 import BlogMenuSelecter from "./BlogMenuSelecter.vue";
@@ -27,11 +28,14 @@ const menuOut = () => {
 };
 
 const changeMenu = () => {
+	const smoother = ScrollSmoother.get();
 	switch (menuState.value) {
 		case "in":
+			smoother?.paused(true);
 			menuIn();
 			break;
 		case "out":
+			smoother?.paused(false);
 			menuOut();
 			break;
 	}
@@ -70,7 +74,7 @@ $base-size: 1;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 100dvh;
+	height: 100lvh;
 	width: 100%;
 	background-color: #ffffff;
 
@@ -79,7 +83,7 @@ $base-size: 1;
 		justify-content: space-between;
 		align-items: center;
 		padding: 2rem * $base-size;
-		height: 70%;
+		height: 65%;
 		width: 70%;
 		border-width: 0.3rem * $base-size;
 		border-style: solid;

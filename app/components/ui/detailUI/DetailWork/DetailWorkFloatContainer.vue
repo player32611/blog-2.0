@@ -120,7 +120,7 @@ defineExpose<DetailWorkFloatContainerInstance>({
 	position: absolute;
 	top: 0;
 	display: flex;
-	height: 100vh;
+	height: 100%;
 	width: 100%;
 	gap: 50px;
 	pointer-events: none;

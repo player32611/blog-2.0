@@ -117,7 +117,7 @@ onUnmounted(() => {
 .work_transition {
 	position: absolute;
 	top: 0;
-	height: 100vh;
+	height: 100%;
 	width: 100%;
 	overflow: hidden;
 	pointer-events: none;

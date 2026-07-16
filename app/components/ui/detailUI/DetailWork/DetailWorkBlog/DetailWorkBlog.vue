@@ -26,7 +26,7 @@ import DetailWorkBlogTitle from "./DetailWorkBlogTitle.vue";
 	justify-content: space-between;
 	align-items: center;
 	gap: 20px;
-	height: 100vh;
+	height: 100%;
 	width: 100%;
 	background-color: #000000;
 
