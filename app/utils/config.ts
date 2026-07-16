@@ -160,16 +160,30 @@ export const MAIN_LINKS: MainLinkConfig[] = [
 	{
 		pos: { x: 720, y: 760 },
 		size: { width: 50, height: 90 },
-		themeColor: "yellow",
-		content: "前端入门",
+		themeColor: "#ffd500",
+		content: "前端基础入门",
 		target: "/blogs/html",
 	},
 	{
 		pos: { x: 1810, y: 860 },
 		size: { width: 40, height: 90 },
-		themeColor: "green",
-		content: "后端框架",
+		themeColor: "#00a300",
+		content: "后端进阶框架",
 		target: "/blogs/springboot",
+	},
+	{
+		pos: { x: 150, y: 280 },
+		size: { width: 50, height: 90 },
+		themeColor: "#000dff",
+		content: "算法练习题",
+		target: "/blogs/algorithm_consolidation",
+	},
+	{
+		pos: { x: 1700, y: 400 },
+		size: { width: 40, height: 80 },
+		themeColor: "#d829ff",
+		content: "GML 函数参考",
+		target: "/blogs/common_functions",
 	},
 ];
 
