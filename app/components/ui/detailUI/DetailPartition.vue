@@ -9,7 +9,7 @@ const { text, direction } = defineProps<DetailPartitionParams>();
 const containerRef = ref<HTMLDivElement | null>(null);
 const itemRefs = ref<HTMLDivElement[]>([]);
 const scrollAnim = ref<GSAPTween | null>(null);
-const normalAnims = ref<GSAPTween[]>([]);
+const normalAnim = ref<GSAPTween | null>(null);
 
 const itemNum = 20;
 
@@ -19,30 +19,24 @@ const resize = () => {
 
 	if (scrollAnim.value) scrollAnim.value.progress(0).kill();
 
+	const offset = 2 * rect.width;
 	gsap.set(containerRef.value, { x: 0 });
 	scrollAnim.value = gsap.to(containerRef.value, {
-		x: direction === "left" ? `-=${2 * rect.width}px` : `+=${2 * rect.width}px`,
+		x: direction === "left" ? `-=${offset}px` : `+=${offset}px`,
 		onStart: () => {
-			if (direction === "left") gsap.set(containerRef.value, { right: 2 * rect.width });
-			else gsap.set(containerRef.value, { right: 4 * rect.width });
+			if (direction === "left") gsap.set(containerRef.value, { right: offset });
+			else gsap.set(containerRef.value, { right: 2 * offset });
 		},
 		scrollTrigger: { scrub: true },
 	});
 
-	normalAnims.value.forEach(el => {
-		el.progress(0).kill();
-	});
-	normalAnims.value.length = 0;
-	itemRefs.value.forEach(el => {
-		gsap.set(el, { x: 0 });
-		normalAnims.value.push(
-			gsap.to(el, {
-				x: direction === "left" ? `-=${2 * rect.width}px` : `+=${2 * rect.width}px`,
-				ease: "none",
-				duration: 3,
-				repeat: -1,
-			}),
-		);
+	normalAnim.value?.progress(0).kill();
+	gsap.set(itemRefs.value, { x: 0 });
+	normalAnim.value = gsap.to(itemRefs.value, {
+		x: direction === "left" ? `-=${offset}px` : `+=${offset}px`,
+		ease: "none",
+		duration: 3,
+		repeat: -1,
 	});
 };
 
@@ -54,7 +48,7 @@ onMounted(() => {
 onUnmounted(() => {
 	scrollAnim.value?.scrollTrigger?.kill();
 	scrollAnim.value?.kill();
-	normalAnims.value.forEach(item => item.kill());
+	normalAnim.value?.kill();
 	window.removeEventListener("resize", resize);
 });
 </script>

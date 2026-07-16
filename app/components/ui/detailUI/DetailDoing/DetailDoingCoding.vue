@@ -26,6 +26,7 @@ onMounted(() => {
 			autoplay: true,
 			animationData: animPath,
 		});
+		lottieAnim.value.pause();
 	}
 
 	mountAnim.value = gsap.fromTo(
@@ -38,6 +39,18 @@ onMounted(() => {
 				trigger: contentRef.value,
 				start: "bottom 90%",
 				toggleActions: "play none none reverse", // 进入时播放，离开时反向播放
+				onEnter: () => {
+					lottieAnim.value?.play();
+				},
+				onEnterBack: () => {
+					lottieAnim.value?.play();
+				},
+				onLeave: () => {
+					lottieAnim.value?.pause();
+				},
+				onLeaveBack: () => {
+					lottieAnim.value?.pause();
+				},
 			},
 		},
 	);
