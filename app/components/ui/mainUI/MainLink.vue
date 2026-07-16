@@ -8,6 +8,7 @@ gsap.registerPlugin(CustomEase);
 
 const loadingStore = useLoadingStore();
 const mainStore = useMainStore();
+const currentPaperRef = ref<HTMLDivElement | null>(null);
 const linkRefs = ref<HTMLDivElement[]>([]);
 const maskAnim = ref<GSAPTimeline | null>(null);
 const hintAnim = ref<GSAPTimeline | null>(null);
@@ -17,25 +18,26 @@ const moveTime = 1;
 
 CustomEase.create("custom", "M0,0 C0.23,1 0.32,1 1,1");
 
-const handleMouseEnter = throttle((e: MouseEvent) => {
+const handleMouseEnter = (e: MouseEvent) => {
 	if (!(e.target instanceof HTMLDivElement)) return;
-	const hint = e.target.querySelector(".link_mask");
-	if (maskAnim.value?.getChildren()[0]?.targets()[0] === hint && hintAnim.value) return;
-	else {
+	if (currentPaperRef.value === e.target) return;
+	else if (currentPaperRef.value !== e.target) {
 		maskAnim.value?.reverse();
 		maskAnim.value = null;
 		hintAnim.value?.reverse();
 		hintAnim.value = null;
 	}
-	maskAnim.value = gsap
+	const hint = e.target.querySelector(".link_mask");
+	const tl = gsap
 		.timeline({
 			onReverseComplete: () => {
-				maskAnim.value?.kill();
+				tl.kill();
 			},
 		})
 		.fromTo(hint, { scaleX: 0 }, { scaleX: 1, ease: "custom", duration: 0.48 }, 0.1)
 		.fromTo(hint, { height: 3 }, { height: "100%", ease: "custom", duration: 0.48 }, 0.4);
-}, 1000);
+	maskAnim.value = tl;
+};
 
 const handleMouseLeave = () => {
 	if (hintAnim.value) return;
@@ -43,21 +45,33 @@ const handleMouseLeave = () => {
 	maskAnim.value = null;
 };
 
-const handleClickPaper = throttle((e: MouseEvent) => {
-	if (!(e.target instanceof HTMLDivElement) || !e.target.classList.contains("link_paper")) return;
-	const hint = e.target.querySelector(".link_hint");
+const handleClickPaper = (e: MouseEvent) => {
+	if (!(e.target instanceof HTMLDivElement)) return;
+	currentPaperRef.value = e.target;
+	const hint = currentPaperRef.value?.querySelector(".link_hint");
+	if (!hint) return;
 	const underline = hint?.querySelector(".hint_underline") || null;
 	const slash = hint?.querySelector(".hint_slash") || null;
-	hintAnim.value = gsap
+	const tl = gsap
 		.timeline({
 			onReverseComplete: () => {
-				hintAnim.value?.kill();
+				tl.kill();
 			},
 		})
-		.to(hint, { opacity: 1, visibility: "visible", duration: 0.7 })
-		.to(underline, { width: "100%", duration: 0.4 }, "<")
-		.to(slash, { opacity: 1, visibility: "visible", duration: 0.5 }, "<");
-}, 1000);
+		.fromTo(
+			hint,
+			{ opacity: 0, visibility: "hidden" },
+			{ opacity: 1, visibility: "visible", duration: 0.7 },
+		)
+		.fromTo(underline, { width: 0 }, { width: "100%", duration: 0.4 }, "<")
+		.fromTo(
+			slash,
+			{ opacity: 0, visibility: "visible" },
+			{ opacity: 1, visibility: "visible", duration: 0.5 },
+			"<",
+		);
+	hintAnim.value = tl;
+};
 
 watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransform.y], newState => {
 	if (moveAnim.value) moveAnim.value.kill();
@@ -68,6 +82,10 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 	});
 	mainStore.setIsResized(false);
 });
+
+onMounted(() => {});
+
+onUnmounted(() => {});
 </script>
 
 <template>
