@@ -32,7 +32,7 @@ export const DETAIL_SKILLS = [
 
 export const DETAIL_EMPTY = "一般你看不到的";
 
-export const DETAIL_WORK_BLOGDATA: DetailWorkBlogCardParams[] = [
+export const DETAIL_WORK_BLOG_DATA: DetailWorkBlogCardParams[] = [
 	{
 		title: "image",
 		subtitle: "图集",
@@ -149,6 +149,8 @@ export const IMAGE_DATAS: ImageInfo[] = [
 ];
 
 export const IMAGE_EMPTY = "未知";
+
+export const LONG_PRESS_TIME = 500;
 
 export const MAIN_NAME = "FRISK";
 

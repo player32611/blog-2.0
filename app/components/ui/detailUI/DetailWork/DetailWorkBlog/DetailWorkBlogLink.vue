@@ -115,7 +115,7 @@ onUnmounted(() => {
 		cursor: none;
 
 		&:hover {
-			color: #212121;
+			color: #ffffff;
 			scale: 1.1;
 			box-shadow: 0 0px 20px rgba($color: #ff7f27, $alpha: 0.4);
 

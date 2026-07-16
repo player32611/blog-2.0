@@ -13,15 +13,15 @@ gsap.registerPlugin(Flip);
 
 const detailStore = useDetailStore();
 const cardParams = ref<params[]>(
-	Array.from(DETAIL_WORK_BLOGDATA, data => ({
+	Array.from(DETAIL_WORK_BLOG_DATA, data => ({
 		...data,
 		id: generateId(),
 	})),
 );
 
 const moveCard = () => {
-	const first = cardParams.value[DETAIL_WORK_BLOGDATA.length - 1];
-	const second = cardParams.value[DETAIL_WORK_BLOGDATA.length - 2];
+	const first = cardParams.value[DETAIL_WORK_BLOG_DATA.length - 1];
+	const second = cardParams.value[DETAIL_WORK_BLOG_DATA.length - 2];
 	if (!first || !second) return;
 	cardParams.value.unshift({
 		...first,
@@ -32,6 +32,10 @@ const moveCard = () => {
 };
 
 const handleClick = async () => {
+	if (detailStore.isLongPressing) {
+		detailStore.setIsLongPressing(false);
+		return;
+	}
 	const state = Flip.getState(".container_card");
 
 	moveCard();
@@ -64,7 +68,7 @@ const handleClick = async () => {
 };
 
 onMounted(() => {
-	detailStore.setWorkBlogCurrentCard(cardParams.value[DETAIL_WORK_BLOGDATA.length - 1] || null);
+	detailStore.setWorkBlogCurrentCard(cardParams.value[DETAIL_WORK_BLOG_DATA.length - 1] || null);
 	window.addEventListener("click", handleClick);
 });
 

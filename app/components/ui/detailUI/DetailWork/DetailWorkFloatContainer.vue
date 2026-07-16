@@ -13,12 +13,12 @@ gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
 
 const { activeIndex } = defineProps<DetailWorkFloatContainerParams>();
 
+const itemNum = ref<number>(10);
 const itemRefs = ref<HTMLDivElement[]>([]);
 
-const itemNum = isMobile() ? 6 : 10;
-const floatingSpeed = Array.from({ length: itemNum }, () => randomFloat(0.1, 0.2));
-const rotateAngle = Array.from({ length: itemNum }, () => Math.random() * 360);
-const rotateSpeed = Array.from({ length: itemNum }, () => randomSign() * randomFloat(0.5, 2));
+const floatingSpeed = Array.from({ length: itemNum.value }, () => randomFloat(0.1, 0.2));
+const rotateAngle = Array.from({ length: itemNum.value }, () => Math.random() * 360);
+const rotateSpeed = Array.from({ length: itemNum.value }, () => randomSign() * randomFloat(0.5, 2));
 
 const ticking = () => {
 	const smoother = ScrollSmoother.get();
@@ -42,6 +42,10 @@ const stopFloating = () => {
 	gsap.ticker.remove(ticking);
 };
 
+onMounted(() => {
+	itemNum.value = isMobile() ? 6 : 10;
+});
+
 onUnmounted(() => {
 	gsap.ticker.remove(ticking);
 });
@@ -56,8 +60,9 @@ defineExpose<DetailWorkFloatContainerInstance>({
 	<div class="work_float_container">
 		<div
 			class="float_item"
-			:class="i === itemNum / 2 ? 'left_last' : ''"
 			v-for="i in itemNum"
+			:key="i"
+			:class="i === itemNum / 2 ? 'left_last' : ''"
 			ref="itemRefs"
 		>
 			<div class="rope_container" v-if="activeIndex >= 0"><div class="rope"></div></div>

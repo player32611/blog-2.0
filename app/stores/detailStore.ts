@@ -12,6 +12,7 @@ export const useDetailStore = defineStore(
 		const workBlogCurrentCard = ref<DetailWorkBlogCardParams | null>(null);
 		const bottomMoreInstance = ref<DetailBottomMoreInstance | null>(null);
 		const maskInstance = ref<DetailMaskInstance | null>(null);
+		const isLongPressing = ref<boolean>(false);
 		const shaderType = ref<"none" | "VCR distortion">("none");
 
 		const setWorkGameCurrentHp = (hp: number) => {
@@ -35,6 +36,10 @@ export const useDetailStore = defineStore(
 			maskInstance.value = mask;
 		};
 
+		const setIsLongPressing = (state: boolean) => {
+			isLongPressing.value = state;
+		};
+
 		const setShaderType = (type: "none" | "VCR distortion") => {
 			shaderType.value = type;
 		};
@@ -44,12 +49,14 @@ export const useDetailStore = defineStore(
 			workBlogCurrentCard,
 			bottomMoreInstance,
 			maskInstance,
+			isLongPressing,
 			shaderType,
 			setWorkGameCurrentHp,
 			setWorkBlogCurrentCard,
 			damageWorkGameHp,
 			setBottomMoreInstance,
 			setMaskInstance,
+			setIsLongPressing,
 			setShaderType,
 		};
 	},

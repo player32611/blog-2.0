@@ -83,9 +83,11 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 	mainStore.setIsResized(false);
 });
 
-onMounted(() => {});
-
-onUnmounted(() => {});
+onUnmounted(() => {
+	maskAnim.value?.kill();
+	hintAnim.value?.kill();
+	moveAnim.value?.kill();
+});
 </script>
 
 <template>

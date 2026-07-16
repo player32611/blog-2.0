@@ -3,38 +3,52 @@ import gsap from "gsap";
 import type { DetailWorkBlogCardParams } from "~/types/components";
 
 const { title, subtitle, icon, content, previewImage } = defineProps<DetailWorkBlogCardParams>();
+const detailStore = useDetailStore();
 const cardRef = ref<HTMLDivElement | null>(null);
 const previewRef = ref<HTMLDivElement | null>(null);
 const fadeAnim = ref<GSAPTween | null>(null);
-const isFirstEnter = ref<boolean>(true);
+const fadeTimeout = ref<number | null>(null);
 
 let setX: gsap.QuickToFunc;
 let setY: gsap.QuickToFunc;
+
 const cardColor: { backgroundColor: string; color: string }[] = [
 	{ backgroundColor: "linear-gradient(-45deg, #ff0000 0%, #ffff00 100%)", color: "#ff0000" },
 	{ backgroundColor: "linear-gradient(-45deg, #e81cff 0%, #40c9ff 100%)", color: "#e81cff" },
 	{ backgroundColor: "linear-gradient(-45deg, #74ebd5 0%, #acb6e5 100%)", color: "#74ebd5" },
 ];
+const fadeTiggerTime = 500;
 
-const move = (e: MouseEvent) => {
-	if (isFirstEnter.value) {
-		setX(e.clientX, e.clientX);
-		setY(e.clientY, e.clientY);
-		isFirstEnter.value = false;
-	} else {
-		setX(e.clientX);
-		setY(e.clientY);
-	}
+const handleMouseMove = (e: MouseEvent) => {
+	setX(e.clientX);
+	setY(e.clientY);
 };
 
 const handleMouseEnter = (e: MouseEvent) => {
-	isFirstEnter.value = true;
 	fadeAnim.value?.play();
-	move(e);
+	handleMouseMove(e);
 };
 
 const handleMouseLeave = () => {
 	fadeAnim.value?.reverse();
+};
+
+const handleTouchStart = (e: TouchEvent) => {
+	e.preventDefault();
+	fadeTimeout.value = setTimeout(() => {
+		if (!e.touches[0]) return;
+		detailStore.setIsLongPressing(true);
+		setX(e.touches[0].clientX, e.touches[0].clientX);
+		setY(e.touches[0].clientY, e.touches[0].clientY);
+		fadeAnim.value?.play();
+	}, fadeTiggerTime);
+};
+
+const handleTouchEnd = () => {
+	if (fadeTimeout.value) {
+		clearTimeout(fadeTimeout.value);
+		fadeTimeout.value = null;
+	}
 };
 
 onMounted(() => {
@@ -50,11 +64,11 @@ onMounted(() => {
 	const theme = randomChoose(...cardColor);
 	gsap.set(cardRef.value, { "--backgroundColor": theme?.backgroundColor });
 	gsap.set(cardRef.value, { "--color": theme?.color });
-	window.addEventListener("mousemove", move);
+	window.addEventListener("mousemove", handleMouseMove);
 });
 
 onUnmounted(() => {
-	window.removeEventListener("mousemove", move);
+	window.removeEventListener("mousemove", handleMouseMove);
 });
 </script>
 
@@ -64,6 +78,8 @@ onUnmounted(() => {
 		class="work_blog_card hoverable"
 		@mouseenter="handleMouseEnter"
 		@mouseleave="handleMouseLeave"
+		@touchstart="handleTouchStart"
+		@touchend="handleTouchEnd"
 		ref="cardRef"
 	>
 		<p class="top">{{ title }}</p>

@@ -77,9 +77,7 @@ onMounted(() => {
 		<DetailWorkGame v-else-if="activeIndex === 0" />
 		<DetailWorkBlog v-else-if="activeIndex === 1" />
 		<DetailWorkItemEmpty v-else />
-		<ClientOnly>
-			<DetailWorkFloatContainer ref="floatRef" :activeIndex="activeIndex" />
-		</ClientOnly>
+		<DetailWorkFloatContainer ref="floatRef" :activeIndex="activeIndex" />
 		<DetailWorkTransition ref="maskRef" />
 	</div>
 </template>

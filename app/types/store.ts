@@ -34,6 +34,7 @@ export type DetailState = {
 	workBlogCurrentCard: Ref<DetailWorkBlogCardParams | null>;
 	bottomMoreInstance: Ref<DetailBottomMoreInstance | null>;
 	maskInstance: Ref<DetailMaskInstance | null>;
+	isLongPressing: Ref<boolean>;
 	shaderType: Ref<"none" | "VCR distortion">;
 };
 
@@ -45,6 +46,7 @@ export type DetailActions = {
 	damageWorkGameHp: (damage: number) => void;
 	setBottomMoreInstance: (instance: DetailBottomMoreInstance | null) => void;
 	setMaskInstance: (mask: DetailMaskInstance | null) => void;
+	setIsLongPressing: (state: boolean) => void;
 	setShaderType: (type: "none" | "VCR distortion") => void;
 };
 
