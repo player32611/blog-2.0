@@ -168,7 +168,7 @@ export const MAIN_LINKS: MainLinkConfig[] = [
 		},
 		themeColor: "yellow",
 		content: "",
-		target: "",
+		target: "/blogs/html",
 	},
 	{
 		pos: {

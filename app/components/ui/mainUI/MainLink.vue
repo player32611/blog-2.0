@@ -2,8 +2,11 @@
 import gsap from "gsap";
 import { CustomEase } from "gsap/all";
 
+import ArrowButton from "~/components/exhibit/ArrowButton.vue";
+
 gsap.registerPlugin(CustomEase);
 
+const loadingStore = useLoadingStore();
 const mainStore = useMainStore();
 const linkRefs = ref<HTMLDivElement[]>([]);
 const maskAnim = ref<GSAPTimeline | null>(null);
@@ -34,14 +37,14 @@ const handleMouseEnter = (e: MouseEvent) => {
 		.fromTo(hint, { height: 3 }, { height: "100%", ease: "custom", duration: 0.48 }, 0.4);
 };
 
-const handleMouseLeave = (e: MouseEvent) => {
+const handleMouseLeave = () => {
 	if (hintAnim.value) return;
 	maskAnim.value?.reverse();
 	maskAnim.value = null;
 };
 
 const handleClickPaper = (e: MouseEvent) => {
-	if (!(e.target instanceof HTMLDivElement)) return;
+	if (!(e.target instanceof HTMLDivElement) || !e.target.classList.contains("link_paper")) return;
 	const hint = e.target.querySelector(".link_hint");
 	const underline = hint?.querySelector(".hint_underline") || null;
 	const slash = hint?.querySelector(".hint_slash") || null;
@@ -52,7 +55,7 @@ const handleClickPaper = (e: MouseEvent) => {
 			},
 		})
 		.to(hint, { opacity: 1, visibility: "visible", duration: 0.7 })
-		.to(underline, { width: 180, duration: 0.4 }, "<")
+		.to(underline, { width: "100%", duration: 0.4 }, "<")
 		.to(slash, { opacity: 1, visibility: "visible", duration: 0.5 }, "<");
 };
 
@@ -96,7 +99,12 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 			<!-- From Uiverse.io by vnuny -->
 			<div class="link_hint">
 				<div class="hint_underline"></div>
-				<p>Use Navbar to navigate the website quickly and easily.</p>
+				<div class="hint_content">
+					Use Navbar to navigate the website quickly and easily.
+					<div class="button_container" @click="loadingStore.loadingNavigate(link.target)">
+						<ArrowButton />
+					</div>
+				</div>
 				<div class="hint_slash"></div>
 			</div>
 		</div>
@@ -160,6 +168,24 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 				transition: width 0.4s;
 			}
 
+			.hint_content {
+				position: relative;
+				display: flex;
+				justify-content: center;
+				align-items: end;
+				font-size: 1rem;
+				font-family: "方正基础像素体";
+				user-select: text;
+				pointer-events: all;
+				cursor: default;
+
+				.button_container {
+					scale: 50%;
+					rotate: 180deg;
+					transform: translate(100%, -50%);
+				}
+			}
+
 			.hint_slash {
 				position: absolute;
 				bottom: 29px;
@@ -172,12 +198,6 @@ watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransfor
 				transform-origin: 0 50%;
 				-webkit-transform: rotate(-225deg);
 				transform: rotate(-225deg);
-			}
-
-			p {
-				user-select: text;
-				pointer-events: all;
-				cursor: default;
 			}
 		}
 	}
