@@ -19,6 +19,7 @@ const circleRingColor = "#ffffff40";
 const circleRingWidth = 2;
 
 const handleClick = (e: MouseEvent) => {
+	if (posArray.value.length >= 3) return;
 	posArray.value.push({ x: e.x, y: e.y, radius: 0 });
 	if (animationFrameId.value === null) animationFrameId.value = requestAnimationFrame(drawFrame);
 };

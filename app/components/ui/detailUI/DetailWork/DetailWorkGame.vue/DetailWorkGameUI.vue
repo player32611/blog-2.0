@@ -50,7 +50,6 @@ onMounted(() => {
 		</div>
 		<div class="ui_button">
 			<RectButton
-				class-list="hoverable"
 				text="fight"
 				icon="&#xe601;"
 				size="large"
@@ -58,26 +57,9 @@ onMounted(() => {
 				:style
 				:iconStyle
 			/>
+			<RectButton text="act" icon="&#xe63d;" size="large" @click="handleClick" :style :iconStyle />
+			<RectButton text="item" icon="&#xe602;" size="large" @click="handleClick" :style :iconStyle />
 			<RectButton
-				class-list="hoverable"
-				text="act"
-				icon="&#xe63d;"
-				size="large"
-				@click="handleClick"
-				:style
-				:iconStyle
-			/>
-			<RectButton
-				class-list="hoverable"
-				text="item"
-				icon="&#xe602;"
-				size="large"
-				@click="handleClick"
-				:style
-				:iconStyle
-			/>
-			<RectButton
-				class-list="hoverable"
 				text="mercy"
 				icon="&#xe62f;"
 				size="large"

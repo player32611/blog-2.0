@@ -67,10 +67,7 @@ const handleClick = () => {
 };
 
 onMounted(() => {
-	contentSplit.value = SplitText.create(contentRef.value, {
-		type: "chars",
-		charsClass: "hoverable",
-	});
+	contentSplit.value = SplitText.create(contentRef.value, { type: "chars" });
 	gsap.set(contentSplit.value.chars, { opacity: 0 });
 	mountAnim.value = gsap.fromTo(
 		contentSplit.value.chars.slice(0, -1),

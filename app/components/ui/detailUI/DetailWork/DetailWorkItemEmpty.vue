@@ -48,7 +48,7 @@ onUnmounted(() => {
 
 <template>
 	<div class="work_empty">
-		<div class="bubble_container hoverable" v-for="_ in bubbleNum" ref="bubbleRefs">
+		<div class="bubble_container" v-for="_ in bubbleNum" ref="bubbleRefs">
 			<Bubble />
 		</div>
 		<div class="empty_content_english">waiting</div>

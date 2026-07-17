@@ -35,7 +35,7 @@ onUnmounted(() => {
 <template>
 	<div class="introduce_info" ref="infoRef">
 		<!-- From Uiverse.io by Nykolas94 -->
-		<label class="folder hoverable">
+		<label class="folder">
 			<input type="checkbox" class="folder__toggle" aria-label="Open folder" />
 			<span class="folder__shape">
 				<span class="folder__back"></span>

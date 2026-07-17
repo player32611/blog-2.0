@@ -11,7 +11,7 @@ const handleClick = () => {
 
 <template>
 	<!-- From Uiverse.io by Sophiek9h -->
-	<div class="bottom_television hoverable" @click="handleClick">
+	<div class="bottom_television" @click="handleClick">
 		<div class="antenna">
 			<div class="antenna_shadow"></div>
 			<div class="a1"></div>

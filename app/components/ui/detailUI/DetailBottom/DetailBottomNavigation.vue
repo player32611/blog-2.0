@@ -42,7 +42,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="bottom_navigation hoverable" @click="handleClick" ref="animContainer"></div>
+	<div class="bottom_navigation" @click="handleClick" ref="animContainer"></div>
 </template>
 
 <style scoped lang="scss">

@@ -4,6 +4,7 @@ import gsap from "gsap";
 const detailStore = useDetailStore();
 const backgroundRef = ref<HTMLDivElement | null>(null);
 const currentImage = ref<string | null>(detailStore.workBlogCurrentCard?.backgroundImage || null);
+const changeAnim = ref<GSAPTimeline | null>(null);
 
 const easeDuration = 0.5;
 
@@ -11,19 +12,14 @@ watch(
 	() => detailStore.workBlogCurrentCard?.backgroundImage,
 	newState => {
 		if (!newState) return;
-		gsap
+		changeAnim.value?.kill();
+		changeAnim.value = gsap
 			.timeline()
-			.to(backgroundRef.value, {
-				filter: "blur(50px)",
-				duration: easeDuration / 2,
-				onComplete: () => {
-					currentImage.value = newState;
-				},
+			.to(backgroundRef.value, { filter: "blur(50px)", duration: easeDuration / 2 })
+			.call(() => {
+				currentImage.value = newState;
 			})
-			.to(backgroundRef.value, {
-				filter: "blur(10px)",
-				duration: easeDuration / 2,
-			});
+			.to(backgroundRef.value, { filter: "blur(10px)", duration: easeDuration / 2 });
 	},
 );
 </script>

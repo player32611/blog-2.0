@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/all";
 import type { RGBColor, Point } from "@/types/common";
 
 const backgroundRef = ref<HTMLDivElement | null>(null);
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 const currentLineDirection = ref<"vertical" | "horizontal">("vertical");
 const progressStart = ref<number>(0);
+const progressStartAnim = ref<GSAPTween | null>(null);
 const progressEnd = ref<number>(0);
+const progressEndAnim = ref<GSAPTween | null>(null);
+const scrollAnim = ref<ScrollTrigger | null>(null);
 
 const activeColor: RGBColor = { r: 0, g: 174, b: 240 };
 const defaultColor: RGBColor = { r: 23, g: 23, b: 23 };
@@ -211,7 +215,7 @@ const drawLine = () => {
 };
 
 const startProgressAnimation = () => {
-	gsap.to(progressStart, {
+	progressStartAnim.value = gsap.to(progressStart, {
 		value: 1,
 		duration: 3,
 		delay: initDelay + progressInterval,
@@ -221,7 +225,7 @@ const startProgressAnimation = () => {
 		onUpdate: drawLine,
 	});
 
-	gsap.to(progressEnd, {
+	progressEndAnim.value = gsap.to(progressEnd, {
 		value: 1,
 		duration: 3,
 		delay: initDelay,
@@ -251,13 +255,30 @@ const resize = () => {
 
 		// 缩放上下文以适应高 DPI 显示器
 		const ctx = canvas.getContext("2d");
-		if (ctx) {
-			ctx.scale(dpr, dpr);
-		}
+		if (ctx) ctx.scale(dpr, dpr);
 	}
 };
 
 onMounted(() => {
+	scrollAnim.value = ScrollTrigger.create({
+		trigger: backgroundRef.value,
+		onEnter: () => {
+			progressStartAnim.value?.resume();
+			progressEndAnim.value?.resume();
+		},
+		onEnterBack: () => {
+			progressStartAnim.value?.resume();
+			progressEndAnim.value?.resume();
+		},
+		onLeave: () => {
+			progressStartAnim.value?.pause();
+			progressEndAnim.value?.pause();
+		},
+		onLeaveBack: () => {
+			progressStartAnim.value?.pause();
+			progressEndAnim.value?.pause();
+		},
+	});
 	resize();
 	startProgressAnimation();
 	window.addEventListener("resize", resize);
@@ -265,8 +286,9 @@ onMounted(() => {
 
 onUnmounted(() => {
 	window.removeEventListener("resize", resize);
-	gsap.killTweensOf(progressStart);
-	gsap.killTweensOf(progressEnd);
+	progressStartAnim.value?.kill();
+	progressEndAnim.value?.kill();
+	scrollAnim.value?.kill();
 });
 </script>
 

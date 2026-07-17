@@ -79,7 +79,7 @@ onUnmounted(() => {
 		@mouseleave="handleMouseLeave"
 	>
 		<!-- From Uiverse.io by gharsh11032000 -->
-		<button class="link_button hoverable" ref="buttonRef">
+		<button class="link_button" ref="buttonRef">
 			<div ref="contentRef">立即前往</div>
 		</button>
 	</div>

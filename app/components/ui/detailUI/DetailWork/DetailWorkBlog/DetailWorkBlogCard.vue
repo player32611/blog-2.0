@@ -26,7 +26,8 @@ const handleMouseMove = (e: MouseEvent) => {
 
 const handleMouseEnter = (e: MouseEvent) => {
 	fadeAnim.value?.play();
-	handleMouseMove(e);
+	setX(e.clientX, e.clientX);
+	setY(e.clientY, e.clientX);
 };
 
 const handleMouseLeave = () => {
@@ -75,7 +76,7 @@ onUnmounted(() => {
 <template>
 	<!-- From Uiverse.io by gharsh11032000 -->
 	<div
-		class="work_blog_card hoverable"
+		class="work_blog_card"
 		@mouseenter="handleMouseEnter"
 		@mouseleave="handleMouseLeave"
 		@touchstart="handleTouchStart"
