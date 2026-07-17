@@ -30,6 +30,7 @@ onMounted(() => {
 		wrapper: wrapperRef.value,
 		content: contentRef.value,
 		smooth: 1,
+		smoothTouch: false,
 		effects: true,
 		normalizeScroll: true,
 	});

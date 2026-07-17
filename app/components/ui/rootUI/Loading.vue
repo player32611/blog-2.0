@@ -61,10 +61,7 @@ const loadingIn = (next: () => void) => {
 			opacity: 1,
 			duration: 0.5,
 			ease: "power2.out",
-			stagger: {
-				from: "edges",
-				each: 0.003,
-			},
+			stagger: { from: "edges", each: 0.003 },
 		})
 		.to(
 			blocks.value,
@@ -73,22 +70,11 @@ const loadingIn = (next: () => void) => {
 				"stroke-opacity": 0,
 				duration: 0.5,
 				ease: "power4.out",
-				stagger: {
-					from: "random",
-					each: 0.002,
-				},
+				stagger: { from: "random", each: 0.002 },
 			},
 			"<0.5",
 		)
-		.to(
-			maskRef.value,
-			{
-				opacity: 1,
-				duration: 0.5,
-				ease: "linear",
-			},
-			"<0.2",
-		);
+		.to(maskRef.value, { opacity: 1, duration: 0.5, ease: "none" }, "<0.2");
 };
 
 const loadingOut = () => {
@@ -101,11 +87,7 @@ const loadingOut = () => {
 				contentAnim.value?.pause();
 			},
 		})
-		.to(maskRef.value, {
-			opacity: 0,
-			duration: 0.5,
-			ease: "linear",
-		})
+		.to(maskRef.value, { opacity: 0, duration: 0.5, ease: "none" })
 		.to(
 			blocks.value,
 			{
@@ -113,10 +95,7 @@ const loadingOut = () => {
 				"stroke-opacity": 1,
 				duration: 0.5,
 				ease: "power4.out",
-				stagger: {
-					from: "random",
-					each: 0.002,
-				},
+				stagger: { from: "random", each: 0.002 },
 			},
 			"<0.2",
 		)
@@ -127,10 +106,7 @@ const loadingOut = () => {
 				opacity: 0,
 				duration: 1,
 				ease: "power2.out",
-				stagger: {
-					from: "center",
-					each: 0.004,
-				},
+				stagger: { from: "center", each: 0.004 },
 			},
 			"<0.2",
 		);
@@ -173,27 +149,18 @@ onMounted(() => {
 				x: 150,
 				ease: "slow(0.3,0.7,false)",
 				duration: contentAnimDuration,
-				stagger: {
-					each: contentAnimStagger,
-					from: "end",
-				},
+				stagger: { each: contentAnimStagger, from: "end" },
 			},
 		)
 		.fromTo(
 			contentSplit.value.chars,
-			{
-				rotate: 90,
-				opacity: 0,
-			},
+			{ rotate: 90, opacity: 0 },
 			{
 				rotate: 0,
 				opacity: 1,
 				ease: "power1.out",
 				duration: contentAnimDuration / 2,
-				stagger: {
-					each: contentAnimStagger,
-					from: "end",
-				},
+				stagger: { each: contentAnimStagger, from: "end" },
 			},
 			"<",
 		)
@@ -204,10 +171,7 @@ onMounted(() => {
 				opacity: 0,
 				ease: "power1.in",
 				duration: contentAnimDuration / 2,
-				stagger: {
-					each: contentAnimStagger,
-					from: "end",
-				},
+				stagger: { each: contentAnimStagger, from: "end" },
 			},
 			`<${contentAnimDuration / 2}`,
 		);
@@ -255,8 +219,8 @@ defineExpose({
 	position: fixed;
 	top: 0;
 	left: 0;
-	height: 100vh;
-	width: 100dvw;
+	height: 100lvh;
+	width: 100lvw;
 	z-index: variables.$loading_zIndex;
 	overflow: hidden;
 	pointer-events: none;

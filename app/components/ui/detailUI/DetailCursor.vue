@@ -4,6 +4,8 @@ import gsap from "gsap";
 const cursorRef = ref<HTMLDivElement | null>(null);
 const isOut = ref<boolean>(true);
 
+let setX: Function;
+let setY: Function;
 const outTime = 0.5; // 离开变化时间（s）
 
 const handleMouseDown = () => {
@@ -20,7 +22,8 @@ const handleMouseMove = (event: MouseEvent) => {
 		gsap.to(cursorRef.value, { scale: 1, opacity: 1, duration: outTime });
 		isOut.value = false;
 	}
-	gsap.set(cursorRef.value, { x: event.clientX, y: event.clientY });
+	setX(event.clientX);
+	setY(event.clientY);
 };
 
 const handleMouseOut = (event: MouseEvent) => {
@@ -31,6 +34,8 @@ const handleMouseOut = (event: MouseEvent) => {
 };
 
 onMounted(() => {
+	setX = gsap.quickSetter(cursorRef.value, "x", "px");
+	setY = gsap.quickSetter(cursorRef.value, "y", "px");
 	window.addEventListener("mousedown", handleMouseDown);
 	window.addEventListener("mouseup", handleMouseUp);
 	window.addEventListener("mousemove", handleMouseMove);

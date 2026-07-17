@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/all";
 import Lottie from "lottie-web";
 import type { AnimationItem } from "lottie-web";
 
@@ -7,8 +9,24 @@ import rolePath from "@/assets/anims/role.json";
 
 const animContainerRef = ref<HTMLDivElement | null>(null);
 const animItem = ref<AnimationItem | null>(null);
+const trigger = ref<ScrollTrigger | null>(null);
 
 onMounted(() => {
+	trigger.value = ScrollTrigger.create({
+		trigger: animContainerRef.value,
+		onEnter: () => {
+			animItem.value?.play();
+		},
+		onEnterBack: () => {
+			animItem.value?.play();
+		},
+		onLeave: () => {
+			animItem.value?.pause();
+		},
+		onLeaveBack: () => {
+			animItem.value?.pause();
+		},
+	});
 	if (animContainerRef.value) {
 		animItem.value = Lottie.loadAnimation({
 			container: animContainerRef.value,
@@ -17,10 +35,12 @@ onMounted(() => {
 			autoplay: true,
 			animationData: rolePath,
 		});
+		animItem.value.pause();
 	}
 });
 
 onUnmounted(() => {
+	trigger.value?.kill();
 	animItem.value?.destroy();
 });
 </script>

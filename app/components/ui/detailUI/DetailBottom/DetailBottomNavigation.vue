@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import gsap from "gsap";
-import { ScrollSmoother } from "gsap/all";
+import { ScrollSmoother, ScrollTrigger } from "gsap/all";
 import Lottie from "lottie-web";
 import type { AnimationItem } from "lottie-web";
 
@@ -10,7 +10,8 @@ gsap.registerPlugin(ScrollSmoother);
 
 const detailStore = useDetailStore();
 const animContainer = ref<HTMLDivElement | null>(null);
-const animItem = ref<AnimationItem | null>(null);
+const lottieAnim = ref<AnimationItem | null>(null);
+const triggerAnim = ref<ScrollTrigger | null>(null);
 
 const handleClick = () => {
 	const smoother = ScrollSmoother.get();
@@ -25,19 +26,36 @@ const handleClick = () => {
 };
 
 onMounted(() => {
+	triggerAnim.value = ScrollTrigger.create({
+		trigger: animContainer.value,
+		onEnter: () => {
+			lottieAnim.value?.play();
+		},
+		onEnterBack: () => {
+			lottieAnim.value?.play();
+		},
+		onLeave: () => {
+			lottieAnim.value?.pause();
+		},
+		onLeaveBack: () => {
+			lottieAnim.value?.pause();
+		},
+	});
 	if (animContainer.value) {
-		animItem.value = Lottie.loadAnimation({
+		lottieAnim.value = Lottie.loadAnimation({
 			container: animContainer.value,
 			renderer: "svg",
 			loop: true,
 			autoplay: true,
 			animationData: animPath,
 		});
+		lottieAnim.value.pause();
 	}
 });
 
 onUnmounted(() => {
-	animItem.value?.destroy();
+	triggerAnim.value?.kill();
+	lottieAnim.value?.destroy();
 });
 </script>
 

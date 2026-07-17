@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import gsap from "gsap";
-import { SplitText } from "gsap/all";
+import { ScrollTrigger, SplitText } from "gsap/all";
 
 import DetailTitleCode from "./DetailTitleCode.vue";
 
@@ -69,10 +69,7 @@ const word1FourthCharAnim = () => {
 	if (!word1Split.value || !word1Split.value.chars[3]) return;
 	gsap.fromTo(
 		word1Split.value.chars[3],
-		{
-			scale: 0,
-			rotate: 90,
-		},
+		{ scale: 0, rotate: 90 },
 		{
 			scale: 1,
 			rotate: 0,

@@ -20,18 +20,15 @@ const itemPositions = ref<Map<string, ItemParams>>(new Map());
 const itemInstances = ref<Map<string, Matter.Body>>(new Map());
 const smoother = ref<ScrollSmoother | null>(null);
 
-let engine: EngineType;
-let render: RenderType;
-let runner: RunnerType;
-let mouse: MouseType;
+let engine: EngineType | null;
+let render: RenderType | null;
+let runner: RunnerType | null;
+let mouse: MouseType | null;
 let mouseConstraint: MouseConstraintType | null;
 
 const resize = () => {
-	Matter.Events.off(engine, "afterUpdate", handleAfterUpdate);
-	World.clear(engine.world, true);
-	Render.stop(render);
-	Engine.clear(engine);
-	containerRef.value?.removeChild(render.canvas);
+	console.log("resize");
+	destroy();
 	init();
 };
 
@@ -95,8 +92,31 @@ const init = () => {
 	else pause();
 };
 
+const destroy = () => {
+	Matter.Events.off(engine, "afterUpdate", handleAfterUpdate);
+
+	if (engine) {
+		World.clear(engine.world, true);
+		Engine.clear(engine);
+	}
+	if (mouse) Mouse.clearSourceEvents(mouse);
+
+	if (runner) Runner.stop(runner);
+
+	if (render) {
+		Render.stop(render);
+		render.canvas.remove();
+	}
+
+	engine = null;
+	render = null;
+	runner = null;
+	mouse = null;
+	mouseConstraint = null;
+};
+
 const createBorder = () => {
-	if (!containerRef.value) return;
+	if (!containerRef.value || !engine) return;
 
 	const width = containerRef.value.clientWidth;
 	const height = containerRef.value.clientHeight;
@@ -208,11 +228,11 @@ const handleTouchLeave = (event: TouchEvent) => {
 };
 
 const resume = () => {
-	runner.enabled = true;
+	if (runner) runner.enabled = true;
 };
 
 const pause = () => {
-	runner.enabled = false;
+	if (runner) runner.enabled = false;
 };
 
 onMounted(() => {

@@ -24,7 +24,11 @@ const easeDuration = 2;
 const transitionAnim = (inOptions?: gsap.TweenVars, outOptions?: gsap.TweenVars) => {
 	if (activeAnim.value) return;
 	activeAnim.value = gsap
-		.timeline()
+		.timeline({
+			onStart: () => {
+				lottieAnim.value?.play();
+			},
+		})
 		.fromTo(
 			pathRef.value,
 			{ morphSVG: start },
@@ -43,6 +47,7 @@ const transitionAnim = (inOptions?: gsap.TweenVars, outOptions?: gsap.TweenVars)
 			duration: easeDuration / 4,
 			...outOptions,
 			onComplete: () => {
+				lottieAnim.value?.pause();
 				const optionOnComplete = outOptions?.onComplete;
 				activeAnim.value?.kill();
 				activeAnim.value = null;
@@ -79,11 +84,13 @@ onMounted(() => {
 			autoplay: true,
 			animationData: animPath,
 		});
+		lottieAnim.value.pause();
 	}
 	gsap.set(animContainerRef.value, { y: "100vh" });
 });
 
 onUnmounted(() => {
+	activeAnim.value?.kill();
 	lottieAnim.value?.destroy();
 });
 </script>

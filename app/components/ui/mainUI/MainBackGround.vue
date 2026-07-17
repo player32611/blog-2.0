@@ -14,7 +14,6 @@ const movedata = ref<{ moveable: boolean; movePos: Point }>({
 	moveable: false,
 	movePos: { x: 0, y: 0 },
 });
-const ani = ref<GSAPTween | null>(null); // gsap 动画
 const scaleNum = ref<number>(1); // 缩放比例
 
 let setX: gsap.QuickToFunc;
@@ -51,7 +50,6 @@ const move = (x: number, y: number) => {
 	movedata.value.movePos.y = Math.max(-maxOffsetY, Math.min(maxOffsetY, newMovY));
 	mainStore.setBackgroundTransform(movedata.value.movePos);
 
-	if (ani.value) ani.value.kill();
 	setX(movedata.value.movePos.x);
 	setY(movedata.value.movePos.y);
 	mousePos.value = { x, y };

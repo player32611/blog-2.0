@@ -75,16 +75,23 @@ const handleClickPaper = (e: MouseEvent) => {
 	hintAnim.value = tl;
 };
 
-watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransform.y], newState => {
-	if (moveAnim.value) moveAnim.value.kill();
-	if (mainStore.isResized) {
-		gsap.set(linkRefs.value, { x: newState[0], y: newState[1] });
-		mainStore.setIsResized(false);
-	} else {
-		setX(newState[0]);
-		setY(newState[1]);
-	}
-});
+watch(
+	[
+		() => mainStore.backgroundTransform.x,
+		() => mainStore.backgroundTransform.y,
+		() => mainStore.isResized,
+	],
+	newState => {
+		if (moveAnim.value) moveAnim.value.kill();
+		if (newState[2]) {
+			gsap.set(linkRefs.value, { x: newState[0], y: newState[1] });
+			mainStore.setIsResized(false);
+		} else {
+			setX(newState[0]);
+			setY(newState[1]);
+		}
+	},
+);
 
 onMounted(() => {
 	setX = gsap.quickTo(linkRefs.value, "x", { duration: moveTime, ease: "power4.out" });

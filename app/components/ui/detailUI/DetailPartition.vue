@@ -11,7 +11,7 @@ const itemRefs = ref<HTMLDivElement[]>([]);
 const scrollAnim = ref<GSAPTween | null>(null);
 const normalAnim = ref<GSAPTween | null>(null);
 
-const itemNum = 10;
+const itemNum = 15;
 
 const resize = () => {
 	if (!itemRefs.value[0]) return;
@@ -72,7 +72,10 @@ onUnmounted(() => {
 		<div class="partition_container" ref="containerRef">
 			<div class="partition_item" v-for="_ in itemNum" ref="itemRefs">
 				<div class="partition_text">{{ text.toUpperCase() }}</div>
-				<div class="partition_arrow"></div>
+				<div
+					class="partition_arrow"
+					:style="{ rotate: direction === 'left' ? '0deg' : '180deg' }"
+				></div>
 			</div>
 		</div>
 	</div>
@@ -132,8 +135,9 @@ onUnmounted(() => {
 				width: 250px * $base-size;
 				font-size: 2rem * $base-size;
 
-				#partition_arrow {
+				.partition_arrow {
 					height: 5rem * $base-size;
+					width: 5rem * $base-size;
 				}
 			}
 		}
@@ -154,8 +158,9 @@ onUnmounted(() => {
 				width: 250px * $base-size;
 				font-size: 2rem * $base-size;
 
-				#partition_arrow {
+				.partition_arrow {
 					height: 5rem * $base-size;
+					width: 5rem * $base-size;
 				}
 			}
 		}
@@ -176,8 +181,9 @@ onUnmounted(() => {
 				width: 250px * $base-size;
 				font-size: 2rem * $base-size;
 
-				#partition_arrow {
+				.partition_arrow {
 					height: 5rem * $base-size;
+					width: 5rem * $base-size;
 				}
 			}
 		}
@@ -198,8 +204,9 @@ onUnmounted(() => {
 				width: 250px * $base-size;
 				font-size: 2rem * $base-size;
 
-				#partition_arrow {
+				.partition_arrow {
 					height: 5rem * $base-size;
+					width: 5rem * $base-size;
 				}
 			}
 		}

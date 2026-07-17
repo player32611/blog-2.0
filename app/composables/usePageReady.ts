@@ -16,21 +16,14 @@ export const usePageReady = (before?: () => void | Promise<void>) => {
 
 	const init = async () => {
 		try {
-			if (before) {
-				await before();
-				console.log("111 - before 执行完成");
-			}
-
-			console.log("222 - 开始初始化");
+			if (before) await before();
 
 			// 等待 Vue 完成 DOM 更新
 			await nextTick();
-			console.log("333 - nextTick 完成");
 
 			// 等待两次渲染帧（第一次用于布局，第二次用于绘制）
 			await waitForRender();
 			await waitForRender();
-			console.log("444 - 渲染完成");
 
 			// 执行用户的 before 回调（可能包含异步操作）
 
@@ -40,11 +33,9 @@ export const usePageReady = (before?: () => void | Promise<void>) => {
 					document.fonts.ready,
 					new Promise<void>(resolve => setTimeout(resolve, 3000)),
 				]);
-				console.log("555 - 字体加载完成（或超时）");
 			}
 
 			isReady.value = true;
-			console.log("666 - 页面已准备就绪");
 			loadingStore.loadingOut();
 		} catch (error) {
 			console.error("页面初始化失败:", error);

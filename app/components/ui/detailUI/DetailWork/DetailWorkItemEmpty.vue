@@ -69,35 +69,35 @@ onUnmounted(() => {
 	overflow: hidden;
 	background: radial-gradient(circle, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.1));
 
-	&::before,
-	&::after {
-		content: "";
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		width: 300%;
-		height: 300%;
-		background: conic-gradient(
-			from 0deg,
-			#ff9aa2,
-			/* Soft pink */ #ffb7b2,
-			/* Light peach */ #ffdac1,
-			/* Pastel yellow */ #e2f0cb,
-			/* Mint green */ #a2e4ff,
-			/* Baby blue */ #c9afff,
-			/* Lavender */ #ffb7b2,
-			#ff9aa2
-		);
-		transform: translate(-50%, -50%);
-		animation: rotate 8s linear infinite;
-		filter: blur(50px); /* Create a soft glowing effect */
-		opacity: 0.8;
-	}
+	// &::before,
+	// &::after {
+	// 	content: "";
+	// 	position: absolute;
+	// 	top: 50%;
+	// 	left: 50%;
+	// 	width: 300%;
+	// 	height: 300%;
+	// 	background: conic-gradient(
+	// 		from 0deg,
+	// 		#ff9aa2,
+	// 		/* Soft pink */ #ffb7b2,
+	// 		/* Light peach */ #ffdac1,
+	// 		/* Pastel yellow */ #e2f0cb,
+	// 		/* Mint green */ #a2e4ff,
+	// 		/* Baby blue */ #c9afff,
+	// 		/* Lavender */ #ffb7b2,
+	// 		#ff9aa2
+	// 	);
+	// 	transform: translate(-50%, -50%);
+	// 	animation: rotate 8s linear infinite;
+	// 	filter: blur(50px); /* Create a soft glowing effect */
+	// 	opacity: 0.8;
+	// }
 
-	&::after {
-		animation: rotate-reverse 10s linear infinite;
-		opacity: 0.6;
-	}
+	// &::after {
+	// 	animation: rotate-reverse 10s linear infinite;
+	// 	opacity: 0.6;
+	// }
 
 	.bubble_container {
 		position: absolute;
