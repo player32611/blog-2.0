@@ -17,6 +17,8 @@ const movedata = ref<{ moveable: boolean; movePos: Point }>({
 const ani = ref<GSAPTween | null>(null); // gsap 动画
 const scaleNum = ref<number>(1); // 缩放比例
 
+let setX: gsap.QuickToFunc;
+let setY: gsap.QuickToFunc;
 const standardWidth = 1700; // 标准宽度
 const resistance = 0.2;
 const easeTime = 1;
@@ -29,10 +31,8 @@ const resize = () => {
 		imageData.value.height = imageRef.value.offsetHeight;
 		imageData.value.width = imageRef.value.offsetWidth;
 		mainStore.setBackgroundSize(imageData.value);
-		movedata.value.movePos = { x: 0, y: 0 };
 		mainStore.setBackgroundTransform(movedata.value.movePos);
 		scaleNum.value = document.body.offsetWidth / standardWidth;
-		gsap.set(imageRef.value, { transform: `translate(0,0)` });
 	}
 };
 
@@ -52,11 +52,8 @@ const move = (x: number, y: number) => {
 	mainStore.setBackgroundTransform(movedata.value.movePos);
 
 	if (ani.value) ani.value.kill();
-	ani.value = gsap.to(imageRef.value, {
-		transform: `translate(${movedata.value.movePos.x}px , ${movedata.value.movePos.y}px)`,
-		duration: easeTime,
-		ease: "power4.out",
-	});
+	setX(movedata.value.movePos.x);
+	setY(movedata.value.movePos.y);
 	mousePos.value = { x, y };
 };
 
@@ -90,6 +87,8 @@ const handleMouseUp = () => {
 };
 
 onMounted(() => {
+	setX = gsap.quickTo(imageRef.value, "x", { duration: easeTime, ease: "power4.out" });
+	setY = gsap.quickTo(imageRef.value, "y", { duration: easeTime, ease: "power4.out" });
 	resize();
 	window.addEventListener("resize", resize);
 });

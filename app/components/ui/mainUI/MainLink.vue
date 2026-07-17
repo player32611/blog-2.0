@@ -14,6 +14,8 @@ const maskAnim = ref<GSAPTimeline | null>(null);
 const hintAnim = ref<GSAPTimeline | null>(null);
 const moveAnim = ref<GSAPTween | null>(null);
 
+let setX: gsap.QuickToFunc;
+let setY: gsap.QuickToFunc;
 const moveTime = 1;
 
 CustomEase.create("custom", "M0,0 C0.23,1 0.32,1 1,1");
@@ -75,12 +77,18 @@ const handleClickPaper = (e: MouseEvent) => {
 
 watch([() => mainStore.backgroundTransform.x, () => mainStore.backgroundTransform.y], newState => {
 	if (moveAnim.value) moveAnim.value.kill();
-	moveAnim.value = gsap.to(linkRefs.value, {
-		transform: `translate(${newState[0]}px , ${newState[1]}px)`,
-		duration: mainStore.isResized ? 0 : moveTime,
-		ease: "power4.out",
-	});
-	mainStore.setIsResized(false);
+	if (mainStore.isResized) {
+		gsap.set(linkRefs.value, { x: newState[0], y: newState[1] });
+		mainStore.setIsResized(false);
+	} else {
+		setX(newState[0]);
+		setY(newState[1]);
+	}
+});
+
+onMounted(() => {
+	setX = gsap.quickTo(linkRefs.value, "x", { duration: moveTime, ease: "power4.out" });
+	setY = gsap.quickTo(linkRefs.value, "y", { duration: moveTime, ease: "power4.out" });
 });
 
 onUnmounted(() => {

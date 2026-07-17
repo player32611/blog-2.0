@@ -42,7 +42,9 @@ const init = () => {
 	const height = containerRef.value.clientHeight;
 
 	// 创建引擎
-	engine = Engine.create();
+	engine = Engine.create({
+		enableSleeping: true,
+	});
 
 	// 创建渲染器
 	render = Render.create({

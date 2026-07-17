@@ -11,6 +11,8 @@ const rotateAnimation = ref<GSAPAnimation | null>(null);
 const traceRef = ref<HTMLDivElement | null>(null);
 const currentMousePos = ref<Point>({ x: -100, y: -100 });
 
+let toX: gsap.QuickToFunc;
+let toY: gsap.QuickToFunc;
 const easeTime = 0.2; // 缓动时间（s）
 const outTime = 0.5; // 离开变化时间（s）
 const traceDuration = 1; // 轨迹持续时间（s）
@@ -36,11 +38,8 @@ const handleMouseMove = (event: MouseEvent) => {
 		gsap.to(cursorRef.value, { scale: 1, opacity: 1, duration: outTime });
 		normalAnimation.value?.resume();
 	}
-	gsap.to(cursorRef.value, {
-		x: event.clientX,
-		y: event.clientY,
-		duration: easeTime,
-	});
+	toX(event.clientX);
+	toY(event.clientY);
 	currentMousePos.value = { x: event.clientX, y: event.clientY };
 };
 
@@ -66,6 +65,8 @@ watch(
 );
 
 onMounted(() => {
+	toX = gsap.quickTo(cursorRef.value, "x", { duration: easeTime });
+	toY = gsap.quickTo(cursorRef.value, "y", { duration: easeTime });
 	if (cursorRef.value) {
 		normalAnimation.value = gsap
 			.timeline({
