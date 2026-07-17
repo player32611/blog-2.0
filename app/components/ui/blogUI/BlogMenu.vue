@@ -8,39 +8,34 @@ import RotatePencil from "~/components/exhibit/RotatePencil.vue";
 
 const menuRef = ref<HTMLDivElement | null>(null);
 const menuState = ref<"in" | "out">("in");
+const menuAnim = ref<GSAPTween | null>(null);
 
 const easeTime = 0.75;
-
-const menuIn = () => {
-	gsap.timeline().to(menuRef.value, {
-		top: "0",
-		duration: easeTime,
-		ease: "power1.inOut",
-	});
-};
-
-const menuOut = () => {
-	gsap.to(menuRef.value, {
-		top: "-100lvh",
-		duration: easeTime,
-		ease: "power1.inOut",
-	});
-};
 
 const changeMenu = () => {
 	const smoother = ScrollSmoother.get();
 	switch (menuState.value) {
 		case "in":
 			smoother?.paused(true);
-			menuIn();
+			menuAnim.value?.play();
 			break;
 		case "out":
 			smoother?.paused(false);
-			menuOut();
+			menuAnim.value?.reverse();
 			break;
 	}
 	menuState.value = menuState.value === "in" ? "out" : "in";
 };
+
+onMounted(() => {
+	menuAnim.value = gsap
+		.to(menuRef.value, { top: "0", duration: easeTime, ease: "power1.inOut" })
+		.pause();
+});
+
+onUnmounted(() => {
+	menuAnim.value?.kill();
+});
 
 defineExpose({
 	changeMenu,

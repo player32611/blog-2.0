@@ -1,52 +1,51 @@
 <script setup lang="ts">
 import gsap from "gsap";
+import { EasePack } from "gsap/all";
 
-import DinoGame from "~/components/exhibit/DinoGame.vue";
+import HamsterRunning from "~/components/exhibit/HamsterRunning.vue";
+
+gsap.registerPlugin(EasePack);
 
 const maskRef = ref<HTMLDivElement | null>(null);
 const maskState = ref<"in" | "out">("in");
 
+let maskAnim: GSAPTimeline;
+
 const easeTime = 0.75;
-
-const maskIn = () => {
-	gsap.timeline().to(maskRef.value, {
-		top: "100%",
-		duration: easeTime,
-		ease: "power1.inOut",
-	});
-};
-
-const maskOut = () => {
-	gsap.to(maskRef.value, {
-		top: "-110px",
-		duration: easeTime,
-		ease: "power1.inOut",
-	});
-};
 
 const changeMask = () => {
 	switch (maskState.value) {
 		case "in":
-			maskIn();
+			maskAnim.play();
+			maskState.value = "out";
 			break;
 		case "out":
-			maskOut();
+			maskAnim.reverse();
+			maskState.value = "in";
 			break;
 	}
-	gsap
+};
+
+onMounted(() => {
+	maskAnim = gsap
 		.timeline()
 		.to(maskRef.value, {
 			height: 300,
-			duration: easeTime / 4,
-			ease: "power1.out",
+			duration: easeTime,
+			ease: "slow(0.1,0.1,true)",
 		})
-		.to(maskRef.value, {
-			height: 100,
-			duration: (easeTime * 3) / 4,
-			ease: "power1.in",
-		});
-	maskState.value = maskState.value === "in" ? "out" : "in";
-};
+		.fromTo(
+			maskRef.value,
+			{ top: -110 },
+			{ top: "100%", duration: easeTime, ease: "power1.inOut" },
+			0,
+		)
+		.pause();
+});
+
+onUnmounted(() => {
+	maskAnim.kill();
+});
 
 defineExpose({
 	changeMask,
@@ -55,7 +54,7 @@ defineExpose({
 
 <template>
 	<div class="blog_mask" ref="maskRef">
-		<DinoGame />
+		<HamsterRunning />
 	</div>
 </template>
 

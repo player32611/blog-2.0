@@ -4,40 +4,9 @@ import { ScrollSmoother } from "gsap/all";
 import type { BlogNavigationParams, BlogNavigationInstance } from "~/types/components";
 
 const { page } = defineProps<BlogNavigationParams>();
-const boxRef = ref<HTMLDivElement | null>(null);
 const activeId = ref<string | null>(null);
 
 const links = computed(() => page?.body.toc?.links);
-
-const easeTime = 1;
-
-const handleMouseEnter = () => {
-	gsap.to(boxRef.value, {
-		right: 0,
-		duration: easeTime,
-		ease: "power2.out",
-	});
-};
-
-const handleMouseLeave = () => {
-	let offset;
-	if (window.innerWidth < 576) {
-		offset = "-9rem";
-	} else if (window.innerWidth < 768) {
-		offset = "-12.5rem";
-	} else if (window.innerWidth < 991) {
-		offset = "-14.5rem";
-	} else if (window.innerWidth < 1199) {
-		offset = "-16.5rem";
-	} else {
-		offset = "-18rem";
-	}
-	gsap.to(boxRef.value, {
-		right: offset,
-		duration: easeTime,
-		ease: "power2.out",
-	});
-};
 
 const handleClick = (id: string) => {
 	const element = document.getElementById(id);
@@ -77,12 +46,7 @@ defineExpose<BlogNavigationInstance>({ handleScroll });
 </script>
 
 <template>
-	<div
-		class="blog_navigation_box"
-		ref="boxRef"
-		@mouseenter="handleMouseEnter"
-		@mouseleave="handleMouseLeave"
-	>
+	<div class="blog_navigation_box">
 		<div class="navigation_title">在此页面上</div>
 		<div v-if="page" v-for="h2 in links" :key="h2.id" class="navigation_links">
 			<div :class="'link_h2 ' + (activeId === h2.id ? 'active' : null)" @click="handleClick(h2.id)">
@@ -117,6 +81,11 @@ $base-size: 1;
 	border-color: #ffffff;
 	font-family: "方正基础像素体";
 	overflow-y: scroll;
+	transition: right 1s ease;
+
+	&:hover {
+		right: 0;
+	}
 
 	&::-webkit-scrollbar {
 		display: none;
