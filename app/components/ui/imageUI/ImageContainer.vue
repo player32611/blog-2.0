@@ -26,9 +26,7 @@ const handleMouseDown = () => {
 	velocityY.value = 0;
 	imageStore.setHoverImageData(null);
 	// 如果动画循环未运行，启动它
-	if (animationFrameId.value === null) {
-		animationFrameId.value = requestAnimationFrame(drawFrame);
-	}
+	if (animationFrameId.value === null) animationFrameId.value = requestAnimationFrame(drawFrame);
 };
 
 const handleTouchStart = (e: TouchEvent) => {
@@ -39,9 +37,7 @@ const handleTouchStart = (e: TouchEvent) => {
 	lastTouchX.value = e.touches[0].clientX;
 	lastTouchY.value = e.touches[0].clientY;
 	imageStore.setHoverImageData(null);
-	if (animationFrameId.value === null) {
-		animationFrameId.value = requestAnimationFrame(drawFrame);
-	}
+	if (animationFrameId.value === null) animationFrameId.value = requestAnimationFrame(drawFrame);
 };
 
 const handleMouseMove = (e: MouseEvent) => {
@@ -51,9 +47,7 @@ const handleMouseMove = (e: MouseEvent) => {
 		velocityY.value += e.movementY * mouseSensitivity * acceleration;
 
 		// 如果动画循环未运行，启动它
-		if (animationFrameId.value === null) {
-			animationFrameId.value = requestAnimationFrame(drawFrame);
-		}
+		if (animationFrameId.value === null) animationFrameId.value = requestAnimationFrame(drawFrame);
 	} else if (
 		Math.abs(velocityX.value) < interactVelocity &&
 		Math.abs(velocityY.value) < interactVelocity
@@ -74,9 +68,7 @@ const handleMouseMove = (e: MouseEvent) => {
 					y: (2 * img.y + currentImageHeight.value) / 2,
 				},
 			});
-		} else {
-			imageStore.setHoverImageData(null);
-		}
+		} else imageStore.setHoverImageData(null);
 	}
 };
 

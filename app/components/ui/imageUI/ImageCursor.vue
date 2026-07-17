@@ -5,6 +5,8 @@ const imageStore = useImageStore();
 const cursorRef = ref<HTMLDivElement | null>(null);
 const rotateAnimation = ref<GSAPAnimation | null>(null); // 旋转动画引用
 
+let toX: gsap.QuickToFunc;
+let toY: gsap.QuickToFunc;
 const easeTime = 0.2; // 缓动时间
 const outTime = 0.5; // 离开变化时间（s）
 const cursorScale = 1.1; // 光标缩放比例
@@ -13,21 +15,17 @@ const dampCoefficient = 0.05; // 阻尼系数
 const handleMouseDown = (event: MouseEvent) => {
 	if (!cursorRef.value) return;
 	if (imageStore.hoverImageData) {
-		gsap.to(cursorRef.value, {
-			x:
-				imageStore.hoverImageData.center.x +
+		toX(
+			imageStore.hoverImageData.center.x +
 				(event.clientX - imageStore.hoverImageData.center.x) * dampCoefficient,
-			y:
-				imageStore.hoverImageData.center.y +
+		);
+		toY(
+			imageStore.hoverImageData.center.y +
 				(event.clientY - imageStore.hoverImageData.center.y) * dampCoefficient,
-			duration: easeTime,
-		});
+		);
 	} else {
-		gsap.to(cursorRef.value, {
-			x: event.clientX,
-			y: event.clientY,
-			duration: easeTime,
-		});
+		toX(event.clientX);
+		toY(event.clientY);
 	}
 };
 
@@ -38,21 +36,17 @@ const handleMouseMove = (event: MouseEvent) => {
 		if (!imageStore.hoverImageData) rotateAnimation.value?.resume();
 	}
 	if (imageStore.hoverImageData) {
-		gsap.to(cursorRef.value, {
-			x:
-				imageStore.hoverImageData.center.x +
+		toX(
+			imageStore.hoverImageData.center.x +
 				(event.clientX - imageStore.hoverImageData.center.x) * dampCoefficient,
-			y:
-				imageStore.hoverImageData.center.y +
+		);
+		toY(
+			imageStore.hoverImageData.center.y +
 				(event.clientY - imageStore.hoverImageData.center.y) * dampCoefficient,
-			duration: easeTime,
-		});
+		);
 	} else {
-		gsap.to(cursorRef.value, {
-			x: event.clientX,
-			y: event.clientY,
-			duration: easeTime,
-		});
+		toX(event.clientX);
+		toY(event.clientY);
 	}
 };
 
@@ -92,6 +86,8 @@ watch(
 );
 
 onMounted(() => {
+	toX = gsap.quickTo(cursorRef.value, "x", { duration: easeTime });
+	toY = gsap.quickTo(cursorRef.value, "y", { duration: easeTime });
 	rotateAnimation.value = gsap
 		.to(cursorRef.value, {
 			rotate: 720,
