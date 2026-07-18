@@ -68,44 +68,7 @@ defineExpose<DetailWorkFloatContainerInstance>({
 			<div class="rope_container" v-if="activeIndex >= 0"><div class="rope"></div></div>
 			<div class="item_container">
 				<span v-if="activeIndex < 0"></span>
-				<svg
-					v-else-if="activeIndex === 0"
-					id="bullet"
-					data-name="bullet"
-					xmlns="http://www.w3.org/2000/svg"
-					viewBox="0 0 8 17"
-				>
-					<g id="_bullet" data-name="_bullet">
-						<g>
-							<rect x="2.5" y=".5" width="3" height="16" />
-							<path d="M5,1v15h-2V1h2M6,0H2v17h4V0h0Z" />
-						</g>
-						<g>
-							<rect x="1.5" y="1.5" width="5" height="15" />
-							<path d="M6,2v14H2V2h4M7,1H1v16h6V1h0Z" />
-						</g>
-						<g>
-							<rect x=".5" y="3.5" width="7" height="12" />
-							<path d="M7,4v11H1V4h6M8,3H0v13h8V3h0Z" />
-						</g>
-						<g>
-							<rect x="2.5" y="1.5" width="3" height="14" style="fill: #4c4c4c" />
-							<path d="M5,2v13h-2V2h2M6,1H2v15h4V1h0Z" style="fill: #4c4c4c" />
-						</g>
-						<g>
-							<rect x="1.5" y="3.5" width="5" height="12" style="fill: #4c4c4c" />
-							<path d="M6,4v11H2V4h4M7,3H1v13h6V3h0Z" style="fill: #4c4c4c" />
-						</g>
-						<g>
-							<rect x="3.5" y="2.5" width="1" height="12" style="fill: #fff" />
-							<path d="M4,3v11V3M5,2h-2v13h2V2h0Z" style="fill: #fff" />
-						</g>
-						<g>
-							<rect x="2.5" y="3.5" width="3" height="11" style="fill: #fff" />
-							<path d="M5,4v10h-2V4h2M6,3H2v12h4V3h0Z" style="fill: #fff" />
-						</g>
-					</g>
-				</svg>
+				<span v-else-if="activeIndex === 0" class="item_bullet"></span>
 				<Vial v-else-if="activeIndex === 1" :color="randomColor({ format: 'hex' })" />
 				<Bubble v-else style="scale: 0.2" />
 			</div>
@@ -167,10 +130,11 @@ defineExpose<DetailWorkFloatContainerInstance>({
 			transform-origin: center center;
 			filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.237));
 
-			#bullet {
+			.item_bullet {
 				position: absolute;
 				height: 100%;
 				width: 100%;
+				background: url("/blog-2.0/images/sprites/bullet.svg") center/contain no-repeat;
 			}
 		}
 	}

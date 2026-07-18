@@ -72,6 +72,10 @@ export interface DetailWorkBlogCardParams {
 	backgroundImage: string;
 }
 
+export interface DetailWorkGameTipParams {
+	isMoved: boolean;
+}
+
 export interface DetailWorkFloatContainerParams {
 	activeIndex: number;
 }

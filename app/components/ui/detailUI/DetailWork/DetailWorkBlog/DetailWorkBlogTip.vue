@@ -12,7 +12,11 @@ const changeDuration = 2;
 const handleClick = () => {
 	currentAnim.value?.kill();
 	currentAnim.value = gsap
-		.timeline()
+		.timeline({
+			onComplete: () => {
+				currentAnim.value?.kill();
+			},
+		})
 		.to(iconRef.value, { scale: 0, ease: "power2.out", duration: changeDuration / 3 })
 		.set(iconRef.value, {
 			y: 0,
@@ -43,7 +47,7 @@ onUnmounted(() => {
 <template>
 	<div class="work_blog_tip" ref="containerRef">
 		<div>点击页面任意位置以切换卡片</div>
-		<div class="icon" ref="iconRef">&#xe886;</div>
+		<span class="icon" ref="iconRef">&#xe886;</span>
 	</div>
 </template>
 
@@ -58,11 +62,6 @@ onUnmounted(() => {
 	color: rgba($color: #ffffff, $alpha: 0.4);
 	font-size: 1rem;
 	font-family: "方正基础像素体";
-
-	.icon {
-		position: relative;
-		top: 1px;
-	}
 }
 
 /* ========== 超小屏（< 576px）========== */
@@ -71,10 +70,6 @@ onUnmounted(() => {
 
 	.work_blog_tip {
 		font-size: 1rem * $base-size;
-
-		.icon {
-			top: 1px * $base-size;
-		}
 	}
 }
 
@@ -84,10 +79,6 @@ onUnmounted(() => {
 
 	.work_blog_tip {
 		font-size: 1rem * $base-size;
-
-		.icon {
-			top: 1px * $base-size;
-		}
 	}
 }
 
@@ -97,10 +88,6 @@ onUnmounted(() => {
 
 	.work_blog_tip {
 		font-size: 1rem * $base-size;
-
-		.icon {
-			top: 1px * $base-size;
-		}
 	}
 }
 
@@ -110,10 +97,6 @@ onUnmounted(() => {
 
 	.work_blog_tip {
 		font-size: 1rem * $base-size;
-
-		.icon {
-			top: 1px * $base-size;
-		}
 	}
 }
 </style>
