@@ -99,8 +99,8 @@ $base-size: 1;
 .music_record {
 	position: relative;
 	display: grid;
-	height: 600px * $base-size;
-	width: 600px * $base-size;
+	height: 70vmin;
+	width: 70vmin;
 	font-size: 1rem * $base-size;
 	border: none;
 	background: #000000;
@@ -128,8 +128,8 @@ $base-size: 1;
 
 		.music_cover {
 			position: relative;
-			height: 450px * $base-size;
-			width: 450px * $base-size;
+			height: 55vmin;
+			width: 55vmin;
 			border-radius: 50%;
 
 			&.loading {
@@ -163,8 +163,8 @@ $base-size: 1;
 	$base-size: 0.4;
 
 	.music_record {
-		height: 600px * $base-size;
-		width: 600px * $base-size;
+		height: 50vmin;
+		width: 50vmin;
 		font-size: 1rem * $base-size;
 
 		.container {
@@ -173,8 +173,8 @@ $base-size: 1;
 			}
 
 			.music_cover {
-				height: 450px * $base-size;
-				width: 450px * $base-size;
+				height: 40vmin;
+				width: 40vmin;
 			}
 		}
 	}
@@ -185,8 +185,8 @@ $base-size: 1;
 	$base-size: 0.5;
 
 	.music_record {
-		height: 600px * $base-size;
-		width: 600px * $base-size;
+		height: 45vmin;
+		width: 45vmin;
 		font-size: 1rem * $base-size;
 
 		.container {
@@ -195,8 +195,8 @@ $base-size: 1;
 			}
 
 			.music_cover {
-				height: 450px * $base-size;
-				width: 450px * $base-size;
+				height: 35vmin;
+				width: 35vmin;
 			}
 		}
 	}
@@ -207,8 +207,8 @@ $base-size: 1;
 	$base-size: 0.6;
 
 	.music_record {
-		height: 600px * $base-size;
-		width: 600px * $base-size;
+		height: 50vmin;
+		width: 50vmin;
 		font-size: 1rem * $base-size;
 
 		.container {
@@ -217,8 +217,8 @@ $base-size: 1;
 			}
 
 			.music_cover {
-				height: 450px * $base-size;
-				width: 450px * $base-size;
+				height: 40vmin;
+				width: 40vmin;
 			}
 		}
 	}
@@ -229,8 +229,8 @@ $base-size: 1;
 	$base-size: 0.8;
 
 	.music_record {
-		height: 600px * $base-size;
-		width: 600px * $base-size;
+		height: 55vmin;
+		width: 55vmin;
 		font-size: 1rem * $base-size;
 
 		.container {
@@ -239,8 +239,8 @@ $base-size: 1;
 			}
 
 			.music_cover {
-				height: 450px * $base-size;
-				width: 450px * $base-size;
+				height: 45vmin;
+				width: 45vmin;
 			}
 		}
 	}
