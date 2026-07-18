@@ -32,6 +32,7 @@ const resize = () => {
 		mainStore.setBackgroundSize(imageData.value);
 		mainStore.setBackgroundTransform(movedata.value.movePos);
 		scaleNum.value = document.body.offsetWidth / standardWidth;
+		console.log("resize");
 	}
 };
 
@@ -39,17 +40,18 @@ const move = (x: number, y: number) => {
 	if (!movedata.value.moveable || !imageRef.value) return;
 	const distanceX = ((x - mousePos.value.x) / scaleNum.value) * resistance;
 	const distanceY = ((y - mousePos.value.y) / scaleNum.value) * resistance;
-
+	console.log(imageData.value, viewBoxData.value);
+	console.log(distanceX, distanceY);
 	const newMovX = movedata.value.movePos.x + distanceX;
 	const newMovY = movedata.value.movePos.y + distanceY;
-
+	console.log(newMovX, newMovY);
 	const maxOffsetX = Math.max(0, (imageData.value.width - viewBoxData.value.width) / 2);
 	const maxOffsetY = Math.max(0, (imageData.value.height - viewBoxData.value.height) / 2);
-
+	console.log(maxOffsetX, maxOffsetY);
 	movedata.value.movePos.x = Math.max(-maxOffsetX, Math.min(maxOffsetX, newMovX));
 	movedata.value.movePos.y = Math.max(-maxOffsetY, Math.min(maxOffsetY, newMovY));
 	mainStore.setBackgroundTransform(movedata.value.movePos);
-
+	console.log(movedata.value.movePos);
 	setX(movedata.value.movePos.x);
 	setY(movedata.value.movePos.y);
 	mousePos.value = { x, y };

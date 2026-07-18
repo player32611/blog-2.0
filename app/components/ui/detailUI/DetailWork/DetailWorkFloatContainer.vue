@@ -70,7 +70,7 @@ defineExpose<DetailWorkFloatContainerInstance>({
 				<span v-if="activeIndex < 0"></span>
 				<span v-else-if="activeIndex === 0" class="item_bullet"></span>
 				<Vial v-else-if="activeIndex === 1" :color="randomColor({ format: 'hex' })" />
-				<Bubble v-else style="scale: 0.2" />
+				<!-- <Bubble v-else style="scale: 0.2" /> -->
 			</div>
 		</div>
 	</div>

@@ -49,7 +49,7 @@ onUnmounted(() => {
 <template>
 	<div class="work_empty">
 		<div class="bubble_container" v-for="_ in bubbleNum" ref="bubbleRefs">
-			<Bubble />
+			<!-- <Bubble /> -->
 		</div>
 		<div class="empty_content_english">waiting</div>
 		<div class="empty_content_chinese">敬请期待</div>
