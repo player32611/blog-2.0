@@ -122,10 +122,11 @@ onUnmounted(() => {
 @use "@/assets/styles/variables.scss";
 
 .work_transition {
-	position: absolute;
+	position: fixed;
 	top: 0;
-	height: 100%;
-	width: 100%;
+	bottom: 0;
+	left: 0;
+	right: 0;
 	overflow: hidden;
 	pointer-events: none;
 	z-index: variables.$loading_zIndex;

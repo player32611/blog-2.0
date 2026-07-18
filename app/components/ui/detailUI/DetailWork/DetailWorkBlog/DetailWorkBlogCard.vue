@@ -26,8 +26,6 @@ const handleMouseMove = (e: MouseEvent) => {
 
 const handleMouseEnter = (e: MouseEvent) => {
 	fadeAnim.value?.play();
-	setX(e.clientX, e.clientX);
-	setY(e.clientY, e.clientX);
 };
 
 const handleMouseLeave = () => {
@@ -93,7 +91,7 @@ onUnmounted(() => {
 		<p class="right">{{ subtitle }}</p>
 		<p class="bottom">{{ title }}</p>
 	</div>
-	<Teleport to="body">
+	<Teleport to=".detail_work">
 		<div class="work_blog_preview" ref="previewRef">
 			<div class="preview_inner">
 				<img class="preview_image" :src="`/blog-2.0${previewImage}`" alt="111" />
@@ -204,10 +202,10 @@ onUnmounted(() => {
 	background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
 	border-radius: 20px;
 	box-shadow: 0px 0px 30px 1px rgba(0, 255, 117, 0.3);
-	z-index: variables.$float_zIndex;
 	visibility: hidden;
 	pointer-events: none;
 	transform: none;
+	z-index: variables.$float_zIndex;
 
 	.preview_inner {
 		width: 98%;

@@ -33,7 +33,6 @@ const resize = () => {
 };
 
 const animate = () => {
-	console.log("anim");
 	animationId = requestAnimationFrame(animate);
 
 	if (material && material.uniforms.uTime) material.uniforms.uTime.value = performance.now() / 1000;
@@ -128,8 +127,10 @@ onUnmounted(() => {
 
 .detail_shader {
 	position: fixed;
-	height: 100vh;
-	width: 100vw;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 	z-index: variables.$loading_zIndex - 10;
 	pointer-events: none;
 }
