@@ -30,6 +30,8 @@ export const DETAIL_SKILLS = [
 	"jsx",
 ];
 
+export const DETAIL_TARGET = "致力于动画，交互与视觉体验";
+
 export const DETAIL_EMPTY = "一般你看不到的";
 
 export const DETAIL_WORK_BLOG_DATA: DetailWorkBlogCardParams[] = [

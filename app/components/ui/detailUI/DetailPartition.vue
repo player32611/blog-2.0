@@ -28,6 +28,7 @@ const resize = () => {
 			else gsap.set(containerRef.value, { right: 2 * offset });
 		},
 		scrollTrigger: {
+			trigger: containerRef.value,
 			scrub: true,
 			onEnter: () => {
 				normalAnim.value?.play();

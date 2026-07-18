@@ -5,15 +5,63 @@ import { ScrollTrigger, SplitText } from "gsap/all";
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const infoRef = ref<HTMLDivElement | null>(null);
+const contentRef = ref<HTMLDivElement | null>(null);
+const contentSplit = ref<SplitText | null>(null);
+const contentAnim = ref<GSAPAnimation | null>(null);
 const mountAnim = ref<GSAPTween | null>(null);
 
+const easeDuration = 0.125;
+const maxDeg = 10;
+
+const handleMouseMove = (e: MouseEvent) => {
+	const rect = infoRef.value?.getBoundingClientRect();
+	if (!rect) return;
+	const rotateX = gsap.utils.mapRange(rect.top, rect.top + rect.height, -maxDeg, maxDeg, e.clientY);
+	const rotateY = gsap.utils.mapRange(
+		rect.left,
+		rect.left + rect.width,
+		-maxDeg / 2,
+		maxDeg / 2,
+		e.clientX,
+	);
+
+	gsap.to(infoRef.value, {
+		transform: `rotateX(${-rotateX}deg) rotateY(${rotateY}deg) perspective(800px)`,
+		duration: easeDuration,
+	});
+};
+
+const handleMouseLeave = () => {
+	gsap.to(infoRef.value, {
+		transform: "rotateX(0) rotateY(0) perspective(800px)",
+		duration: easeDuration,
+	});
+};
+
 onMounted(() => {
+	contentSplit.value = SplitText.create(contentRef.value, { type: "chars" });
+	contentAnim.value = gsap
+		.fromTo(
+			contentSplit.value.chars,
+			{
+				visibility: "hidden",
+				background: "rgba(255, 127, 39, 0.5)",
+				textShadow: `0 0 60px rgba(255, 127, 39, 0.3)`,
+			},
+			{
+				visibility: "visible",
+				background: "rgba(255, 127, 39, 0)",
+				textShadow: `0 0 0 rgba(255, 127, 39, 0.8)`,
+				duration: 1,
+				stagger: 0.05,
+			},
+		)
+		.pause();
 	mountAnim.value = gsap.fromTo(
 		infoRef.value,
-		{ paddingTop: 0, height: 0, opacity: 0 },
+		{ scale: 0, opacity: 0 },
 		{
-			paddingTop: "1.5rem",
-			height: "auto",
+			scale: 1,
 			opacity: 1,
 			ease: "power2.out",
 			duration: 1,
@@ -21,6 +69,12 @@ onMounted(() => {
 				trigger: infoRef.value,
 				start: "top 80%", // 当元素顶部到达视口 80% 位置时触发
 				toggleActions: "play none none reverse", // 进入时播放，离开时反向播放
+			},
+			onComplete: () => {
+				contentAnim.value?.play();
+			},
+			onReverseComplete: () => {
+				contentAnim.value?.progress(0).pause();
 			},
 		},
 	);
@@ -33,267 +87,115 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="introduce_info" ref="infoRef">
-		<!-- From Uiverse.io by Nykolas94 -->
-		<label class="folder">
-			<input type="checkbox" class="folder__toggle" aria-label="Open folder" />
-			<span class="folder__shape">
-				<span class="folder__back"></span>
-				<span class="folder__papers">
-					<span class="paper paper--1">
-						<div>姓名：{{ DETAIL_EMPTY }}</div>
-						<div>性别：{{ DETAIL_EMPTY }}</div>
-						<div>年龄：{{ DETAIL_EMPTY }}</div>
-					</span>
-					<span class="paper paper--2">
-						<div>状态：{{ DETAIL_STATE }}</div>
-					</span>
-					<span class="paper paper--3">
-						<div>昵称：{{ DETAIL_NAME }}</div>
-						<div>爱好：{{ DETAIL_HOBBY }}</div>
-					</span>
-				</span>
-				<span class="folder__front">
-					<span class="folder__title">个人简介</span>
-				</span>
-			</span>
-		</label>
+	<div
+		class="introduce_info"
+		ref="infoRef"
+		@mousemove="handleMouseMove"
+		@mouseleave="handleMouseLeave"
+	>
+		<div class="info_corner tr1"></div>
+		<div class="info_corner tr2"></div>
+		<div class="info_corner tr3"></div>
+		<div class="info_corner tr4"></div>
+		<div class="info_content">
+			<div ref="contentRef">
+				<p class="content_introduce">INTRODUCE</p>
+				<p>NAME: {{ DETAIL_NAME }}</p>
+				<p>JOP: {{ DETAIL_JOB }}</p>
+				<p>HOBBY: {{ DETAIL_HOBBY }}</p>
+				<p>STATE: {{ DETAIL_STATE }}</p>
+				<p>TARGET: {{ DETAIL_TARGET }}</p>
+			</div>
+		</div>
+		<div class="scan_line"></div>
 	</div>
 </template>
 
 <style scoped lang="scss">
 .introduce_info {
 	position: relative;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	padding-left: 50px;
-	padding-right: 50px;
+	padding: 20px;
+	display: grid;
+	grid-template-columns: 20px auto 20px;
+	grid-template-rows: 20px auto 20px;
 	color: rgba($color: #ffffff, $alpha: 0.5);
-	border-color: rgba($color: #ffffff, $alpha: 0.5);
-	border-width: 5px;
+	font-size: 1rem;
+	font-family: "方正基础像素体";
+	border-width: 2px;
 	border-style: solid;
+	border-color: rgba(255, 255, 255, 0.1);
+	border-radius: 5px;
+	background: linear-gradient(45deg, #1a1a1a, #262626);
 	overflow: hidden;
+	transition: border-color 0.5s ease;
 
-	/* From Uiverse.io by Nykolas94 */
-	.folder {
-		--folder-back-1: #f7c14b;
-		--folder-back-2: #e9a52f;
-		--folder-front-1: #ffd970;
-		--folder-front-2: #fbc548;
-		--folder-edge: #d68f23;
-		--paper: #fdfdfb;
-		--paper-2: #f1f0ea;
-		--ink: #2a2520;
-		--ink-soft: #7c736a;
-		--ring: #1d6cf5;
-		--radius: 0.875em;
-		--ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+	&:hover {
+		border-color: rgba(255, 255, 255, 0.5);
 
-		position: relative;
-		display: inline-block;
-		width: 350px;
-		font-size: 1rem;
-		font-family: "方正基础像素体";
-		color: var(--ink);
-		cursor: none;
-		user-select: none;
+		.info_corner {
+			border-color: rgba($color: #ff7f27, $alpha: 0.7);
+		}
+	}
 
-		&:active {
-			.folder__shape {
-				transform: translateY(-0.125em) scale(0.99);
-			}
+	.info_corner {
+		height: 100%;
+		width: 100%;
+		border-color: rgba($color: #ff7f27, $alpha: 0.3);
+		border-style: solid;
+		border-width: 0;
+		transition: border-color 0.5s ease;
+
+		&.tr1 {
+			grid-area: 1/1/2/2;
+			border-top-width: 2px;
+			border-left-width: 2px;
 		}
 
-		.folder__toggle {
-			position: absolute;
-			width: 1px;
-			height: 1px;
-			opacity: 0;
-			pointer-events: none;
-
-			&:checked ~ .folder__shape {
-				transform: translateY(-0.375em);
-
-				.paper {
-					transform: translateY(-26%);
-				}
-
-				.paper--1 {
-					transform: translate(-26%, -18%) rotate(-7deg);
-				}
-
-				.paper--2 {
-					transform: translate(22%, -22%) rotate(6deg);
-				}
-
-				.folder__front {
-					transform: rotateX(-32deg);
-				}
-			}
-
-			&:focus-visible ~ .folder__shape {
-				.folder__back {
-					outline: 3px solid var(--ring);
-					outline-offset: 4px;
-					border-radius: var(--radius);
-				}
-			}
+		&.tr2 {
+			grid-area: 1/3/2/4;
+			border-top-width: 2px;
+			border-right-width: 2px;
 		}
 
-		.folder__shape {
-			position: relative;
-			display: block;
-			width: 100%;
-			aspect-ratio: 5 / 4;
-			transition: transform 0.45s var(--ease);
-
-			.folder__back {
-				position: absolute;
-				inset: 14% 0 0 0;
-				background: linear-gradient(135deg, var(--folder-back-1), var(--folder-back-2));
-				border-radius: 0.25em var(--radius) var(--radius) var(--radius);
-				box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
-
-				&::before {
-					content: "";
-					position: absolute;
-					top: -13%;
-					left: 0;
-					width: 46%;
-					height: 16%;
-					background: linear-gradient(135deg, var(--folder-back-1), var(--folder-back-2));
-					border-radius: 0.375em 0.375em 0 0;
-					clip-path: polygon(0 0, 82% 0, 100% 100%, 0 100%);
-				}
-			}
-
-			.folder__papers {
-				position: absolute;
-				inset: 6% 8% 12% 8%;
-				z-index: 2;
-				display: block;
-
-				.paper {
-					position: absolute;
-					left: 50%;
-					bottom: 0;
-					padding: 1rem;
-					width: calc(86% - 2rem);
-					height: calc(78% - 2rem);
-					color: var(--ink);
-					translate: -50% 0;
-					background: var(--paper);
-					border-radius: 0.375em;
-					box-shadow: 0 0.25em 0.875em rgba(60, 40, 10, 0.12);
-					transition:
-						transform 0.45s var(--ease),
-						bottom 0.45s var(--ease);
-					overflow: hidden;
-
-					&::after {
-						content: "";
-						position: absolute;
-						left: 1rem;
-						right: 24%;
-						height: 6%;
-						border-radius: 0.2em;
-						background: var(--paper-2);
-					}
-
-					div {
-						margin-bottom: 1rem;
-						overflow: hidden;
-						white-space: nowrap; /* 禁止换行 */
-						text-overflow: ellipsis; /* 显示省略号 */
-					}
-				}
-
-				.paper--1 {
-					width: 78%;
-					height: 70%;
-					background: #f6f4ee;
-				}
-				.paper--2 {
-					width: 82%;
-					height: 74%;
-					background: #fbfaf6;
-				}
-				.paper--3 {
-					width: 86%;
-				}
-			}
-
-			.folder__front {
-				position: absolute;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				align-items: center;
-				inset: 38% 0 0 0;
-				z-index: 3;
-				background: linear-gradient(150deg, var(--folder-front-1), var(--folder-front-2));
-				border-radius: var(--radius);
-				box-shadow:
-					inset 0 1px 0 rgba(255, 255, 255, 0.55),
-					0 -1px 0 var(--folder-edge),
-					0 0.875em 1.375em -0.75em rgba(120, 80, 10, 0.35);
-				transform-origin: bottom center;
-				transition: transform 0.45s var(--ease);
-
-				&::after {
-					content: "";
-					position: absolute;
-					inset: 0;
-					border-radius: var(--radius);
-					background: linear-gradient(120deg, rgba(255, 255, 255, 0.35) 0%, transparent 45%);
-					pointer-events: none;
-				}
-
-				.folder__title {
-					display: block;
-					font-weight: 700;
-					font-size: 1.05em;
-					letter-spacing: -0.01em;
-					color: var(--ink-soft);
-				}
-			}
+		&.tr3 {
+			grid-area: 3/1/4/2;
+			border-bottom-width: 2px;
+			border-left-width: 2px;
 		}
+
+		&.tr4 {
+			grid-area: 3/3/4/4;
+			border-bottom-width: 2px;
+			border-right-width: 2px;
+		}
+	}
+
+	.info_content {
+		grid-area: 2/2/3/3;
+
+		.content_introduce {
+			margin-top: 0;
+			font-size: 2rem;
+			font-weight: 600;
+			text-align: center;
+		}
+	}
+
+	.scan_line {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(to bottom, transparent, rgba(#ff7f27, 0.1), transparent);
+		transform: translateY(-100%);
+		animation: scanMove 3s linear infinite;
 	}
 }
 
-@media (hover: hover) {
-	.folder {
-		&:hover {
-			.folder__shape {
-				transform: translateY(-0.375em);
-
-				.paper {
-					transform: translateY(-26%);
-				}
-
-				.paper--1 {
-					transform: translate(-26%, -18%) rotate(-7deg);
-				}
-
-				.paper--2 {
-					transform: translate(22%, -22%) rotate(6deg);
-				}
-
-				.folder__front {
-					transform: rotateX(-32deg);
-				}
-			}
-		}
+@keyframes scanMove {
+	0% {
+		transform: translateY(-100%);
 	}
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.folder__shape,
-	.folder__front,
-	.paper {
-		transition: none;
+	100% {
+		transform: translateY(100%);
 	}
 }
 
@@ -302,11 +204,32 @@ onUnmounted(() => {
 	$base-size: 0.5;
 
 	.introduce_info {
-		border-width: 5px * $base-size;
+		padding: 20px * $base-size;
+		grid-template-columns: 20px * $base-size auto 20px * $base-size;
+		grid-template-rows: 20px * $base-size auto 20px * $base-size;
+		border-width: 2px * $base-size;
+		border-radius: 5px * $base-size;
 
-		.folder {
-			width: 250px;
-			font-size: 1.7rem * $base-size;
+		.info_corner {
+			&.tr1 {
+				border-top-width: 2px * $base-size;
+				border-left-width: 2px * $base-size;
+			}
+
+			&.tr2 {
+				border-top-width: 2px * $base-size;
+				border-right-width: 2px * $base-size;
+			}
+
+			&.tr3 {
+				border-bottom-width: 2px * $base-size;
+				border-left-width: 2px * $base-size;
+			}
+
+			&.tr4 {
+				border-bottom-width: 2px * $base-size;
+				border-right-width: 2px * $base-size;
+			}
 		}
 	}
 }
@@ -316,39 +239,102 @@ onUnmounted(() => {
 	$base-size: 0.7;
 
 	.introduce_info {
-		border-width: 5px * $base-size;
+		padding: 20px * $base-size;
+		grid-template-columns: 20px * $base-size auto 20px * $base-size;
+		grid-template-rows: 20px * $base-size auto 20px * $base-size;
+		border-width: 2px * $base-size;
+		border-radius: 5px * $base-size;
 
-		.folder {
-			width: 280px;
-			font-size: 1.3rem * $base-size;
+		.info_corner {
+			&.tr1 {
+				border-top-width: 2px * $base-size;
+				border-left-width: 2px * $base-size;
+			}
+
+			&.tr2 {
+				border-top-width: 2px * $base-size;
+				border-right-width: 2px * $base-size;
+			}
+
+			&.tr3 {
+				border-bottom-width: 2px * $base-size;
+				border-left-width: 2px * $base-size;
+			}
+
+			&.tr4 {
+				border-bottom-width: 2px * $base-size;
+				border-right-width: 2px * $base-size;
+			}
 		}
 	}
 }
 
 /* ========== 中等屏（768px - 991px）========== */
 @media screen and (min-width: 768px) and (max-width: 991px) {
-	$base-size: 0.5;
+	$base-size: 0.7;
 
 	.introduce_info {
-		border-width: 5px * $base-size;
+		padding: 20px * $base-size;
+		grid-template-columns: 20px * $base-size auto 20px * $base-size;
+		grid-template-rows: 20px * $base-size auto 20px * $base-size;
+		border-width: 2px * $base-size;
+		border-radius: 5px * $base-size;
 
-		.folder {
-			width: 250px;
-			font-size: 1.5rem * $base-size;
+		.info_corner {
+			&.tr1 {
+				border-top-width: 2px * $base-size;
+				border-left-width: 2px * $base-size;
+			}
+
+			&.tr2 {
+				border-top-width: 2px * $base-size;
+				border-right-width: 2px * $base-size;
+			}
+
+			&.tr3 {
+				border-bottom-width: 2px * $base-size;
+				border-left-width: 2px * $base-size;
+			}
+
+			&.tr4 {
+				border-bottom-width: 2px * $base-size;
+				border-right-width: 2px * $base-size;
+			}
 		}
 	}
 }
 
 /* ========== 大屏（991px - 1199px）========== */
 @media screen and (min-width: 991px) and (max-width: 1199px) {
-	$base-size: 0.7;
+	$base-size: 0.85;
 
 	.introduce_info {
-		border-width: 5px * $base-size;
+		padding: 20px * $base-size;
+		grid-template-columns: 20px * $base-size auto 20px * $base-size;
+		grid-template-rows: 20px * $base-size auto 20px * $base-size;
+		border-width: 2px * $base-size;
+		border-radius: 5px * $base-size;
 
-		.folder {
-			width: 300px;
-			font-size: 1.3rem * $base-size;
+		.info_corner {
+			&.tr1 {
+				border-top-width: 2px * $base-size;
+				border-left-width: 2px * $base-size;
+			}
+
+			&.tr2 {
+				border-top-width: 2px * $base-size;
+				border-right-width: 2px * $base-size;
+			}
+
+			&.tr3 {
+				border-bottom-width: 2px * $base-size;
+				border-left-width: 2px * $base-size;
+			}
+
+			&.tr4 {
+				border-bottom-width: 2px * $base-size;
+				border-right-width: 2px * $base-size;
+			}
 		}
 	}
 }
