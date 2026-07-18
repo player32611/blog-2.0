@@ -63,8 +63,9 @@ onUnmounted(() => {
 	justify-content: center;
 	width: 100%;
 	color: rgba($color: #ffffff, $alpha: 0.4);
-	font-size: 1rem;
+	font-size: 2vmin;
 	font-family: "方正基础像素体";
+	white-space: nowrap;
 	z-index: variables.$float_zIndex;
 	user-select: none;
 	pointer-events: none;

@@ -39,6 +39,8 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/variables.scss";
+
 .work_blog_title {
 	position: relative;
 	display: flex;
@@ -49,6 +51,7 @@ onUnmounted(() => {
 	font-size: 5rem;
 	font-family: "Coustard Black";
 	text-align: center;
+	z-index: variables.$float_zIndex;
 
 	p {
 		margin: 0;
@@ -83,6 +86,7 @@ onUnmounted(() => {
 
 	.work_blog_title {
 		gap: 5rem * $base-size;
+		margin-bottom: 5rem * $base-size;
 		font-size: 5rem * $base-size;
 	}
 }
@@ -93,6 +97,7 @@ onUnmounted(() => {
 
 	.work_blog_title {
 		gap: 5rem * $base-size;
+		margin-bottom: 5rem * $base-size;
 		font-size: 5rem * $base-size;
 	}
 }

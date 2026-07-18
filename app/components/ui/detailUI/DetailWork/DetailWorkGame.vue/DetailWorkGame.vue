@@ -20,7 +20,8 @@ import DetailWorkGameShader from "./DetailWorkGameShader.vue";
 .work_game {
 	position: relative;
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
+	justify-content: end;
 	align-items: center;
 	height: 100%;
 	width: 100%;

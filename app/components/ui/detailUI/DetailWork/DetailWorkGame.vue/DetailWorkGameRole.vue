@@ -32,54 +32,39 @@ onUnmounted(() => {
 @use "@/assets/styles/variables.scss";
 
 .game_role {
-	position: absolute;
-	top: 0;
-	width: 300px;
-	height: 500px;
+	flex: 1;
+	margin-bottom: 30vh;
+	height: 100%;
+	width: auto;
 	image-rendering: pixelated;
 	z-index: variables.$float_zIndex;
 }
 
 /* ========== 超小屏（< 576px）========== */
 @media screen and (max-width: 576px) {
-	$base-size: 0.65;
-
 	.game_role {
-		top: 60px;
-		width: 300px * $base-size;
-		height: 500px * $base-size;
+		margin-bottom: 40vh;
 	}
 }
 
 /* ========== 小屏（576px - 768px）========== */
 @media screen and (min-width: 576px) and (max-width: 768px) {
-	$base-size: 0.7;
-
 	.game_role {
-		top: 40px;
-		width: 300px * $base-size;
-		height: 500px * $base-size;
+		margin-bottom: 37vh;
 	}
 }
 
 /* ========== 中等屏（768px - 991px）========== */
 @media screen and (min-width: 768px) and (max-width: 991px) {
-	$base-size: 0.8;
-
 	.game_role {
-		width: 300px * $base-size;
-		height: 500px * $base-size;
+		margin-bottom: 34vh;
 	}
 }
 
 /* ========== 大屏（991px - 1199px）========== */
 @media screen and (min-width: 991px) and (max-width: 1199px) {
-	$base-size: 0.9;
-
 	.game_role {
-		top: -40px;
-		width: 300px * $base-size;
-		height: 500px * $base-size;
+		margin-bottom: 30vh;
 	}
 }
 </style>

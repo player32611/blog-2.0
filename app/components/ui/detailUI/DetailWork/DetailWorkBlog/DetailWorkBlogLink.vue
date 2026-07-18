@@ -91,8 +91,8 @@ onUnmounted(() => {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 200px;
-	width: 400px;
+	height: 20vh;
+	width: 50vw;
 
 	/* From Uiverse.io by gharsh11032000 */
 	.link_button {
@@ -149,9 +149,6 @@ onUnmounted(() => {
 	$base-size: 0.8;
 
 	.work_blog_link {
-		height: 200px * $base-size;
-		width: 400px * $base-size;
-
 		.link_button {
 			padding: 10px * $base-size 24px * $base-size;
 			font-size: 18px * $base-size;
@@ -175,9 +172,6 @@ onUnmounted(() => {
 	$base-size: 0.85;
 
 	.work_blog_link {
-		height: 200px * $base-size;
-		width: 400px * $base-size;
-
 		.link_button {
 			padding: 10px * $base-size 24px * $base-size;
 			font-size: 18px * $base-size;
@@ -201,9 +195,6 @@ onUnmounted(() => {
 	$base-size: 0.9;
 
 	.work_blog_link {
-		height: 200px * $base-size;
-		width: 400px * $base-size;
-
 		.link_button {
 			padding: 10px * $base-size 24px * $base-size;
 			font-size: 18px * $base-size;
@@ -227,9 +218,6 @@ onUnmounted(() => {
 	$base-size: 0.95;
 
 	.work_blog_link {
-		height: 200px * $base-size;
-		width: 400px * $base-size;
-
 		.link_button {
 			padding: 10px * $base-size 24px * $base-size;
 			font-size: 18px * $base-size;

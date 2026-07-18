@@ -94,17 +94,15 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .work_blog_container {
-	position: absolute;
-	left: calc(50% - 150px - 40px);
-	top: calc(50% - 250px + 40px);
-	height: 500px;
-	width: 300px;
+	flex: 1;
+	aspect-ratio: 4 / 7;
 	perspective: 100px;
+	transform: translate(-20px, 20px);
 
 	:deep(.container_card) {
 		position: absolute;
-		height: 500px;
-		width: 300px;
+		height: 100%;
+		width: 100%;
 		pointer-events: none;
 
 		&:nth-child(5) {
@@ -145,16 +143,10 @@ onUnmounted(() => {
 	$base-size: 0.6;
 
 	.work_blog_container {
-		left: calc(50% - 150px * $base-size - 40px * $base-size);
-		top: calc(50% - 250px * $base-size + 40px * $base-size);
-		height: 500px * $base-size;
-		width: 300px * $base-size;
 		perspective: 100px * $base-size;
+		transform: translate(-20px * $base-size, 20px * $base-size);
 
 		:deep(.container_card) {
-			height: 500px * $base-size;
-			width: 300px * $base-size;
-
 			&:nth-child(4) {
 				left: 20px * $base-size;
 				top: -20px * $base-size;
@@ -183,16 +175,10 @@ onUnmounted(() => {
 	$base-size: 0.7;
 
 	.work_blog_container {
-		left: calc(50% - 150px * $base-size - 40px * $base-size);
-		top: calc(50% - 250px * $base-size + 40px * $base-size);
-		height: 500px * $base-size;
-		width: 300px * $base-size;
 		perspective: 100px * $base-size;
+		transform: translate(-20px * $base-size, 20px * $base-size);
 
 		:deep(.container_card) {
-			height: 500px * $base-size;
-			width: 300px * $base-size;
-
 			&:nth-child(4) {
 				left: 20px * $base-size;
 				top: -20px * $base-size;
@@ -221,16 +207,10 @@ onUnmounted(() => {
 	$base-size: 0.8;
 
 	.work_blog_container {
-		left: calc(50% - 150px * $base-size - 40px * $base-size);
-		top: calc(50% - 250px * $base-size + 40px * $base-size);
-		height: 500px * $base-size;
-		width: 300px * $base-size;
 		perspective: 100px * $base-size;
+		transform: translate(-20px * $base-size, 20px * $base-size);
 
 		:deep(.container_card) {
-			height: 500px * $base-size;
-			width: 300px * $base-size;
-
 			&:nth-child(4) {
 				left: 20px * $base-size;
 				top: -20px * $base-size;
@@ -259,16 +239,10 @@ onUnmounted(() => {
 	$base-size: 0.9;
 
 	.work_blog_container {
-		left: calc(50% - 150px * $base-size - 40px * $base-size);
-		top: calc(50% - 250px * $base-size + 40px * $base-size);
-		height: 500px * $base-size;
-		width: 300px * $base-size;
 		perspective: 100px * $base-size;
+		transform: translate(-20px * $base-size, 20px * $base-size);
 
 		:deep(.container_card) {
-			height: 500px * $base-size;
-			width: 300px * $base-size;
-
 			&:nth-child(4) {
 				left: 20px * $base-size;
 				top: -20px * $base-size;

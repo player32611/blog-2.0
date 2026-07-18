@@ -149,14 +149,14 @@ onUnmounted(() => {
 
 		&.top {
 			grid-area: 1 / 1 / 2 / 4;
-			font-size: 1.2rem;
+			font-size: 2cqh;
 			text-transform: capitalize;
 			font-weight: 700;
 		}
 
 		&.left {
 			grid-area: 2 / 1 / 3 / 2;
-			font-size: 0.8rem;
+			font-size: 2cqh;
 			text-transform: capitalize;
 			transform: rotate(-90deg);
 		}
@@ -164,25 +164,29 @@ onUnmounted(() => {
 		&.center {
 			display: flex;
 			flex-direction: column;
+			justify-content: space-around;
 			gap: 50px;
-			font-size: 1rem;
+			height: 100%;
+			width: 100%;
+			font-size: 2cqh;
+			overflow: hidden;
 
 			.icon {
 				color: var(--color);
-				font-size: 5rem;
+				font-size: 10cqh;
 			}
 		}
 
 		&.right {
 			grid-area: 2 / 3 / 3 / 4;
-			font-size: 0.8rem;
+			font-size: 2cqh;
 			text-transform: capitalize;
 			transform: rotate(90deg);
 		}
 
 		&.bottom {
 			grid-area: 3 / 1 / 4 / 4;
-			font-size: 1.2rem;
+			font-size: 2cqh;
 			text-transform: capitalize;
 			font-weight: 700;
 		}
@@ -238,29 +242,8 @@ onUnmounted(() => {
 		}
 
 		p {
-			&.top {
-				font-size: 1.2rem * $base-size;
-			}
-
-			&.left {
-				font-size: 0.8rem * $base-size;
-			}
-
 			&.center {
 				gap: 50px * $base-size;
-				font-size: 1rem * $base-size;
-
-				.icon {
-					font-size: 5rem * $base-size;
-				}
-			}
-
-			&.right {
-				font-size: 0.8rem * $base-size;
-			}
-
-			&.bottom {
-				font-size: 1.2rem * $base-size;
 			}
 		}
 	}
@@ -296,29 +279,8 @@ onUnmounted(() => {
 		}
 
 		p {
-			&.top {
-				font-size: 1.2rem * $base-size;
-			}
-
-			&.left {
-				font-size: 0.8rem * $base-size;
-			}
-
 			&.center {
 				gap: 50px * $base-size;
-				font-size: 1rem * $base-size;
-
-				.icon {
-					font-size: 5rem * $base-size;
-				}
-			}
-
-			&.right {
-				font-size: 0.8rem * $base-size;
-			}
-
-			&.bottom {
-				font-size: 1.2rem * $base-size;
 			}
 		}
 	}
@@ -354,29 +316,8 @@ onUnmounted(() => {
 		}
 
 		p {
-			&.top {
-				font-size: 1.2rem * $base-size;
-			}
-
-			&.left {
-				font-size: 0.8rem * $base-size;
-			}
-
 			&.center {
 				gap: 50px * $base-size;
-				font-size: 1rem * $base-size;
-
-				.icon {
-					font-size: 5rem * $base-size;
-				}
-			}
-
-			&.right {
-				font-size: 0.8rem * $base-size;
-			}
-
-			&.bottom {
-				font-size: 1.2rem * $base-size;
 			}
 		}
 	}
@@ -412,29 +353,8 @@ onUnmounted(() => {
 		}
 
 		p {
-			&.top {
-				font-size: 1.2rem * $base-size;
-			}
-
-			&.left {
-				font-size: 0.8rem * $base-size;
-			}
-
 			&.center {
 				gap: 50px * $base-size;
-				font-size: 1rem * $base-size;
-
-				.icon {
-					font-size: 5rem * $base-size;
-				}
-			}
-
-			&.right {
-				font-size: 0.8rem * $base-size;
-			}
-
-			&.bottom {
-				font-size: 1.2rem * $base-size;
 			}
 		}
 	}

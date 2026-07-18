@@ -27,7 +27,6 @@ let mouse: MouseType | null;
 let mouseConstraint: MouseConstraintType | null;
 
 const resize = () => {
-	console.log("resize");
 	destroy();
 	init();
 };
