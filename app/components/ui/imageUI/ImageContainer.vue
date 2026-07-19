@@ -214,6 +214,7 @@ const drawFrame = () => {
 				currentImageWidth.value,
 				currentImageHeight.value,
 				imageBorderRadius,
+				"cover",
 			);
 		} else {
 			drawPlaceholder(
@@ -264,11 +265,10 @@ const resize = () => {
 		canvasRef.value.height = rect.height * dpr;
 		const ctx = canvasRef.value.getContext("2d");
 		if (ctx) {
+			// ctx.imageSmoothingEnabled = false;
 			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 			// 只有当图片尺寸或间距需要改变时才重新生成
-			if (imageStore.getLayoutAttribute().imageWidth !== currentImageWidth.value) {
-				createImgDatas();
-			}
+			if (imageStore.getLayoutAttribute().imageWidth !== currentImageWidth.value) createImgDatas();
 		}
 	}
 	drawFrame();

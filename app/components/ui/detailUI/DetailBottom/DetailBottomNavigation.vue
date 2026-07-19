@@ -69,7 +69,7 @@ onUnmounted(() => {
 	position: relative;
 	height: 200px;
 	width: 200px;
-	image-rendering: pixelated; /* 强制锐利边缘，无平滑 */
+	image-rendering: pixelated;
 	user-select: none;
 }
 

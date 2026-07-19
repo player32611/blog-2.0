@@ -119,8 +119,6 @@ watch(
 				v-if="loadingState !== 'error'"
 				:src="`/blog-2.0${currentImageData?.path}`"
 				:class="{ loading: loadingState === 'loading' }"
-				:width="imageStore.getLayoutAttribute().imageWidth"
-				:height="imageStore.getLayoutAttribute().imageHeight"
 				@click="handleClickImage"
 				@mouseenter="handleMouseEnter"
 				@mouseleave="handleMouseLeave"
@@ -159,12 +157,19 @@ watch(
 
 		.image_shadow {
 			position: absolute;
+			height: 50vmin;
+			width: 50vmin;
+			object-fit: contain;
 			border-radius: 1rem;
 			filter: blur(20px);
 		}
 
 		.active_image {
 			position: absolute;
+			height: 50vmin;
+			width: 50vmin;
+			object-fit: contain;
+			// image-rendering: pixelated;
 			cursor: pointer;
 
 			&.loading {

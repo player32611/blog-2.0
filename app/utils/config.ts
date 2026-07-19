@@ -148,6 +148,16 @@ export const IMAGE_DATAS: ImageInfo[] = [
 		author: "",
 		path: "/images/collections/FCBC31D6A22B6B04602E5C0084F3D29F.jpg",
 	},
+	{
+		name: "",
+		author: "",
+		path: "/images/collections/c629be96-7085-4bcf-950f-dffc6dd36aaf.png",
+	},
+	{
+		name: "",
+		author: "",
+		path: "/images/collections/140786992_p0.jpg",
+	},
 ];
 
 export const IMAGE_EMPTY = "未知";

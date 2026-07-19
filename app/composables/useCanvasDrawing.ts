@@ -24,6 +24,7 @@ export function useCanvasDrawing(canvasRef: Ref<HTMLCanvasElement | null>) {
 		width: number,
 		height: number,
 		radius: number = 0,
+		fit: "fill" | "cover" | "contain" = "fill",
 	): void => {
 		if (!canvasRef.value || !ctx.value) return;
 
@@ -43,7 +44,44 @@ export function useCanvasDrawing(canvasRef: Ref<HTMLCanvasElement | null>) {
 		// 裁剪并绘制图片
 		ctx.value.save();
 		ctx.value.clip();
-		ctx.value.drawImage(img, x, y, width, height);
+
+		if (fit === "fill") {
+			ctx.value.drawImage(img, x, y, width, height);
+		} else {
+			const imgW = img.naturalWidth;
+			const imgH = img.naturalHeight;
+
+			let sx = 0;
+			let sy = 0;
+			let sw = imgW;
+			let sh = imgH;
+
+			const imgRatio = imgW / imgH;
+			const targetRatio = width / height;
+
+			if (fit === "cover") {
+				if (imgRatio > targetRatio) {
+					sw = imgH * targetRatio;
+					sx = (imgW - sw) / 2;
+				} else {
+					sh = imgW / targetRatio;
+					sy = (imgH - sh) / 2;
+				}
+			} else if (fit === "contain") {
+				const scale = Math.min(width / imgW, height / imgH);
+
+				const dw = imgW * scale;
+				const dh = imgH * scale;
+
+				const dx = x + (width - dw) / 2;
+				const dy = y + (height - dh) / 2;
+
+				ctx.value.drawImage(img, dx, dy, dw, dh);
+			}
+
+			ctx.value.drawImage(img, sx, sy, sw, sh, x, y, width, height);
+		}
+
 		ctx.value.restore();
 	};
 
