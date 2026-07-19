@@ -116,7 +116,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="code_group">
+	<div class="code_group" v-if="slotChildren.length">
 		<div class="code_group_head">
 			<div class="tabs" ref="tabContainerRef">
 				<button
@@ -174,7 +174,7 @@ onUnmounted(() => {
 			align-items: center;
 			border-width: 2.5px;
 			border-style: solid;
-			border-color: #ffffff;
+			border-color: var(--code-group-color, #ffffff);
 			border-radius: 8px;
 			overflow-x: hidden;
 
@@ -200,7 +200,7 @@ onUnmounted(() => {
 				}
 
 				&.active {
-					color: #ffffff;
+					color: var(--code-group-color, #ffffff);
 				}
 			}
 		}
@@ -241,14 +241,14 @@ onUnmounted(() => {
 			position: relative;
 			left: 0;
 			height: 2px;
-			background-color: #ffffff;
+			background-color: var(--code-group-color, #ffffff);
 		}
 	}
 
 	.blocks {
 		position: relative;
 		margin-top: 1rem;
-		border-bottom: 2.5px solid #ffffff;
+		border-bottom: 2.5px solid var(--code-group-color, #ffffff);
 		overflow: hidden;
 
 		.block {
