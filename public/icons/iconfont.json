@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "43697514",
+      "name": "向左-1",
+      "font_class": "xiangzuo-1",
+      "unicode": "e7a1",
+      "unicode_decimal": 59297
+    },
+    {
+      "icon_id": "43697521",
+      "name": "向右-1",
+      "font_class": "xiangyou-1",
+      "unicode": "e7a2",
+      "unicode_decimal": 59298
+    },
+    {
       "icon_id": "43696527",
       "name": "确认",
       "font_class": "queren",

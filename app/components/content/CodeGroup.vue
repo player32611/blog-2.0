@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import { gsap } from "gsap/gsap-core";
+import gsap from "gsap";
 
 const slots = useSlots();
-const activeTab = ref<number>(0);
-const tabsRef = ref<Array<HTMLElement>>([]);
+const activeTabIndex = ref<number>(0);
+const tabContainerRef = ref<HTMLDivElement | null>(null);
+const tabRefs = ref<HTMLElement[]>([]);
 const barRef = ref<HTMLDivElement | null>(null);
-const blocksRef = ref<Array<HTMLElement>>([]);
+const blockRefs = ref<HTMLElement[]>([]);
 const blockContainerRef = ref<HTMLDivElement | null>(null);
+const changeAnim = ref<GSAPTimeline | null>(null);
+const showLeftArrow = ref<boolean>(false);
+const showRightArrow = ref<boolean>(false);
 
 const slotChildren = computed(() => slots.default?.() ?? []);
 const tabs = computed(() =>
@@ -18,55 +22,120 @@ const tabs = computed(() =>
 	})),
 );
 
+let toScrollLeft: gsap.QuickToFunc;
+const scrollDistance = 100;
+const scrollDuration = 0.5;
+
 const handleClickTab = (index: number) => {
-	if (index === activeTab.value) return;
-	if (!tabsRef.value[index]) return;
-	const activeBlock = blocksRef.value[activeTab.value];
-	if (!activeBlock) return;
-	const newBlock = blocksRef.value[index];
-	if (!newBlock) return;
-	activeTab.value = index;
+	if (
+		index === activeTabIndex.value ||
+		changeAnim.value ||
+		!tabRefs.value[index] ||
+		!tabContainerRef.value
+	)
+		return;
+	const activeBlock = blockRefs.value[activeTabIndex.value];
+	const newBlock = blockRefs.value[index];
+	const tabWidth = tabRefs.value[index].offsetWidth;
+	const tabLeft = tabRefs.value[index].offsetLeft;
+	const scrollLeft = tabContainerRef.value.scrollLeft;
+
+	activeTabIndex.value = index;
 	gsap.to(barRef.value, {
-		left: `${tabsRef.value[index].offsetLeft + tabsRef.value[index].offsetWidth * 0.1}`,
-		width: `${tabsRef.value[index].offsetWidth * 0.8}px`,
+		left: tabLeft + tabWidth * 0.1 - scrollLeft,
+		width: tabWidth * 0.8,
 		duration: 0.5,
 		ease: "power1.out",
+		overwrite: true,
 	});
-	gsap
-		.timeline()
+	changeAnim.value = gsap
+		.timeline({
+			onComplete: () => {
+				changeAnim.value?.kill();
+				changeAnim.value = null;
+			},
+		})
 		.to(blockContainerRef.value, { height: 0, duration: 0.5, ease: "power1.out" })
-		.set(activeBlock, { height: 0 })
-		.set(newBlock, { height: "auto" })
+		.set(activeBlock || null, { height: 0 })
+		.set(newBlock || null, { height: "auto" })
 		.to(blockContainerRef.value, { height: "auto", duration: 0.5, ease: "power1.out" });
 };
 
+const scrollUpdate = () => {
+	const activeTab = tabRefs.value[activeTabIndex.value];
+	if (!tabContainerRef.value || !activeTab) return;
+
+	const tabWidth = activeTab.offsetWidth;
+	const tabLeft = activeTab.offsetLeft;
+	const scrollLeft = tabContainerRef.value.scrollLeft;
+	const scrollWidth = tabContainerRef.value.scrollWidth;
+	const clientWidth = tabContainerRef.value.clientWidth;
+
+	if (scrollLeft) showLeftArrow.value = true;
+	else showLeftArrow.value = false;
+	if (scrollLeft + clientWidth >= scrollWidth - 1) showRightArrow.value = false;
+	else showRightArrow.value = true;
+
+	gsap.to(barRef.value, {
+		left: tabLeft + tabWidth * 0.1 - scrollLeft,
+		width: tabWidth * 0.8,
+		duration: 0.5,
+		ease: "power1.out",
+	});
+};
+
+const handleClickArrow = (direction: "left" | "right") => {
+	if (!tabContainerRef.value) return;
+	if (direction === "left") toScrollLeft(tabContainerRef.value.scrollLeft - scrollDistance);
+	else toScrollLeft(tabContainerRef.value.scrollLeft + scrollDistance);
+};
+
 onMounted(() => {
-	const firstTab = tabsRef.value[0];
-	const firstBlock = blocksRef.value[0];
+	toScrollLeft = gsap.quickTo(tabContainerRef.value, "scrollLeft", {
+		ease: "power1.out",
+		duration: scrollDuration,
+		onUpdate: scrollUpdate,
+	});
+	scrollUpdate();
+	const firstTab = tabRefs.value[0];
+	const firstBlock = blockRefs.value[0];
 	if (firstTab && firstBlock) {
 		gsap.set(barRef.value, {
-			left: `${firstTab.offsetLeft + firstTab.offsetWidth * 0.1}px`,
-			width: `${firstTab.offsetWidth * 0.8}px`,
+			left: firstTab.offsetLeft + firstTab.offsetWidth * 0.1,
+			width: firstTab.offsetWidth * 0.8,
+			overwrite: true,
 		});
 		gsap.set(firstBlock, { height: "auto" });
-		gsap.set(blockContainerRef.value, { height: `${firstBlock.offsetHeight}px` });
+		gsap.set(blockContainerRef.value, { height: firstBlock.offsetHeight });
 	}
+});
+
+onUnmounted(() => {
+	changeAnim.value?.kill();
 });
 </script>
 
 <template>
 	<div class="code_group">
-		<div class="tabs">
-			<button
-				v-for="(tab, index) in tabs"
-				:key="index"
-				class="tab"
-				:class="{ active: activeTab === index }"
-				@click="() => handleClickTab(index)"
-				ref="tabsRef"
-			>
-				{{ tab.label }}
-			</button>
+		<div class="code_group_head">
+			<div class="tabs" ref="tabContainerRef">
+				<button
+					v-for="(tab, index) in tabs"
+					:key="index"
+					class="tab"
+					:class="{ active: activeTabIndex === index }"
+					@click="() => handleClickTab(index)"
+					ref="tabRefs"
+				>
+					{{ tab.label }}
+				</button>
+			</div>
+			<span class="icon arrow_left" v-if="showLeftArrow" @click="handleClickArrow('left')">
+				&#xe7a1;
+			</span>
+			<span class="icon arrow_right" v-if="showRightArrow" @click="handleClickArrow('right')">
+				&#xe7a2;
+			</span>
 		</div>
 		<div class="bar_container">
 			<div class="bar" ref="barRef"></div>
@@ -77,12 +146,8 @@ onMounted(() => {
 					v-for="(vnode, index) in slotChildren"
 					:key="index"
 					class="block"
-					:class="{ active: activeTab === index }"
-					:ref="
-						el => {
-							if (el) blocksRef[index] = el as HTMLElement;
-						}
-					"
+					:class="{ active: activeTabIndex === index }"
+					ref="blockRefs"
 				>
 					<component :is="vnode" />
 				</div>
@@ -97,38 +162,68 @@ onMounted(() => {
 	margin: 20px 0;
 	border-radius: 8px;
 
-	.tabs {
+	.code_group_head {
 		position: relative;
 		display: flex;
-		border-width: 2.5px;
-		border-style: solid;
-		border-color: #ffffff;
-		border-radius: 8px;
-		overflow-x: hidden;
+		align-items: center;
 
-		&::-webkit-scrollbar {
-			display: none;
-		}
+		.tabs {
+			flex: 1;
+			position: relative;
+			display: flex;
+			align-items: center;
+			border-width: 2.5px;
+			border-style: solid;
+			border-color: #ffffff;
+			border-radius: 8px;
+			overflow-x: hidden;
 
-		.tab {
-			padding: 8px 16px;
-			font-family: "方正基础像素体";
-			font-size: 1rem;
-			color: rgba(255, 255, 255, 0.5);
-			background: transparent;
-			border: none;
-			cursor: pointer;
-			white-space: nowrap;
-			transition:
-				color 0.2s,
-				border-color 0.2s;
-
-			&:hover {
-				color: rgba(255, 255, 255, 0.8);
+			&::-webkit-scrollbar {
+				display: none;
 			}
 
-			&.active {
+			.tab {
+				padding: 8px 16px;
+				font-family: "方正基础像素体";
+				font-size: 1rem;
+				color: rgba(255, 255, 255, 0.5);
+				background: transparent;
+				border: none;
+				cursor: pointer;
+				white-space: nowrap;
+				transition:
+					color 0.2s,
+					border-color 0.2s;
+
+				&:hover {
+					color: rgba(255, 255, 255, 0.8);
+				}
+
+				&.active {
+					color: #ffffff;
+				}
+			}
+		}
+
+		.icon {
+			position: absolute;
+			color: rgba(255, 255, 255, 0.5);
+			font-size: 1rem;
+			transform: translateY(1px);
+			transition: color 0.2s ease;
+			user-select: none;
+			cursor: pointer;
+
+			&:hover {
 				color: #ffffff;
+			}
+
+			&.arrow_left {
+				left: 0;
+			}
+
+			&.arrow_right {
+				right: 0;
 			}
 		}
 	}
@@ -137,11 +232,13 @@ onMounted(() => {
 		position: relative;
 		display: flex;
 		align-items: center;
+		top: 6px;
+		height: 2px;
 		width: 100%;
+		overflow: hidden;
 
 		.bar {
-			position: absolute;
-			top: 6px;
+			position: relative;
 			left: 0;
 			height: 2px;
 			background-color: #ffffff;
