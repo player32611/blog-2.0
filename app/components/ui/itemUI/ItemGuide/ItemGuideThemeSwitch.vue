@@ -611,4 +611,32 @@ const inputValue = computed({
 		transform: translateY(-100%) translateX(50%);
 	}
 }
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	.theme-switch {
+		--toggle-size: calc(32px * 0.4);
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	.theme-switch {
+		--toggle-size: calc(32px * 0.55);
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	.theme-switch {
+		--toggle-size: calc(32px * 0.7);
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	.theme-switch {
+		--toggle-size: calc(32px * 0.85);
+	}
+}
 </style>
