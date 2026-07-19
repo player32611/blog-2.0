@@ -50,6 +50,7 @@
 			color: #ffff00;
 			word-break: break-all;
 			font-size: 1em;
+			--theme-color: #ffff00;
 
 			.icon {
 				margin: 10px;

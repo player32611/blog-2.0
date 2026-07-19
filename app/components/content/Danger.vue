@@ -22,8 +22,8 @@
 	height: fit-content;
 	border-left-style: solid;
 	border-left-color: #ff0000;
-	border-left-width: 5px;
-	border-radius: 15px;
+	border-left-width: 0.3em;
+	border-radius: 0.9em;
 	border-top-left-radius: 0px;
 	border-bottom-left-radius: 0px;
 	background: linear-gradient(to right, #f7575756, #f7575725 50%, #f7575738);
@@ -34,7 +34,7 @@
 		overflow: auto;
 
 		&::-webkit-scrollbar {
-			height: 7px;
+			height: 0.5em;
 		}
 
 		&::-webkit-scrollbar-track {
@@ -52,7 +52,7 @@
 			color: #ff0000;
 			font-size: 1em;
 			word-break: break-all;
-			--code-group-color: #ff0000;
+			--theme-color: #ff0000;
 
 			.icon {
 				margin: 10px;

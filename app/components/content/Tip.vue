@@ -52,6 +52,7 @@
 			color: #add8e6;
 			word-break: break-all;
 			font-size: 1em;
+			--theme-color: #add8e6;
 
 			.icon {
 				margin: 10px;

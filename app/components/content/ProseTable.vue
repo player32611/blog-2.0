@@ -17,7 +17,7 @@ $base-size: 1;
 	border-radius: 8px;
 	border-width: 0.2rem * $base-size;
 	border-style: solid;
-	border-color: #e5e7eb;
+	border-color: var(--theme-color, #e5e7eb);
 	overflow: auto;
 
 	.custom-table {
@@ -30,7 +30,7 @@ $base-size: 1;
 		padding: 0.75rem * $base-size 1rem * $base-size;
 		border-bottom-width: 0.1rem * $base-size;
 		border-bottom-style: dashed;
-		border-bottom-color: #f3f4f6;
+		border-bottom-color: var(--theme-color, #f3f4f6);
 
 		&:last-child {
 			border-bottom: none;
@@ -41,7 +41,7 @@ $base-size: 1;
 			font-weight: 600;
 			border-bottom-width: 0.2rem * $base-size;
 			border-bottom-style: solid;
-			border-bottom-color: #e5e7eb;
+			border-bottom-color: var(--theme-color, #e5e7eb);
 		}
 
 		td {

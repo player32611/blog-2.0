@@ -94,7 +94,7 @@ $base-size: 1;
 	padding: 1rem * $base-size;
 	border-width: 0.2rem * $base-size;
 	border-style: solid;
-	border-color: #ffffff;
+	border-color: var(--theme-color, #ffffff);
 	border-radius: 10px;
 	background-color: #000;
 

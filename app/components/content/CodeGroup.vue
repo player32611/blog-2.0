@@ -108,10 +108,12 @@ onMounted(() => {
 		gsap.set(firstBlock, { height: "auto" });
 		gsap.set(blockContainerRef.value, { height: firstBlock.offsetHeight });
 	}
+	window.addEventListener("resize", scrollUpdate);
 });
 
 onUnmounted(() => {
 	changeAnim.value?.kill();
+	window.removeEventListener("resize", scrollUpdate);
 });
 </script>
 
@@ -174,7 +176,7 @@ onUnmounted(() => {
 			align-items: center;
 			border-width: 2.5px;
 			border-style: solid;
-			border-color: var(--code-group-color, #ffffff);
+			border-color: var(--theme-color, #ffffff);
 			border-radius: 8px;
 			overflow-x: hidden;
 
@@ -186,7 +188,7 @@ onUnmounted(() => {
 				padding: 8px 16px;
 				font-family: "方正基础像素体";
 				font-size: 1rem;
-				color: rgba(255, 255, 255, 0.5);
+				color: rgba(#ffffff, 0.5);
 				background: transparent;
 				border: none;
 				cursor: pointer;
@@ -196,11 +198,11 @@ onUnmounted(() => {
 					border-color 0.2s;
 
 				&:hover {
-					color: rgba(255, 255, 255, 0.8);
+					color: rgba(#ffffff, 0.8);
 				}
 
 				&.active {
-					color: var(--code-group-color, #ffffff);
+					color: var(--theme-color, #ffffff);
 				}
 			}
 		}
@@ -241,14 +243,14 @@ onUnmounted(() => {
 			position: relative;
 			left: 0;
 			height: 2px;
-			background-color: var(--code-group-color, #ffffff);
+			background-color: var(--theme-color, #ffffff);
 		}
 	}
 
 	.blocks {
 		position: relative;
 		margin-top: 1rem;
-		border-bottom: 2.5px solid var(--code-group-color, #ffffff);
+		border-bottom: 2.5px solid var(--theme-color, #ffffff);
 		overflow: hidden;
 
 		.block {
@@ -261,6 +263,7 @@ onUnmounted(() => {
 
 			:deep(.custom_pre_wrapper) {
 				margin: 0;
+				--code-color: var(--theme-color, #ffffff);
 			}
 		}
 	}
@@ -273,18 +276,22 @@ onUnmounted(() => {
 	.code_group {
 		margin: 20px * $base-size 0;
 
-		.tabs {
-			border-width: 2.5px * $base-size;
+		.code_group_head {
+			.tabs {
+				border-width: 2.5px * $base-size;
 
-			.tab {
-				padding: 8px * $base-size 16px * $base-size;
-				font-size: 1rem * $base-size;
+				.tab {
+					padding: 8px * $base-size 16px * $base-size;
+					font-size: 1rem * $base-size;
+				}
 			}
 		}
 
 		.bar_container {
+			top: 6px * $base-size;
+			height: 2px * $base-size;
+
 			.bar {
-				top: 6px * $base-size;
 				height: 2px * $base-size;
 			}
 		}
@@ -302,18 +309,22 @@ onUnmounted(() => {
 	.code_group {
 		margin: 20px * $base-size 0;
 
-		.tabs {
-			border-width: 2.5px * $base-size;
+		.code_group_head {
+			.tabs {
+				border-width: 2.5px * $base-size;
 
-			.tab {
-				padding: 8px * $base-size 16px * $base-size;
-				font-size: 1rem * $base-size;
+				.tab {
+					padding: 8px * $base-size 16px * $base-size;
+					font-size: 1rem * $base-size;
+				}
 			}
 		}
 
 		.bar_container {
+			top: 6px * $base-size;
+			height: 2px * $base-size;
+
 			.bar {
-				top: 6px * $base-size;
 				height: 2px * $base-size;
 			}
 		}
@@ -331,18 +342,22 @@ onUnmounted(() => {
 	.code_group {
 		margin: 20px * $base-size 0;
 
-		.tabs {
-			border-width: 2.5px * $base-size;
+		.code_group_head {
+			.tabs {
+				border-width: 2.5px * $base-size;
 
-			.tab {
-				padding: 8px * $base-size 16px * $base-size;
-				font-size: 1rem * $base-size;
+				.tab {
+					padding: 8px * $base-size 16px * $base-size;
+					font-size: 1rem * $base-size;
+				}
 			}
 		}
 
 		.bar_container {
+			top: 6px * $base-size;
+			height: 2px * $base-size;
+
 			.bar {
-				top: 6px * $base-size;
 				height: 2px * $base-size;
 			}
 		}
@@ -360,18 +375,22 @@ onUnmounted(() => {
 	.code_group {
 		margin: 20px * $base-size 0;
 
-		.tabs {
-			border-width: 2.5px * $base-size;
+		.code_group_head {
+			.tabs {
+				border-width: 2.5px * $base-size;
 
-			.tab {
-				padding: 8px * $base-size 16px * $base-size;
-				font-size: 1rem * $base-size;
+				.tab {
+					padding: 8px * $base-size 16px * $base-size;
+					font-size: 1rem * $base-size;
+				}
 			}
 		}
 
 		.bar_container {
+			top: 6px * $base-size;
+			height: 2px * $base-size;
+
 			.bar {
-				top: 6px * $base-size;
 				height: 2px * $base-size;
 			}
 		}
