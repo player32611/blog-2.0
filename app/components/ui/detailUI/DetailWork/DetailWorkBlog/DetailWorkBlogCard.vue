@@ -24,7 +24,7 @@ const handleMouseMove = (e: MouseEvent) => {
 	setY(e.clientY);
 };
 
-const handleMouseEnter = (e: MouseEvent) => {
+const handleMouseEnter = () => {
 	fadeAnim.value?.play();
 };
 

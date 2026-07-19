@@ -1,9 +1,3 @@
-<template>
-	<NuxtLink :href="props.href" :target="props.target">
-		<slot />
-	</NuxtLink>
-</template>
-
 <script setup lang="ts">
 const props = defineProps({
 	href: {
@@ -14,8 +8,14 @@ const props = defineProps({
 		type: String as PropType<
 			"_blank" | "_parent" | "_self" | "_top" | (string & object) | null | undefined
 		>,
-		default: undefined,
+		default: "_blank",
 		required: false,
 	},
 });
 </script>
+
+<template>
+	<NuxtLink :href="props.href" :target="props.target">
+		<slot />
+	</NuxtLink>
+</template>

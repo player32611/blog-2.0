@@ -4,6 +4,7 @@ import { CustomEase, CustomWiggle } from "gsap/all";
 
 gsap.registerPlugin(CustomEase, CustomWiggle);
 
+const loadingStore = useLoadingStore();
 const containerRef = ref<HTMLDivElement | null>(null);
 const buttonRef = ref<HTMLDivElement | null>(null);
 const contentRef = ref<HTMLParagraphElement | null>(null);
@@ -11,6 +12,11 @@ const waitAnim = ref<GSAPTween | null>(null);
 
 const moveStrength = 0.4;
 const contentStrength = 0.1;
+
+const handleClick = (e: MouseEvent) => {
+	e.preventDefault();
+	loadingStore.loadingNavigate("/");
+};
 
 const handleMouseMove = (e: MouseEvent) => {
 	if (!containerRef.value) return;
@@ -79,7 +85,7 @@ onUnmounted(() => {
 		@mouseleave="handleMouseLeave"
 	>
 		<!-- From Uiverse.io by gharsh11032000 -->
-		<button class="link_button" ref="buttonRef">
+		<button class="link_button" ref="buttonRef" @click="handleClick">
 			<div ref="contentRef">立即前往</div>
 		</button>
 	</div>

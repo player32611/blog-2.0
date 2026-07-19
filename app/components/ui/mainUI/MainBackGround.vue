@@ -32,7 +32,6 @@ const resize = () => {
 		mainStore.setBackgroundSize(imageData.value);
 		mainStore.setBackgroundTransform(movedata.value.movePos);
 		scaleNum.value = document.body.offsetWidth / standardWidth;
-		console.log("resize");
 	}
 };
 
