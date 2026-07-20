@@ -10,18 +10,22 @@ import type {
 import type { ItemParams } from "~/types/components";
 
 import ItemBookConstraint from "./ItemBookConstraint.vue";
+import ItemEarbudCaseCard from "./ItemEarbudCaseCard.vue";
 import ItemMagnetConstraint from "./ItemMagnetConstraint.vue";
 import ItemPhoneCard from "./ItemPhoneCard.vue";
 import ItemSwitchCard from "./ItemSwitchCard.vue";
+import ItemUNOChangeColorCard from "./ItemUNOChangeColorCard.vue";
 
 const { Constraint, Engine, Render, World, Bodies, Mouse, MouseConstraint, Runner } = Matter;
 
 const itemStore = useItemStore();
 const containerRef = ref<HTMLDivElement>();
 const ItemBookConstraintRef = ref<InstanceType<typeof ItemBookConstraint> | null>(null);
+const ItemEarbudCaseCardRef = ref<InstanceType<typeof ItemEarbudCaseCard> | null>(null);
 const ItemMagnetConstraintRef = ref<InstanceType<typeof ItemMagnetConstraint> | null>(null);
 const ItemPhoneCardRef = ref<InstanceType<typeof ItemPhoneCard> | null>(null);
 const ItemSwitchCardRef = ref<InstanceType<typeof ItemSwitchCard> | null>(null);
+const ItemUNOChangeColorCardRef = ref<InstanceType<typeof ItemUNOChangeColorCard> | null>(null);
 const itemPositions = ref<Map<string, ItemParams>>(new Map());
 const items = ref<Map<string, Matter.Body>>(new Map());
 
@@ -152,6 +156,13 @@ const createConstraints = () => {
 };
 
 const createCards = () => {
+	if (ItemEarbudCaseCardRef.value) {
+		const x = itemPositions.value.get("ItemEarbudCaseCard")?.x ?? Math.random() * window.innerWidth;
+		const y = itemPositions.value.get("ItemEarbudCaseCard")?.y ?? Math.random() * -100;
+		const angle = itemPositions.value.get("ItemEarbudCaseCard")?.angle ?? Math.random() * 360;
+		const item = ItemEarbudCaseCardRef.value.createItem(x, y, angle);
+		if (item) items.value.set("ItemEarbudCaseCard", item);
+	}
 	if (ItemSwitchCardRef.value) {
 		const x = itemPositions.value.get("ItemSwitchCard")?.x ?? Math.random() * window.innerWidth;
 		const y = itemPositions.value.get("ItemSwitchCard")?.y ?? Math.random() * -100;
@@ -159,13 +170,20 @@ const createCards = () => {
 		const item = ItemSwitchCardRef.value.createItem(x, y, angle);
 		if (item) items.value.set("ItemSwitchCard", item);
 	}
-
 	if (ItemPhoneCardRef.value) {
 		const x = itemPositions.value.get("ItemPhoneCard")?.x ?? Math.random() * window.innerWidth;
 		const y = itemPositions.value.get("ItemPhoneCard")?.y ?? Math.random() * -100;
 		const angle = itemPositions.value.get("ItemPhoneCard")?.angle ?? Math.random() * 360;
 		const item = ItemPhoneCardRef.value.createItem(x, y, angle);
 		if (item) items.value.set("ItemPhoneCard", item);
+	}
+	if (ItemUNOChangeColorCardRef.value) {
+		const x =
+			itemPositions.value.get("ItemUNOChangeColorCard")?.x ?? Math.random() * window.innerWidth;
+		const y = itemPositions.value.get("ItemUNOChangeColorCard")?.y ?? Math.random() * -100;
+		const angle = itemPositions.value.get("ItemUNOChangeColorCard")?.angle ?? Math.random() * 360;
+		const item = ItemUNOChangeColorCardRef.value.createItem(x, y, angle);
+		if (item) items.value.set("ItemUNOChangeColorCard", item);
 	}
 };
 
@@ -209,6 +227,14 @@ watch(
 				if (items.value.has(addItemName)) return;
 				let item: Matter.Body | null = null;
 				switch (addItemName) {
+					case "ItemEarbudCaseCard":
+						if (ItemEarbudCaseCardRef.value)
+							item = ItemEarbudCaseCardRef.value.createItem(
+								Math.random() * window.innerWidth,
+								Math.random() * -100,
+								Math.random() * 360,
+							);
+						break;
 					case "ItemSwitchCard":
 						if (ItemSwitchCardRef.value)
 							item = ItemSwitchCardRef.value.createItem(
@@ -220,6 +246,14 @@ watch(
 					case "ItemPhoneCard":
 						if (ItemPhoneCardRef.value)
 							item = ItemPhoneCardRef.value.createItem(
+								Math.random() * window.innerWidth,
+								Math.random() * -100,
+								Math.random() * 360,
+							);
+						break;
+					case "ItemUNOChangeColorCard":
+						if (ItemUNOChangeColorCardRef.value)
+							item = ItemUNOChangeColorCardRef.value.createItem(
 								Math.random() * window.innerWidth,
 								Math.random() * -100,
 								Math.random() * 360,
@@ -267,6 +301,13 @@ onUnmounted(() => {
 		:angle="itemPositions.get('ItemBookConstraint')?.angle ?? 0"
 		ref="ItemBookConstraintRef"
 	/>
+	<ItemEarbudCaseCard
+		:x="itemPositions.get('ItemEarbudCaseCard')?.x ?? 0"
+		:y="itemPositions.get('ItemEarbudCaseCard')?.y ?? 0"
+		:angle="itemPositions.get('ItemEarbudCaseCard')?.angle ?? 0"
+		:visible="itemPositions.has('ItemEarbudCaseCard')"
+		ref="ItemEarbudCaseCardRef"
+	/>
 	<ItemMagnetConstraint
 		:x="itemPositions.get('ItemMagnetConstraint')?.x ?? 0"
 		:y="itemPositions.get('ItemMagnetConstraint')?.y ?? 0"
@@ -286,6 +327,13 @@ onUnmounted(() => {
 		:angle="itemPositions.get('ItemSwitchCard')?.angle ?? 0"
 		:visible="itemPositions.has('ItemSwitchCard')"
 		ref="ItemSwitchCardRef"
+	/>
+	<ItemUNOChangeColorCard
+		:x="itemPositions.get('ItemUNOChangeColorCard')?.x ?? 0"
+		:y="itemPositions.get('ItemUNOChangeColorCard')?.y ?? 0"
+		:angle="itemPositions.get('ItemUNOChangeColorCard')?.angle ?? 0"
+		:visible="itemPositions.has('ItemUNOChangeColorCard')"
+		ref="ItemUNOChangeColorCardRef"
 	/>
 </template>
 

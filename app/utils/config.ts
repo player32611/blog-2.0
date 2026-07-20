@@ -149,8 +149,8 @@ export const IMAGE_DATAS: ImageInfo[] = [
 		path: "/images/collections/FCBC31D6A22B6B04602E5C0084F3D29F.jpg",
 	},
 	{
-		name: "",
-		author: "",
+		name: "铃仙（undertale 特供版）",
+		author: "一颗没梦想的苹果",
 		path: "/images/collections/c629be96-7085-4bcf-950f-dffc6dd36aaf.png",
 		option: {
 			pixel: true,
@@ -160,6 +160,21 @@ export const IMAGE_DATAS: ImageInfo[] = [
 		name: "",
 		author: "",
 		path: "/images/collections/140786992_p0.jpg",
+	},
+	{
+		name: "UJ!LB“Bullet Train - Death Station”",
+		author: "BiBimusim2",
+		path: "/images/collections/IMG_1324.png",
+	},
+	{
+		name: "UJ!“Insanity Duo”",
+		author: "BiBimusim2",
+		path: "/images/collections/IMG_1326.webp",
+	},
+	{
+		name: "[K.V.M - Unjustice] Phase 2",
+		author: "BiBimusim2",
+		path: "/images/collections/IMG_1323.webp",
 	},
 ];
 

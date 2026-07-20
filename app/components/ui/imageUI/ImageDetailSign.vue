@@ -102,6 +102,7 @@ $base-size: 1;
 			font-family: "方正基础像素体";
 
 			.content_line {
+				margin: 0.5rem 0;
 				white-space: nowrap; /* 不换行 */
 				overflow: hidden; /* 隐藏超出内容 */
 				text-overflow: ellipsis; /* 显示省略号 */
