@@ -152,6 +152,9 @@ export const IMAGE_DATAS: ImageInfo[] = [
 		name: "",
 		author: "",
 		path: "/images/collections/c629be96-7085-4bcf-950f-dffc6dd36aaf.png",
+		option: {
+			pixel: true,
+		},
 	},
 	{
 		name: "",

@@ -119,6 +119,9 @@ watch(
 				v-if="loadingState !== 'error'"
 				:src="`/blog-2.0${currentImageData?.path}`"
 				:class="{ loading: loadingState === 'loading' }"
+				:style="{
+					imageRendering: currentImageData?.option?.pixel ? 'pixelated' : 'auto',
+				}"
 				@click="handleClickImage"
 				@mouseenter="handleMouseEnter"
 				@mouseleave="handleMouseLeave"

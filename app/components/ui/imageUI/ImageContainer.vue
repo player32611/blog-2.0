@@ -136,6 +136,7 @@ const createImgDatas = () => {
 				targetX: x,
 				targetY: y,
 				animation: null,
+				option: data.option,
 			},
 		]);
 
@@ -207,15 +208,11 @@ const drawFrame = () => {
 
 	imageStore.allImagePosData.forEach(img => {
 		if (img.img) {
-			drawImage(
-				img.x,
-				img.y,
-				img.img,
-				currentImageWidth.value,
-				currentImageHeight.value,
-				imageBorderRadius,
-				"cover",
-			);
+			drawImage(img.x, img.y, img.img, currentImageWidth.value, currentImageHeight.value, {
+				radius: imageBorderRadius,
+				fit: "cover",
+				pixel: img.option?.pixel,
+			});
 		} else {
 			drawPlaceholder(
 				img.x,

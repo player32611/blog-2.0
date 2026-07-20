@@ -23,6 +23,9 @@ export type ImageInfo = {
 	name: string;
 	author: string;
 	path: string;
+	option?: {
+		pixel: boolean;
+	};
 };
 
 /**

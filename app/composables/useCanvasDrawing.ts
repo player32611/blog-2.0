@@ -1,3 +1,5 @@
+import type { DrawImageOptions } from "~/types/composables";
+
 export function useCanvasDrawing(canvasRef: Ref<HTMLCanvasElement | null>) {
 	const ctx = computed<CanvasRenderingContext2D | null>(() => {
 		if (!canvasRef.value) return null;
@@ -23,8 +25,7 @@ export function useCanvasDrawing(canvasRef: Ref<HTMLCanvasElement | null>) {
 		img: HTMLImageElement,
 		width: number,
 		height: number,
-		radius: number = 0,
-		fit: "fill" | "cover" | "contain" = "fill",
+		{ radius = 0, fit = "fill", pixel = false }: DrawImageOptions = {},
 	): void => {
 		if (!canvasRef.value || !ctx.value) return;
 
@@ -44,10 +45,10 @@ export function useCanvasDrawing(canvasRef: Ref<HTMLCanvasElement | null>) {
 		// 裁剪并绘制图片
 		ctx.value.save();
 		ctx.value.clip();
+		if (pixel) ctx.value.imageSmoothingEnabled = false;
 
-		if (fit === "fill") {
-			ctx.value.drawImage(img, x, y, width, height);
-		} else {
+		if (fit === "fill") ctx.value.drawImage(img, x, y, width, height);
+		else {
 			const imgW = img.naturalWidth;
 			const imgH = img.naturalHeight;
 
