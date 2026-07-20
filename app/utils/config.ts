@@ -154,6 +154,8 @@ export const IMAGE_DATAS: ImageInfo[] = [
 		path: "/images/collections/c629be96-7085-4bcf-950f-dffc6dd36aaf.png",
 		option: {
 			pixel: true,
+			themeColor: "#ffffff",
+			border: true,
 		},
 	},
 	{
@@ -165,16 +167,28 @@ export const IMAGE_DATAS: ImageInfo[] = [
 		name: "UJ!LB“Bullet Train - Death Station”",
 		author: "BiBimusim2",
 		path: "/images/collections/IMG_1324.png",
+		option: {
+			themeColor: "#ffffff",
+			border: true,
+		},
 	},
 	{
 		name: "UJ!“Insanity Duo”",
 		author: "BiBimusim2",
 		path: "/images/collections/IMG_1326.webp",
+		option: {
+			themeColor: "#800080",
+			border: true,
+		},
 	},
 	{
 		name: "[K.V.M - Unjustice] Phase 2",
 		author: "BiBimusim2",
 		path: "/images/collections/IMG_1323.webp",
+		option: {
+			themeColor: "#ffffff",
+			border: true,
+		},
 	},
 ];
 

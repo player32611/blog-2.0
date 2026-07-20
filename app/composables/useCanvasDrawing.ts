@@ -25,11 +25,17 @@ export function useCanvasDrawing(canvasRef: Ref<HTMLCanvasElement | null>) {
 		img: HTMLImageElement,
 		width: number,
 		height: number,
-		{ radius = 0, fit = "fill", pixel = false }: DrawImageOptions = {},
+		{
+			radius = 0,
+			fit = "fill",
+			pixel = false,
+			borderColor = "#ffffff",
+			borderWidth = 0,
+		}: DrawImageOptions = {},
 	): void => {
 		if (!canvasRef.value || !ctx.value) return;
 
-		// 绘制圆角路径
+		// 圆角路径
 		ctx.value.beginPath();
 		ctx.value.moveTo(x + radius, y);
 		ctx.value.lineTo(x + width - radius, y);
@@ -42,9 +48,10 @@ export function useCanvasDrawing(canvasRef: Ref<HTMLCanvasElement | null>) {
 		ctx.value.arcTo(x, y, x + radius, y, radius);
 		ctx.value.closePath();
 
-		// 裁剪并绘制图片
+		// 裁剪
 		ctx.value.save();
 		ctx.value.clip();
+
 		if (pixel) ctx.value.imageSmoothingEnabled = false;
 
 		if (fit === "fill") ctx.value.drawImage(img, x, y, width, height);
@@ -68,7 +75,10 @@ export function useCanvasDrawing(canvasRef: Ref<HTMLCanvasElement | null>) {
 					sh = imgW / targetRatio;
 					sy = (imgH - sh) / 2;
 				}
-			} else if (fit === "contain") {
+
+				ctx.value.drawImage(img, sx, sy, sw, sh, x, y, width, height);
+			} else {
+				// contain
 				const scale = Math.min(width / imgW, height / imgH);
 
 				const dw = imgW * scale;
@@ -79,8 +89,13 @@ export function useCanvasDrawing(canvasRef: Ref<HTMLCanvasElement | null>) {
 
 				ctx.value.drawImage(img, dx, dy, dw, dh);
 			}
+		}
 
-			ctx.value.drawImage(img, sx, sy, sw, sh, x, y, width, height);
+		// 绘制边框
+		if (borderWidth > 0) {
+			ctx.value.lineWidth = borderWidth;
+			ctx.value.strokeStyle = borderColor;
+			ctx.value.stroke();
 		}
 
 		ctx.value.restore();

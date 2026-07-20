@@ -13,6 +13,7 @@ export const useImageStore = defineStore("image", (): ImageState & ImageGetter &
 		let imageWidth = 350;
 		let imageHeight = 500;
 		let imageMargin = 200;
+		const imageBorderWidth = 5;
 		const imageBorderRadius = 16;
 		const imagePlaceHolderColor = "#ffffff";
 		const screenWidth = window.innerWidth;
@@ -35,6 +36,7 @@ export const useImageStore = defineStore("image", (): ImageState & ImageGetter &
 			imageWidth,
 			imageHeight,
 			imageMargin,
+			imageBorderWidth,
 			imageBorderRadius,
 			imagePlaceHolderColor,
 			totalWidth: imageWidth * rowMax + imageMargin * (rowMax - 1),

@@ -199,7 +199,8 @@ const drawFrame = () => {
 	if (!canvasRef.value) return;
 	const ctx = canvasRef.value.getContext("2d");
 	if (!ctx) return;
-	const { imageBorderRadius, imagePlaceHolderColor } = imageStore.getLayoutAttribute();
+	const { imageBorderRadius, imagePlaceHolderColor, imageBorderWidth } =
+		imageStore.getLayoutAttribute();
 
 	const rect = canvasRef.value.getBoundingClientRect();
 	ctx.clearRect(0, 0, rect.width, rect.height);
@@ -212,6 +213,8 @@ const drawFrame = () => {
 				radius: imageBorderRadius,
 				fit: "cover",
 				pixel: img.option?.pixel,
+				borderColor: img.option?.themeColor,
+				borderWidth: img.option?.border ? imageBorderWidth : 0,
 			});
 		} else {
 			drawPlaceholder(

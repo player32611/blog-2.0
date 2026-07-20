@@ -23,9 +23,13 @@ export type ImageInfo = {
 	name: string;
 	author: string;
 	path: string;
-	option?: {
-		pixel: boolean;
-	};
+	option?: ImageInfoOption;
+};
+
+export type ImageInfoOption = {
+	border?: boolean;
+	pixel?: boolean;
+	themeColor?: string;
 };
 
 /**
@@ -56,6 +60,7 @@ export type ImageLayoutData = {
 	imageWidth: number;
 	imageHeight: number;
 	imageMargin: number;
+	imageBorderWidth: number;
 	imageBorderRadius: number;
 	imagePlaceHolderColor: string;
 	totalWidth: number;

@@ -69,8 +69,7 @@ defineExpose<ItemInstance>({
 			-5px 0px 8px #c3f4ff inset,
 			15px 2px 25px #000 inset,
 			-24px -2px 34px #c3f4ff99 inset,
-			250px 0px 44px #00000066 inset,
-			150px 0px 38px #000000aa inset;
+			250px 0px 44px #00000066 inset;
 	}
 }
 

@@ -160,8 +160,8 @@ watch(
 
 		.image_shadow {
 			position: absolute;
-			height: 50vmin;
-			width: 50vmin;
+			height: 60vmin;
+			width: 60vmin;
 			object-fit: contain;
 			border-radius: 1rem;
 			filter: blur(20px);
@@ -169,10 +169,9 @@ watch(
 
 		.active_image {
 			position: absolute;
-			height: 50vmin;
-			width: 50vmin;
+			height: 60vmin;
+			width: 60vmin;
 			object-fit: contain;
-			// image-rendering: pixelated;
 			cursor: pointer;
 
 			&.loading {
