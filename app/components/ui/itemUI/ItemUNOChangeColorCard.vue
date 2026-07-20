@@ -66,11 +66,14 @@ defineExpose<ItemInstance>({
 	position: absolute;
 	width: 11em;
 	height: 14.8em;
+	font-size: 1rem;
 	background: #28282b;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border: 6px solid #f5f5dc;
+	border-width: 6px;
+	border-style: solid;
+	border-color: #f5f5dc;
 	border-radius: 5px;
 	transition: transform 0.5s;
 	overflow: hidden;
@@ -105,7 +108,9 @@ defineExpose<ItemInstance>({
 		height: 14em;
 		border-radius: 50%;
 		transform: skew(-25deg);
-		border: 4px solid white;
+		border-width: 4px;
+		border-style: solid;
+		border-color: white;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 
@@ -113,7 +118,9 @@ defineExpose<ItemInstance>({
 			position: absolute;
 			width: 1.5em;
 			height: 3em;
-			border: 1px solid white;
+			border-width: 1px;
+			border-style: solid;
+			border-color: white;
 		}
 
 		&.top-left {
@@ -157,6 +164,86 @@ defineExpose<ItemInstance>({
 
 	100% {
 		transform: rotate(45deg) translate(18em, -2.8em);
+	}
+}
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.3;
+
+	.item_UNO_changeColor_card {
+		font-size: 1rem * $base-size;
+		border-width: 6px * $base-size;
+		border-radius: 5px * $base-size;
+		filter: drop-shadow(5px * $base-size 5px * $base-size 5px * $base-size rgba(0, 0, 0, 0.337));
+
+		.circle {
+			border-width: 4px * $base-size;
+
+			&.small {
+				border-width: 1px * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.45;
+
+	.item_UNO_changeColor_card {
+		font-size: 1rem * $base-size;
+		border-width: 6px * $base-size;
+		border-radius: 5px * $base-size;
+		filter: drop-shadow(5px * $base-size 5px * $base-size 5px * $base-size rgba(0, 0, 0, 0.337));
+
+		.circle {
+			border-width: 4px * $base-size;
+
+			&.small {
+				border-width: 1px * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.6;
+
+	.item_UNO_changeColor_card {
+		font-size: 1rem * $base-size;
+		border-width: 6px * $base-size;
+		border-radius: 5px * $base-size;
+		filter: drop-shadow(5px * $base-size 5px * $base-size 5px * $base-size rgba(0, 0, 0, 0.337));
+
+		.circle {
+			border-width: 4px * $base-size;
+
+			&.small {
+				border-width: 1px * $base-size;
+			}
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.8;
+
+	.item_UNO_changeColor_card {
+		font-size: 1rem * $base-size;
+		border-width: 6px * $base-size;
+		border-radius: 5px * $base-size;
+		filter: drop-shadow(5px * $base-size 5px * $base-size 5px * $base-size rgba(0, 0, 0, 0.337));
+
+		.circle {
+			border-width: 4px * $base-size;
+
+			&.small {
+				border-width: 1px * $base-size;
+			}
+		}
 	}
 }
 </style>

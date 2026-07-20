@@ -120,4 +120,188 @@ defineExpose<ItemInstance>({
 		font-weight: bolder;
 	}
 }
+
+/* ========== 超小屏（< 576px）========== */
+@media screen and (max-width: 576px) {
+	$base-size: 0.3;
+
+	.item_earbud_case {
+		width: 270px * $base-size;
+		height: 220px * $base-size;
+		border-radius: 70px * $base-size;
+		box-shadow:
+			inset 0px * $base-size 35px * $base-size 25px * $base-size #ffffffe0,
+			inset 10px * $base-size 0px * $base-size 25px * $base-size #0000004b,
+			inset 40px * $base-size 0px * $base-size 20px * $base-size #ffffff,
+			inset -10px * $base-size 0px * $base-size 25px * $base-size #0000004b,
+			inset -40px * $base-size 0px * $base-size 20px * $base-size #fff,
+			inset 0px * $base-size 10px * $base-size 10px * $base-size #000000e0,
+			inset 0px * $base-size -15px * $base-size 25px * $base-size #00000036,
+			10px * $base-size 25px * $base-size 40px * $base-size -10px * $base-size #00000060;
+		filter: drop-shadow(5px * $base-size 5px * $base-size 5px * $base-size rgba(0, 0, 0, 0.337));
+
+		.cavity {
+			width: 150px * $base-size;
+			height: 20px * $base-size;
+			border-radius: 200px * $base-size;
+		}
+
+		.line {
+			height: 2px * $base-size;
+
+			&::after,
+			&::before {
+				height: 2px * $base-size;
+			}
+		}
+
+		.led {
+			width: 7px * $base-size;
+			border-radius: 100px * $base-size;
+			box-shadow: 0 0 6px * $base-size #3eff4b;
+		}
+
+		.text {
+			margin-top: 70px * $base-size;
+		}
+	}
+}
+
+/* ========== 小屏（576px - 768px）========== */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	$base-size: 0.45;
+
+	.item_earbud_case {
+		width: 270px * $base-size;
+		height: 220px * $base-size;
+		border-radius: 70px * $base-size;
+		box-shadow:
+			inset 0px * $base-size 35px * $base-size 25px * $base-size #ffffffe0,
+			inset 10px * $base-size 0px * $base-size 25px * $base-size #0000004b,
+			inset 40px * $base-size 0px * $base-size 20px * $base-size #ffffff,
+			inset -10px * $base-size 0px * $base-size 25px * $base-size #0000004b,
+			inset -40px * $base-size 0px * $base-size 20px * $base-size #fff,
+			inset 0px * $base-size 10px * $base-size 10px * $base-size #000000e0,
+			inset 0px * $base-size -15px * $base-size 25px * $base-size #00000036,
+			10px * $base-size 25px * $base-size 40px * $base-size -10px * $base-size #00000060;
+		filter: drop-shadow(5px * $base-size 5px * $base-size 5px * $base-size rgba(0, 0, 0, 0.337));
+
+		.cavity {
+			width: 150px * $base-size;
+			height: 20px * $base-size;
+			border-radius: 200px * $base-size;
+		}
+
+		.line {
+			height: 2px * $base-size;
+
+			&::after,
+			&::before {
+				height: 2px * $base-size;
+			}
+		}
+
+		.led {
+			width: 7px * $base-size;
+			border-radius: 100px * $base-size;
+			box-shadow: 0 0 6px * $base-size #3eff4b;
+		}
+
+		.text {
+			margin-top: 70px * $base-size;
+		}
+	}
+}
+
+/* ========== 中等屏（768px - 991px）========== */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	$base-size: 0.6;
+
+	.item_earbud_case {
+		width: 270px * $base-size;
+		height: 220px * $base-size;
+		border-radius: 70px * $base-size;
+		box-shadow:
+			inset 0px * $base-size 35px * $base-size 25px * $base-size #ffffffe0,
+			inset 10px * $base-size 0px * $base-size 25px * $base-size #0000004b,
+			inset 40px * $base-size 0px * $base-size 20px * $base-size #ffffff,
+			inset -10px * $base-size 0px * $base-size 25px * $base-size #0000004b,
+			inset -40px * $base-size 0px * $base-size 20px * $base-size #fff,
+			inset 0px * $base-size 10px * $base-size 10px * $base-size #000000e0,
+			inset 0px * $base-size -15px * $base-size 25px * $base-size #00000036,
+			10px * $base-size 25px * $base-size 40px * $base-size -10px * $base-size #00000060;
+		filter: drop-shadow(5px * $base-size 5px * $base-size 5px * $base-size rgba(0, 0, 0, 0.337));
+
+		.cavity {
+			width: 150px * $base-size;
+			height: 20px * $base-size;
+			border-radius: 200px * $base-size;
+		}
+
+		.line {
+			height: 2px * $base-size;
+
+			&::after,
+			&::before {
+				height: 2px * $base-size;
+			}
+		}
+
+		.led {
+			width: 7px * $base-size;
+			border-radius: 100px * $base-size;
+			box-shadow: 0 0 6px * $base-size #3eff4b;
+		}
+
+		.text {
+			margin-top: 70px * $base-size;
+		}
+	}
+}
+
+/* ========== 大屏（991px - 1199px）========== */
+@media screen and (min-width: 991px) and (max-width: 1199px) {
+	$base-size: 0.75;
+
+	.item_earbud_case {
+		width: 270px * $base-size;
+		height: 220px * $base-size;
+		border-radius: 70px * $base-size;
+		box-shadow:
+			inset 0px * $base-size 35px * $base-size 25px * $base-size #ffffffe0,
+			inset 10px * $base-size 0px * $base-size 25px * $base-size #0000004b,
+			inset 40px * $base-size 0px * $base-size 20px * $base-size #ffffff,
+			inset -10px * $base-size 0px * $base-size 25px * $base-size #0000004b,
+			inset -40px * $base-size 0px * $base-size 20px * $base-size #fff,
+			inset 0px * $base-size 10px * $base-size 10px * $base-size #000000e0,
+			inset 0px * $base-size -15px * $base-size 25px * $base-size #00000036,
+			10px * $base-size 25px * $base-size 40px * $base-size -10px * $base-size #00000060;
+		filter: drop-shadow(5px * $base-size 5px * $base-size 5px * $base-size rgba(0, 0, 0, 0.337));
+
+		.cavity {
+			width: 150px * $base-size;
+			height: 20px * $base-size;
+			border-radius: 200px * $base-size;
+		}
+
+		.line {
+			height: 2px * $base-size;
+
+			&::after,
+			&::before {
+				height: 2px * $base-size;
+			}
+		}
+
+		.led {
+			width: 7px * $base-size;
+			border-radius: 100px * $base-size;
+			box-shadow: 0 0 6px * $base-size #3eff4b;
+		}
+
+		.text {
+			margin-top: 70px * $base-size;
+		}
+	}
+}
 </style>
