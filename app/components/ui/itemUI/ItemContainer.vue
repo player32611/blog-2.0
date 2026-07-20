@@ -15,6 +15,7 @@ import ItemMagnetConstraint from "./ItemMagnetConstraint.vue";
 import ItemPhoneCard from "./ItemPhoneCard.vue";
 import ItemSwitchCard from "./ItemSwitchCard.vue";
 import ItemUNOChangeColorCard from "./ItemUNOChangeColorCard.vue";
+import { contain } from "three/src/extras/TextureUtils.js";
 
 const { Constraint, Engine, Render, World, Bodies, Mouse, MouseConstraint, Runner } = Matter;
 
@@ -189,29 +190,32 @@ const createCards = () => {
 
 const handleUpdate = () => {
 	Matter.Events.on(mouseConstraint, "startdrag", () => {
-		if (containerRef.value) {
-			containerRef.value.style.cursor = "grabbing";
-		}
+		if (containerRef.value) containerRef.value.style.cursor = "grabbing";
 	});
 
 	Matter.Events.on(mouseConstraint, "enddrag", () => {
-		if (containerRef.value) {
-			containerRef.value.style.cursor = "pointer";
-		}
+		if (containerRef.value) containerRef.value.style.cursor = "pointer";
 	});
 
 	Matter.Events.on(engine, "afterUpdate", () => {
+		if (!containerRef.value) return;
+		const width = containerRef.value.clientWidth;
+		const height = containerRef.value.clientHeight;
+
 		items.value.forEach((item, key) => {
 			itemPositions.value?.set(key, {
 				x: item.position.x,
 				y: item.position.y,
 				angle: item.angle,
 			});
-			if (key === "ItemMagnetConstraint" && item.velocity.y < -10) {
-				itemStore.toggleShowingCommandBar();
-			} else if (key === "ItemBookConstraint" && item.velocity.y < -10) {
-				itemStore.toggleShowingGuide();
+			if (item.position.y > height + 100) {
+				Matter.Body.setPosition(item, { x: width / 2, y: -100 });
+				Matter.Body.setVelocity(item, { x: 0, y: 0 });
 			}
+			if (key === "ItemMagnetConstraint" && item.velocity.y < -10)
+				itemStore.toggleShowingCommandBar();
+			else if (key === "ItemBookConstraint" && item.velocity.y < -10)
+				itemStore.toggleShowingGuide();
 		});
 	});
 };
