@@ -12,6 +12,7 @@ import type { ItemParams } from "~/types/components";
 import ItemEarbudCaseCard from "./ItemCard/ItemEarbudCaseCard.vue";
 import ItemEarthCard from "./ItemCard/ItemEarthCard.vue";
 import ItemPhoneCard from "./ItemCard/ItemPhoneCard.vue";
+import ItemPokerCard from "./ItemCard/ItemPokerCard.vue";
 import ItemSwitchCard from "./ItemCard/ItemSwitchCard.vue";
 import ItemUNOChangeColorCard from "./ItemCard/ItemUNOChangeColorCard.vue";
 
@@ -25,6 +26,7 @@ const containerRef = ref<HTMLDivElement>();
 const ItemBookConstraintRef = ref<InstanceType<typeof ItemBookConstraint> | null>(null);
 const ItemEarbudCaseCardRef = ref<InstanceType<typeof ItemEarbudCaseCard> | null>(null);
 const ItemEarthCardRef = ref<InstanceType<typeof ItemEarthCard> | null>(null);
+const ItemPokerCardRef = ref<InstanceType<typeof ItemPokerCard> | null>(null);
 const ItemMagnetConstraintRef = ref<InstanceType<typeof ItemMagnetConstraint> | null>(null);
 const ItemPhoneCardRef = ref<InstanceType<typeof ItemPhoneCard> | null>(null);
 const ItemSwitchCardRef = ref<InstanceType<typeof ItemSwitchCard> | null>(null);
@@ -173,6 +175,13 @@ const createCards = () => {
 		const item = ItemEarthCardRef.value.createItem(x, y, angle);
 		if (item) items.value.set("ItemEarthCard", item);
 	}
+	if (ItemPokerCardRef.value) {
+		const x = itemPositions.value.get("ItemPokerCard")?.x ?? Math.random() * window.innerWidth;
+		const y = itemPositions.value.get("ItemPokerCard")?.y ?? Math.random() * -100;
+		const angle = itemPositions.value.get("ItemPokerCard")?.angle ?? Math.random() * 360;
+		const item = ItemPokerCardRef.value.createItem(x, y, angle);
+		if (item) items.value.set("ItemPokerCard", item);
+	}
 	if (ItemSwitchCardRef.value) {
 		const x = itemPositions.value.get("ItemSwitchCard")?.x ?? Math.random() * window.innerWidth;
 		const y = itemPositions.value.get("ItemSwitchCard")?.y ?? Math.random() * -100;
@@ -251,6 +260,14 @@ watch(
 					case "ItemEarthCard":
 						if (ItemEarthCardRef.value)
 							item = ItemEarthCardRef.value.createItem(
+								Math.random() * window.innerWidth,
+								Math.random() * -100,
+								Math.random() * 360,
+							);
+						break;
+					case "ItemPokerCard":
+						if (ItemPokerCardRef.value)
+							item = ItemPokerCardRef.value.createItem(
 								Math.random() * window.innerWidth,
 								Math.random() * -100,
 								Math.random() * 360,
@@ -337,6 +354,13 @@ onUnmounted(() => {
 		:angle="itemPositions.get('ItemPhoneCard')?.angle ?? 0"
 		:visible="itemPositions.has('ItemPhoneCard')"
 		ref="ItemPhoneCardRef"
+	/>
+	<ItemPokerCard
+		:x="itemPositions.get('ItemPokerCard')?.x ?? 0"
+		:y="itemPositions.get('ItemPokerCard')?.y ?? 0"
+		:angle="itemPositions.get('ItemPokerCard')?.angle ?? 0"
+		:visible="itemPositions.has('ItemPokerCard')"
+		ref="ItemPokerCardRef"
 	/>
 	<ItemSwitchCard
 		:x="itemPositions.get('ItemSwitchCard')?.x ?? 0"
