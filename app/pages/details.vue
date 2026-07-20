@@ -71,6 +71,11 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
+@font-face {
+	font-family: "Coustard Black";
+	src: url("/fonts/Coustard_Black.woff2") format("woff2");
+}
+
 .details {
 	width: 100%;
 	font-size: 1rem;

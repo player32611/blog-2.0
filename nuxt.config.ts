@@ -42,11 +42,6 @@ export default defineNuxtConfig({
 				src: "/fonts/方正基础像素体.ttf",
 				weight: 500,
 			},
-			{
-				name: "Coustard Black",
-				src: "/fonts/Coustard_Black.woff2",
-				weight: 500,
-			},
 		],
 	},
 	nitro: {

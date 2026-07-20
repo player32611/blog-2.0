@@ -98,7 +98,7 @@ export const useSoundStore = defineStore("sound", (): SoundState & SoundGetter &
 			musicAudio.value.removeEventListener("canplay", handleCanPlay);
 			musicAudio.value.removeEventListener("timeupdate", handleTimeUpdate);
 			musicAudio.value.removeEventListener("ended", handleMusicEnded);
-			musicAudio.value.src = music.path;
+			musicAudio.value.src = `/blog-2.0${music.path}`;
 			musicAudio.value.load();
 			musicAudio.value.addEventListener("canplay", handleCanPlay);
 			musicAudio.value.addEventListener("timeupdate", handleTimeUpdate);
