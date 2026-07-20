@@ -15,7 +15,7 @@ const createItem = (x: number, y: number, angle: number): Body | null => {
 		restitution: 0.6,
 		friction: 0.5,
 		render: {
-			fillStyle: "rgba(0, 0, 0)",
+			fillStyle: "rgba(0, 0, 0, 0)",
 		},
 	});
 };
@@ -28,7 +28,7 @@ defineExpose<ItemInstance>({
 <template>
 	<!-- From Uiverse.io by nanda248 -->
 	<div
-		class="item_UNO_changeColor_card"
+		class="item_UNO_changeColor"
 		:style="{
 			left: x - (itemRef ? itemRef.offsetWidth / 2 : 0) + 'px',
 			top: y - (itemRef ? itemRef.offsetHeight / 2 : 0) + 'px',
@@ -62,7 +62,7 @@ defineExpose<ItemInstance>({
 @use "@/assets/styles/variables.scss";
 
 /* From Uiverse.io by nanda248 */
-.item_UNO_changeColor_card {
+.item_UNO_changeColor {
 	position: absolute;
 	width: 11em;
 	height: 14.8em;
@@ -171,7 +171,7 @@ defineExpose<ItemInstance>({
 @media screen and (max-width: 576px) {
 	$base-size: 0.3;
 
-	.item_UNO_changeColor_card {
+	.item_UNO_changeColor {
 		font-size: 1rem * $base-size;
 		border-width: 6px * $base-size;
 		border-radius: 5px * $base-size;
@@ -191,7 +191,7 @@ defineExpose<ItemInstance>({
 @media screen and (min-width: 576px) and (max-width: 768px) {
 	$base-size: 0.45;
 
-	.item_UNO_changeColor_card {
+	.item_UNO_changeColor {
 		font-size: 1rem * $base-size;
 		border-width: 6px * $base-size;
 		border-radius: 5px * $base-size;
@@ -211,7 +211,7 @@ defineExpose<ItemInstance>({
 @media screen and (min-width: 768px) and (max-width: 991px) {
 	$base-size: 0.6;
 
-	.item_UNO_changeColor_card {
+	.item_UNO_changeColor {
 		font-size: 1rem * $base-size;
 		border-width: 6px * $base-size;
 		border-radius: 5px * $base-size;
@@ -231,7 +231,7 @@ defineExpose<ItemInstance>({
 @media screen and (min-width: 991px) and (max-width: 1199px) {
 	$base-size: 0.8;
 
-	.item_UNO_changeColor_card {
+	.item_UNO_changeColor {
 		font-size: 1rem * $base-size;
 		border-width: 6px * $base-size;
 		border-radius: 5px * $base-size;

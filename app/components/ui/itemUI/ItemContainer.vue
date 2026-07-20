@@ -9,13 +9,14 @@ import type {
 } from "matter-js";
 import type { ItemParams } from "~/types/components";
 
+import ItemEarbudCaseCard from "./ItemCard/ItemEarbudCaseCard.vue";
+import ItemEarthCard from "./ItemCard/ItemEarthCard.vue";
+import ItemPhoneCard from "./ItemCard/ItemPhoneCard.vue";
+import ItemSwitchCard from "./ItemCard/ItemSwitchCard.vue";
+import ItemUNOChangeColorCard from "./ItemCard/ItemUNOChangeColorCard.vue";
+
 import ItemBookConstraint from "./ItemBookConstraint.vue";
-import ItemEarbudCaseCard from "./ItemEarbudCaseCard.vue";
 import ItemMagnetConstraint from "./ItemMagnetConstraint.vue";
-import ItemPhoneCard from "./ItemPhoneCard.vue";
-import ItemSwitchCard from "./ItemSwitchCard.vue";
-import ItemUNOChangeColorCard from "./ItemUNOChangeColorCard.vue";
-import { contain } from "three/src/extras/TextureUtils.js";
 
 const { Constraint, Engine, Render, World, Bodies, Mouse, MouseConstraint, Runner } = Matter;
 
@@ -23,6 +24,7 @@ const itemStore = useItemStore();
 const containerRef = ref<HTMLDivElement>();
 const ItemBookConstraintRef = ref<InstanceType<typeof ItemBookConstraint> | null>(null);
 const ItemEarbudCaseCardRef = ref<InstanceType<typeof ItemEarbudCaseCard> | null>(null);
+const ItemEarthCardRef = ref<InstanceType<typeof ItemEarthCard> | null>(null);
 const ItemMagnetConstraintRef = ref<InstanceType<typeof ItemMagnetConstraint> | null>(null);
 const ItemPhoneCardRef = ref<InstanceType<typeof ItemPhoneCard> | null>(null);
 const ItemSwitchCardRef = ref<InstanceType<typeof ItemSwitchCard> | null>(null);
@@ -164,6 +166,13 @@ const createCards = () => {
 		const item = ItemEarbudCaseCardRef.value.createItem(x, y, angle);
 		if (item) items.value.set("ItemEarbudCaseCard", item);
 	}
+	if (ItemEarthCardRef.value) {
+		const x = itemPositions.value.get("ItemEarthCard")?.x ?? Math.random() * window.innerWidth;
+		const y = itemPositions.value.get("ItemEarthCard")?.y ?? Math.random() * -100;
+		const angle = itemPositions.value.get("ItemEarthCard")?.angle ?? Math.random() * 360;
+		const item = ItemEarthCardRef.value.createItem(x, y, angle);
+		if (item) items.value.set("ItemEarthCard", item);
+	}
 	if (ItemSwitchCardRef.value) {
 		const x = itemPositions.value.get("ItemSwitchCard")?.x ?? Math.random() * window.innerWidth;
 		const y = itemPositions.value.get("ItemSwitchCard")?.y ?? Math.random() * -100;
@@ -239,6 +248,14 @@ watch(
 								Math.random() * 360,
 							);
 						break;
+					case "ItemEarthCard":
+						if (ItemEarthCardRef.value)
+							item = ItemEarthCardRef.value.createItem(
+								Math.random() * window.innerWidth,
+								Math.random() * -100,
+								Math.random() * 360,
+							);
+						break;
 					case "ItemSwitchCard":
 						if (ItemSwitchCardRef.value)
 							item = ItemSwitchCardRef.value.createItem(
@@ -299,12 +316,7 @@ onUnmounted(() => {
 
 <template>
 	<div ref="containerRef" class="item_container"></div>
-	<ItemBookConstraint
-		:x="itemPositions.get('ItemBookConstraint')?.x ?? 0"
-		:y="itemPositions.get('ItemBookConstraint')?.y ?? 0"
-		:angle="itemPositions.get('ItemBookConstraint')?.angle ?? 0"
-		ref="ItemBookConstraintRef"
-	/>
+
 	<ItemEarbudCaseCard
 		:x="itemPositions.get('ItemEarbudCaseCard')?.x ?? 0"
 		:y="itemPositions.get('ItemEarbudCaseCard')?.y ?? 0"
@@ -312,11 +324,12 @@ onUnmounted(() => {
 		:visible="itemPositions.has('ItemEarbudCaseCard')"
 		ref="ItemEarbudCaseCardRef"
 	/>
-	<ItemMagnetConstraint
-		:x="itemPositions.get('ItemMagnetConstraint')?.x ?? 0"
-		:y="itemPositions.get('ItemMagnetConstraint')?.y ?? 0"
-		:angle="itemPositions.get('ItemMagnetConstraint')?.angle ?? 0"
-		ref="ItemMagnetConstraintRef"
+	<ItemEarthCard
+		:x="itemPositions.get('ItemEarthCard')?.x ?? 0"
+		:y="itemPositions.get('ItemEarthCard')?.y ?? 0"
+		:angle="itemPositions.get('ItemEarthCard')?.angle ?? 0"
+		:visible="itemPositions.has('ItemEarthCard')"
+		ref="ItemEarthCardRef"
 	/>
 	<ItemPhoneCard
 		:x="itemPositions.get('ItemPhoneCard')?.x ?? 0"
@@ -338,6 +351,19 @@ onUnmounted(() => {
 		:angle="itemPositions.get('ItemUNOChangeColorCard')?.angle ?? 0"
 		:visible="itemPositions.has('ItemUNOChangeColorCard')"
 		ref="ItemUNOChangeColorCardRef"
+	/>
+
+	<ItemBookConstraint
+		:x="itemPositions.get('ItemBookConstraint')?.x ?? 0"
+		:y="itemPositions.get('ItemBookConstraint')?.y ?? 0"
+		:angle="itemPositions.get('ItemBookConstraint')?.angle ?? 0"
+		ref="ItemBookConstraintRef"
+	/>
+	<ItemMagnetConstraint
+		:x="itemPositions.get('ItemMagnetConstraint')?.x ?? 0"
+		:y="itemPositions.get('ItemMagnetConstraint')?.y ?? 0"
+		:angle="itemPositions.get('ItemMagnetConstraint')?.angle ?? 0"
+		ref="ItemMagnetConstraintRef"
 	/>
 </template>
 
