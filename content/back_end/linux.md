@@ -169,8 +169,8 @@ Linux 命令格式：`command [-option] [parameter]`
 文件详细信息解释
 
 ```bash
-drwxr-x--- 20 hcb  hcb   4096  5月  2 14:09 ./
--rw-r--r--  1 hcb  hcb   3771  3月 31  2024 .bashrc
+drwxr-x--- 20 bba  bba   4096  5月  2 14:09 ./
+-rw-r--r--  1 bba  bba   3771  3月 31  2024 .bashrc
 ```
 
 第一列开头为 `d` 表示目录，`-` 表示文件，剩余九位代表文件权限，`r` 代表读权限，`w` 代表写权限，`x` 代表执行权限，若无对应权限则为 `-`

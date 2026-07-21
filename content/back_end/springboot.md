@@ -599,7 +599,7 @@ public void testUpdate() throws Exception {
   // 获取 SQL 语句执行对象
   Statement statement = connection.createStatement();
   // 执行 SQL
-  int i =  statement.executeUpdate("update user set name='hcb' where id=1");
+  int i =  statement.executeUpdate("update user set name='root' where id=1");
   System.out.println("SQL 执行完毕影响的记录数为："+i);
   // 释放资源
   statement.close();
@@ -611,14 +611,14 @@ public void testUpdate() throws Exception {
 
 **需求**：基于 JDBC 程序，执行 select 语句，将查询结果封装到 User 对象中
 
-**SQL**：`select * from users where username = 'hcb' and password = '123456'`
+**SQL**：`select * from users where username = 'root' and password = '123456'`
 
 ```java
 @Test
 public void testSelect() {
     String url = "jdbc:mysql://localhost:3306/shopping";
     String username = "root";
-    String password = "hcb326630";
+    String password = "`12345`";
 
     Connection conn = null;
     PreparedStatement stmt = null;
@@ -630,7 +630,7 @@ public void testSelect() {
 
         String sql = "SELECT id, name, password, avatar, role_id, balance FROM users WHERE name = ? AND password = ?"; // 预编译 SQL
         stmt = conn.prepareStatement(sql);
-        stmt.setString(1, "hcb");
+        stmt.setString(1, "bba");
         stmt.setString(2, "123456");
         rs = stmt.executeQuery();
 
@@ -686,7 +686,7 @@ while(resultSet.next()){
 
 ```java
 PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
-pstmt.setString(1, "hcb");
+pstmt.setString(1, "bba");
 pstmt.setString(2, "123456");
 ResultSet resultSet = pstmt.executeQuery();
 ```
@@ -882,7 +882,7 @@ DML 语句执行完毕的返回值，表示该 DML 语句执行完毕影响的�
 #default
 **需求**：添加一个用户
 
-**SQL**：`insert into users (name,password,avator,role_id,balance) values("hcb", '123456', 'https://666', 1, 114514)`
+**SQL**：`insert into users (name,password,avator,role_id,balance) values("bba", '123456', 'https://666', 1, 114514)`
 
 **Mapper 接口**：
 
@@ -976,7 +976,7 @@ class SpringbootMybatisApplicationTests {
 #default
 **需求**：根据用户名和密码查询用户信息
 
-**SQL**：`select * from users where name = "hcb" and password = "123456"`
+**SQL**：`select * from users where name = "bba" and password = "123456"`
 
 **Mapper 接口**：
 
@@ -1176,7 +1176,7 @@ spring:
     url: jdbc:mysql://localhost:3306/shopping
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: hcb326630
+    password: 123456
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

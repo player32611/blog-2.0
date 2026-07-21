@@ -18,7 +18,7 @@ const animContainerAnim = ref<GSAPTimeline | null>(null);
 const contentContainerRef = ref<HTMLDivElement | null>(null);
 const contentSplit = ref<SplitText | null>(null);
 const contentAnim = ref<GSAPTimeline | null>(null);
-const currnetTipIndex = ref<number>(randomInt(0, LOADING_TIPS.length - 1));
+const currnetTipIndex = ref<number>(0);
 
 const row = 13;
 const line = 15;
@@ -116,6 +116,7 @@ const loadingOut = () => {
 
 onMounted(() => {
 	createBlocks();
+	currnetTipIndex.value = randomInt(0, LOADING_TIPS.length - 1);
 	if (animContainerRef.value) {
 		animItem.value = Lottie.loadAnimation({
 			container: animContainerRef.value,
