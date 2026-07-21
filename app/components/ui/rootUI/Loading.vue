@@ -18,6 +18,7 @@ const animContainerAnim = ref<GSAPTimeline | null>(null);
 const contentContainerRef = ref<HTMLDivElement | null>(null);
 const contentSplit = ref<SplitText | null>(null);
 const contentAnim = ref<GSAPTimeline | null>(null);
+const currnetTipIndex = ref<number>(randomInt(0, LOADING_TIPS.length - 1));
 
 const row = 13;
 const line = 15;
@@ -48,6 +49,7 @@ const loadingIn = (next: () => void) => {
 	gsap
 		.timeline({
 			onStart: () => {
+				currnetTipIndex.value = randomInt(0, LOADING_TIPS.length - 1);
 				animItem.value?.play();
 				animContainerAnim.value?.resume();
 				contentAnim.value?.resume();
@@ -208,6 +210,7 @@ defineExpose({
 		<div class="loading_mask" ref="maskRef">
 			<div class="loading_anim" ref="animContainerRef"></div>
 			<div class="loading_content" ref="contentContainerRef">LOADING</div>
+			<div class="loading_tip">小贴士：{{ LOADING_TIPS[currnetTipIndex] }}</div>
 		</div>
 	</div>
 </template>
@@ -259,6 +262,13 @@ defineExpose({
 		}
 
 		.loading_content {
+			color: #ffffff;
+			font-family: "方正基础像素体";
+		}
+
+		.loading_tip {
+			position: absolute;
+			bottom: 2rem;
 			color: #ffffff;
 			font-family: "方正基础像素体";
 		}

@@ -76,6 +76,7 @@ export const DETAIL_WORK_BLOG_DATA: DetailWorkBlogCardParams[] = [
 		backgroundImage: "/images/components/mainPreview.png",
 	},
 ];
+export const LOADING_TIPS: string[] = ["这里没有提示", "主页里有些隐蔽的链接"];
 
 export const IMAGE_DATAS: ImageInfo[] = [
 	{
