@@ -8,8 +8,8 @@ export const useImageStore = defineStore("image", (): ImageState & ImageGetter &
 	const currentMountAnim = ref<GSAPAnimation | null>(null);
 
 	const getLayoutAttribute = (): ImageLayoutData => {
-		const rowMax = 5;
-		const lineMax = 5;
+		const rowMax = 4;
+		const lineMax = 4;
 		let imageWidth = 350;
 		let imageHeight = 500;
 		let imageMargin = 200;

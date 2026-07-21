@@ -80,76 +80,6 @@ export const LOADING_TIPS: string[] = ["这里没有提示", "主页里有些隐
 
 export const IMAGE_DATAS: ImageInfo[] = [
 	{
-		name: "",
-		author: "",
-		path: "/images/collections/24774353ACDA0E4C388CDD05200DBD97.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/45CCC416F28D06A37EF558E2371A5365.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/823CE984FC6A7116BF068413E7A6CF56.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/8B195C4CB599EB531839B6418FFE1EBC.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/91CED444465CE7F933F2E1D7CFCE64B6.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/A0D7FD386EBE6A590370C41EE62B05C9.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/B3B1101712E69A5BFBEA9BFACD5BCB7C.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/C1CE8D4B783173C1138D29D10A6F985D.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/C2E15091D71B4CCDABED63199E856D86.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/E13C355319A784BADE390F1EF04FB65F.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/E68BA344B81E00527C8143AD962F4822.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/F0A1BCCC7FA96556F36AB190B1CAADAB.jpg",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/FBEF25F790E9007EB3D1D49E93DFFB7E.png",
-	},
-	{
-		name: "",
-		author: "",
-		path: "/images/collections/FCBC31D6A22B6B04602E5C0084F3D29F.jpg",
-	},
-	{
 		name: "铃仙（undertale 特供版）",
 		author: "一颗没梦想的苹果",
 		path: "/images/collections/c629be96-7085-4bcf-950f-dffc6dd36aaf.png",
@@ -188,6 +118,15 @@ export const IMAGE_DATAS: ImageInfo[] = [
 		path: "/images/collections/IMG_1323.webp",
 		option: {
 			themeColor: "#ffffff",
+			border: true,
+		},
+	},
+	{
+		name: "MB!TouhouTale",
+		author: "タングステン",
+		path: "/images/collections/illust_130516251_20250522_000220.jpg",
+		option: {
+			themeColor: "#ffff00",
 			border: true,
 		},
 	},

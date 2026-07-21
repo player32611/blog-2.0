@@ -64,6 +64,7 @@ watch(
 			<div class="sign_content">
 				<div class="content_line">名称：{{ currentImageData?.name || IMAGE_EMPTY }}</div>
 				<div class="content_line">作者：{{ currentImageData?.author || IMAGE_EMPTY }}</div>
+				<div class="content_line">链接：{{ currentImageData?.link || IMAGE_EMPTY }}</div>
 			</div>
 		</div>
 		<div class="sign_body"></div>

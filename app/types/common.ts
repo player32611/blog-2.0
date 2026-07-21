@@ -23,6 +23,7 @@ export type ImageInfo = {
 	name: string;
 	author: string;
 	path: string;
+	link?: string;
 	option?: ImageInfoOption;
 };
 
