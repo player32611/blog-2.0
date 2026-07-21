@@ -15,7 +15,7 @@ const createItem = (x: number, y: number, angle: number): Body | null => {
 		restitution: 0.6,
 		friction: 0.5,
 		render: {
-			fillStyle: "rgba(0, 0, 0)",
+			fillStyle: "rgba(0, 0, 0, 0)",
 		},
 	});
 };

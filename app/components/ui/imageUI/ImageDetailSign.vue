@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import gsap from "gsap";
+import type { ImagePosData } from "~/types/common";
 
 const imageStore = useImageStore();
 const signRef = ref<HTMLDivElement | null>(null);
 const signHeadRef = ref<HTMLDivElement | null>(null);
+const currentImageData = ref<ImagePosData | null>(null);
 
 const easeTime = 0.5;
 
@@ -28,6 +30,7 @@ watch(
 	() => imageStore.activeImageData,
 	newData => {
 		if (newData) {
+			currentImageData.value = newData;
 			gsap.to(signRef.value, {
 				rotate: "+=180",
 				duration: easeTime,
@@ -59,10 +62,8 @@ watch(
 			@mouseleave="handleMouseLeave"
 		>
 			<div class="sign_content">
-				<div class="content_line">名称：{{ imageStore.activeImageData?.name || IMAGE_EMPTY }}</div>
-				<div class="content_line">
-					作者：{{ imageStore.activeImageData?.author || IMAGE_EMPTY }}
-				</div>
+				<div class="content_line">名称：{{ currentImageData?.name || IMAGE_EMPTY }}</div>
+				<div class="content_line">作者：{{ currentImageData?.author || IMAGE_EMPTY }}</div>
 			</div>
 		</div>
 		<div class="sign_body"></div>

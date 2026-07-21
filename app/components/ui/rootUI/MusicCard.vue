@@ -189,7 +189,6 @@ $base-size: 1;
 			justify-content: space-between;
 			align-items: center;
 			width: 100%;
-
 			border-radius: 12px * $base-size;
 
 			.title_content {
@@ -217,6 +216,7 @@ $base-size: 1;
 			.music_cover {
 				height: 100%;
 				width: 100%;
+				object-fit: cover;
 
 				&.loading {
 					display: none;
@@ -370,7 +370,6 @@ $base-size: 1;
 	$base-size: 0.75;
 
 	.music_card {
-		width: 190px * $base-size;
 		border-radius: 10px * $base-size;
 
 		.card_content {
@@ -382,15 +381,17 @@ $base-size: 1;
 			border-width: 1px * $base-size;
 
 			.card_title {
-				border-width: 1px * $base-size;
-				margin: 12px * $base-size auto;
-				font-size: 0.6rem * $base-size;
 				border-radius: 12px * $base-size;
+
+				.title_content {
+					font-size: 0.6rem * $base-size;
+					border-width: 1px * $base-size;
+				}
 			}
 
 			.cover_container {
 				width: 80px * $base-size;
-				min-height: 80px * $base-size;
+				height: 80px * $base-size;
 				margin-top: 20px * $base-size;
 				border-radius: 15px * $base-size;
 			}
@@ -409,14 +410,14 @@ $base-size: 1;
 
 			.music_control {
 				padding: 0 5px * $base-size;
+			}
 
-				.control_btn {
-					width: 30px * $base-size;
-					height: 30px * $base-size;
+			.control_btn {
+				width: 30px * $base-size;
+				height: 30px * $base-size;
 
-					.icon {
-						font-size: 13px * $base-size;
-					}
+				.icon {
+					font-size: 13px * $base-size;
 				}
 			}
 		}
@@ -504,7 +505,6 @@ $base-size: 1;
 	$base-size: 0.85;
 
 	.music_card {
-		width: 190px * $base-size;
 		border-radius: 10px * $base-size;
 
 		.card_content {
@@ -516,15 +516,17 @@ $base-size: 1;
 			border-width: 1px * $base-size;
 
 			.card_title {
-				border-width: 1px * $base-size;
-				margin: 12px * $base-size auto;
-				font-size: 0.6rem * $base-size;
 				border-radius: 12px * $base-size;
+
+				.title_content {
+					font-size: 0.6rem * $base-size;
+					border-width: 1px * $base-size;
+				}
 			}
 
 			.cover_container {
 				width: 80px * $base-size;
-				min-height: 80px * $base-size;
+				height: 80px * $base-size;
 				margin-top: 20px * $base-size;
 				border-radius: 15px * $base-size;
 			}
@@ -543,14 +545,14 @@ $base-size: 1;
 
 			.music_control {
 				padding: 0 5px * $base-size;
+			}
 
-				.control_btn {
-					width: 30px * $base-size;
-					height: 30px * $base-size;
+			.control_btn {
+				width: 30px * $base-size;
+				height: 30px * $base-size;
 
-					.icon {
-						font-size: 13px * $base-size;
-					}
+				.icon {
+					font-size: 13px * $base-size;
 				}
 			}
 		}
@@ -638,7 +640,6 @@ $base-size: 1;
 	$base-size: 0.9;
 
 	.music_card {
-		width: 190px * $base-size;
 		border-radius: 10px * $base-size;
 
 		.card_content {
@@ -650,15 +651,17 @@ $base-size: 1;
 			border-width: 1px * $base-size;
 
 			.card_title {
-				border-width: 1px * $base-size;
-				margin: 12px * $base-size auto;
-				font-size: 0.6rem * $base-size;
 				border-radius: 12px * $base-size;
+
+				.title_content {
+					font-size: 0.6rem * $base-size;
+					border-width: 1px * $base-size;
+				}
 			}
 
 			.cover_container {
 				width: 80px * $base-size;
-				min-height: 80px * $base-size;
+				height: 80px * $base-size;
 				margin-top: 20px * $base-size;
 				border-radius: 15px * $base-size;
 			}
@@ -677,14 +680,14 @@ $base-size: 1;
 
 			.music_control {
 				padding: 0 5px * $base-size;
+			}
 
-				.control_btn {
-					width: 30px * $base-size;
-					height: 30px * $base-size;
+			.control_btn {
+				width: 30px * $base-size;
+				height: 30px * $base-size;
 
-					.icon {
-						font-size: 13px * $base-size;
-					}
+				.icon {
+					font-size: 13px * $base-size;
 				}
 			}
 		}
@@ -772,7 +775,6 @@ $base-size: 1;
 	$base-size: 0.9;
 
 	.music_card {
-		width: 190px * $base-size;
 		border-radius: 10px * $base-size;
 
 		.card_content {
@@ -784,15 +786,17 @@ $base-size: 1;
 			border-width: 1px * $base-size;
 
 			.card_title {
-				border-width: 1px * $base-size;
-				margin: 12px * $base-size auto;
-				font-size: 0.6rem * $base-size;
 				border-radius: 12px * $base-size;
+
+				.title_content {
+					font-size: 0.6rem * $base-size;
+					border-width: 1px * $base-size;
+				}
 			}
 
 			.cover_container {
 				width: 80px * $base-size;
-				min-height: 80px * $base-size;
+				height: 80px * $base-size;
 				margin-top: 20px * $base-size;
 				border-radius: 15px * $base-size;
 			}
@@ -811,14 +815,14 @@ $base-size: 1;
 
 			.music_control {
 				padding: 0 5px * $base-size;
+			}
 
-				.control_btn {
-					width: 30px * $base-size;
-					height: 30px * $base-size;
+			.control_btn {
+				width: 30px * $base-size;
+				height: 30px * $base-size;
 
-					.icon {
-						font-size: 13px * $base-size;
-					}
+				.icon {
+					font-size: 13px * $base-size;
 				}
 			}
 		}
