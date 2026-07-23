@@ -13,7 +13,25 @@ export default defineNuxtConfig({
 		build: {
 			markdown: {
 				highlight: {
-					langs: ["c", "cpp", "java", "properties", "python", "vue", "xml"],
+					langs: [
+						"bash",
+						"c",
+						"cpp",
+						"css",
+						"html",
+						"java",
+						"javascript",
+						"json",
+						"jsx",
+						"properties",
+						"python",
+						"sql",
+						"typescript",
+						"vue",
+						"xml",
+						"yaml",
+						"yml",
+					],
 					theme: "github-dark",
 				},
 				toc: {
