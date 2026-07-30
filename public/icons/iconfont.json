@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "43697512",
+      "name": "向上-1",
+      "font_class": "xiangshang-1",
+      "unicode": "e7a3",
+      "unicode_decimal": 59299
+    },
+    {
+      "icon_id": "43697515",
+      "name": "向下-1",
+      "font_class": "xiangxia-1",
+      "unicode": "e7a4",
+      "unicode_decimal": 59300
+    },
+    {
       "icon_id": "43699549",
       "name": "手电",
       "font_class": "shoudian",

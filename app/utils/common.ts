@@ -483,3 +483,7 @@ export const randomChoose = <T>(...values: T[]): T | undefined => {
 	if (values.length === 0) return undefined;
 	return values[Math.floor(Math.random() * values.length)];
 };
+
+export const nearlyEqual = (a: number, b: number, epsilon = 1e-6) => {
+	return Math.abs(a - b) <= epsilon;
+};

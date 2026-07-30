@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const mainStore = useMainStore();
+</script>
 
 <template>
 	<!-- From Uiverse.io by sinful_9361 -->
@@ -6,7 +8,10 @@
 		<div id="stars"></div>
 		<div id="stars2"></div>
 		<div id="stars3"></div>
-		<div></div>
+		<span class="icon mask_up_tip" v-if="!mainStore.isBorder.has('up')">&#xe7a3;</span>
+		<span class="icon mask_right_tip" v-if="!mainStore.isBorder.has('right')">&#xe7a2;</span>
+		<span class="icon mask_down_tip" v-if="!mainStore.isBorder.has('down')">&#xe7a4;</span>
+		<span class="icon mask_left_tip" v-if="!mainStore.isBorder.has('left')">&#xe7a1;</span>
 	</div>
 </template>
 
@@ -2076,6 +2081,100 @@ $star-color: yellow;
 				1543px 1757px $star-color,
 				287px 1272px $star-color;
 		}
+	}
+
+	.icon {
+		position: absolute;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: #ffffff;
+		pointer-events: none;
+		user-select: none;
+
+		&.mask_up_tip {
+			top: 0;
+			width: 100%;
+			animation: arrowUp 1s linear infinite;
+		}
+
+		&.mask_right_tip {
+			right: 0;
+			height: 100%;
+			animation: arrowRight 1s linear infinite;
+		}
+
+		&.mask_down_tip {
+			bottom: 0;
+			width: 100%;
+			animation: arrowDown 1s linear infinite;
+		}
+
+		&.mask_left_tip {
+			left: 0;
+			height: 100%;
+			animation: arrowLeft 1s linear infinite;
+		}
+	}
+}
+
+@keyframes arrowUp {
+	0% {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	50% {
+		opacity: 1;
+		transform: translateY(0px);
+	}
+	100% {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+}
+
+@keyframes arrowRight {
+	0% {
+		opacity: 0;
+		transform: translateX(-10px);
+	}
+	50% {
+		opacity: 1;
+		transform: translateX(0px);
+	}
+	100% {
+		opacity: 0;
+		transform: translateX(10px);
+	}
+}
+
+@keyframes arrowDown {
+	0% {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	50% {
+		opacity: 1;
+		transform: translateY(0px);
+	}
+	100% {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+}
+
+@keyframes arrowLeft {
+	0% {
+		opacity: 0;
+		transform: translateX(10px);
+	}
+	50% {
+		opacity: 1;
+		transform: translateX(0px);
+	}
+	100% {
+		opacity: 0;
+		transform: translateX(-10px);
 	}
 }
 

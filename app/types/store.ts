@@ -101,6 +101,7 @@ export type LoadingActions = {
 export type MainState = {
 	isDragging: Ref<boolean>;
 	isResized: Ref<boolean>;
+	isBorder: Ref<Set<"up" | "right" | "down" | "left">>;
 	backgroundSize: Ref<Rectangle>;
 	backgroundTransform: Ref<Point>;
 };
@@ -110,6 +111,8 @@ export type MainGetter = {};
 export type MainActions = {
 	setIsDragging: (state: boolean) => void;
 	setIsResized: (state: boolean) => void;
+	addIsBorder: (state: "up" | "right" | "down" | "left") => void;
+	removeIsBorder: (state: "up" | "right" | "down" | "left") => void;
 	setBackgroundSize: (rect: Rectangle) => void;
 	setBackgroundTransform: (transform: Point) => void;
 };

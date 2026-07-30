@@ -16,6 +16,11 @@ const movedata = ref<{ moveable: boolean; movePos: Point }>({
 });
 const scaleNum = ref<number>(1); // 缩放比例
 
+const maxTranPrecent = computed<Rectangle>(() => ({
+	height: (imageData.value.height - viewBoxData.value.height) / 2,
+	width: (imageData.value.width - viewBoxData.value.width) / 2,
+}));
+
 let setX: gsap.QuickToFunc;
 let setY: gsap.QuickToFunc;
 const standardWidth = 1700; // 标准宽度
@@ -92,6 +97,17 @@ onMounted(() => {
 
 onUnmounted(() => {
 	window.removeEventListener("resize", resize);
+});
+
+watch([() => movedata.value.movePos.x, () => movedata.value.movePos.y], ([x, y]) => {
+	if (nearlyEqual(x, maxTranPrecent.value.width)) mainStore.addIsBorder("left");
+	else mainStore.removeIsBorder("left");
+	if (nearlyEqual(x, -maxTranPrecent.value.width)) mainStore.addIsBorder("right");
+	else mainStore.removeIsBorder("right");
+	if (nearlyEqual(y, maxTranPrecent.value.height)) mainStore.addIsBorder("up");
+	else mainStore.removeIsBorder("up");
+	if (nearlyEqual(y, -maxTranPrecent.value.height)) mainStore.addIsBorder("down");
+	else mainStore.removeIsBorder("down");
 });
 
 usePageReady(() => {
