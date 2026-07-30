@@ -125,10 +125,71 @@ export const IMAGE_DATAS: ImageInfo[] = [
 		name: "MB!TouhouTale",
 		author: "タングステン",
 		path: "/images/collections/illust_130516251_20250522_000220.jpg",
+		link: "https://www.pixiv.net/artworks/130516251",
 		option: {
 			themeColor: "#ffff00",
 			border: true,
 		},
+	},
+	{
+		name: "ハルトマンの妖怪少女",
+		author: "syuri22",
+		path: "/images/collections/135953151_p0_master1200.jpg",
+		link: "https://www.pixiv.net/artworks/135953151",
+	},
+	{
+		name: "ナイトメアサンズ",
+		author: "ゲストコ@マシュマロ募集",
+		path: "/images/collections/143126606_p0_master1200.jpg",
+		link: "https://www.pixiv.net/artworks/143126606",
+	},
+	{
+		name: "てなちと会って1年なう！",
+		author: "マトリ💎つくね",
+		path: "/images/collections/146892453_p0_master1200.jpg",
+		link: "https://www.pixiv.net/artworks/146892453",
+	},
+	{
+		name: "freedom leitmotif",
+		author: "ミロ",
+		path: "/images/collections/146859889_p0_master1200.jpg",
+		link: "https://www.pixiv.net/artworks/146859889",
+	},
+	{
+		name: "ターコかわいい💙",
+		author: "いろせ氏",
+		path: "/images/collections/146796662_p0_master1200.jpg",
+		link: "https://www.pixiv.net/artworks/146796662",
+	},
+	{
+		name: "フラウリィ",
+		author: "うゆは",
+		path: "/images/collections/147351302_p0_master1200.jpg",
+		link: "https://www.pixiv.net/artworks/147351302",
+	},
+	{
+		name: "吃了没，没吃吃我一炮",
+		author: "KOML",
+		path: "/images/collections/145165590_p0_master1200.jpg",
+		link: "https://www.pixiv.net/artworks/145165590",
+	},
+	{
+		name: "少女",
+		author: "くれ〜ぷ",
+		path: "/images/collections/88078117_p0_master1200.jpg",
+		link: "https://www.pixiv.net/artworks/88078117",
+	},
+	{
+		name: "Collapse",
+		author: "이로다_Yiroda",
+		path: "/images/collections/145842324_p0_master1200.jpg",
+		link: "https://www.pixiv.net/artworks/145842324",
+	},
+	{
+		name: "dust horror🧣❤️🪓",
+		author: "阿娇",
+		path: "/images/collections/143665655_p0_master1200.jpg",
+		link: "https://www.pixiv.net/artworks/143665655",
 	},
 ];
 

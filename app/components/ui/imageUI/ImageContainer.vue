@@ -127,16 +127,13 @@ const createImgDatas = () => {
 		imageStore.setAllImagePosData([
 			...imageStore.allImagePosData,
 			{
-				name: data.name,
-				author: data.author,
-				path: data.path,
+				...data,
 				img: null,
 				x,
 				y,
 				targetX: x,
 				targetY: y,
 				animation: null,
-				option: data.option,
 			},
 		]);
 
