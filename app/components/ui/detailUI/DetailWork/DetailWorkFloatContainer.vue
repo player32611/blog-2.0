@@ -6,7 +6,6 @@ import type {
 	DetailWorkFloatContainerInstance,
 } from "~/types/components";
 
-import Bubble from "~/components/exhibit/Bubble.vue";
 import Vial from "../../common/Vial.vue";
 
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
@@ -70,7 +69,12 @@ defineExpose<DetailWorkFloatContainerInstance>({
 				<span v-if="activeIndex < 0"></span>
 				<span v-else-if="activeIndex === 0" class="item_bullet"></span>
 				<Vial v-else-if="activeIndex === 1" :color="randomColor({ format: 'hex' })" />
-				<!-- <Bubble v-else style="scale: 0.2" /> -->
+				<span
+					class="icon"
+					:style="{ color: randomChoose('#d5ad72', '#000000', '#ffffff') }"
+					v-else
+					>{{ randomChoose("&#xe7c0;", "&#xe7f2;", "&#xe858;") }}</span
+				>
 			</div>
 		</div>
 	</div>
@@ -135,6 +139,10 @@ defineExpose<DetailWorkFloatContainerInstance>({
 				height: 100%;
 				width: 100%;
 				background: url("/blog-2.0/images/sprites/bullet.svg") center/contain no-repeat;
+			}
+
+			.icon {
+				font-size: 40px;
 			}
 		}
 	}

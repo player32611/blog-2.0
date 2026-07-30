@@ -132,7 +132,9 @@ onUnmounted(() => {
 			</div>
 			<div class="sign_body"></div>
 		</div>
-		<div class="textarea_tooltip" ref="tooltipRef">建设中</div>
+		<div class="textarea_tooltip_container">
+			<div class="textarea_tooltip" ref="tooltipRef">建设中</div>
+		</div>
 	</div>
 </template>
 
@@ -220,15 +222,20 @@ $base-size: 0.7;
 		}
 	}
 
-	.textarea_tooltip {
+	.textarea_tooltip_container {
 		position: absolute;
 		top: 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		width: 100%;
-		color: #ff7f27;
-		font-family: "方正基础像素体";
-		text-align: center;
-		opacity: 0;
-		pointer-events: none;
+
+		.textarea_tooltip {
+			color: #ff7f27;
+			font-family: "方正基础像素体";
+			opacity: 0;
+			pointer-events: none;
+		}
 	}
 }
 
@@ -337,6 +344,11 @@ $base-size: 0.7;
 				border-width: 0 5px * $base-size 5px * $base-size 5px * $base-size;
 			}
 		}
+
+		.textarea_tooltip_container {
+			top: 50px;
+			rotate: -180deg;
+		}
 	}
 }
 
@@ -402,6 +414,11 @@ $base-size: 0.7;
 				width: 20px * $base-size;
 				border-width: 0 5px * $base-size 5px * $base-size 5px * $base-size;
 			}
+		}
+
+		.textarea_tooltip_container {
+			top: 50px;
+			rotate: -180deg;
 		}
 	}
 }

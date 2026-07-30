@@ -130,7 +130,7 @@ onUnmounted(() => {
 	transition: border-color 0.5s ease;
 
 	&:hover {
-		border-color: rgba(255, 255, 255, 0.5);
+		border-color: rgba($color: #ff7f27, $alpha: 0.5);
 
 		.info_corner {
 			border-color: rgba($color: #ff7f27, $alpha: 0.7);
