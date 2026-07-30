@@ -1,15 +1,59 @@
 <script setup lang="ts">
 import gsap from "gsap";
+import { CustomEase, CustomWiggle, EasePack } from "gsap/all";
 
-const textareaRef = ref<HTMLTextAreaElement | null>(null);
+gsap.registerPlugin(CustomEase, CustomWiggle, EasePack);
+
+const tooltipRef = ref<HTMLDivElement | null>(null);
+const tooltipAnim = ref<GSAPTimeline | null>(null);
+const pressKey = ref<Set<string>>(new Set());
+
+const changeDuration = 1;
+
+const handleUpdate = () => {
+	if (pressKey.value.size === 1 && pressKey.value.has("Enter")) {
+		tooltipAnim.value = gsap
+			.timeline()
+			.fromTo(
+				tooltipRef.value,
+				{ opacity: 0 },
+				{ opacity: 1, ease: "slow(0.7,0.7,true)", duration: changeDuration },
+			)
+			.fromTo(
+				tooltipRef.value,
+				{ y: 0 },
+				{ y: -100, ease: "slow(0.1,0.7,false)", duration: changeDuration },
+				"<",
+			);
+	}
+};
+
+const handleKeyDown = (e: KeyboardEvent) => {
+	if (!pressKey.value.has(e.key)) pressKey.value.add(e.key);
+	handleUpdate();
+};
+
+const handleKeyUp = (e: KeyboardEvent) => {
+	if (pressKey.value.has(e.key)) pressKey.value.delete(e.key);
+};
+
+onUnmounted(() => {
+	pressKey.value.clear();
+});
 </script>
 
 <template>
 	<div class="bottom_textarea">
-		<div class="sign" ref="signRef">
+		<div class="sign">
 			<div class="sign_head" ref="signHeadRef">
 				<!-- From Uiverse.io by MuhammadHasann -->
-				<textarea class="sign_content" rows="10" placeholder="留下宝贵的意见吧"></textarea>
+				<textarea
+					class="sign_content"
+					rows="10"
+					placeholder="留下宝贵的意见吧"
+					@keydown="handleKeyDown"
+					@keyup="handleKeyUp"
+				></textarea>
 				<div class="leaf_1" ref="leaf1Ref">
 					<svg
 						xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -88,6 +132,7 @@ const textareaRef = ref<HTMLTextAreaElement | null>(null);
 			</div>
 			<div class="sign_body"></div>
 		</div>
+		<div class="textarea_tooltip" ref="tooltipRef">建设中</div>
 	</div>
 </template>
 
@@ -95,6 +140,8 @@ const textareaRef = ref<HTMLTextAreaElement | null>(null);
 $base-size: 0.7;
 
 .bottom_textarea {
+	position: relative;
+
 	.sign {
 		position: relative;
 		display: flex;
@@ -159,6 +206,7 @@ $base-size: 0.7;
 				outline: none;
 				resize: none;
 				overflow: hidden;
+				cursor: none;
 			}
 		}
 
@@ -170,6 +218,17 @@ $base-size: 0.7;
 			border-style: solid;
 			border-color: #000000;
 		}
+	}
+
+	.textarea_tooltip {
+		position: absolute;
+		top: 0;
+		width: 100%;
+		color: #ff7f27;
+		font-family: "方正基础像素体";
+		text-align: center;
+		opacity: 0;
+		pointer-events: none;
 	}
 }
 

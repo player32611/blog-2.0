@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "43699549",
+      "name": "手电",
+      "font_class": "shoudian",
+      "unicode": "e7c0",
+      "unicode_decimal": 59328
+    },
+    {
+      "icon_id": "43710481",
+      "name": "设置",
+      "font_class": "shezhi",
+      "unicode": "e7f2",
+      "unicode_decimal": 59378
+    },
+    {
+      "icon_id": "44070861",
+      "name": "派工",
+      "font_class": "paigong",
+      "unicode": "e858",
+      "unicode_decimal": 59480
+    },
+    {
       "icon_id": "43697514",
       "name": "向左-1",
       "font_class": "xiangzuo-1",
