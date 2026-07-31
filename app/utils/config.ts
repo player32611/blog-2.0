@@ -98,6 +98,7 @@ export const IMAGE_DATAS: ImageInfo[] = [
 		name: "UJ!LB“Bullet Train - Death Station”",
 		author: "BiBimusim2",
 		path: "/images/collections/IMG_1324.png",
+		link: "https://www.bilibili.com/video/BV1QDKB65EZK?spm_id_from=333.788.recommend_more_video.1&trackid=web_related_0.router-related-2479604-d9wfs.1785476852511.207&vd_source=3dbf6d9842ae113ffd236f9c65349d24",
 		option: {
 			themeColor: "#ffffff",
 			border: true,
@@ -107,6 +108,7 @@ export const IMAGE_DATAS: ImageInfo[] = [
 		name: "UJ!“Insanity Duo”",
 		author: "BiBimusim2",
 		path: "/images/collections/IMG_1326.webp",
+		link: "https://www.bilibili.com/video/BV1QDKB65EZK?spm_id_from=333.788.recommend_more_video.1&trackid=web_related_0.router-related-2479604-d9wfs.1785476852511.207&vd_source=3dbf6d9842ae113ffd236f9c65349d24",
 		option: {
 			themeColor: "#800080",
 			border: true,
@@ -116,6 +118,7 @@ export const IMAGE_DATAS: ImageInfo[] = [
 		name: "[K.V.M - Unjustice] Phase 2",
 		author: "BiBimusim2",
 		path: "/images/collections/IMG_1323.webp",
+		link: "https://www.bilibili.com/video/BV1QDKB65EZK?spm_id_from=333.788.recommend_more_video.1&trackid=web_related_0.router-related-2479604-d9wfs.1785476852511.207&vd_source=3dbf6d9842ae113ffd236f9c65349d24",
 		option: {
 			themeColor: "#ffffff",
 			border: true,

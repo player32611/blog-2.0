@@ -9,6 +9,10 @@ const currentImageData = ref<ImagePosData | null>(null);
 
 const easeTime = 0.5;
 
+const handleClick = () => {
+	window.open(currentImageData.value?.link, "_blank", "noopener,noreferrer");
+};
+
 const handleMouseEnter = () => {
 	if (!imageStore.activeImageData || !signHeadRef.value) return;
 	const rect = signHeadRef.value.getBoundingClientRect();
@@ -64,7 +68,9 @@ watch(
 			<div class="sign_content">
 				<div class="content_line">名称：{{ currentImageData?.name || IMAGE_EMPTY }}</div>
 				<div class="content_line">作者：{{ currentImageData?.author || IMAGE_EMPTY }}</div>
-				<div class="content_line">链接：{{ currentImageData?.link || IMAGE_EMPTY }}</div>
+				<div class="content_line" @click="handleClick" v-if="currentImageData?.link">
+					链接：{{ currentImageData?.link || IMAGE_EMPTY }}
+				</div>
 			</div>
 		</div>
 		<div class="sign_body"></div>
@@ -105,9 +111,18 @@ $base-size: 1;
 
 			.content_line {
 				margin: 0.5rem 0;
-				white-space: nowrap; /* 不换行 */
-				overflow: hidden; /* 隐藏超出内容 */
-				text-overflow: ellipsis; /* 显示省略号 */
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				transition: color 1s ease;
+
+				&:last-child {
+					cursor: pointer;
+
+					&:hover {
+						color: #ff7f27;
+					}
+				}
 			}
 		}
 	}
