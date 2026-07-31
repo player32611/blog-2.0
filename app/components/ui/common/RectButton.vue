@@ -4,7 +4,7 @@ import type { ButtonParams } from "@/types/components";
 
 const { text, size, icon, onClick, classList, style, iconStyle } = defineProps<ButtonParams>();
 
-const buttonSound = useSoundEffect("/sounds/effects/button.wav");
+const buttonSound = useSoundEffect("/blog-2.0/sounds/effects/button.wav");
 
 const handleClick = () => {
 	if (onClick) {
