@@ -66,6 +66,7 @@ export const getLangIcon = (language: string) => {
 		case "JSON":
 			return "&#xe63a;";
 		case "markdown":
+		case "Markdown":
 		case "md":
 			return "&#xe6ff;";
 		case "properties":
@@ -131,6 +132,7 @@ export const getLangIconColor = (language: string) => {
 		case "JSON":
 			return "#BABABA";
 		case "markdown":
+		case "Markdown":
 		case "md":
 			return "#ffffff";
 		case "properties":
