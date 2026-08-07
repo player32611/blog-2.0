@@ -23,6 +23,8 @@ export default defineNuxtConfig({
 						"javascript",
 						"json",
 						"jsx",
+						"markdown",
+						"md",
 						"properties",
 						"python",
 						"sql",
