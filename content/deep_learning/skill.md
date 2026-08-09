@@ -29,15 +29,19 @@ L4 场景应用层（内容创作 / 办公自动化）
 
 ```md
 ---
-
 name: hello-skill
 description: 当用户说"你好 / hello / hi / 打个招呼"时触发，使用星火 Lite 模型生成一句 30 字以内的中文问候语。Use when the user says hi / hello / great.
+---
 
 # hello-skill
 
 ## 能力
 
 调用讯飞星火 Lite 接口，根据用户输入语言返回对应问候语。
+
+## 输入
+
+- 文本：用户消息
 ```
 
 ### DESCRIPTION
