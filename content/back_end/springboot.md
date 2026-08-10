@@ -2114,3 +2114,75 @@ String url = aliyunOSSOperator.upload(image.getBytes(), image.getOriginalFilenam
 ::
 
 ::
+
+## Spring Boot 项目结构
+
+### 单模块项目
+
+```text
+my-spring-boot-project/
+├── src/
+│ ├── main/
+│ │ ├── java/
+│ │ │ └── com/example/demo/
+│ │ │     ├── DemoApplication.java      # 启动类
+│ │ │     ├── controller/               # 控制器层
+│ │ │     ├── service/                  # 业务逻辑层
+│ │ │     ├── repository/               # 数据访问层
+│ │ │     ├── model/entity/             # 实体类
+│ │ │     ├── dto/                      # 数据传输对象
+│ │ │     ├── config/                   # 配置类
+│ │ │     └── util/                     # 工具类
+│ │ ├── resources/
+│ │ │   ├── application.yml             # 核心配置文件
+│ │ │   ├── application-dev.yml         # 开发环境配置
+│ │ │   ├── application-prod.yml        # 生产环境配置
+│ │ │   ├── static/                     # 静态资源（CSS/JS/图片）
+│ │ │   ├── templates/                  # 模板文件（Thymeleaf等）
+│ │ │   └── db/migration/               # Flyway/Liquibase 迁移脚本
+│ │ └── webapp/                         # （可选）传统Web应用目录
+│ └── test/
+│     ├── java/                         # 单元测试和集成测试
+│     └── resources/                    # 测试资源文件
+├── mvnw / mvnw.cmd                     # Maven Wrapper
+├── pom.xml 或 build.gradle             # 构建配置文件
+└── .gitignore
+```
+
+### 多模块项目
+
+```text
+my-multi-module-project/          # 项目根目录
+├── pom.xml                        # 父工程POM，packaging为pom，管理版本
+├── my-common/                     # 公共模块（被所有业务模块依赖）
+│   ├── pom.xml
+│   └── src/main/java/
+│       └── com/example/
+│           ├── config/            # 公共配置（如Redis、Swagger）[citation:1][citation:8]
+│           ├── exception/         # 全局异常处理、自定义异常[citation:8]
+│           ├── util/              # 工具类（如JWT、日期处理）[citation:8]
+│           └── response/          # 统一API响应结构[citation:8]
+├── my-pojo/                     # 对象模块，存放普通 Java 对象，只有属性和对应的 getter 和 setter
+│   ├── pom.xml
+│   └── src/main/java/
+│       └── com/example/
+│           ├── dto/               # 数据传输对象，通常用于程序中各层之间传递数据
+│           ├── entity/            # 实体，通常和数据库中的表对应
+│           └── vo/                # 视图对象，为前端展示数据提供的对象
+├── my-service/              # 用户模块业务实现
+│   ├── pom.xml
+│   └── src/main/java/
+│       └── com/example/
+│           ├── config/            # 配置文件
+│           ├── controller/        # REST API 入口[citation:1]
+│           ├── mapper/            # 数据链接实现
+│           ├── service/           # 业务逻辑实现
+│           ├── repository/        # 数据访问层
+│           └── ...
+├── my-order-api/                 # 订单模块API接口
+│   └── ... (结构同 my-user-api)
+├── my-order-service/             # 订单模块业务实现（依赖 my-order-api 和 my-user-api）
+│   └── ... (结构同 my-user-service)
+└── my-gateway/                   # 网关模块（可选，微服务场景）[citation:1]
+    └── ...
+```
