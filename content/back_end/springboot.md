@@ -2186,3 +2186,143 @@ my-multi-module-project/          # 项目根目录
 └── my-gateway/                   # 网关模块（可选，微服务场景）[citation:1]
     └── ...
 ```
+
+## 登录校验
+
+### 会话技术
+
+**会话**：用户打开浏览器，访问 web 服务器的资源，会话建立，知道有一方断开连接，会话结束。在一次会话中可以包含多次请求和响应。
+
+**会话跟踪**：一种维护浏览器状态的方法，服务器需要多次识别多次请求是否来自于同一浏览器，以便在同一次会话的多次请求间共享数据。
+
+**会话跟踪方案**：
+
+- 客户端会话跟踪技术：Cookie
+
+- 服务端会话跟踪技术：Session
+
+- 令牌技术
+
+### Cookie
+
+优点：HTTP 协议中支持的技术
+
+缺点：移动端 APP 无法使用 Cookie；不安全，用户可以自己禁用 Cookie；Cookie 不能跨域
+
+```java
+@GetMapping("/setCookie")
+public Result setCookie(HttpServletResponse response){
+  response.addCookie(new Cookie("login_username", "123456"));
+  return Result.success();
+}
+
+@GetMapping("/getCookie")
+public Result getCookie(HttpServletResponse response){
+  Cookie[] cookies = request.getCookies();
+  for(Cookie cookie : cookies) {
+    if(cookie.getName().equals("login_username")){
+      System.out.println("login_username: " + cookie.getValue());
+    }
+  }
+  return Result.success();
+}
+```
+
+::tip
+
+Cookie 会话跟踪方案的原理：
+
+- 响应头：Set-Cookie
+
+- 请求头：Cookie
+
+::
+
+### Session
+
+优点：存储在服务器端，安全
+
+缺点：服务器集群环境下无法直接使用 Session，同时还具有 Cookie 的缺点
+
+```java
+@GetMapping("/setSession")
+public Result setSession(HttpSession session){
+  log.info("HttpSession-setSession: {}", session.hashCode());
+
+  session.setAttribute("loginUser", "123456")
+  return Result.success();
+}
+
+@GetMapping("/getSession")
+public Result getSession(HttpSession session){
+  log.info("HttpSession-getSession: {}", session.hashCode());
+
+  Object loginUser = session.getAttribute("loginUser");
+  log.info("loginUser: {}", loginUser);
+  return Result.success();
+}
+```
+
+::tip
+
+Cookie 会话跟踪方案的原理：基于 Cookie 的（Set-Cookie, Cookie）
+
+::
+
+### JWT 令牌
+
+优点：支持 PC 端，移动端；解决集群环境下的认证问题；减轻服务器端存储压力
+
+缺点：需要自己实现
+
+**JWT 令牌**(JSON Web Token) 定义了一种简洁的、自包含的格式，用于在通信双方以 json 数据格式安全的传输信息
+
+- 第一部分：**Header**(头)，记录令牌类型、签名算法等。例如：`{"alg":"HS256", "type":"JWT"}`，通过 Base64 编码
+
+- 第二部分：**Payload**(有效载荷)，携带一些自定义信息、默认信息等。例如：`{"id": "1", "username":"Tom"}`，通过 Base64 编码
+
+- 第三部分：**Signature**(签名)，放置 Token 被篡改，确保安全性。将 header、payload 融入，并加入指定密钥，通过指定签名算法计算而来
+
+**使用步骤**：
+
+1. 引入 jjwt 依赖
+
+```xml
+<dependency>
+  <groupId>io.jsonwebtoken</groupId>
+  <artifactId>jjwt</artifactId>
+  <version>0.9.1</version>
+</dependency>
+```
+
+2. 调用官方提供的工具类 Jwts 来生成或解析 jwt 令牌
+
+::code-group
+
+```java [生成令牌]
+@Test
+public void testGenJwt() {
+  Map<String, Object> claims = new HashMap<>();
+  claims.put("id", 10);
+  claims.put("username", "test");
+  String jwt = Jwts.builder().signWith(SignatureAlgorithm.HS256, "SVRIRULNQQ==") // 指定加密算法与密钥
+    .addClaims(claims)
+    .setExpiration(new Date(System.currentTimeMillis() + 12 * 3600 * 1000)) // 指定有效期
+    .compact();
+  System.out.println(jwt)
+}
+```
+
+```java [解析令牌]
+@Test
+public void testGenJwt() {
+  String jwtToken = "exJoe......";
+  Claims claims = Jwts.parser()
+    .setSigningKey("SVRIRULNQQ==")
+    .parseClaimsJws(jwtToken)
+    .getBody();
+  System.out.println(claims)
+}
+```
+
+::
