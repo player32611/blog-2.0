@@ -2326,3 +2326,252 @@ public void testGenJwt() {
 ```
 
 ::
+
+### Filter 过滤器
+
+**过滤器**(Filter)可以把对资源的请求拦截下来，从而实现一些特殊的功能。比如：登录校验，统一编码处理，敏感字符处理等。
+
+**使用步骤：**
+
+1. 定义一个类，实现 Filter 接口，并实现其所有方法（init、doFilter、destroy）
+
+2. Filter 类上加 `@WebFilter` 注解，配置拦截路径
+
+```java
+@WebFilter(urlPatterns = "/*") // 拦截所有请求
+public class DemoFilter implements Filter {
+  // 初始化方法，web 服务器启动，创建 Filter 实例时调用，只调用一次
+  @Override
+  public void init(FilterConfig filterConfig) throws ServletException {
+    System.out.println("init ...");
+  }
+
+  // 拦截到请求时，调用该方法
+  @Override
+  public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws Exception {
+    System.out.print("拦截到了请求 ...");
+    chain.doFilter(servletRequest, servletResponse); // 放行
+  }
+
+  // 销毁方法，web 服务器关闭时调用，只调用一次
+  @Override
+  public void destory() {
+    System.out.println("destory ...");
+  }
+}
+```
+
+3. 启动类上加 `@ServletComponentScan` 开启 Servlet 组件支持
+
+```java
+@ServletComponentScan
+@SpringBootApplication
+public class XxxApplication {
+
+}
+```
+
+::warning
+
+如果过滤器中不执行放行操作，过滤器拦截到请求之后，就不会访问对应的资源
+
+::
+
+|   过滤路径   | urlPatterns 值 |                  含义                  |
+| :----------: | :------------: | :------------------------------------: |
+| 拦截具体路径 |    `/login`    |  只有访问 `/login` 路径时，才会被拦截  |
+|   目录拦截   |   `/emps/*`    | 访问 `/emps/` 下的所有资源，都会被拦截 |
+|   拦截所有   |      `/*`      |        访问所有资源，都会被拦截        |
+
+::detail
+
+#title
+具体示例：登录过滤校验
+#default
+
+```java
+@WebFilter(urlPatterns = "/*") // 拦截所有请求
+public class TokenFilter implements Filter {
+  @Override
+  public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws Exception {
+    HttpServletRequest request = (HttpServletRequest) servletRequest;
+    HttpServletResponse response = (HttpServletResponse) servletResponse;
+
+    // 1. 获取到请求路径
+    String requestURI = request.getRequestURI();
+
+    // 2. 判断是否是登录请求，如果路径中包含 /login，说明是登录操作，放行
+    if(requestURI.contains("/login")){
+      filterChain.doFilter(request, response);
+      return;
+    }
+
+    // 3. 获取请求头中的 token
+    String token = request.getHeader("token");
+
+    // 4. 判断 token 是否存在，如果不存在，说明用户没有登录，返回错误信息（401 状态码）
+    if(token == null || token.isEmpty()){
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
+
+    // 5. 如果 token 存在，校验令牌，如果校验失败 -> 返回错误信息（401 状态码）
+    try {
+      JwtUtils.parseToken(token); // 手动实现的校验方法
+    } catch (Exception e){
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
+
+    // 6. 校验通过，放行
+    chain.doFilter(servletRequest, servletResponse);
+  }
+}
+```
+
+::
+
+::tip
+
+放行后访问对应资源，资源访问完成后，还会回到 Filter 中，并可继续执行放行后逻辑代码
+
+::
+
+::tip
+
+过滤器链
+
+一个 web 应用中，可以配置多个过滤器，这多个过滤器就形成了一个过滤器链
+
+::
+
+### Interceptor 拦截器
+
+**拦截器**(Interceptor) 是一种动态拦截方法调用的机制，类似于过滤器。Spring 框架中提供的，主要用来动态拦截控制器方法的执行，在指定的方法调用前后，根据业务需要执行预先设定的代码。
+
+**使用步骤：**
+
+1. 定义拦截器，实现 HandlerInterceptor 接口，并实现其所有方法
+
+2. 注册拦截器
+
+```java
+@Component
+public class DemoInterceptor implements HandlerInterceptor {
+  // 目标资源方法执行前执行，返回 true时代表放行；返回 false 时代表不放行
+  @Override
+  public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception{
+    return true;
+  }
+
+  // 目标资源方法执行后执行
+  @Override
+  public void postHandle(HttpServletRequest req, HttpServletResponse resp, Object handler, ModelAndView mv) throws Exception{
+    System.out.println("preHandle ...");
+  }
+
+  // 视图渲染完毕后执行
+  @Override
+  public void afterCompletion(HttpServletRequest req, HttpServletResponse resp, Object handler, ModelAndView mv) throws Exception{
+    System.out.println("afterCompletion ...");
+  }
+}
+```
+
+3. 拦截器配置
+
+```java
+
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+  @Autowwired
+  private DemoInterceptor demoInterceptor;
+
+  @Override
+  public void addInterceptors(InterceptorRegistry registry){
+    registry.addInterceptor(demoInterceptor).addPathPatterns("/**");
+  }
+}
+
+```
+
+|  拦截路径   |          含义           |                             含义                              |
+| :---------: | :---------------------: | :-----------------------------------------------------------: |
+|    `/*`     |        一级路径         |    能匹配 `/depts`、`/emp`、`/login`，不能匹配 `/depts/1`     |
+|    `/**`    |       任意级路径        |            能匹配 `/depts`、`depts/1`、`depts/1/2`            |
+| `/depts/*`  |  `/depts` 下的一级路径  |       能匹配 `/depts`，不能匹配 `/depts/1/2`、`/depts`        |
+| `/depts/**` | `/depts` 下的任意级路径 | 能匹配 `/depts`、`/depts/1`、`/depts/1/2`，不能匹配 `/emps/1` |
+
+::detail
+
+#title
+具体示例：登录过滤校验
+
+#default
+
+```java
+@Component
+public class TokenInterceptor implements HandlerInterceptor {
+  @Override
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
+    // 1. 获取到请求路径
+    String requestURI = request.getRequestURI();
+
+    // 2. 判断是否是登录请求，如果路径中包含 /login，说明是登录操作，放行
+    if(requestURI.contains("/login")){
+      filterChain.doFilter(request, response);
+      return true;
+    }
+
+    // 3. 获取请求头中的 token
+    String token = request.getHeader("token");
+
+    // 4. 判断 token 是否存在，如果不存在，说明用户没有登录，返回错误信息（401 状态码）
+    if(token == null || token.isEmpty()){
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return false;
+    }
+
+    // 5. 如果 token 存在，校验令牌，如果校验失败 -> 返回错误信息（401 状态码）
+    try {
+      JwtUtils.parseToken(token); // 手动实现的校验方法
+    } catch (Exception e){
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return false;
+    }
+
+    // 6. 校验通过，放行
+    chain.doFilter(servletRequest, servletResponse);
+    return true;
+  }
+
+}
+```
+
+::
+
+::tip
+
+`registry.addPathPatterns()` 用于设置需要拦截的请求路径
+
+`registry.excludePathPatterns()` 用于设置不需要拦截的请求路径
+
+::
+
+::warning
+
+Filter 与 Interceptor 优先级
+
+浏览器发送请求到服务器时，先经过 Filter 过滤器，再经过 Interceptor 拦截器
+
+::
+
+::warning
+
+Filter 与 Interceptor 区别
+
+- 接口规范不同：过滤器需要实现 Filter 接口，而拦截器需要实现 HandlerInterceptor 接口
+
+- 拦截范围不同：过滤器 Filter 会拦截所有的资源，而 Interceptor 只会拦截 Spring 环境中的资源
+
+::
