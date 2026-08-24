@@ -2519,7 +2519,6 @@ public class TokenInterceptor implements HandlerInterceptor {
 
     // 2. 判断是否是登录请求，如果路径中包含 /login，说明是登录操作，放行
     if(requestURI.contains("/login")){
-      filterChain.doFilter(request, response);
       return true;
     }
 
@@ -2541,7 +2540,6 @@ public class TokenInterceptor implements HandlerInterceptor {
     }
 
     // 6. 校验通过，放行
-    chain.doFilter(servletRequest, servletResponse);
     return true;
   }
 

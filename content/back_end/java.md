@@ -1244,3 +1244,15 @@ while (it.hasNext()) {
 ::
 
 在屏幕上绘图要使用 Java 的图形环境，Graphics 对象就是专门管理图形环境的
+
+## 线程与进程
+
+### ThreadLocal
+
+**ThreadLocal** 为每个线程提供单独一份存储空间，具有线程隔离的效果，只有在线程内才能获取到对应的值，线程外则不能访问
+
+- `public void set(T vallue)`：设置当前线程的线程局部变量的值
+
+- `public T get()`：返回当前线程所对应的局部变量的值
+
+- `public void remove()`：移除当前线程的线程局部变量
