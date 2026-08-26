@@ -2573,3 +2573,99 @@ Filter 与 Interceptor 区别
 - 拦截范围不同：过滤器 Filter 会拦截所有的资源，而 Interceptor 只会拦截 Spring 环境中的资源
 
 ::
+
+## Spring Cache 缓存
+
+Spring Cache 是一个框架，实现了基于注解的缓存功能，只需要简单的加一个注解，就能实现缓存功能
+
+Spring Cache 提供了一层抽象，底层可以切换不同的缓存实现，例如：
+
+- EHCache
+
+- Caffeine
+
+- Redis
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-cache</artifactId>
+</dependency>
+```
+
+### 入门
+
+1. 在启动类上开启缓存:
+
+```java
+@EnableCaching
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+```
+
+2. 在添加或修改数据上添加 `@CachePut`:
+
+```java
+@CachePut(value = "dish", key = "#dish.id")
+public DishVO update(Dish dish) {
+    dishMapper.update(dish);
+
+    return dishMapper.selectById(dish.getId());
+}
+```
+
+3. 在查询方法上添加 `@Cacheable`
+
+```java
+@Cacheable(value = "dish", key = "#id")
+public DishVO getById(Long id) {
+    System.out.println("查询数据库");
+
+    return dishMapper.selectById(id);
+}
+```
+
+4. 在删除方法上添加 `@CacheEvict`
+
+```java
+@CacheEvict(value = "dish", key = "#id")
+public void delete(Long id) {
+    dishMapper.deleteById(id);
+}
+```
+
+::tip
+
+`@CachePut`、`@Cacheable`、`@CacheEvict` 的第一个参数 value 为缓存名称，可以理解为给这一组缓存起一个名字
+
+第二个参数 key 表示具体的缓存 Key，最终拼接出的 key 为 `value::key`
+
+当第二个参数 key 为 `#xxx` (xxx 为任意字符串)时，xxx 对应方法的参数，`#user.id` 代表参数 user 的 id 属性；
+
+当第二个参数 key 为 `#p0` 时，p0 对应方法的第一个参数，`#p0.id` 代表第一个参数的 id 属性；
+
+当第二个参数 key 为 `#result` 时， result 对应方法的返回值，`#result.id` 代表返回值的 id 属性(`@Cacheable` 无法使用)；
+
+当配置为 `@CacheEvict(value = "dish", allEntries = true)` 时，代表删除 dish 组下所有的缓存
+
+::
+
+### @EnableCaching
+
+用于开启缓存注解功能，通常加载启动类上
+
+### @Cacheable
+
+在方法执行前先查询缓存中是否有数据，如果有数据，则直接返回缓存数据；如果没有缓存数据，调用方法并将方法返回值放到缓存中
+
+### @CachePut
+
+将方法的返回值放到缓存中
+
+### @CacheEvict
+
+将一条或多条数据从缓存中删除
