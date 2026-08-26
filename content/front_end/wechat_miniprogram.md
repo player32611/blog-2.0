@@ -18,9 +18,13 @@ https://developers.weixin.qq.com/miniprogram/dev/devtools/stable.html
 
 ### 工具栏
 
-**编译**: 在模拟器中查看最新的项目效果![An image](/images/content/front-end/WeChatMiniProgram/compile.png)
+**编译**: 在模拟器中查看最新的项目效果
 
-**预览**: 在真机中查看最新的项目效果![An image](/images/content/front-end/WeChatMiniProgram/preview.png)
+<img src="/images/content/front-end/WeChatMiniProgram/compile.png" alt="编译" width="100"/>
+
+**预览**: 在真机中查看最新的项目效果
+
+<img src="/images/content/front-end/WeChatMiniProgram/preview.png" alt="预览" width="100"/>
 
 ### 项目结构
 
@@ -86,7 +90,7 @@ https://developers.weixin.qq.com/miniprogram/dev/devtools/stable.html
 
 ### 小程序窗口的组成部分
 
-![An image](/images/content/front-end/WeChatMiniProgram/windowComponents.png)
+<img src="/images/content/front-end/WeChatMiniProgram/windowComponents.png" alt="窗口" width="400"/>
 
 其中导航栏区域和背景区域可以通过全局的 **window** 节点来进行相关的配置
 
@@ -122,7 +126,7 @@ https://developers.weixin.qq.com/miniprogram/dev/devtools/stable.html
 
 ### 添加 loading 提示效果
 
-调用**wx.showLoading()**方法，即可显示 loading 提示框，但需主动调用 **wx.hideLoading** 才能关闭提示框
+调用 **`wx.showLoading()`** 方法，即可显示 loading 提示框，但需主动调用 **`wx.hideLoading`** 才能关闭提示框
 
 ```javascript
 //上拉触底时加载数据
@@ -1929,11 +1933,11 @@ onLoad(){
 
 想要为小程序项目进行分包，首先需要调整小程序目录结构：
 
-![An image](/images/content/front-end/WeChatMiniProgram/packagesLists.png)
+<img src="/images/content/front-end/WeChatMiniProgram/packagesLists.png" alt="目录结构" width="400"/>
 
 同时在 `app.json` 的 **subpackages** 节点中声明分包的结构
 
-![An image](/images/content/front-end/WeChatMiniProgram/packagesConfigures.png)
+<img src="/images/content/front-end/WeChatMiniProgram/packagesConfigures.png" alt="分包结构" width="400"/>
 
 ```json
 {
