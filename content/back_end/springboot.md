@@ -2669,3 +2669,44 @@ public void delete(Long id) {
 ### @CacheEvict
 
 将一条或多条数据从缓存中删除
+
+## Spring Task
+
+Spring Task 是 Spring 框架提供的任务调度工具，可以按照约定的时间自动执行某个代码逻辑
+
+**使用步骤：**
+
+1. 导入 maven 坐标 spring-contexr
+
+2. 启动类添加注解 `@EnableScheduling` 开启任务调度
+
+3. 自定义定时任务类
+
+```java
+@Component
+@Slf4j
+public class MyTask {
+  // 定时任务，每隔 5 秒触发一次
+  @Scheduled(cron = "0/5 * * * * ?")
+  public void executeTask(){
+    log.info("定时任务开始执行: {}", new Date())
+  }
+
+}
+```
+
+### cron 表达式
+
+cron 表达是其实就是一个字符串，通过 cron 表达式可以**定义任务触发的时间**
+
+- 构成规则：分为 6 或 7 个域，由空格分隔开，每个域代表一个含义(秒、分钟、小时、日、月、周、年(可选))
+
+::detail
+
+#title
+具体示例
+#default
+
+2022 年 10 月 12 日上午 9 点整对应的 cron 表达式为：`0 0 9 12 10 ? 2022`
+
+::
