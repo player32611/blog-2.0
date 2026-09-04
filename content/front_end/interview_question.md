@@ -358,7 +358,7 @@ let direction = 0;
 console.log(Direction); // ❌
 ```
 
-### 接口（interface）和类型别名（type）的区别
+### 接口（interface）和类型别名（type）
 
 `interface` 更适合描述 "对象的结构"，支持声明合并
 
@@ -403,6 +403,8 @@ type Point = [number, number];
 const point: Point = [10, 20];
 ```
 
+- 共同点：都可以描述对象或者函数，都允许扩展
+
 ::tip
 
 - `interface` 可以通过 `extends` 扩展
@@ -444,3 +446,472 @@ const admin: Admin = {
 ```
 
 ::
+
+### any 类型的作用
+
+不清楚当前变量类型时使用，值来自于动态内容（用户输入/第三方代码库）
+
+### any、never、unknown、null、undefined 和 void 有什么区别
+
+- `any`：动态类型变量，失去了类型检查的作用
+
+- `never`：永远不存在的值的类型，在抛出异常、死循环、穷尽检查时使用（函数不会正常结束）
+
+- `unknown`：未知类型，任何类型的值都可以赋值给 `unknown`，`unknown` 只能赋值给 `unknown`、`any`（类型安全版的 `any`）
+
+- `null`：明确为空，默认是所有类型的子类型
+
+- `undefined`：没有被定义，默认是所有类型的子类型
+  - 在 `strictNullChecks` 配置下，`null` 或者 `undefined` 只能赋值给 void 或者他们自己
+
+- `void`：没有任何类型，当函数没有返回值时可以定义为 `void`（函数正常结束）
+
+### interface 给 Function / Array / Class（Indexable） 做声明吗
+
+```typescript
+// Function 声明
+// 表示：Say 是一个可以被调用的函数，它接收一个类型为 string 的参数 name，无返回值
+interface Say {
+	(name: string): void;
+}
+let say: Say = (name: string): void => {};
+
+// Array 声明
+// 表示：用 number 类型的索引访问这个对象时，得到的是 number
+interface NumberArray {
+	[index: number]: number;
+}
+let list: NumberArray = [1, 2, 3, 4, 5];
+
+// Class 声明
+interface Person {
+	name: string;
+	sayHi(name: string): string;
+}
+```
+
+### 使用 string、number、boolean、symbol、object 等给类型做声明
+
+```typescript
+let name: string = "foo";
+let age: number = 6;
+let isDone: boolean = false;
+let sym: Symbol = Symbol();
+```
+
+::tip
+
+`string` 表示 JavaScript 的原始字符串类型，`String` 表示 String 对象类型，一般推荐 `string`
+
+```typescript
+let a: string = "hello";
+let b: String = new String("hello");
+```
+
+Number 和 number，Boolean 和 boolean 同理
+
+`Symbol` 主要是 JavaScript 中的构造/创建 Symbol 的函数对象:
+
+```typescript
+const id: symbol = Symbol("id");
+```
+
+::
+
+::tip
+
+- `object` 表示非原始类型
+
+```typescript
+let value: object;
+
+value = {};
+value = [];
+value = function () {};
+value = "hello"; // ❌
+value = 123; // ❌
+value = true; // ❌
+```
+
+- `Object` 比 object 更宽
+
+```typescript
+let value: Object;
+
+value = {};
+value = [];
+value = "hello";
+value = 123;
+value = true;
+```
+
+::
+
+### TypeScript 中的 this 和 JavaScript 中的 this 有什么差异
+
+- `TypeScript`：在 `noImplicitThis: true` 配置下必须去声明 this 类型，才能在函数或者对象中使用 this
+
+- 其余保持一致
+
+```typescript
+interface User {
+	name: string;
+	sayHello(this: User): void;
+}
+
+const user: User = {
+	name: "Tom",
+
+	sayHello() {
+		console.log(this.name);
+	},
+};
+```
+
+### 使用 Union Types（联合类型） 时的注意事项
+
+- 联合类型只能访问共有的属性或者方法
+
+```typescript
+function print(value: string | number) {
+	console.log(value.toString()); // ✅ 两者都有
+	console.log(value.length); // ❌ number 没有 length
+}
+```
+
+- 使用联合类型后，通常需要类型缩小
+
+```typescript
+function print(value: string | number) {
+	if (typeof value === "string") {
+		console.log(value.length);
+	} else {
+		console.log(value.toFixed(2));
+	}
+}
+```
+
+### 如何设计 Class 的声明
+
+```typescript
+class Greeter {
+	greeting: string;
+
+	constructor(message: string) {
+		this.greeting = message;
+	}
+
+	greet(): string {
+		return `hello, #{this.greeting}`;
+	}
+}
+
+let greeter = new Greeter("world");
+```
+
+### 如何获取联合枚举类型的 Key
+
+```typescript
+enum str {
+	A,
+	B,
+	C,
+	D,
+}
+type strUnion = keyof type of str; // 'A' | 'B' | 'C' | 'D'
+
+enum Status {
+  Pending = "pending",
+  Success = "success",
+  Failed = "failed"
+}
+type StatusKey = keyof typeof Status; // "Pending" | "Success" | "Failed"
+```
+
+::tip
+
+`Status` 表示枚举类型；`typeof Status` 用于获取运行时的 Status 对象类型；`keyof typeof Status` 用于获取这个枚举对象的所有属性名。
+
+::
+
+### 简单介绍 TypeScript 模块加载机制
+
+```typescript
+import { a } from "moduleA";
+```
+
+1. 尝试通过绝对/相对定位查找模块文件
+
+- 一般查找顺序：`.ts` -> `.tsx` -> `.d.ts`
+
+2. 若未找到，尝试查找外部模块声明 `.d.ts`
+
+3. 若仍未找到，抛出错误 `cannot find module 'moduleA'`
+
+### 简单聊聊对 TypeScript 类型兼容性的理解
+
+当一个类型 Y 可以赋值给另外一个类型 X 时，就可以说**类型 X 兼容类型 Y**
+
+```typescript
+let a: string = "hello";
+let b: string = a; // ✅
+
+let c: number = 123;
+let d: string = c; // ❌
+```
+
+对于接口兼容性：只有目标 X 中的声明的类型属性变量在原类型 Y 中都存在，就可以说**类型 X 兼容类型 Y**
+
+::code-group
+
+```typescript [对象类型是"结构兼容"]
+interface Person {
+	name: string;
+}
+
+const user = {
+	name: "Tom",
+	age: 18,
+};
+
+const person: Person = user; // ✅
+```
+
+```typescript [结构兼容，而不是名称兼容]
+interface Person {
+	name: string;
+}
+
+interface User {
+	name: string;
+}
+
+let person: Person;
+let user: User;
+
+person = user; // ✅
+```
+
+::
+
+对于函数兼容性：源函数的返回值类型可以赋值给目标函数要求的返回值类型。
+
+```typescript
+let fn1 = (x: number) => 100;
+let fn2: (x: number) => number;
+fn2 = fn1; // ✅
+
+let fn: () => string;
+const getValue = () => "hello";
+fn = getValue; // ✅
+```
+
+::warning
+
+关于函数参数兼容性：
+
+```typescript
+interface Animal {
+	name: string;
+}
+
+interface Dog extends Animal {
+	bark(): void;
+}
+
+let handleAnimal = (animal: Animal) => {};
+let handleDog = (dog: Dog) => {};
+
+handleAnimal = handleDog; // ❌
+```
+
+::
+
+### 对象展开的副作用
+
+- 对象展开是浅拷贝，对象展开只能保证第一层引用被复制，嵌套对象仍然共享引用。
+
+```typescript
+const user = {
+	name: "Tom",
+	address: {
+		city: "Shanghai",
+	},
+};
+const newUser = { ...user };
+
+newUser !== user; // true
+newUser.address === user.address; // true
+
+newUser.address.city = "Beijing";
+console.log(user.address.city); // "Beijing"
+```
+
+```typescript
+const user = {
+	hobbies: ["JavaScript", "TypeScript"],
+};
+const newUser = { ...user };
+
+newUser.hobbies.push("React");
+console.log(user.hobbies); // ["JavaScript", "TypeScript", "React"]
+```
+
+- 展开对象时，后面的属性会覆盖前面的属性
+
+```typescript
+const user = {
+	name: "Tom",
+	age: 18,
+};
+
+const newUser = {
+	...user,
+	age: 20,
+};
+// {
+//   name: "Tom",
+//   age: 20
+// }
+```
+
+- 仅包含可枚举的属性，不可枚举属性丢失
+
+```typescript
+const obj = {
+	name: "Tom",
+};
+
+Object.defineProperty(obj, "age", {
+	value: 18,
+	enumerable: false,
+});
+
+const newObj = { ...obj };
+
+console.log(newObj.name); // Tom
+console.log(newObj.age); // undefined
+```
+
+### 类型的全局声明和局部声明
+
+当 ts 文件不包含 `import`、`export` 时变成全局声明
+
+```typescript
+interface User {
+	name: string;
+	age: number;
+}
+
+// 其它文件可用
+const user: User = {
+	name: "Tom",
+	age: 18,
+};
+```
+
+包含 `import`、`export` 时变成局部声明
+
+```typescript
+export interface User {
+	name: string;
+}
+
+// 其它文件必须
+import type { User } from "./user";
+```
+
+### 如何使 TypeScript 项目引入并识别编译为 JavaScript 的 npm 库包
+
+> npm 包只有 JavaScript，没有 TypeScript 类型声明时，TS 项目如何既能运行，又能通过类型检查？
+
+1. 选择安装 ts 版本 `npm install @types/xxx --save`
+
+2. 没有类型的 js 库时，需要编写同名的 `.d.ts`
+
+```typescript
+declare module "xxx" {
+	export function add(a: number, b: number): number;
+}
+```
+
+### TypeScript 的 tsconfig.json 中有哪些配置项信息
+
+```json
+{
+	"files": [],
+	"include": [],
+	"exclude": [],
+	"compileOnSave": true,
+	"extends": "",
+	"compilerOptions": {} // 核心配置
+}
+```
+
+- `files`：精确指定需要编译的文件
+
+- `include`：指定需要编译的文件
+
+- `exclude`：排除不需要编译的文件：
+
+- `compileOnSave`：当文件保存时，是否自动触发 TypeScript 编译
+
+- `extends`：用来让一个 TS 配置文件继承另一个 TS 配置文件
+
+- `compilerOptions`：编译核心配置项
+  - `target`：指定编译后的 JavaScript 版本
+  - `module`：指定生成的 JavaScript 使用什么模块规范
+  - `moduleResolution`：指定 TypeScript 如何查找模块
+  - `strict`：是否开启严格类型检查
+
+### 如何设置模块导入的路径别名
+
+一般通过 `tsconfig.json` 的 `paths` 进行配置
+
+```json
+{
+	"compilerOptions": {
+		"paths": {
+			"@/*": ["src/*"] // @/*  →  src/*
+		}
+	}
+}
+```
+
+因此，原本为：
+
+```typescript
+import Button from "../../components/Button";
+import request from "../../utils/request";
+```
+
+变为：
+
+```typescript
+import Button from "@/components/Button";
+import request from "@/utils/request";
+```
+
+### declare、declare global 是什么
+
+declare 用于声明全局变量、全局函数、全局命名空间、js modules、class 等（声明某个**已有**的变量/函数/类/模块等）
+
+```typescript
+declare const version: string;
+```
+
+declare global 用于为全局对象、window 增加新的属性（向全局作用域添加声明）
+
+```typescript
+export {};
+
+declare global {
+	interface Window {
+		csrf: string;
+	}
+}
+
+window.csrf = "xxxxxxx";
+```
+
+两者都不产生 JS 代码
