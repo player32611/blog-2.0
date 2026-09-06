@@ -28,6 +28,7 @@ export default defineNuxtConfig({
 						"properties",
 						"python",
 						"sql",
+						"tsx",
 						"typescript",
 						"vue",
 						"xml",

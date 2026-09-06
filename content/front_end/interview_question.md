@@ -915,3 +915,362 @@ window.csrf = "xxxxxxx";
 ```
 
 两者都不产生 JS 代码
+
+### 类中成员的 public、private、protected、readonly 修饰符的理解
+
+- `public`：默认设定、可以被外部成员访问
+
+```typescript
+class User {
+	name: string = "Tom";
+
+	public sayHello() {
+		console.log(`Hello ${this.name}`);
+	}
+}
+
+const user = new User();
+
+console.log(user.name); // ✅
+user.sayHello(); // ✅
+```
+
+- `private`：私有，只有当前类内部可以访问
+
+```typescript
+class User {
+	private password: string = "123456";
+
+	login() {
+		console.log(this.password); // ✅
+	}
+}
+
+const user = new User();
+
+user.login(); // ✅
+
+console.log(user.password); // ❌ Property 'password' is private
+```
+
+- `protected`：允许类内部及其子类访问
+
+```typescript
+class User {
+	protected name: string = "Tom";
+
+	protected sayHello() {
+		console.log("Hello");
+	}
+}
+
+class Admin extends User {
+	test() {
+		console.log(this.name); // ✅
+		this.sayHello(); // ✅
+	}
+}
+
+const admin = new Admin();
+
+console.log(admin.name); // ❌ protected 成员不能在类外部访问
+```
+
+- `readonly`：属性设置为只读，只读属性必须在声明时或者构造函数里被初始化
+
+```typescript
+class User {
+	readonly id: number;
+
+	constructor(id: number) {
+		this.id = id;
+	}
+}
+
+const user = new User(1001);
+
+console.log(user.id); // ✅
+
+user.id = 1002; // ❌ Cannot assign to 'id' because it is a read-only property
+```
+
+### keyof 和 typeof 关键字的作用
+
+- `keyof`：索引类型查询操作符，获取索引类型属性名，构成联合类型
+
+```typescript
+interface User {
+	name: string;
+	age: number;
+	address: string;
+}
+
+type UserKey = keyof User; // "name" | "age" | "address"
+```
+
+- `typeof`：获取一个变量或者对象的类型
+
+```typescript
+const user = {
+	name: "Tom",
+	age: 18,
+};
+
+type User = typeof user;
+// {
+//   name: string;
+//   age: number;
+// }
+```
+
+::tip
+
+`keyof typeof` 组合
+
+```typescript
+const user = {
+	name: "Tom",
+	age: 18,
+	gender: "male",
+};
+
+type UserKey = keyof typeof user; // "name" | "age" | "gender"
+```
+
+::
+
+### 简述工具类型 Exclude、omit、Merge、Intersection、Overwrite 的作用
+
+- `Exclude<T, U>`：从**联合类型 T** 中排除能够赋值给 U 的类型
+
+```typescript
+type Status = "pending" | "success" | "failed";
+
+type Result = Exclude<Status, "failed">; // "pending" | "success"
+```
+
+- `Omit<T, K>`：从**对象类型 T** 中删除指定的属性 K
+
+```typescript
+interface User {
+	id: number;
+	name: string;
+	age: number;
+	password: string;
+}
+
+type UserWithoutPassword = Omit<User, "password">;
+// {
+//   id: number;
+//   name: string;
+//   age: number;
+// };
+```
+
+- `Merge<O1, O2>`：自定义工具类型，把两个对象类型合并成一个类型
+
+```typescript
+type Merge<A, B> = {
+	[K in keyof A | keyof B]: K extends keyof B ? B[K] : K extends keyof A ? A[K] : never;
+};
+
+type A = {
+	name: string;
+};
+
+type B = {
+	age: number;
+};
+
+type User = Merge<A, B>;
+// {
+//   name: string;
+//   age: number;
+// }
+```
+
+- `Overwrite<T, U>`：自定义工具类型，基于原来的类型，用新的类型覆盖指定属性。
+
+```typescript
+type Overwrite<T, U> = Omit<T, keyof U> & U;
+
+interface User {
+	id: number;
+	name: string;
+	age: number;
+}
+
+type NewUser = Overwrite<
+	User,
+	{
+		id: string;
+	}
+>;
+// {
+//   id: string;
+//   name: string;
+//   age: number;
+// }
+```
+
+- `Intersection<T, U>`：指交叉类型 `&`
+
+### 数组定义的两种方式
+
+```typescript
+type Foo = Array<string>;
+interface Bar {
+	baz: Array<{ name: string; age: number }>;
+}
+```
+
+```typescript
+type Foo = string[];
+interface Bar {
+	baz: { name: string; age: number }[];
+}
+```
+
+## React
+
+### 用户如何根据不同的权限，查看不同的页面
+
+早期 ReactRouter 实现：通过 `onEnter` 实现路由进入前置校验的方式
+
+```javascript
+<Router path="/home" component={App} onEnter={(nextState, replact) => {
+  if(nextState.location.pathname !== '/'){
+    // 根据参数判断用户信息
+    const uid = utils.getUrlParams(nextState, "uid")
+    if(!uid){
+      replace('/');
+    } else {
+      // XXXX
+    }
+  }
+}}>
+```
+
+React Router v6/v7 实现登录鉴权：
+
+::code-group
+
+```tsx [AuthRoute.tsx]
+function AuthRoute() {
+	const token = localStorage.getItem("token");
+
+	// 如果未登录，重定向至登录页
+	if (!token) {
+		return <Navigate to="/login" replace />;
+	}
+
+	// 如果验证通过，就渲染当前路由对应的子页面。
+	return <Outlet />;
+}
+```
+
+```tsx [PermissionRoute.tsx]
+// permissions: ["home:view", "user:list", "user:add"]
+function PermissionRoute({ permission }: { permission: string }) {
+	// 自定义获取用户的权限
+	const permissions = getPermissions();
+
+	// 如果用户权限不包含，显示 403
+	if (!permissions.includes(permission)) {
+		return <Navigate to="/403" replace />;
+	}
+
+	// 如果验证通过，就渲染当前路由对应的子页面。
+	return <Outlet />;
+}
+```
+
+```tsx [router.tsx]
+<Routes>
+	<Route path="/login" element={<Login />} />
+
+	{/* 登录权限 */}
+	<Route element={<AuthRoute />}>
+		<Route path="/home" element={<Home />} />
+
+		{/* 用户列表权限 */}
+		<Route element={<PermissionRoute permission="user:list" />}>
+			<Route path="/user" element={<User />} />
+		</Route>
+
+		{/* 用户新增权限 */}
+		<Route element={<PermissionRoute permission="user:add" />}>
+			<Route path="/user/add" element={<UserAdd />} />
+		</Route>
+	</Route>
+
+	<Route path="/403" element={<Forbidden />} />
+</Routes>
+```
+
+::
+
+### React.createClass、extends Component、Function Component 的区别
+
+- `React.createClass`：React 早期用于创建组件的方式：
+
+```jsx
+const Hello = React.createClass({
+  // 支持 mixins，传入其它组件， 可以调用其它组件的生命周期与内部方法
+  mixins: [
+    SomeMixin
+  ]
+
+	// state 初始化
+	getInitialState() {
+		return {
+			name: "Tom",
+		};
+	},
+
+	handleClick() {
+		this.setState({
+			name: "Jerry",
+		});
+	},
+
+	render() {
+		return <div onClick={this.handleClick}>Hello {this.state.name}</div>;
+	},
+});
+```
+
+- extends Component：ES6 后创建组件的方式
+
+```jsx
+class Hello extends React.Component {
+	// state 初始化
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			name: "Tom",
+		};
+	}
+
+	handleClick = () => {
+		this.setState({
+			name: "Jerry",
+		});
+	};
+
+	render() {
+		return <div onClick={this.handleClick}>Hello {this.state.name}</div>;
+	}
+}
+```
+
+- Function Component：现代 React 更推荐的函数式写法：
+
+```jsx
+function App() {
+	const [count, setCount] = useState(0);
+
+	return <button onClick={() => setCount(count + 1)}>{count}</button>;
+}
+```
