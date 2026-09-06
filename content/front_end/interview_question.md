@@ -660,7 +660,7 @@ let c: number = 123;
 let d: string = c; // ❌
 ```
 
-对于接口兼容性：只有目标 X 中的声明的类型属性变量在原类型 Y 中都存在，就可以说**类型 X 兼容类型 Y**
+对于接口兼容性: 只有目标 X 中的声明的类型属性变量在原类型 Y 中都存在，就可以说**类型 X 兼容类型 Y**
 
 ::code-group
 
@@ -848,21 +848,21 @@ declare module "xxx" {
 }
 ```
 
-- `files`：精确指定需要编译的文件
+- `files`: 精确指定需要编译的文件
 
-- `include`：指定需要编译的文件
+- `include`: 指定需要编译的文件
 
-- `exclude`：排除不需要编译的文件：
+- `exclude`: 排除不需要编译的文件：
 
-- `compileOnSave`：当文件保存时，是否自动触发 TypeScript 编译
+- `compileOnSave`: 当文件保存时，是否自动触发 TypeScript 编译
 
-- `extends`：用来让一个 TS 配置文件继承另一个 TS 配置文件
+- `extends`: 用来让一个 TS 配置文件继承另一个 TS 配置文件
 
-- `compilerOptions`：编译核心配置项
-  - `target`：指定编译后的 JavaScript 版本
-  - `module`：指定生成的 JavaScript 使用什么模块规范
-  - `moduleResolution`：指定 TypeScript 如何查找模块
-  - `strict`：是否开启严格类型检查
+- `compilerOptions`: 编译核心配置项
+  - `target`: 指定编译后的 JavaScript 版本
+  - `module`: 指定生成的 JavaScript 使用什么模块规范
+  - `moduleResolution`: 指定 TypeScript 如何查找模块
+  - `strict`: 是否开启严格类型检查
 
 ### 如何设置模块导入的路径别名
 
@@ -976,7 +976,7 @@ const admin = new Admin();
 console.log(admin.name); // ❌ protected 成员不能在类外部访问
 ```
 
-- `readonly`：属性设置为只读，只读属性必须在声明时或者构造函数里被初始化
+- `readonly`: 属性设置为只读，只读属性必须在声明时或者构造函数里被初始化
 
 ```typescript
 class User {
@@ -1008,7 +1008,7 @@ interface User {
 type UserKey = keyof User; // "name" | "age" | "address"
 ```
 
-- `typeof`：获取一个变量或者对象的类型
+- `typeof`: 获取一个变量或者对象的类型
 
 ```typescript
 const user = {
@@ -1041,7 +1041,7 @@ type UserKey = keyof typeof user; // "name" | "age" | "gender"
 
 ### 简述工具类型 Exclude、omit、Merge、Intersection、Overwrite 的作用
 
-- `Exclude<T, U>`：从**联合类型 T** 中排除能够赋值给 U 的类型
+- `Exclude<T, U>`: 从**联合类型 T** 中排除能够赋值给 U 的类型
 
 ```typescript
 type Status = "pending" | "success" | "failed";
@@ -1049,7 +1049,7 @@ type Status = "pending" | "success" | "failed";
 type Result = Exclude<Status, "failed">; // "pending" | "success"
 ```
 
-- `Omit<T, K>`：从**对象类型 T** 中删除指定的属性 K
+- `Omit<T, K>`: 从**对象类型 T** 中删除指定的属性 K
 
 ```typescript
 interface User {
@@ -1067,7 +1067,7 @@ type UserWithoutPassword = Omit<User, "password">;
 // };
 ```
 
-- `Merge<O1, O2>`：自定义工具类型，把两个对象类型合并成一个类型
+- `Merge<O1, O2>`: 自定义工具类型，把两个对象类型合并成一个类型
 
 ```typescript
 type Merge<A, B> = {
@@ -1089,7 +1089,7 @@ type User = Merge<A, B>;
 // }
 ```
 
-- `Overwrite<T, U>`：自定义工具类型，基于原来的类型，用新的类型覆盖指定属性。
+- `Overwrite<T, U>`: 自定义工具类型，基于原来的类型，用新的类型覆盖指定属性。
 
 ```typescript
 type Overwrite<T, U> = Omit<T, keyof U> & U;
@@ -1113,7 +1113,7 @@ type NewUser = Overwrite<
 // }
 ```
 
-- `Intersection<T, U>`：指交叉类型 `&`
+- `Intersection<T, U>`: 指交叉类型 `&`
 
 ### 数组定义的两种方式
 
@@ -1135,7 +1135,7 @@ interface Bar {
 
 ### 用户如何根据不同的权限，查看不同的页面
 
-早期 ReactRouter 实现：通过 `onEnter` 实现路由进入前置校验的方式
+早期 ReactRouter 实现: 通过 `onEnter` 实现路由进入前置校验的方式
 
 ```javascript
 <Router path="/home" component={App} onEnter={(nextState, replact) => {
@@ -1274,3 +1274,635 @@ function App() {
 	return <button onClick={() => setCount(count + 1)}>{count}</button>;
 }
 ```
+
+### React 事件与普通的 HTML 事件有什么区别
+
+- 事件名称不同: 原生事件名称为全小写，React 事件为 onClick 小驼峰
+
+- 事件函数处理不同: 原生事件采用字符串绑定，React 事件采用 `{}` 绑定
+
+- 阻止浏览器本身的默认行为不同：原生事件采用 `return false` 阻止默认行为，React 事件采用 `preventDefault()`
+
+- React 中使用**合成事件**，对浏览器原生事件进行了封装，使 React 可以提供统一的事件处理方式
+
+::tip
+
+为什么 React 使用合成事件
+
+抹平不同浏览器的事件差异（兼容性） + 统一 React 的事件处理机制 + 方便事件委托和性能管理
+
+::
+
+### 受控组件与非受控组件
+
+- 受控组件：表单数据由 React State 控制
+
+> 受控组件是指表单元素的值由 React State 控制，例如通过 value 和 onChange 管理 input。用户输入后触发 onChange，更新 State，然后 React 再通过 value 更新 UI。
+
+> 受控组件更符合 React 的状态驱动思想，比较适合复杂表单、实时校验和数据联动；非受控组件代码更简单，适合一些简单表单或者文件上传等场景。
+
+```jsx
+import { useState } from "react";
+
+function App() {
+	const [name, setName] = useState("");
+
+	return (
+		// 受控组件
+		<input value={name} onChange={e => setName(e.target.value)} />
+	);
+}
+```
+
+- 非受控组件: 表单数据由 DOM 自己控制，通过 ref 获取
+
+> 非受控组件则是由 DOM 自己维护表单数据，React 不实时保存输入值，而是在需要的时候通过 ref 从 DOM 中获取。通常使用 defaultValue 设置初始值。
+
+```tsx
+import { useRef } from "react";
+
+function App() {
+	const inputRef = useRef<HTMLInputElement>(null);
+
+	const handleSubmit = () => {
+		console.log(inputRef.current?.value);
+	};
+
+	return (
+		<>
+			{/* 非受控组件 */}
+			<input ref={inputRef} />
+
+			<button onClick={handleSubmit}>提交</button>
+		</>
+	);
+}
+```
+
+### 为什么 useState 要使用数组而非对象
+
+> useState 返回数组主要是 API 设计上的考虑，而不是因为数组性能更好。它返回 `[state, setState]`，通过数组解构，使用者可以自由地给状态和更新函数命名。例如可以写成 `[count, setCount]`、`[name, setName]`。如果返回对象，就需要固定属性名称，多个 useState 使用时容易出现命名冲突，虽然可以通过对象解构重命名解决，但写法更加复杂。
+
+同时 React Hooks 本身依赖调用顺序来关联每个 Hook 的状态，因此数组这种固定位置的返回形式也非常简洁。
+
+`useState` 返回数组，主要是为了让开发者可以自由命名状态值和更新函数，同时保持 API 简洁、调用顺序明确。并不是因为数组比对象"性能更好"
+
+```jsx
+const [count, setCount] = useState(0);
+```
+
+::tip
+
+数组解构与对象解构
+
+```js
+const foo = [1, 2, 3];
+const [one, two, three] = foo; // 自定义名称
+
+const user = {
+	id: 123,
+	name: "chenghuai",
+};
+const { id, name } = user; // 固定名称
+```
+
+::
+
+### React refs
+
+> Ref 是 React 提供的一种用于访问 DOM 节点或者保存可变值的机制。函数组件中主要通过 useRef 使用。Ref 的值保存在 current 属性中，修改 current 不会触发组件重新渲染，因此适合保存 DOM 引用、定时器、上一次的值等不需要驱动 UI 更新的数据。
+
+`ref` 是 React 中直接访问 DOM 节点或保存可变值的一种机制，适合保存 DOM 引用、定时器、上一次的值等不需要驱动 UI 更新的数据
+
+```tsx
+import { useRef } from "react";
+
+function App() {
+	const inputRef = useRef<HTMLInputElement>(null);
+
+	const handleFocus = () => {
+		inputRef.current?.focus();
+	};
+
+	return (
+		<>
+			<input ref={inputRef} />
+			<button onClick={handleFocus}>获取焦点</button>
+		</>
+	);
+}
+```
+
+### ref 和 state 的区别
+
+需要驱动 UI 更新的数据用 state；只需要在组件生命周期内保存、但不需要驱动 UI 更新的数据用 ref。
+
+state: 修改 state -> 触发重新渲染 -> 页面更新
+
+ref: 修改 ref.current -> 不会触发重新渲染
+
+### 为什么要使用 Hooks
+
+> Hooks 主要是为了让函数组件也能够使用 State、Effect、Ref、Context 等 React 能力，同时摆脱 Class 组件中 this、生命周期以及逻辑复用复杂的问题。通过 Custom Hooks，可以把可复用的状态逻辑抽离出来，让代码更容易复用和维护。因此现代 React 更推荐函数组件 + Hooks 的开发方式。
+
+- 解决生命周期逻辑分散的问题: Class 写法中一个功能可能需要写在多个生命周期，Hooks 可以把同一个功能放到一起:
+
+::code-group
+
+```jsx [Class 生命周期]
+componentDidMount() {
+  // 请求数据
+}
+
+componentDidUpdate() {
+  // 请求数据
+}
+
+componentWillUnmount() {
+  // 清理
+}
+```
+
+```jsx [useEffect Hook]
+useEffect(() => {
+	// 请求数据
+
+	return () => {
+		// 清理
+	};
+}, []);
+```
+
+::
+
+- 解决 Class 组件 `this` 的复杂问题: Class 组件经常需要处理 `this`，Hooks 不需要处理 Class 中的 this:
+
+::code-group
+
+```jsx [Class 生命周期]
+class User extends React.Component {
+	handleClick() {
+		console.log(this);
+	}
+
+	render() {
+		return <button onClick={this.handleClick.bind(this)}>点击</button>;
+	}
+}
+```
+
+```jsx [useEffect Hook]
+function User() {
+	const handleClick = () => {
+		console.log("点击");
+	};
+
+	return <button onClick={handleClick}>点击</button>;
+}
+```
+
+::
+
+- 更方便地复用状态逻辑
+
+### 错误边界 Error Boundary
+
+> Error Boundary 是 React 提供的错误边界机制，可以捕获子组件在渲染、生命周期以及构造过程中发生的 JavaScript 错误，并通过 getDerivedStateFromError 显示降级 UI，通过 componentDidCatch 进行错误日志记录，从而避免局部组件错误导致整个页面崩溃。它不能捕获事件处理器、异步代码以及自身抛出的错误。
+
+错误边界更多的是一种定义，组件可以捕获发生在子组件的 JS 报错，并能降级处理
+
+::code-group
+
+```tsx [ErrorBoundary]
+import React from "react";
+
+interface Props {
+	children: React.ReactNode;
+}
+
+interface State {
+	hasError: boolean;
+}
+
+class ErrorBoundary extends React.Component<Props, State> {
+	constructor(props) {
+		super(props);
+		this.state = { hasError: false };
+	}
+
+	state: State = {
+		hasError: false,
+	};
+
+	static getDerivedStateFromError(error): State {
+		return {
+			hasError: true,
+		};
+	}
+
+	componentDidCatch(error: Error, info: React.ErrorInfo) {
+		console.error("Error:", error);
+		console.error("Component Stack:", info.componentStack);
+	}
+
+	render() {
+		if (this.state.hasError) {
+			// 进行降级展示
+			return (
+				<div>
+					<h2>页面出错了</h2>
+					<button
+						onClick={() => {
+							this.setState({
+								hasError: false,
+							});
+						}}
+					>
+						重试
+					</button>
+				</div>
+			);
+		}
+
+		return this.props.children;
+	}
+}
+```
+
+```tsx [使用]
+<ErrorBoundary>
+	<UserList />
+</ErrorBoundary>
+```
+
+::
+
+::warning
+
+函数组件不能直接写 Error Boundary，目前 Error Boundary 的核心机制仍然基于 Class Component 的错误边界 API。
+
+::
+
+### React 代码分割
+
+> React 代码分割是将应用的 JavaScript 代码拆分成多个 Chunk，使浏览器不需要一次性加载整个应用，而是在需要的时候按需加载。React 中最常用的方式是 React.lazy 配合 Suspense，底层通常使用动态 import() 实现。实际项目中最常见的是对路由进行懒加载，也可以对体积较大的组件进行按需加载，从而减少首屏 JavaScript 体积，提升首屏加载性能。
+
+代码分割就是把原本一次性加载的 JavaScript 代码，拆成多个较小的代码块（Chunk），在真正需要的时候再加载。用于减少首屏需要加载的 JavaScript 体积，提高首屏加载速度。
+
+1. `import`
+
+```jsx
+import { add } from "./utils";
+console.log(add(1, 2));
+
+import("./utils").then(utils => {
+	const { add } = utils;
+	console.log(add(1, 2));
+});
+```
+
+2. `React.lazy`
+
+```jsx
+import { lazy, Suspense } from "react";
+
+const OtherComponennt = lazy(() => import("./OtherComponennt"));
+
+function App() {
+	return (
+		<Suspense fallback={<div>加载中...</div>}>
+			<OtherComponennt />
+		</Suspense>
+	);
+}
+```
+
+### Fragments（<> </>）
+
+> Fragment 是 React 提供的一种特殊组件，用于将多个元素组合起来，同时不会向真实 DOM 中增加额外的节点。它主要用于避免无意义的 DOM 包装，保持 HTML 结构和 DOM 层级的简洁。Fragment 可以使用 `<Fragment>` 或 `<>...</>` 简写；如果需要设置 key，则必须使用完整的 Fragment 写法。
+
+**Fragment（片段）**用于让 React 在不增加额外 DOM 节点的情况下，返回多个元素
+
+React 组件通常只能返回一个根节点，要解决的话通常在最外层包裹一个 `div`，但是会多出一个没有实际意义的 `div`
+
+使用 `<Fragment>` 可以解决
+
+::code-group
+
+```jsx [Fragment]
+import { Fragment } from "react";
+
+function App() {
+	return (
+		<Fragment>
+			<h1>标题</h1>
+			<p>内容</p>
+		</Fragment>
+	);
+}
+
+function UserList({ users }: { users: User[] }) {
+  return (
+    <>
+      {users.map(user => (
+        <Fragment key={user.id}>
+          <dt>{user.name}</dt>
+          <dd>{user.age}</dd>
+        </Fragment>
+      ))}
+    </>
+  );
+}
+```
+
+```jsx [简写]
+function App() {
+	return (
+		<>
+			<h1>标题</h1>
+			<p>内容</p>
+		</>
+	);
+}
+```
+
+::
+
+### React 的设计思想
+
+> React 的核心设计思想主要是声明式 UI、组件化、状态驱动和单向数据流。开发者通过 State 和 Props 描述 UI 在不同状态下应该呈现什么样子，而不是直接操作 DOM。React 将页面拆分成可复用的组件，并通过单向数据流让数据变化更加可预测。在实现层面，React 通过 Virtual DOM、Reconciliation 等机制计算 UI 的变化并更新必要的 DOM，从而降低开发者直接操作 DOM 的复杂度。
+
+- 声明式: 描述 UI 应该是什么样子，而不是告诉程序具体怎么修改 DOM
+
+::code-group
+
+```javascript [传统]
+const div = document.querySelector("#app");
+
+div.innerHTML = "Hello";
+
+div.style.color = "red";
+```
+
+```jsx [React]
+function App() {
+	const [count, setCount] = useState(0);
+
+	return (
+		<div>
+			<p>{count}</p>
+
+			<button onClick={() => setCount(count + 1)}>+1</button>
+		</div>
+	);
+}
+```
+
+::
+
+- 组件化: 组件内部状态自身维护，只处理内部渲染逻辑；组件通信中，不同组件通过 props 单项数据流进行交互
+
+- 数据驱动视图(UI = f(state)): 不能直接操作 DOM，而是通过修改数据(state)、props，数据驱动视图更新
+
+- 虚拟 DOM: DOM 操作消耗性能，不建议直接操作 DOM；React 会根据新的 UI 描述计算需要更新的部分(增量更新)。
+
+### JSX 是什么，和 JS 有什么区别
+
+> JSX 是 JavaScript 的一种语法扩展，它允许我们在 JavaScript 中使用类似 HTML 的语法来描述 UI。JSX 本身不是 HTML，也不是浏览器原生支持的 JavaScript 语法，需要经过编译转换成 JavaScript。JavaScript 是一种完整的编程语言，而 JSX 只是 JavaScript 的语法扩展。React 中通常使用 JSX 来声明组件的 UI 结构，同时可以通过 {} 在 JSX 中嵌入 JavaScript 表达式
+
+**JSX（JavaScript XML）**是一种 JavaScript 的语法扩展(语法糖)，允许我们在 JavaScript 中使用类似 HTML 的语法描述 UI。需要通过 webpack、babel 编译后转化为 js 执行
+
+::code-group
+
+```jsx [编译前]
+const element = <h1>Hello</h1>;
+```
+
+```javascript [编译后]
+const element = React.createElement("h1", null, "Hello");
+```
+
+::
+
+::tip
+
+React 17 之前，JSX 必须依赖 React 变量，必须 `import React from "react";`
+
+React 17 RC 后，不再要求手动导入 React：
+
+::code-group
+
+```jsx [编译前]
+function App() {
+	return <h1>Hello React</h1>;
+}
+```
+
+```javascript [编译后]
+import { jsx as _jsx } from "react/jsx-runtime";
+
+function App() {
+	return _jsx("h1", {
+		children: "Hello React",
+	});
+}
+```
+
+::
+
+::
+
+### 为什么 React 自定义组件首字母大写
+
+> React 自定义组件首字母必须大写，是因为 JSX 通过大小写来区分原生 DOM 标签和自定义 React 组件。小写标签会被当作字符串形式的 HTML 标签，例如 `<div>`；大写标签会被当作 JavaScript 变量/组件，例如 `<MyButton>`。所以 React 组件通常使用 PascalCase 命名。
+
+JSX 通过大小写区分"原生 HTML 标签"和"自定义 React 组件"
+
+```js
+<app>hello encode</app>;
+// 编译后
+React.createElement("app", null, "hello encode");
+
+<App>hello encode</App>;
+// 编译后
+React.createElement(App, null, "hello encode");
+```
+
+### React 组件为什么不能返回多个元素(为什么只有一个根元素)
+
+> React 组件一次渲染需要返回一个整体的 React 元素结构，而虚拟 DOM/Fiber 是树状结构，需要有明确的根节点。因此组件不能直接返回多个并列的 JSX 根节点。如果需要返回多个元素，可以使用父元素或者 Fragment 将它们组织成一棵树。
+
+React 组件最后会被编译为 render 函数，函数的返回值只能是一个；虚拟 DOM 是树状结构，根节点只能是一个
+
+想返回多个元素，可以使用 **HOC 高阶函数**和 **`Reactfagment`**
+
+```jsx
+// 使用数组返回
+renderList(){
+  this.state.list.map((item, key) => {
+    return [
+      <tr key={item.id}>
+        <td>{item.name}</td>
+        <td>{item.age}</td>
+        <td>{item.address}</td>
+      </tr>
+    ]
+  })
+}
+```
+
+### 元素和组件的区别
+
+> React Component 和 Element 是两个不同的概念。Component 是一个用于定义 UI 的函数或类，负责描述如何生成 UI；Element 是一个轻量级的 JavaScript 对象，用来描述某一时刻 UI 应该是什么样子。JSX，比如 `<User />`，创建的是 React Element，而 User 本身是组件。React 根据 Element 去调用组件并完成后续渲染。
+
+组件是"生产 UI 的函数/定义"，元素是"组件执行后产生的 UI 描述对象"。
+
+::code-group
+
+```jsx [组件]
+function User() {
+	return <div>张三</div>;
+}
+// User 是组件
+```
+
+```jsx [元素]
+const element = <User />;
+
+// <User /> 是元素
+```
+
+::
+
+### 简述 React 的生命周期
+
+> React 组件生命周期主要分为三个阶段：挂载、更新和卸载。挂载阶段组件创建并加入页面，常用 constructor、render、componentDidMount；更新阶段当 props 或 state 变化时重新渲染，常用 render 和 componentDidUpdate；卸载阶段组件从页面移除，使用 componentWillUnmount 清理定时器、事件监听、订阅等资源。现代 React 推荐函数组件和 Hooks，很多类组件生命周期场景使用 useEffect 及其清理函数实现。
+
+**生命周期**: 组件实例从创建到销毁流程
+
+- **挂载阶段**:
+  - `constructor`: 初始化
+  - `static getDerviedStateFromProps`
+  - `render`: 创建虚拟 DOM 阶段
+  - `componentDidMount`: 挂载生成真实 DOM 时
+
+- **更新阶段**
+  - `static getDerviedStateFromProps`
+  - `shouldComponentUpdate`
+  - `render`: 跟新虚拟 DOM 阶段
+  - `getSnapshotBeforeUpdate`: 获取更新前状态
+  - `componentDidUpdate`: 完成更新后调用
+
+- **卸载状态**
+  - `componentWillUnmount`: 组件被移除时调用
+
+::warning
+
+函数组件不存在`componentDidMount()`、`componentDidUpdate()`、`componentWillUnmount()` 等生命周期函数
+
+::
+
+### React 常用组件
+
+> Portal 是 React 提供的一种将子节点渲染到 DOM 其他位置的机制，通过 createPortal(children, domNode) 实现。它只改变元素在真实 DOM 中的位置，并不会改变 React 树中的父子关系，因此仍然可以使用 React Context，事件也按照 React 树进行传播。Portal 最常用于 Modal、Tooltip、Popover、Dropdown 等需要脱离父容器布局限制的场景。
+
+> Context 是 React 提供的跨层级数据传递机制，主要用于解决 Prop Drilling。当多个不同层级的组件需要共享同一份数据时，可以通过 createContext 创建 Context，由父组件提供 value，子孙组件通过 useContext 获取数据，而不需要逐层传递 props。常见场景包括主题、当前用户、语言、权限以及部分全局状态。Context 应该适度使用，简单的父子数据传递优先使用 props。
+
+> Transition 是 React 的并发渲染机制，用于将不紧急的状态更新标记为低优先级更新。通过 useTransition 可以使用 startTransition 标记更新，并通过 isPending 获取 Transition 的进行状态。这样 React 可以在处理复杂 UI 更新时优先保证用户交互的响应，并且 Transition 更新是可中断的。它不是防抖，也不是简单的异步执行，而是 React 的更新调度机制。
+
+- `Portal`(`createPortal(children, domNode)`): 让子组件渲染在除了父组件之外的 DOM 节点的方式(用于弹窗、提示框等)
+
+```jsx
+import { createPortal } from "react-dom";
+
+function Modal() {
+	return createPortal(<div className="modal">弹窗内容</div>, document.body);
+}
+```
+
+- `Fragment`: 包裹多个 JSX，但不产生额外 DOM 节点
+
+```jsx
+function App() {
+	return (
+		<Fragment>
+			<h1>标题</h1>
+			<p>内容</p>
+		</Fragment>
+	);
+}
+```
+
+- `Context`(`createContext()`): 跨层级组件数据传递
+
+```tsx
+import { createContext, useContext } from "react";
+
+type User = {
+	name: string;
+	age: number;
+};
+
+const UserContext = createContext<User | null>(null);
+
+function App() {
+	const user = {
+		name: "张三",
+		age: 20,
+	};
+
+	return (
+		<UserContext value={user}>
+			<A />
+		</UserContext>
+	);
+}
+
+function A() {
+	return <B />;
+}
+
+function B() {
+	return <C />;
+}
+
+function C() {
+	const user = useContext(UserContext);
+
+	return (
+		<div>
+			{user?.name} - {user?.age}
+		</div>
+	);
+}
+```
+
+- `Transition`(`useTransition()`): React 18 引入的并发特性，允许操作被中断
+
+```jsx
+import { useState, useTransition } from "react";
+
+function App() {
+	const [tab, setTab] = useState("home");
+
+	const [isPending, startTransition] = useTransition();
+
+	function handleClick() {
+		startTransition(() => {
+			setTab("posts");
+		});
+	}
+
+	return (
+		<>
+			<button onClick={handleClick}>Posts</button>
+
+			{isPending && <span>加载中...</span>}
+
+			<Content tab={tab} />
+		</>
+	);
+}
+```
+
+### Redux 工作原理
