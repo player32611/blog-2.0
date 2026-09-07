@@ -2613,3 +2613,295 @@ observer.observe(element);
 ### 组件按需引入
 
 > 组件按需引入是指只加载页面实际使用的组件，而不是一次性加载整个组件库。它可以配合 ES Module、Tree Shaking 和 Code Splitting 来减少 JavaScript Bundle 体积。对于大型、低频使用的组件，还可以通过 React.lazy 或 Next.js dynamic 进行动态加载，在真正使用组件时再下载对应 Chunk，从而减少首屏 JavaScript 的下载、解析和执行成本，提高首屏性能。
+
+## Vue
+
+### Vue 组件间的通信方式
+
+> Vue 组件通信主要有以下几种方式：
+
+> 父子组件：父传子使用 props，子传父使用 emit，双向绑定可以使用 v-model。
+> 父组件调用子组件：使用 ref，Vue 3 `<script setup>` 中配合 `defineExpose`。
+> 兄弟组件：通过共同父组件进行 emit + props 通信。
+> 跨层级组件：使用 provide/inject，避免 props 逐层传递。
+> 全局状态共享：使用 Pinia。
+> 内容传递：使用 slot。
+> 属性透传：可以使用 $attrs。
+
+> 实际项目中，一般优先使用 props + emit，跨层级使用 provide/inject，复杂的全局状态使用 Pinia。
+
+- 父组件 → 子组件: `defineProps()`
+
+::code-group
+
+```vue [父组件]
+<!-- 父组件 -->
+<Child :name="userName" />
+```
+
+```vue [子组件]
+<!-- 子组件 -->
+<script setup>
+defineProps({
+	name: String,
+});
+</script>
+
+<template>
+	<div>{{ name }}</div>
+</template>
+```
+
+::
+
+- 子组件 → 父组件：`defineEmits()`
+
+::code-group
+
+```vue [父组件]
+<script setup>
+const handleChange = value => {
+	console.log(value);
+};
+</script>
+
+<Child @change="handleChange" />
+```
+
+```vue [子组件]
+<!-- 子组件 -->
+<script setup>
+const emit = defineEmits(["change"]);
+
+function handleClick() {
+	emit("change", "hello");
+}
+</script>
+
+<template>
+	<button @click="handleClick">点击</button>
+</template>
+```
+
+::
+
+- 父组件直接操作子组件：ref
+
+::code-group
+
+```vue [父组件]
+<script setup>
+import { ref } from "vue";
+
+const childRef = ref();
+
+const handleClick = () => {
+	childRef.value.open();
+};
+</script>
+
+<template>
+	<Child ref="childRef" />
+
+	<button @click="handleClick">打开</button>
+</template>
+```
+
+```vue [子组件]
+<script setup>
+function open() {
+	console.log("打开弹窗");
+}
+
+defineExpose({
+	open,
+});
+</script>
+```
+
+::
+
+- 跨层级通信：`provide()` / `inject()`
+
+::code-group
+
+```vue [父组件]
+<script setup>
+import { provide, ref } from "vue";
+
+const count = ref(0);
+
+provide("count", count);
+</script>
+```
+
+```vue [任意后代组件]
+<script setup>
+import { inject } from "vue";
+
+const count = inject("count");
+</script>
+
+<template>
+	{{ count }}
+</template>
+```
+
+::
+
+### v-if 和 v-for 优先级
+
+> v-if 和 v-for 不建议写在同一个元素上。
+
+> Vue 2 中 v-for 优先级高于 v-if，会先遍历再判断。
+
+> Vue 3 中 v-if 优先级高于 v-for，因此 v-if 中不能访问 v-for 定义的变量。
+
+> 如果需要过滤列表，推荐使用 computed 提前过滤；如果是控制整个列表是否渲染，则把 v-if 放到 v-for 的父级元素上。
+
+### Vue 生命周期
+
+> Vue 生命周期描述的是组件从创建、挂载、更新到卸载的完整过程。
+
+> Vue 3 Composition API 中常用的生命周期有 onBeforeMount、onMounted、onBeforeUpdate、onUpdated、onBeforeUnmount 和 onUnmounted。
+
+> onMounted 表示组件 DOM 已经挂载完成，通常用于 DOM 操作、第三方组件初始化等；onBeforeUpdate 和 onUpdated 分别对应 DOM 更新前和更新后；onBeforeUnmount 和 onUnmounted 用于组件卸载前后的处理，通常在 onUnmounted 中清理定时器、事件监听、WebSocket 等副作用。
+
+> Vue 3 中 setup() 承担了 Vue 2 中 beforeCreate 和 created 阶段的大部分职责。
+
+- `onBeforeMount()`: 组件挂载 DOM 之前执行
+
+- `onMounted()`: 组件完成 DOM 挂载之后执行
+
+- `onBeforeUpdate()`: 响应式数据发生变化，DOM 更新之前执行
+
+- `onUpdated()`: DOM 更新完成之后执行
+
+- `onBeforeUnmount()`: 组件卸载之前执行
+
+- `onUnmounted()`: 组件卸载完成之后执行
+
+- `onActivated()`: keep-alive 激活时
+
+- `onDeactivated()`: keep-alive 停止使用
+
+```vue
+<KeepAlive>
+  <Component :is="currentComponent" />
+</KeepAlive>
+```
+
+- `onErrorCaptured()`: 错误监听
+
+- `onRenderTracked()`: 追踪组件渲染过程中，哪些响应式数据被读取（track）了
+
+### 双向绑定原理和使用
+
+> Vue 中双向绑定主要通过 v-model 实现，它本质上是属性绑定和事件监听的语法糖。
+
+> 对原生表单元素来说，例如 input 的 v-model 可以理解为 :value 加上 @input，数据变化时更新视图，用户输入时通过事件更新数据。
+
+> 对于组件来说，Vue 3 中 v-model 默认对应 modelValue prop 和 update:modelValue 事件，即：
+
+> v-model="value" 等价于 :modelValue="value" @update:modelValue="value = $event"。
+
+> 因此 Vue 的双向绑定本质上仍然是单向数据流 + 事件通知，并不是组件之间真正的双向数据流。
+
+v-model 本质上是 value + input/change 事件的语法糖。
+
+```vue
+<input v-model="username" />
+```
+
+### Vue 响应式
+
+> Vue 响应式的核心是当响应式数据发生变化时，能够自动通知依赖它的副作用，从而触发更新。
+
+> Vue 3 主要通过 Proxy 实现对象响应式，通过拦截对象的 get 和 set 操作完成依赖收集和更新触发。
+
+> 当组件渲染时读取响应式数据，会触发 get，Vue 通过 track 收集当前组件渲染函数等副作用与该数据之间的依赖关系；当数据发生修改时，会触发 set，Vue 通过 trigger 找到相关依赖并调度执行，最终重新渲染组件并更新 DOM。
+
+> ref 主要通过 Ref 对象的 .value 实现响应式，reactive 则主要通过 Proxy 实现对象响应式。computed 和 watch 也建立在 Vue 的响应式依赖系统之上。
+
+Vue 响应式是: 当响应式数据发生变化时，Vue 能自动找到依赖这个数据的地方，并触发相应的更新。
+
+```vue
+<script setup>
+import { ref } from "vue";
+
+const count = ref(0);
+
+const add = () => {
+	count.value++;
+};
+</script>
+
+<template>
+	<div>{{ count }}</div>
+	<button @click="add">+1</button>
+</template>
+```
+
+Vue 会通过 Proxy 对对象进行代理:
+
+```javascript
+const proxy = new Proxy(target, {
+	get(target, key) {
+		// 依赖收集
+		track(target, key);
+
+		return target[key];
+	},
+
+	set(target, key, value) {
+		target[key] = value;
+
+		// 触发更新
+		trigger(target, key);
+
+		return true;
+	},
+});
+```
+
+- 读取属性 -> get -> track() -> 收集依赖
+
+- 修改属性 -> set -> trigger() -> 触发依赖
+
+### Vue 模板渲染原理
+
+> Vue 的模板渲染大致分为模板编译、VNode 生成和 DOM 更新几个阶段。
+
+> 首先，Vue 会将 template 通过编译器解析成 AST，然后经过 Transform 和 Codegen，生成 render 函数。
+
+> 组件首次渲染时执行 render 函数，生成 VNode，然后通过 mount 将 VNode 转换成真实 DOM。
+
+> 当响应式数据发生变化时，响应式系统通过 trigger 通知组件的 Render Effect，重新执行 render 函数生成新的 VNode，然后 Vue 对新旧 VNode 进行 Diff，通过 Patch 只更新发生变化的真实 DOM。
+
+> Vue 3 还通过 Patch Flag、Block Tree、静态提升等编译优化手段，进一步减少运行时 Diff 和 DOM 操作。
+
+### template 与 jsx 的区别
+
+> Template 是 Vue 提供的模板语法，更接近 HTML，通过 v-if、v-for、v-model 等指令描述 UI，Vue 编译器可以对模板进行静态分析和优化。JSX 是 JavaScript 的语法扩展，UI 可以直接使用 JavaScript 的变量、表达式、条件、循环等能力，因此灵活性更高。两者最终都会被编译成能够生成 UI 描述结构的代码，再由框架完成 VNode/Element 到真实 DOM 的渲染。
+
+Vue 2 时期，vue-loader 依赖 vue-template-compiler 模块解析 .vue 文件，将 template 转换成 render 函数中的参数，再交由 render 实现
+
+Vue 3 的 SFC 编译体系会通过 vue-loader / @vitejs/plugin-vue 等工具处理 .vue 文件，其中模板由 Vue 3 Compiler 编译成 render 函数。
+
+babel 通过 @babel/preset-react 插件将 jsx 转为 js
+
+### Vue 2 与 Vue 3 区别
+
+> Vue 2 和 Vue 3 最大的区别主要体现在响应式、API、编译优化和性能几个方面。Vue 2 的响应式主要基于 Object.defineProperty，Vue 3 使用 Proxy，对对象和数组的响应式支持更加完善；Vue 3 新增了 Composition API，可以通过 Composable 更好地复用逻辑；同时支持 Fragment、Teleport、Suspense 等新特性。在编译和运行时方面，Vue 3 引入了 Patch Flag、Block Tree、静态提升等优化，减少运行时 Diff 范围。此外 Vue 3 的 TypeScript 支持、Tree Shaking 和全局 API 设计也进行了改进。
+
+- 重写响应式: Vue 2 的 `Object.defineProperty()` 替换为 Vue 3 的 `Proxy`
+
+- composition api: Vue 3 新增 Composition API，允许编写 Composable
+
+- VDOM升级: 从双端比较进化到最长递增子序列
+
+- 框架写法：Vue 3 源码由 Flow 迁移到了 TypeScript。
+
+- 整体结构，将源码拆分成多个功能包，增强模块化和可维护性，同时配合 ES Module 和 Tree Shaking 减少最终构建产物体积
+
+- 模板编译: 将静态节点编译为常量，在运行时复用
