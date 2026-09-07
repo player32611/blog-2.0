@@ -263,6 +263,12 @@ ev.trigger("test");
 ev.trigger("test");
 ```
 
+### this 指针?
+
+### 闭包的概念?
+
+### 原型与原型链?
+
 ## TypeScript
 
 ### TypeScript 的优势
@@ -2545,3 +2551,65 @@ function Search() {
 ```
 
 ::
+
+### 列表项 key 属性
+
+> key 是 React 用来标识列表元素身份的特殊属性。在 Reconciliation 过程中，React 会通过 key 建立新旧节点之间的对应关系，从而判断元素是新增、删除、移动还是更新，并尽可能复用已有 Fiber 和 DOM 节点。
+
+> key 应该具有唯一性和稳定性。动态列表不建议使用 index 作为 key，因为插入、删除或者排序后，index 会发生变化，可能导致 React 错误复用组件实例，进而出现组件内部 State 和数据对应错误的问题。
+
+> 所以一般应该使用数据本身稳定且唯一的 ID 作为 key，例如 key={item.id}。
+
+key 是 React 用来唯一标识列表中每个元素身份的特殊属性，主要用于 Reconciliation（协调）阶段判断哪些元素发生了新增、删除、移动或更新。
+
+key 的本质是帮助 React 建立新旧 Virtual DOM 节点之间的对应关系，从而进行高效的 Diff/Reconciliation。
+
+### 架构级优化
+
+> 架构级优化主要不是针对某个组件进行优化，而是从整个应用的组件结构、状态管理、数据流和资源加载等方面降低更新成本。
+
+> 首先是合理拆分组件和下放状态，缩小组件更新范围；其次可以使用发布订阅或者 Zustand、Redux 等状态管理方案，并结合 selector 做精确订阅，避免无关组件更新。
+
+> 在资源层面，可以进行路由级代码分割、组件懒加载、Tree Shaking 和第三方库按需加载，减少首屏 JS 体积。
+
+> 在数据层面，可以建立统一的数据请求和缓存层，避免重复请求，并使用分页、虚拟列表解决大数据量场景。
+
+> 对于复杂计算，可以使用 Web Worker 将计算从主线程移出去；如果使用 Next.js，还可以结合 SSR、SSG、Streaming 等渲染策略优化首屏性能。
+
+> 最终目标都是一样的：缩小更新范围、降低渲染成本、减少首屏资源、减少网络请求。
+
+### 服务端渲染 SSR
+
+> SSR，也就是服务端渲染，是指 React 在服务器端执行，将组件渲染成 HTML 后返回给浏览器。浏览器可以先展示服务器返回的 HTML，然后客户端加载 JavaScript，通过 Hydration 将 React 的事件和状态等能力绑定到已有的 HTML 上，使页面具备交互能力。
+
+> SSR 的主要优势是可以更快返回页面内容，并且对于 SEO 友好，特别适合商品详情、新闻、博客等内容型页面。同时它也有缺点，比如增加服务器计算压力，并且存在 Hydration 成本和服务端与客户端环境不一致导致的 Hydration Mismatch 问题。
+
+> 所以实际项目中一般会根据页面特点组合使用 CSR、SSR、SSG 和客户端渲染，而不是所有页面都使用 SSR。
+
+### 组件设计进行优化
+
+### Intersection Observer API
+
+> Intersection Observer 是浏览器提供的异步观察元素与指定区域交叉状态的 Web API，可以判断元素是否进入或离开 viewport，以及进入区域的比例。
+
+> 它相比传统的 scroll + getBoundingClientRect 方式，不需要开发者在 scroll 事件中频繁计算元素位置，因此更适合实现图片懒加载、组件懒加载、无限滚动和曝光埋点等功能。
+
+> 在 React 中通常通过 useRef 获取 DOM 元素，再通过 useEffect 创建 Observer，并在组件卸载时调用 disconnect 清理观察。
+
+> 性能优化的核心价值是：让屏幕外的资源和组件延迟到真正需要的时候再加载，从而减少首屏资源和主线程工作量。
+
+```javascript
+const observer = new IntersectionObserver(entries => {
+	entries.forEach(entry => {
+		if (entry.isIntersecting) {
+			console.log("进入可视区域");
+		}
+	});
+});
+
+observer.observe(element);
+```
+
+### 组件按需引入
+
+> 组件按需引入是指只加载页面实际使用的组件，而不是一次性加载整个组件库。它可以配合 ES Module、Tree Shaking 和 Code Splitting 来减少 JavaScript Bundle 体积。对于大型、低频使用的组件，还可以通过 React.lazy 或 Next.js dynamic 进行动态加载，在真正使用组件时再下载对应 Chunk，从而减少首屏 JavaScript 的下载、解析和执行成本，提高首屏性能。
