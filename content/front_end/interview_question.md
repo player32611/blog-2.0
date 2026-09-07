@@ -1577,11 +1577,11 @@ function App() {
 }
 ```
 
-### Fragments（<> </>）
+### Fragments(<> </>)
 
 > Fragment 是 React 提供的一种特殊组件，用于将多个元素组合起来，同时不会向真实 DOM 中增加额外的节点。它主要用于避免无意义的 DOM 包装，保持 HTML 结构和 DOM 层级的简洁。Fragment 可以使用 `<Fragment>` 或 `<>...</>` 简写；如果需要设置 key，则必须使用完整的 Fragment 写法。
 
-**Fragment（片段）**用于让 React 在不增加额外 DOM 节点的情况下，返回多个元素
+**Fragment(片段)**用于让 React 在不增加额外 DOM 节点的情况下，返回多个元素
 
 React 组件通常只能返回一个根节点，要解决的话通常在最外层包裹一个 `div`，但是会多出一个没有实际意义的 `div`
 
@@ -1906,3 +1906,642 @@ function App() {
 ```
 
 ### Redux 工作原理
+
+> Redux 是一种基于单向数据流的状态管理方案。应用状态集中存储在 Store 中，组件通过 dispatch 派发 Action，Store 调用 Reducer，根据旧 State 和 Action 计算出新的 State，然后通知订阅者，React-Redux 根据状态变化触发相关组件重新渲染。
+
+Redux 本质上是一个单向数据流的全局状态管理方案。
+
+- 跨层级组件数据共享与通信
+
+- 需要持久化的全局数据(用户登录信息等)
+
+**核心概念**：
+
+- Store: 一个全局的状态管理对象
+
+- Reducer: 一个纯函数，更具旧 state 和 props 更新新 state
+
+- Action: 改变状态的唯一方法(`dispatch(action)`)
+
+- State: 保存应用的状态
+
+dispatch(action) -> Store 接收到 Action -> rootReducer(oldState, action) -> Reducer 判断 action.type -> 计算 newState -> Store 保存 newState -> 通知订阅者 -> React-Redux 检查组件需要的数据 -> 相关组件重新渲染
+
+### 为什么需要前端路由
+
+> 因为 SPA 通常只有一个 HTML 页面，单页应用对 SEC 不友好，需要通过前端路由建立 URL 和组件 UI 之间的映射。用户导航时，前端路由可以监听 URL 变化并匹配对应组件，在不重新加载整个页面的情况下更新 UI。同时它还能统一处理动态参数、嵌套路由、前进后退以及权限控制等问题。
+
+### 前端路由解决了什么问题
+
+> 前端路由主要解决 SPA 中 URL 与 UI 的映射问题。它可以根据 URL 渲染对应的页面组件，并通过客户端导航避免整页刷新，同时支持浏览器前进后退、动态路由参数、嵌套路由以及路由级权限控制等功能。
+
+- 在刷新页面时，能根据 url 对资源进行重定向
+
+- 不同 url 映射到不同内容
+
+- 拦截用户的刷新操作，感知 url 的变化，防止不必要请求
+
+### react-router-dom 有哪些组件
+
+```jsx
+import { BrowserRouter, Routes, Route, Link, NavLink, Navigate, Outlet } from "react-router-dom";
+
+function App() {
+	return (
+		<BrowserRouter>
+			<nav>
+				<Link to="/">首页</Link>
+
+				<NavLink to="/user">用户</NavLink>
+			</nav>
+
+			<Routes>
+				<Route path="/" element={<Home />} />
+
+				<Route path="/user" element={<UserLayout />}>
+					<Route path="list" element={<UserList />} />
+					<Route path="detail" element={<UserDetail />} />
+				</Route>
+
+				<Route path="/login" element={<Login />} />
+
+				<Route path="/403" element={<Forbidden />} />
+
+				<Route path="*" element={<Navigate to="/" replace />} />
+			</Routes>
+		</BrowserRouter>
+	);
+}
+```
+
+- `BrowserRouter`: 提供路由环境（基于 html5 的 History API 管理 URL）
+
+```jsx
+<BrowserRouter>
+	<App />
+</BrowserRouter>
+```
+
+- `HashRouter`: 提供路由环境（把路由信息放在 URL 的 hash 部分）
+
+- `Route`: 路由匹配
+
+```jsx
+<Routes>
+	<Route path="/" element={<Home />} />
+	<Route path="/user" element={<User />} />
+	<Route path="/order" element={<Order />} />
+</Routes>
+```
+
+- `Link`: 声明式导航
+
+```jsx
+<Link to="/user">用户管理</Link>
+```
+
+- `NavLink`: 当前活动的连接
+
+```jsx
+<NavLink to="/user" className={({ isActive }) => (isActive ? "active" : "")}>
+	用户管理
+</NavLink>
+```
+
+### 数据如何在 React 组件中流动
+
+> React 遵循单向数据流，数据通常从父组件通过 Props 向子组件传递。子组件不能直接修改父组件的 Props 或 State，如果子组件需要修改父组件的数据，父组件可以把更新函数作为 Props 传给子组件，由子组件调用回调通知父组件更新 State。兄弟组件之间通常通过状态提升到共同父组件进行通信；跨层级数据可以使用 Context，更复杂的全局状态可以使用 Redux、Zustand 等状态管理方案。
+
+- 父 -> 子: props 传递
+
+```jsx
+function Parent() {
+  const name = "张三";
+
+  return <Child name={name} />;
+}
+
+function Child({ name }: { name: string }) {
+  return <div>{name}</div>;
+}
+```
+
+- 子 -> 父: 回调函数/事件冒泡
+
+::code-group
+
+```tsx [回调函数]
+function Parent() {
+	const [count, setCount] = useState(0);
+
+	return <Child count={count} onChange={setCount} />;
+}
+
+function Child({ count, onChange }: { count: number; onChange: (value: number) => void }) {
+	return <button onClick={() => onChange(count + 1)}>{count}</button>;
+}
+```
+
+```jsx [事件冒泡]
+function Parent() {
+	const sayName = name => {
+		console.log(name);
+	};
+
+	return (
+		<div onClick={() => sayName("aaa")}>
+			<Child />
+		</div>
+	);
+}
+
+function Child() {
+	return <button>点击</button>;
+}
+```
+
+::
+
+- 兄弟组件通信: 状态提升
+
+```jsx
+function Parent() {
+	const [value, setValue] = useState("");
+
+	return (
+		<>
+			<ChildA onChange={setValue} />
+			<ChildB value={value} />
+		</>
+	);
+}
+```
+
+- 父组件向后代组件通信: Context
+
+```jsx
+const user = useContext(UserContext);
+```
+
+- 复杂数据通信: 状态管理
+
+### React Hooks 解决了什么问题
+
+> React Hooks 主要解决了函数组件能力不足、Class 组件 this 复杂、状态逻辑复用困难以及生命周期逻辑分散等问题。Hooks 让函数组件可以使用 State、Effect、Ref、Context 等 React 能力，同时可以通过 Custom Hook 抽离和复用状态逻辑，使代码能够按照业务逻辑进行组织，而不是依赖 Class 生命周期进行组织
+
+- 解决函数组件能力不足: 类组件维护自己的 state，函数组件是无状态的
+
+::code-group
+
+```jsx [类组件]
+class Counter extends React.Component {
+	state = {
+		count: 0,
+	};
+
+	render() {
+		return <button>{this.state.count}</button>;
+	}
+}
+```
+
+```jsx [函数组件]
+function Counter() {
+	const [count, setCount] = useState(0); // 使用 hook
+
+	return <button onClick={() => setCount(count + 1)}>{count}</button>;
+}
+```
+
+::
+
+- 解决逻辑复用困难
+
+- 解决生命周期逻辑分散: 类组件有生命周期钩子，函数组件没有
+
+- 解决 `this` 的复杂问题
+
+::warning
+
+React Hooks 的局限性
+
+- 不能完整为函数组件提供类组件的能力
+
+- 对开发者提出更高要求
+
+- 有严格规则约束
+
+::
+
+### React 常用 Hooks
+
+> React 常用 Hooks 包括 useState、useEffect、useRef、useContext、useMemo、useCallback 和 useReducer 等。useState 用于状态管理，useEffect 用于与外部系统同步和处理副作用，useRef 用于操作 DOM 或保存不参与渲染的可变值，useContext 用于跨层级共享数据，useMemo 和 useCallback 用于缓存值和函数，useReducer 用于管理复杂状态。React 18 以后还需要掌握 useTransition 和 useDeferredValue 等并发相关 Hooks。
+
+- `useState`: 用于给函数组件添加状态
+
+- `useEffect`: 处理副作用
+
+- `useMemo`: 缓存计算结果
+
+- `useCallback`: 缓存函数
+
+- `useEffectLayout`: DOM 布局相关操作
+
+- `useContext`: 跨层级传递数据
+
+- `useRef`: 保存可变值 / 操作 DOM
+
+### Fiber 更新机制
+
+> React Fiber 是 React 16 引入的新协调架构，核心目的是将渲染工作拆分成一个个 Fiber 工作单元，使 React 可以对更新进行调度，并支持暂停、恢复、复用和放弃部分渲染工作。一次更新主要经历 Render 和 Commit 两个阶段：Render 阶段负责执行组件、构建和协调 Fiber Tree、计算出需要发生的变化，这个阶段可以被调度和中断；Commit 阶段负责将计算出的变化一次性提交到 DOM，这个阶段不能被中断。
+
+**Fiber**: React 内部表示一个组件/节点及其更新工作的数据结构，是 React 的协调架构，它把 UI 更新拆成可调度的工作单元，并通过 Render（协调）和 Commit（提交）两个阶段完成更新。
+
+Fiber 是 FiberNode 对象，是一个链表(树形结构)，不仅记录子节点，还记录父节点、兄弟节点，是可以打断的
+
+**更新的整体流程**: 触发更新 -> Schedule / 调度 -> Render / Reconciliation -> Commit -> 浏览器 Paint
+
+::tip
+
+Fiber 的双缓存
+
+React 通常会存在两棵相关的 Fiber Tree: **Current Tree** 与 **WorkInProgress Tree**，用于减少性能损耗
+
+- Current Tree: 当前正在显示的 UI 树
+
+- WorkInProgress Tree(wip tree): 内存中正在计算的新 UI 树
+
+::
+
+### React 渲染流程
+
+> React 的渲染流程可以分为 Trigger、Render 和 Commit 三个主要阶段。首先，当组件首次渲染或者 State、Props、Context 等发生变化时，会触发更新；然后进入 Render 阶段，React 执行组件并通过 Fiber 和 Reconciliation 计算新的 UI，比较前后结果并确定需要更新的部分，这个阶段主要负责计算，不直接修改 DOM；之后进入 Commit 阶段，将 Render 阶段计算出的变化提交到真实 DOM；最后浏览器进行 Paint，将最新 UI 显示出来。
+
+React 使用 jsx 描绘界面，jsx 经过编译后形成 render Function，render Function 执行后形成虚拟 DOM，虚拟 DOM 转换成 Fiber(这个过程为 Reconciliation)，转换过程中创建真实 DOM，转换完成后一次性 commmit 到 DOM 上
+
+jsx 组件 ---babel 编译--> render Function -----> 虚拟 DOM -----> Fiber(WorkInProgress Tree) ---commit--> 真实 DOM ---挂载到 Container-->
+
+### 虚拟 DOM
+
+> 虚拟 DOM 是 React 对 UI 的一种 JavaScript 内存表示，用来描述组件最终应该呈现什么样的 UI。当 State 或 Props 发生变化时，React 会重新计算 UI，并通过 Reconciliation 比较前后的结果，确定需要发生的变化，最后在 Commit 阶段将必要的变化应用到真实 DOM。虚拟 DOM 的核心价值不是简单地比真实 DOM 快，而是提供了声明式 UI 和高效协调的抽象，让开发者不需要手动管理大量 DOM 更新。
+
+## 性能优化
+
+### 为什么性能优化重要
+
+> 性能优化非常重要，一方面可以提升用户体验，让页面加载更快、交互更加流畅；另一方面可以降低 CPU、内存、网络等资源消耗，提高系统的吞吐量和并发能力，同时增强系统的稳定性。
+
+### 从输入 URL 到页面加载完成，发生了什么
+
+> 浏览器首先解析 URL，然后进行 DNS 解析，将域名转换成 IP 地址。接着与服务器建立 TCP 连接，如果是 HTTPS，还需要进行 TLS 握手。连接建立后，浏览器发送 HTTP 请求，服务器处理请求后返回 HTTP 响应。
+
+> 浏览器收到 HTML 后开始解析，构建 DOM Tree，同时解析 CSS 构建 CSSOM，然后将 DOM 和 CSSOM 合并生成 Render Tree。接下来浏览器进行 Layout，计算元素的位置和尺寸，然后进行 Paint，将元素绘制到图层，最后进行 Composite 合成并显示到屏幕上。
+
+> 同时，在 HTML 解析过程中还可能遇到 JavaScript、CSS、图片等资源，浏览器会继续发起对应的网络请求，并执行 JavaScript。JavaScript 还可能修改 DOM 和 CSS，从而触发重新布局、重绘或者重新合成。
+
+> 所以整个过程可以概括为：URL 解析 → DNS → TCP → TLS → HTTP → 服务器处理 → HTML/CSS/JS 解析 → DOM/CSSOM → Render Tree → Layout → Paint → Composite → 页面显示。
+
+DNS 解析大致会经历：浏览器 DNS 缓存 -> 操作系统 DNS 缓存 -> hosts -> DNS 服务器 -> 根域名服务器 -> 顶级域名服务器 -> 权威 DNS 服务器 -> 得到 IP
+
+拿到 IP 后，浏览器与服务器建立 TCP 连接，经典 TCP 三次握手
+
+### 性能优化的整体思路
+
+> 性能优化首先不是直接修改代码，而是遵循测量、定位、优化、验证、监控的流程。首先通过性能指标和工具确定具体的性能瓶颈，然后根据问题所在的层面进行针对性优化。
+
+> 前端一般可以从网络、资源加载、JavaScript 执行、浏览器渲染以及用户交互几个方面进行优化。
+
+> 网络层可以通过 CDN、HTTP 缓存、HTTP/2、HTTP/3 等减少网络耗时；资源层可以通过代码分割、懒加载、压缩、图片优化等减少资源加载成本；运行时可以减少不必要的 React 渲染、优化 JavaScript 计算、使用防抖节流；渲染层可以减少回流和重绘；大数据量场景可以使用虚拟列表。
+
+> 最后通过 Lighthouse、Chrome DevTools 等工具对比优化前后的指标，并持续监控，避免性能问题再次出现。
+
+> 核心原则就是：不要凭感觉优化，要先定位瓶颈，再针对瓶颈优化。
+
+### 用户角度的性能指标
+
+> 从用户角度看，性能主要关注三个方面：加载速度、交互响应和视觉稳定性。加载速度可以通过 FCP、LCP 等指标衡量；交互响应主要关注 INP；视觉稳定性主要关注 CLS。除此之外，还需要关注用户的感知性能，比如是否快速看到首屏内容、是否能够尽早进行交互，而不仅仅是页面最终完全加载所需要的时间。
+
+- FP(First Paint): 首次绘制，表示浏览器第一次绘制像素的时间
+
+- FCP(First Contentful Paint): 首次内容绘制，表示页面第一次绘制出有实际内容的东西(文字、图片、SVG、Canvas)
+
+- LCP(Largest Contentful Paint): 最大内容绘制，表示首屏中最大的主要内容元素完成渲染的时间
+
+- INP(Interaction to Next Paint): 表示用户进行一次交互后，到浏览器完成下一次视觉更新之间的延迟
+
+- CLS(Cumulative Layout Shift): 累计布局偏移，用于衡量页面加载过程中，元素是否发生意外移动
+
+- TTFB: 加载第一个字节所需时间，用于衡量请求资源到响应第一个字节开始到达之间的时间
+
+- TTI: 可交互时间，衡量的是从网页开始播放开始的时间，只要其主要资源已加载完毕，就能可靠地快速响应用户输入
+
+### 性能指标的计算
+
+::code-group
+
+```javascript [web-vitals 库]
+import { onFCP, onLCP, TTFB } from "web-vitals";
+
+onCLS(console.log);
+onINP(console.log);
+onLCP(console.log);
+onFCP(console.log);
+onTTFB(console.log);
+```
+
+```javascript [Performance API]
+const entryHandler = list => {
+	for (const entry of list.getEntries()) {
+		if (entry.name === "first-paint") {
+			observer.disconnect();
+		}
+		// 白屏时间
+		let FP = entry.startTime;
+	}
+};
+
+const observer = new PerformanceObserver(entryHandler);
+observer.observe({ type: "paint", buffered: true });
+```
+
+::
+
+性能监控与上报：
+
+```typescript
+class PerformanceMonitor {
+	private metrics: Record<string, any> = {};
+	private readonly RESOURCE_TYPES = ["img", "css", "script"];
+	private readonly PERFORMACE_ENDPOINT = "/performace";
+
+	constructor() {
+		this.init();
+	}
+
+	private init(): void {
+		this.setupLoadPerformanceMonitoring();
+		this.setupResourcePerformance();
+	}
+
+	// 首次内容绘制 FCP
+	private setupLoadPerformanceMonitoring() {
+		const reportPerformance = () => {
+			const paint = performance.getEntriesByType("paint");
+
+			const fcpEntry = paint.find(entry => entry.name === "first-contentful-paint");
+
+			if (fcpEntry) {
+				this.metrics.FCP = fcpEntry.startTime;
+				this.reportMetrics();
+			}
+		};
+
+		window.addEventListener("load", () => {
+			setTimeout(reportPerformance, 0);
+		});
+	}
+
+	// 设置资源加载性能
+	private setupResourcePerformance() {
+		const observer = new PerformanceObserver(list => {
+			list.getEntries().forEach(entry => {
+				if (this.RESOURCE_TYPES.includes(entry?.initiatorType)) {
+					this.metrics[entry.name] = entry.duration;
+				}
+			});
+		});
+
+		observer.observe({ entryTypes: ["resource"] });
+	}
+
+	private reportMetrics() {
+		try {
+			navigator.sendBeacon(this.PERFORMACE_ENDPOINT, JSON.stringify(this.metrics));
+		} catch (err) {
+			console.error("性能上报失败", err);
+		}
+	}
+}
+```
+
+### 常用性能检查工具
+
+- Lighthouse
+
+- network
+
+- performance
+
+### 网络层面优化
+
+> 网络层面的性能优化主要从几个方面入手：减少请求数量、减少资源体积、提高传输效率、合理利用缓存以及优化接口请求。
+
+> 比如通过代码分割、懒加载减少不必要的请求；通过 Tree Shaking、压缩 JS/CSS、WebP/AVIF 等减少资源体积；使用 Gzip 或 Brotli 压缩文本资源；通过 CDN 就近访问静态资源；利用 Cache-Control、ETag 等实现浏览器缓存；同时使用 HTTP/2、HTTP/3 提高网络传输效率。
+
+> 对接口还可以通过请求合并、请求缓存、分页、避免重复请求等方式进行优化。
+
+> 核心目标就是：少传、快传、少请求、能缓存就缓存。
+
+### 浏览器缓存
+
+> 浏览器缓存主要分为强缓存和协商缓存。
+
+> 强缓存主要通过 Cache-Control 和 Expires 控制，在缓存有效期内浏览器可以直接使用本地缓存，不需要向服务器发送请求。
+
+> 当强缓存失效后，会进入协商缓存，主要通过 ETag/If-None-Match 和 Last-Modified/If-Modified-Since 判断资源是否发生变化。如果资源没有变化，服务器返回 304 Not Modified，浏览器继续使用本地缓存；如果发生变化，则返回 200 和新的资源。
+
+> 在实际项目中，通常会对带 hash 的 JS、CSS、图片等静态资源设置长期缓存，而 HTML 设置较短缓存或 no-cache，从而实现缓存和资源更新之间的平衡。
+
+> 一句话：强缓存不请求，协商缓存要请求；没变化 304，有变化 200。
+
+### DNS 优化
+
+> DNS 优化主要是减少 DNS 解析带来的网络耗时。
+
+> 常见方式包括利用浏览器和操作系统的 DNS 缓存、合理设置 DNS TTL、使用 dns-prefetch 提前进行 DNS 解析，以及使用 preconnect 提前完成 DNS、TCP 和 TLS 连接。
+
+> 在大型项目中还可以通过 CDN 和智能 DNS，根据用户所在地区将请求调度到距离用户更近的节点。同时要避免不必要的域名拆分，合理控制域名数量。
+
+> 核心思路就是：DNS 能缓存就缓存，能提前解析就提前解析，重要域名可以提前建立连接，并通过 CDN 做就近访问。
+
+- 减少 DNS 查询次数，提前解析关键域名，提升页面加载速度
+
+- DNS 预取
+
+```html
+<head>
+	<!-- 提前建立网络连接 -->
+	<link rel="preconnect" href="https://cdn.example.com" />
+
+	<!-- 提前进行 DNS 解析 -->
+	<link rel="dns-prefetch" href="//cdn.example.com" />
+</head>
+```
+
+::warning
+
+一般建议 3-5 个关键域名
+
+::
+
+### 域名收敛
+
+> 域名收敛是指在合理范围内减少页面访问的不同域名数量。
+
+> 因为访问不同域名可能需要进行 DNS 解析，以及建立 TCP 和 TLS 连接，所以过多的域名会增加网络连接成本。
+
+> 在 HTTP/1.1 时代，由于单域名并发连接数有限，经常使用域名分片来提高并发；而 HTTP/2、HTTP/3 支持多路复用，可以在一个连接上同时传输多个资源，因此现代 Web 更倾向于域名收敛。
+
+> 但域名并不是越少越好，实际项目需要结合 CDN、缓存、安全隔离、服务部署等因素进行合理划分。
+
+- 减少查询次数
+
+- 利用 http2.0 多路复用特性，避免重复 TCP 握手
+
+```md
+cdn1.example.com
+cdn2.example.com
+img.example.com
+static.example.com
+font.example.com
+
+             ↓
+
+优化后：
+
+static.example.com
+```
+
+### CDN
+
+> CDN，也就是内容分发网络，主要通过在不同地区部署边缘节点，将静态资源缓存到距离用户更近的节点。用户请求资源时，通过 DNS 和 CDN 调度系统选择合适的节点，从 CDN 就近获取资源。
+
+> CDN 的核心优势是降低网络延迟、提高静态资源加载速度、减少源服务器压力。
+
+> 前端项目中通常会将 JS、CSS、图片、字体、视频等静态资源部署到 CDN，并结合文件 Hash + Cache-Control 长期缓存使用。
+
+> 当 CDN 没有缓存资源时，会向源服务器回源获取资源并进行缓存，后续请求就可以直接从 CDN 返回。
+
+> 一句话：CDN = 就近访问 + 边缘缓存 + 降低源站压力。
+
+### 渲染层面优化
+
+> 渲染层面的性能优化主要是减少浏览器和框架不必要的渲染工作。
+
+> 浏览器层面，可以减少 DOM 操作，避免频繁触发重排和重绘，批量进行 DOM 的读写操作，避免 Layout Thrashing；动画尽量使用 transform 和 opacity，并使用 requestAnimationFrame。
+
+> React 层面，可以通过合理拆分组件和状态、React.memo、useMemo、useCallback 等方式减少不必要的组件重新渲染；对于大量数据列表，可以使用虚拟列表，只渲染可视区域的数据。
+
+> 同时还可以通过图片懒加载、content-visibility、拆分 Long Task、Web Worker 等方式减少主线程压力。
+
+> 核心就是：少渲染、少计算、少布局、少绘制，并尽量让主线程保持流畅。
+
+- 尽可能减少渲染资源个数
+
+- 尽可能减少资源体积的大小
+
+- 压缩 html、减少 html 体积
+
+- CSS 按需引入，原子能力
+
+### React 性能优化
+
+- 减少不必要的组件渲染: 使用 `React.memo`，当组件的 props 没有变化时，可以避免重新渲染(对引用类型的 props 无效，除非使用 `useMemo` 包裹)
+
+```tsx
+const UserInfo = React.memo(({ name }: { name: string }) => {
+	console.log("UserInfo render");
+
+	return <div>{name}</div>;
+});
+```
+
+- 使用 `useMemo` 缓存计算结果/稳定引用类型: 对于复杂计算，可以避免每次 render 都重新计算，但没必要所有变量都加缓存
+
+```tsx
+// 缓存计算结果
+const totalPrice = useMemo(() => {
+	return list.reduce((sum, item) => {
+		return sum + item.price * item.count;
+	}, 0);
+}, [list]);
+
+// 稳定引用类型
+const config = useMemo(
+	() => ({
+		color: "red",
+	}),
+	[theme],
+);
+
+<Child config={config} />;
+
+// 避免依赖项陷阱
+const sum = useMemo(() => {
+	return state.a + state.b;
+}, [state.a, state.b]);
+```
+
+- 使用 `useCallback` 缓存函数: 函数组件每次重新执行时，函数都会重新创建，父组件每次 render 都会产生新的函数引用
+
+```tsx
+const Parent = () => {
+	const handleClick = useCallBack(() => {
+		console.log("click");
+	}, []);
+
+	return (
+		<div>
+			<Child handleClick={handleClick} />
+		</div>
+	);
+};
+```
+
+### 发布订阅者跳过中间组件 render 过程
+
+> React 传统的父子状态传递主要通过 props，如果顶层状态发生变化，可能导致中间组件参与更新。发布订阅模式可以把状态抽离成独立 Store，组件通过订阅 Store 获取数据。Store 更新时直接通知订阅该数据的组件，而不需要通过 props 一层层向下传递，因此可以缩小 React 的更新范围，避免不相关的中间组件因为状态变化而重新执行 render。像 Zustand 这类状态管理库就是这种思想的典型应用。
+
+### 状态下放
+
+> 状态下放指的是将 State 放到离实际使用它最近的组件中，而不是为了方便管理而统一放到较高层组件。因为 React 中组件的 State 更新会触发该组件以及相关子树的更新，如果状态放得过高，就可能导致大量不相关组件参与 render。将状态下放后，可以缩小状态更新的影响范围，从源头减少组件 render 和 React 的协调工作。
+
+> 但是状态也不能无限下放。如果多个组件需要共享状态，应该将状态提升到这些组件最近的公共祖先。也就是说，状态应该放在能够满足共享需求的最低层级。
+
+::code-group
+
+```jsx [下放前]
+function App() {
+	const [keyword, setKeyword] = useState("");
+
+	return (
+		<>
+			<Header />
+			<Search keyword={keyword} setKeyword={setKeyword} />
+			<ProductList />
+			<Footer />
+		</>
+	);
+}
+```
+
+```jsx [下放后]
+function App() {
+	return (
+		<>
+			<Header />
+			<Search />
+			<ProductList />
+			<Footer />
+		</>
+	);
+}
+
+function Search() {
+	const [keyword, setKeyword] = useState("");
+
+	return <input value={keyword} onChange={e => setKeyword(e.target.value)} />;
+}
+```
+
+::
