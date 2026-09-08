@@ -2580,11 +2580,15 @@ key 的本质是帮助 React 建立新旧 Virtual DOM 节点之间的对应关�
 
 ### 服务端渲染 SSR
 
-> SSR，也就是服务端渲染，是指 React 在服务器端执行，将组件渲染成 HTML 后返回给浏览器。浏览器可以先展示服务器返回的 HTML，然后客户端加载 JavaScript，通过 Hydration 将 React 的事件和状态等能力绑定到已有的 HTML 上，使页面具备交互能力。
+> SSR 即服务端渲染，是指服务器在接收到请求后执行前端组件和数据获取逻辑，将页面渲染成完整 HTML 返回给浏览器，浏览器可以直接展示页面内容，之后再通过 Hydration 将服务端 HTML 与客户端框架关联起来，使页面具备交互能力。相比 CSR，SSR 可以改善首屏内容呈现，并且更有利于 SEO，但会增加服务器计算压力和开发复杂度，同时需要处理服务端与客户端渲染结果不一致导致的 Hydration 问题。
 
-> SSR 的主要优势是可以更快返回页面内容，并且对于 SEO 友好，特别适合商品详情、新闻、博客等内容型页面。同时它也有缺点，比如增加服务器计算压力，并且存在 Hydration 成本和服务端与客户端环境不一致导致的 Hydration Mismatch 问题。
+CSR(client side render)
 
-> 所以实际项目中一般会根据页面特点组合使用 CSR、SSR、SSG 和客户端渲染，而不是所有页面都使用 SSR。
+SSR(server side render)服务端渲染: 服务器返回的 HTML 内容包含所有 DOM 节点
+
+- 利于 SEO
+
+- 白屏时间更短: 浏览器只需进行 DOM、CSSOM 解析
 
 ### 组件设计进行优化
 
@@ -2905,3 +2909,113 @@ babel 通过 @babel/preset-react 插件将 jsx 转为 js
 - 整体结构，将源码拆分成多个功能包，增强模块化和可维护性，同时配合 ES Module 和 Tree Shaking 减少最终构建产物体积
 
 - 模板编译: 将静态节点编译为常量，在运行时复用
+
+### composition api
+
+> Composition API 是 Vue 3 新增的一套组件逻辑组织方式，通过 ref、reactive、computed、watch、生命周期 Hooks 等 API，将组件逻辑按照功能进行组合，并可以通过 Composable 封装和复用逻辑。相比 Options API 按 data、methods、computed 等选项组织代码，Composition API 更适合复杂组件、逻辑复用和 TypeScript 开发。
+
+Composition API: `ref()`、`computed()`、`watch()`、`onMounted()` 等
+
+Vue 2 主要使用 Options API:
+
+```javascript
+export default {
+	data() {
+		return {
+			count: 0,
+			user: null,
+		};
+	},
+
+	computed: {
+		double() {
+			return this.count * 2;
+		},
+	},
+
+	methods: {
+		increment() {
+			this.count++;
+		},
+
+		login() {
+			// 用户登录
+		},
+	},
+
+	mounted() {
+		// 初始化
+	},
+};
+```
+
+### nextTick()
+
+> nextTick 是 Vue 提供的异步 API，用于等待当前这轮响应式数据更新导致的 DOM 更新完成后，再执行回调或后续代码。Vue 为了提高性能，会将组件更新进行异步批量处理，因此修改响应式数据后 DOM 不一定立即更新。当我们需要在数据修改后获取最新 DOM、操作新增元素或获取最新布局信息时，可以使用 nextTick。
+
+作用: 在下一次 DOM 循环之后再去执行
+
+```javascript
+const handleClick = async () => {
+	count.value++;
+
+	await nextTick();
+
+	// DOM 已经更新
+};
+
+nextTick(() => {
+	// DOM 已经更新
+});
+```
+
+### Teleport
+
+> Teleport 是 Vue 3 的内置组件，可以将组件模板中的 DOM 节点渲染到当前组件之外的指定容器中，例如 body。它主要用于弹窗、遮罩、抽屉、Tooltip 等需要脱离父级 DOM 层级的场景，可以避免父元素的 overflow、z-index、transform 等样式影响。Teleport 只改变 DOM 的挂载位置，不改变组件的逻辑作用域、响应式状态和组件关系。
+
+作用: 将任意组件的 DOM 插入到其它指定的组件层(modal、message 常用)
+
+::code-group
+
+```vue [示例代码]
+<template>
+	<button @click="visible = true">打开弹窗</button>
+
+	<Teleport to="body">
+		<div v-if="visible" class="modal">
+			<div class="modal-content">
+				<h2>弹窗标题</h2>
+				<button @click="visible = false">关闭</button>
+			</div>
+		</div>
+	</Teleport>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const visible = ref(false);
+</script>
+```
+
+```html [渲染结果]
+<body>
+	<div id="app">
+		<button>打开弹窗</button>
+	</div>
+
+	<div class="modal">
+		<div class="modal-content">
+			<h2>弹窗标题</h2>
+		</div>
+	</div>
+</body>
+```
+
+::
+
+- `to`: 挂载的节点位置
+
+- `disabled`: 标识子节点是否挂载。为 true 时，内容不会挂载到指定位置，而是保留在当前组件位置
+
+### 工程化
