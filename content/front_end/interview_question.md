@@ -3018,4 +3018,270 @@ const visible = ref(false);
 
 - `disabled`: 标识子节点是否挂载。为 true 时，内容不会挂载到指定位置，而是保留在当前组件位置
 
-### 工程化
+## 工程化
+
+### 同一个页面三个组件请求同一个 API
+
+> 我会在公共请求层做请求去重，而不是修改组件本身。
+
+> 具体来说，可以使用一个 Map 保存正在进行中的 Promise，以请求 URL、Method、Params 等生成唯一 key。
+
+> 第一个组件请求时，如果 Map 中不存在这个 key，就真正发送 HTTP 请求，并把 Promise 放进去；后续组件请求相同接口时，发现 Map 中已经存在对应 Promise，就直接返回这个 Promise，从而让多个组件共享同一个请求。
+
+> 请求完成后，在 finally 中删除 pending Promise。
+
+> 如果还希望请求完成后的一段时间内继续复用结果，则可以进一步增加数据缓存，并配合 TTL、失效策略等。
+
+```typescript
+const pendingRequests = new Map<string, Promise<any>>();
+
+function request(url: string, options?: RequestInit) {
+	const key = `${options?.method || "GET"}:${url}`;
+
+	// 已经有相同请求正在执行
+	if (pendingRequests.has(key)) {
+		return pendingRequests.get(key)!;
+	}
+
+	const promise = fetch(url, options)
+		.then(res => res.json())
+		.finally(() => {
+			// 请求完成后删除
+			pendingRequests.delete(key);
+		});
+
+	pendingRequests.set(key, promise);
+
+	return promise;
+}
+```
+
+axios 封装:
+
+```typescript
+const pendingMap = new Map<string, Promise<any>>();
+
+function get(url: string, params?: any) {
+	const key = `GET:${url}:${JSON.stringify(params || {})}`;
+
+	const pending = pendingMap.get(key);
+
+	if (pending) {
+		return pending;
+	}
+
+	const promise = axios.get(url, { params }).finally(() => {
+		pendingMap.delete(key);
+	});
+
+	pendingMap.set(key, promise);
+
+	return promise;
+}
+```
+
+### 前端构建中 CJS、ESM、UMD 等区别是什么
+
+> CJS、ESM、UMD 本质上是不同的 JavaScript 模块规范或模块打包格式。CJS 使用 require 和 module.exports，传统上主要用于 Node.js；ESM 使用 import/export，是 JavaScript 官方标准，依赖关系静态可分析，因此更利于 Tree Shaking，也是现代前端构建的主流格式；UMD 则是为了兼容多种模块环境，把 CommonJS、AMD 和浏览器全局变量等方式统一封装。实际开发中，现代 Vite、Vue、React 项目通常优先使用 ESM，而组件库为了兼容不同消费环境，可能同时产出 ESM、CJS、UMD 等格式。
+
+- CJS(CommonJS): Node.js 早期最常见的模块规范
+
+- ESM(ES Modules): 现代 JavaScript 官方模块标准
+
+- UMD(Universal Module Definition): 早于 ESM，既能在浏览器中使用，又能在非浏览器环境中使用(实质是把多种模块规范包装在一起)
+
+::code-group
+
+```javascript [CJS]
+// math.js
+module.exports = {
+	add(a, b) {
+		return a + b;
+	},
+};
+
+const math = require("./math");
+```
+
+```javascript [ESM]
+// math.js
+export function add(a, b) {
+	return a + b;
+}
+
+import { add } from "./math.js";
+```
+
+```javascript [UMD 本质]
+(function (root, factory) {
+	if (typeof module === "object" && module.exports) {
+		// CommonJS
+		module.exports = factory();
+	} else if (typeof define === "function" && define.amd) {
+		// AMD
+		define([], factory);
+	} else {
+		// 浏览器
+		root.MyLibrary = factory();
+	}
+})(this, function () {
+	return {
+		add(a, b) {
+			return a + b;
+		},
+	};
+});
+```
+
+::
+
+### 前端权限管理的模型
+
+> 前端权限管理最常见的是 RBAC，也就是基于角色的权限控制。基本关系是 User → Role → Permission，一个用户可以拥有多个角色，一个角色可以拥有多个权限。前端通常根据权限实现路由权限、菜单权限和按钮权限：路由权限控制用户能不能进入页面，菜单权限控制菜单是否展示，按钮权限控制具体操作是否展示或执行。
+
+> 在实现上，可以登录后从后端获取用户角色和权限列表，然后统一封装 hasPermission，通过路由守卫、权限组件或者权限指令进行控制。如果系统需要更灵活的权限，也可以采用 ACL、ABAC 等模型。需要特别注意的是，前端权限主要用于 UI 控制，真正的安全权限校验必须由后端完成，不能因为前端隐藏了按钮就认为接口安全。
+
+- ACL: 基于用户权限的管理模型
+  - 好处: 只需要给当前的用户授权或者取消权限即可，清晰简单
+  - 内部逻辑: user -> permission
+  - 缺点: 用户量增长时正对每个用户都要维护记录，成本较高
+
+- RBAC: 基于角色的权限管理模型
+  - 特点: 权限与用户无关，用户通过角色关联权限
+  - 内部逻辑: user -> role -> permission
+
+- ABAC: 基于属性的权限管理模型
+  - 优点: 可扩展性高
+
+### peerDependencies
+
+> peerDependencies 是 npm 中用于声明“宿主项目必须提供的依赖”的字段，常用于组件库、插件等场景。
+
+> 比如一个 React 组件库依赖 React，我们通常不会把 React 放到 dependencies 中，而是放到 peerDependencies：
+
+> dependencies 是包运行时自身需要的依赖，devDependencies 是开发和构建时需要的依赖，而 peerDependencies 是要求宿主项目提供的依赖。
+
+```json
+{
+	"dependencies": {
+		"lodash": "^4.17.21"
+	},
+
+	"devDependencies": {
+		"typescript": "^5.0.0",
+		"vite": "^7.0.0"
+	},
+
+	"peerDependencies": {
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0"
+	}
+}
+```
+
+::tip
+
+dependencies、devDependencies、peerDependencies 区别
+
+- dependencies 运行时必须依赖，由 npm 自动安装
+
+- devDependencies 开发/构建时需要，项目自己安装
+
+- peerDependencies 要求宿主项目提供，由宿主项目安装
+
+::
+
+### pnpm 有什么优势
+
+> pnpm 最大的优势是依赖复用和依赖隔离。它通过全局 Content-addressable Store 保存依赖，并通过硬链接、符号链接等方式让多个项目复用同一份依赖文件，因此相比传统 npm 安装方式可以显著减少磁盘占用，并提高安装速度。
+
+> 另外 pnpm 的 node_modules 结构更加严格，可以减少幽灵依赖问题，强制项目声明自己真正使用的依赖。在 Monorepo 场景下，pnpm Workspace 也提供了很好的支持，所以现在很多大型前端项目和 Monorepo 项目都会选择 pnpm。
+
+pnpm(performance npm) 速度快，节省磁盘空间
+
+- 采用硬链接(hard link): 安装在 `~/pnpm-store` 中，允许同一个文件有多个有效的路径名称
+
+- 建立非扁平化的 node_modules
+
+::tip
+
+幽灵依赖
+
+项目代码使用了一个没有在自己 package.json 中声明的依赖，但因为其他依赖把它"带进来了"，所以项目暂时还能运行。
+
+::
+
+### eslint 作用
+
+> ESLint 是一个 JavaScript/TypeScript 静态代码检查工具，它通过解析源代码并结合各种规则，对代码进行静态分析，用于发现潜在错误、代码质量问题以及不符合团队规范的代码，同时支持部分问题的自动修复。
+
+> 它和 Prettier 的定位不同，ESLint 更关注代码质量和规范，Prettier 主要负责代码格式化；TypeScript 则主要负责类型检查。在实际项目中通常会将 ESLint、Prettier、TypeScript 配合使用，并在 CI/CD 中执行 ESLint 检查，保证代码质量。
+
+```javascript
+const user = {
+	name: "张三",
+};
+
+console.log(username); // 提示: 'username' is not defined
+```
+
+### browserslist
+
+> Browserslist 是一个用于配置项目浏览器兼容范围的工具。它本身不负责代码转换，而是为 Babel、Autoprefixer 等构建工具提供目标浏览器信息，从而决定 JavaScript 的转译程度、CSS 前缀以及 Polyfill 的处理范围。
+
+配置方法：通常在 package.json
+
+```json
+{
+	"browserslist": ["> 1%", "last 2 versions", "not dead"]
+}
+```
+
+### Minify 代码压缩
+
+> Minify 是前端构建阶段的代码压缩，通过删除空格、注释、换行，以及进行变量名压缩、代码优化等方式，在不改变程序功能的情况下减小 JS、CSS、HTML 等文件体积，从而降低网络传输成本。常见工具有 Terser、esbuild、SWC。它和 Tree Shaking 的区别是：Tree Shaking 主要删除未使用的代码，而 Minify 主要压缩保留下来的代码。
+
+现代前端构建工具通常会自动完成
+
+::code-group
+
+```javascript [压缩前]
+function calculateTotal(price, quantity) {
+	const total = price * quantity;
+	return total;
+}
+```
+
+```javascript [压缩后]
+function calculateTotal(a, b) {
+	return a * b;
+}
+```
+
+::
+
+- 删除空格、换行、注释
+
+- 删除无意义的字符
+
+- 简化代码结构
+
+- 删除不可达代码
+
+- 变量名压缩(混淆)
+
+- 合并声明
+
+### package-lock.json
+
+> package-lock.json 是 npm 生成的依赖锁文件，用于记录项目完整依赖树以及实际解析后的具体版本、依赖关系等信息。package.json 主要声明依赖及版本范围，而 package-lock.json 负责锁定最终安装结果，从而保证团队开发、CI/CD 和生产环境的依赖版本一致。普通项目应该将 package-lock.json 提交到 Git，CI 环境通常使用 npm ci 按 Lockfile 严格安装。
+
+效果: 锁定版本，保证开发环境与生产环境保持一致
+
+### serverless
+
+> Serverless 是一种云计算架构模式，核心思想是开发者无需关注服务器的部署、运维和扩缩容，而是将业务代码以函数等形式部署到云平台，由平台负责底层基础设施。它具有自动扩缩容、按量计费、运维成本低等特点，但也存在冷启动、执行时间限制、无状态以及厂商锁定等问题。常见实现是 FaaS，例如 AWS Lambda、阿里云函数计算等。
+
+Fass(function as a servie)(函数即服务)
+
+Bass(backend as a service)(后端即服务)
