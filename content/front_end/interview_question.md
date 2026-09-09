@@ -1,5 +1,72 @@
 # 前端面试题
 
+## CSS
+
+### CSS 的 GPU 加速
+
+> CSS GPU 加速是指浏览器将部分渲染和合成任务交给 GPU 处理，从而降低 CPU 主线程的工作量，提高动画和交互的流畅度。现代浏览器通常会将 transform、opacity 等适合合成的属性放到独立合成层，在 Composite 阶段由 GPU 完成移动、缩放等操作，避免频繁触发 Layout 和 Paint。常见的优化手段有使用 transform 和 opacity 做动画，以及合理使用 will-change。不过 GPU 加速并不是越多越好，过度创建合成层会增加 GPU 内存和图层合成成本，反而可能造成性能下降。
+
+> 现代浏览器会根据渲染情况自动决定是否创建合成层
+
+```css
+.box {
+	will-change: transform;
+}
+
+.box:hover {
+	transform: translateX(100px);
+}
+```
+
+::tip
+
+GPU
+
+GPU 专门用于处理图形渲染，擅长并行计算。可以同时处理大量像素点的计算，非常适合动画、3D 效果等场景
+
+::
+
+### CSS 如何形成渲染树
+
+> 浏览器首先解析 HTML 生成 DOM Tree，同时解析 CSS 生成 CSSOM Tree。然后将 DOM 节点与 CSSOM 中的规则进行匹配，通过层叠、继承等机制计算每个节点的最终样式，也就是 Computed Style。浏览器根据 DOM 结构和计算样式生成 Render Tree，display:none 等不需要渲染的节点不会进入 Render Tree。之后浏览器对 Render Tree 进行 Layout，计算元素的位置和尺寸，再进行 Paint 和 Composite，最终显示到屏幕上。
+
+渲染树的形成是 css 和 DOM 一起拼接而成的
+
+1. 资源的收集: 外部 css 文件(`<link ref="stylessheet">`)、外部 css 样式(`<style></style>`)、内联样式(直接写在 dom 的 style 标签中的)
+
+2. 词法分析: 浏览器会将预处理后的 css 字符串拆分成最小的语法单元(tokens)
+
+3. 语法分析: 将相关 css 语法拼接成 ast 的抽象语法树(ast 是对 css 的结构化描述，包含所有样式规则的层级关系)，也会去确定样式的冲突关系包括层级的关系
+
+### flex: 1 代表什么
+
+> flex: 1 是 flex-grow: 1、flex-shrink: 1、flex-basis: 0% 的简写，表示元素可以伸缩，并以 0% 作为基础尺寸，按照 flex-grow 的比例分配父容器的可用空间。
+
+`flex: 1` 等价于 `flex-grow: 1, flex-shrink: 1, flex-basis: 0%`
+
+`flex-grow`: 扩展因子的配置，有剩余空间时，这个元素参与分配剩余空间，并且按照比例分配
+
+```css
+/* 1000px */
+.container {
+	display: flex;
+}
+
+/* 最终效果: 500px */
+.left {
+	flex: 1;
+}
+
+/* 最终效果: 500px */
+.right {
+	flex: 1;
+}
+```
+
+`flex-shink`: 收缩因子的配置，空间不足时，允许元素按照比例进行收缩
+
+`flex-basis`: 基础尺寸，分配剩余空间时，不把元素原来的主轴尺寸作为基础尺寸
+
 ## JavaScript
 
 ### 自定义实现 unshift 效果
@@ -268,6 +335,16 @@ ev.trigger("test");
 ### 闭包的概念?
 
 ### 原型与原型链?
+
+### 浏览器的事件循环机制
+
+> JavaScript 在浏览器中主要运行在单线程上，为了处理异步任务，浏览器通过 Event Loop 机制协调调用栈、任务队列以及浏览器的 Web API。
+
+> 同步代码会先在调用栈中执行，异步操作由浏览器提供的 Web API 处理，完成之后将对应回调放入任务队列。事件循环会不断检查调用栈，在当前任务执行完成后优先清空微任务队列，然后浏览器根据时机进行渲染，再执行后续任务。
+
+> 常见宏任务包括 setTimeout、setInterval、DOM 事件等；常见微任务包括 Promise.then、async await、queueMicrotask 和 MutationObserver。因此一般情况下，当前宏任务执行结束后，会优先执行微任务，再进入下一个宏任务。
+
+- 微任务: 比普通的宏任务队列优先级更高，所有微任务会在当前宏任务执行完毕后，下个宏任务才会执行
 
 ## TypeScript
 
@@ -1137,6 +1214,115 @@ interface Bar {
 }
 ```
 
+## 网络请求
+
+### 为什么要取消网络请求
+
+> 取消网络请求主要是为了避免无效请求继续消耗客户端和服务器资源，同时避免请求结果回来后产生无效的业务处理。特别是在搜索框、快速切换页面、重复操作等场景中，可以通过取消旧请求解决请求竞态问题，保证最终使用的是最新请求的结果。Axios 中可以使用 AbortController 实现请求取消。
+
+如果多个相同请求不取消之前的行为，极容易导致信息展示错误
+
+### axios 取消请求
+
+> Axios 可以通过 AbortController 取消请求。创建 AbortController，把它的 signal 传给 Axios 请求，然后调用 controller.abort() 即可取消。取消请求后可以通过 axios.isCancel() 判断是否属于主动取消。实际开发中常用于 React 组件卸载取消请求，以及搜索框中取消上一次请求，避免请求竞态。旧版本 Axios 还有 CancelToken，但现在已经废弃。
+
+```javascript
+const controller = new AbortController();
+
+axios.get("/api/user", {
+	signal: controller.signal,
+});
+
+// 取消请求
+controller.abort("取消原因");
+```
+
+::tip
+
+当多个请求绑定同一个 AbortController 时，会一次取消多个请求
+
+```javascript
+const controller = new AbortController();
+
+axios.get("/patha", {
+	signal: controller.signal,
+});
+
+axios.get("/pathb", {
+	signal: controller.signal,
+});
+
+controller.abort("取消原因");
+```
+
+::
+
+### cookie 是什么，有哪些常用的属性
+
+> Cookie 是浏览器保存的一小段键值数据，服务器可以通过 Set-Cookie 设置，浏览器在后续符合条件的请求中自动携带。常用属性包括 Expires、Max-Age、Domain、Path、Secure、HttpOnly 和 SameSite。其中 HttpOnly 可以降低 XSS 窃取 Cookie 的风险，SameSite 主要用于限制跨站 Cookie，从而降低 CSRF 风险。
+
+**来源**：
+
+- 接口响应体中的 set-cookie 字段
+
+- 前端可通过 js 进行相关的设置
+
+**属性**:
+
+- 过期时间的设置: max-age 或 expires 字段
+
+- domain(域名): 限制 Cookie 生效的域名范围
+
+- path: 限制 Cookie 生效的路径范围
+
+- secure: 相关的 cookie 只能在 https 协议下才能携带
+
+- HttpOnly: 禁止 js 进行访问以及修改
+
+- SameSite: 对于跨域属性的设置，控制跨站请求是否携带 Cookie
+
+### HTTP2 和 HTTP1 有哪些区别
+
+> HTTP/2 相比 HTTP/1.1 主要有几个改进。第一，HTTP/1.1 是文本传输，而 HTTP/2 使用二进制分帧，更方便进行多路复用；第二，HTTP/2 可以在一个 TCP 连接中通过多个 Stream 并行传输多个请求和响应，减少 HTTP 层的队头阻塞，因此不再需要像 HTTP/1.1 那样依赖大量 TCP 连接提高并发；第三，HTTP/2 使用 HPACK 对 Header 进行压缩，减少重复 Header 带来的网络开销；第四，HTTP/2 曾提供 Server Push，让服务器可以主动推送资源。不过 HTTP/2 仍然基于 TCP，因此 TCP 层的队头阻塞仍然存在，这也是 HTTP/3 使用 QUIC 的重要原因。
+
+HTTP2 针对 HTTP1 的优化
+
+- 数据格式: 二进制帧: HTTP2 协议会把相关的内容分成不一样的帧来进行发送，其中比较重要的包括 header 以及 data 帧
+
+- 连接复用: HTTP1 中网络通过一个 TCP 连接通道，只能同时请求一个。只能等待当前请求结束后，才能请求第二个，造成浏览器只能请求 6 个同域名下面的请求；HTTP 优化了这种情况，同一个域名理论上是不会做请求接口的数量限制，用 streamId 来曲风不一样的请求，大大减少了 TCP 通道的连接数量
+
+- 头部处理: 采用 HPACK 压缩，在服务器端，会有一个静态字典。host、User-Agent 信息等，会直接用相关的映射字段，或者索引来进行填充。
+
+### localStorage、sessionStorage 以及 cookie 的区别
+
+> 三者都是浏览器端的数据存储机制，但生命周期、容量以及与服务器的交互方式不同。
+
+> localStorage 生命周期较长，除非手动删除，否则数据会一直存在，通常用于保存用户偏好、主题等持久化的非敏感数据。
+
+> sessionStorage 生命周期与当前页面会话相关，关闭当前 Tab 后数据通常会被清除，适合保存临时的页面状态。
+
+> Cookie 容量较小，通常约 4KB，但它最大的特点是会在满足 Domain、Path、SameSite 等条件时自动随 HTTP 请求发送给服务器，因此经常用于 Session 和身份认证。
+
+> 另外，Cookie 支持 HttpOnly、Secure、SameSite 等安全属性，而 localStorage 和 sessionStorage 不支持 HttpOnly。
+
+> 如果使用 JWT 放在 localStorage 中，前端通常需要手动通过 Authorization 请求头发送；如果放在 HttpOnly Cookie 中，则浏览器会自动携带。
+
+都是浏览器存储数据的方式
+
+- localStorage: 没有时间概念，可以永久缓存(如果用户不清除)
+
+- sessionStorage: 会话级别，用户关闭页面时数据会被直接清除
+
+- cookie: 有过期时间，通过 Expires 字段设置
+
+来源: storage 主要是通过 js 进行设置；cookie 可以通过 js 来设置，也可以通过接口的 set-cookie 字段来进行设置
+
+容量: storage 的容量(5M 左右)明显大于 cookie 的容量(4K 左右)
+
+作用的页面范围: storage 都是必须相同域名，才能读取数据；cookie 可通过 Domain、Path 控制作用域名
+
+安全性: storage 都可以通过 js 进行读取；cookie 可以通过设置 http-only 来禁止 js 的访问以及修改
+
 ## React
 
 ### 用户如何根据不同的权限，查看不同的页面
@@ -1217,6 +1403,14 @@ function PermissionRoute({ permission }: { permission: string }) {
 ::
 
 ### React.createClass、extends Component、Function Component 的区别
+
+> React.createClass 是早期 React 提供的组件创建方式，通过对象配置定义组件，使用 getInitialState 和 this.setState 管理状态。
+
+> ES6 之后可以通过 extends React.Component 创建 Class Component，它具有组件实例，可以使用 this.state、this.props 和生命周期方法。
+
+> Function Component 是现在 React 推荐的组件方式，本质上是一个返回 React Element 的函数，通过 Hooks，例如 useState、useEffect 等实现状态管理、副作用和逻辑复用。
+
+> 随着 Hooks 的出现，Function Component 在代码简洁性、逻辑复用和组合能力方面更有优势，因此现代 React 开发基本以 Function Component 为主。
 
 - `React.createClass`：React 早期用于创建组件的方式：
 
@@ -1947,6 +2141,32 @@ dispatch(action) -> Store 接收到 Action -> rootReducer(oldState, action) -> R
 
 - 拦截用户的刷新操作，感知 url 的变化，防止不必要请求
 
+### react-router 等单页面路由组件是如何实现的
+
+> React Router 本质上是利用浏览器的 History API 或 Hash API 实现前端路由。
+
+> 以 BrowserRouter 为例，当用户点击 Link 时，Router 会阻止 <a> 标签的默认跳转，然后通过 history.pushState() 修改 URL，同时更新内部的 location 状态；当用户点击浏览器前进后退时，则通过监听 popstate 事件获取 URL 的变化。
+
+> URL 变化后，Router 会根据当前 pathname 与 Route 配置进行匹配，找到对应的 React Element，然后触发 React 重新渲染，因此整个过程中不需要重新加载 HTML 页面。
+
+> HashRouter 原理类似，只不过它监听的是 hashchange，利用 URL 中的 # 部分保存路由信息。
+
+> BrowserRouter 在部署时还需要服务器配置 fallback，将前端路由都指向 index.html，否则直接刷新 /user 等路径时服务器可能返回 404。
+
+- hash 模式: www.xx.com/#/a
+
+- history 模式: www.xx.com/a
+
+浏览器行为监听: hash 模式可以监听 `hashchange`，history 模式可以监听 `popstate` 事件
+
+如何收集路由与组件的匹配:
+
+```javascript
+export const a = {
+	patha: () => import("/components"),
+};
+```
+
 ### react-router-dom 有哪些组件
 
 ```jsx
@@ -2013,6 +2233,97 @@ function App() {
 	用户管理
 </NavLink>
 ```
+
+- `Outlet`: 渲染嵌套路由
+
+::code-group
+
+```jsx [UserLayout]
+import { Outlet } from "react-router";
+
+function UserLayout() {
+	return (
+		<div>
+			<h1>用户中心</h1>
+
+			<nav>
+				<Link to="profile">个人资料</Link>
+				<Link to="order">订单</Link>
+			</nav>
+
+			<Outlet />
+		</div>
+	);
+}
+```
+
+```jsx [路由]
+<Route path="/user" element={<UserLayout />}>
+	<Route path="profile" element={<Profile />} />
+	<Route path="order" element={<Order />} />
+</Route>
+```
+
+::
+
+### react-router-dom 有哪些方法
+
+- `useNavigate`: 编程式跳转
+
+```javascript
+import { useNavigate } from "react-router";
+
+function Login() {
+	const navigate = useNavigate();
+
+	const handleLogin = async () => {
+		// 登录接口
+		await login();
+
+		navigate("/home");
+	};
+
+	return <button onClick={handleLogin}>登录</button>;
+}
+```
+
+- `useParams`: 获取动态路由参数
+
+```javascript
+import { useParams } from "react-router";
+
+// /user/100
+// /user/200
+// /user/300
+function User() {
+	const { id } = useParams();
+
+	return <h1>用户 ID：{id}</h1>;
+}
+```
+
+- `useSearchParams`: 获取/修改 URL 查询参数
+
+```javascript
+import { useSearchParams } from "react-router";
+
+// /user?page=1&keyword=Tom
+function User() {
+	const [searchParams, setSearchParams] = useSearchParams();
+
+	const page = searchParams.get("page");
+	const keyword = searchParams.get("keyword");
+
+	return (
+		<div>
+			page: {page}
+			keyword: {keyword}
+		</div>
+	);
+}
+```
+
+- `useLocation`: 获取当前 URL/location
 
 ### 数据如何在 React 组件中流动
 
@@ -2191,434 +2502,21 @@ jsx 组件 ---babel 编译--> render Function -----> 虚拟 DOM -----> Fiber(Wor
 
 > 虚拟 DOM 是 React 对 UI 的一种 JavaScript 内存表示，用来描述组件最终应该呈现什么样的 UI。当 State 或 Props 发生变化时，React 会重新计算 UI，并通过 Reconciliation 比较前后的结果，确定需要发生的变化，最后在 Commit 阶段将必要的变化应用到真实 DOM。虚拟 DOM 的核心价值不是简单地比真实 DOM 快，而是提供了声明式 UI 和高效协调的抽象，让开发者不需要手动管理大量 DOM 更新。
 
-## 性能优化
-
-### 为什么性能优化重要
-
-> 性能优化非常重要，一方面可以提升用户体验，让页面加载更快、交互更加流畅；另一方面可以降低 CPU、内存、网络等资源消耗，提高系统的吞吐量和并发能力，同时增强系统的稳定性。
-
-### 从输入 URL 到页面加载完成，发生了什么
-
-> 浏览器首先解析 URL，然后进行 DNS 解析，将域名转换成 IP 地址。接着与服务器建立 TCP 连接，如果是 HTTPS，还需要进行 TLS 握手。连接建立后，浏览器发送 HTTP 请求，服务器处理请求后返回 HTTP 响应。
-
-> 浏览器收到 HTML 后开始解析，构建 DOM Tree，同时解析 CSS 构建 CSSOM，然后将 DOM 和 CSSOM 合并生成 Render Tree。接下来浏览器进行 Layout，计算元素的位置和尺寸，然后进行 Paint，将元素绘制到图层，最后进行 Composite 合成并显示到屏幕上。
-
-> 同时，在 HTML 解析过程中还可能遇到 JavaScript、CSS、图片等资源，浏览器会继续发起对应的网络请求，并执行 JavaScript。JavaScript 还可能修改 DOM 和 CSS，从而触发重新布局、重绘或者重新合成。
-
-> 所以整个过程可以概括为：URL 解析 → DNS → TCP → TLS → HTTP → 服务器处理 → HTML/CSS/JS 解析 → DOM/CSSOM → Render Tree → Layout → Paint → Composite → 页面显示。
-
-DNS 解析大致会经历：浏览器 DNS 缓存 -> 操作系统 DNS 缓存 -> hosts -> DNS 服务器 -> 根域名服务器 -> 顶级域名服务器 -> 权威 DNS 服务器 -> 得到 IP
-
-拿到 IP 后，浏览器与服务器建立 TCP 连接，经典 TCP 三次握手
-
-### 性能优化的整体思路
-
-> 性能优化首先不是直接修改代码，而是遵循测量、定位、优化、验证、监控的流程。首先通过性能指标和工具确定具体的性能瓶颈，然后根据问题所在的层面进行针对性优化。
-
-> 前端一般可以从网络、资源加载、JavaScript 执行、浏览器渲染以及用户交互几个方面进行优化。
-
-> 网络层可以通过 CDN、HTTP 缓存、HTTP/2、HTTP/3 等减少网络耗时；资源层可以通过代码分割、懒加载、压缩、图片优化等减少资源加载成本；运行时可以减少不必要的 React 渲染、优化 JavaScript 计算、使用防抖节流；渲染层可以减少回流和重绘；大数据量场景可以使用虚拟列表。
-
-> 最后通过 Lighthouse、Chrome DevTools 等工具对比优化前后的指标，并持续监控，避免性能问题再次出现。
-
-> 核心原则就是：不要凭感觉优化，要先定位瓶颈，再针对瓶颈优化。
-
-### 用户角度的性能指标
-
-> 从用户角度看，性能主要关注三个方面：加载速度、交互响应和视觉稳定性。加载速度可以通过 FCP、LCP 等指标衡量；交互响应主要关注 INP；视觉稳定性主要关注 CLS。除此之外，还需要关注用户的感知性能，比如是否快速看到首屏内容、是否能够尽早进行交互，而不仅仅是页面最终完全加载所需要的时间。
-
-- FP(First Paint): 首次绘制，表示浏览器第一次绘制像素的时间
-
-- FCP(First Contentful Paint): 首次内容绘制，表示页面第一次绘制出有实际内容的东西(文字、图片、SVG、Canvas)
-
-- LCP(Largest Contentful Paint): 最大内容绘制，表示首屏中最大的主要内容元素完成渲染的时间
-
-- INP(Interaction to Next Paint): 表示用户进行一次交互后，到浏览器完成下一次视觉更新之间的延迟
-
-- CLS(Cumulative Layout Shift): 累计布局偏移，用于衡量页面加载过程中，元素是否发生意外移动
-
-- TTFB: 加载第一个字节所需时间，用于衡量请求资源到响应第一个字节开始到达之间的时间
-
-- TTI: 可交互时间，衡量的是从网页开始播放开始的时间，只要其主要资源已加载完毕，就能可靠地快速响应用户输入
-
-### 性能指标的计算
-
-::code-group
-
-```javascript [web-vitals 库]
-import { onFCP, onLCP, TTFB } from "web-vitals";
-
-onCLS(console.log);
-onINP(console.log);
-onLCP(console.log);
-onFCP(console.log);
-onTTFB(console.log);
-```
-
-```javascript [Performance API]
-const entryHandler = list => {
-	for (const entry of list.getEntries()) {
-		if (entry.name === "first-paint") {
-			observer.disconnect();
-		}
-		// 白屏时间
-		let FP = entry.startTime;
-	}
-};
-
-const observer = new PerformanceObserver(entryHandler);
-observer.observe({ type: "paint", buffered: true });
-```
-
-::
-
-性能监控与上报：
-
-```typescript
-class PerformanceMonitor {
-	private metrics: Record<string, any> = {};
-	private readonly RESOURCE_TYPES = ["img", "css", "script"];
-	private readonly PERFORMACE_ENDPOINT = "/performace";
-
-	constructor() {
-		this.init();
-	}
-
-	private init(): void {
-		this.setupLoadPerformanceMonitoring();
-		this.setupResourcePerformance();
-	}
-
-	// 首次内容绘制 FCP
-	private setupLoadPerformanceMonitoring() {
-		const reportPerformance = () => {
-			const paint = performance.getEntriesByType("paint");
-
-			const fcpEntry = paint.find(entry => entry.name === "first-contentful-paint");
-
-			if (fcpEntry) {
-				this.metrics.FCP = fcpEntry.startTime;
-				this.reportMetrics();
-			}
-		};
-
-		window.addEventListener("load", () => {
-			setTimeout(reportPerformance, 0);
-		});
-	}
-
-	// 设置资源加载性能
-	private setupResourcePerformance() {
-		const observer = new PerformanceObserver(list => {
-			list.getEntries().forEach(entry => {
-				if (this.RESOURCE_TYPES.includes(entry?.initiatorType)) {
-					this.metrics[entry.name] = entry.duration;
-				}
-			});
-		});
-
-		observer.observe({ entryTypes: ["resource"] });
-	}
-
-	private reportMetrics() {
-		try {
-			navigator.sendBeacon(this.PERFORMACE_ENDPOINT, JSON.stringify(this.metrics));
-		} catch (err) {
-			console.error("性能上报失败", err);
-		}
-	}
-}
-```
-
-### 常用性能检查工具
-
-- Lighthouse
-
-- network
-
-- performance
-
-### 网络层面优化
-
-> 网络层面的性能优化主要从几个方面入手：减少请求数量、减少资源体积、提高传输效率、合理利用缓存以及优化接口请求。
-
-> 比如通过代码分割、懒加载减少不必要的请求；通过 Tree Shaking、压缩 JS/CSS、WebP/AVIF 等减少资源体积；使用 Gzip 或 Brotli 压缩文本资源；通过 CDN 就近访问静态资源；利用 Cache-Control、ETag 等实现浏览器缓存；同时使用 HTTP/2、HTTP/3 提高网络传输效率。
-
-> 对接口还可以通过请求合并、请求缓存、分页、避免重复请求等方式进行优化。
-
-> 核心目标就是：少传、快传、少请求、能缓存就缓存。
-
-### 浏览器缓存
-
-> 浏览器缓存主要分为强缓存和协商缓存。
-
-> 强缓存主要通过 Cache-Control 和 Expires 控制，在缓存有效期内浏览器可以直接使用本地缓存，不需要向服务器发送请求。
-
-> 当强缓存失效后，会进入协商缓存，主要通过 ETag/If-None-Match 和 Last-Modified/If-Modified-Since 判断资源是否发生变化。如果资源没有变化，服务器返回 304 Not Modified，浏览器继续使用本地缓存；如果发生变化，则返回 200 和新的资源。
-
-> 在实际项目中，通常会对带 hash 的 JS、CSS、图片等静态资源设置长期缓存，而 HTML 设置较短缓存或 no-cache，从而实现缓存和资源更新之间的平衡。
-
-> 一句话：强缓存不请求，协商缓存要请求；没变化 304，有变化 200。
-
-### DNS 优化
-
-> DNS 优化主要是减少 DNS 解析带来的网络耗时。
-
-> 常见方式包括利用浏览器和操作系统的 DNS 缓存、合理设置 DNS TTL、使用 dns-prefetch 提前进行 DNS 解析，以及使用 preconnect 提前完成 DNS、TCP 和 TLS 连接。
-
-> 在大型项目中还可以通过 CDN 和智能 DNS，根据用户所在地区将请求调度到距离用户更近的节点。同时要避免不必要的域名拆分，合理控制域名数量。
-
-> 核心思路就是：DNS 能缓存就缓存，能提前解析就提前解析，重要域名可以提前建立连接，并通过 CDN 做就近访问。
-
-- 减少 DNS 查询次数，提前解析关键域名，提升页面加载速度
-
-- DNS 预取
-
-```html
-<head>
-	<!-- 提前建立网络连接 -->
-	<link rel="preconnect" href="https://cdn.example.com" />
-
-	<!-- 提前进行 DNS 解析 -->
-	<link rel="dns-prefetch" href="//cdn.example.com" />
-</head>
-```
-
-::warning
-
-一般建议 3-5 个关键域名
-
-::
-
-### 域名收敛
-
-> 域名收敛是指在合理范围内减少页面访问的不同域名数量。
-
-> 因为访问不同域名可能需要进行 DNS 解析，以及建立 TCP 和 TLS 连接，所以过多的域名会增加网络连接成本。
-
-> 在 HTTP/1.1 时代，由于单域名并发连接数有限，经常使用域名分片来提高并发；而 HTTP/2、HTTP/3 支持多路复用，可以在一个连接上同时传输多个资源，因此现代 Web 更倾向于域名收敛。
-
-> 但域名并不是越少越好，实际项目需要结合 CDN、缓存、安全隔离、服务部署等因素进行合理划分。
-
-- 减少查询次数
-
-- 利用 http2.0 多路复用特性，避免重复 TCP 握手
-
-```md
-cdn1.example.com
-cdn2.example.com
-img.example.com
-static.example.com
-font.example.com
-
-             ↓
-
-优化后：
-
-static.example.com
-```
-
-### CDN
-
-> CDN，也就是内容分发网络，主要通过在不同地区部署边缘节点，将静态资源缓存到距离用户更近的节点。用户请求资源时，通过 DNS 和 CDN 调度系统选择合适的节点，从 CDN 就近获取资源。
-
-> CDN 的核心优势是降低网络延迟、提高静态资源加载速度、减少源服务器压力。
-
-> 前端项目中通常会将 JS、CSS、图片、字体、视频等静态资源部署到 CDN，并结合文件 Hash + Cache-Control 长期缓存使用。
-
-> 当 CDN 没有缓存资源时，会向源服务器回源获取资源并进行缓存，后续请求就可以直接从 CDN 返回。
-
-> 一句话：CDN = 就近访问 + 边缘缓存 + 降低源站压力。
-
-### 渲染层面优化
-
-> 渲染层面的性能优化主要是减少浏览器和框架不必要的渲染工作。
-
-> 浏览器层面，可以减少 DOM 操作，避免频繁触发重排和重绘，批量进行 DOM 的读写操作，避免 Layout Thrashing；动画尽量使用 transform 和 opacity，并使用 requestAnimationFrame。
-
-> React 层面，可以通过合理拆分组件和状态、React.memo、useMemo、useCallback 等方式减少不必要的组件重新渲染；对于大量数据列表，可以使用虚拟列表，只渲染可视区域的数据。
-
-> 同时还可以通过图片懒加载、content-visibility、拆分 Long Task、Web Worker 等方式减少主线程压力。
-
-> 核心就是：少渲染、少计算、少布局、少绘制，并尽量让主线程保持流畅。
-
-- 尽可能减少渲染资源个数
-
-- 尽可能减少资源体积的大小
-
-- 压缩 html、减少 html 体积
-
-- CSS 按需引入，原子能力
-
-### React 性能优化
-
-- 减少不必要的组件渲染: 使用 `React.memo`，当组件的 props 没有变化时，可以避免重新渲染(对引用类型的 props 无效，除非使用 `useMemo` 包裹)
-
-```tsx
-const UserInfo = React.memo(({ name }: { name: string }) => {
-	console.log("UserInfo render");
-
-	return <div>{name}</div>;
-});
-```
-
-- 使用 `useMemo` 缓存计算结果/稳定引用类型: 对于复杂计算，可以避免每次 render 都重新计算，但没必要所有变量都加缓存
-
-```tsx
-// 缓存计算结果
-const totalPrice = useMemo(() => {
-	return list.reduce((sum, item) => {
-		return sum + item.price * item.count;
-	}, 0);
-}, [list]);
-
-// 稳定引用类型
-const config = useMemo(
-	() => ({
-		color: "red",
-	}),
-	[theme],
-);
-
-<Child config={config} />;
-
-// 避免依赖项陷阱
-const sum = useMemo(() => {
-	return state.a + state.b;
-}, [state.a, state.b]);
-```
-
-- 使用 `useCallback` 缓存函数: 函数组件每次重新执行时，函数都会重新创建，父组件每次 render 都会产生新的函数引用
-
-```tsx
-const Parent = () => {
-	const handleClick = useCallBack(() => {
-		console.log("click");
-	}, []);
-
-	return (
-		<div>
-			<Child handleClick={handleClick} />
-		</div>
-	);
-};
-```
-
-### 发布订阅者跳过中间组件 render 过程
-
-> React 传统的父子状态传递主要通过 props，如果顶层状态发生变化，可能导致中间组件参与更新。发布订阅模式可以把状态抽离成独立 Store，组件通过订阅 Store 获取数据。Store 更新时直接通知订阅该数据的组件，而不需要通过 props 一层层向下传递，因此可以缩小 React 的更新范围，避免不相关的中间组件因为状态变化而重新执行 render。像 Zustand 这类状态管理库就是这种思想的典型应用。
-
-### 状态下放
-
-> 状态下放指的是将 State 放到离实际使用它最近的组件中，而不是为了方便管理而统一放到较高层组件。因为 React 中组件的 State 更新会触发该组件以及相关子树的更新，如果状态放得过高，就可能导致大量不相关组件参与 render。将状态下放后，可以缩小状态更新的影响范围，从源头减少组件 render 和 React 的协调工作。
-
-> 但是状态也不能无限下放。如果多个组件需要共享状态，应该将状态提升到这些组件最近的公共祖先。也就是说，状态应该放在能够满足共享需求的最低层级。
-
-::code-group
-
-```jsx [下放前]
-function App() {
-	const [keyword, setKeyword] = useState("");
-
-	return (
-		<>
-			<Header />
-			<Search keyword={keyword} setKeyword={setKeyword} />
-			<ProductList />
-			<Footer />
-		</>
-	);
-}
-```
-
-```jsx [下放后]
-function App() {
-	return (
-		<>
-			<Header />
-			<Search />
-			<ProductList />
-			<Footer />
-		</>
-	);
-}
-
-function Search() {
-	const [keyword, setKeyword] = useState("");
-
-	return <input value={keyword} onChange={e => setKeyword(e.target.value)} />;
-}
-```
-
-::
-
-### 列表项 key 属性
-
-> key 是 React 用来标识列表元素身份的特殊属性。在 Reconciliation 过程中，React 会通过 key 建立新旧节点之间的对应关系，从而判断元素是新增、删除、移动还是更新，并尽可能复用已有 Fiber 和 DOM 节点。
-
-> key 应该具有唯一性和稳定性。动态列表不建议使用 index 作为 key，因为插入、删除或者排序后，index 会发生变化，可能导致 React 错误复用组件实例，进而出现组件内部 State 和数据对应错误的问题。
-
-> 所以一般应该使用数据本身稳定且唯一的 ID 作为 key，例如 key={item.id}。
-
-key 是 React 用来唯一标识列表中每个元素身份的特殊属性，主要用于 Reconciliation（协调）阶段判断哪些元素发生了新增、删除、移动或更新。
-
-key 的本质是帮助 React 建立新旧 Virtual DOM 节点之间的对应关系，从而进行高效的 Diff/Reconciliation。
-
-### 架构级优化
-
-> 架构级优化主要不是针对某个组件进行优化，而是从整个应用的组件结构、状态管理、数据流和资源加载等方面降低更新成本。
-
-> 首先是合理拆分组件和下放状态，缩小组件更新范围；其次可以使用发布订阅或者 Zustand、Redux 等状态管理方案，并结合 selector 做精确订阅，避免无关组件更新。
-
-> 在资源层面，可以进行路由级代码分割、组件懒加载、Tree Shaking 和第三方库按需加载，减少首屏 JS 体积。
-
-> 在数据层面，可以建立统一的数据请求和缓存层，避免重复请求，并使用分页、虚拟列表解决大数据量场景。
-
-> 对于复杂计算，可以使用 Web Worker 将计算从主线程移出去；如果使用 Next.js，还可以结合 SSR、SSG、Streaming 等渲染策略优化首屏性能。
-
-> 最终目标都是一样的：缩小更新范围、降低渲染成本、减少首屏资源、减少网络请求。
-
-### 服务端渲染 SSR
-
-> SSR 即服务端渲染，是指服务器在接收到请求后执行前端组件和数据获取逻辑，将页面渲染成完整 HTML 返回给浏览器，浏览器可以直接展示页面内容，之后再通过 Hydration 将服务端 HTML 与客户端框架关联起来，使页面具备交互能力。相比 CSR，SSR 可以改善首屏内容呈现，并且更有利于 SEO，但会增加服务器计算压力和开发复杂度，同时需要处理服务端与客户端渲染结果不一致导致的 Hydration 问题。
-
-CSR(client side render)
-
-SSR(server side render)服务端渲染: 服务器返回的 HTML 内容包含所有 DOM 节点
-
-- 利于 SEO
-
-- 白屏时间更短: 浏览器只需进行 DOM、CSSOM 解析
-
-### 组件设计进行优化
-
-### Intersection Observer API
-
-> Intersection Observer 是浏览器提供的异步观察元素与指定区域交叉状态的 Web API，可以判断元素是否进入或离开 viewport，以及进入区域的比例。
-
-> 它相比传统的 scroll + getBoundingClientRect 方式，不需要开发者在 scroll 事件中频繁计算元素位置，因此更适合实现图片懒加载、组件懒加载、无限滚动和曝光埋点等功能。
-
-> 在 React 中通常通过 useRef 获取 DOM 元素，再通过 useEffect 创建 Observer，并在组件卸载时调用 disconnect 清理观察。
-
-> 性能优化的核心价值是：让屏幕外的资源和组件延迟到真正需要的时候再加载，从而减少首屏资源和主线程工作量。
-
-```javascript
-const observer = new IntersectionObserver(entries => {
-	entries.forEach(entry => {
-		if (entry.isIntersecting) {
-			console.log("进入可视区域");
-		}
-	});
-});
-
-observer.observe(element);
-```
-
-### 组件按需引入
-
-> 组件按需引入是指只加载页面实际使用的组件，而不是一次性加载整个组件库。它可以配合 ES Module、Tree Shaking 和 Code Splitting 来减少 JavaScript Bundle 体积。对于大型、低频使用的组件，还可以通过 React.lazy 或 Next.js dynamic 进行动态加载，在真正使用组件时再下载对应 Chunk，从而减少首屏 JavaScript 的下载、解析和执行成本，提高首屏性能。
-
 ## Vue
+
+### React 和 Vue 的区别有哪些
+
+> React 和 Vue 都是用于构建用户界面的前端框架/库，但设计理念和技术实现有所不同。
+
+> React 更偏向 UI 库，强调使用 JavaScript/JSX 描述 UI，状态更新后通过 Fiber 和 Reconciliation 机制计算 UI 的变化；Vue 更强调响应式数据驱动视图，Vue 3 使用 Proxy 实现响应式系统，并结合模板编译优化和 Virtual DOM 完成更新。
+
+> 在开发方式上，React 主要使用 JSX，而 Vue 通常使用 SFC 单文件组件和模板语法。React 的生态更加开放，例如状态管理可以选择 Redux、Zustand 等；Vue 则有相对统一的官方生态，比如 Vue Router 和 Pinia。
+
+> 两者现在也有很多相似之处，例如 React Hooks 和 Vue Composition API 都用于复用组件逻辑。
+
+> 总体来说，React 更强调灵活性和 JavaScript 驱动 UI，Vue 更强调响应式、约定和开发体验。
+
+- **页面结构表达的区别**: vue 通过模板去表达页面的结构，这种方式便于框架标识非变动的 DOM 元素，便于后续框架优化，但不够灵活；React 通过 jsx 方式来表达页面结构，有点是足够灵活，缺点是不易进行 dom 元素的标识，性能优化较为困难
 
 ### Vue 组件间的通信方式
 
@@ -3017,6 +2915,471 @@ const visible = ref(false);
 - `to`: 挂载的节点位置
 
 - `disabled`: 标识子节点是否挂载。为 true 时，内容不会挂载到指定位置，而是保留在当前组件位置
+
+## 性能优化
+
+### 为什么性能优化重要
+
+> 性能优化非常重要，一方面可以提升用户体验，让页面加载更快、交互更加流畅；另一方面可以降低 CPU、内存、网络等资源消耗，提高系统的吞吐量和并发能力，同时增强系统的稳定性。
+
+### 从输入 URL 到页面加载完成，发生了什么
+
+> 浏览器首先解析 URL，然后进行 DNS 解析，将域名转换成 IP 地址。接着与服务器建立 TCP 连接，如果是 HTTPS，还需要进行 TLS 握手。连接建立后，浏览器发送 HTTP 请求，服务器处理请求后返回 HTTP 响应。
+
+> 浏览器收到 HTML 后开始解析，构建 DOM Tree，同时解析 CSS 构建 CSSOM，然后将 DOM 和 CSSOM 合并生成 Render Tree。接下来浏览器进行 Layout，计算元素的位置和尺寸，然后进行 Paint，将元素绘制到图层，最后进行 Composite 合成并显示到屏幕上。
+
+> 同时，在 HTML 解析过程中还可能遇到 JavaScript、CSS、图片等资源，浏览器会继续发起对应的网络请求，并执行 JavaScript。JavaScript 还可能修改 DOM 和 CSS，从而触发重新布局、重绘或者重新合成。
+
+> 所以整个过程可以概括为：URL 解析 → DNS → TCP → TLS → HTTP → 服务器处理 → HTML/CSS/JS 解析 → DOM/CSSOM → Render Tree → Layout → Paint → Composite → 页面显示。
+
+DNS 解析大致会经历：浏览器 DNS 缓存 -> 操作系统 DNS 缓存 -> hosts -> DNS 服务器 -> 根域名服务器 -> 顶级域名服务器 -> 权威 DNS 服务器 -> 得到 IP
+
+拿到 IP 后，浏览器与服务器建立 TCP 连接，经典 TCP 三次握手
+
+### 性能优化的整体思路
+
+> 性能优化首先不是直接修改代码，而是遵循测量、定位、优化、验证、监控的流程。首先通过性能指标和工具确定具体的性能瓶颈，然后根据问题所在的层面进行针对性优化。
+
+> 前端一般可以从网络、资源加载、JavaScript 执行、浏览器渲染以及用户交互几个方面进行优化。
+
+> 网络层可以通过 CDN、HTTP 缓存、HTTP/2、HTTP/3 等减少网络耗时；资源层可以通过代码分割、懒加载、压缩、图片优化等减少资源加载成本；运行时可以减少不必要的 React 渲染、优化 JavaScript 计算、使用防抖节流；渲染层可以减少回流和重绘；大数据量场景可以使用虚拟列表。
+
+> 最后通过 Lighthouse、Chrome DevTools 等工具对比优化前后的指标，并持续监控，避免性能问题再次出现。
+
+> 核心原则就是：不要凭感觉优化，要先定位瓶颈，再针对瓶颈优化。
+
+### 用户角度的性能指标
+
+> 从用户角度看，性能主要关注三个方面：加载速度、交互响应和视觉稳定性。加载速度可以通过 FCP、LCP 等指标衡量；交互响应主要关注 INP；视觉稳定性主要关注 CLS。除此之外，还需要关注用户的感知性能，比如是否快速看到首屏内容、是否能够尽早进行交互，而不仅仅是页面最终完全加载所需要的时间。
+
+- FP(First Paint): 首次绘制，表示浏览器第一次绘制像素的时间
+
+- FCP(First Contentful Paint): 首次内容绘制，表示页面第一次绘制出有实际内容的东西(文字、图片、SVG、Canvas)
+
+- LCP(Largest Contentful Paint): 最大内容绘制，表示首屏中最大的主要内容元素完成渲染的时间
+
+- INP(Interaction to Next Paint): 表示用户进行一次交互后，到浏览器完成下一次视觉更新之间的延迟
+
+- CLS(Cumulative Layout Shift): 累计布局偏移，用于衡量页面加载过程中，元素是否发生意外移动
+
+- TTFB: 加载第一个字节所需时间，用于衡量请求资源到响应第一个字节开始到达之间的时间
+
+- TTI: 可交互时间，衡量的是从网页开始播放开始的时间，只要其主要资源已加载完毕，就能可靠地快速响应用户输入
+
+### 性能指标的计算
+
+::code-group
+
+```javascript [web-vitals 库]
+import { onFCP, onLCP, TTFB } from "web-vitals";
+
+onCLS(console.log);
+onINP(console.log);
+onLCP(console.log);
+onFCP(console.log);
+onTTFB(console.log);
+```
+
+```javascript [Performance API]
+const entryHandler = list => {
+	for (const entry of list.getEntries()) {
+		if (entry.name === "first-paint") {
+			observer.disconnect();
+		}
+		// 白屏时间
+		let FP = entry.startTime;
+	}
+};
+
+const observer = new PerformanceObserver(entryHandler);
+observer.observe({ type: "paint", buffered: true });
+```
+
+::
+
+性能监控与上报：
+
+```typescript
+class PerformanceMonitor {
+	private metrics: Record<string, any> = {};
+	private readonly RESOURCE_TYPES = ["img", "css", "script"];
+	private readonly PERFORMACE_ENDPOINT = "/performace";
+
+	constructor() {
+		this.init();
+	}
+
+	private init(): void {
+		this.setupLoadPerformanceMonitoring();
+		this.setupResourcePerformance();
+	}
+
+	// 首次内容绘制 FCP
+	private setupLoadPerformanceMonitoring() {
+		const reportPerformance = () => {
+			const paint = performance.getEntriesByType("paint");
+
+			const fcpEntry = paint.find(entry => entry.name === "first-contentful-paint");
+
+			if (fcpEntry) {
+				this.metrics.FCP = fcpEntry.startTime;
+				this.reportMetrics();
+			}
+		};
+
+		window.addEventListener("load", () => {
+			setTimeout(reportPerformance, 0);
+		});
+	}
+
+	// 设置资源加载性能
+	private setupResourcePerformance() {
+		const observer = new PerformanceObserver(list => {
+			list.getEntries().forEach(entry => {
+				if (this.RESOURCE_TYPES.includes(entry?.initiatorType)) {
+					this.metrics[entry.name] = entry.duration;
+				}
+			});
+		});
+
+		observer.observe({ entryTypes: ["resource"] });
+	}
+
+	private reportMetrics() {
+		try {
+			navigator.sendBeacon(this.PERFORMACE_ENDPOINT, JSON.stringify(this.metrics));
+		} catch (err) {
+			console.error("性能上报失败", err);
+		}
+	}
+}
+```
+
+### 常用性能检查工具
+
+- Lighthouse
+
+- network
+
+- performance
+
+### 网络层面优化
+
+> 网络层面的性能优化主要从几个方面入手：减少请求数量、减少资源体积、提高传输效率、合理利用缓存以及优化接口请求。
+
+> 比如通过代码分割、懒加载减少不必要的请求；通过 Tree Shaking、压缩 JS/CSS、WebP/AVIF 等减少资源体积；使用 Gzip 或 Brotli 压缩文本资源；通过 CDN 就近访问静态资源；利用 Cache-Control、ETag 等实现浏览器缓存；同时使用 HTTP/2、HTTP/3 提高网络传输效率。
+
+> 对接口还可以通过请求合并、请求缓存、分页、避免重复请求等方式进行优化。
+
+> 核心目标就是：少传、快传、少请求、能缓存就缓存。
+
+### 浏览器缓存
+
+> 浏览器缓存主要分为强缓存和协商缓存。
+
+> 强缓存主要通过 Cache-Control 和 Expires 控制，在缓存有效期内浏览器可以直接使用本地缓存，不需要向服务器发送请求。
+
+> 当强缓存失效后，会进入协商缓存，主要通过 ETag/If-None-Match 和 Last-Modified/If-Modified-Since 判断资源是否发生变化。如果资源没有变化，服务器返回 304 Not Modified，浏览器继续使用本地缓存；如果发生变化，则返回 200 和新的资源。
+
+> 在实际项目中，通常会对带 hash 的 JS、CSS、图片等静态资源设置长期缓存，而 HTML 设置较短缓存或 no-cache，从而实现缓存和资源更新之间的平衡。
+
+> 一句话：强缓存不请求，协商缓存要请求；没变化 304，有变化 200。
+
+### DNS 优化
+
+> DNS 优化主要是减少 DNS 解析带来的网络耗时。
+
+> 常见方式包括利用浏览器和操作系统的 DNS 缓存、合理设置 DNS TTL、使用 dns-prefetch 提前进行 DNS 解析，以及使用 preconnect 提前完成 DNS、TCP 和 TLS 连接。
+
+> 在大型项目中还可以通过 CDN 和智能 DNS，根据用户所在地区将请求调度到距离用户更近的节点。同时要避免不必要的域名拆分，合理控制域名数量。
+
+> 核心思路就是：DNS 能缓存就缓存，能提前解析就提前解析，重要域名可以提前建立连接，并通过 CDN 做就近访问。
+
+- 减少 DNS 查询次数，提前解析关键域名，提升页面加载速度
+
+- DNS 预取
+
+```html
+<head>
+	<!-- 提前建立网络连接 -->
+	<link rel="preconnect" href="https://cdn.example.com" />
+
+	<!-- 提前进行 DNS 解析 -->
+	<link rel="dns-prefetch" href="//cdn.example.com" />
+</head>
+```
+
+::warning
+
+一般建议 3-5 个关键域名
+
+::
+
+### 域名收敛
+
+> 域名收敛是指在合理范围内减少页面访问的不同域名数量。
+
+> 因为访问不同域名可能需要进行 DNS 解析，以及建立 TCP 和 TLS 连接，所以过多的域名会增加网络连接成本。
+
+> 在 HTTP/1.1 时代，由于单域名并发连接数有限，经常使用域名分片来提高并发；而 HTTP/2、HTTP/3 支持多路复用，可以在一个连接上同时传输多个资源，因此现代 Web 更倾向于域名收敛。
+
+> 但域名并不是越少越好，实际项目需要结合 CDN、缓存、安全隔离、服务部署等因素进行合理划分。
+
+- 减少查询次数
+
+- 利用 http2.0 多路复用特性，避免重复 TCP 握手
+
+```md
+cdn1.example.com
+cdn2.example.com
+img.example.com
+static.example.com
+font.example.com
+
+             ↓
+
+优化后：
+
+static.example.com
+```
+
+### CDN
+
+> CDN，也就是内容分发网络，主要通过在不同地区部署边缘节点，将静态资源缓存到距离用户更近的节点。用户请求资源时，通过 DNS 和 CDN 调度系统选择合适的节点，从 CDN 就近获取资源。
+
+> CDN 的核心优势是降低网络延迟、提高静态资源加载速度、减少源服务器压力。
+
+> 前端项目中通常会将 JS、CSS、图片、字体、视频等静态资源部署到 CDN，并结合文件 Hash + Cache-Control 长期缓存使用。
+
+> 当 CDN 没有缓存资源时，会向源服务器回源获取资源并进行缓存，后续请求就可以直接从 CDN 返回。
+
+> 一句话：CDN = 就近访问 + 边缘缓存 + 降低源站压力。
+
+### 渲染层面优化
+
+> 渲染层面的性能优化主要是减少浏览器和框架不必要的渲染工作。
+
+> 浏览器层面，可以减少 DOM 操作，避免频繁触发重排和重绘，批量进行 DOM 的读写操作，避免 Layout Thrashing；动画尽量使用 transform 和 opacity，并使用 requestAnimationFrame。
+
+> React 层面，可以通过合理拆分组件和状态、React.memo、useMemo、useCallback 等方式减少不必要的组件重新渲染；对于大量数据列表，可以使用虚拟列表，只渲染可视区域的数据。
+
+> 同时还可以通过图片懒加载、content-visibility、拆分 Long Task、Web Worker 等方式减少主线程压力。
+
+> 核心就是：少渲染、少计算、少布局、少绘制，并尽量让主线程保持流畅。
+
+- 尽可能减少渲染资源个数
+
+- 尽可能减少资源体积的大小
+
+- 压缩 html、减少 html 体积
+
+- CSS 按需引入，原子能力
+
+### React 性能优化
+
+> React 性能优化我一般从三个方面考虑：减少不必要的渲染、降低渲染成本以及降低首屏加载成本。
+
+> 首先是渲染优化，可以通过 React.memo 避免组件在 props 没有变化时重复渲染，通过 useMemo 缓存复杂计算结果，通过 useCallback 稳定函数引用。另外要合理进行状态下放，缩小状态影响范围，避免一个状态变化导致整个页面重新渲染。
+
+> 对于列表，可以使用稳定的 key，数据量很大时使用虚拟列表，只渲染当前可视区域的数据。
+
+> 第二是加载优化，可以使用 React.lazy、Suspense 和路由级代码分割，配合 Tree Shaking、压缩、图片懒加载、CDN 等减少首屏资源。
+
+> 第三是数据层优化，例如对接口请求进行缓存和去重，避免多个组件重复请求相同 API。
+
+> 对于复杂交互，还可以使用 startTransition、useDeferredValue 等并发特性，把非紧急更新降级。
+
+> 最后，性能优化不能只靠经验，应该先通过 React DevTools Profiler、Chrome Performance、Lighthouse 等工具定位真正的性能瓶颈，再针对性优化。
+
+React 对于框架性能优化比较粗糙，需要前端做一些基础的优化，来达到提升页面性能的效果
+
+- 减少不必要的组件渲染: 使用 `React.memo` 缓存组件 props 进行浅比较，当组件的 props 没有变化时，可以避免重新渲染(对引用类型的 props 无效，除非使用 `useMemo` 包裹)
+
+```tsx
+const UserInfo = React.memo(({ name }: { name: string }) => {
+	console.log("UserInfo render");
+
+	return <div>{name}</div>;
+});
+```
+
+- 使用 `useMemo` 缓存计算结果/稳定引用类型: 对于复杂计算，可以避免每次 render 都重新计算，但没必要所有变量都加缓存
+
+```tsx
+// 缓存计算结果
+const totalPrice = useMemo(() => {
+	return list.reduce((sum, item) => {
+		return sum + item.price * item.count;
+	}, 0);
+}, [list]);
+
+// 稳定引用类型
+const config = useMemo(
+	() => ({
+		color: "red",
+	}),
+	[theme],
+);
+
+<Child config={config} />;
+
+// 避免依赖项陷阱
+const sum = useMemo(() => {
+	return state.a + state.b;
+}, [state.a, state.b]);
+```
+
+- 使用 `useCallback` 缓存函数: 函数组件每次重新执行时，函数都会重新创建，父组件每次 render 都会产生新的函数引用
+
+```tsx
+const Parent = () => {
+	const handleClick = useCallBack(() => {
+		console.log("click");
+	}, []);
+
+	return (
+		<div>
+			<Child handleClick={handleClick} />
+		</div>
+	);
+};
+```
+
+### 发布订阅者跳过中间组件 render 过程
+
+> React 传统的父子状态传递主要通过 props，如果顶层状态发生变化，可能导致中间组件参与更新。发布订阅模式可以把状态抽离成独立 Store，组件通过订阅 Store 获取数据。Store 更新时直接通知订阅该数据的组件，而不需要通过 props 一层层向下传递，因此可以缩小 React 的更新范围，避免不相关的中间组件因为状态变化而重新执行 render。像 Zustand 这类状态管理库就是这种思想的典型应用。
+
+### 状态下放
+
+> 状态下放指的是将 State 放到离实际使用它最近的组件中，而不是为了方便管理而统一放到较高层组件。因为 React 中组件的 State 更新会触发该组件以及相关子树的更新，如果状态放得过高，就可能导致大量不相关组件参与 render。将状态下放后，可以缩小状态更新的影响范围，从源头减少组件 render 和 React 的协调工作。
+
+> 但是状态也不能无限下放。如果多个组件需要共享状态，应该将状态提升到这些组件最近的公共祖先。也就是说，状态应该放在能够满足共享需求的最低层级。
+
+::code-group
+
+```jsx [下放前]
+function App() {
+	const [keyword, setKeyword] = useState("");
+
+	return (
+		<>
+			<Header />
+			<Search keyword={keyword} setKeyword={setKeyword} />
+			<ProductList />
+			<Footer />
+		</>
+	);
+}
+```
+
+```jsx [下放后]
+function App() {
+	return (
+		<>
+			<Header />
+			<Search />
+			<ProductList />
+			<Footer />
+		</>
+	);
+}
+
+function Search() {
+	const [keyword, setKeyword] = useState("");
+
+	return <input value={keyword} onChange={e => setKeyword(e.target.value)} />;
+}
+```
+
+::
+
+### 列表项 key 属性
+
+> key 是 React 用来标识列表元素身份的特殊属性。在 Reconciliation 过程中，React 会通过 key 建立新旧节点之间的对应关系，从而判断元素是新增、删除、移动还是更新，并尽可能复用已有 Fiber 和 DOM 节点。
+
+> key 应该具有唯一性和稳定性。动态列表不建议使用 index 作为 key，因为插入、删除或者排序后，index 会发生变化，可能导致 React 错误复用组件实例，进而出现组件内部 State 和数据对应错误的问题。
+
+> 所以一般应该使用数据本身稳定且唯一的 ID 作为 key，例如 key={item.id}。
+
+key 是 React 用来唯一标识列表中每个元素身份的特殊属性，主要用于 Reconciliation（协调）阶段判断哪些元素发生了新增、删除、移动或更新。
+
+key 的本质是帮助 React 建立新旧 Virtual DOM 节点之间的对应关系，从而进行高效的 Diff/Reconciliation。
+
+### React 循环渲染中为什么推荐不用 index 作为 key
+
+> React 不推荐使用 index 作为 key，是因为 index 表示的是元素在列表中的位置，而不是元素本身的身份。当列表发生插入、删除、排序时，元素的位置会发生变化，导致 key 跟着变化，React 可能错误复用原来的 DOM 或组件实例，从而产生组件状态错乱、输入框内容错位等问题。
+
+> 因此一般应该使用数据本身稳定且唯一的 ID 作为 key。只有当列表是静态的、不会发生增删排序，并且列表项没有内部状态时，才可以考虑使用 index。
+
+### 架构级优化
+
+> 架构级优化主要不是针对某个组件进行优化，而是从整个应用的组件结构、状态管理、数据流和资源加载等方面降低更新成本。
+
+> 首先是合理拆分组件和下放状态，缩小组件更新范围；其次可以使用发布订阅或者 Zustand、Redux 等状态管理方案，并结合 selector 做精确订阅，避免无关组件更新。
+
+> 在资源层面，可以进行路由级代码分割、组件懒加载、Tree Shaking 和第三方库按需加载，减少首屏 JS 体积。
+
+> 在数据层面，可以建立统一的数据请求和缓存层，避免重复请求，并使用分页、虚拟列表解决大数据量场景。
+
+> 对于复杂计算，可以使用 Web Worker 将计算从主线程移出去；如果使用 Next.js，还可以结合 SSR、SSG、Streaming 等渲染策略优化首屏性能。
+
+> 最终目标都是一样的：缩小更新范围、降低渲染成本、减少首屏资源、减少网络请求。
+
+### 服务端渲染 SSR
+
+> SSR 即服务端渲染，是指服务器在接收到请求后执行前端组件和数据获取逻辑，将页面渲染成完整 HTML 返回给浏览器，浏览器可以直接展示页面内容，之后再通过 Hydration 将服务端 HTML 与客户端框架关联起来，使页面具备交互能力。相比 CSR，SSR 可以改善首屏内容呈现，并且更有利于 SEO，但会增加服务器计算压力和开发复杂度，同时需要处理服务端与客户端渲染结果不一致导致的 Hydration 问题。
+
+CSR(client side render)
+
+SSR(server side render)服务端渲染: 服务器返回的 HTML 内容包含所有 DOM 节点
+
+- 利于 SEO
+
+- 白屏时间更短: 浏览器只需进行 DOM、CSSOM 解析
+
+### 组件设计进行优化
+
+### Intersection Observer API
+
+> Intersection Observer 是浏览器提供的异步观察元素与指定区域交叉状态的 Web API，可以判断元素是否进入或离开 viewport，以及进入区域的比例。
+
+> 它相比传统的 scroll + getBoundingClientRect 方式，不需要开发者在 scroll 事件中频繁计算元素位置，因此更适合实现图片懒加载、组件懒加载、无限滚动和曝光埋点等功能。
+
+> 在 React 中通常通过 useRef 获取 DOM 元素，再通过 useEffect 创建 Observer，并在组件卸载时调用 disconnect 清理观察。
+
+> 性能优化的核心价值是：让屏幕外的资源和组件延迟到真正需要的时候再加载，从而减少首屏资源和主线程工作量。
+
+```javascript
+const observer = new IntersectionObserver(entries => {
+	entries.forEach(entry => {
+		if (entry.isIntersecting) {
+			console.log("进入可视区域");
+		}
+	});
+});
+
+observer.observe(element);
+```
+
+### 组件按需引入
+
+> 组件按需引入是指只加载页面实际使用的组件，而不是一次性加载整个组件库。它可以配合 ES Module、Tree Shaking 和 Code Splitting 来减少 JavaScript Bundle 体积。对于大型、低频使用的组件，还可以通过 React.lazy 或 Next.js dynamic 进行动态加载，在真正使用组件时再下载对应 Chunk，从而减少首屏 JavaScript 的下载、解析和执行成本，提高首屏性能。
+
+### 首屏加载优化
+
+> 首屏加载优化主要从网络、资源、渲染和服务端几个方面入手。
+
+> 网络层使用 CDN、HTTP/2、缓存、DNS 优化降低网络耗时；资源层通过代码分割、路由懒加载、Tree Shaking、图片压缩和懒加载减少首屏资源；渲染层提取关键 CSS、减少主线程 JS 执行，并使用骨架屏改善用户感知；服务端可以使用 SSR/SSG，让浏览器更早拿到可展示的 HTML。
+
+> 最后通过 Chrome DevTools、Lighthouse、Performance 分析具体瓶颈，重点关注 FCP、LCP、TTFB、TBT、CLS 等指标。
+
+- 文件优化
+
+- 下载优化: 代码压缩
+
+- 缓存策略
+
+- 动画: 骨架屏，或 loading 动画
 
 ## 工程化
 
