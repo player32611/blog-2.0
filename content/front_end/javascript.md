@@ -130,6 +130,94 @@ txt.split(" "); // 用空格分隔
 txt.split("|"); // 用竖线分隔
 ```
 
+**startsWith()** 方法 : 如果字符串以指定值开头则返回 true，否则返回 false
+
+```javascript
+let text = "Hello world, welcome to the universe.";
+text.startsWith("Hello"); // true
+```
+
+**endsWith()** 方法 : 如果字符串以指定值结尾则返回 true，否则返回 false
+
+```javascript
+let text = "Hello world, welcome to the universe.";
+text.endsWith("universe."); // true
+```
+
+**includes()** 方法 : 如果字符串包含指定值则返回 true，否则返回 false
+
+```javascript
+let text = "Hello world, welcome to the universe.";
+text.includes("world"); // true
+```
+
+**repeat()** 方法 : 返回一个新字符串，其中包含指定次数的字符串副本
+
+```javascript
+let text = "Hello";
+text.repeat(3); // "HelloHelloHello"
+```
+
+**padStart()** 方法 : 用另一个字符串填充当前字符串（从开头填充），直到结果字符串达到给定的长度
+
+```javascript
+let text = "5";
+text.padStart(4, "0"); // "0005"
+```
+
+**padEnd()** 方法 : 用另一个字符串填充当前字符串（从末尾填充），直到结果字符串达到给定的长度
+
+```javascript
+let text = "5";
+text.padEnd(4, "0"); // "5000"
+```
+
+**trimStart()** 方法 : 删除字符串开头的空白符
+
+**trimEnd()** 方法 : 删除字符串结尾的空白符
+
+**replaceAll()** 方法 : 用另一个值替换字符串中出现的所有指定值，返回一个新字符串，不会改变原始字符串
+
+```javascript
+let text = "I love cats. Cats are very easy to love.";
+text.replaceAll("cats", "dogs");
+// "I love dogs. Dogs are very easy to love."
+```
+
+**match()** 方法 : 根据正则表达式在字符串中搜索匹配项，并以数组形式返回匹配项
+
+```javascript
+let text = "The rain in SPAIN stays mainly in the plain";
+text.match(/ain/g); // ["ain", "ain", "ain"]
+```
+
+**matchAll()** 方法 : 返回一个包含所有匹配正则表达式的结果及其捕获组的迭代器
+
+```javascript
+let text = "The rain in SPAIN stays mainly in the plain";
+let matches = text.matchAll(/ain/g);
+```
+
+**localeCompare()** 方法 : 按本地特定顺序比较两个字符串，如果排序时字符串位于引用字符串之前返回 -1，之后返回 1，相等返回 0
+
+```javascript
+let a = "ab";
+let b = "cd";
+a.localeCompare(b); // -1
+```
+
+**String.fromCharCode()** 方法 : 将 Unicode 值转换为字符
+
+```javascript
+String.fromCharCode(72, 69, 76, 76, 79); // "HELLO"
+```
+
+**String.fromCodePoint()** 方法 : 返回使用指定的代码点序列创建的字符串
+
+```javascript
+String.fromCodePoint(72, 101, 108, 108, 111); // "Hello"
+```
+
 ## 数组
 
 ### 定义数组
