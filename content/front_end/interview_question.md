@@ -1,5 +1,40 @@
 # 前端面试题
 
+## HTML
+
+### script 标签的 async 以及 defer 属性有什么作用以及他们的区别
+
+> async 和 defer 都可以让 script 异步下载，从而避免 JS 下载阻塞 HTML 解析。async 是"下载完立即执行"，多个脚本执行顺序不确定；defer 是"HTML 解析完成后再执行"，并且多个 defer 脚本会按照 HTML 中的顺序执行。
+
+script 标签会直接阻塞页面 html 的渲染，首先会通过网络请求相关的内容。请求完成后，执行 js 逻辑，完成后才会继续进行页面 html 的解析
+
+```html
+<script src="app.js"></script>
+<!-- HTML 解析 -> 遇到 script -> 暂停 HTML 解析 -> 下载 JS -> 执行 JS -> 继续解析 HTML -->
+```
+
+`async`: 异步下载，下载完成后立即暂停 HTML 解析并执行
+
+```html
+<script async src="app.js"></script>
+```
+
+`defer`: 异步下载，但是等 HTML 解析完成后再执行
+
+```html
+<script defer src="app.js"></script>
+```
+
+::tip
+
+async 以及 defer 的区别
+
+- 执行阶段: `async` 是加载完了直接执行；`defer` 是加载完了并且等待整体页面渲染完成后才会去执行
+
+- 顺序: 多个 `async` 标签同时加载，他们的执行顺序是没法保证的；多个 `defer` 标签是可以保证执行顺序的。
+
+::
+
 ## CSS
 
 ### CSS 的 GPU 加速
@@ -246,6 +281,13 @@ function twoSum(nums, target) {
 
 ```javascript
 // 方式一：Promise.all()
+async function request() {
+	const [aData, bData] = await Promise.all([requestA(), requestB()]);
+
+	const cData = await requestC(aData, bData);
+
+	return cData;
+}
 
 // 方法二
 let arr = [];
@@ -330,9 +372,157 @@ ev.trigger("test");
 ev.trigger("test");
 ```
 
-### this 指针?
+### this 指向问题
 
-### 闭包的概念?
+> JavaScript 中普通函数的 this 是动态绑定的，主要取决于函数的调用方式；而箭头函数没有自己的 this，它会捕获定义时外层作用域的 this。new、call/apply/bind 可以显式决定普通函数的 this，但不能改变箭头函数的 this。
+
+::code-group
+
+```javascript [普通函数]
+function a() {
+	// this == window
+	console.log(this.name);
+}
+
+a(); // undefined
+```
+
+```javascript [对象函数调用]
+const obj = {
+	name: "Tom",
+	say() {
+		console.log(this.name);
+	},
+};
+
+obj.say(); // Tom
+
+const b = obj.say;
+
+b(); // undefined
+```
+
+```typescript [箭头函数]
+const a = {
+	name: "s",
+	getName: () => {
+		console.log(this.name); // s
+	},
+};
+
+a.getName(); // undefined
+```
+
+::
+
+::tip
+
+经典面试题:
+
+```javascript
+const obj = {
+	name: "Tom",
+
+	say() {
+		console.log(this.name);
+
+		setTimeout(function () {
+			console.log(this.name);
+		}, 0);
+
+		setTimeout(() => {
+			console.log(this.name);
+		}, 0);
+	},
+};
+
+obj.say();
+// Tom
+// undefined
+// Tom
+```
+
+::
+
+### 闭包是什么
+
+> 闭包是指函数能够访问并持有其定义时所在词法作用域中的变量，即使这个外部函数已经执行结束，这些变量仍然可以被内部函数访问。闭包的本质可以理解为函数和它的词法环境的组合。常见用途包括实现数据私有化、保存函数状态、函数工厂以及解决异步回调中的变量捕获问题。需要注意的是，闭包会延长相关变量的生命周期，如果不合理使用可能增加内存占用，但闭包本身并不等于内存泄漏。
+
+在 JavaScript 中，闭包是指一个函数能够访问并操作其声明时所在的词法作用域中的变量和函数，即使该函数在其词法作用域之外被调用
+
+简单来说，闭包的核心在于: 函数和它所"捕获"额周围环境(变量，函数)捆绑在一起，形成一个独立的单元
+
+```javascript
+function outer() {
+	let count = 0;
+
+	function inner() {
+		count++;
+		console.log(count);
+	}
+
+	return inner;
+}
+
+const fn = outer();
+
+fn(); // 1
+fn(); // 2
+fn(); // 3
+```
+
+**常见用途**:
+
+::code-group
+
+```javascript [数据封装]
+function createCounter() {
+	let count = 0;
+
+	return {
+		increment() {
+			count++;
+		},
+
+		getCount() {
+			return count;
+		},
+	};
+}
+
+const counter = createCounter();
+
+counter.increment();
+counter.increment();
+
+console.log(counter.getCount()); // 2
+```
+
+```javascript [函数工厂]
+function multiply(x) {
+	return function (y) {
+		return x * y;
+	};
+}
+
+const double = multiply(2);
+const triple = multiply(3);
+
+double(5); // 10
+triple(5); // 15
+```
+
+::
+
+::warning
+
+闭包的缺点
+
+- 肯会造成内存泄漏
+
+- 代码可读性
+
+::
 
 ### 原型与原型链?
 
@@ -1322,6 +1512,12 @@ HTTP2 针对 HTTP1 的优化
 作用的页面范围: storage 都是必须相同域名，才能读取数据；cookie 可通过 Domain、Path 控制作用域名
 
 安全性: storage 都可以通过 js 进行读取；cookie 可以通过设置 http-only 来禁止 js 的访问以及修改
+
+### 浏览器跨域是什么，如何解决跨域问题
+
+> 跨域是浏览器同源策略导致的。当请求的协议、域名或者端口与当前页面不同时，就属于跨域。浏览器的同源策略主要是为了防止恶意网站读取其他源的敏感数据。解决跨域最常用的是 CORS，由后端通过 Access-Control-Allow-Origin 等响应头告诉浏览器允许哪些源访问。开发环境还可以通过 Vite、Webpack Dev Server 等配置代理，生产环境可以通过 Nginx 反向代理。另外还有 JSONP、postMessage 等方案，其中 JSONP 主要用于兼容老项目并且只支持 GET。
+
+协议、域名、端口号有一个不同就是跨域
 
 ## React
 
@@ -2916,6 +3112,18 @@ const visible = ref(false);
 
 - `disabled`: 标识子节点是否挂载。为 true 时，内容不会挂载到指定位置，而是保留在当前组件位置
 
+### Vue 的数据劫持是怎么样实现的
+
+> Vue 2 的数据劫持主要通过 Object.defineProperty 实现，在初始化阶段遍历对象的属性，为每个属性设置 getter 和 setter。当组件渲染访问属性时，会在 getter 中进行依赖收集；当属性发生修改时，会触发 setter，然后通过 Dep 通知对应的 Watcher 更新视图。由于 Object.defineProperty 只能劫持已经存在的属性，所以 Vue 2 对新增属性需要通过 $set 处理，对数组则通过重写数组的变异方法来实现响应式。
+
+> Vue 3 则使用 Proxy，可以直接代理整个对象，通过 get 进行依赖收集，通过 set、deleteProperty 等操作触发更新，因此对新增、删除属性以及数组等场景支持更自然。
+
+- 监听范围: `defineProperty` 是递归监听所有对象的属性，也就是对象的字段；`proxy` 是监听的对象整体，而不是某个字段
+
+- 数值支持: `defineProperty` 无法监听数组的长度变化，以及数组的变化，因为考虑到性能的原因；`proxy` 原生支持监听数组
+
+- 兼容性: `defineProperty` 兼容性比较好，兼容比较早的 IE8 等浏览器；`proxy` 兼容性不太号，无法支持 IE
+
 ## 性能优化
 
 ### 为什么性能优化重要
@@ -3381,6 +3589,63 @@ observer.observe(element);
 
 - 动画: 骨架屏，或 loading 动画
 
+### 单页面和多页面的区别
+
+> SPA 是 Single Page Application，通常整个应用只有一个 HTML，通过前端路由管理不同的页面状态和组件，路由切换时一般不会重新加载整个 HTML，因此交互体验比较流畅，但首屏资源可能比较大，SEO 也需要额外处理。MPA 是 Multi Page Application，不同页面通常对应不同的 HTML，页面跳转时需要向服务器请求新的页面，因此首屏可以比较快、SEO 相对友好，但页面切换会发生重新加载。
+
+> SPA 更适合后台管理系统、Web App 等交互复杂的应用；MPA 更适合门户、新闻、电商等对 SEO 和独立页面访问要求较高的场景。需要注意 SPA/MPA 和 CSR/SSR 是两个不同维度的概念。
+
+- html 加载: 单页面无论跳转多少个页面，都只加载一次 html；多页面则是跳转几个页面就加载几个 html
+
+- 资源加载: 单页面会加载大部分的资源；多页面只会加载本页面需要的资源
+
+- seo: 单页面 seo 爬虫的时候不能获取到相关页面内容；大部分多页面会把页面内容直接放到 html 中下发，这样就便于爬虫获取内容
+
+- 单页面的流行: 单页面资源加载的缺点可以通过 js 或者 css 拆包的方式进行解决，seo 可以通过服务端渲染进行解决，React 还有 vue 框架的兴起可以使用组件以及 react-router 或者 vue-router 这类型的组件来维护页面
+
+### 防抖和节流是什么，他们使用的场景都有哪些
+
+> 防抖和节流都是用于处理高频事件、减少函数执行次数的性能优化手段。防抖是事件连续触发时不断重新计时，只有停止触发一段时间后才执行一次，因此适合搜索框输入、表单校验、窗口 resize、自动保存等只关心最终结果的场景。节流则是在一定时间间隔内最多执行一次，即使事件持续触发也会按照固定频率执行，因此适合 scroll、mousemove、拖拽等需要持续响应的高频事件。
+
+> 简单来说，防抖是“只执行最后一次”，节流是“按照固定频率执行”。
+
+防抖: 适合需要"等待用户操作停止后再执行"的结果，核心是"着重最后一次"
+
+节流: 适合需要""控制执行频率的场景，核心是"限制单位时间内执行次数"
+
+::code-group
+
+```javascript [防抖]
+function debounce(fn, delay) {
+	let timer;
+
+	return function (...args) {
+		clearTimeout(timer);
+
+		timer = setTimeout(() => {
+			fn.apply(this, args);
+		}, delay);
+	};
+}
+```
+
+```javascript [节流]
+function throttle(fn, delay) {
+	let lastTime = 0;
+
+	return function (...args) {
+		const now = Date.now();
+
+		if (now - lastTime >= delay) {
+			lastTime = now;
+			fn.apply(this, args);
+		}
+	};
+}
+```
+
+::
+
 ## 工程化
 
 ### 同一个页面三个组件请求同一个 API
@@ -3648,3 +3913,50 @@ function calculateTotal(a, b) {
 Fass(function as a servie)(函数即服务)
 
 Bass(backend as a service)(后端即服务)
+
+### vite 对比 webpack 有什么优势
+
+> Vite 最大的优势是开发环境的启动和 HMR 速度。Webpack 在开发过程中通常需要先构建整个依赖图并进行 Bundle，而 Vite 利用浏览器原生 ESM，开发时不需要对整个项目进行打包，只在浏览器请求模块时进行转换，因此启动速度更快。修改代码时，Vite 也可以基于 ESM 的模块边界进行局部更新，所以 HMR 更快，而且项目规模变大后性能下降没有传统 Bundle 模式那么明显。另外 Vite 配置更加简单，对 TypeScript、Vue、React 等现代前端技术支持也比较友好。
+
+**开发阶段**:
+
+- vite: 通过 `import`，这种模块机制，动态加载需要的 js 以及 css 文件，不会将所有文件进行打包；在开发阶段也会通过 esbuild 这个工具对第三方依赖包进行打包以及缓存。
+
+**上线阶段**:
+
+- vite: 通过 rollup 打包来进行上线的处理
+
+vite 缺点: 开发环境正常运行，但是无法保证上线后不报错
+
+webpack: 全量打包，dev 以及 build 环境一致，不会出现严重的 js 报错，这个也会导致 webpack dev 环境缓慢
+
+### webpack 如何设置 loader，他们的顺序是怎样的
+
+> Webpack 中 Loader 通过 module.rules 进行配置，通常通过 test 指定匹配的文件类型，通过 use 指定需要执行的 Loader。例如 SCSS 可以配置 style-loader、css-loader 和 sass-loader。多个普通 Loader 默认按照从右到左、从下到上的顺序执行，也就是数组中越靠右的 Loader 越先执行。Loader 本质上负责模块转换，而 Plugin 主要用于扩展 Webpack 的整体构建流程。
+
+```javascript
+module: {
+	rules: [
+		{
+			test: /\.scss$/,
+			use: ["style-loader", "css-loader", "less-loader"],
+		},
+	];
+}
+```
+
+**loader 的作用**: 主要是将非 js 等文件转换为 webpack 可以处理的模块，主要包括 css、image、file。loader 会将这些文件处理成 js 格式进行处理
+
+**webpack loader 和插件的区别**:
+
+- 作用的对象: loader 主要是文件转换，也就是编译阶段；插件是作用在打包的每一个环节，比如打包前、打包后、编译前、编译后等钩子节点
+- 作用: loader 用于文件转换；插件用于扩展功能，主要是在各个生命周期扩展每一个生命周期的功能
+- 本质: loader 是转换器；插件是扩展器
+
+::tip
+
+Loader 的执行顺序
+
+Webpack Loader 默认从右往左执行，从下往上执行。
+
+::

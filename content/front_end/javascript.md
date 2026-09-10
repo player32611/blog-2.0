@@ -247,6 +247,126 @@ function myFunction(value, index, array) {
 }
 ```
 
+**filter()** : 创建一个通过测试的数组元素组成的新数组，不会改变原始数组
+
+```javascript
+var numbers = [45, 4, 9, 16, 25];
+var over18 = numbers.filter(myFunction);
+
+function myFunction(value, index, array) {
+	return value > 18;
+}
+// over18 结果为 [45, 25]
+```
+
+**reduce()** : 在每个数组元素上运行函数，以生成（减少它）单个值。该方法在数组中从左到右工作，它不会改变原始数组，可以接受一个初始值
+
+```javascript
+var numbers = [45, 4, 9, 16, 25];
+var sum = numbers.reduce(myFunction, 0);
+
+function myFunction(total, value, index, array) {
+	return total + value;
+}
+// sum 结果为 99
+```
+
+**reduceRight()** : 与 reduce() 类似，不同之处在于它从数组的末尾（从右到左）开始工作
+
+**every()** : 检查数组中的所有元素是否都通过测试，如果所有元素都通过则返回 true，否则返回 false
+
+```javascript
+var numbers = [45, 4, 9, 16, 25];
+var allOver18 = numbers.every(myFunction);
+
+function myFunction(value, index, array) {
+	return value > 18;
+}
+// allOver18 结果为 false
+```
+
+**some()** : 检查数组中的某些元素是否通过测试，如果有元素通过则返回 true
+
+```javascript
+var numbers = [45, 4, 9, 16, 25];
+var someOver18 = numbers.some(myFunction);
+
+function myFunction(value, index, array) {
+	return value > 18;
+}
+// someOver18 结果为 true
+```
+
+**sort()** : 对数组的元素进行排序，默认按字符串顺序排序，会改变原始数组。对数字排序时需要提供一个比较函数：
+
+```javascript
+var points = [40, 100, 1, 5, 25, 10];
+points.sort(function (a, b) {
+	return a - b; // 升序
+}); // [1, 5, 10, 25, 40, 100]
+
+points.sort(function (a, b) {
+	return b - a; // 降序
+}); // [100, 40, 25, 10, 5, 1]
+```
+
+**fill()** : 用一个固定值填充数组中从起始索引到终止索引（不包括）的全部元素，会改变原始数组
+
+```javascript
+var fruits = ["Banana", "Orange", "Apple", "Mango"];
+fruits.fill("Kiwi", 1, 3);
+// ["Banana", "Kiwi", "Kiwi", "Mango"]
+```
+
+**flat()** : 按照一个可指定的深度递归遍历数组，并将所有元素与遍历到的子数组中的元素合并为一个新数组返回，不会改变原始数组
+
+```javascript
+var myArr = [
+	[1, 2],
+	[3, 4],
+	[5, 6],
+];
+var newArr = myArr.flat();
+// [1, 2, 3, 4, 5, 6]
+```
+
+**flatMap()** : 首先使用映射函数映射每个元素，然后将结果压缩成一个新数组，等同于 map() 后再 flat()
+
+```javascript
+var myArr = [1, 2, 3, 4, 5];
+var newArr = myArr.flatMap(x => [x, x * 10]);
+// [1, 10, 2, 20, 3, 30, 4, 40, 5, 50]
+```
+
+**at()** : 返回数组中指定索引的元素，接受负值，负值从数组末尾开始计数
+
+```javascript
+var fruits = ["Banana", "Orange", "Apple", "Mango"];
+var fruit = fruits.at(2); // "Apple"
+var last = fruits.at(-1); // "Mango"
+```
+
+**Array.isArray()** : 检查对象是否是数组，是则返回 true，否则返回 false
+
+```javascript
+Array.isArray([1, 2, 3]); // true
+Array.isArray("hello"); // false
+```
+
+**Array.from()** : 从具有 length 属性或可迭代的对象创建一个新数组
+
+```javascript
+Array.from("ABCDEFG"); // ["A", "B", "C", "D", "E", "F", "G"]
+Array.from([1, 2, 3], x => x * 2); // [2, 4, 6]
+```
+
+**Array.of()** : 通过可变数量的参数创建一个新数组，而不考虑参数的数量或类型
+
+```javascript
+Array.of(7); // [7]
+Array.of(1, 2, 3); // [1, 2, 3]
+```
+
 ## 对象
 
 ### 对象属性
