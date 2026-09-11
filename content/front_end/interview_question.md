@@ -102,6 +102,69 @@ GPU 专门用于处理图形渲染，擅长并行计算。可以同时处理大�
 
 `flex-basis`: 基础尺寸，分配剩余空间时，不把元素原来的主轴尺寸作为基础尺寸
 
+### 元素水平垂直居中
+
+- flex: 子元素可以不设置宽高
+
+```css
+.parent {
+	display: flex;
+	justify-content: center; /* 主轴水平居中 */
+	align-items: center; /* 交叉轴垂直居中 */
+}
+```
+
+- transform:
+
+```css
+.parent {
+	position: relative;
+}
+
+.child {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+```
+
+::tip
+
+translate 50% 是针对于子元素本身的宽高
+
+::
+
+- margin: 需要知道子元素宽高
+
+```css
+.parent {
+	position: relative;
+}
+
+.child {
+	position: absolute;
+
+	width: 100px;
+	height: 50px;
+
+	left: 50%;
+	top: 50%;
+
+	margin-left: -50px;
+	margin-top: -25px;
+}
+```
+
+- grid:
+
+```css
+.parent {
+	display: grid;
+	place-items: center;
+}
+```
+
 ## JavaScript
 
 ### 自定义实现 unshift 效果
@@ -524,17 +587,91 @@ triple(5); // 15
 
 ::
 
+### 深拷贝与浅拷贝的区别
+
+> 浅拷贝和深拷贝的主要区别在于对引用类型的处理。
+
+> 浅拷贝只复制对象的第一层属性，如果属性值是引用类型，那么复制的是引用，所以修改嵌套对象可能会影响原对象。
+
+> 常见的浅拷贝方式有 Object.assign()、对象展开运算符，以及数组的 slice()、展开运算符等。
+
+> 深拷贝会递归复制对象的各层数据，使原对象和拷贝对象之间不存在共享的嵌套对象引用。
+
+> 现代 JavaScript 可以使用 structuredClone() 实现深拷贝；面试中如果需要手写深拷贝，还需要考虑数组、Date、Map、Set、循环引用等特殊情况，循环引用通常可以使用 WeakMap 解决。
+
+> JSON.parse(JSON.stringify()) 虽然可以实现简单对象的深拷贝，但会丢失 undefined、函数、Symbol 等数据，并且无法正确处理循环引用，因此不适合作为通用深拷贝方案。
+
+在编程中，深拷贝(Deep Copy) 和浅拷贝(Shallow Copy) 是两种创建对象副本的方式，核心区别在于是否复制对象的深层数据(即引用类型的内部数据)
+
+::code-group
+
+```javascript [浅拷贝]
+const obj = {
+	name: "Tom",
+	info: {
+		city: "Beijing",
+	},
+};
+
+const copy = { ...obj };
+
+console.log(copy === obj); // false
+console.log(copy.info === obj.info); // true，说明 info 还是指向原来的对象。
+
+copy.info.city = "Shanghai";
+
+console.log(obj.info.city); // Shanghai
+```
+
+```javascript [深拷贝]
+// 简易实现
+function deepClone(obj) {
+	if (typeof obj !== "obj") return obj;
+	const newObj = {};
+
+	const newArray = [];
+	if (Array.isArray(obj)) {
+		obj.forEach(item => {
+			newArry.push(deepClone(item));
+		});
+	}
+
+	for (const key in obj) {
+		if (obj.hasOwnProperty(key)) {
+			newObj[key] = deepCopy(Obj[key]);
+		}
+	}
+
+	return newObj;
+}
+
+const obj = {
+	name: "Tom",
+	info: {
+		city: "Beijing",
+	},
+};
+
+const copy = deepClone(obj);
+```
+
+::
+
+**常见浅拷贝方式**:
+
+```javascript
+const copy = Object.assign({}, obj);
+
+const copy = { ...obj };
+
+const copy1 = [...arr];
+
+const copy2 = arr.slice();
+
+const copy3 = Array.from(arr);
+```
+
 ### 原型与原型链?
-
-### 浏览器的事件循环机制
-
-> JavaScript 在浏览器中主要运行在单线程上，为了处理异步任务，浏览器通过 Event Loop 机制协调调用栈、任务队列以及浏览器的 Web API。
-
-> 同步代码会先在调用栈中执行，异步操作由浏览器提供的 Web API 处理，完成之后将对应回调放入任务队列。事件循环会不断检查调用栈，在当前任务执行完成后优先清空微任务队列，然后浏览器根据时机进行渲染，再执行后续任务。
-
-> 常见宏任务包括 setTimeout、setInterval、DOM 事件等；常见微任务包括 Promise.then、async await、queueMicrotask 和 MutationObserver。因此一般情况下，当前宏任务执行结束后，会优先执行微任务，再进入下一个宏任务。
-
-- 微任务: 比普通的宏任务队列优先级更高，所有微任务会在当前宏任务执行完毕后，下个宏任务才会执行
 
 ## TypeScript
 
@@ -1402,6 +1539,76 @@ type Foo = string[];
 interface Bar {
 	baz: { name: string; age: number }[];
 }
+```
+
+### 前端如何判断数据类型
+
+> JavaScript 中常见的数据类型判断方式有 typeof、instanceof、Array.isArray()、Object.prototype.toString.call() 和 constructor。
+
+> typeof 适合判断基本数据类型，但存在两个经典问题：typeof null 是 "object"，数组和普通对象都会返回 "object"。
+
+> instanceof 是通过原型链判断对象是否属于某个构造函数，但不适合判断基本类型，而且存在跨 iframe 的问题。
+
+> 判断数组推荐使用 Array.isArray()，它对跨 iframe 的数组也更加可靠。
+
+> 如果需要判断比较具体的类型，例如 Date、RegExp、Null、Array 等，可以使用 Object.prototype.toString.call()。
+
+> 实际开发中一般是根据场景选择：基本类型用 typeof，数组用 Array.isArray()，复杂类型可以使用 Object.prototype.toString.call()。
+
+- 基础类型 `typeof`，但无法对引用类型进行准确的判断
+
+```typescript
+typeof 123; // "number"
+typeof "hello"; // "string"
+typeof true; // "boolean"
+typeof undefined; // "undefined"
+typeof Symbol(); // "symbol"
+typeof 123n; // "bigint"
+typeof function () {}; // "function"
+typeof {}; // "object"
+typeof []; // "object"
+typeof null; // "object"
+```
+
+- 引用类型 `instanceof`
+
+```typescript
+const arr = [];
+
+arr instanceof Array; // true
+
+arr instanceof Object; // true
+```
+
+- `toString`，可以覆盖所有类型，但不够直观
+
+```typescript
+Object.prototype.toString.call(123);
+// "[object Number]"
+
+Object.prototype.toString.call("hello");
+// "[object String]"
+
+Object.prototype.toString.call(true);
+// "[object Boolean]"
+
+Object.prototype.toString.call(null);
+// "[object Null]"
+
+Object.prototype.toString.call(undefined);
+// "[object Undefined]"
+
+Object.prototype.toString.call([]);
+// "[object Array]"
+
+Object.prototype.toString.call({});
+// "[object Object]"
+
+Object.prototype.toString.call(new Date());
+// "[object Date]"
+
+Object.prototype.toString.call(/abc/);
+// "[object RegExp]"
 ```
 
 ## 网络请求
@@ -3156,19 +3363,23 @@ DNS 解析大致会经历：浏览器 DNS 缓存 -> 操作系统 DNS 缓存 -> h
 
 > 核心原则就是：不要凭感觉优化，要先定位瓶颈，再针对瓶颈优化。
 
-### 用户角度的性能指标
+### 前端页面性能指标都有哪些
 
 > 从用户角度看，性能主要关注三个方面：加载速度、交互响应和视觉稳定性。加载速度可以通过 FCP、LCP 等指标衡量；交互响应主要关注 INP；视觉稳定性主要关注 CLS。除此之外，还需要关注用户的感知性能，比如是否快速看到首屏内容、是否能够尽早进行交互，而不仅仅是页面最终完全加载所需要的时间。
+
+**核心指标**:
+
+- **LCP**(Largest Contentful Paint): 最大内容绘制，表示首屏中最大的主要内容元素完成渲染的时间
+
+- **INP**(Interaction to Next Paint): 表示用户进行一次交互后，到浏览器完成下一次视觉更新之间的延迟
+
+- **CLS**(Cumulative Layout Shift): 累计布局偏移，用于衡量页面加载过程中，元素是否发生意外移动
+
+**传统指标**:
 
 - FP(First Paint): 首次绘制，表示浏览器第一次绘制像素的时间
 
 - FCP(First Contentful Paint): 首次内容绘制，表示页面第一次绘制出有实际内容的东西(文字、图片、SVG、Canvas)
-
-- LCP(Largest Contentful Paint): 最大内容绘制，表示首屏中最大的主要内容元素完成渲染的时间
-
-- INP(Interaction to Next Paint): 表示用户进行一次交互后，到浏览器完成下一次视觉更新之间的延迟
-
-- CLS(Cumulative Layout Shift): 累计布局偏移，用于衡量页面加载过程中，元素是否发生意外移动
 
 - TTFB: 加载第一个字节所需时间，用于衡量请求资源到响应第一个字节开始到达之间的时间
 
@@ -3281,17 +3492,19 @@ class PerformanceMonitor {
 
 > 核心目标就是：少传、快传、少请求、能缓存就缓存。
 
-### 浏览器缓存
+### 浏览器有哪些缓存策略
 
-> 浏览器缓存主要分为强缓存和协商缓存。
+> 浏览器缓存主要分为 HTTP 缓存和浏览器本地存储。HTTP 缓存又分为强缓存和协商缓存。强缓存主要通过 Cache-Control 和 Expires 控制，在缓存有效期内浏览器直接使用本地缓存，不会向服务器发送请求。缓存过期后进入协商缓存，通过 Last-Modified/If-Modified-Since 或 ETag/If-None-Match 判断资源是否发生变化，如果没有变化服务器返回 304，浏览器继续使用缓存，否则返回 200 和新的资源。
 
-> 强缓存主要通过 Cache-Control 和 Expires 控制，在缓存有效期内浏览器可以直接使用本地缓存，不需要向服务器发送请求。
+> 实际项目中通常会给 HTML 设置较短的缓存策略，而 JS、CSS、图片等静态资源使用文件指纹配合长期缓存，这样既能保证更新及时，又能提高资源加载速度。
 
-> 当强缓存失效后，会进入协商缓存，主要通过 ETag/If-None-Match 和 Last-Modified/If-Modified-Since 判断资源是否发生变化。如果资源没有变化，服务器返回 304 Not Modified，浏览器继续使用本地缓存；如果发生变化，则返回 200 和新的资源。
+首先进行强缓存的判断，如果命中了强缓存，则直接访问本地的文件。如果说强缓存失效了，才会进行协商缓存
 
-> 在实际项目中，通常会对带 hash 的 JS、CSS、图片等静态资源设置长期缓存，而 HTML 设置较短缓存或 no-cache，从而实现缓存和资源更新之间的平衡。
+`cache-control` 进行强缓存的判断(单位: 秒):
 
-> 一句话：强缓存不请求，协商缓存要请求；没变化 304，有变化 200。
+```http
+Cache-Control: max-age=3600
+```
 
 ### DNS 优化
 
@@ -3646,6 +3859,195 @@ function throttle(fn, delay) {
 
 ::
 
+### 浏览器的事件循环机制
+
+> JavaScript 在浏览器中主要运行在单线程上，为了处理异步任务，浏览器通过 Event Loop 机制协调调用栈、任务队列以及浏览器的 Web API。
+
+> 同步代码会先在调用栈中执行，异步操作由浏览器提供的 Web API 处理，完成之后将对应回调放入任务队列。事件循环会不断检查调用栈，在当前任务执行完成后优先清空微任务队列，然后浏览器根据时机进行渲染，再执行后续任务。
+
+> 常见宏任务包括 setTimeout、setInterval、DOM 事件等；常见微任务包括 Promise.then、async await、queueMicrotask 和 MutationObserver。因此一般情况下，当前宏任务执行结束后，会优先执行微任务，再进入下一个宏任务。
+
+- 微任务: 比普通的宏任务队列优先级更高，所有微任务会在当前宏任务执行完毕后，下个宏任务才会执行
+
+### 浏览器当中的线程以及进程
+
+> 现代浏览器通常采用多进程架构，常见的包括浏览器主进程、渲染进程、GPU 进程、网络相关进程等，具体划分会根据浏览器版本和实现有所不同。
+
+> 一个网页主要运行在渲染进程中，里面有 JavaScript 主线程以及其他负责事件、定时器、网络协作、Worker 等工作的线程。JavaScript 主线程主要负责 JS 执行，并参与 DOM、事件处理以及渲染相关工作。
+
+> 浏览器采用多进程主要是为了实现稳定性、安全性和隔离性；采用多线程则是为了让不同类型的任务能够并行或异步处理，避免所有工作都阻塞在一个执行单元上。
+
+> 普通页面的 JavaScript 主执行环境是单线程的，如果执行大量计算就会阻塞主线程，导致页面卡顿，因此可以使用 Web Worker 将计算任务放到其他线程执行。
+
+**进程**: 操纵系统资源分配的最小单位(如内存、CPU 时间片)，进程间相互独立，通行成本高
+
+**线程**: 进程内的执行单元(轻量级进程)，共享进程的资源，通信成本低
+
+**主要进程**:
+
+- 浏览器主进程: 浏览器的控制中心，可以协调其它的进程进行工作，管理全局的资源、前进以及后退
+
+- 渲染进程: 网页渲染，生成可视化的界面
+
+- 网络进程: 负责网络请求的进程
+
+- GPU 进程: 负责图像渲染以及硬件加速
+
+**渲染进程中的线程**: 每一个浏览器中的 tab 网页，都是一个单独的渲染进程
+
+- 主线程: 执行 js 代码处理相关 DOM 以及 CSS，协调其它的线程
+
+- 合成线程: 主要将页面不同的分层，图层，合并成最后的屏幕图像
+
+- 绘制线程: 根据渲染树和图层信息，绘制每个图层的像素内容
+
+- 定时器线程: setTimeout、setInteral
+
+### 前端 web-worker 的使用
+
+> Web Worker 是浏览器提供的后台线程 API，主要用于处理耗时的 JavaScript 计算，避免阻塞主线程。使用时首先通过 new Worker() 创建 Worker，然后主线程通过 postMessage() 向 Worker 发送数据，Worker 通过 self.onmessage 接收数据，计算完成后通过 self.postMessage() 把结果返回给主线程，主线程通过 onmessage 接收结果。Worker 不能直接操作 DOM，如果不再使用，可以通过 terminate() 销毁。
+
+> Worker 和主线程之间默认通过结构化克隆传递数据，如果需要传输大量二进制数据，可以使用 Transferable Objects 来转移数据所有权。
+
+前端是一个单线程的机制，如果有复杂的任务，执行时间过长，会阻塞页面的逻辑，造成页面卡顿。web-worker 的出现，提供了线程的机制，我们能够新建 worker 来完成复杂的请求
+
+worker 和主线程的通信主要通过 postMessage 来完成
+
+::code-group
+
+```javascript [main.js]
+const worker = new Worker("./worker.js");
+
+worker.postMessage(1000000000);
+
+worker.onmessage = event => {
+	console.log("计算结果：", event.data);
+};
+```
+
+```javascript [worker.js]
+self.onmessage = event => {
+	const num = event.data;
+
+	let result = 0;
+
+	for (let i = 0; i <= num; i++) {
+		result += i;
+	}
+
+	self.postMessage(result);
+};
+```
+
+::
+
+- 值传递，而非引用传递: 发送数据给 worker 的时候，是需要把数据进行序列化，深拷贝操作的。值的传递是有性能损耗的。
+
+- 值的类型: 包含基础类型 number、string 或者 obj
+
+- Transferable Objects(可转移对象)
+
+::warning
+
+线程的限制
+
+- 无法访问 DOM
+
+- 同源的限制
+
+- 需要考虑线程的数量
+
+::
+
+### 前端埋点是什么，发送需要注意哪些问题
+
+> 前端埋点就是在用户使用 Web 应用的过程中采集用户行为和页面运行数据，例如页面访问、按钮点击、商品浏览、下单以及错误和性能数据，然后发送到后端的数据分析系统。
+
+> 埋点可以通过代码埋点、可视化埋点和无埋点等方式实现。
+
+> 在发送方面，首先要保证不影响核心业务和用户体验，一般采用异步发送和批量上报，减少 HTTP 请求数量；页面关闭时可以使用 navigator.sendBeacon 提高数据上报成功率。对于重要埋点，需要考虑网络异常导致的数据丢失，可以进行本地持久化和重试，同时通过 eventId 做幂等，避免重复上报。
+
+> 另外还需要注意数据格式统一、数据大小、请求频率、超时、隐私保护和数据安全，敏感信息不能随意采集。最终原则就是：埋点是辅助业务的，不能反过来影响业务。
+
+**埋点**: 在前端代码中嵌入统计代码或工具，追踪用户相关操作
+
+- 业务相关埋点: 页面的 pv、元素的点击、曝光、任务埋点
+
+- 页面性能&报错相关的前端页面埋点
+
+**埋点的发送方式**
+
+- 图片上报: 利用图片的 url 上面加上埋点信息，get 请求发送埋点。简单直接，没有任何跨域的问题。但无法进行埋点拓展，比如加密或者压缩，另外也对发送长度有限制
+
+- 正常接口上报: 可拓展，可以进行压缩上报，或者加密上报。但有跨域的问题，另外页面关闭之前的埋点可能无法发送
+
+- sendBeacon: 浏览器专门用于发送埋点的 api。简单，可以解决页面关闭(离开)之前发送埋点的问题。但无法拓展
+
+### 如何进行白屏监控
+
+> 白屏监控的核心是判断用户打开页面后，在一定时间内是否成功渲染出了有效内容。
+
+> 一种常见方案是 DOM 采样检测，在页面的多个位置通过 document.elementsFromPoint() 获取元素，如果多个采样点都没有有效 DOM，并且超过一定时间阈值，就可以认为可能发生白屏。
+
+> 为了避免页面正常加载过程中的误判，可以结合 MutationObserver 监听 DOM 的变化，在页面渲染出有效内容后停止检测。
+
+> 同时还应该结合 PerformanceObserver 监控 FP、FCP、LCP，以及监听 window.onerror、unhandledrejection 和资源加载错误。因为很多白屏实际上是 JS 执行错误或者 JS/CSS Chunk 加载失败导致的。
+
+> 最后将白屏事件以及 URL、路由、版本号、FCP、错误信息、资源 URL、设备和网络信息等上报到监控平台，用于告警和问题定位。
+
+> 所以完整的白屏监控不是单纯检测 DOM，而是 DOM 采样 + 性能指标 + JS/资源错误 + 版本信息综合判断。
+
+页面没有渲染的任何节点，导致页面直接白屏
+
+- DOM 节点检测: 通过 `document.body.chileNodes` 监控相关的页面 DOM 节点是否存在，是否可见
+
+- 渲染时间监控: 所有的元素加载完成作为起点，第一个元素渲染完成作为终点，这两个点的差值如果大过了某一个阈值，就说明大概率发生了白屏
+
+- 页面报错监控: js 报错或关键资源的加载失败，相关的页面节点无法渲染
+
+- 口技的指定:
+
+### 页面重排和重绘的概念
+
+> 重排和重绘都是浏览器渲染过程中可能发生的操作。
+
+> 重排是元素的几何信息发生变化，例如宽高、位置、布局方式发生变化，浏览器需要重新计算页面布局。常见操作包括修改 width、height、margin、padding，添加删除 DOM，以及读取某些布局属性后导致强制同步布局。
+
+> 重绘是元素的布局没有变化，只是视觉样式发生变化，例如修改 color、background-color 等，浏览器只需要重新绘制元素。
+
+> 通常来说，重排的成本比重绘更高，因为重排可能影响其他元素的布局，并且通常会进一步触发重绘。
+
+> 性能优化方面，可以通过批量修改 DOM、使用 class、避免频繁读写布局属性、读写分离，以及使用 transform 和 opacity 进行动画来减少重排和重绘。
+
+**重排**: 是页面元素的变化，会导致页面重新对元素进行布局，并重绘
+
+**重绘**: 就是元素本身背景页或颜色变化，重新绘制
+
+**减少重排的策略**:
+
+- 合并样式修改:
+
+```javascript
+document.style.width = "100px";
+document.style.height = "200px";
+
+// 优化后
+document.cssText = "width: 100px; height: 200px;";
+```
+
+- 避免频繁读取布局属性(document.offsetWidth 等)
+
+- 减少文档流中 DOM 操作
+
+- 硬件加速
+
+```css
+.parent {
+	transform: translateZ(0);
+	will-change: transform;
+}
+```
+
 ## 工程化
 
 ### 同一个页面三个组件请求同一个 API
@@ -3960,3 +4362,43 @@ Loader 的执行顺序
 Webpack Loader 默认从右往左执行，从下往上执行。
 
 ::
+
+### 如何引入 antd 组件并支持按需加载
+
+> Ant Design 在现代 React 项目中一般直接通过 ESM 方式引入，例如 import { Button } from 'antd'。
+
+> 配合 Vite、Webpack、Next.js 等现代构建工具的 Tree Shaking，可以在构建阶段移除没有使用的代码，因此通常不需要额外配置 babel-plugin-import。
+
+> 如果是以前的 Ant Design 项目，则可以通过 babel-plugin-import 将 import { Button } from 'antd' 转换成组件级别的引入，实现传统意义上的按需加载。
+
+> 如果说的是运行时按需加载，则应该使用 import()、React.lazy 等实现代码分割和懒加载。
+
+> 所以需要区分 组件按需引入、Tree Shaking 和运行时懒加载 这三个概念。
+
+### 什么是前端微应用，不同的实现方式都是什么
+
+> 前端微应用，也叫微前端，是一种将大型前端应用拆分成多个独立子应用的架构方式。每个子应用可以独立开发、独立部署，甚至可以使用不同的技术栈，最后由主应用进行组合。
+
+> 常见实现方式主要有几种：
+
+> 第一种是 iframe，隔离性最好，实现简单，但是通信、路由、用户体验和性能方面存在一些问题。
+
+> 第二种是基于 single-spa、qiankun 的应用级微前端，由主应用根据路由加载和管理子应用，并通过生命周期管理子应用。
+
+> 第三种是 Web Components，通过 Custom Elements 和 Shadow DOM 实现组件化和样式隔离，适合跨技术栈复用组件。
+
+> 第四种是 Module Federation，通过运行时加载远程模块实现模块级共享，适合多个应用之间共享组件和业务模块。
+
+> 另外还有构建时集成，比如把子应用发布成 npm 包，然后由主应用安装使用。
+
+> 实际选择时，需要根据项目对隔离性、独立部署、技术栈兼容、模块共享以及性能的要求进行选择。
+
+前端微应用架构核心是**把大前端项目拆分成多个独立小应用，再灵活组合使用**
+
+**核心特点**:
+
+- 独立开发部署: 每个小应用可单独开发、测试，不影响其它部分
+
+- 灵活集成: 多个小应用能像搭积木一样，组合成完整的产品
+
+- 互不干扰: 小应用间技术栈可不同，运行时互不冲突

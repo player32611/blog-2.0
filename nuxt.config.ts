@@ -19,6 +19,7 @@ export default defineNuxtConfig({
 						"cpp",
 						"css",
 						"html",
+						"http",
 						"java",
 						"javascript",
 						"json",
