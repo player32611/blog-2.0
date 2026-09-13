@@ -4048,6 +4048,30 @@ document.cssText = "width: 100px; height: 200px;";
 }
 ```
 
+### 浏览器渲染流程
+
+> 浏览器首先解析 HTML 生成 DOM Tree，同时解析 CSS 生成 CSSOM，然后将 DOM 和 CSSOM 合并生成 Render Tree。接着进行 Layout，计算元素的几何信息；然后进行 Paint，将元素绘制成图层；最后由 Compositor 对各个图层进行合成，最终显示到屏幕上。
+
+1. 解析 HTML: 从上到下读取 HTML 内容，遇到标签就构建 DOM 树
+
+2. 解析 CSS: 当遇到 CSS(内联、`<style>` 或者 `<link>`)，都会并行构建 CSSDOM 树
+
+3. 渲染页面: 等待 DOM 和 CSSDOM 都准备好，合并渲染树，会计算元素位置大小(布局)，并绘制到屏幕上
+
+### JS 加载会阻塞浏览器渲染吗
+
+> JS 加载是否阻塞浏览器渲染，要看加载方式。普通 script 会阻塞 HTML 解析，JS 的下载和执行都可能导致页面渲染延迟；async 下载不阻塞 HTML 解析，但下载完成后的执行会阻塞解析；defer 下载不阻塞解析，并在 HTML 解析完成后执行，因此通常推荐将业务脚本使用 defer。
+
+会，而且默认是 "加载 + 执行" 双重阻塞，但不是所有情况都这样，关键看 JS 脚本的加载方式，位置和浏览器机制
+
+JS 执行会阻塞 DOM 解析: 浏览器解析 HTML 时，一旦遇到 `<script>` 标签，都会立即停下 HTML 解析，转而去下载外部脚本并执行外部脚本
+
+JS 执行会等待 CSSDOM: JS 代码里要操作 CSS 样式(`getComputedStyle(element)`)，浏览器会先检查 CSSDOM 有没有构建完。如果没有，会暂停 JS 执行等待 CSSDOM 就绪后再继续执行
+
+- `defer`(延迟执行)
+
+- `async`(异步执行)
+
 ## 工程化
 
 ### 同一个页面三个组件请求同一个 API

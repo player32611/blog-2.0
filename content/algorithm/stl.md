@@ -1,11 +1,5 @@
 # STL
 
-::danger
-
-该页面尚未完工!
-
-::
-
 ## 什么是 STL
 
 STL 即标准模板库(Standard Template Library)，是 C++ 标准库的一部分，里面包含了一些模板化的通用的数据结构和算法。由于其模板化的特点，它能够兼容自定义的数据类型，避免大量的造轮子工作。
@@ -610,6 +604,188 @@ int main() {
 
 ## 双向链表-list
 
+如果需要使用双向链表，C++ 的 STL 提供了一个已经封装好的容器-`list`。`list` 的底层就是一个双向链表，其中创建以及增删改查等等的逻辑已经实现好了，并且也完成了封装。
+
+`list` 与 `vector` 最大的区别在于，`list` 支持在任意位置以 $O(1)$ 的时间复杂度插入和删除元素，但是不支持随机访问（不能使用下标访问元素）。
+
+### 创建 list
+
+```cpp
+#include<list>
+
+int main() {
+    std::list<int> a1;
+    std::list<int> a2(10);
+    std::list<int> a3(10, 2);
+    std::list<int> a4 = { 1,2,3,4,5 };
+}
+```
+
+以上代码创建了:
+
+- 一个名字为 a1 的空链表，里面都是 int 类型的数据；
+
+- 一个名字为 a2 的链表，大小为 10；
+
+- 一个名字为 a3 的链表，大小为 10，里面的值都初始化为 2。
+
+- 一个名字为 a4 的链表，里面有 5 个数据，数据初始化为 1,2,3,4,5。
+
+::tip
+
+`<>` 里面可以存放任意的数据类型，包括结构体 struct、字符串 string 等等。
+
+::
+
+### size()/empty()
+
+- `size()`: 返回链表里实际元素的个数；
+
+- `empty()`: 链表是否为空。如果为空：返回 true，否则返回 false。
+
+```cpp
+#include<iostream>
+#include<list>
+using namespace std;
+
+void print(list<int>& a) {
+    for (auto x : a)cout << x << " ";
+    cout << endl;
+}
+
+int main() {
+    list<int> a = { 1,2,3,4,5 };
+    print(a);
+    cout << a.size() << " " << a.empty() << endl;
+}
+```
+
+### push_back()/push_front()/pop_back()/pop_front()
+
+- `push_back()`: 在链表尾部添加一个元素；
+
+- `push_front()`: 在链表头部添加一个元素；
+
+- `pop_back()`: 删除链表尾部的一个元素；
+
+- `pop_front()`: 删除链表头部的一个元素。
+
+```cpp
+#include<iostream>
+#include<list>
+using namespace std;
+
+void print(list<int>& a) {
+    for (auto x : a)cout << x << " ";
+    cout << endl;
+}
+
+int main() {
+    list<int> a = { 1,2,3,4,5 };
+    print(a);
+    a.push_back(6);
+    a.push_front(0);
+    print(a);
+    a.pop_back();
+    a.pop_front();
+    print(a);
+}
+```
+
+### front()/back()
+
+- `front()`: 返回链表第一个元素；
+
+- `back()`: 返回链表最后一个元素。
+
+```cpp
+#include<iostream>
+#include<list>
+using namespace std;
+
+int main() {
+    list<int> a = { 1,2,3,4,5 };
+    cout << a.front() << " " << a.back() << endl;
+}
+```
+
+### insert()/erase()
+
+`list` 在任意位置插入和删除的效率非常高，因此 `insert()` 和 `erase()` 是 `list` 的常用方法。
+
+- `insert(pos, val)`: 在 pos 位置（迭代器）前面插入一个元素 val；
+
+- `erase(pos)`: 删除 pos 位置（迭代器）指向的元素。
+
+```cpp
+#include<iostream>
+#include<list>
+using namespace std;
+
+void print(list<int>& a) {
+    for (auto x : a)cout << x << " ";
+    cout << endl;
+}
+
+int main() {
+    list<int> a = { 1,2,3,4,5 };
+    list<int>::iterator it = a.begin();
+    it++;              // 指向第二个元素 2
+    a.insert(it, 10);  // 在 2 前面插入 10
+    print(a);          // 输出：1 10 2 3 4 5
+    a.erase(it);       // 删除 2
+    print(a);          // 输出：1 10 3 4 5
+}
+```
+
+::warning
+
+`list` 的迭代器不支持 `it + 2` 这种跨多步的运算，只能通过 `it++` 一步一步移动。因为链表在内存中不是连续存储的。
+
+::
+
+### 遍历
+
+`list` 不支持下标访问，但可以使用迭代器或者范围 for 进行遍历。
+
+```cpp
+#include<iostream>
+#include<list>
+using namespace std;
+
+int main() {
+    list<int> a = { 1,2,3,4,5 };
+    // 使用迭代器遍历
+    for (list<int>::iterator it = a.begin(); it != a.end(); it++) {
+        cout << *it << " ";
+    }
+    cout << endl;
+    // 使用范围 for 遍历
+    for (auto x : a) {
+        cout << x << " ";
+    }
+    cout << endl;
+}
+```
+
+::warning
+
+`list` 不支持 `a[i]` 这种下标访问方式，因为链表在内存中不是连续存储的，无法通过下标快速定位元素。
+
+::
+
+::tip
+
+`list` 不支持 STL 算法中的 `sort()` 函数，但自身提供了 `sort()` 成员函数用于排序，还提供了 `reverse()` 成员函数用于反转链表。
+
+```cpp
+list<int> a = { 3,1,4,1,5 };
+a.sort();    // 排序后：1 1 3 4 5
+a.reverse(); // 反转后：5 4 3 1 1
+```
+
+::
+
 ## 栈-stack
 
 ### 创建 stack
@@ -687,41 +863,594 @@ int main() {
 
 ## 双端队列-deque
 
-::danger
+双端队列 `deque` 是一种可以在头部和尾部同时进行插入和删除的容器。与 `vector` 类似，`deque` 也支持随机访问（使用下标访问元素）；与 `list` 类似，`deque` 也支持在头部进行插入和删除。
 
-该部分尚未完工!
+### 创建 deque
+
+```cpp
+#include<deque>
+
+int main() {
+    std::deque<int> a1;
+    std::deque<int> a2(10);
+    std::deque<int> a3(10, 2);
+    std::deque<int> a4 = { 1,2,3,4,5 };
+}
+```
+
+以上代码创建了:
+
+- 一个名字为 a1 的空双端队列，里面都是 int 类型的数据；
+
+- 一个名字为 a2 的双端队列，大小为 10；
+
+- 一个名字为 a3 的双端队列，大小为 10，里面的值都初始化为 2。
+
+- 一个名字为 a4 的双端队列，里面有 5 个数据，数据初始化为 1,2,3,4,5。
+
+### size()/empty()
+
+- `size()`: 返回双端队列里实际元素的个数；
+
+- `empty()`: 双端队列是否为空。如果为空：返回 true，否则返回 false。
+
+### push_back()/push_front()/pop_back()/pop_front()
+
+- `push_back()`: 在双端队列尾部添加一个元素；
+
+- `push_front()`: 在双端队列头部添加一个元素；
+
+- `pop_back()`: 删除双端队列尾部的一个元素；
+
+- `pop_front()`: 删除双端队列头部的一个元素。
+
+```cpp
+#include<iostream>
+#include<deque>
+using namespace std;
+
+void print(deque<int>& a) {
+    for (auto x : a)cout << x << " ";
+    cout << endl;
+}
+
+int main() {
+    deque<int> a = { 1,2,3,4,5 };
+    print(a);
+    a.push_back(6);
+    a.push_front(0);
+    print(a);
+    a.pop_back();
+    a.pop_front();
+    print(a);
+}
+```
+
+### front()/back()
+
+- `front()`: 返回双端队列第一个元素；
+
+- `back()`: 返回双端队列最后一个元素。
+
+```cpp
+#include<iostream>
+#include<deque>
+using namespace std;
+
+int main() {
+    deque<int> a = { 1,2,3,4,5 };
+    cout << a.front() << " " << a.back() << endl;
+}
+```
+
+### clear()
+
+- `clear()`: 清空双端队列。
+
+```cpp
+#include<iostream>
+#include<deque>
+using namespace std;
+
+void print(deque<int>& a) {
+    for (auto x : a)cout << x << " ";
+    cout << endl;
+}
+
+int main() {
+    deque<int> a = { 1,2,3,4,5 };
+    print(a);
+    a.clear();
+    print(a);
+}
+```
+
+::tip
+
+`deque` 的底层不是一段连续的内存，而是由多段连续内存拼接而成，因此可以在头部高效地插入和删除元素。这也是它和 `vector` 的主要区别。
 
 ::
 
 ## 优先队列-priority_queue
 
-::danger
+优先队列 `priority_queue` 是一种特殊的队列，它的出队顺序不是先进先出，而是**优先级最高的元素先出队**。`priority_queue` 的底层是一个堆，默认情况下是一个**大根堆**，也就是队首（堆顶）元素是最大的。
 
-该部分尚未完工!
+### 创建 priority_queue
+
+```cpp
+#include<queue>
+
+int main() {
+    std::priority_queue<int> a;                              // 默认大根堆
+    std::priority_queue<int, vector<int>, greater<int>> b;   // 小根堆
+}
+```
+
+- `priority_queue<int> a` 创建了一个大根堆，队首元素最大；
+
+- `priority_queue<int, vector<int>, greater<int>> b` 创建了一个小根堆，队首元素最小。
+
+::tip
+
+`priority_queue` 需要包含 `<queue>` 头文件。第三个模板参数是用于比较的函数对象，`greater<int>` 表示小根堆，需要包含 `<functional>` 头文件。
+
+::
+
+### size()/empty()
+
+- `size()`: 返回优先队列里实际元素的个数；
+
+- `empty()`: 优先队列是否为空。如果为空：返回 true，否则返回 false。
+
+### push()/pop()
+
+- `push()`: 往优先队列里添加一个元素；
+
+- `pop()`: 删除优先队列队首（优先级最高）的一个元素。
+
+### top()
+
+- `top()`: 返回队首元素（优先级最高的元素），但是不会删除。
+
+```cpp
+#include<iostream>
+#include<queue>
+using namespace std;
+
+int main() {
+    priority_queue<int> q; // 大根堆
+    q.push(3);
+    q.push(1);
+    q.push(4);
+    q.push(1);
+    q.push(5);
+    while (q.size()) {
+        cout << q.top() << " ";
+        q.pop();
+    }
+    // 输出：5 4 3 1 1
+}
+```
+
+::tip
+
+默认的大根堆，`top()` 返回的是最大的元素。如果需要每次返回最小的元素，可以创建小根堆：
+
+```cpp
+priority_queue<int, vector<int>, greater<int>> q;
+```
+
+::
+
+::warning
+
+`priority_queue` 没有迭代器，不能像 `vector` 那样通过下标或者范围 for 遍历，只能通过 `top()` 和 `pop()` 依次取出元素。
+
+::
+
+### 自定义优先级
+
+当元素是自定义类型（如结构体）时，需要自定义比较规则。可以通过自定义比较函数来实现。
+
+```cpp
+#include<iostream>
+#include<queue>
+using namespace std;
+
+struct Node {
+    int x;
+    int y;
+};
+
+// 自定义比较：x 小的优先级高（小根堆）
+struct cmp {
+    bool operator()(Node a, Node b) {
+        return a.x > b.x;
+    }
+};
+
+int main() {
+    priority_queue<Node, vector<Node>, cmp> q;
+    q.push({3, 1});
+    q.push({1, 2});
+    q.push({2, 3});
+    while (q.size()) {
+        Node t = q.top();
+        cout << t.x << " " << t.y << endl;
+        q.pop();
+    }
+    // 输出：
+    // 1 2
+    // 2 3
+    // 3 1
+}
+```
+
+::tip
+
+自定义比较时，`cmp` 中的 `operator()` 返回 true 表示 a 的优先级低于 b。所以 `return a.x > b.x` 表示 x 小的元素优先级高，即小根堆。
 
 ::
 
 ## 集合-set
 
-::danger
+`set` 是集合容器，它的内部元素是**自动排序**并且**去重**的。`set` 的底层是一棵红黑树，因此插入、删除、查找的时间复杂度都是 $O(logn)$。
 
-该部分尚未完工!
+### 创建 set
+
+```cpp
+#include<set>
+
+int main() {
+    std::set<int> a;
+    std::set<int> b = { 3,1,4,1,5,9 };
+}
+```
+
+::tip
+
+`set` 中的元素会自动去重并且升序排序。上面的 `b` 中实际存储的元素是 `1,3,4,5,9`（`1` 只保留了一个）。
+
+::
+
+### size()/empty()
+
+- `size()`: 返回集合里实际元素的个数；
+
+- `empty()`: 集合是否为空。如果为空：返回 true，否则返回 false。
+
+### insert()/erase()
+
+- `insert(x)`: 往集合里插入元素 x，如果 x 已经存在，则不会插入（去重）；
+
+- `erase(x)`: 删除集合中值为 x 的元素。
+
+```cpp
+#include<iostream>
+#include<set>
+using namespace std;
+
+void print(set<int>& a) {
+    for (auto x : a)cout << x << " ";
+    cout << endl;
+}
+
+int main() {
+    set<int> a;
+    a.insert(3);
+    a.insert(1);
+    a.insert(4);
+    a.insert(1); // 重复插入，无效
+    print(a);    // 输出：1 3 4
+    a.erase(3);
+    print(a);    // 输出：1 4
+}
+```
+
+### find()/count()
+
+- `find(x)`: 查找值为 x 的元素，返回指向该元素的迭代器；如果不存在，返回 `end()`；
+
+- `count(x)`: 返回集合中值为 x 的元素的个数。由于 `set` 去重，因此返回值只能是 0 或 1。
+
+```cpp
+#include<iostream>
+#include<set>
+using namespace std;
+
+int main() {
+    set<int> a = { 1,2,3,4,5 };
+    if (a.find(3) != a.end()) {
+        cout << "found 3" << endl;
+    }
+    cout << a.count(3) << " " << a.count(10) << endl; // 输出：1 0
+}
+```
+
+### 遍历
+
+`set` 中的元素是按升序排列的，遍历 `set` 会按从小到大的顺序访问元素。
+
+```cpp
+#include<iostream>
+#include<set>
+using namespace std;
+
+int main() {
+    set<int> a = { 3,1,4,1,5,9 };
+    for (auto x : a) {
+        cout << x << " ";
+    }
+    // 输出：1 3 4 5 9
+}
+```
+
+::warning
+
+`set` 中的元素是只读的，不能通过迭代器修改元素的值。因为 `set` 是依靠元素的值来排序的，如果修改元素的值，会破坏 `set` 的有序性。
+
+::
+
+### lower_bound()/upper_bound()
+
+`set` 也提供了 `lower_bound()` 和 `upper_bound()` 成员函数，用于查找第一个大于等于 x 或者第一个大于 x 的元素。
+
+- `lower_bound(x)`: 返回第一个大于等于 x 的元素的迭代器；
+
+- `upper_bound(x)`: 返回第一个大于 x 的元素的迭代器。
+
+```cpp
+#include<iostream>
+#include<set>
+using namespace std;
+
+int main() {
+    set<int> a = { 1,3,5,7,9 };
+    auto it1 = a.lower_bound(4); // 第一个 >= 4 的元素是 5
+    auto it2 = a.upper_bound(4); // 第一个 > 4 的元素是 5
+    cout << *it1 << " " << *it2 << endl;
+}
+```
+
+::tip
+
+`set` 的 `lower_bound()`/`upper_bound()` 成员函数时间复杂度是 $O(logn)$。而 STL 算法中的 `lower_bound()`/`upper_bound()` 作用在 `set` 上时时间复杂度是 $O(n)$，所以要优先使用 `set` 自带的成员函数。
 
 ::
 
 ## 红黑树-map
 
-::danger
+`map` 是一种键值对（key-value）容器，它的内部元素是**自动按键排序**并且**键去重**的。`map` 的底层也是一棵红黑树，插入、删除、查找的时间复杂度都是 $O(logn)$。
 
-该部分尚未完工!
+### 创建 map
+
+```cpp
+#include<map>
+
+int main() {
+    std::map<string, int> a; // 键是 string，值是 int
+}
+```
+
+::tip
+
+`map` 的键值对类型是 `pair`，可以使用 `make_pair(key, value)` 或者 `{key, value}` 来创建一个键值对。
+
+::
+
+### size()/empty()
+
+- `size()`: 返回 map 里实际元素的个数；
+
+- `empty()`: map 是否为空。如果为空：返回 true，否则返回 false。
+
+### 插入元素
+
+可以使用下标运算符 `[]` 或者 `insert()` 来插入元素。
+
+```cpp
+#include<iostream>
+#include<map>
+using namespace std;
+
+int main() {
+    map<string, int> m;
+    // 方式1：使用下标运算符
+    m["apple"] = 3;
+    m["banana"] = 5;
+    // 方式2：使用 insert()
+    m.insert({"cherry", 2});
+    m.insert(make_pair("date", 7));
+    cout << m["apple"] << endl;
+}
+```
+
+::tip
+
+使用下标运算符 `m[key]` 时，如果 key 不存在，会**自动插入**一个默认值（value 为 0），然后返回该值的引用。
+
+::
+
+### 查找元素
+
+- `find(key)`: 查找键为 key 的元素，返回指向该元素的迭代器；如果不存在，返回 `end()`；
+
+- `count(key)`: 返回键为 key 的元素的个数。由于 `map` 的键去重，因此返回值只能是 0 或 1。
+
+```cpp
+#include<iostream>
+#include<map>
+using namespace std;
+
+int main() {
+    map<string, int> m = { {"apple", 3}, {"banana", 5} };
+    if (m.find("apple") != m.end()) {
+        cout << m["apple"] << endl;
+    }
+    cout << m.count("apple") << " " << m.count("cherry") << endl;
+}
+```
+
+### erase()
+
+- `erase(key)`: 删除键为 key 的元素。
+
+```cpp
+#include<iostream>
+#include<map>
+using namespace std;
+
+int main() {
+    map<string, int> m = { {"apple", 3}, {"banana", 5} };
+    m.erase("apple");
+    cout << m.size() << endl;
+}
+```
+
+### 遍历
+
+遍历 `map` 时，得到的是 `pair` 类型，`first` 是键，`second` 是值。遍历顺序按键的升序。
+
+```cpp
+#include<iostream>
+#include<map>
+using namespace std;
+
+int main() {
+    map<string, int> m = { {"banana", 5}, {"apple", 3}, {"cherry", 2} };
+    for (auto it = m.begin(); it != m.end(); it++) {
+        cout << it->first << " " << it->second << endl;
+    }
+    // 输出（按键升序）：
+    // apple 3
+    // banana 5
+    // cherry 2
+}
+```
+
+::tip
+
+`map` 中的 `key` 是只读的，不能修改，但 `value` 可以修改。因为 `map` 依靠 `key` 来排序，如果修改 `key` 会破坏有序性。
 
 ::
 
 ## 哈希表-unordered_map
 
-::danger
+`unordered_map` 也是一种键值对容器，功能与 `map` 类似，但是底层是**哈希表**实现，因此元素是**无序**的，插入、删除、查找的平均时间复杂度是 $O(1)$。
 
-该部分尚未完工!
+### 创建 unordered_map
+
+```cpp
+#include<unordered_map>
+
+int main() {
+    std::unordered_map<string, int> a; // 键是 string，值是 int
+}
+```
+
+::tip
+
+`unordered_map` 需要包含 `<unordered_map>` 头文件。
+
+::
+
+### size()/empty()
+
+- `size()`: 返回哈希表里实际元素的个数；
+
+- `empty()`: 哈希表是否为空。如果为空：返回 true，否则返回 false。
+
+### 插入元素
+
+和 `map` 一样，可以使用下标运算符 `[]` 或者 `insert()` 插入元素。
+
+```cpp
+#include<iostream>
+#include<unordered_map>
+using namespace std;
+
+int main() {
+    unordered_map<string, int> m;
+    m["apple"] = 3;
+    m["banana"] = 5;
+    m.insert({"cherry", 2});
+    cout << m["apple"] << endl;
+}
+```
+
+### 查找元素
+
+- `find(key)`: 查找键为 key 的元素，返回指向该元素的迭代器；如果不存在，返回 `end()`；
+
+- `count(key)`: 返回键为 key 的元素的个数，只能是 0 或 1。
+
+```cpp
+#include<iostream>
+#include<unordered_map>
+using namespace std;
+
+int main() {
+    unordered_map<string, int> m = { {"apple", 3}, {"banana", 5} };
+    if (m.find("apple") != m.end()) {
+        cout << m["apple"] << endl;
+    }
+    cout << m.count("apple") << endl;
+}
+```
+
+### erase()
+
+- `erase(key)`: 删除键为 key 的元素。
+
+```cpp
+#include<iostream>
+#include<unordered_map>
+using namespace std;
+
+int main() {
+    unordered_map<string, int> m = { {"apple", 3}, {"banana", 5} };
+    m.erase("apple");
+    cout << m.size() << endl;
+}
+```
+
+### 遍历
+
+遍历 `unordered_map` 得到的是 `pair` 类型，但是元素的顺序是**无序**的。
+
+```cpp
+#include<iostream>
+#include<unordered_map>
+using namespace std;
+
+int main() {
+    unordered_map<string, int> m = { {"banana", 5}, {"apple", 3}, {"cherry", 2} };
+    for (auto it = m.begin(); it != m.end(); it++) {
+        cout << it->first << " " << it->second << endl;
+    }
+}
+```
+
+### map 与 unordered_map 的区别
+
+|      特性      |     map      |   unordered_map   |
+| :------------: | :----------: | :---------------: |
+|    底层实现    |    红黑树    |      哈希表       |
+|    元素顺序    | 按键升序排序 |       无序        |
+| 查找时间复杂度 |  $O(logn)$   |    平均 $O(1)$    |
+|     头文件     |   `<map>`    | `<unordered_map>` |
+
+::tip
+
+- 如果需要元素按键有序（如遍历时按键升序输出），使用 `map`；
+
+- 如果只关心快速查找，对顺序没有要求，使用 `unordered_map`，平均查找速度更快。
+
+::
+
+::warning
+
+`unordered_map` 的查找时间复杂度是**平均** $O(1)$，最坏情况下会退化到 $O(n)$（当哈希冲突严重时）。
 
 ::
 
