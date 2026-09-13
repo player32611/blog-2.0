@@ -4,4 +4,8 @@
 	</h2>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+h2 {
+	font-size: 2.5em;
+}
+</style>

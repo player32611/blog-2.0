@@ -4,4 +4,8 @@
 	</h3>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+h3 {
+	font-size: 1.5em;
+}
+</style>
