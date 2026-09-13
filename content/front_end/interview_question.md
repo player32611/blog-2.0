@@ -2,9 +2,44 @@
 
 ## HTML
 
-### script 标签的 async 以及 defer 属性有什么作用以及他们的区别
+### script 标签上有哪些属性，分别作用是什么
 
 > async 和 defer 都可以让 script 异步下载，从而避免 JS 下载阻塞 HTML 解析。async 是"下载完立即执行"，多个脚本执行顺序不确定；defer 是"HTML 解析完成后再执行"，并且多个 defer 脚本会按照 HTML 中的顺序执行。
+
+- `src`: 指定 JS 文件地址
+
+- `type`: 定义脚本 MIME 类型，告诉浏览器如何解析脚本
+
+- **`async`**: 异步下载，下载完成后立即暂停 HTML 解析并执行
+
+- **`defer`**: 异步下载，但是等 HTML 解析完成后再执行
+
+```html
+<script src="/js/app.js"></script>
+
+<script type="text/javascript"></script>
+
+<script async src="app.js"></script>
+
+<script defer src="app.js"></script>
+```
+
+- `crossorigin`: 控制跨域加载脚本时 CORS 的权限，用于获取跨域脚本的错误信息(默认跨域脚本无法获取错误信息)
+
+- `integrity`: 保证脚本的完整性，防止脚本被篡改
+
+```html
+<script src="https://cdn.example.com/app.js" crossorigin="anonymous"></script>
+<script src="https://cdn.example.com/app.js" crossorigin="use-credentials"></script>
+
+<script
+	src="https://cdn.example.com/app.js"
+	integrity="sha384-xxx..."
+	crossorigin="anonymous"
+></script>
+```
+
+::warning
 
 script 标签会直接阻塞页面 html 的渲染，首先会通过网络请求相关的内容。请求完成后，执行 js 逻辑，完成后才会继续进行页面 html 的解析
 
@@ -13,17 +48,7 @@ script 标签会直接阻塞页面 html 的渲染，首先会通过网络请求�
 <!-- HTML 解析 -> 遇到 script -> 暂停 HTML 解析 -> 下载 JS -> 执行 JS -> 继续解析 HTML -->
 ```
 
-`async`: 异步下载，下载完成后立即暂停 HTML 解析并执行
-
-```html
-<script async src="app.js"></script>
-```
-
-`defer`: 异步下载，但是等 HTML 解析完成后再执行
-
-```html
-<script defer src="app.js"></script>
-```
+::
 
 ::tip
 
@@ -31,7 +56,7 @@ async 以及 defer 的区别
 
 - 执行阶段: `async` 是加载完了直接执行；`defer` 是加载完了并且等待整体页面渲染完成后才会去执行
 
-- 顺序: 多个 `async` 标签同时加载，他们的执行顺序是没法保证的；多个 `defer` 标签是可以保证执行顺序的。
+- 顺序: 多个 `async` 标签同时加载，他们的执行顺序是没法保证的；多个 `defer` 标签是可以保证按照标签顺序执行的。
 
 ::
 
@@ -672,6 +697,177 @@ const copy3 = Array.from(arr);
 ```
 
 ### 原型与原型链?
+
+### DOM 里面，如何判断 a 元素是 b 元素的子元素
+
+> 可以使用 DOM 的 contains() 方法，例如 b.contains(a)，它可以判断 a 是否是 b 的后代节点。如果要求严格的子元素关系，需要额外判断 a !== b。
+
+::code-group
+
+```javascript [方案一]
+const a = document.querySelector("#a");
+const b = document.querySelector("#b");
+
+console.log(b.contains(a));
+```
+
+```javascript [方案二]
+const a = document.querySelector("#a");
+const b = document.querySelector("#b");
+
+// 判断 a 的祖先中是否存在 b
+a.closest("#b") === b;
+```
+
+::
+
+### js 超过 Number 最大值的数如何处理
+
+> JavaScript 的 Number 使用 IEEE 754 双精度浮点数表示，最大安全整数是 Number.MAX_SAFE_INTEGER，即 2^53 - 1，超过这个范围后整数可能出现精度丢失。如果需要处理超过安全整数范围的大整数，可以使用 ES2020 提供的 BigInt。在前后端数据传输中，如果是订单 ID、雪花 ID 等超大整数，也可以让后端以字符串形式返回，避免 JSON 解析时发生精度丢失。
+
+在 JavaScript 中，Number 类型基于 64 位双精度浮点数实现，其最大值由 Number.MAX_VALUE 定义
+
+当数值超过这个上限时，会被强制转为 `Infinity`，导致精度丢失或计算错误
+
+**解决方案**:
+
+```javascript
+const a = 9007199254740992n;
+const b = BigInt("123456789012345678901234567890");
+const c = BigInt(Number.MAX_VALUE) + 100n;
+
+console.log(a);
+console.log(b);
+```
+
+### js 如何判空(数组、对象、字符串、0、undefined、null、空 map、空 set)
+
+> JS 判空不能简单使用 !value，因为 0、false、NaN 等也是 falsy，而空数组、空对象、空 Map、空 Set 都是 truthy。对于 null 和 undefined 可以使用 value == null；字符串判断 value === '' 或 trim() === ''；数组判断 length === 0；普通对象使用 Object.keys(value).length === 0；Map 和 Set 使用 size === 0。如果业务上 0 不是空值，就不能使用 !value 统一判断。
+
+```javascript
+function isEmoty(val) {
+	// 基础空值
+	if (val === undefined || val === null) return true;
+
+	// 数字类型
+	if (typeof val === "number") return val === 0;
+
+	// 字符串
+	if (typeof val === "string") return val === "";
+
+	// 数组
+	if (Array.isArray(val)) return val.length === 0;
+
+	// 对象
+	if (typeof val === "object" && !Array.isArray(val)) {
+		if (val.constructor === Object) return Object.keys(val).length === 0;
+
+		// 空 Map
+		if (val instanceof Map) return val.size === 0;
+
+		// 空 Set
+		if (val instanceof Set) return (val, size === 0);
+	}
+
+	return false;
+}
+```
+
+### js 如何实现大对象深度对比
+
+> 大对象深度比较可以通过递归遍历对象的属性来实现，首先用 Object.is 判断是否是同一个引用，然后判断类型、数组类型和 key 数量，再递归比较每个属性。对于循环引用，可以使用 WeakMap 记录已经比较过的对象，避免无限递归。
+
+> 但是对于大对象，性能问题比实现本身更重要。生产环境通常使用成熟的 lodash.isEqual，或者通过结构共享、引用比较 ===、缩小比较范围等方式避免每次都遍历整个对象。
+
+```javascript
+// 目标
+// deepEqual(1, 2) // false
+// deepEqual({a: 1, b: 2}, {a: 1, b: 2}) // true
+
+function deepEqual(a, b) {
+	// 原始值是否一致
+	if (a === b) return true;
+
+	// null/undefined/原始值
+	if (a === null || b === null || typeof a !== "object" || typeof b !== "object")
+		return Object.is(a, b);
+
+	// 构造函数
+	if (a.constructor !== b.constructor) return false;
+
+	// 数组
+	if (Array.isArray(a))
+		return a.length === b.length && a.every((val, idx) => deepEqual(val, b[idx]));
+
+	// Set
+	if (a instanceof Set) {
+		if (a.size !== b.size) return false;
+		for (const val of a) {
+			let hasEqual = false;
+			for (const bVal of b) {
+				if (deepEqual(val, bVal)) {
+					hasEqual = true;
+					break;
+				}
+			}
+			if (!hasEqual) return false;
+		}
+	}
+
+	// Map
+	if (a instanceof Map) {
+		if (a.size !== b.size) return false;
+		for (const [key, val] of a) {
+			let hasEqual = false;
+			for (const [bKey, bVal] of b) {
+				if (deepEqual(key, bKey) && deepEqual(val, bVal)) {
+					hasEqual = true;
+					break;
+				}
+			}
+			if (!hasEqual) return false;
+		}
+	}
+
+	// 函数
+	if (typeof a === "function") return a.toString() === b.toString();
+
+	// 普通对象 object
+	const keysA = Object.keys(a);
+	const keysB = Object.keys(b);
+
+	if (keysA.length !== keysB.length) return false;
+	return keysA.every(key => deepEqual(a[key], b[key]));
+}
+```
+
+### V8 里的 JIT 是什么
+
+> JIT 是 Just-In-Time 即时编译。V8 不会一开始就把所有 JavaScript 全部编译成机器码，而是先通过 Ignition 解释执行字节码，同时收集运行时的类型反馈。当发现某段代码执行频繁、类型比较稳定时，就把它识别为热点代码，并交给 TurboFan 进行优化编译，生成更高效的机器码。
+
+> 如果后续发现之前的类型假设不成立，V8 还可以进行 Deoptimization，回退到通用执行路径。这样能够在运行时利用真实的代码执行情况优化 JavaScript，从而提高性能。
+
+**核心**: 让 JS 跑的更快
+
+**JS 执行流程**: JS 引擎逐行读代码 -> 转成字节码 -> 逐行执行
+
+**JIT 核心思路**: 频繁执行的热点代码(比如循环、常调用函数)直接编译为机器码(CPU 直接能跑的指令)
+
+- Ignition(解释器): 负责快速启动
+
+- TurboFan(优化编译器): 负责深度优化
+
+- 反优化机制: 校验之前代码生成的机器码，确保类型不出错，如果出错了它就重新交给解释器执行
+
+**实际工作流程**:
+
+1. 首次执行: JS 代码 -> Ignition(解释器)转字节码 -> 解释执行
+
+2. 检测热点: 函数调用，循环执行次数，标记为热点代码
+
+3. 编译加速: TurboFan(优化编译器) -> 直接编译为机器码，后续直接用机器码执行
+
+**本质**: 解释执行 + 热点编译
 
 ## TypeScript
 
@@ -1725,6 +1921,18 @@ HTTP2 针对 HTTP1 的优化
 > 跨域是浏览器同源策略导致的。当请求的协议、域名或者端口与当前页面不同时，就属于跨域。浏览器的同源策略主要是为了防止恶意网站读取其他源的敏感数据。解决跨域最常用的是 CORS，由后端通过 Access-Control-Allow-Origin 等响应头告诉浏览器允许哪些源访问。开发环境还可以通过 Vite、Webpack Dev Server 等配置代理，生产环境可以通过 Nginx 反向代理。另外还有 JSONP、postMessage 等方案，其中 JSONP 主要用于兼容老项目并且只支持 GET。
 
 协议、域名、端口号有一个不同就是跨域
+
+### HTTP 是一个无状态的协议，那么 Web 应用要怎么保持用户的登录态
+
+> HTTP 本身是无状态协议，服务器不会自动记住前一次请求的用户身份。Web 应用通常通过 Cookie、Session 或 Token 来维护登录态。传统方案是登录成功后服务器创建 Session，并通过 Set-Cookie 将 Session ID 返回给浏览器，之后浏览器每次请求自动携带 Cookie，服务器根据 Session ID 找到对应用户。前后端分离项目中也经常使用 JWT，登录成功后服务器返回 Token，前端保存 Token，并在后续请求的 Authorization Header 中携带，服务器验证 Token 后确定用户身份。
+
+方案一: Cookie + Session
+
+- 登录阶段: 用户发送账号+密码给服务器，服务器验证通过后，创建一个 session，生成 sessionID。服务器把 sessionID 通过 Set-Cookie 放到 Cookie 里返回给浏览器
+
+方案二: Token 令牌
+
+用户发送账号+密码给服务器后生成加密的 token，前端存储 token，后续请求时将 token 放在请求头里(`Authorization: Bearer ${token}`)。后端返回 200 则继续请求，非 200 则清除本地登录信息，返回登录页
 
 ## React
 
@@ -3331,6 +3539,40 @@ const visible = ref(false);
 
 - 兼容性: `defineProperty` 兼容性比较好，兼容比较早的 IE8 等浏览器；`proxy` 兼容性不太号，无法支持 IE
 
+## nodejs
+
+### nodejs 如何充分利用多核 CPU
+
+> Node.js 的 JavaScript 执行主要依赖单线程 Event Loop，所以单个 Node.js 实例无法充分利用多核 CPU。对于 Web 服务，可以使用 Cluster 创建多个 Node.js 进程，让多个进程分布到不同 CPU 核心上；对于 CPU 密集型任务，可以使用 Worker Threads 创建多个线程，把耗时计算放到 Worker 中执行，避免阻塞主线程。生产环境还可以使用 PM2、Docker 或 Kubernetes 启动和管理多个 Node.js 实例。对于 I/O 密集型任务，一般依靠 Node.js 的异步 I/O 和 Event Loop 就可以获得较高的并发能力。
+
+**核心结论**: JS 是单线程语言，只能利用一个主进程，如果想充分利用多核 CPU，就需要创建多个工作进程
+
+::code-group
+
+```javascript [cluster(原生)]
+const cluster = require("cluster");
+const os = require("os");
+
+const cpuCount = os.cpus().length;
+
+if (cluster.isPrimary) for (let i = 0; i < cpuCount; i++) cluster.fork();
+else {
+	const http = require("http");
+	http
+		.createServer((req, res) => {
+			res.end(`工作进程 ${process.pid} 处理了请求`);
+		})
+		.listen(3000);
+}
+```
+
+```bash [PM2]
+npm install -g pm2
+pm2 start app.js -i max # max 表示: 根据 CPU 核心数自动创建工作进程
+```
+
+::
+
 ## 性能优化
 
 ### 为什么性能优化重要
@@ -4265,7 +4507,7 @@ pnpm(performance npm) 速度快，节省磁盘空间
 
 ::
 
-### eslint 作用
+### ESlint 作用
 
 > ESLint 是一个 JavaScript/TypeScript 静态代码检查工具，它通过解析源代码并结合各种规则，对代码进行静态分析，用于发现潜在错误、代码质量问题以及不符合团队规范的代码，同时支持部分问题的自动修复。
 
@@ -4278,6 +4520,18 @@ const user = {
 
 console.log(username); // 提示: 'username' is not defined
 ```
+
+### ESlint 代码检查的过程
+
+> ESLint 首先读取配置文件，根据配置选择 Parser 和 Rules；然后 Parser 将 JavaScript/TypeScript 源代码解析成 AST，ESLint 遍历 AST，并触发对应 Rule 对节点进行检查。如果发现问题，就通过 context.report() 收集诊断信息，最后经过 Formatter 格式化输出。使用 --fix 时，如果 Rule 提供了自动修复能力，ESLint 会根据 fix 信息修改源码，并重新进行检查。
+
+1. 初始化 & 读配置: 向上找 `.eslintrc` 和 `package.json` eslintConfig 字段，就近原则合并；加载规则；`.eslintignore` 处理忽略文件
+
+2. 解析代码，生成 AST: ESlint 并不直接读取代码，而是将代码转化成计算机能理解的抽象语法树(AST)
+
+3. 遍历 AST，执行规则检查: 从根节点到子节点，逐个访问每个语法结构(变量、函数、条件语句)，并进行规则校验；每个规则都是一个小函数，判断 AST 每个节点是否触发规则，发现违规就记录下来
+
+4. 输出结果 & 自动修复: 在终端打印违规信息，包含文件路径、行号、违规规则、错误描述；可通过 `eslint src/ --fix` 直接修改部分文件
 
 ### browserslist
 
@@ -4356,7 +4610,53 @@ vite 缺点: 开发环境正常运行，但是无法保证上线后不报错
 
 webpack: 全量打包，dev 以及 build 环境一致，不会出现严重的 js 报错，这个也会导致 webpack dev 环境缓慢
 
-### webpack 如何设置 loader，他们的顺序是怎样的
+### vite 和 webpack 在热更新上有什么区别
+
+热更新(HMR)的本质是: 修改文件后，不刷新整个页面，只更新变化的部分
+
+**webpack 热更新**: 源码 -> 找依赖 -> 重新打包 -> 替换 hundle
+
+- webpack 要找到谁依赖了这个文件，找到依赖链后重新打包相关的模块
+
+::detail
+
+#title
+具体示例
+#default
+
+当 `button.vue` 被 `page.vue` 引用，`page.vue` 又被 `main.js` 引用时，`button.vue` 自己和相关依赖的链上文件都重新编译，最终产出一个更新片段(hot update chunk)
+
+重新打包完成后，再发送一个更新请求，浏览器里替换掉旧的 bundle，再触发一次组件重新渲染
+
+::
+
+**vite 热更新**: 精准定位 -> 单文件 -> 原生替换
+
+- vite 通过 chokidar 直接监听文件变化
+
+::detail
+
+#title
+具体示例
+#default
+
+修改 `button.vue` 后，vite 不分析依赖链，直接对 `button.vue` 进行编译，编译结果就是 ESM 文件
+
+之后通过 webSocket 告诉浏览器 `button.vue` 变化，浏览器重新请求 `button.vue`，只替换这一个文件
+
+::
+
+::tip
+
+vite 为什么快
+
+vite 不全面打包，而是精准打包，并且依赖了原生 ESM 能力实现单文件的替换
+
+webpack 分析依赖链，对于依赖链重新打包并重新生成 bundle 文件，并替换 bundle 文件重新渲染
+
+::
+
+### webpack loader
 
 > Webpack 中 Loader 通过 module.rules 进行配置，通常通过 test 指定匹配的文件类型，通过 use 指定需要执行的 Loader。例如 SCSS 可以配置 style-loader、css-loader 和 sass-loader。多个普通 Loader 默认按照从右到左、从下到上的顺序执行，也就是数组中越靠右的 Loader 越先执行。Loader 本质上负责模块转换，而 Plugin 主要用于扩展 Webpack 的整体构建流程。
 
@@ -4364,7 +4664,7 @@ webpack: 全量打包，dev 以及 build 环境一致，不会出现严重的 js
 module: {
 	rules: [
 		{
-			test: /\.scss$/,
+			test: /\.less$/,
 			use: ["style-loader", "css-loader", "less-loader"],
 		},
 	];
@@ -4379,6 +4679,62 @@ module: {
 - 作用: loader 用于文件转换；插件用于扩展功能，主要是在各个生命周期扩展每一个生命周期的功能
 - 本质: loader 是转换器；插件是扩展器
 
+**文件相关 loader**:
+
+```javascript
+module: {
+	rules: [
+		{
+			test: /\.(png|jpeg|gif|svg|ttf|woff2?)$/,
+			use: [
+				{
+					loader: "url-loader",
+					options: {
+						limit: 10240, // 10kb 以下的转为 base64
+						outputPath: "assets", //最终打包文件夹
+						name: "[name].[hash:8].[ext]",
+					},
+				},
+			],
+		},
+	];
+}
+```
+
+**js loader**:
+
+```javascript
+{
+  test: /\.(js|jsx)$/,
+  exclude: "/node_modules/"
+  use: [
+    {
+      loader: "babel-loader",
+      options: {
+        persets: [
+          "@babel/preset-env", // 转 ES6 以上的语法为低级语法
+          "@babel/preset-react" // 转 JSX
+        ]
+      },
+    },
+  ],
+}
+```
+
+**vue/react loader**:
+
+```javascript
+{
+  test: /\.vue$/,
+  exclude: "/node_modules/"
+  use: [
+    {
+      loader: "vue-loader",
+    },
+  ],
+}
+```
+
 ::tip
 
 Loader 的执行顺序
@@ -4386,6 +4742,10 @@ Loader 的执行顺序
 Webpack Loader 默认从右往左执行，从下往上执行。
 
 ::
+
+### babel-runtime 库的作用是什么
+
+> babel-runtime 是 Babel 的运行时辅助库，用来提供 Babel 编译过程中产生的公共 helper。配合 @babel/plugin-transform-runtime 使用后，可以将原本重复注入到各个文件中的 helper 抽取出来，通过模块引用的方式复用，从而减少打包后的重复代码和体积，同时可以避免部分 polyfill 对全局环境的污染。
 
 ### 如何引入 antd 组件并支持按需加载
 
