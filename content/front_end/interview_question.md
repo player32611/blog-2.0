@@ -869,6 +869,33 @@ function deepEqual(a, b) {
 
 **本质**: 解释执行 + 热点编译
 
+### 判断一个对象是否为空，其原型链上是否有自定义数据或者方法
+
+> 如果只判断对象自身是否为空，我会使用 Reflect.ownKeys(obj).length === 0，因为它能够同时检测字符串、Symbol 和不可枚举属性。如果还需要判断原型链上的自定义数据或方法，我会通过 Object.getPrototypeOf() 逐层向上遍历，同时排除 Object.prototype，因为它包含 JavaScript 默认提供的 toString、valueOf 等方法。需要注意 Object.keys() 只能够检测自身的可枚举字符串属性，而 for...in 还会遍历原型链，因此都不适合作为这个问题的完整判断方式。
+
+```javascript
+function isCompletelyEmpty(obj) {
+	if (obj === null || typeof obj !== "object") return false;
+
+	const ownProps = Object.getOwnPropertyNames(obj);
+	const ownCustomProps = ownProps.filter(prop => {
+		return !["__proto__", "length", "constructor"].includes(prop);
+	});
+
+	if (ownCustomProps.length > 0) return false;
+
+	let currentProto = Object.getPrototypeOf(obj);
+	while (currentProto !== Object.prototype) {
+		const protoProps = Object.getOwnPropertyNames(currentProto);
+		const proptoCustomProps = protoProps.filter(prop => prop !== "constructor");
+		if (proptoCustomProps.length > 0) return false;
+		currentProto = Object.getPrototypeOf(currentProto);
+	}
+
+	return true;
+}
+```
+
 ## TypeScript
 
 ### TypeScript 的优势
@@ -1886,35 +1913,17 @@ HTTP2 针对 HTTP1 的优化
 
 - 头部处理: 采用 HPACK 压缩，在服务器端，会有一个静态字典。host、User-Agent 信息等，会直接用相关的映射字段，或者索引来进行填充。
 
-### localStorage、sessionStorage 以及 cookie 的区别
+### 浏览器的存储有哪些
 
-> 三者都是浏览器端的数据存储机制，但生命周期、容量以及与服务器的交互方式不同。
+> Cookie 主要解决客户端和服务器之间的状态传递；localStorage 适合长期保存少量客户端数据；sessionStorage 适合保存当前页面会话的数据；IndexedDB 适合大量结构化数据；Cache Storage 主要配合 Service Worker 做资源缓存和离线应用。
 
-> localStorage 生命周期较长，除非手动删除，否则数据会一直存在，通常用于保存用户偏好、主题等持久化的非敏感数据。
+- cookie: 很小，4KB；可设置有效期；按域名隔离
 
-> sessionStorage 生命周期与当前页面会话相关，关闭当前 Tab 后数据通常会被清除，适合保存临时的页面状态。
+- localStorage: 本地存储，主打长期复用；5KB；永久有效(手动删除)；按域名隔离
 
-> Cookie 容量较小，通常约 4KB，但它最大的特点是会在满足 Domain、Path、SameSite 等条件时自动随 HTTP 请求发送给服务器，因此经常用于 Session 和身份认证。
+- sessionStorage: 会话级存储
 
-> 另外，Cookie 支持 HttpOnly、Secure、SameSite 等安全属性，而 localStorage 和 sessionStorage 不支持 HttpOnly。
-
-> 如果使用 JWT 放在 localStorage 中，前端通常需要手动通过 Authorization 请求头发送；如果放在 HttpOnly Cookie 中，则浏览器会自动携带。
-
-都是浏览器存储数据的方式
-
-- localStorage: 没有时间概念，可以永久缓存(如果用户不清除)
-
-- sessionStorage: 会话级别，用户关闭页面时数据会被直接清除
-
-- cookie: 有过期时间，通过 Expires 字段设置
-
-来源: storage 主要是通过 js 进行设置；cookie 可以通过 js 来设置，也可以通过接口的 set-cookie 字段来进行设置
-
-容量: storage 的容量(5M 左右)明显大于 cookie 的容量(4K 左右)
-
-作用的页面范围: storage 都是必须相同域名，才能读取数据；cookie 可通过 Domain、Path 控制作用域名
-
-安全性: storage 都可以通过 js 进行读取；cookie 可以通过设置 http-only 来禁止 js 的访问以及修改
+- IndexDB: 本地数据库，用来存储大量结构化内容，并且支持复杂查询；GB 为单位；永久有效；按域名隔离
 
 ### 浏览器跨域是什么，如何解决跨域问题
 
@@ -1933,6 +1942,49 @@ HTTP2 针对 HTTP1 的优化
 方案二: Token 令牌
 
 用户发送账号+密码给服务器后生成加密的 token，前端存储 token，后续请求时将 token 放在请求头里(`Authorization: Bearer ${token}`)。后端返回 200 则继续请求，非 200 则清除本地登录信息，返回登录页
+
+### 前端如何设置请求超时时间
+
+> 前端请求超时一般由请求库或浏览器 API 实现。Axios 可以直接通过 timeout 设置，例如 `axios.get(url, { timeout: 5000 })`；Fetch 本身没有 timeout 参数，可以通过 AbortController 主动取消请求，现代浏览器也可以使用 `AbortSignal.timeout()`；XMLHttpRequest 则可以直接设置 xhr.timeout。实际项目中一般会在 Axios 请求实例中统一配置默认超时时间，再针对上传、报表等耗时接口单独调整，并在响应拦截器中统一处理超时错误。
+
+::code-group
+
+```javascript [全局设置]
+import axios from "axios";
+
+const service = axios.create({
+	baseURL: "http://api.xxx.com",
+	timeout: 3000, // 全局超时时间 3 秒
+});
+
+service
+	.get("/data")
+	.then(res => console.log(res))
+	.catch(err => {
+		if (err.code === "ECONNABORTED") {
+			this.$message.error("请求超时");
+			retry();
+		}
+	});
+```
+
+```javascript [局部设置]
+axios
+	.get("http://api.xxx.com", {
+		timeout: 5000, // 5 秒超时
+	})
+	.then(res => {
+		console.log("请求成功");
+	})
+	.catch(error => {
+		if (err.code === "ECONNABORTED") {
+			this.$message.error("请求超时");
+			retry();
+		}
+	});
+```
+
+::
 
 ## React
 
@@ -4422,6 +4474,36 @@ function renderBatch() {
 
 renderBatch() // 启用分片渲染
 ```
+
+### 浏览器对队头阻塞有什么优化
+
+> 浏览器针对队头阻塞的优化主要经历了三个阶段：HTTP/1.1 中通过建立多个 TCP 连接，让不同请求分散到不同连接上，从而缓解队头阻塞；HTTP/2 引入多路复用，在一个 TCP 连接中使用多个 Stream，解决了 HTTP 层的队头阻塞，但由于底层仍然使用 TCP，一个数据包丢失会导致整个 TCP 连接上的 Stream 等待；HTTP/3 使用基于 UDP 的 QUIC，并通过独立 Stream 传输，使一个 Stream 的丢包不会阻塞其他 Stream，从而解决了 TCP 层的队头阻塞。
+
+**队头阻塞**(Head-of-Line Blocking，HOL Blocking) 是指队列前面的请求/数据没有完成，导致后面的请求/数据即使已经准备好了，也无法继续处理
+
+- HTTP1.1: 浏览器给同一个域名开个 TCP 链接(通常 6 个限制)，顺序排队响应
+
+- HTTP2: 多路复用
+
+### 你认为组件封装的一些基本准则是什么
+
+> 我认为组件封装主要遵循几个原则：第一是单一职责，一个组件尽量只负责一类功能；第二是高内聚低耦合，组件内部逻辑集中，对外尽量通过明确的 Props、事件、Slot 等接口通信；第三是控制合理粒度，避免组件过大，也避免过度拆分；第四是保证一定的复用性和扩展性，不要把具体业务逻辑写死；第五是抽象稳定的共性，而不是为了复用强行抽象变化的业务；最后还需要考虑边界状态、样式隔离和可测试性。
+
+> 核心思想就是：组件内部负责自己的事情，对外提供清晰稳定的接口，在复用性和复杂度之间取得平衡。
+
+**核心准则**: 复用、稳定、已维护
+
+- 单一职责: 组件只负责一件事，不做万能组件
+
+- props 设计: 输入清晰要明确、可控、避免模糊不清的依赖；可选的 props 一定要提供默认值；不允许子组件直接修改 props
+
+- 事件驱动: 一定要通过事件来通知，不要直接操作外部环境，保持解耦
+
+- 样式隔离
+
+- 可复用、可配置: 提取可变的部分
+
+- 无副作用
 
 ## 工程化
 

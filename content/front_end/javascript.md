@@ -482,6 +482,139 @@ var person = { firstName: "Bill", lastName: "Gates", age: 62, eyeColor: "blue" }
 delete person.age; // 或 delete person["age"];
 ```
 
+::warning
+
+delete 运算符会破坏对象的隐藏类（hidden class）结构，在 V8 等引擎中可能导致性能下降。频繁删除属性时，更推荐将属性值设为 `undefined` 或使用 Map。
+
+::
+
+### 检测属性是否存在
+
+**in 运算符** : 检查对象（包括其原型链）中是否存在指定属性，存在返回 true，否则返回 false
+
+```javascript
+var person = { firstName: "Bill", lastName: "Gates", age: 62 };
+"age" in person; // true
+"eyeColor" in person; // false
+```
+
+**hasOwnProperty()** 方法 : 检查对象自身（不包括原型链）是否拥有指定属性
+
+```javascript
+var person = { firstName: "Bill", lastName: "Gates", age: 62 };
+person.hasOwnProperty("age"); // true
+person.hasOwnProperty("eyeColor"); // false
+```
+
+::tip
+
+`in` 运算符会沿着原型链向上查找属性，而 hasOwnProperty() 只检查对象自身的属性。当对象从原型继承属性时，两者的结果可能不同。
+
+::
+
+### 枚举对象属性
+
+**Object.keys()** 方法 : 返回对象自身可枚举属性名组成的数组
+
+**Object.values()** 方法 : 返回对象自身可枚举属性值组成的数组
+
+**Object.entries()** 方法 : 返回对象自身可枚举属性的 `[键, 值]` 键值对数组
+
+```javascript
+var person = { firstName: "Bill", lastName: "Gates", age: 62 };
+Object.keys(person); // ["firstName", "lastName", "age"]
+Object.values(person); // ["Bill", "Gates", 62]
+Object.entries(person); // [["firstName", "Bill"], ["lastName", "Gates"], ["age", 62]]
+```
+
+**for...in 循环** : 遍历对象的所有可枚举属性（包括原型链上的可枚举属性）
+
+```javascript
+var person = { firstName: "Bill", lastName: "Gates", age: 62 };
+for (var key in person) {
+	console.log(key + ": " + person[key]);
+}
+```
+
+::warning
+
+for...in 会遍历到原型链上继承来的可枚举属性，而 Object.keys() 只返回对象自身的属性。遍历对象时通常建议配合 hasOwnProperty() 过滤掉继承的属性。
+
+::
+
+### 合并与复制对象
+
+**Object.assign()** 方法 : 将一个或多个源对象的可枚举属性复制到目标对象，并返回目标对象
+
+```javascript
+var target = { a: 1, b: 2 };
+var source = { b: 3, c: 4 };
+Object.assign(target, source);
+// target 变为 { a: 1, b: 3, c: 4 }
+```
+
+::warning
+
+Object.assign() 只进行浅拷贝：如果源对象的某个属性值是对象或数组，复制的是引用而不是副本，修改新对象会影响到源对象。深拷贝需要借助 structuredClone() 或 JSON.parse(JSON.stringify()) 等方式。
+
+::
+
+### 对象方法
+
+对象中定义的函数称为对象方法。方法通过 this 关键字引用所属的对象：
+
+```javascript
+var person = {
+	firstName: "Bill",
+	lastName: "Gates",
+	fullName: function () {
+		return this.firstName + " " + this.lastName;
+	},
+};
+person.fullName(); // "Bill Gates"
+```
+
+**this 关键字** : 在对象方法中，this 指向调用该方法的对象。this 的值取决于函数的调用方式，而不是定义方式
+
+::warning
+
+this 的值在运行时才确定。当方法被单独提取出来作为普通函数调用时，this 不再指向原对象（非严格模式下指向全局对象，严格模式下为 undefined）。箭头函数没有自己的 this，它会继承外层作用域的 this。
+
+::
+
+### 创建对象
+
+**Object.create()** 方法 : 使用指定的原型对象创建一个新对象
+
+```javascript
+var proto = {
+	greet: function () {
+		return "Hello";
+	},
+};
+var obj = Object.create(proto);
+obj.greet(); // "Hello"
+```
+
+### 保护对象
+
+**Object.freeze()** 方法 : 冻结对象，使其既不能添加、删除属性，也不能修改已有属性的值
+
+**Object.seal()** 方法 : 密封对象，使其不能添加或删除属性，但可以修改已有属性的值
+
+```javascript
+var obj = { a: 1 };
+Object.freeze(obj);
+obj.a = 2; // 无效（严格模式下会报错）
+obj.b = 3; // 无效
+```
+
+::danger
+
+Object.freeze() 与 Object.seal() 都只是浅层操作：嵌套对象内部的属性仍可被修改。只有对整个对象树递归调用 freeze() 才能实现完全冻结。
+
+::
+
 ## Common JS 与 ES 模块
 
 CommonJS 和 ES 模块（ESM）是 JavaScript 的两种模块系统，它们在语法、加载时机、特性等方面有明显区别。
