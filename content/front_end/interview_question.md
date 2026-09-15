@@ -4314,6 +4314,115 @@ JS 执行会等待 CSSDOM: JS 代码里要操作 CSS 样式(`getComputedStyle(el
 
 - `async`(异步执行)
 
+### QPS 到达峰值如何处理
+
+> QPS 到达峰值时，我一般会从几个层面处理。首先通过网关进行限流，例如令牌桶、漏桶等，避免流量超过系统承载能力；然后使用 Redis 等缓存减少数据库访问，对于突发流量可以通过 MQ 进行削峰填谷；如果是持续性的流量增长，则通过负载均衡进行水平扩容。同时对非核心功能进行降级，并对异常依赖进行熔断，防止故障扩散。数据库层面还可以通过读写分离、索引优化、分库分表等方式提高吞吐量。
+
+> 整体思路就是：限流保护系统、缓存减少压力、MQ 削峰、扩容提高吞吐、降级保证核心业务、熔断避免雪崩。
+
+::code-group
+
+```javascript [控制并发]
+const requestQueue = [];
+
+let currentRunning = 0;
+
+const MAX_CONCURRENT = 2;
+
+function addToQueue(api, params, callback) {
+	requestQueue.push({ api, params, callback });
+	processQueue();
+}
+
+function processQueue() {
+	if (currentRunning >= MAX_CONCURRENT || requestQueue.length === 0) return;
+
+	currentRunning++;
+
+	const { api, params, callback } = requestQueue.shift();
+
+  fetch(api, P method: "POST", body: params)
+    .then(res => res.json())
+    .then(callback)
+    .catch(err => console.error(err))
+    .finally(() => {
+      currentRunning--;
+      processQueue();
+    })
+}
+
+// 调用
+addToQueue("/api/pay", {orderId: "xxx"}, (res) => {});
+```
+
+```javascript [缓存技术]
+function requestWithCache(api, params, cacheTime = 300000) {
+	const cacheKey = `${api}-${JSON.stringify(params)}`;
+	const cachedData = localStorage.getItem(cacheKey);
+	const caheTimeStamp = localStorage.getItem(`${cacheKey}_time`);
+
+	// 缓存没有过期
+	if (cachedData && caheTimeStamp && Date.now() - caheTimeStamp < cacheTime) {
+		return Promise.reslove(JSON.parse(cachedData));
+	}
+
+	// 缓存已过期
+	return fetch(api, { method: "POST", body: params })
+		.then(res => res.json())
+		.then(data => {
+			localStorage.setIten(cacheKey, JSON.stringify(data));
+			localStorage.setIten(`${cacheKey}_time`, Data.now().toString());
+			return data;
+		});
+}
+```
+
+::
+
+### 后端一次性返回树形结构数据，数据量非常大，前端该如何处理
+
+**本质**: 数据量过大，给前端渲染压力过大，对内存压力过大
+
+**解决方案**: 数据分片 + 分布渲染
+
+```javascript
+const treeData = []; // 后端返回超大数据
+const renderBatchSize = 500; // 每批次渲染多少节点
+let currentIndex = 0; // 当前渲染到索引
+
+function flattenTree(data) {
+	let result = [];
+
+	data.forEach(node => {
+		result.push(node);
+    if(node.children && node.children.length){
+      return = [..result, ...flattenTree(node.children)];
+    }
+	});
+
+  return flattenTreeData;
+}
+
+const flattenData = flattenTree(treeData)
+
+function renderBatch() {
+  const endIndex = Math.min(currentIndex + renderBatchSize, flattenData.length);
+
+  const batchData = flattenData.slice(currentIndex, endIndex);
+
+
+  updateTreeData(batchData)
+
+  currentIndex = endIndex;
+
+  if(currentIndex < flattenData.length){
+    requestIdleCallback(renderBatch); // 浏览器空闲时渲染，不会阻塞 JS 主进程
+  }
+}
+
+renderBatch() // 启用分片渲染
+```
+
 ## 工程化
 
 ### 同一个页面三个组件请求同一个 API
@@ -4786,3 +4895,37 @@ Webpack Loader 默认从右往左执行，从下往上执行。
 - 灵活集成: 多个小应用能像搭积木一样，组合成完整的产品
 
 - 互不干扰: 小应用间技术栈可不同，运行时互不冲突
+
+### Webpack 项目中通过 script 标签引入资源，在项目中如何处理
+
+> Webpack 项目中通过 script 标签引入资源，首先要看这个资源是否需要 Webpack 管理。
+
+> 如果是 CDN 或者不需要打包的第三方资源，可以直接在 HTML 中使用 `<script>` 引入，Webpack 不会处理它。
+
+> 如果希望资源参与 Webpack 的依赖分析、打包、Tree Shaking 等，则应该使用 import 引入。
+
+> 对于通过 CDN 的第三方库，可以配合 Webpack 的 externals，让 Webpack 不把它打进 bundle，而是在运行时使用 `<script>` 加载的全局变量，从而减小打包体积。
+
+**场景1**: 直接引入第三方库
+
+::code-group
+
+```html [public/index.html]
+<script src="https://cdn.example.com/jquery.min.js"></script>
+```
+
+```javascript [webpack.config.js]
+module.exports = {
+	externals: {
+		jquery: "jQuery",
+	},
+};
+```
+
+```javascript [xxx.js]
+import $ from "jquery";
+
+$(".app").show();
+```
+
+::
