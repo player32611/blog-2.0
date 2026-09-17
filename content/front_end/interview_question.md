@@ -5241,3 +5241,24 @@ export default defineConfig({
 ```
 
 ::
+
+### 如何禁止别人调试自己的前端页面代码
+
+::code-group
+
+```javascript [禁用右键菜单]
+document.addEventListener("contextmenu", e => e.preventDefault());
+```
+
+```javascript [阻断开发者工具启动]
+const initWidth = window.innerWidth;
+const initHeight = window.innerHeight;
+
+window.addEventListener("resize", {
+  if(Math.abs(window.innerWidth - initWidth > 100) || Math.abs(window.innerHeight - initHeight) > 100){
+    location.reload();
+  }
+})
+```
+
+::
