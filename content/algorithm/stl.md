@@ -1475,3 +1475,150 @@ upper_bound(a, a + n, x);
 ```
 
 时间复杂度：**$O(logn)$**
+
+### sort()
+
+包含在 `<algorithm>` 头文件中。对数组（左闭右开）进行排序，默认从小到大。可以传入自定义的比较函数。
+
+```cpp
+sort(a, a + n);                  // 默认升序排序
+sort(a, a + n, greater<int>());  // 降序排序
+sort(a, a + n, cmp);             // 自定义比较函数
+```
+
+::tip
+
+`sort()` 只能对支持随机访问的容器（如数组、`vector`、`deque`）使用，不能直接用于 `list`。`greater<int>()` 需要包含 `<functional>` 头文件。
+
+::
+
+时间复杂度：**$O(nlogn)$**
+
+### reverse()
+
+包含在 `<algorithm>` 头文件中。将数组（或容器）中指定区间（左闭右开）的元素反转。
+
+```cpp
+reverse(a, a + n);
+reverse(v.begin(), v.end()); // vector 反转
+```
+
+时间复杂度：**$O(n)$**
+
+### max()/min()
+
+包含在 `<algorithm>` 头文件中。返回两个（或多个）值中的最大值 / 最小值。
+
+```cpp
+cout << max(3, 5) << endl;          // 5
+cout << min(3, 5) << endl;          // 3
+cout << max({1, 2, 3, 4}) << endl;  // 多个值取最大，需要 c++11
+```
+
+时间复杂度：**$O(1)$**（两个值），多个值为 **$O(n)$**
+
+### max_element()/min_element()
+
+包含在 `<algorithm>` 头文件中。在数组（左闭右开）中查找最大 / 最小元素，返回指向该元素的迭代器（地址）。如果要得到值，需要解引用 `*`。
+
+```cpp
+int* it = max_element(a, a + n);
+cout << *it << endl;
+```
+
+时间复杂度：**$O(n)$**
+
+### swap()
+
+包含在 `<algorithm>` 头文件中。交换两个变量的值。
+
+```cpp
+int a = 1, b = 2;
+swap(a, b); // a = 2, b = 1
+```
+
+时间复杂度：**$O(1)$**
+
+### fill()
+
+包含在 `<algorithm>` 头文件中。将数组（或容器）中指定区间（左闭右开）的元素填充为指定值。
+
+```cpp
+fill(a, a + n, 0);            // 将 a[0]~a[n-1] 都赋值为 0
+fill(v.begin(), v.end(), 1);  // 将 vector 所有元素赋值为 1
+```
+
+::tip
+
+给数组整体赋初值时，`fill()` 比 `memset()` 更通用。`memset()` 是按字节填充的，只能用于 `char` 类型或者赋值为 0/-1，并且它包含在 `<cstring>` 头文件中，不属于 STL。
+
+::
+
+时间复杂度：**$O(n)$**
+
+### count()
+
+包含在 `<algorithm>` 头文件中。统计数组（或容器）中指定区间（左闭右开）内值等于 val 的元素的个数。
+
+```cpp
+int cnt = count(a, a + n, 3); // 统计 a 数组中值为 3 的元素个数
+```
+
+时间复杂度：**$O(n)$**
+
+### find()
+
+包含在 `<algorithm>` 头文件中。在数组（或容器）中指定区间（左闭右开）内查找值为 val 的元素，返回指向该元素的迭代器（地址）；如果不存在，返回区间末尾。
+
+```cpp
+int* it = find(a, a + n, 3);
+if (it != a + n) {
+    cout << "found" << endl;
+}
+```
+
+::tip
+
+这里的 `find()` 是 STL 算法，和 `string`、`map`、`set` 等容器自带的 `find()` 成员函数不同。对于 `string`、`map`、`set`，优先使用它们自带的成员函数，效率更高。
+
+::
+
+时间复杂度：**$O(n)$**
+
+### unique()
+
+包含在 `<algorithm>` 头文件中。将数组（有序）中重复的元素移到末尾，返回去重后新的末尾位置（第一个重复元素的位置）。通常配合 `sort()` 一起使用。
+
+```cpp
+sort(a, a + n);
+int len = unique(a, a + n) - a; // 去重后的元素个数
+```
+
+::warning
+
+`unique()` 不会真正删除重复元素，只是把不重复的元素移到前面，重复的元素移到后面。需要配合 `sort()` 使用，并且通过返回值得到去重后的长度。
+
+::
+
+时间复杂度：**$O(n)$**
+
+### next_permutation()
+
+包含在 `<algorithm>` 头文件中。将数组（左闭右开）重新排列为字典序的下一个更大的排列。如果存在下一个排列，返回 true，否则返回 false。
+
+```cpp
+int a[] = {1, 2, 3};
+do {
+    // 输出 123 132 213 231 312 321
+    for (int i = 0; i < 3; i++)cout << a[i];
+    cout << endl;
+} while (next_permutation(a, a + 3));
+```
+
+::tip
+
+`next_permutation()` 会按照字典序依次生成全排列，常用来枚举一个序列的全排列。要得到所有全排列，需要先对序列进行 `sort()`。对应的还有 `prev_permutation()`，用于生成上一个排列。
+
+::
+
+时间复杂度：**$O(n)$**
