@@ -1986,6 +1986,66 @@ axios
 
 ::
 
+### 如何防止前端重复请求
+
+> 前端防止重复请求，我一般分几个层面处理。首先对于多个组件同时请求同一个 API，可以通过 Map 缓存正在进行中的 Promise，让相同请求复用同一个 Promise；对于不需要实时更新的数据，可以增加响应缓存和过期时间。
+
+> 对于用户重复点击，可以在请求期间禁用按钮，或者根据场景使用防抖、节流。对于搜索这类连续变化的请求，可以通过 AbortController 取消上一次请求，避免旧请求覆盖新数据。
+
+> 在大型项目中，还可以在 Axios 请求层统一生成请求唯一 key，通过 pending Map 做请求去重。最后，对于订单创建、支付等重要 POST 请求，不能只依赖前端去重，还需要后端通过幂等 ID 保证业务操作只执行一次。
+
+::code-group
+
+```javascript [防抖]
+async function fetchSearch(keyword) {
+	const response = await fetch(`/api/search?keyword=${encodeURIComponent(keyword)}`);
+	const data = await response.json();
+}
+
+const debouncedSearch = debounce(fetchSearch, 300);
+
+const searchInput = document.getElementbyId("searchInput");
+
+const searchInput.addEventListener("input", (e) => {
+  debouncedSearch(e.target.val);
+})
+```
+
+```html [按钮禁用和状态锁]
+<button id="submitBtn">提交表单</button>
+
+<script>
+	const submitBtn = document.getElementbyId("submitBtn");
+	let isSubmitting = false;
+
+	async function submitForm() {
+		if (isSubmitting) return;
+
+		try {
+			isSubmitting = true;
+			submitBtn.disabled = true;
+			submitBtn.innerText = "提交中";
+			const response = await fetch(`/api/submit`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ userName: "test" }),
+			});
+			const data = await response.json();
+		} catch {
+			alert("提交失败，请重试");
+		} finally {
+			isSubmitting = false;
+			submitBtn.disabled = false;
+			submitBtn.innerText = "提交表单";
+		}
+	}
+
+	submitBtn.addEventListener("click", submitForm);
+</script>
+```
+
+::
+
 ## React
 
 ### 用户如何根据不同的权限，查看不同的页面
@@ -4505,6 +4565,104 @@ renderBatch() // 启用分片渲染
 
 - 无副作用
 
+### 如何减少项目里的 if else
+
+> 减少项目中的 if else，我一般不会追求完全消灭条件判断，而是针对复杂分支进行重构。
+
+> 简单条件可以使用卫语句，通过提前 return 减少嵌套；对于状态、类型等固定映射，可以使用对象或者 Map 配置代替大量 if else；对于不同业务行为，可以使用策略模式，把不同逻辑拆成独立策略；权限、菜单等场景可以采用配置驱动；如果业务状态转换比较复杂，可以使用状态机；如果是对象类型差异，则可以利用多态来消除类型判断。
+
+> 核心思想是把不断增长的条件逻辑转换成数据配置、策略或者独立的业务对象，从而提高代码的可读性和扩展性。
+
+::code-group
+
+```javascript [三元运算符]
+let result;
+if (score >= 60) {
+	result = "及格";
+} else {
+	result = "不及格";
+}
+
+// 优化后
+const result = score >= 60 ? "及格" : "不及格";
+```
+
+```javascript [提前 return]
+function calculateBonus(performance) {
+	let bonus = 0;
+	if (performance === "A") {
+		bonus = 1000;
+	} else {
+		if (performance === "B") {
+			bonus = 500;
+		} else {
+			bonus = 100;
+		}
+	}
+	return bonus;
+}
+
+// 优化后
+function calculateBonus(performance) {
+	if (performance === "A") return 1000;
+	if (performance === "B") return 500;
+	return 100;
+}
+```
+
+```javascript [固定值映射]
+function getStatusText(status) {
+	if (status === 0) return "待审核";
+	if (status === 1) return "已通过";
+	if (status === 2) return "已拒绝";
+	if (status === 3) return "已撤销";
+	return "位置状态";
+}
+
+// 优化后
+const statusMap = {
+	0: "待审核",
+	1: "已通过",
+	2: "已拒绝",
+	3: "已撤销",
+};
+function getStatusText(status) {
+	return statusMap[status] || "未知状态";
+}
+```
+
+```javascript [策略模式]
+const PaymentStrtegies = {
+	wechat(amount) {
+		return callWechatPayAPI(amount); // 业务逻辑
+	},
+	alipay(amount) {
+		return callAlilpayAPI(amount);
+	},
+	card(amount) {
+		return callCardPayAPI(amount);
+	},
+};
+
+class PaymentContext {
+	constructor(type) {
+		this.strategy = PaymentStrtegies[type];
+
+		if (!this.strategy) throw new Error("不支持的支付方式");
+	}
+
+	execute(amount) {
+		return this.strategy(amount);
+	}
+}
+
+const wechatPayment = new PaymentContext("wechat");
+
+wechatPayment.execute(100); // 微信支付 100 元
+```
+
+::
+
 ## 工程化
 
 ### 同一个页面三个组件请求同一个 API
@@ -5008,6 +5166,78 @@ module.exports = {
 import $ from "jquery";
 
 $(".app").show();
+```
+
+::
+
+### 如何标准化处理线上用户反馈的问题
+
+> 我们一般会把线上用户反馈标准化处理，首先统一收集问题，记录用户、环境、发生时间、操作步骤、截图以及错误信息，然后按照功能 Bug、性能、兼容性、数据等进行分类，并根据影响范围确定严重程度和优先级。
+
+> 开发拿到问题后首先尝试复现，如果无法复现，就结合前端监控、浏览器 DevTools、网络请求和后端日志进行定位，判断是前端、后端、网络还是数据问题。定位后分析根因，而不是只修复表面现象。
+
+> 修复完成后经过 Code Review 和测试环境验证，再进行线上发布。对于重要问题可以灰度发布，并通过错误率、接口失败率、白屏率等监控指标确认问题是否真正解决。对于严重或者重复发生的问题，还需要进行复盘，把解决方案沉淀为测试用例、监控告警或者开发规范，避免问题再次发生。
+
+- 统一反馈入口: 产品页面里加意见反馈模块；应用商店，社群，汇总到一个统一的工单系统
+
+- 分类: 功能异常、性能问题、需求建议、运营问题；
+
+- 分级: 核心链路异常(10 分钟内响应 < 止损时间 < 2 小时修复) > 部分用户核心功能无法使用(30 分钟内响应 < 止损时间 < 24 小时修复) > 非和兴链路问题(24 小时内响应 < 止损时间 < 3 天修复) > 需求建议(48 小时响应，纳入需求池)
+
+- 闭环处理: 接收登记、排查定位、处理解决、同步用户、关闭归档
+
+- 沉淀复盘: 找到根因，出对应的预防方案，避免未来再次出现；更新知识库；优化产品
+
+### 如何打包时运行 chunk，且在项目工程中，如何去加载这个运行时 chunk
+
+> Webpack 的 runtime chunk 主要负责模块和 chunk 的运行时管理，例如模块映射、chunk ID 管理以及动态 import 对应 chunk 的加载。
+
+> 在 Webpack 中可以通过 optimization.runtimeChunk: 'single' 将 runtime 单独抽成一个 chunk。构建之后会得到类似 runtime.xxx.js、main.xxx.js 和异步 chunk。
+
+> 在项目运行时，通常由 HtmlWebpackPlugin 自动把 runtime chunk 注入 HTML，浏览器首先加载 runtime，然后加载业务入口 chunk。当业务代码执行 import() 时，runtime 会根据 chunk ID 计算资源 URL，并动态创建 script 标签加载对应的异步 chunk。
+
+> 将 runtime 单独抽离的主要目的之一是优化缓存，业务代码发生变化时不一定需要重新下载 runtime。
+
+::code-group
+
+```javascript [webpack]
+const path = require("path");
+
+module.exports = {
+	mode: "production",
+
+	entry: "./src/index.js",
+
+	output: {
+		path: path.resolve(__dirname, "dist"),
+		filename: "[name].[contenthash].js",
+		chunkFilename: "[name].[contenthash].chunk.js",
+	},
+
+	optimization: {
+		runtimeChunk: "single",
+	},
+};
+```
+
+```javascript [vite]
+import { defineConfig } from "vite";
+
+export default defineConfig({
+	build: {
+		rollupOptions: {
+			output: {
+				chunkFileNames: "js/[name]-[hash].js",
+				entryFileNames: "js/[name]-[hash].js",
+			},
+		},
+	},
+});
+
+// 使用
+{
+	/* <script src="runtime.js"></script>; */
+}
 ```
 
 ::
