@@ -90,6 +90,7 @@ onMounted(() => {
 <style scoped lang="scss">
 .blog_scrollbar {
 	position: fixed;
+	top: 0;
 	left: 0;
 	height: 100dvh;
 	width: 5px;
