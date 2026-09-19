@@ -190,6 +190,93 @@ translate 50% 是针对于子元素本身的宽高
 }
 ```
 
+### 样式隔离的方法有哪些
+
+> **前端样式隔离主要有 BEM/命名空间、CSS Modules、Vue scoped、CSS-in-JS、Shadow DOM、iframe，以及微前端中的 CSS 改写等方案。**其中 BEM 属于命名约定，CSS Modules 和 scoped 属于编译期/构建期隔离，Shadow DOM 属于浏览器原生的 DOM/CSS 隔离，而 iframe 是更彻底的文档级隔离。
+
+::code-group
+
+```css [命名空间隔离(BEM 规范)]
+/* 格式: 块名__元素名--修饰符 */
+.user-card {
+	padding: 16px;
+}
+
+.user-card__avatar {
+	width: 48px;
+}
+
+.user-card--highlight {
+	border: 2px solid #foo;
+}
+```
+
+```vue [CSS 作用域隔离(scoped 属性)]
+<style scoped>
+.card {
+	color: #333;
+}
+
+/* 编译后:
+  .card[data-v-xxx] { color: #333 } */
+</style>
+```
+
+```css [CSS Modules]
+/* Card.module.css 模块文件 */
+
+.card {
+	color: #333;
+}
+.avatar {
+	width: 48px;
+}
+
+/* React 组件
+import styles from "./Card.module.css"
+export default () => <div className={styles.card}></div> */
+```
+
+```javascript [css in js]
+import styled from "styled-components";
+
+// 定义样式组件
+const StyledCard = styled.div`
+	padding: 16px;
+	color: #333;
+`;
+const Avatar = styled.img`
+	width: 48px;
+`;
+
+export default () => (
+	<StyledCard>
+		<Avatar src="xxx" />
+	</StyledCard>
+);
+```
+
+```javascript [Shadow DOM]
+const host = document.querySelector("#app");
+
+// 创建 shadow DOM
+const shadowRoot = host.attachShadow({
+	mode: "open",
+});
+
+shadowRoot.innerHTML = `
+  <style>
+    .box {
+      color: red;
+    }
+  </style>
+
+  <div class="box">Hello</div>
+`;
+```
+
+::
+
 ## JavaScript
 
 ### 自定义实现 unshift 效果
@@ -963,6 +1050,119 @@ function detectDevice() {
 	return result;
 }
 ```
+
+### 如何实现实时统计用户浏览器窗口大小
+
+> 实时统计浏览器窗口大小，可以监听 window 的 resize 事件，在事件触发时通过 window.innerWidth 和 window.innerHeight 获取当前 viewport 的宽高。由于 resize 事件可能高频触发，如果涉及计算或者数据上报，需要使用节流或防抖。组件框架中还要注意在组件销毁时移除事件监听，SSR 环境则不能在服务端直接访问 window。
+
+```html
+<html>
+	<body>
+		<p>窗口尺寸：<span id="size"></span></p>
+	</body>
+</html>
+
+<script>
+	const sizeEl = document.getElementById("size");
+
+	function updateWindowSize() {
+		// 关键尺寸
+		const width = window.innerWidth; // 视窗尺寸(包含滚动条)
+		const height = window.innerHeight; // 视窗高度(包含滚动条)
+
+		const docWidth = document.documentElement.clintWidth; // 文档宽度(不包含滚动条)
+		const docHeight = document.documentElement.clintHeight; // 文档高度(不包含滚动条)
+
+		const screenWidth = window.screen.width;
+		const screenHeight = window.screen.height;
+
+		const sizeText = `视窗(${width}×${height}) | 文档(${docWidth}×${docHeight}) | 屏幕(${screenWidth}×${screenHeight})`;
+
+		sizeEl.textContent = sizeText;
+	}
+	updateWindowSize();
+
+	window.addEventListener("resize", updateWindowSize);
+
+	// 移动设备
+	window.addEventListener("orientationchange", updateWindowSize);
+</script>
+```
+
+::tip
+
+优化版
+
+```javascript
+const debouncedUpdate = debounce(updateWindowSize, 300);
+window.addEventListener("resize", debouncedUpdate);
+window.addEventListener("orientationchange", debouncedUpdate);
+```
+
+::
+
+### 应用上线后，怎么通知用户刷新当前页面
+
+> 应用上线以后，如果需要通知正在使用旧版本的用户刷新页面，我一般会做前端版本检测。服务端或者静态资源服务器维护一个当前版本号，前端启动时获取版本号并缓存下来，然后通过定时轮询、WebSocket 或 SSE 检测最新版本。如果发现版本发生变化，就通过 Toast、Notification 等方式提示用户“发现新版本，请刷新页面”，用户确认以后再执行 location.reload()。
+
+> 同时还需要解决浏览器缓存问题，通常 HTML 使用 no-cache 或较短缓存，JS、CSS 等静态资源使用文件 hash 并设置长期缓存，这样刷新以后才能正确拿到新版本资源。如果项目使用 Service Worker，还需要处理 Service Worker 的更新、waiting、skipWaiting 和页面 reload。
+
+> 一般不建议发现新版本后直接强制刷新，因为用户可能正在填写表单或者进行重要操作，应该尽量让用户决定刷新时机。
+
+1. 打版本号
+
+2. 定期拉取最新版本
+
+3. 对比版本并提示
+
+::code-group
+
+```json [版本配置]
+// public/version.json
+{
+	"version": "v1.0.0" // 手动更新
+}
+```
+
+```javascript
+const pkg = require("./package.json");
+
+module.export = {
+	plugins: [
+		new webpack.DefinePlugin({
+			"process.env.APP_VERSION": JSON.stringify(pkg.version),
+		}),
+	],
+};
+
+// 拉取
+let locationVersion = import.meta.env.APP_VERSION; // vite
+let localVersion = process.env.APP_VERSION; // webpack
+
+async function checkUpdate() {
+	try {
+		const res = await fetch("/version.json?t=" + Date.now());
+		const { version: latestVersion } = await res.json;
+		if (locationVersion !== latestVersion) {
+			showUpdateNotice(latestVersion);
+		}
+	} catch (err) {
+		console.log("版本检测失败", err);
+	}
+}
+
+function showUpdateNotice() {
+	if (MessageBox.comfirm(`应用已更新到${latestVersion}! \n是否刷新页面获取最新功能?`)) {
+		window.location.reload();
+	} else {
+		setTimeout(checkUpdate, 10 * 60 * 1000);
+	}
+}
+
+window.addEventListener("load", checkUpdate);
+```
+
+::
 
 ## TypeScript
 
@@ -4836,6 +5036,34 @@ function renderDatch() {
 
 **Canvas**: 画布，浏览器只渲染了一个 DOM 元素，表格(单元格、文字、样式)靠 JS 代码华仔画布上，不生成额外的 DOM
 
+### 页面加载速度提升(性能优化)应该从哪些方向来思考
+
+> 页面性能优化我一般从“网络、资源、渲染、JavaScript、服务端、缓存和监控”几个方向考虑。首先通过 DevTools、Performance 和 Web Vitals 定位瓶颈，然后针对性优化。网络层可以使用 CDN、HTTP 缓存、HTTP/2/3；资源层可以做代码分割、Tree Shaking、图片压缩和懒加载；渲染层减少 DOM、避免强制同步布局、使用虚拟列表；JS 层减少主线程计算，必要时使用 Web Worker；服务端关注 TTFB、接口耗时和缓存；最后通过 LCP、FCP、INP、CLS 等指标对比优化前后的效果。
+
+- 资源压缩: 压缩 JS、CSS
+
+- 图片优化: JPG 压缩成 WebP
+
+- 资源取舍: 未使用代码进行删除
+
+- 启用 HTTP2: 支持多路复用(复用一个连接多个资源，不需要排队)
+
+- 资源托管: 静态资源托管到 CDN 上
+
+- 资源分片: 大文件(10M静态资源)分片成多个，重复利用浏览器并发能力，减少单文件阻塞
+
+- 缓存: cache-control Etag，让浏览器缓存
+
+- 首屏优化: 影响首屏的关键的 JS、CSS 优先渲染
+
+- 避免阻塞渲染资源: `meida="print"`
+
+- 减少重绘和回流: 避免频繁修改 DOM
+
+- 骨架屏、加载动画: 在资源没有真正加载完成时，给用户一些反馈
+
+- 进度提示
+
 ## 工程化
 
 ### 同一个页面三个组件请求同一个 API
@@ -5531,3 +5759,117 @@ Diff 算法:
 	}
 </script>
 ```
+
+### 一般代码是如何做重构的
+
+> 我一般不会直接推翻重写，而是先分析重构的原因和影响范围。首先通过代码阅读、调用关系、日志以及性能工具定位问题，然后确定重构目标。重构前尽量补充单元测试、接口测试或者核心业务回归用例，保证重构过程中行为不发生变化。
+
+> 实际重构时我会采用小步迭代的方式，比如先提取重复代码，再拆分过大的函数和组件，然后按照单一职责原则划分模块，降低模块之间的耦合，对于复杂的 if/else 会根据实际业务考虑 Map、策略模式或者工厂模式。前端项目中还会把页面展示、业务逻辑和 API 请求进行分层。
+
+> 每完成一个小步骤就进行测试和 Git 提交，最后通过 Code Review 和回归测试确认没有引入问题。如果涉及性能重构，还会通过 Performance、Web Vitals 等指标对比重构前后的效果。
+
+> 所以我理解重构的核心不是简单地把代码改得更漂亮，而是在保证业务行为基本不变的前提下，提高代码的可读性、可维护性、可扩展性，并降低后续开发成本。
+
+**核心原则**:
+
+- 不新增功能: 重构的时候只改内部结构，不能新增需求
+
+- 保持行为一致: 重构前后，代码输入相同的内容，必须输出相同结果
+
+- 小步迭代
+
+**核心步骤**:
+
+- 准备单元测试
+
+- 清理脏代码: 命名优化、删除无效注释、格式统一
+
+- 消除冗余: 去重和简化、提取重复代码、简化表达式
+
+- 优化结构: 拆分臃肿模块、解耦依赖、按职责分层
+
+**总结**:
+
+不是要把代码推倒重来，而是小步优化，让代码好用、好维护
+
+::warning
+
+避坑
+
+不盲目追求完美代码，重构到清晰可维护即可，不要过度设计
+
+不要脱离业务，明确理解代码业务逻辑，不要为了代码优雅破坏原有的业务逻辑
+
+如果没有完整的测试不要盲目重构
+
+::
+
+### 站点如何防止爬虫
+
+> 防爬不能依赖单一手段，也很难做到完全阻止。一般是在服务端进行多层防护。首先通过 robots.txt 对遵守协议的搜索引擎声明爬取规则；对于真正的安全防护，会使用 WAF、CDN Bot 管理、IP 和用户维度的限流，以及登录鉴权和权限控制。对于异常访问，可以结合请求频率、访问路径、行为特征等进行风险识别，超过阈值后进行限流、验证码或者封禁。对于高价值接口，还可以使用时间戳、Nonce、签名等机制降低接口被批量调用的风险。
+
+> 另外我不会把 JS 混淆、禁止 F12、禁止右键当作核心防爬手段，因为这些都无法阻止爬虫直接调用后端 API。真正重要的是服务端鉴权、限流、风控和数据保护。
+
+`robots.txt`: 告知爬虫哪些可爬，哪些不可爬
+
+::code-group
+
+```[基础防护]
+User-agent: * # 针对所有爬虫
+Disallow: /admin/ # 禁止爬后台
+Disallow: /api/ # 禁止爬接口
+Allow: /public/ # 允许爬的资源
+Crawl-delay: 5 # 限制爬取频率
+```
+
+```[限制请求频率]
+// nginx 代码
+http {
+  limit_req_zone $binary_remote_addr zone=anti_spider:10 rate=2r/s
+  server {
+    location / {
+      limit_req zone=anti_spider
+    }
+  }
+}
+
+// limit_req_zone: 限制区域
+
+// rate: 每秒最多请求
+```
+
+```[禁止非法 Referer 访问]
+location /api/ {
+  valid_referers none blocked xxx.com *.xxx.com
+  if($valid_referers) {
+    return 403 Forbidden;
+  }
+}
+```
+
+```javascript [检测浏览器指纹，针对无头浏览器]
+if (navigator.webdriver) {
+	window.location.href = "/403";
+}
+```
+
+```javascript [接口参数加密]
+import CryptoJs from "crypto-js";
+
+const key = "xx--key--xxx"; // 密钥
+
+const params = { page: 1, size: 10 };
+const encryptedParams = CryptoJs.AES.encrypt(JSON.stringify(params), key).toString();
+```
+
+::
+
+**总结**: 防爬虫的核心是提升难度
+
+::tip
+
+其它
+
+人机验证、滑块拼图、字符串验证登录
+
+::
