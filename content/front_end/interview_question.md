@@ -606,7 +606,7 @@ triple(5); // 15
 
 闭包的缺点
 
-- 肯会造成内存泄漏
+- 可能会造成内存泄漏
 
 - 代码可读性
 
@@ -893,6 +893,74 @@ function isCompletelyEmpty(obj) {
 	}
 
 	return true;
+}
+```
+
+### 如何判断 DOM 元素是否在可视区域内
+
+> 常见方式是通过 navigator.userAgent 判断，例如通过 UA 中的 Android、iPhone、Windows 等关键字识别设备和平台。现代 Chromium 浏览器还可以使用 navigator.userAgentData 获取移动设备和平台信息。
+
+> 但如果只是为了实现响应式布局，我不会优先通过 UA 判断，而是使用 CSS Media Query 或 matchMedia 根据屏幕特征适配。
+
+> 如果目的是判断某项功能是否支持，则应该采用能力检测，比如判断 'geolocation' in navigator，而不是通过设备类型推测功能支持情况。
+
+**核心 API**: `getBoundingClientRect`
+
+```javascript
+function isElementInViewPort(el, fullyInView = false) {
+	if (!el || el.nodeType !== 1) return false; // 非 DOM 元素直接返回 false
+
+	const rect = el.getBoundingClientRect();
+	const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+	const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+
+	const verticallyInView = fullyInView
+		? rect.top >= 0 && rect.bottom <= viewPortHeight // 完全可见: 顶部不过可视区域上沿，底部也不超过可视区域下沿
+		: rect.top <= viewPortHeight && rect.bottom >= 0; // 部分可见: 顶部没超出视窗下沿，第八步没超出上沿
+	const horizontallyInView = fullyInView
+		? rect.left >= 0 && rect.right <= viewPortWidth
+		: rect.left <= viewPortWidth && rect.right >= 0;
+
+	return verticallyInView && horizontallyInView;
+}
+```
+
+### 如何判断用户设备
+
+**UA 解析**: 通过 `navigator.userAgent` 解析浏览器头
+
+**特征检测**: 通过浏览器特有的 API/属性 来判断
+
+```javascript
+function detectDevice() {
+	const ua = navigator.userAgent.toLowerCase();
+
+	const result = {
+		isMobile: false,
+		isPc: false,
+		os: "",
+		browser: "",
+	};
+
+	const isMobile = /mobile|android|iphone|ipod|ipad|ios/i.test(ua);
+
+	const isPc = !isMobile;
+
+	result.isMobile = isMobile;
+	result.isPc = isPc;
+
+	// 判断操作系统
+	if (ua.includes("windows")) result.os = "windows";
+	if (ua.includes("mac os")) result.os = "macOS";
+	// 判断浏览器
+	if (ua.includes("chrome") && !ua.includes("edge")) result.browser = "chrome";
+	// 特征判断
+	if (result.isMobile && !("onTouchstart" in window)) {
+		result.isMobile = false;
+		result.isPc = true;
+	}
+
+	return result;
 }
 ```
 
@@ -2278,7 +2346,7 @@ const [count, setCount] = useState(0);
 
 数组解构与对象解构
 
-```js
+```javascript
 const foo = [1, 2, 3];
 const [one, two, three] = foo; // 自定义名称
 
@@ -2500,7 +2568,7 @@ function App() {
 }
 ```
 
-### Fragments(<> </>)
+### Fragments(`<> </>`)
 
 > Fragment 是 React 提供的一种特殊组件，用于将多个元素组合起来，同时不会向真实 DOM 中增加额外的节点。它主要用于避免无意义的 DOM 包装，保持 HTML 结构和 DOM 层级的简洁。Fragment 可以使用 `<Fragment>` 或 `<>...</>` 简写；如果需要设置 key，则必须使用完整的 Fragment 写法。
 
@@ -2868,7 +2936,7 @@ dispatch(action) -> Store 接收到 Action -> rootReducer(oldState, action) -> R
 
 > React Router 本质上是利用浏览器的 History API 或 Hash API 实现前端路由。
 
-> 以 BrowserRouter 为例，当用户点击 Link 时，Router 会阻止 <a> 标签的默认跳转，然后通过 history.pushState() 修改 URL，同时更新内部的 location 状态；当用户点击浏览器前进后退时，则通过监听 popstate 事件获取 URL 的变化。
+> 以 BrowserRouter 为例，当用户点击 Link 时，Router 会阻止 `<a>` 标签的默认跳转，然后通过 history.pushState() 修改 URL，同时更新内部的 location 状态；当用户点击浏览器前进后退时，则通过监听 popstate 事件获取 URL 的变化。
 
 > URL 变化后，Router 会根据当前 pathname 与 Route 配置进行匹配，找到对应的 React Element，然后触发 React 重新渲染，因此整个过程中不需要重新加载 HTML 页面。
 
@@ -3424,11 +3492,11 @@ const count = inject("count");
 
 > Vue 中双向绑定主要通过 v-model 实现，它本质上是属性绑定和事件监听的语法糖。
 
-> 对原生表单元素来说，例如 input 的 v-model 可以理解为 :value 加上 @input，数据变化时更新视图，用户输入时通过事件更新数据。
+> 对原生表单元素来说，例如 input 的 v-model 可以理解为 `:value` 加上 `@input`，数据变化时更新视图，用户输入时通过事件更新数据。
 
 > 对于组件来说，Vue 3 中 v-model 默认对应 modelValue prop 和 update:modelValue 事件，即：
 
-> v-model="value" 等价于 :modelValue="value" @update:modelValue="value = $event"。
+> `v-model="value"` 等价于 `:modelValue="value"` `@update:modelValue="value = $event"`。
 
 > 因此 Vue 的双向绑定本质上仍然是单向数据流 + 事件通知，并不是组件之间真正的双向数据流。
 
@@ -4663,6 +4731,111 @@ wechatPayment.execute(100); // 微信支付 100 元
 
 ::
 
+### 如何统计长任务时间、长任务执行次数
+
+> 可以使用 PerformanceObserver 监听 Long Tasks API。浏览器会把主线程持续超过 50ms 的任务作为 longtask PerformanceEntry，通过 entry.duration 可以获取单个长任务的执行时间，每收到一个 entry 就可以将次数加一，同时累加 duration 得到长任务总耗时，还可以进一步统计平均耗时和最大耗时。
+
+**长任务**: 根据 W3C 规范，长任务是指主线程连续执行超过 50ms 的任务，因为浏览器没 16.67.ms(60fps) 需要完成一次渲染，超过 50ms 会导致至少 3 帧丢失，用户能明显感知卡顿
+
+**统计方法**:
+
+1. 开始时间、结束时间
+
+2. 筛选出耗时大于 50ms 的任务，出现次数和具体信息保存下来
+
+```javascript
+const longTaskStats = {
+	count: 0, // 长任务出现次数
+	totalTIme: 0, // 所有长任务的总耗时
+	tasks: [], // 每个长任务的详细信息(开始时间、耗时、来源等等)
+};
+
+const observer = new PerformanceObserver(entryList => {
+	const entries = entryList.getEntriesByType("longtask");
+
+	entries.forEach(entry => {
+		const duration = entry.duration.toFixed(2);
+
+		if (duration >= 50) {
+			longTaskStats.count++;
+			longTaskStats.totalTIme += Number(duration);
+			longTaskStats.tasks.push({
+				startTime: entry.startTime.toFixed(2), // 任务开始时间(相对于页面加载)
+				duration: duration,
+				source: entry.name || "unknow", // 如: "script"、"layout"、"gc 等
+				stack: entry.backtrace ? entry.backtrace.map(item => item.functionName).join(" -> ") : "无",
+			});
+		}
+	});
+});
+
+observer.observe({ entryTypes: ["longtask"], buffered: true });
+
+setTimeout(() => {
+	const start = Date.now();
+
+	while (Date.now() - start < 100) {
+		// 故意阻塞主线程
+	}
+}, 1000);
+```
+
+### 如何一次性渲染十万条数据还能保证页面不卡顿
+
+> 如果有 10 万条数据，首先不会真的渲染 10 万个 DOM，而是采用虚拟列表。根据 scrollTop、容器高度和每项高度计算当前可见的数据范围，只渲染可视区域加少量 buffer，例如实际只维护几十个 DOM，通过占位容器和 transform 保证滚动条高度正常。
+
+> 如果 10 万条数据本身也不应该一次性传输，那么后端还应该采用分页或者游标分页，前端结合虚拟列表。
+
+> 如果数据已经全部加载到前端，而且存在大量计算，可以把排序、过滤等 CPU 密集型任务放到 Web Worker；如果必须逐步创建大量 DOM，可以使用 requestAnimationFrame 或 requestIdleCallback 做分片渲染，避免产生长任务。
+
+> 所以优化要从网络、计算和 DOM 三个层面考虑，而不是只解决 DOM 渲染问题。
+
+**卡顿原因**: JS 执行占用线程，执行时间过长；重绘重排，计算量大导致卡顿
+
+**解法**:
+
+::code-group
+
+```javascript [虚拟列表滚动]
+container.onscroll(() => {
+	const scrollTop = container.scrolltop; // 滚动距离
+	const start = Math.floor(scrollTop / itemHeight); // 起始索引
+
+	const end = start + visibleCount;
+
+	renderData(data.slice(start, end));
+});
+```
+
+```javascript [分片渲染]
+let index = 0;
+function renderDatch() {
+	for (let i = 0; i < 100; i++) {
+		const div = document.createElement("div");
+		div.textContent = data[index++];
+		container.appendChild(div);
+	}
+
+	if (index < 100000) {
+		requestIdleCallback(renderDatch); // 空闲执行
+	}
+}
+```
+
+::
+
+### 为何现在市面上做表格渲染可视化技术的，大多数都是 canvas、而很少用 svg 的
+
+> Canvas 和 SVG 的核心区别在于渲染模型。SVG 是基于 DOM 的矢量图形，每一个图形元素都会成为一个可操作的节点，所以它在元素数量较少、交互和可访问性要求高的场景下比较合适。
+
+> Canvas 更接近直接绘制像素，本身只需要维护一个 Canvas DOM 节点，大量图形不会产生大量 DOM，因此在大数据量、高频更新、图表和表格可视化场景下通常性能更好。
+
+> 所以很多大数据可视化库倾向于 Canvas，但这并不是说 Canvas 一定优于 SVG。比如需要精细 DOM 交互、CSS 控制、无障碍以及图形数量较少时，SVG 反而更合适。实际项目中还经常采用 HTML + Canvas 或 SVG + HTML 的混合方案。
+
+**SVG**: 矢量图形，每一个单元格、文字都是一个独立的 DOM 元素，浏览器要逐个解析、渲染这些 DOM，并且还要维护 DOM 树状态
+
+**Canvas**: 画布，浏览器只渲染了一个 DOM 元素，表格(单元格、文字、样式)靠 JS 代码华仔画布上，不生成额外的 DOM
+
 ## 工程化
 
 ### 同一个页面三个组件请求同一个 API
@@ -5005,6 +5178,38 @@ webpack 分析依赖链，对于依赖链重新打包并重新生成 bundle 文�
 
 ::
 
+### 为什么 Vite 速度比 webpack 快
+
+> Vite 比传统 Webpack 开发环境快，主要是因为两者的开发模式不同。Webpack 在开发启动时通常需要先解析整个项目的依赖关系并进行 Bundle，而 Vite 利用了浏览器原生 ESM，启动时只需要启动 Dev Server，模块被浏览器请求时再进行转换。
+
+> 另外，Vite 会使用 esbuild 对第三方依赖进行预构建和缓存，从而减少开发过程中的处理成本。
+
+> 在 HMR 方面，Vite 通常只需要重新转换发生变化的模块，而传统 Webpack 的更新可能涉及相关 Bundle 的重新构建，所以大型项目下 Vite 的启动和热更新体验通常更快。
+
+> 不过生产环境两者都会进行构建优化，所以不能简单理解为 Vite 完全不需要 Bundle。
+
+**设计思路**: vite 抛弃了全量打包，改用按需编译 + 原生 ES 模块方式，把打包工作推迟到了浏览器请求时；生产环境使用 rollup 打包，并具备并行处理文件、预缓存的能力
+
+- webpack 先打包，再启动服务器，比较慢(取决于本地有多少文件)
+
+- vite: 推迟打包过程到浏览器请求文件时，启动本地开发环境时不扫描依赖、不打包，启动时只读取配置文件、启动本地服务器(毫秒级、不管项目多大)
+
+::tip
+
+打包
+
+js、css、图片、静态资源为文件，按依赖关系进行合并、转移，最终生成几个 bundle main.js
+
+::
+
+::tip
+
+ES 模块
+
+ESM 现代浏览器原生支持的一种按需加载文件技术，`import "./utils.js"` 自己去发起请求去拿 `utils.js`
+
+::
+
 ### webpack loader
 
 > Webpack 中 Loader 通过 module.rules 进行配置，通常通过 test 指定匹配的文件类型，通过 use 指定需要执行的 Loader。例如 SCSS 可以配置 style-loader、css-loader 和 sass-loader。多个普通 Loader 默认按照从右到左、从下到上的顺序执行，也就是数组中越靠右的 Loader 越先执行。Loader 本质上负责模块转换，而 Plugin 主要用于扩展 Webpack 的整体构建流程。
@@ -5262,3 +5467,67 @@ window.addEventListener("resize", {
 ```
 
 ::
+
+### 如何理解数据驱动视图
+
+> 数据驱动视图是现代前端框架的核心思想，即视图是数据状态的映射。开发者主要维护数据状态，而不需要手动操作 DOM。当数据发生变化时，框架通过响应式系统感知数据变化，然后重新计算相关视图，并通过 Diff 等机制找到需要更新的部分，最终更新真实 DOM。
+
+> 例如 Vue 中修改 ref 或 reactive 数据后，不需要手动调用 innerText、appendChild 等 DOM API，Vue 会通过依赖收集和派发更新，让视图自动同步。这样可以把业务逻辑和 DOM 操作解耦，降低开发复杂度。
+
+**核心要素**:
+
+- 单一数据源
+
+- 数据与视图的映射关系
+
+- 响应式系统
+
+- 虚拟 DOM 与 Diff 算法
+
+::tip
+
+**传统 DOM 操作(jQuery 时代)**:
+
+1. 修改数据: `userName = "新昵称"`
+
+2. 查找 DOM 元素: `$('#nickname')`
+
+3. 手动更新 DOM 元素: `$('#nickname').text(userName)`
+
+**数据驱动视图(Vue、React 时代)**:
+
+React: `setState({ userName: "新昵称" })`
+
+Vue: `this.userName = "新昵称"`
+
+::
+
+::tip
+
+Diff 算法:
+
+对比数据变化前后的虚拟 DOM 找到差异，最终只把差异同步到真实 DOM
+
+::
+
+### 使用同一个链接，如何实现 PC 打开是 web 应用，手机打开是 H5 应用
+
+> 可以在统一域名入口处根据 User-Agent 判断设备类型。生产环境可以由 Nginx 或服务端完成设备识别，PC 请求返回 Web 应用的入口 HTML，移动端请求返回 H5 应用的入口 HTML。也可以由前端统一入口判断后进行跳转，但这种方式会产生额外资源加载和页面闪烁，所以通常优先服务端判断。
+
+> 如果 PC 和移动端只是布局不同，而业务逻辑基本一致，则不一定需要拆成两个应用，可以使用响应式设计，通过 CSS Media Query 适配不同屏幕。
+
+> 另外还要考虑用户主动切换 PC/H5 的情况，否则可能出现跳转循环，所以可以通过 Cookie 或参数记录用户的主动选择。
+
+设备识别 + 前端路由分发(适用两端差异较大的场景)
+
+```html
+<script>
+	const ua = navigator.userAgent;
+	const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
+	if (isMobile) {
+		location.href = "/h5/";
+	} else {
+		location.href = "/web/";
+	}
+</script>
+```
