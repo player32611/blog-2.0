@@ -6,6 +6,7 @@ export default defineNuxtConfig({
 			link: [{ rel: "icon", type: "image/svg+xml", href: "/blog-2.0/soul.svg" }],
 		},
 	},
+	css: ["~/assets/styles/katex.scss"],
 	modules: ["@nuxt/content", "@pinia/nuxt", "@nuxt/fonts"],
 	devtools: { enabled: false },
 	compatibilityDate: "2024-04-03",
@@ -37,6 +38,14 @@ export default defineNuxtConfig({
 						"yml",
 					],
 					theme: "github-dark",
+				},
+				remarkPlugins: {
+					"remark-math": {},
+				},
+				rehypePlugins: {
+					"rehype-katex": {
+						output: "mathml",
+					},
 				},
 				toc: {
 					depth: 2,

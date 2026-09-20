@@ -14,10 +14,13 @@
 		"@pinia/nuxt": "^0.11.3",
 		"better-sqlite3": "^12.8.0",
 		"gsap": "^3.14.2",
+		"katex": "^0.18.7",
 		"lottie-web": "^5.13.0",
 		"matter-js": "^0.20.0",
 		"nuxt": "^4.3.1",
 		"pinia": "^3.0.4",
+		"rehype-katex": "^7.0.1",
+		"remark-math": "^6.0.0",
 		"sakana-widget": "^3.0.0",
 		"sass": "^1.97.3",
 		"three": "^0.184.0"
