@@ -546,3 +546,21 @@ void testStringTemplate() throws JsonProcessingException {
 | `RedisTemplate.opsForList()`  | ListOperations  |   操作 List 类型数据    |
 |  `RedisTemplate.opsForSet()`  |  SetOperations  |    操作 Set 类型数据    |
 | `RedisTemplate.opsForZSet()`  | ZSetOperations  | 操作 SortedSet 类型数据 |
+
+## 分布式缓存
+
+单点 Redis 存在以下问题
+
+- 数据丢失问题: 需实现 Redis 数据持久化
+
+- 并发能力问题: 需搭建主从集群，实现读写分离
+
+- 存储能力问题: 需搭建分片集群，利用插槽机制实现动态扩容
+
+- 故障恢复问题: 需利用 Redis 哨兵，实现健康检测和自动恢复
+
+### RDB 持久化
+
+RDB(Redis Database Backup file) Redis 数据备份文件，也被叫做 Redis 数据快照。简单来说就是把内存中的所有数据都记录到磁盘中。当 Redis 实例故障重启后，从磁盘读取快照文件，恢复数据
+
+快照文件称为 RDB 文件，默认是保存在当前运行目录
