@@ -541,8 +541,8 @@ void testStringTemplate() throws JsonProcessingException {
 
 |              API              |   返回值类型    |          说明           |
 | :---------------------------: | :-------------: | :---------------------: |
-| `RrdisTemplate.opsForValue()` | ValueOperations |  操作 String 类型数据   |
-| `RrdisTemplate.opsForHash()`  | HashOperations  |   操作 Hash 类型数据    |
-| `RrdisTemplate.opsForList()`  | ListOperations  |   操作 List 类型数据    |
-|  `RrdisTemplate.opsForSet()`  |  SetOperations  |    操作 Set 类型数据    |
-| `RrdisTemplate.opsForZSet()`  | ZSetOperations  | 操作 SortedSet 类型数据 |
+| `RedisTemplate.opsForValue()` | ValueOperations |  操作 String 类型数据   |
+| `RedisTemplate.opsForHash()`  | HashOperations  |   操作 Hash 类型数据    |
+| `RedisTemplate.opsForList()`  | ListOperations  |   操作 List 类型数据    |
+|  `RedisTemplate.opsForSet()`  |  SetOperations  |    操作 Set 类型数据    |
+| `RedisTemplate.opsForZSet()`  | ZSetOperations  | 操作 SortedSet 类型数据 |
