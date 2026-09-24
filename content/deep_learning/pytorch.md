@@ -575,6 +575,51 @@ w.data = w.data - 0.01 * w.grad
 print(f'更新后的权重: {w}')
 ```
 
+::detail
+
+#title
+具体示例
+#default
+
+```python
+# 输入数据
+x = torch.ones(2, 5)
+print(f'x: {x}')
+
+# 标签
+y = torch.zeros(2, 3)
+print(f'y: {y}')
+
+# 初始化权重
+w = torch.randn(5, 3, requires_grad=True)
+print(f'w: {w}')
+
+# 初始化偏置
+b = torch.randn(3, requires_grad=True)
+print(f'b: {b}')
+
+# 正向传播
+z = x @ w + b
+print(f'z: {z}')
+
+# 定义损失函数: 均方误差
+criterion = torch.nn.MSELoss()
+loss = criterion(z, y)
+print(f'loss: {loss}')
+
+# 反向传播
+loss.sum().backward()
+
+# 打印需要更新的梯度
+print(f'w 的梯度: {w.grad}')
+print(f'b 的梯度: {b.grad}')
+
+# 学习
+w.data = w.data - 0.01 * w.grad
+```
+
+::
+
 ::tip
 
 `torch.tensor(初始值, requires_grad=是否能被自动微分/求导, dtype=数据类型)`
@@ -615,3 +660,138 @@ print(f'结束 权重: {w}, loss: {loss}')
 - `x.grad.zero_()`: 清空上一次计算的梯度值
 
 ::
+
+### detach()
+
+一个张量一旦设置了自动微分，这个张量旧不能直接转成 numpy 的 ndarray 对象了，需要通过 detach() 函数解决
+
+```python
+t1 = torch.tensor(10, requires_grad=True, dtype=torch.float)
+print(f't1: {t1}, type: {type(t1)}')
+
+# 报错
+# n1 = t1.numpy()
+# print(f'n1: {n1}, type: {type(n1)}')
+
+n2 = t1.detach().numpy()
+print(f'n2: {n2}, type: {type(n2)}')
+```
+
+::warning
+
+`t1.detach()` 与 `t1` 共享同一片存储空间
+
+::
+
+### 线性回归问题
+
+1. 准备训练集数据
+
+2. 构建要使用的模型
+
+3. 设置损失函数和优化器
+
+4. 模型训练
+
+```python
+import torch
+
+# 导入数据及对象和数据加载器
+from torch.utils.data import TensorDataset, DataLoader
+# 导入损失函数
+from torch import nn, optim
+# 导入创建线性回归模型数据集的方法
+from sklearn.datasets import make_regression
+# 导入绘图库
+import matplotlib.pyplot as plt
+
+plt.rcParams['font.sans-serif'] = ['SimHei'] # 用来正常显示中文标签
+plt.rcParams['axes.unicode_minus'] = False # 用来正常显示负号
+
+# 创建数据集
+def create_dataset():
+    bias = 14.5
+    x, y, coef = make_regression(
+        n_samples=100, # 样本数
+        n_features=1, # 特征点数
+        noise=5, # 噪声，越大表示样本点越散
+        coef=True, # 是否返回权重系数(真实值)
+        bias= bias, # 偏置
+        random_state=42 # 随机数种子
+    )
+
+    # 把数据集封装成张量对象
+    x = torch.tensor(x, dtype=torch.float32)
+    y = torch.tensor(y, dtype=torch.float32)
+
+    return x, y, coef, bias
+
+# 模型训练
+def train_model(x, y, coef, bias):
+    # 将 tensor 转为 数据集对象 再转为 数据加载器对象
+    dataset = TensorDataset(x, y)
+    dataloader = DataLoader(dataset, batch_size=16, shuffle=True) # 参数: 数据集对象，每轮数据大小，是否打乱数据
+
+    # 创建初始的回归模型
+    model = nn.Linear(1, 1) # 参数: 输入特征维度，输出特征维度
+
+    # 损失函数: 均方误差
+    criterion = nn.MSELoss()
+    # 学习算法: 梯度下降法
+    optimizer = optim.SGD(params=model.parameters(), lr=0.01) # lr: 学习率
+
+
+    epochs = 100 # 训练轮数
+    loss_list = [] # 记录每轮的平均损失值
+
+    # 开始训练
+    for epoch in range(epochs): # 0 ~ 99
+        total_loss = 0.0 # 每轮已记录的总损失
+        train_sample = 0 # 每轮已训练批数
+        # 每轮训练的操作
+        for train_x, train_y in dataloader: # (16, 16, 16, 16, 16, 16, 4)
+            # 使用模型进行预测
+            y_pred = model(train_x)
+            # 计算(平均)损失值
+            loss = criterion(y_pred, train_y.reshape(-1, 1).type(torch.float32))
+
+            total_loss += loss.item()
+            train_sample += 1
+
+            optimizer.zero_grad() # 梯度清零
+            loss.sum().backward() # 反向传播
+            optimizer.step() # 更新参数
+
+        # 把本轮的(平均)损失值添加到列表中
+        loss_list.append(total_loss / train_sample)
+        print(f'轮数: {epoch + 1}, 平均损失值: {total_loss / train_sample}')
+
+    # 训练结束
+    print(f'100 轮的平均损失分别为: {loss_list}')
+    print(f'模型权重: {model.weight}, 模型偏置: {model.bias}')
+
+    # 绘制损失曲线
+    plt.plot(range(epochs), loss_list)
+    plt.title("损失值变化曲线")
+    plt.grid()
+    plt.show()
+
+    # 绘制预测值和真实值的关系
+    plt.scatter(x, y) # 绘制样本点分布情况
+    y_pred = model(x).detach().numpy().ravel() # 需 detach 后才能转 numpy
+    y_true = coef * x.numpy().ravel() + bias
+    # 按 x 排序，避免连线因样本顺序错乱而画成锯齿状
+    x_np = x.numpy().ravel()
+    order = x_np.argsort()
+    plt.plot(x_np[order], y_pred[order], color='red', label='预测值')
+    plt.plot(x_np[order], y_true[order], color='green', label='真实值')
+    plt.legend() # 图例
+    plt.grid() # 网格
+    plt.show()
+
+
+if __name__ == '__main__':
+    x, y, coef, bias = create_dataset()
+
+    train_model(x, y, coef, bias)
+```
