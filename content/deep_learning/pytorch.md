@@ -795,3 +795,65 @@ if __name__ == '__main__':
 
     train_model(x, y, coef, bias)
 ```
+
+## 神经网络搭建
+
+在 PyTorch 中定义深度神经网络其实就是层堆叠的过程，继承自 `nn.Module`，实现两个方法:
+
+- `__init__` 方法中定义网络中的层结构，主要是全连接层，并进行初始化
+
+- `forward` 方法，在实例化模型的时候，底层会自动调用该函数。该函数中为初始化定义的 layer 传入参数，进行前向传播等
+
+### 参数计算与统计
+
+```python
+import torch
+import torch.nn as nn
+from torchsummary import summary
+
+# 搭建神经网络
+class Model(nn.Module):
+    # 完成初始化
+    def __init__(self):
+        super().__init__() # 初始化父类成员
+        self.linear1 = nn.Linear(3, 3) # 搭建隐藏层 1: 输入特征 3，输出特征 3
+        self.linear2 = nn.Linear(3, 2) # 搭建隐藏层 2: 输入特征 3，输出特征 2
+        # 输出层: 输入特征 2，输出特征 2，
+        self.output = nn.Linear(2, 2)
+
+        # 对隐藏层 1 进行参数初始化
+        nn.init.xavier_normal_(self.linear1.weight)
+        nn.init.zeros_(self.linear1.bias)
+        # 对隐藏层 2 进行参数初始化
+        nn.init.xavier_normal_(self.linear2.weight)
+        nn.init.zeros_(self.linear2.bias)
+
+    def forward(self, x):
+        x = torch.sigmoid(self.linear1(x)) # 隐藏层 1 计算: 加权求和后调用激活函数
+        x = torch.relu(self.linear2(x))  # 隐藏层 2 计算
+        x = torch.softmax(self.output(x), dim=-1) # 输出层计算
+        return x # 返回预测值
+
+def train():
+    model = Model() # 创建模型对象
+
+    data = torch.randn(size=(5, 3)) # 创建数据集样本(随机生成)
+
+    out = model(data) # 调用神经网络模型，前向传播
+
+    summary(model, input_size=(5, 3)) # 查看模型参数
+
+    # 查看模型具体参数
+    for name, param in model.named_parameters():
+        print(f'name: {name}, param: {param}')
+
+
+if __name__ == '__main__':
+    train()
+```
+
+### 多分类任务损失函数
+
+```python
+
+```
