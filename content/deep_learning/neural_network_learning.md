@@ -1225,7 +1225,7 @@ if __name__ == '__main__':
 
 RMSProp 优化算法是对 AdaGrad 的优化。最主要的不同是，其使用指数加权平均梯度替换历史梯度的平方和
 
-$$h = \beta h + (1 - \beta) \frac{\partial L}{\partial W} ʘ \frac{\partial L}{\partial W}$$
+$h = \beta h + (1 - \beta) \frac{\partial L}{\partial W}$ ʘ $\frac{\partial L}{\partial W}$
 
 ::detail
 
@@ -1829,11 +1829,11 @@ plt.show()
 
 ![基于MNIST数据集的权重初始值的比较：横轴是学习的迭代次数（iterations），纵轴是损失函数的值（loss）](/images/content/deep-learning/learning-skill/weight-init-comparison.png)
 
-从图中的结果可知，初始值为标准差是 0.01 的高斯分布时完全无法进行学习。这和刚才观察到的激活值的分布一样，是因为正向传播中传递的值很小（集中在 0 附近的数据）。因此，逆向传播时求到的梯度也很小，权重几乎不进行更新。
+从图中的结果可知，初始值为标准差是 0.01 的高斯分布时完全无法进行学习。这和刚才观察到的激活值的分布一样，是因为正向传播中传递的值很小（集中在 0 附近的数据）。因此，逆向传播时求到的梯度也很小，权重几乎不进行更新
 
-相反，当权重初始值为 Xavier 初始值和 He 初始值时，学习进行得很顺利。并且，我们发现 He 初始值时的学习进度更快一些。
+相反，当权重初始值为 Xavier 初始值和 He 初始值时，学习进行得很顺利。并且，我们发现 He 初始值时的学习进度更快一些
 
-综上，在神经网络的学习中，权重初始值非常重要。很多时候权重初始值的设定关系到神经网络的学习能否成功。权重初始值的重要性容易被忽视，而任何事情的开始（初始值）总是关键的，
+综上，在神经网络的学习中，权重初始值非常重要。很多时候权重初始值的设定关系到神经网络的学习能否成功。权重初始值的重要性容易被忽视，而任何事情的开始（初始值）总是关键的
 
 ## Batch Normalization
 
@@ -2549,6 +2549,220 @@ Best-5 (val acc:0.73) | lr:0.0052, weight decay:8.97e-06
 
 像这样，观察可以使学习顺利进行的超参数的范围，从而缩小值的范围。然后，在这个缩小的范围中重复相同的操作。这样就能缩小到合适的超参数的存在范围，然后在某个阶段，选择一个最终的超参数的值。
 
+## 学习率优化(了解)
+
+在训练神经网络时，一般情况下学习率都会随着训练而变化。这主要是由于在神经网络训练的后期，如果学习率过高，会造成 loss 的震荡，但是如果学习率减小的过慢，又会造成收敛变慢的情况
+
+相较于 AdaGrad、RMSProp、Adam 方式，我们可以通过等间隔、指定间隔、指数等方式，来手动控制学习率的调整
+
+|     方法     |         等间隔学习率衰减         |             指定间隔学习率衰减             |               指数学习率衰减               |
+| :----------: | :------------------------------: | :----------------------------------------: | :----------------------------------------: |
+| **衰减方式** |           固定步长衰减           |                指定步长衰减                |         平滑指数衰减，历史平均考虑         |
+| **实现难度** |            简单易实现            |             相对简单，容易调整             |          需要额外历史计算，较复杂          |
+| **适用场景** |    大型数据集，较为简单的任务    |         对训练平稳性要求较高的任务         |          高精度训练，避免过快收敛          |
+|   **优点**   | 直观，易于调试，适用于大批量数据 |           易于调试，稳定训练过程           |   贫农规划且考虑历史更新，收敛稳定性较强   |
+|   **缺点**   |  学习率变化较大，可能跳过最优点  | 在某些情况下可能衰减过快，导致优化提前停滞 | 超参数调节较为复杂，可能需要更多的计算资源 |
+
+### 等间隔学习率衰减
+
+::detail
+
+#title
+PyTorch 代码
+#default
+`lr_scheduler.StepLR(optimizer, step_size, gamma=0.1)`
+
+- `step_size`: 间隔的轮数，即多少轮调整一次学习率
+
+- `gamma`: 学习率衰减系数，即 $lr_t = lr_{t-1} * gamma$
+
+```python
+import torch
+import torch.optim as optim
+from matplotlib import pyplot as plt
+
+if __name__ == '__main__':
+    # 定义初始学习率、训练的轮数、每轮训练的批次数
+    lr, epochs, iteration = 0.1, 200, 10
+
+    # 创建数据集
+    y_true = torch.tensor([0]) # 真实值
+    x = torch.tensor([1.0], dtype=torch.float) # 输入特征
+    w = torch.tensor([1.0], requires_grad=True, dtype=torch.float32) # 权重参数
+
+    # 创建优化器对象
+    optimizer = optim.SGD([w], lr=lr, momentum=0.9)
+
+    # 创建学习率衰减对象
+    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=50, gamma=0.5)
+
+    lr_list, epoch_list = [], [] # 每轮训练用的学习率，训练轮数
+    # 数据示例: lr_list = [0.1, 0.1, 0.1, 0.05, 0.05, ..., 0.025, ..., 0.0125, ...]
+    # epoch_list = [1, 2, 3, ..., 50, 51, ..., 100, 101, ..., 151, ...]
+
+    # 循环遍历训练轮数，进行具体的训练
+    for epoch in range(epochs):
+        # 获取当前轮数和学习率，并保存到列表中
+        epoch_list.append(epoch + 1)
+        lr_list.append(scheduler.get_last_lr()) # 获取最后的学习率
+
+        # 循环遍历，每轮每批次进行训练
+        for batch in range(iteration):
+            y_pred = w * x # 计算预测值
+            loss = (y_pred - y_true).pow(2).sum() # 计算损失值(最小二乘)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+        # 更新学习率
+        scheduler.step()
+
+    print(f'lr_list: {lr_list}') # 打印结果
+    print(f'epoch_list: {epoch_list}')  # 打印结果
+
+    # 可视化
+    plt.plot(epoch_list, lr_list)
+    plt.xlabel('Epoch')
+    plt.ylabel('Learning Rate')
+    plt.show()
+```
+
+::
+
+### 指定间隔学习率衰减
+
+::detail
+
+#title
+PyTorch 代码
+#default
+`lr_scheduler.MultiStepLR(optimizer, milestones=[50, 100, 50], gamma=0.5)`
+
+- `milestones`: 轮数数组，数组的每一项对应相同学习率的轮数
+
+- `gamma`: 学习率衰减系数，即 $lr_t = lr_{t-1} * gamma$
+
+```python
+import torch
+import torch.optim as optim
+from matplotlib import pyplot as plt
+
+if __name__ == '__main__':
+    # 定义初始学习率、训练的轮数、每轮训练的批次数
+    lr, epochs, iteration = 0.1, 200, 10
+
+    # 创建数据集
+    y_true = torch.tensor([0]) # 真实值
+    x = torch.tensor([1.0], dtype=torch.float) # 输入特征
+    w = torch.tensor([1.0], requires_grad=True, dtype=torch.float32) # 权重参数
+
+    # 创建优化器对象
+    optimizer = optim.SGD([w], lr=lr, momentum=0.9)
+
+    # 创建学习率衰减对象
+    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[50, 100, 50], gamma=0.5)
+
+    lr_list, epoch_list = [], [] # 每轮训练用的学习率，训练轮数
+    # 数据示例: lr_list = [0.1, 0.1, 0.1, 0.05, 0.05, ..., 0.025, ..., 0.0125, ...]
+    # epoch_list = [1, 2, 3, ..., 50, 51, ..., 100, 101, ..., 151, ...]
+
+    # 循环遍历训练轮数，进行具体的训练
+    for epoch in range(epochs):
+        # 获取当前轮数和学习率，并保存到列表中
+        epoch_list.append(epoch + 1)
+        lr_list.append(scheduler.get_last_lr()) # 获取最后的学习率
+
+        # 循环遍历，每轮每批次进行训练
+        for batch in range(iteration):
+            y_pred = w * x # 计算预测值
+            loss = (y_pred - y_true).pow(2).sum() # 计算损失值(最小二乘)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+        # 更新学习率
+        scheduler.step()
+
+    print(f'lr_list: {lr_list}') # 打印结果
+    print(f'epoch_list: {epoch_list}')  # 打印结果
+
+    # 可视化
+    plt.plot(epoch_list, lr_list)
+    plt.xlabel('Epoch')
+    plt.ylabel('Learning Rate')
+    plt.show()
+```
+
+::
+
+### 指数学习率衰减
+
+指数学习率衰减前期学习率衰减快，中期慢，后期更慢
+
+$lr_t = lr_{t-1} * gamma^{epoch}$
+
+::detail
+
+#title
+PyTorch 代码
+#default
+`lr_scheduler.ExponentialLR(optimizer, gamma=0.95)`
+
+- `gamma`: 指数的底
+
+```python
+import torch
+import torch.optim as optim
+from matplotlib import pyplot as plt
+
+if __name__ == '__main__':
+    # 定义初始学习率、训练的轮数、每轮训练的批次数
+    lr, epochs, iteration = 0.1, 200, 10
+
+    # 创建数据集
+    y_true = torch.tensor([0]) # 真实值
+    x = torch.tensor([1.0], dtype=torch.float) # 输入特征
+    w = torch.tensor([1.0], requires_grad=True, dtype=torch.float32) # 权重参数
+
+    # 创建优化器对象
+    optimizer = optim.SGD([w], lr=lr, momentum=0.9)
+
+    # 创建学习率衰减对象
+    scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.95)
+
+    lr_list, epoch_list = [], [] # 每轮训练用的学习率，训练轮数
+    # 数据示例: lr_list = [0.1, 0.1, 0.1, 0.05, 0.05, ..., 0.025, ..., 0.0125, ...]
+    # epoch_list = [1, 2, 3, ..., 50, 51, ..., 100, 101, ..., 151, ...]
+
+    # 循环遍历训练轮数，进行具体的训练
+    for epoch in range(epochs):
+        # 获取当前轮数和学习率，并保存到列表中
+        epoch_list.append(epoch + 1)
+        lr_list.append(scheduler.get_last_lr()) # 获取最后的学习率
+
+        # 循环遍历，每轮每批次进行训练
+        for batch in range(iteration):
+            y_pred = w * x # 计算预测值
+            loss = (y_pred - y_true).pow(2).sum() # 计算损失值(最小二乘)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+        # 更新学习率
+        scheduler.step()
+
+    print(f'lr_list: {lr_list}') # 打印结果
+    print(f'epoch_list: {epoch_list}')  # 打印结果
+
+    # 可视化
+    plt.plot(epoch_list, lr_list)
+    plt.xlabel('Epoch')
+    plt.ylabel('Learning Rate')
+    plt.show()
+```
+
+::
+
 ## 小结
 
 ::detail
@@ -2609,7 +2823,7 @@ Best-5 (val acc:0.73) | lr:0.0052, weight decay:8.97e-06
 
 - **最优化**：神经网络的学习中寻找最优参数的过程
 
-- **SGD（随机梯度下降法）**：一种最优化方法，使用参数的梯度，沿梯度方向更新参数，并重复这个步骤多次，从而逐渐靠近最优参数
+- **SGD(随机梯度下降法)**：一种最优化方法，使用参数的梯度，沿梯度方向更新参数，并重复这个步骤多次，从而逐渐靠近最优参数
 
 - **Momentum**：一种改进随机梯度下降法的方法，在梯度方向上受力，使参数的更新更平滑
 
