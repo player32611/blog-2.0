@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { gsap } from "gsap";
 import { ScrollSmoother, ScrollTrigger } from "gsap/all";
-import type { BlogCollectionItems, BlogCollections, NetworkLoadingState } from "~/types/config";
+import type { BlogCollectionItems, BlogCollections } from "~/types/config";
 import type {
 	BlogMaskInstance,
 	BlogMenuInstance,
@@ -35,6 +35,7 @@ blogPreloadComponents();
 usePageReady(() =>
 	blogStore.useBlogContent(slug.value).then(res => {
 		page.value = res;
+		document.title = res?.title || slug.value;
 	}),
 );
 
@@ -46,7 +47,6 @@ onMounted(() => {
 		onUpdate: navigationRef.value?.handleScroll,
 	});
 	blogStore.setBlogInstance(maskRef.value, menuRef.value);
-	document.title = slug.value;
 });
 
 onBeforeUnmount(() => {
