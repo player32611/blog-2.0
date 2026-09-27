@@ -902,3 +902,72 @@ if __name__ == '__main__':
     optimizer.step()
     print(f'w: {w}, w.grad: {w.grad}')
 ```
+
+### 正则化
+
+- Dropout(随机失活): `nn.Dropout(p)`
+  - `p`: 失活概率
+
+- Batch Norm(批量归一化): `nn.BatchNorm2d(num_features, eps, momentum, affine)`
+  - `num_features`: 输入通道数
+  - `eps`: 噪声数(小常数)
+  - `momentum`: 动量值，用于计算移动平均统计量的
+  - `affine`: 表示使用可学习的变换参数 (λ, β)，对归一化(标准化)后的数据进行缩放和平移
+
+::code-group
+
+```python [Dropout]
+t1 = torch.randint(0, 10, size=(1,4)).float() # 创建上一层输出结果(仅模拟)
+print(f't1: {t1}')
+linear1 = nn.Linear(4, 5) # 创建本层
+
+l1 = linear1(t1) # 加权求和
+output = torch.relu(l1) # 经过激活函数
+print(f'output: {output}')
+
+# 随机失活处理
+dropout = nn.Dropout(p=0.5)
+d1 = dropout(l1)
+print(f'd1: {d1}')
+```
+
+```python [Batch Norm]
+input_2d = torch.randn(size=(1, 2, 3, 4)) # 创建输入数据(仅模拟)(1 张图片，2 个通道，3 行 4 列)
+print(f'input_2d: {input_2d}')
+
+# 创建 Batch Norm 层
+bn2d = nn.BatchNorm2d(num_features=2, eps=1e-5, momentum=0.1, affine=True)
+
+# 对数据进行批量归一化处理
+output_2d = bn2d(input_2d)
+print(f'output_2d: {output_2d}')
+```
+
+::
+
+::tip
+
+#title
+Batch Norm 处理一维数据
+#default
+
+```python
+input_1d = torch.randn(size=(2, 2)) # 创建输入数据
+print(f'input_1d: {input_1d}')
+
+# 创建线性层
+linear = nn.Linear(2, 4)
+
+# 对数据进行线性变换
+l1 = linear(input_1d)
+print(f'l1: {l1}')
+
+# 创建 Batch Norm 层
+bn1d = nn.BatchNorm1d(num_features=4)
+
+# 对数据进行批量归一化处理
+output_1d = bn1d(l1)
+print(f'output_1d: {output_1d}')
+```
+
+::

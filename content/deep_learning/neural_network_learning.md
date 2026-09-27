@@ -1635,165 +1635,13 @@ plt.show()
 
 综上，在神经网络的学习中，权重初始值非常重要。很多时候权重初始值的设定关系到神经网络的学习能否成功。权重初始值的重要性容易被忽视，而任何事情的开始（初始值）总是关键的
 
-## Batch Normalization
-
-如果设定了合适的权重初始值，则各层的激活值分布会有适当的广度，从而可以顺利地进行学习。
-
-那么，为了使各层拥有适当的广度，“强制性” 地调整激活值的分布会怎样呢？实际上，**Batch Normalization** 方法就是基于这个想法而产生的
-
-### Batch Normalization 的算法
-
-Batch Normalization（下文简称Batch Norm）是 2015 年提出的方法。Batch Norm 虽然是一个问世不久的新方法，但已经被很多研究人员和技术人员广泛使用。
-
-::tip
-
-Batch Norm 的优点：
-
-- 可以使学习快速进行（可以增大学习率）
-
-- 不那么依赖初始值（对于初始值不用那么神经质）
-
-- 抑制过拟合（降低 Dropout 等的必要性）
-
-考虑到深度学习要花费很多时间，第一个优点令人非常开心。另外，后两点也可以帮我们消除深度学习的学习中的很多烦恼。
-
-::
-
-Batch Norm 的思路是调整各层的激活值分布使其拥有适当的广度。为此，要向神经网络中插入对数据分布进行正规化的层，即 Batch Normalization 层（下文简称 Batch Norm 层）：
-
-![使用了 Batch Normalization 的神经网络的例子（Batch Norm 层的背景为灰色）](/images/content/deep-learning/learning-skill/batch-norm.png)
-
-Batch Norm，顾名思义，以进行学习时的 mini-batch 为单位，按 minibatch 进行正规化。具体而言，就是进行使数据分布的均值为 0、方差为 1 的正规化。用数学式表示的话，如下所示：
-
-![Batch Norm 的算法](/images/content/deep-learning/learning-skill/batch-norm-algorithm.png)
-
-> $\mu_B$： minibatch 中数据的均值
->
-> $\sigma_B^2$：minibatch 中数据的方差
->
-> $ε$：一个微小值（比如，10e-7 等），防止出现除以 0 的情况。
-
-这里对 mini-batch 的 $m$ 个输入数据的集合 $B={\{x_1,x_2,...,x_m\}}$ 求均值 $\mu_B$ 和方差 $\sigma_B^2$。然后，对输入数据进行均值为 0、方差为 1（合适的分布）的正规化。
-
-接着，Batch Norm 层会对正规化后的数据进行缩放和平移的变换，用数学式可以如下表示：
-
-![Batch Norm 层对输入数据的变换](/images/content/deep-learning/learning-skill/batch-norm-transform.png)
-
-> $\gamma$ 和 $\beta$：两个参数，分别对输入数据进行缩放和平移的变换，一开始设置为 1 和 0，然后再通过学习调整到合适的值。
-
-上面就是 Batch Norm 的算法。这个算法是神经网络上的正向传播。如果使用计算图，Batch Norm 可以表示为：
-
-![Batch Norm 的计算图](/images/content/deep-learning/learning-skill/batch-norm-graph.png)
-
-### Batch Normalization 的评估
-
-现在我们使用 Batch Norm 层进行实验，观察使用 Batch Norm 层和不使用 Batch Norm 层时学习的过程会如何变化：
-
-```python
-import sys, os
-sys.path.append(os.pardir)  # 为了导入父目录的文件而进行的设定
-import numpy as np
-import matplotlib.pyplot as plt
-from dataset.mnist import load_mnist
-from common.multi_layer_net_extend import MultiLayerNetExtend
-from common.optimizer import SGD, Adam
-
-(x_train, t_train), (x_test, t_test) = load_mnist(normalize=True)
-
-# 为了快速实验，只取前 1000 个样本
-x_train = x_train[:1000]
-t_train = t_train[:1000]
-
-max_epochs = 20
-train_size = x_train.shape[0]
-batch_size = 100
-learning_rate = 0.01
-
-
-def __train(weight_init_std):
-    # 创建两个相同结构的网络：一个使用 Batch Norm 层，一个不用
-    bn_network = MultiLayerNetExtend(input_size=784, hidden_size_list=[100, 100, 100, 100, 100], output_size=10, weight_init_std=weight_init_std, use_batchnorm=True)
-    network = MultiLayerNetExtend(input_size=784, hidden_size_list=[100, 100, 100, 100, 100], output_size=10, weight_init_std=weight_init_std)
-    optimizer = SGD(lr=learning_rate)
-
-    train_acc_list = []
-    bn_train_acc_list = []
-
-    iter_per_epoch = max(train_size / batch_size, 1)
-    epoch_cnt = 0
-
-    for i in range(1000000000):
-        batch_mask = np.random.choice(train_size, batch_size)
-        x_batch = x_train[batch_mask]
-        t_batch = t_train[batch_mask]
-
-        # 两个网络同时用相同的数据训练
-        for _network in (bn_network, network):
-            grads = _network.gradient(x_batch, t_batch)
-            optimizer.update(_network.params, grads)
-
-        if i % iter_per_epoch == 0:
-            train_acc = network.accuracy(x_train, t_train)
-            bn_train_acc = bn_network.accuracy(x_train, t_train)
-            train_acc_list.append(train_acc)
-            bn_train_acc_list.append(bn_train_acc)
-
-            print("epoch:" + str(epoch_cnt) + " | " + str(train_acc) + " - " + str(bn_train_acc))
-
-            epoch_cnt += 1
-            if epoch_cnt >= max_epochs:
-                break
-
-    return train_acc_list, bn_train_acc_list
-
-# 3.绘制图形==========
-weight_scale_list = np.logspace(0, -4, num=16)
-x = np.arange(max_epochs)
-
-for i, w in enumerate(weight_scale_list):
-    print( "============== " + str(i+1) + "/16" + " ==============")
-    train_acc_list, bn_train_acc_list = __train(w)
-
-    plt.subplot(4,4,i+1)
-    plt.title("W:" + str(w))
-    if i == 15:
-        plt.plot(x, bn_train_acc_list, label='Batch Normalization', markevery=2)
-        plt.plot(x, train_acc_list, linestyle = "--", label='Normal(without BatchNorm)', markevery=2)
-    else:
-        plt.plot(x, bn_train_acc_list, markevery=2)
-        plt.plot(x, train_acc_list, linestyle="--", markevery=2)
-
-    plt.ylim(0, 1.0)
-    if i % 4:
-        plt.yticks([])
-    else:
-        plt.ylabel("accuracy")
-    if i < 12:
-        plt.xticks([])
-    else:
-        plt.xlabel("epochs")
-    plt.legend(loc='lower right')
-
-plt.show()
-```
-
-![基于 Batch Norm 的效果：使用 Batch Norm 后，学习进行得更快了](/images/content/deep-learning/learning-skill/batch-norm-result.png)
-
-从图中的结果可知，使用 Batch Norm 后，学习进行得更快了。
-
-接着，给予不同的初始值尺度，观察学习的过程如何变化：
-
-![图中的实线是使用了 Batch Norm时的结果，虚线是没有使用 Batch Norm 时的结果：图的标题处标明了权重初始值的标准差](/images/content/deep-learning/learning-skill/weight-init-scale-result.png)
-
-我们发现，几乎所有的情况下都是使用 Batch Norm 时学习进行得更快。同时也可以发现，实际上，在不使用 Batch Norm 的情况下，如果不赋予一个尺度好的初始值，学习将完全无法进行。
-
-综上，通过使用 Batch Norm，可以推动学习的进行。并且，对权重初始值变得健壮（表示不那么依赖初始值）。
-
 ## 正则化
 
-机器学习的问题中，**过拟合**是一个很常见的问题。过拟合指的是只能拟合训练数据，但不能很好地拟合不包含在训练数据中的其他数据的状态。
+机器学习的问题中，**过拟合**是一个很常见的问题。过拟合指的是只能拟合训练数据，但不能很好地拟合不包含在训练数据中的其他数据的状态
 
-机器学习的目标是提高泛化能力，即便是没有包含在训练数据里的未观测数据，也希望模型可以进行正确的识别。我们可以制作复杂的、表现力强的模型，但是相应地，抑制过拟合的技巧也很重要。
+机器学习的目标是提高泛化能力，即便是没有包含在训练数据里的未观测数据，也希望模型可以进行正确的识别。我们可以制作复杂的、表现力强的模型，但是相应地，抑制过拟合的技巧也很重要
+
+在设计机器学习算法时希望在新样本上的泛化能力强，许多机器学习算法都采用相关的策略来减少测试误差，这些策略被统称为**正则化**
 
 ### 过拟合
 
@@ -1929,21 +1777,21 @@ L2 范数、L1 范数、L∞ 范数都可以用作正则化项，它们各有各
 
 此外，还要注意，训练数据的识别精度没有达到 100%。
 
-### Dropout
+### Dropout(随机失活)
 
-权值衰减方法实现简单，在某种程度上能够抑制过拟合。但是，如果网络的模型变得很复杂，只用权值衰减就难以应对了。在这种情况下，我们经常会使用 **Dropout** 方法。
+权值衰减方法实现简单，在某种程度上能够抑制过拟合。但是，如果网络的模型变得很复杂，只用权值衰减就难以应对了。在神经网络中模型参数较多，在数据量不足的情况下，很容易过拟合。在这种情况下，我们经常会使用 **Dropout** 方法。
 
 Dropout 是一种在学习的过程中随机删除神经元的方法。训练时，随机选出隐藏层的神经元，然后将其删除。被删除的神经元不再进行信号的传递。
 
 ![Dropout的概念图：左边是一般的神经网络，右边是应用了 Dropout 的网络](/images/content/deep-learning/learning-skill/dropout.png)
 
 > 左边是一般的神经网络，右边是应用了 Dropout 的网络
->
+
 > Dropout 通过随机选择并删除神经元，停止向前传递信号
 
-训练时，每传递一次数据，就会随机选择要删除的神经元。
+训练时，每传递一次数据，就会随机选择要删除的神经元。让神经元以超参数 $p$ 的概率停止工作被置为 0，未被置为 0 的进行缩放，缩放比例为 $\frac{1}{1-p}$。训练过程可以认为是对完整的神经网络的一些子集进行训练，每次基于输入数据只更新子网络的参数
 
-测试时，虽然会传递所有的神经元信号，但是对于各个神经元的输出，要乘上训练时的删除比例后再输出。
+测试时，虽然会传递所有的神经元信号，但是对于各个神经元的输出，要乘上训练时的删除比例后再输出
 
 ```python
 class Dropout:
@@ -2110,23 +1958,218 @@ class Trainer:
 
 Dropout 的实验和前面的实验一样，使用 7 层网络（每层有 100 个神经元，激活函数为 ReLU），一个使用 Dropout，另一个不使用 Dropout，实验的结果如下图所示：
 
-![左边没有使用 Dropout，右边使用了 Dropout（dropout_rate=0.15）](/images/content/deep-learning/learning-skill/dropout-example.png)
+![左边没有使用 Dropout，右边使用了 Dropout(dropout_rate=0.15)](/images/content/deep-learning/learning-skill/dropout-example.png)
 
-> 左边没有使用 Dropout，右边使用了 Dropout（dropout_rate=0.15）
+通过使用 Dropout，训练数据和测试数据的识别精度的差距变小了。并且，训练数据也没有到达 100% 的识别精度。像这样，通过使用 Dropout，即便是表现力强的网络，也可以抑制过拟合
 
-通过使用 Dropout，训练数据和测试数据的识别精度的差距变小了。并且，训练数据也没有到达 100% 的识别精度。像这样，通过使用 Dropout，即便是表现力强的网络，也可以抑制过拟合。
+在实际应用中，Dropout 参数 $p$ 的概率同茶馆取值在 0.2 到 0.5 之间
+
+- 对于较小的模型或较复杂的任务。丢弃率可以选择 0.3 或更小
+
+- 对于非常深的网络，较大的丢弃率(如 0.5 或 0.6)可能会有效防止过拟合
+
+- 实际应用中，通常会在全连接层(激活函数后)之后添加 Dropout 层
+
+### Batch Normalization(批量归一化)
+
+如果设定了合适的权重初始值，则各层的激活值分布会有适当的广度，从而可以顺利地进行学习
+
+那么，为了使各层拥有适当的广度，"强制性" 地调整激活值的分布会怎样呢？实际上，**Batch Normalization** 方法就是基于这个想法而产生的
+
+Batch Normalization(下文简称Batch Norm)是 2015 年提出的方法。Batch Norm 虽然是一个问世不久的新方法，但已经被很多研究人员和技术人员广泛使用
+
+::tip
+
+Batch Norm 的优点：
+
+- 可以使学习快速进行（可以增大学习率）
+
+- 不那么依赖初始值（对于初始值不用那么神经质）
+
+- 抑制过拟合（降低 Dropout 等的必要性）
+
+考虑到深度学习要花费很多时间，第一个优点令人非常开心。另外，后两点也可以帮我们消除深度学习的学习中的很多烦恼。
+
+::
+
+Batch Norm 的思路是调整各层的激活值分布使其拥有适当的广度。为此，要向神经网络中插入对数据分布进行正规化的层，即 Batch Normalization 层(下文简称 Batch Norm 层)：
+
+![使用了 Batch Normalization 的神经网络的例子（Batch Norm 层的背景为灰色）](/images/content/deep-learning/learning-skill/batch-norm.png)
+
+Batch Norm，顾名思义，以进行学习时的 mini-batch 为单位，按 minibatch 进行正规化。具体而言，就是进行使数据分布的均值为 0、方差为 1 的正规化。用数学式表示的话，如下所示：
+
+![Batch Norm 的算法](/images/content/deep-learning/learning-skill/batch-norm-algorithm.png)
+
+> $\mu_B$： minibatch 中数据的均值
+
+> $\sigma_B^2$：minibatch 中数据的方差
+
+> $\epsilon$：一个微小值(比如，10e-7 等)，防止出现除以 0 的情况。
+
+这里对 mini-batch 的 $m$ 个输入数据的集合 $B={\{x_1,x_2,...,x_m\}}$ 求均值 $\mu_B$ 和方差 $\sigma_B^2$。然后，对输入数据进行均值为 0、方差为 1(合适的分布)的正规化。
+
+接着，Batch Norm 层会对正规化后的数据进行缩放和平移的变换，用数学式可以如下表示：
+
+![Batch Norm 层对输入数据的变换](/images/content/deep-learning/learning-skill/batch-norm-transform.png)
+
+> $\gamma$ 和 $\beta$：两个可学习的参数，分别对输入数据进行缩放和平移的变换，一开始设置为 1 和 0，然后再通过学习调整到合适的值。$\gamma$ 为系数，$\beta$ 为偏置
+
+::detail
+
+#title
+另一种写法
+#default
+
+先对数据标准化，再对数据重构(缩放 + 平移)
+
+$$f(x) = \lambda · \frac{x - E(X)}{\sqrt{Var(x)} + \epsilon} + \beta$$
+
+- $E(x)$: 表示变量的均值
+
+- $Var(x)$: 表示变量的方差
+
+::
+
+上面就是 Batch Norm 的算法。这个算法是神经网络上的正向传播。如果使用计算图，Batch Norm 可以表示为：
+
+![Batch Norm 的计算图](/images/content/deep-learning/learning-skill/batch-norm-graph.png)
+
+::tip
+
+批量归一化的作用:
+
+- 减少内部协方差偏移: 通过对每层的输入进行标准化，减少了输入数据分布的变化，从而加速了训练过程，并使得网络在训练过程中更加稳定
+
+- 加速训练
+
+- 起到正则化作用
+
+- 提升泛化能力: 由于其正则化效果，批量归一化能帮助网络在测试集上取得更好的性能
+
+批量归一化层在计算机视觉领域使用较多
+
+::
+
+::detail
+
+#title
+Batch Normalization 的评估
+#default
+现在我们使用 Batch Norm 层进行实验，观察使用 Batch Norm 层和不使用 Batch Norm 层时学习的过程会如何变化：
+
+```python
+import sys, os
+sys.path.append(os.pardir)  # 为了导入父目录的文件而进行的设定
+import numpy as np
+import matplotlib.pyplot as plt
+from dataset.mnist import load_mnist
+from common.multi_layer_net_extend import MultiLayerNetExtend
+from common.optimizer import SGD, Adam
+
+(x_train, t_train), (x_test, t_test) = load_mnist(normalize=True)
+
+# 为了快速实验，只取前 1000 个样本
+x_train = x_train[:1000]
+t_train = t_train[:1000]
+
+max_epochs = 20
+train_size = x_train.shape[0]
+batch_size = 100
+learning_rate = 0.01
+
+
+def __train(weight_init_std):
+    # 创建两个相同结构的网络：一个使用 Batch Norm 层，一个不用
+    bn_network = MultiLayerNetExtend(input_size=784, hidden_size_list=[100, 100, 100, 100, 100], output_size=10, weight_init_std=weight_init_std, use_batchnorm=True)
+    network = MultiLayerNetExtend(input_size=784, hidden_size_list=[100, 100, 100, 100, 100], output_size=10, weight_init_std=weight_init_std)
+    optimizer = SGD(lr=learning_rate)
+
+    train_acc_list = []
+    bn_train_acc_list = []
+
+    iter_per_epoch = max(train_size / batch_size, 1)
+    epoch_cnt = 0
+
+    for i in range(1000000000):
+        batch_mask = np.random.choice(train_size, batch_size)
+        x_batch = x_train[batch_mask]
+        t_batch = t_train[batch_mask]
+
+        # 两个网络同时用相同的数据训练
+        for _network in (bn_network, network):
+            grads = _network.gradient(x_batch, t_batch)
+            optimizer.update(_network.params, grads)
+
+        if i % iter_per_epoch == 0:
+            train_acc = network.accuracy(x_train, t_train)
+            bn_train_acc = bn_network.accuracy(x_train, t_train)
+            train_acc_list.append(train_acc)
+            bn_train_acc_list.append(bn_train_acc)
+
+            print("epoch:" + str(epoch_cnt) + " | " + str(train_acc) + " - " + str(bn_train_acc))
+
+            epoch_cnt += 1
+            if epoch_cnt >= max_epochs:
+                break
+
+    return train_acc_list, bn_train_acc_list
+
+# 3.绘制图形==========
+weight_scale_list = np.logspace(0, -4, num=16)
+x = np.arange(max_epochs)
+
+for i, w in enumerate(weight_scale_list):
+    print( "============== " + str(i+1) + "/16" + " ==============")
+    train_acc_list, bn_train_acc_list = __train(w)
+
+    plt.subplot(4,4,i+1)
+    plt.title("W:" + str(w))
+    if i == 15:
+        plt.plot(x, bn_train_acc_list, label='Batch Normalization', markevery=2)
+        plt.plot(x, train_acc_list, linestyle = "--", label='Normal(without BatchNorm)', markevery=2)
+    else:
+        plt.plot(x, bn_train_acc_list, markevery=2)
+        plt.plot(x, train_acc_list, linestyle="--", markevery=2)
+
+    plt.ylim(0, 1.0)
+    if i % 4:
+        plt.yticks([])
+    else:
+        plt.ylabel("accuracy")
+    if i < 12:
+        plt.xticks([])
+    else:
+        plt.xlabel("epochs")
+    plt.legend(loc='lower right')
+
+plt.show()
+```
+
+![基于 Batch Norm 的效果：使用 Batch Norm 后，学习进行得更快了](/images/content/deep-learning/learning-skill/batch-norm-result.png)
+
+从图中的结果可知，使用 Batch Norm 后，学习进行得更快了。
+
+接着，给予不同的初始值尺度，观察学习的过程如何变化：
+
+![图中的实线是使用了 Batch Norm时的结果，虚线是没有使用 Batch Norm 时的结果：图的标题处标明了权重初始值的标准差](/images/content/deep-learning/learning-skill/weight-init-scale-result.png)
+
+我们发现，几乎所有的情况下都是使用 Batch Norm 时学习进行得更快。同时也可以发现，实际上，在不使用 Batch Norm 的情况下，如果不赋予一个尺度好的初始值，学习将完全无法进行。
+
+综上，通过使用 Batch Norm，可以推动学习的进行。并且，对权重初始值变得健壮(表示不那么依赖初始值)
+
+::
 
 ## 超参数的验证
 
-神经网络中，除了权重和偏置等参数，**超参数**（hyper-parameter）也经常出现。这里所说的超参数是指，比如各层的神经元数量、batch 大小、参数更新时的学习率或权值衰减等。如果这些超参数没有设置合适的值，模型的性能就会很差。虽然超参数的取值非常重要，但是在决定超参数的过程中一般会伴随很多的试错。
+神经网络中，除了权重和偏置等参数，**超参数**(hyper-parameter)也经常出现。这里所说的超参数是指，比如各层的神经元数量、batch 大小、参数更新时的学习率或权值衰减等。如果这些超参数没有设置合适的值，模型的性能就会很差。虽然超参数的取值非常重要，但是在决定超参数的过程中一般会伴随很多的试错。
 
 ### 验证数据
 
-之前我们使用的数据集分成了训练数据和测试数据，训练数据用于学习，测试数据用于评估泛化能力。由此，就可以评估是否只过度拟合了训练数据（是否发生了过拟合），以及泛化能力如何等。
+之前我们使用的数据集分成了训练数据和测试数据，训练数据用于学习，测试数据用于评估泛化能力。由此，就可以评估是否只过度拟合了训练数据(是否发生了过拟合)，以及泛化能力如何等。
 
-下面我们要对超参数设置各种各样的值以进行验证。（不能使用测试数据评估超参数的性能）
+下面我们要对超参数设置各种各样的值以进行验证。(不能使用测试数据评估超参数的性能)
 
-调整超参数时，必须使用超参数专用的确认数据。用于调整超参数的数据，一般称为**验证数据**（validation data）。我们使用这个验证数据来评估超参数的好坏。
+调整超参数时，必须使用超参数专用的确认数据。用于调整超参数的数据，一般称为**验证数据**(validation data)。我们使用这个验证数据来评估超参数的好坏。
 
 ::detail
 
