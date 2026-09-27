@@ -851,9 +851,3 @@ def train():
 if __name__ == '__main__':
     train()
 ```
-
-### 多分类任务损失函数
-
-```python
-
-```

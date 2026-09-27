@@ -899,7 +899,7 @@ plt.show()
 
 ## 参数的优化方法
 
-神经网络的学习的目的是找到使损失函数的值尽可能小的参数。这是寻找最优参数的问题，解决这个问题的过程称为**最优化**（optimization）。但遗憾的是，神经网络的最优化问题非常难。这是因为参数空间非常复杂，无法轻易找到最优解（无法使用那种通过解数学式一下子就求得最小值的方法）。而且，在深度神经网络中，参数的数量非常庞大，导致最优化问题更加复杂
+神经网络的学习的目的是找到使损失函数的值尽可能小的参数。这是寻找最优参数的问题，解决这个问题的过程称为**最优化**(optimization)。但遗憾的是，神经网络的最优化问题非常难。这是因为参数空间非常复杂，无法轻易找到最优解(无法使用那种通过解数学式一下子就求得最小值的方法)。而且，在深度神经网络中，参数的数量非常庞大，导致最优化问题更加复杂
 
 在深度学习中，梯度下降的集中方式的根本区别就在于 Batch Size 不同
 
@@ -1008,22 +1008,47 @@ $$ f(x, y) = \frac{1}{20}x^2 + y^2 $$
 
 为了改正 SGD 的缺点，下面我们将介绍 **Momentum**、**AdaGrad**、**Adam** 这 3 种方法来取代 SGD。
 
-### Momentum
+::tip
 
-**Momentum**是 “动量” 的意思，和物理有关。用数学式表示 Momentum 方法，如下所示：
+指数移动加权平均
+
+我们最常见的算数平均指的是将所有数加起来除以数的个数，每个数的权重是相同的。指数加权平均指的是给每个数赋予不同的权重求得平均数
+
+移动平均数，指的是计算最近邻的 N 个数来获得平均数
+
+**指数移动加权平均**则是参考各数值，并且各数值的权重都不同。距离越远的数字对平均数计算的贡献就越小(权重较小)，距离越近则对平均数的计算贡献就越大(权重越大)
+
+$$
+S_t = \begin{cases}
+Y_1 & (t = 0) \\
+\beta * S_{t-1} + (1 - \beta) * Y_t & (t > 0)
+\end{cases}
+$$
+
+- $S_t$: 表示指数加权平均值
+
+- $Y_t$: 表示 $t$ 时刻的值
+
+- $\beta$: 调节权重系数，该值越大平均数越平缓
+
+::
+
+### Momentum(动量算法)
+
+**Momentum**是 "动量" 的意思，和物理有关。用数学式表示 Momentum 方法，如下所示：
 
 ![Momentum 数学式](/images/content/deep-learning/learning-skill/Momentum.png)
 
 > $W$：需要更新的权重参数
->
+
 > $\frac{\partial L}{\partial W}$：损失函数关于 $W$ 的梯度
->
+
 > $\eta$：学习率
->
+
 > $v$：对应物理上的速度
->
+
 > ←：表示用右边的值更新左边的值
->
+
 > $a$：承担逐渐减速的任务
 
 该式表示了物体在梯度方向上受力，在这个力的作用下，物体的速度增加这一物理法则。
@@ -1076,28 +1101,57 @@ class Momentum:
 
 因此，和 SGD 时的情形相比，可以更快地朝 x 轴方向靠近，减弱 “之” 字形的变动程度。
 
-### AdaGrad
+::detail
 
-在神经网络的学习中，学习率（数学式中记为 $η$）的值很重要。学习率过小，会导致学习花费过多时间；反过来，学习率过大，则会导致学习发散而不能正确进行。
+#title
+PyTorch 代码示例
+#default
 
-在关于学习率的有效技巧中，有一种被称为**学习率衰减**（learning ratedecay）的方法，即随着学习的进行，使学习率逐渐减小。实际上，一开始 “多” 学，然后逐渐 “少” 学的方法，在神经网络的学习中经常被使用。
+```python
+import torch
+import torch.optim as optim
 
-逐渐减小学习率的想法，相当于将 “全体” 参数的学习率值一起降低。而 **AdaGrad** 进一步发展了这个想法，针对 “一个一个” 的参数，赋予其 “定制” 的值。
+if __name__ == '__main__':
+    w = torch.tensor([1.0], requires_grad=True, dtype=torch.float32) # 初始化权重参数
+    criterion = ((w ** 2) / 2.0) # 定义损失函数，计算损失值
+    optimizer = optim.SGD(params=[w], lr=0.01, momentum=0.9) # 创建优化器
+    # 计算梯度值
+    optimizer.zero_grad()
+    criterion.sum().backward()
+    optimizer.step()
+    print(f'w: {w}, w.grad: {w.grad}')
 
-AdaGrad 会为参数的每个元素适当地调整学习率，与此同时进行学习（AdaGrad 的 Ada 来自英文单词 Adaptive，即 “适当的” 的意思）。
+    criterion = ((w ** 2) / 2.0)
+    optimizer.zero_grad()
+    criterion.sum().backward()
+    optimizer.step()
+    print(f'w: {w}, w.grad: {w.grad}')
+```
+
+::
+
+### AdaGrad(自适应学习率)
+
+在神经网络的学习中，学习率(数学式中记为 $η$)的值很重要。学习率过小，会导致学习花费过多时间；反过来，学习率过大，则会导致学习发散而不能正确进行。
+
+在关于学习率的有效技巧中，有一种被称为**学习率衰减**(learning ratedecay)的方法，即随着学习的进行，使学习率逐渐减小。实际上，一开始 "多" 学，然后逐渐 "少" 学的方法，在神经网络的学习中经常被使用。
+
+逐渐减小学习率的想法，相当于将 "全体" 参数的学习率值一起降低。而 **AdaGrad** 进一步发展了这个想法，针对 "一个一个" 的参数，赋予其 "定制" 的值。
+
+AdaGrad 会为参数的每个元素适当地调整学习率，与此同时进行学习(AdaGrad 的 Ada 来自英文单词 Adaptive，即 "适当的" 的意思)。
 
 ![AdaGrad 数学式](/images/content/deep-learning/learning-skill/AdaGrad.png)
 
 > $W$：需要更新的权重参数
->
+
 > $\frac{\partial L}{\partial W}$：损失函数关于 $W$ 的梯度
->
+
 > $\eta$：学习率
->
+
 > $h$：保存了以前的所有梯度值的平方和
->
+
 > ←：表示用右边的值更新左边的值
->
+
 > ʘ：对应矩阵元素的乘法
 
 在更新参数时，通过乘以 $\frac{1}{\sqrt{h}}$，就可以调整学习的尺度。这意味着，参数的元素中变动较大（被大幅更新）的元素的学习率将变小。也就是说，可以按参数的元素进行学习率衰减，使变动大的参数的学习率逐渐减小。
@@ -1138,11 +1192,77 @@ class AdaGrad:
 
 可知，函数的取值高效地向着最小值移动。由于 y 轴方向上的梯度较大，因此刚开始变动较大，但是后面会根据这个较大的变动按比例进行调整，减小更新的步伐。因此，y 轴方向上的更新程度被减弱，“之” 字形的变动程度有所衰减。
 
-### Adam
+::detail
 
-Momentum 参照小球在碗中滚动的物理规则进行移动，AdaGrad 为参数的每个元素适当地调整更新步伐。如果将这两个方法融合在一起会怎么样呢？这就是 **Adam** 方法的基本思路。
+#title
+PyTorch 代码示例
+#default
 
-Adam 是 2015 年提出的方法。它的理论有些复杂，直观地讲，就是融合了 Momentum 和 AdaGrad 的方法。通过组合前面两个方法的优点，有望实现参数空间的高效搜索。此外，进行超参数的 “偏置校正” 也是 Adam 的特征。
+```python
+import torch
+import torch.optim as optim
+
+if __name__ == '__main__':
+    w = torch.tensor([1.0], requires_grad=True, dtype=torch.float32) # 初始化权重参数
+    criterion = ((w ** 2) / 2.0) # 定义损失函数，计算损失值
+    optimizer = optim.Adagrad(params=[w], lr=0.01) # 创建优化器
+    # 计算梯度值
+    optimizer.zero_grad()
+    criterion.sum().backward()
+    optimizer.step()
+    print(f'w: {w}, w.grad: {w.grad}')
+
+    criterion = ((w ** 2) / 2.0)
+    optimizer.zero_grad()
+    criterion.sum().backward()
+    optimizer.step()
+    print(f'w: {w}, w.grad: {w.grad}')
+```
+
+::
+
+### RMSProp
+
+RMSProp 优化算法是对 AdaGrad 的优化。最主要的不同是，其使用指数加权平均梯度替换历史梯度的平方和
+
+$$h = \beta h + (1 - \beta) \frac{\partial L}{\partial W} ʘ \frac{\partial L}{\partial W}$$
+
+::detail
+
+#title
+PyTorch 代码示例
+#default
+
+```python
+import torch
+import torch.optim as optim
+
+if __name__ == '__main__':
+    w = torch.tensor([1.0], requires_grad=True, dtype=torch.float32) # 初始化权重参数
+    criterion = ((w ** 2) / 2.0) # 定义损失函数，计算损失值
+    optimizer = optim.RMSprop(params=[w], lr=0.01, alpha=0.9) # 创建优化器
+    # 计算梯度值
+    optimizer.zero_grad()
+    criterion.sum().backward()
+    optimizer.step()
+    print(f'w: {w}, w.grad: {w.grad}')
+
+    criterion = ((w ** 2) / 2.0)
+    optimizer.zero_grad()
+    criterion.sum().backward()
+    optimizer.step()
+    print(f'w: {w}, w.grad: {w.grad}')
+```
+
+- alpha 就是 $\beta$
+
+::
+
+### Adam(自适应矩估计)
+
+Momentum 参照小球在碗中滚动的物理规则进行移动，AdaGrad 为参数的每个元素适当地调整更新步伐。如果将这两个方法融合在一起会怎么样呢？这就是 **Adam**(Adaptive Moment Estimation) 方法的基本思路
+
+Adam 是 2015 年提出的方法。它的理论有些复杂，直观地讲，就是融合了 Momentum 和 AdaGrad 的方法。它计算了梯度的一阶矩 (平均值) 和二阶矩 (梯度的方差) 的自适应估计，从而动态调整学习率。通过组合前面两个方法的优点，有望实现参数空间的高效搜索。此外，进行超参数的 "偏置校正" 也是 Adam 的特征
 
 ```python
 class Adam:
@@ -1176,6 +1296,37 @@ class Adam:
 ::tip
 
 Adam 会设置 3 个超参数。一个是学习率（论文中以 $α$ 出现），另外两个是一次 momentum 系数 $β_1$ 和二次 momentum 系数 $β_2$。根据论文，标准的设定值是 $β_1$ 为 0.9，$β_2$ 为 0.999。设置了这些值后，大多数情况下都能顺利运行。
+
+::
+
+::detail
+
+#title
+PyTorch 代码示例
+#default
+
+```python
+import torch
+import torch.optim as optim
+
+if __name__ == '__main__':
+    w = torch.tensor([1.0], requires_grad=True, dtype=torch.float32) # 初始化权重参数
+    criterion = ((w ** 2) / 2.0) # 定义损失函数，计算损失值
+    optimizer = optim.Adam(params=[w], lr=0.01, betas=(0.9, 0.999)) # 创建优化器
+    # 计算梯度值
+    optimizer.zero_grad()
+    criterion.sum().backward()
+    optimizer.step()
+    print(f'w: {w}, w.grad: {w.grad}')
+
+    criterion = ((w ** 2) / 2.0)
+    optimizer.zero_grad()
+    criterion.sum().backward()
+    optimizer.step()
+    print(f'w: {w}, w.grad: {w.grad}')
+```
+
+- `betas = (梯度衰减系数，学习率衰减系数)`
 
 ::
 
@@ -1254,6 +1405,14 @@ plt.show()
 根据使用的方法不同，参数更新的路径也不同。只看这个图的话，AdaGrad 似乎是最好的，不过也要注意，结果会根据要解决的问题而变。并且，很显然，超参数（学习率等）的设定值不同，结果也会发生变化。
 
 这 4 种方法各有各的特点，都有各自擅长解决的问题和不擅长解决的问题。很多研究中至今仍在使用 SGD。Momentum 和 AdaGrad 也是值得一试的方法。最近，很多研究人员和技术人员都喜欢用 Adam。
+
+| 优化算法 |                       优点                        |                         缺点                         |                      适用场景                      |
+| :------: | :-----------------------------------------------: | :--------------------------------------------------: | :------------------------------------------------: |
+|   SGD    |                  简单、容易实现                   |      收敛速度较慢，容易震荡，特别是在复杂问题中      |     用于简单任务，或者当数据特征分布相对稳定时     |
+| Momentum |    可以加速收敛、减少震荡，特别是在高曲率区域     | 需要手动调整动量超参数，可能会在小步长训练中过度更新 |     用于非平稳优化问题，尤其是深度学习中的应用     |
+| AdaGrad  |         自适应调整学习率，适用于稀疏数据          |    学习率会在训练过程中逐渐衰减，可能导致早期停滞    |      适合稀疏数据，如 NLP 或推荐系统中的特征       |
+| RMSProp  |   解决了 AdaGrad 学习率过早衰减的问题，适应性强   |        需要选择合适的超参数，更新肯会过于激进        |   适用于动态问题、非平稳目标函数，如深度学习训练   |
+|   Adam   | 结合了 Momentum 和 RMSProp 的优点，适应性强且稳定 |  需要调节更多的超参数，训练过程中可能会产生较大波动  | 广泛适用于各种深度学习任务，特别是非平稳和复杂问题 |
 
 ::detail
 
