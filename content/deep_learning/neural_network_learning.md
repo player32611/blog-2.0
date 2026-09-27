@@ -49,22 +49,6 @@ $$L = \frac{1}{n} \sum_{n} |y_i - f(x_i)|$$
 
 L1 loss 的最大问题是梯度在零点不平滑，导致会跳过极小值
 
-::detail
-
-#title
-PyTorch 实现
-#default
-
-```python
-y_true = torch.tensor([2.0, 2.0, 2.0], dtype=torch.float) # 手动创建样本真实值
-y_pred = torch.tensor([1.0, 1.0, 1.9], requires_grad=True) # 手动创建样本预测值
-criterion = nn.L1Loss() # 创建损失函数
-loss = criterion(y_pred, y_true) # 计算损失值
-print(f'loss: {loss}')
-```
-
-::
-
 ### 均方误差(MSE 损失函数)
 
 可以用作损失函数的函数有很多，其中最有名的是**均方误差**(mean squared error, MSE)。它以误差的平方和的均值作为距离
@@ -120,22 +104,6 @@ print(mean_squared_error(np.array(y), np.array(t))) # 0.59750000000000003
 ```
 
 这里举了两个例子。第一个例子中，正确解是 2，神经网络的输出的最大值是 2；第二个例子中，正确解是 2，神经网络的输出的最大值是 7。 如实验结果所示，我们发现第一个例子的损失函数的值更小，和监督数据之间的误差较小。也就是说，均方误差显示第一个例子的输出结果与监督数据更加吻合。
-
-::
-
-::detail
-
-#title
-PyTorch 实现
-#default
-
-```python
-y_true = torch.tensor([2.0, 2.0, 2.0], dtype=torch.float) # 手动创建样本真实值
-y_pred = torch.tensor([1.0, 1.0, 1.9], requires_grad=True) # 手动创建样本预测值
-criterion = nn.MSELoss() # 创建损失函数
-loss = criterion(y_pred, y_true) # 计算损失值
-print(f'loss: {loss}')
-```
 
 ::
 
@@ -198,22 +166,6 @@ print(cross_entropy_error(np.array(y), np.array(t))) # 2.3025840929945458
 
 ::
 
-::detail
-
-#title
-PyTorch 实现
-#default
-
-```python
-y_true = torch.tensor([1, 2]) # 手动创建样本真实值
-y_pred = torch.tensor([[0.1, 0.8, 0.1], [0.7, 0.2, 0.1]], requires_grad=True, dtype=torch.float) # 手动创建样本预测值
-criterion = nn.CrossEntropyLoss() # 创建损失函数
-loss = criterion(y_pred, y_true) # 计算损失值
-print(f'loss: {loss}')
-```
-
-::
-
 ### 二分类任务损失函数
 
 在处理二分类任务是，我们不再使用 softmax 激活函数，而是使用 sigmoid 激活函数，那损失函数也相应的进行调整，使用二分类的交叉熵损失函数:
@@ -225,22 +177,6 @@ $$ L = -y \log y' - (1 - y) \log (1 - y')$$
 - $y'$: 样本属于某一类别的预测概率
 
 - $L$: 用来衡量真实值 $y$ 与预测值 $y'$ 之间差异性的损失结果
-
-::detail
-
-#title
-PyTorch 实现
-#default
-
-```python
-y_true = torch.tensor([0, 1, 0], dtype=torch.float) # 手动创建样本真实值
-y_pred = torch.tensor([0.6901, 0.5423, 0.2639]) # 手动创建样本预测值
-criterion = nn.BCELoss() # 创建损失函数
-loss = criterion(y_pred, y_true) # 计算损失值
-print(f'loss: {loss}')
-```
-
-::
 
 ### 回归任务损失函数(Smooth L1 损失函数)
 
@@ -256,22 +192,6 @@ $$
 在 [-1, 1] 之间实际上就是 L2 损失，这样解决了 L1 的不光滑问题
 
 在 [-1, 1] 区间外，实际上就是 L1 损失，这样就解决了离群点梯度爆炸的问题
-
-::detail
-
-#title
-PyTorch 实现
-#default
-
-```python
-y_true = torch.tensor([2.0, 2.0, 2.0], dtype=torch.float) # 手动创建样本真实值
-y_pred = torch.tensor([1.0, 1.0, 1.9], requires_grad=True) # 手动创建样本预测值
-criterion = nn.SmoothL1Loss() # 创建损失函数
-loss = criterion(y_pred, y_true) # 计算损失值
-print(f'loss: {loss}')
-```
-
-::
 
 ### 平均损失函数
 
@@ -315,21 +235,21 @@ def cross_entropy_error(y, t):
 
 ::
 
-实现的要点是，由于 one-hot 表示中 t 为 0 的元素的交叉熵误差也为 0，因此针对这些元素的计算可以忽略。
+实现的要点是，由于 one-hot 表示中 t 为 0 的元素的交叉熵误差也为 0，因此针对这些元素的计算可以忽略
 
 ### 为何要设定损失函数
 
-假设有一个神经网络，现在我们来关注这个神经网络中的某一个权重参数。
+假设有一个神经网络，现在我们来关注这个神经网络中的某一个权重参数
 
-此时，对该权重参数的损失函数求导，表示的是 “如果稍微改变这个权重参数的值，损失函数的值会如何变化”。
+此时，对该权重参数的损失函数求导，表示的是 "如果稍微改变这个权重参数的值，损失函数的值会如何变化"
 
-如果导数的值为负，通过使该权重参数向正方向改变，可以减小损失函数的值；反过来，如果导数的值为正，则通过使该权重参数向负方向改变，可以减小损失函数的值。
+如果导数的值为负，通过使该权重参数向正方向改变，可以减小损失函数的值；反过来，如果导数的值为正，则通过使该权重参数向负方向改变，可以减小损失函数的值
 
-不过，当导数的值为 0 时，无论权重参数向哪个方向变化，损失函数的值都不会改变，此时该权重参数的更新会停在此处。
+不过，当导数的值为 0 时，无论权重参数向哪个方向变化，损失函数的值都不会改变，此时该权重参数的更新会停在此处
 
 ::tip
 
-在进行神经网络的学习时，不能将识别精度作为指标。因为如果以识别精度为指标，则参数的导数在绝大多数地方都会变为 0。
+在进行神经网络的学习时，不能将识别精度作为指标。因为如果以识别精度为指标，则参数的导数在绝大多数地方都会变为 0
 
 ::
 
@@ -338,19 +258,19 @@ def cross_entropy_error(y, t):
 #title
 为什么用识别精度作为指标时，参数的导数在绝大多数地方都会变成 0 呢？
 #default
-假设某个神经网络正确识别出了 100 笔训练数据中的 32 笔，此时识别精度为 32%。
+假设某个神经网络正确识别出了 100 笔训练数据中的 32 笔，此时识别精度为 32%
 
-如果以识别精度为指标，即使稍微改变权重参数的值，识别精度也仍将保持在 32%，不会出现变化。
+如果以识别精度为指标，即使稍微改变权重参数的值，识别精度也仍将保持在 32%，不会出现变化
 
-也就是说，**仅仅微调参数，是无法改善识别精度的**。即便识别精度有所改善，它的值也不会像 32.0123...%这样连续变化，而是变为 33%、34% 这样的不连续的、离散的值。
+也就是说，**仅仅微调参数，是无法改善识别精度的**。即便识别精度有所改善，它的值也不会像 32.0123...%这样连续变化，而是变为 33%、34% 这样的不连续的、离散的值
 
-而如果把损失函数作为指标，则当前损失函数的值可以表示为 0.92543...这样的值。并且，如果稍微改变一下参数的值，对应的损失函数也会像 0.93432...这样发生连续性的变化。
+而如果把损失函数作为指标，则当前损失函数的值可以表示为 0.92543...这样的值。并且，如果稍微改变一下参数的值，对应的损失函数也会像 0.93432...这样发生连续性的变化
 
 ::
 
 ## 数值微分
 
-利用微小的差分求导数的过程称为**数值微分**（numerical differentiation），而基于数学式的推导求导数的过程，则用 “**解析性**”（analytic）一词，称为 “解析性求解” 或者 “解析性求导”。
+利用微小的差分求导数的过程称为**数值微分**(numerical differentiation)，而基于数学式的推导求导数的过程，则用 **解析性**(analytic)一词，称为 "解析性求解" 或者 "解析性求导"
 
 ### 导数
 
@@ -1101,35 +1021,6 @@ class Momentum:
 
 因此，和 SGD 时的情形相比，可以更快地朝 x 轴方向靠近，减弱 “之” 字形的变动程度。
 
-::detail
-
-#title
-PyTorch 代码示例
-#default
-
-```python
-import torch
-import torch.optim as optim
-
-if __name__ == '__main__':
-    w = torch.tensor([1.0], requires_grad=True, dtype=torch.float32) # 初始化权重参数
-    criterion = ((w ** 2) / 2.0) # 定义损失函数，计算损失值
-    optimizer = optim.SGD(params=[w], lr=0.01, momentum=0.9) # 创建优化器
-    # 计算梯度值
-    optimizer.zero_grad()
-    criterion.sum().backward()
-    optimizer.step()
-    print(f'w: {w}, w.grad: {w.grad}')
-
-    criterion = ((w ** 2) / 2.0)
-    optimizer.zero_grad()
-    criterion.sum().backward()
-    optimizer.step()
-    print(f'w: {w}, w.grad: {w.grad}')
-```
-
-::
-
 ### AdaGrad(自适应学习率)
 
 在神经网络的学习中，学习率(数学式中记为 $η$)的值很重要。学习率过小，会导致学习花费过多时间；反过来，学习率过大，则会导致学习发散而不能正确进行。
@@ -1192,71 +1083,11 @@ class AdaGrad:
 
 可知，函数的取值高效地向着最小值移动。由于 y 轴方向上的梯度较大，因此刚开始变动较大，但是后面会根据这个较大的变动按比例进行调整，减小更新的步伐。因此，y 轴方向上的更新程度被减弱，“之” 字形的变动程度有所衰减。
 
-::detail
-
-#title
-PyTorch 代码示例
-#default
-
-```python
-import torch
-import torch.optim as optim
-
-if __name__ == '__main__':
-    w = torch.tensor([1.0], requires_grad=True, dtype=torch.float32) # 初始化权重参数
-    criterion = ((w ** 2) / 2.0) # 定义损失函数，计算损失值
-    optimizer = optim.Adagrad(params=[w], lr=0.01) # 创建优化器
-    # 计算梯度值
-    optimizer.zero_grad()
-    criterion.sum().backward()
-    optimizer.step()
-    print(f'w: {w}, w.grad: {w.grad}')
-
-    criterion = ((w ** 2) / 2.0)
-    optimizer.zero_grad()
-    criterion.sum().backward()
-    optimizer.step()
-    print(f'w: {w}, w.grad: {w.grad}')
-```
-
-::
-
 ### RMSProp
 
 RMSProp 优化算法是对 AdaGrad 的优化。最主要的不同是，其使用指数加权平均梯度替换历史梯度的平方和
 
-$h = \beta h + (1 - \beta) \frac{\partial L}{\partial W}$ ʘ $\frac{\partial L}{\partial W}$
-
-::detail
-
-#title
-PyTorch 代码示例
-#default
-
-```python
-import torch
-import torch.optim as optim
-
-if __name__ == '__main__':
-    w = torch.tensor([1.0], requires_grad=True, dtype=torch.float32) # 初始化权重参数
-    criterion = ((w ** 2) / 2.0) # 定义损失函数，计算损失值
-    optimizer = optim.RMSprop(params=[w], lr=0.01, alpha=0.9) # 创建优化器
-    # 计算梯度值
-    optimizer.zero_grad()
-    criterion.sum().backward()
-    optimizer.step()
-    print(f'w: {w}, w.grad: {w.grad}')
-
-    criterion = ((w ** 2) / 2.0)
-    optimizer.zero_grad()
-    criterion.sum().backward()
-    optimizer.step()
-    print(f'w: {w}, w.grad: {w.grad}')
-```
-
-- alpha 就是 $\beta$
-
-::
+$h = \alpha h + (1 - \alpha) \frac{\partial L}{\partial W}$ ʘ $\frac{\partial L}{\partial W}$
 
 ### Adam(自适应矩估计)
 
@@ -1296,37 +1127,6 @@ class Adam:
 ::tip
 
 Adam 会设置 3 个超参数。一个是学习率（论文中以 $α$ 出现），另外两个是一次 momentum 系数 $β_1$ 和二次 momentum 系数 $β_2$。根据论文，标准的设定值是 $β_1$ 为 0.9，$β_2$ 为 0.999。设置了这些值后，大多数情况下都能顺利运行。
-
-::
-
-::detail
-
-#title
-PyTorch 代码示例
-#default
-
-```python
-import torch
-import torch.optim as optim
-
-if __name__ == '__main__':
-    w = torch.tensor([1.0], requires_grad=True, dtype=torch.float32) # 初始化权重参数
-    criterion = ((w ** 2) / 2.0) # 定义损失函数，计算损失值
-    optimizer = optim.Adam(params=[w], lr=0.01, betas=(0.9, 0.999)) # 创建优化器
-    # 计算梯度值
-    optimizer.zero_grad()
-    criterion.sum().backward()
-    optimizer.step()
-    print(f'w: {w}, w.grad: {w.grad}')
-
-    criterion = ((w ** 2) / 2.0)
-    optimizer.zero_grad()
-    criterion.sum().backward()
-    optimizer.step()
-    print(f'w: {w}, w.grad: {w.grad}')
-```
-
-- `betas = (梯度衰减系数，学习率衰减系数)`
 
 ::
 

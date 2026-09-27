@@ -851,3 +851,54 @@ def train():
 if __name__ == '__main__':
     train()
 ```
+
+### 损失函数与损失值
+
+- MAE(L1 loss) 损失函数: `nn.L1Loss()`
+
+- MSE(均方误差) 损失函数: `nn.MSELoss()`
+
+- softmax(交叉熵误差) 损失函数: `nn.CrossEntropyLoss()`
+
+- sigmoid(二分类任务) 损失函数: `nn.BCELoss()`
+
+- Smooth L1(回归任务) 损失函数: `nn.SmoothL1Loss()`
+
+```python
+y_true = torch.tensor([2.0, 2.0, 2.0], dtype=torch.float) # 手动创建样本真实值
+y_pred = torch.tensor([1.0, 1.0, 1.9], requires_grad=True) # 手动创建样本预测值
+criterion = nn.L1Loss() # 创建损失函数 MAE
+loss = criterion(y_pred, y_true) # 计算损失值
+print(f'loss: {loss}')
+```
+
+### 参数的更新与优化
+
+- Momentum(动量算法): `optim.SGD(params, lr, momentum)`
+
+- AdaGrad(自适应学习率): `optim.Adagrad(params, lr)`
+
+- RMSProp: `optim.RMSprop(params, lr, alpha)`
+
+- Adam(自适应矩估计): `optim.Adam(params, lr, betas)` (`betas = (梯度衰减系数，学习率衰减系数)`)
+
+```python
+import torch
+import torch.optim as optim
+
+if __name__ == '__main__':
+    w = torch.tensor([1.0], requires_grad=True, dtype=torch.float32) # 初始化权重参数
+    criterion = ((w ** 2) / 2.0) # 定义损失函数，计算损失值
+    optimizer = optim.SGD(params=[w], lr=0.01, momentum=0.9) # 创建优化器(Momentum)
+    # 计算梯度值
+    optimizer.zero_grad()
+    criterion.sum().backward()
+    optimizer.step()
+    print(f'w: {w}, w.grad: {w.grad}')
+
+    criterion = ((w ** 2) / 2.0)
+    optimizer.zero_grad()
+    criterion.sum().backward()
+    optimizer.step()
+    print(f'w: {w}, w.grad: {w.grad}')
+```
