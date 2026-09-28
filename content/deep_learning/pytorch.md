@@ -806,6 +806,10 @@ if __name__ == '__main__':
 
 ### 参数计算与统计
 
+- `summary(model, inputsize)`: 计算模型参数
+  - `model`: 模型对象
+  - `inputsize=(batch, input_dim)`: 输入数据的形状，包含批次大小和输入特征数
+
 ```python
 import torch
 import torch.nn as nn
@@ -947,9 +951,7 @@ print(f'output_2d: {output_2d}')
 
 ::tip
 
-#title
 Batch Norm 处理一维数据
-#default
 
 ```python
 input_1d = torch.randn(size=(2, 2)) # 创建输入数据
@@ -971,3 +973,10 @@ print(f'output_1d: {output_1d}')
 ```
 
 ::
+
+### 模型训练
+
+- `DataLoader(dataset, batch_size, shuffle)`: 创建数据加载器
+  - `dataset`: 数据集对象
+  - `batch_size`: 每批次的数据条数
+  - `shuffle`: 是否打乱数据
