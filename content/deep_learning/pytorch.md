@@ -980,3 +980,40 @@ print(f'output_1d: {output_1d}')
   - `dataset`: 数据集对象
   - `batch_size`: 每批次的数据条数
   - `shuffle`: 是否打乱数据
+
+### 卷积层 API
+
+- `nn.Conv2d(in_channels, out_channels, kernel_size, stride, padding)`
+  - `in_channels`: 输入通道数，RGB 图片一般是 3
+  - `out_channels`: 输出通道，也可以理解为卷积核 kernel 的数量
+  - `kernel_size`: 卷积核的高和宽设置
+  - `stride`: 卷积核移动的步长，默认为 1
+  - `padding`: 在四周加入填充的数量，默认补 0
+
+```python
+import torch
+import matplotlib.pyplot as plt
+import torch.nn as nn
+
+if __name__ == '__main__':
+    img = plt.imread("./img.jpg") # 加载图片
+
+    # img -> 张量 -> 转换维度
+    img2 = torch.tensor(img, dtype=torch.float)
+    img2 = img2.permute(2, 0, 1)
+
+    img3 = img2.unsqueeze(dim=0) # 在 0 维添加一个维度，意为 1 张图片
+
+    conv = nn.Conv2d(in_channels=4, out_channels=4, kernel_size=3) # 创建卷积层对象，提取特征图
+
+    conv_img = conv(img3) # 具体的卷积计算
+
+    img4 = conv_img[0] # 查看提取到的 4 个特征图
+
+    img5 = img4.permute(1, 2, 0) # 转回维度
+
+    # 可视化
+    feature1 = img5[:, :, 0].detach().numpy() # 第 0 通道的像素图
+    plt.imshow(feature1)
+    plt.show()
+```
