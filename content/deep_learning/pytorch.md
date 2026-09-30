@@ -1017,3 +1017,60 @@ if __name__ == '__main__':
     plt.imshow(feature1)
     plt.show()
 ```
+
+### 池化层 API
+
+- `nn.MaxPool2d(kernel_size, stride, padding)`: 最大池化
+- `nn.AvgPool2d(kernel_size, stride, padding)`: 平均池化
+  - `kernel_size`: 核的高和宽设置
+  - `stride`: 核移动的步长
+  - `padding`: 在四周加入填充的数量，默认补 0
+
+::code-group
+
+```python [单通道池化]
+inputs = torch.tensor([[[1, 2, 3], [4, 5, 6], [7, 8, 9]]]) # 创建 1 个 1 通道，3 * 3 的二维输入矩阵
+
+# 最大池化
+pool1 = nn.MaxPool2d(2, 1, 0)
+outputs = pool1(inputs)
+print(f'outputs: {outputs}, shape: {outputs.shape}')
+
+# 平均池化
+pool2 = nn.AvgPool2d(2, 1, 0)
+outputs = pool2(inputs)
+print(f'outputs: {outputs}, shape: {outputs.shape}')
+```
+
+```python [多通道池化]
+# 创建 1 个 3 通道，3 * 3 的二维输入矩阵
+inputs = torch.tensor([
+    [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9]
+    ],
+    [
+        [10, 11, 12],
+        [13, 14, 15],
+        [16, 17, 18]
+    ],
+    [
+        [19, 20, 21],
+        [22, 23, 24],
+        [25, 26, 27]
+    ]
+])
+
+# 最大池化
+pool1 = nn.MaxPool2d(2, 1, 0)
+outputs = pool1(inputs)
+print(f'outputs: {outputs}, shape: {outputs.shape}')
+
+# 平均池化
+pool2 = nn.AvgPool2d(2, 1, 0)
+outputs = pool2(inputs)
+print(f'outputs: {outputs}, shape: {outputs.shape}')
+```
+
+::
