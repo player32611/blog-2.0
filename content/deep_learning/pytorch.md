@@ -1020,8 +1020,8 @@ if __name__ == '__main__':
 
 ### 池化层 API
 
-- `nn.MaxPool2d(kernel_size, stride, padding)`: 最大池化
-- `nn.AvgPool2d(kernel_size, stride, padding)`: 平均池化
+- `nn.MaxPool2d(kernel_size, stride, padding)`: 最大池化层
+- `nn.AvgPool2d(kernel_size, stride, padding)`: 平均池化层
   - `kernel_size`: 核的高和宽设置
   - `stride`: 核移动的步长
   - `padding`: 在四周加入填充的数量，默认补 0
@@ -1074,3 +1074,43 @@ print(f'outputs: {outputs}, shape: {outputs.shape}')
 ```
 
 ::
+
+### 词嵌入层
+
+- `jieba.lcut()`: 将中文字符串进行分词
+
+- `nn.Embedding(num_embeddings, embedding_dim)` 创建词嵌入层
+  - `num_embeddings`: 表示词的数量
+  - `embedding_dim`: 表示用多少维的向量来表示每个词
+
+```python
+import torch
+import jieba
+import torch.nn as nn
+
+if __name__ == '__main__':
+    text = '北京冬奥的进度条已经过半，不少外国运动员在完成自己的比赛后踏上归途'
+    words = jieba.lcut(text)
+    print(f'分词结果: {words}')
+
+    embed = nn.Embedding(len(words), 4) # 创建词嵌入层
+
+    for i, word in enumerate(words): # 获取每个词对象的下标索引
+        word_vector = embed(torch.tensor(i)) # 把词索引(张量形式)转成词向量(随机)
+        print(f'词: {word}, \t\t词向量: {word_vector}')
+```
+
+::tip
+
+`enumerate()` 函数
+
+`enumerate()` 函数返回列表中每个值及其对应的索引
+
+::
+
+### RNN 层
+
+- `nn.RNN(input_size, hidden_size, num_layers)`: 创建 RNN 层
+  - `input_size`: 输入数据的维度，一般设为词向量的维度
+  - `hidden_size`: 隐藏层 h 的维度，也是当前层神经元的输出维度
+  - `num_layers`: 隐藏层 h 的层数，默认为 1
