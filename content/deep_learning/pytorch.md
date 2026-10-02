@@ -1112,5 +1112,35 @@ if __name__ == '__main__':
 
 - `nn.RNN(input_size, hidden_size, num_layers)`: 创建 RNN 层
   - `input_size`: 输入数据的维度，一般设为词向量的维度
-  - `hidden_size`: 隐藏层 h 的维度，也是当前层神经元的输出维度
+  - `hidden_size`: 隐藏层 h 的维度，也是当前层神经元的输出维度(隐藏状态向量的维度)，值越大，能存储的剧情记忆就越多
   - `num_layers`: 隐藏层 h 的层数，默认为 1
+
+将 RNN 实例化就可以将数据送入其中进行处理: `output, hn = RNN(x, h0)`
+
+- 输入数据: 输入主要包括词嵌入的 x、初始的隐藏层 $h_0$
+  - x 的表示形式为 `[seq_len, batch, input_size]`，即 `[句子的长度, batch 的大小, 词向量的维度]`
+  - $h_0$ 的表示形式为 `[num_layers, batch, hidden_size]`，即 `[隐藏层的层数, batch 的大小, 隐藏层 h 的维数]`
+- 输出结果: 主要包括输出结果 output，最后一层的 $h_n$
+  - output 的表示形式与输入 x 类似，为 `[seq_len, batch, hidden_size]`，即 `[句子的长度, batch 的大小, 输出向量的维度]`
+  - $h_n$ 的表示形式与输入 $h_0$ 一样，为 `[num_layers, batch, hidden_size]`，即 `[隐藏层的层数, batch 的大小, 隐藏层 h 的维数]`
+
+```python
+import torch
+import torch.nn as nn
+
+if __name__ == '__main__':
+    rnn = nn.RNN(input_size=128, hidden_size=256, num_layers=1) # 创建循环网络层
+
+    # 定义变量，表示输入的 x
+    # size = (每个句子的词的个数, 句子的数量, 词向量的维度)
+    x = torch.randn(size=(5, 32, 128))
+
+    # 定义变量，记录上一时刻的隐藏状态
+    # size = (隐藏层的层数, 句子的数量, 隐藏状态向量维度)
+    h0 = torch.randn(size=(1, 32, 256))
+
+    # 调用 RNN 处理，获取到当前时刻的预测值和当前的隐藏状态
+    output, h5 = rnn(x, h0)
+    print(f'output: {output.shape}')
+    print(f'h5: {h5.shape}')
+```
