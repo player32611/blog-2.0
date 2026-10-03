@@ -1229,6 +1229,106 @@ mybatis:
     map-underscore-to-camel-case: true
 ```
 
+## MyBatis-Plus
+
+MyBatisPlus 官方提供了 starter，其中集成了 Mybatis 和 MybatisPlus 的所有功能，并且实现了自动装配效果
+
+因此我们可以用 MybatisPlus 的 starter 代替 Mybatis 的 starter:
+
+```xml
+<dependency>
+  <groupId>com.baomidou</groupId>
+  <artifactId>mybatis-plus-boot-starter</artifactId>
+  <version>3.5.17</version>
+</dependency>
+```
+
+然后需要将我们自定义的 Mapper 继承 MybatisPlus 提供的 BaseMapper 接口:
+
+```java
+public interface UserMapper extends BaseMapper<User> {
+
+}
+```
+
+### 常见注解
+
+MyBatisPlus 通过扫描实体类，并基于反射获取实体类信息作为数据库表信息
+
+::tip
+
+MyBatisPlus 扫描规则
+
+- 类名驼峰转下划线作为表名
+
+- 名为 id 的字段作为主键
+
+- 变量名驼峰转下划线作为表的字段名
+
+::
+
+当命名不符合约定时，需要手动使用注解来指定
+
+- `@TableName`: 用来指定表名
+
+- `@TableId`: 用来指定表中的主键字段信息
+
+- `@TableField`: 用来指定表中的普通字段信息
+
+```java
+// 数据库配置
+// 名称         数据类型  注释      默认
+// id           BiGINT   用户id    AUTO_INCREMENT
+// username     VARCHAR  用户名    无默认值
+// is_married   BIT      密码      0
+// order        TINYINT  序号      NULL
+
+@TableName("tb_user")
+public class User {
+  @TableId(value="id", type=IdType.AUTO)s
+  private Long id
+  @TableField("username")
+  private String name;
+  @TableField("is_married")
+  private Boolean isMarried;
+  @TableField("`order`")
+  private Integer order;
+  @TableField(exist = false)
+  private String address;
+}
+```
+
+::tip
+
+使用 `@TableField` 的常见场景
+
+- 成员变量名与数据库字段名不一致
+
+- 成员变量名以 is 开头，且是 boolean 类型
+
+- 成员变量名与数据库关键字冲突
+
+- 成员变量不是数据库字段
+
+::
+
+### 常见配置
+
+MyBatisPlus 的配置项继承了 MyBatis 原生配置和一些自己特有的配置
+
+```yml
+mybatis-plus:
+  type-aliases-package: com.xxx.xxx.xxx # 别名扫描包
+  mapper-locations: "classpath*:/mapper/**/*.xml" # Mapper.xml 文件地址，默认值
+  configuration:
+    map-underscore-to-camel-case: true # 是否开启下划线和驼峰的映射
+    cache-enable: false # 是否开启二级缓存
+  global-config:
+    db-config:
+      id-type: assign_id # id 为雪花算法生成
+      update-strategy: not_null # 更新策略: 只更新非空字段
+```
+
 ## Spring AOP
 
 **AOP**（Aspect Oriented Programming）（面向切面编程，面向方面编程），可简单理解为就是面向特定方法编程
@@ -2710,3 +2810,7 @@ cron 表达是其实就是一个字符串，通过 cron 表达式可以**定义�
 2022 年 10 月 12 日上午 9 点整对应的 cron 表达式为：`0 0 9 12 10 ? 2022`
 
 ::
+
+## 微服务
+
+微服务是一种软件架构风格，它是以专注于单一职责的很多小型项目为基础，组合出复杂的大型应用
