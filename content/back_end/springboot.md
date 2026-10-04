@@ -1329,6 +1329,661 @@ mybatis-plus:
       update-strategy: not_null # 更新策略: 只更新非空字段
 ```
 
+### 条件构造器
+
+MyBatisPlus 支持各种复杂的 where 条件，可以满足日常开发的所有需求
+
+QueryWrapper 和 LambdaQueryWrapper 通常用来构建 select、delete、update 的 where 条件部分
+
+UpdateWrapper 和 LambdaUpdateWrapper 通常只有在 set 语句比较特殊才使用
+
+尽量使用 LambdaQueryWrapper 和 LambdaUpdateWrapper，避免硬编码
+
+::code-group
+
+```java [案例一]
+// 查询出名字中带 o 的，存款大于等于 1000 元的人的 id、username、info、balance 字段
+// SQL: SELECT id,username,info,balance FROM user WHERE username LIKE "%o%" AND balance >= 1000
+
+@Test
+void testQueryWrapper() {
+  QueryWrapper<User> wrapper = new QueryWrapper<>() // 构建查询条件
+    .select("id", "username", "info", "balance")
+    .like("username", "0")
+    .ge("balance", 1000);
+  List<User> users = userMapper.selectList(wrapper); // 查询
+}
+
+@Test
+void testLambdaQueryWrapper() {
+  LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>() // 构建查询条件
+    .select(User::getId, User::getUsername, User::getInfo, User::getBalance)
+    .like(User::getUsername, "0")
+    .ge(User::getBalance, 1000);
+  List<User> users = userMapper.selectList(wrapper); // 查询
+}
+```
+
+```java [案例二]
+// 更新用户名为 jack 的用户的余额为 2000
+// SQL: UPDATE user SET balance = 2000 WHERE username = "jack"
+
+@Test
+void testUpdateByQueryWrapper() {
+  // 要更新的数据
+  User user = new User();
+  user.setBalance(2000);
+
+  // 更新的条件
+  QueryWrapper<User> wrapper = new QueryWrapper<>().eq("username", "jack");
+
+  // 执行更新
+  userMapper.update(user, wrapper);
+}
+```
+
+```java [案例三]
+// 更新 id 为 1,2,3 的用户的余额，扣 200
+// SQL: UPDATE user SET balance = balance - 200 WHERE id in (1, 2, 4)
+
+@Test
+void testUpdateByQueryWrapper() {
+  List<Long> ids = List.of(1L, 2L, 4L);
+  new UpdateWrapper<User> wrapper = new UpdateWrapper<>()
+    .setSql("balance = balance - 200");
+  userMapper.update(null, wrapper);
+}
+```
+
+::
+
+### 自定义 SQL
+
+可以利用 MyBatisPlus 的 Wrapper 来构建复杂的 where 条件，然后自己定义 SQL 语句中剩下的部分
+
+1. 基于 Wrapper 构建 where 条件
+
+```java
+// 将 id 在指定范围的用户(例如 1、2、4)的余额扣减指定值
+
+List<Long> ids = List.of(1L, 2L, 4L); // 更新条件
+
+LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<User>().in(User::getId, ids); // 定义条件
+
+userMapper.updateBalanceByIds(wrapper, amount); // 调用自定义 SQL 方法
+```
+
+2. 在 mapper 方法参数中用 Param 注解声明 wrapper 变量名称，必须是 ew
+
+```java
+void updateBalanceByIds(@Param("ew") LambdaQueryWrapper<User> wrapper, @Param("amount") int amount);
+```
+
+3. 自定义 SQL，并使用 Wrapper 条件
+
+```xml
+<update id="updateBalanceByIds">
+  UPDATE tb_user SET balance = balance - #{amount} ${ew.customSqlSegment}
+</update>
+```
+
+### Service 接口
+
+1. 自定义 Service 接口继承 IService 接口
+
+2. 自定义 Service 实现类，实现自定义接口并继承 ServiceImpl 类
+
+::code-group
+
+```java [UserService.java]
+public interface UserService extends IService<User> {
+
+}
+```
+
+```java [UserServiceImpl.java]
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+}
+```
+
+```java [UserServiceTest.java]
+@Test
+void testSaveUser() {
+  User user = new User();
+  user.setUsername("LiLei");
+  user.setPassword("123");
+
+  userService.save(user);
+}
+
+@Test
+void testQuery() {
+  List<User> users = userService.listByIds(List.of(1L, 2L, 4L));
+  users.forEach(System.out::println);
+}
+```
+
+::
+
+::detail
+
+#title
+基于 Restful 风格实现接口
+#default
+
+|         接口         | 请求方式 |            请求路径             |                  请求参数                  |    返回值    |
+| :------------------: | :------: | :-----------------------------: | :----------------------------------------: | :----------: |
+|       新增用户       |   POST   |            `/users`             |                用户表单实体                |      无      |
+|       删除用户       |  DELETE  |          `/users/{id}`          |                  用户 id                   |      无      |
+|   根据 id 查询用户   |   GET    |          `/users/{id}`          |                  用户 id                   |   用户 VO    |
+|   根据 id 批量查询   |   GET    |            `/users`             |                用户 id 集合                | 用户 VO 集合 |
+|   根据 id 扣减余额   |   PUT    | `/users/{id}/deduction/{money}` |             用户 id、扣减金额              |      无      |
+| 根据复杂条件查询用户 |   GET    |          `/users/list`          | 用户名关键字、用户状态、最小余额、最大余额 | 用户 VO 集合 |
+
+::code-group
+
+```java [UserController.java]
+@RequestMapping("/users")
+@RestController
+@RequiredArgsConstructor
+public class UserController {
+
+  private final UserService userService;
+
+  @PostMapping
+  public void saveUser(@RequestBody UserFormDTO userDTO) {
+    User user = BeanUtil.copyProperties(userDTO, User.class) // 把 DTO 拷贝到 PO
+
+    userService.save(user);
+  }
+
+  @DeleteMapping("/{id}")
+  public void deleteUserById(@PathVariable("id") Long id) {
+    userService.removeById(id);
+  }
+
+  @GetMapping("/{id}")
+  public UserVO queryUserById(@PathVariable("id") Long id) {
+    User user = userService.getById(id); // 查询用户
+    return BeanUtil.copyProperties(user, UserVO.class) // 把 PO 拷贝到 VO
+  }
+
+  @GetMapping
+  public List<UserVO> queryUserById(@RequestParams("ids") List<Long> ids) {
+    List<User> users = userService.listByIds(ids); // 查询用户
+    return BeanUtil.copyToLists(users, UserVO.class); // 把 PO 拷贝到 VO
+  }
+
+  @PutMapping("/{id}/deduction/{money}")
+  public void deductMoneyNyId(@PathVariable("id") Long id, @PathVariable("money") Integer money) {
+    userService.deductBalance(id, money);
+  }
+
+  @GetMapping("/list")
+  public List<UserVO> queryUsers(UserQuery query) {
+    // UserQuery 包含: String name、Integer status、Integer minBalance、Integer maxBalance
+    List<User> users = userService.queryUsers(query.getName(), query.getStatus(), query.getMinBalance(), query.getMaxBalance());
+
+    return BeanUtil.copyToList(users, UserVO.class);
+  }
+}
+```
+
+```java [UserServiceImpl.java]
+@Service
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+  @Override
+  @Transactional
+  public void deductBalance(Lont id, Integer money) {
+    User user = getById(id); // 查询用户
+
+    // 校验用户状态
+    if( user == null || user.getStatus() == 2) {
+      throw new RuntimeException("用户状态异常");
+    }
+
+    // 校验余额是否充足
+    if(user.getBalance() < money) {
+      throw new RuntimeException("用户余额不足");
+    }
+
+    // 扣减余额
+    int remainBalance = user.getBalance() - money;
+    baseMapper.deductBalance(id, money);
+    lambdaUpdate()
+      .set(User::getBalance, remainBalance)
+      .set(remainBalance == 0, User::getStatus, 2)
+      .eq(User::getId, id)
+      .eq(User::getBalance, user.getBalance()) // 乐观锁，高并发处理
+      .update();
+  }
+
+  @Override
+  public List<User> queryUsers(String name, Integer status, Integer minBalance, Integer maxBalance) {
+    return lambdaQuery()
+      .like(name != null, User::getUsername, name)
+      .eq(status != null, User::getStatus, status)
+      .ge(minBalance != null, User::getMinBalance, minBalance)
+      .le(maxBalance != null, User::getMaxBalance, maxBalance);
+      .list();
+  }
+}
+```
+
+```java [UserMapper.java]
+public interface UserMapper extends BaseMapper<User> {
+  @Update("UPDATE tb_user SET balance = balance - #{money}")
+  void deductBalance(@Param("id") Long id, @Param("money") Integer money);
+}
+```
+
+::
+
+::
+
+### 静态工具
+
+一旦出现 Service 相互调用时，推荐使用 Db 的静态工具来调用
+
+```java
+@Override
+public UserVO queryUserAndAddressById(Long id) {
+  User user = getById(id);
+  if(user == null || user.getStatus() == 2) {
+    throw new RuntimeException("用户状态异常");
+  }
+
+  // 查询地址
+  List<Address> assresses = Db.lambdaQuery(Address.class).eq(Address::getUserId, id);
+
+  // 封装 VO
+  UserVO userVO = BeanUtil.copyProperties(user, UserVO.class);
+  if(CollUtil.isNotEmpty(address)) {
+    userVO.setAddresses(BeanUtil.copyToList(addresses, AddressVO.class));
+  }
+  return userVO;
+}
+```
+
+### 逻辑删除
+
+逻辑删除就是基于代码逻辑模拟删除效果，但并不会真正删除数据。思路如下:
+
+- 在表中添加一个字段标记数据是否被删除
+
+- 当删除数据时把标记置为 1
+
+- 查询时只查询标记为 0 的数据
+
+MyBatisPlus 提供了逻辑删除功能，无需改变方法调用的方式，而是在底层帮我们自动修改 CRUD 的语句。我们要做的就是在 application.yaml 文件中配置逻辑删除的字段名称和值即可
+
+```yml
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: flag # 全局逻辑删除的实体字段名，字段类型可以是 boolean、integer
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+```
+
+::warning
+
+逻辑删除的问题
+
+- 会导致数据库垃圾数据越来越多，影响查询效率
+
+- SQL 中全都需要对逻辑删除字段做判断，影响查询效率
+
+::
+
+### 枚举处理器
+
+对于枚举类型的数据字段，可以使用枚举处理器进行管理
+
+::code-group
+
+```java [User.java]
+
+public class User {
+  //...
+
+  // 使用状态(1正常 2冻结)
+  private UserStatue status;
+}
+```
+
+```java [UserStatus.java]
+@Getter
+public enum UserStatus {
+  NORMAL(1, "正常"),
+  FROZEN(2, "冻结")
+  ;
+
+  @EnumValue
+  private finnal int value;
+  private final STring desc;
+
+  UserStatus(int value, String desc) {
+    this.value = value;
+    this.desc = desc;
+  }
+}
+```
+
+```yml [application.yml]
+mybatis-plus:
+  configuration:
+    default-enum-type-handler: com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler
+```
+
+```java [UserTest.java]
+//...
+
+if(user == null || user.getStatus() == UserStatus.FROZEN) {
+  throw new RuntimeException("用户状态异常");
+}
+```
+
+::
+
+### JSON 处理器
+
+当数据库里存储 JSON 字符串，后端想要操作 JSON 属性时，可以使用 JSON 处理器
+
+::code-group
+
+```java [User.java]
+@Data
+@TableName(value="user", autoResultMap = true)
+public class User {
+  private Long id;
+
+  private String username;
+
+  @TableFIeld(typeHandler = JacksonTypeHandler.class)
+  private UserInfo info; // JSON 数据
+}
+```
+
+::
+
+### 插件功能
+
+MyBatisPlus 提供的内置拦截器有下面这些:
+
+|              拦截器              |                 描述                 |
+| :------------------------------: | :----------------------------------: |
+|    TenantLineInnerInterceptor    |              多租户插件              |
+| DynamicTableNameInnerInterceptor |             动态表名插件             |
+|    PaginationInnerInterceptor    |               分页插件               |
+| OptimisticLockerInnerInterceptor |              乐观锁插件              |
+|    IllegalSQLInnerInterceptor    | SQL 性能规范插件，检测并拦截垃圾 SQL |
+|   BlockAttackInnerInterceptor    |       防止全表更新和删除的插件       |
+
+### 分页插件
+
+首先，要在配置类中注册 MyBatisPlus 的核心插件，同时添加分页插件
+
+```java
+@Configuration
+public class MybatisConfig {
+
+  @Bean
+  public MybatisPlusInterceptor mybatisPlusInterceptor() {
+    MybatisPlusInterceptor interceptor - new MybatisPlusInterceptor(); // 初始化核心插件
+
+    // 添加分页插件
+    PaginationInnerInterceptor pageInterceptor = new PaginationInnerInterceptor(DbType.MYSQL);
+    pageInterceptor.setMaxLimit(1000L); // 设置分页上限
+    interceptor.addInnerInterceptor(pageInterceptor);
+
+    return interceptor;
+  }
+}
+```
+
+接着，就可以使用分页的 API 了
+
+```java
+@Test
+void testPageQuery() {
+  int pageNo = 1, pageSize = 5; // 查询
+
+  Page<User> page = Page.of(pageNo, pageSize); // 分页参数
+  page.addOrder(new OrderItem("balance", false)); // 排序参数，通过 OrderItem 来指定
+  Page<User> p = userService.page(page); // 分页查询
+
+  System.out.println("total = " + p.getTotal()); // 总条数
+  System.out.println("pages = " + p.getPages()); // 总页数
+
+  List<User> records = p.getRecords(); // 分页数据
+  records.forEach(System.out::println);
+}
+```
+
+::detail
+
+#title
+基于 Restful 风格实现分页查询
+#default
+
+|   参数   |                                         说明                                         |
+| :------: | :----------------------------------------------------------------------------------: |
+| 请求方式 |                                         GET                                          |
+| 请求路径 |                                    `/users/page`                                     |
+| 请求参数 | `{pageNo: 1, pageSize: 5, sortBy: "balance", isAsc: false, name: "jack", status: 1}` |
+|  返回值  |                   `{total: 1005, pages: 201, list: Array<UserVO>}`                   |
+| 特殊说明 |      如果排序字段为空，默认按照更新时间排序；排序字段不为空，则按照排序字段排序      |
+
+::code-group
+
+```java [PageQuery.java]
+@Data
+public class PageQuery {
+  private Integer pageNo;
+  private Integer pageSize;
+  private Integer sortBy;
+  private Integer isAsc;
+}
+```
+
+```java [UserQuery.java]
+@Data
+public class UserQuery extends PageQuery {
+  private String name;
+  private Integer status;
+  private Integer minBalance;
+  private Integer maxBalance;
+}
+```
+
+```java [PageDTO.java]
+@Data
+public class PageDTO<T> {
+  private Long total;
+  private Long pages;
+  private List<T> list;
+}
+```
+
+```java [UserController.java]
+@GetMapping("/page")
+public PageDTO<UserVO> queryUsersPage(UserQuery query) {
+  return userService.queryUsersPage(query)
+}
+```
+
+```java [UserService.java]
+public interface UserService extends IService<User> {
+  PageDTO<UserVO> queryUsersPage(UserQuery query);
+}
+```
+
+```java [UserServiceImpl.java]
+@Service
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+  @Override
+  public PageDTO<UserVO> queryUsersPage(UserQuery query) {
+    String name = query.getName();
+    Integer status = query.getStatus();
+
+    // 构建分页条件
+    Page<UserVO> page = Page.of(query.getPageNo(), query.getPageSize());
+    // 构建排序条件
+    if(query.getSortBy() != null) {
+      page.addOrder(new OrderItem(query.getSortBy(), query.getIsAsc()));
+    } else {
+      page.addOrder(new OrderItem("update_time", false));
+    }
+
+
+    // 分页查询
+    Page<User> p =lambdaQuery()
+      .like(name != null, User::getUsername, name)
+      .eq(status != null. User::getStatus, status)
+      .page(page);
+
+    // 封装 VO 结果
+    PageDTO<UserVO> dto = new PageDTO<>();
+    dto.setTotal(p.getTotal()); // 总条数
+    dto.setPages(p.getPages()); // 总页数
+    List<User> records = p.getRecords(); // 当前页数据
+    if(CollUtil.isEmpty(records)) {
+      dto.setList(Collections.emptyList());
+      return dto;
+    }
+    dto.setList(BeanUtil.copyToList(records, UserVO.class)); // 拷贝
+
+    // 返回
+    return dto;
+  }
+}
+```
+
+::
+
+::
+
+### 通用分页实体
+
+对于复杂业务逻辑，可以封装为通用分页实体
+
+::code-group
+
+```java [PageQuery.java]
+@Data
+public class PageQuery {
+  private Integer pageNo = 1;
+  private Integer pageSize = 5;
+  private Integer sortBy;
+  private Integer isAsc = true;
+
+  public <T> Page<T> toMpPage(OrderItem ... items) {
+    // 构建分页条件
+    Page<T> page = Page.of(pageNo, pageSize);
+    // 构建排序条件
+    if(sortBy != null) {
+      page.addOrder(new OrderItem(sortBy, isAsc));
+    } else if(items != null) {
+      // 为空，默认排序
+      page.addOrder(items);
+    }
+
+    return page;
+  }
+
+  // 重载方法
+  public <T> Page<T> toMpPage(String defaultSortBy, Boolean defaultAsc) {
+    return toMpPage(new OrderItem(defaultSortBy, defaultAsc));
+  }
+
+
+  // 定义其它情况的方法
+  public <T> Page<T> toMpPageDefaultSortByCreateTime() {
+    return toMpPage(new OrderItem("create_time", false));
+  }
+
+  public <T> Page<T> toMpPageDefaultSortByUpdateTime() {
+    return toMpPage(new OrderItem("update_time", false));
+  }
+}
+```
+
+```java [PageDTO.java]
+@Data
+public class PageDTO<T> {
+  private Long total;
+  private Long pages;
+  private List<T> list;
+
+  public static <PO, VO> PageDTO<VO> of(Page<PO> p, Class<VO>, clazz) {
+    PageDTO<VO> dto = new PageDTO<>();
+    dto.setTotal(p.getTotal()); // 总条数
+    dto.setPages(p.getPages()); // 总页数
+    List<PO> records = p.getRecords(); // 当前页数据
+    if(CollUtil.isEmpty(records)) {
+      dto.setList(Collections.emptyList());
+      return dto;
+    }
+    dto.setList(BeanUtil.copyToList(records, clazz)); // 拷贝
+
+    return dto; // 返回
+  }
+
+  // 重载，用于自定义拷贝时使用
+  public static <PO, VO> PageDTO<VO> of(Page<PO> p, Function<PO, VO> convertor) {
+    PageDTO<VO> dto = new PageDTO<>();
+    dto.setTotal(p.getTotal()); // 总条数
+    dto.setPages(p.getPages()); // 总页数
+    List<PO> records = p.getRecords(); // 当前页数据
+    if(CollUtil.isEmpty(records)) {
+      dto.setList(Collections.emptyList());
+      return dto;
+    }
+
+    dto.setList(records.stream().map(convertor).collect(Collectors.toList())); // 拷贝
+
+    return dto; // 返回
+  }
+}
+```
+
+```java [UserServiceImpl.java]
+@Service
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+  @Override
+  public PageDTO<UserVO> queryUsersPage(UserQuery query) {
+    String name = query.getName();
+    Integer status = query.getStatus();
+
+    // 构建分页条件
+    Page<User> page = query.toMpPageDefaultSortByUpdateTime();
+
+    // 分页查询
+    Page<User> p =lambdaQuery()
+      .like(name != null, User::getUsername, name)
+      .eq(status != null. User::getStatus, status)
+      .page(page);
+
+    // 封装 VO 结果
+    return PageDTO.of(p, UserVO.class);
+
+    // 自定义拷贝逻辑
+    return PageDTO.of(p, user -> {
+      UserVO vo = BeanUtil.copyProperties(user, UserVO.class); // 拷贝基础属性
+
+      // 处理特殊逻辑
+      vo.setUsername(vo.getUsername().substring(0, vo.getUsername().length() - 2) + "**");
+      return vo;
+    })
+  }
+}
+```
+
+::
+
 ## Spring AOP
 
 **AOP**（Aspect Oriented Programming）（面向切面编程，面向方面编程），可简单理解为就是面向特定方法编程
