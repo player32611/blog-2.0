@@ -3466,6 +3466,358 @@ cron 表达是其实就是一个字符串，通过 cron 表达式可以**定义�
 
 ::
 
-## 微服务
+## Spring Cloud
+
+Spring Cloud 是目前国内适用最广泛的微服务框架，集成了各种微服务功能组件，并基于 SpringBoot 实现了这些组件的自动装配，从而提供了良好的开箱即用体验
+
+```xml
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-dependencies</artifactId>
+</dependency>
+```
+
+::tip
+
+微服务
 
 微服务是一种软件架构风格，它是以专注于单一职责的很多小型项目为基础，组合出复杂的大型应用
+
+- **单一架构**: 将业务的所有功能集中在一个项目中开发，打成一个包部署
+  - 优点: 具有架构简单，部署成本低
+  - 缺点: 但同时具有团队协作成本高、系统发布效率低、系统可用性差的缺点
+  - 适用范围: 功能相对简单，规模较小的项目
+
+- **微服务架构**: 把单体架构中的功能模块拆分为多个独立项目
+
+::
+
+### 服务拆分原则
+
+对于创业型项目: 先采用单体架构，快速开发，快速试错。随着规模扩大，逐渐拆分
+
+对于确定的大型项目: 资金明确，可以直接选择微服务架构，避免后续拆分的麻烦
+
+从拆分目标来说，要做到:
+
+- **高内聚**: 每个微服务的职责要尽量单一，包含的业务相互关联度高、完整度高
+
+- **低耦合**: 每个微服务的功能要相对独立，尽量减少对其它微服务的依赖
+
+从拆分方式来说，一般包含两种方式:
+
+- **纵向拆分**: 按照业务模块来拆分
+
+- **横向拆分**: 抽取公共服务，提高复用性
+
+微服务的工程项目结构有两种:
+
+- **独立 Project**: 每一个服务都是一个独立的项目，可以有不同的 git 仓库
+
+- **Maven 集合**: 一个主项目下分为不同的模块，各个模块都是一个项目，可以各自启动
+
+### 改造 Spring Boot
+
+从 Spring Boot 项目改造成微服务时，需要对不同的微服务项目设置不同的端口的名称
+
+```yml
+server:
+  port: 8080
+spring:
+  application:
+    name: hm-service # 微服务名称
+```
+
+### 远程调用
+
+拆分后，某些数据在不同服务，无法直接调用本地方法查询数据
+
+Spring 给我们提供了一个 RestTemplate 工具，可以方便的实现 Http 请求的发送
+
+1. 注入 ResTemplate 到 Spring 容器
+
+```java
+@Bean
+public RestTemplate restTemplate() {
+  return new RestTemplate();
+}
+```
+
+2. 发起远程调用
+
+```java
+public <T> ResponseEntity exchange(
+  String url, // 请求路径
+  HttpMethod method, // 请求方式
+  @Nullable HttpEntity<?> requestEntity, // 请求实体，可以为空
+  Class<T> responseType, // 返回值类型
+  Map<String, ?> uriVariables // 请求参数
+)
+
+```
+
+::detail
+
+#title
+具体使用示例
+#default
+
+```java
+@Service
+@RequiredArgsConstructor
+public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements ICartService {
+
+  private final RestTemplate restTemplate;
+
+  private void handleCartItems(List<CartVO> vos) {
+    Set<Long> itemIds = vos.stream().map(CartVO::getItemId).collect(Collectors.toSet()); // 获取商品 id
+
+    // List<ItemDTO> items = itemService.queryItemByIds(itemIds); // 单一架构内查询商品
+
+    // 利用 RestTemplate 发起 http 请求，得到 http 的响应
+    ResponseEntity<List<ItemDTO>> response = restTemplate.exchange(
+      "http://localhost:8081/items?ids={ids}",
+      HttpMethod.GET,
+      null,
+      new ParameterizedTypeReference<List<ItemDTO>>() {},
+      Map.of("ids", CollUtil.join(itemIds, ","))
+    );
+
+    // 解析响应
+    if(response.getStatusCode().is2xxSuccessful()) {
+      return; // 查询失败
+    }
+    List<ItemDTO> items = response.getBody();
+
+    // ...
+  }
+}
+```
+
+::
+
+### Nacos 注册中心
+
+在服务治理中，存在服务提供者，服务消费者，注册中心
+
+- **服务提供者**: 暴露服务接口，供其它服务调用
+
+- **服务消费者**: 调用其它服务提供的接口
+
+- **注册中心**: 记录并监控微服务各示例状态，推送服务变更信息
+
+服务提供者会在启动时注册自己信息到注册中心，消费者可以从注册中兴订阅和拉取服务信息
+
+服务提供者通过心跳机制向注册中心报告自己的健康状态，当心跳异常时注册中心会将异常服务剔除，并痛殴告知订阅了该服务的消费者
+
+消费者可以通过负载均衡算法，从多个实例中选择一个
+
+Nacos 是目前国内企业中占比最多的注册中心组件。它是阿里巴巴的产品，目前已经加入 Spring Cloud Alibaba 中
+
+官网地址: https://nacos.io/
+
+### 服务注册
+
+服务注册步骤如下:
+
+1. 引入 nacos discovery 依赖
+
+```xml
+<dependency>
+  <groupId>com.alibaba.cloud</groupId>
+  <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+</dependency>
+```
+
+2. 配置 Nacos 地址
+
+```yml
+# application.yml
+spring:
+  application:
+    name: item-service # 服务名称
+  cloud:
+    nacos:
+      server-addr: 192.168.150.101:8848 # nacos 地址
+```
+
+### 服务发现
+
+消费者需要连接 nacos 以拉取和订阅服务，因此服务发现的前两步与服务注册是一样，后面再加上服务调用即可:
+
+1. 引入 nacos discovery 依赖
+
+2. 配置 Nacos 地址
+
+3. 服务发现
+
+```java
+private final DiscoveryClient discoveryClient:
+
+private void handleCartItems(List<CartVO> vos) {
+  // 根据服务名称，拉取服务的实例列表
+  List<ServiceInstance> instances = discoveryClient.getInstances("实例名称");
+  if(CollUtil.isEmpty(instances)) {
+    return;
+  }
+
+  // 负载均衡，随机挑选一个实例
+  ServiceInstance instance = instances.get(RandomUtil.randomInt(instances.size()));
+
+  // 获取实例的 IP 和端口
+  URI uri = instance.getUri();
+
+  // 业务逻辑
+  ResponseEntity<List<ItemDTO>> response = restTemplate.exchange(
+    uri + "/item?ids={idss}",
+    HttpMethod.GET,
+    null,
+    new ParameterizedTypeReference<List<ItemDTO>>() {},
+    Map.of("ids", CollUtil.join(itemIds, ","))
+  );
+
+  // 解析响应
+  if(response.getStatusCode().is2xxSuccessful()) {
+    return; // 查询失败
+  }
+  List<ItemDTO> items = response.getBody();
+}
+```
+
+## OpenFeign
+
+OpenFeign 是一个声明式的 http 客户端，是 Spring Cloud 在 Eureka 公司开源的 Feigh 基础上改造而来，其作用就是基于 SpringMVC 的常见注解，帮我们优雅的实现 http 请求的发送
+
+OpenFeigh 已被 Spring Cloud 自动装配，实现起来非常简单
+
+1. 引入依赖，包括 OpenFeign 和负载均衡组件 SpringCloudLoadBalancer
+
+```xml
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-openfeign</artifactId>
+</dependency>
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+</dependency>
+```
+
+2. 通过在启动类上添加 `@EnableFeignClients` 注解，启用 OpenFeign 功能
+
+```java
+@EnableFeighClients
+@SpringBootApplication
+public class XxxApplication {
+  // ...
+}
+```
+
+3. 编写 FeignClient
+
+```java
+@FeignClient(name = "实例名称")
+public interface XxxClient {
+
+  @GetMapping("/items")
+  List<ItemDTO> queryItemByIds(@RequestParam("ids") Collection<Long> ids);
+}
+```
+
+4. 使用 FeignClient，实现远程调用
+
+```java
+List<ItemDTO> items = xxxClient.queryItemByIds(List.of(1,2,3));
+```
+
+### 连接池
+
+OpenFeign 对 Http 请求做了优雅的封装，不过其底层发起 http 请求，依赖于其它的框架。这些框架可以自己选择，包括以下三种:
+
+- **HttpURLConnection**: 默认实现，不支持连接池
+
+- **Apache HttpClient**: 支持连接池
+
+- **OKHttp**: 支持连接池
+
+OpenFeign 整合 OKHttp 的步骤如下:
+
+1. 引入依赖
+
+```xml
+<dependency>
+  <groupId>io.github.openfeign</groupId>
+  <artifactId>feign-okhttp</artifactId>
+</dependency>
+```
+
+2. 开启连接池功能
+
+```yml
+feign:
+  okhttp:
+    enabled: true
+```
+
+### 最佳实践
+
+针对 OpenFeign 的最佳项目结构，是将 Feign 客户端接口抽取为独立的 API 模块，供所有消费者服务依赖，而不是在每个服务里重复定义
+
+```text
+project-parent/
+├── xxx-api/                 # 独立 API 模块
+│   ├── src/main/java/
+│   │   └── com/example/api/
+│   │       ├── client/       # Feign 客户端接口
+│   │       │   └── UserClient.java
+│   │       ├── dto/          # 接口相关的 DTO
+│   │       │   └── UserDTO.java
+│   │       ├── fallback/     # 降级处理类
+│   │       │   └── UserFallbackFactory.java
+│   │       └── config/       # 默认 Feign 配置
+│   │           └── DefaultFeignConfig.java
+│   └── pom.xml               # 引入 openfeign、loadbalancer 依赖
+├── user-service/             # 服务提供者
+└── order-service/            # 服务消费者，依赖 xxx-api
+```
+
+当定义的 FeignClient 不在 SpringBootApplication 的扫描包范围时，这些 FeignClient 无法使用。有两种方式解决:
+
+- **指定 FeignCLient 所在包**: `@EnableFeignClients(basePackages = "com.xxx.api.client")`
+
+- **指定 FeignClient 字节码**: `@EnableFeignClients(clients = {XxxClient.class})`
+
+### 日志输出
+
+OpenFeign 只会在 FeignClient 所在包的日志级别为 **DEBUG**，才会输出日志。而且其日志级别有 4 级:
+
+- **NONE**: 不记录任何日志信息，这是默认值
+
+- **BASIC**: 仅记录请求的方法，URL 以及响应状态码和执行时间
+
+- **HEADERS**: 在 BASIC 的基础上，额外记录了请求和响应的头信息
+
+- **FULL**: 记录所有请求和响应的明细，包括头信息、请求体、元数据
+
+要自定义日志级别需要声明一个类型为 Logger.Level 的 Bean，在其中定义日志级别:
+
+```java
+public class DefaultFeignConfig {
+  @Bean
+  public Logger.Level feignLogLevel() {
+    return Logger.Level.FULL;
+  }
+}
+```
+
+但此时这个 Bean 并未生效，要想配置某个 FeignClient 的日志，可以在 `@FeignClient` 注解中声明:
+
+```java
+@FeignClient(value = "实例名称", configuration = DefaultFeignConfig.class)
+```
+
+如果想要全局配置，让所有 FeignClient 都按照这个日志配置，则需要在 `@EnableFeignCLients` 注解中声明:
+
+```java
+@EnableFeignClients(defaultConfiguration = DefaultFeignConfig.class)
+```

@@ -119,15 +119,11 @@ docker run -d \
 mysql:8
 ```
 
-- `docker run`：创建并运行一个容器，`-d` 是让容器在后台运行
+### 镜像和容器
 
-- `--name mysql`：给容器起个名字，必须唯一
+当我们利用 Docker 安装应用时，Docker 会自动搜索并下载应用**镜像**（image）。镜像不仅包含应用本身，还包含应用运行所需要的环境、配置、系统函数库。Docker 会在运行镜像时创建一个隔离环境，称为**容器**（container）
 
-- `-p 3308:3306`：设置端口映射，前为宿主机的端口，后为容器的端口
-
-- `-e [KEY]=[VALUE]`：设置环境变量
-
-- `mysql:8`：指定运行的镜像的名字，版本
+- **镜像仓库**：存储和管理镜像的平台，Docker 官方维护了一个公共仓库：[Docker Hub](https://hub.docker.com/)
 
 镜像名称一般分两部分组成：`[repository]:[tag]`，其中 `repository` 就是镜像名，`tag` 时镜像的版本
 
@@ -137,49 +133,51 @@ mysql:8
 
 ::
 
-### 镜像和容器
-
-当我们利用 Docker 安装应用时，Docker 会自动搜索并下载应用**镜像**（image）。镜像不仅包含应用本身，还包含应用运行所需要的环境、配置、系统函数库。Docker 会在运行镜像时创建一个隔离环境，称为**容器**（container）
-
-- **镜像仓库**：存储和管理镜像的平台，Docker 官方维护了一个公共仓库：[Docker Hub](https://hub.docker.com/)
-
 ## Docker 核心
 
 ### 常见命令
 
 Docker 最常见的命令就是操作镜像、容器的命令
 
-`docker pull`：拉取镜像
+`docker pull`: 拉取镜像
 
-`docker push`：推送镜像
+`docker push`: 推送镜像
 
-`docker images`：查看所有镜像
+`docker images`: 查看所有镜像
 
-`docker rmi`：删除镜像
+`docker rmi`: 删除镜像
 
-`docker run`：创建并运行容器
+`docker run`: 创建并运行容器
 
-`docker start`：启动容器
+- `docker run -d`: 让容器在后台运行
 
-`docker stop`：停止容器
+- `--name xxx`: 给容器起一个名字，必须唯一
 
-`docker ps`：查看正在运行的容器
+- `-p 3306:3306`: 设置端口映射
 
-`docker rm`：删除容器
+- `-e [KEY]=[VALUE]`：设置环境变量
 
-`docker logs`：查看容器的日志
+`docker start`: 启动容器
 
-`docker exec`：进入容器
+`docker stop`: 停止容器
 
-- ` docker exec -it [容器名] bash`：进入容器终端
+`docker ps`: 查看正在运行的容器
 
-`docker build`：构建镜像
+`docker rm`: 删除容器
 
-`docker save`：保存容器
+`docker logs`: 查看容器的日志
 
-`docker load`：加载容器
+`docker exec`: 进入容器
 
-`docker inspect`：查看容器的详情信息
+- ` docker exec -it [容器名] bash`: 进入容器终端
+
+`docker build`: 构建镜像
+
+`docker save`: 保存容器
+
+`docker load`: 加载容器
+
+`docker inspect`: 查看容器的详情信息
 
 ### 数据卷
 
