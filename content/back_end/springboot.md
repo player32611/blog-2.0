@@ -3596,7 +3596,7 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements IC
 
 ::
 
-### Nacos 注册中心
+## Nacos 注册中心
 
 在服务治理中，存在服务提供者，服务消费者，注册中心
 
@@ -3683,6 +3683,90 @@ private void handleCartItems(List<CartVO> vos) {
   List<ItemDTO> items = response.getBody();
 }
 ```
+
+### 配置共享
+
+由于微服务重复配置过多，维护成本高；业务配置经常变动时，每次修改都要重启服务；当网关路由配置写死，如果变更要重启网关。可以使用 Nacos 实现配置管理
+
+1. 添加配置到 Nacos: 在 Nacos 控制台中即可设置共享配置
+
+2. 引入依赖
+
+```xml
+<!-- nacos 配置管理 -->
+<dependency>
+  <groupId>com.alibaba.cloud</groupId>
+  <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+</dependency>
+
+<!-- 读取 bootstrap 文件 -->
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-bootstrap</artifactId>
+</dependency>
+```
+
+3. 新建 bootstrap.yaml
+
+```yaml
+# bootstrap.yaml
+
+spring:
+  application:
+    name: xxx-service # 服务名称
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: 192.168.150.101 # nacos 地址
+      config:
+        file-extension: yaml # 共享配置文件后缀名
+        shared-confids: # 共享配置
+          - dataId: shared-xxx.yaml # 共享配置 Data ID
+          - dataId: shared-xxx.yaml # 共享配置 Data ID
+```
+
+### 配置热更新
+
+**配置热更新**: 当修改配置文件中的配置时，微服务无需重启即可使配置生效
+
+条件:
+
+- nacos 中要有一个与微服务名有关的配置文件: `[spring.application.name]-[spring.active.profile].[file-extension]`(`[微服务名称]-[项目 profile(可选)].[文件后缀名]`)
+  - 在 nacos 控制台中进行配置，例如 xxx-service.yaml
+
+- 微服务中要以特定方式读取需要热更新的配置属性
+
+::code-group
+
+```java [配置方式一]
+@Data
+@Component
+@configurationProperties(prefix = "xxx.xxx")
+public class CartProperties {
+  private int maxItems;
+}
+```
+
+```java [配置方式二]
+@Data
+@Component
+@RefreshScope
+public class CartProperties {
+  @Value("${xxx.xxx.maxItems}")
+  private int maxItems;
+}
+```
+
+::
+
+### 动态路由
+
+::danger
+
+该部分尚未完工!
+
+::
 
 ## OpenFeign
 
@@ -4233,9 +4317,8 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 
 OpenFeign 中提供了一个拦截器接口 `RequestInterceptor`，所有由 OpenFeign 发起的请求都会先调用拦截器处理请求
 
-::code-group
-
-```java [DefaultFeignConfig.java]
+```java
+// DefaultFeignConfig.java
 // 在 xxx-api 的 OpenFeign 配置类中定义拦截器
 
 public class DefaultFeignConfig {
@@ -4254,7 +4337,5 @@ public class DefaultFeignConfig {
   }
 }
 ```
-
-::
 
 ::
