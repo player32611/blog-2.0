@@ -3821,3 +3821,440 @@ public class DefaultFeignConfig {
 ```java
 @EnableFeignClients(defaultConfiguration = DefaultFeignConfig.class)
 ```
+
+## 网关
+
+网关就是网络的关口，负责请求的路由、转发、身份校验
+
+在 SpringCloud 中网关的实现包括两种:
+
+- Spring Cloud Gateway: Spring 官方出品，基于 WebFlux 响应式编程，无需调优即可获得优异性能
+
+- Netfilx Zuul: Netfix 出品，基于 Servlet 的阻塞式编程，需要调优才能获得与 SpringCloudGateway 类似的性能
+
+1. 创建网关模块
+
+2. 引入网关依赖
+
+```xml
+<!-- 网关 -->
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-gateway</artifactId>
+</dependency>
+<!-- nacos discovery -->
+<dependency>
+  <groupId>com.alibaba.cloud</groupId>
+  <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+</dependency>
+<!-- 负载均衡 -->
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+</dependency>
+```
+
+3. 编写启动类
+
+```java
+// GatwayApplication.java
+
+@SpringBootApplication
+public class GatewayApplication {
+  public static void main(String[] args) {
+    SpringApplication.run(GatewayApplication.class, args)
+  }
+}
+```
+
+4. 配置路由规则
+
+```yml
+server:
+  port: 8080
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      server-addr: 192.168.150.101:8848
+    gateway:
+      routes:
+        - id: xxx # 路由规则 id，自定义，唯一
+          uri: lb://xxx-service # 路由目标微服务，lb 代表负载均衡
+          predicates: # 路由断言，判断请求是否符合规则，符合则路由到目标
+            - Path=/xxx/** # 以请求路径做判断
+        - id: item
+          uri: lb://item-service
+          predicates:
+            - Path=/items/**
+      default-filters: # 通用过滤器
+        - xxx # 过滤器逻辑
+```
+
+### 路由属性
+
+网关路由对应的 Java 类型是 RouteDefinition，其中常见的属性有:
+
+- id: 路由唯一标识
+
+- uri: 路由目标地址
+
+- predicates: 路由断言，判断请求是否符合当前路由
+
+|          名称          |              说明               |                                                   示例                                                   |
+| :--------------------: | :-----------------------------: | :------------------------------------------------------------------------------------------------------: |
+|         After          |      是某个时间点后的请求       |                         `- After=2037-01-20T17:42:47.789-07:00[America/Denver]`                          |
+|         Before         |     是某个时间点之前的请求      |                         `- Before=2031-04-13T15:14:47.433+08:00[Asia/Shanghai]`                          |
+|        Between         |    是某两个时间点之前的请求     | `- Between=2037-01-20T17:42:47.789-07:00[America/Denver], 2037-01-21T17:42:47.789-07:00[America/Denver]` |
+|         Cookie         |     请求必须包含某些 cookie     |                                        `- Cookie=chocolate, ch.p`                                        |
+|         Header         |     请求必须包含某些 header     |                                       `- Header=X-Request-Id, \d+`                                       |
+|          Host          | 请求必须是访问某个 host（域名） |                                 `- Host=.somehost.org,.anotherhost.org`                                  |
+|         Method         |     请求方式必须是指定方式      |                                           `- Method=GET,POST`                                            |
+|          Path          |    请求路径必须符合指定规则     |                                     `- Path=/red/{segment},/blue/**`                                     |
+|         Query          |    请求参数必须包含指定参数     |                                   `- Query=name,Jack或者- Query=name`                                    |
+|       RemoteAddr       |    请求者的ip必须是指定范围     |                                      `- RemoteAddr=192.168.1.1/24`                                       |
+|         Weight         |            权重处理             |                                           `- Weight=group1, 2`                                           |
+| XForwarded Remote Addr |    基于请求的来源 IP 做判断     |                                 `- XForwardedRemoteAddr=192.168.1.1/24`                                  |
+
+- filters: 路由过滤器，对请求或响应做特殊处理
+
+|         名称         |             说明             |                        示例                        |
+| :------------------: | :--------------------------: | :------------------------------------------------: |
+|   AddRequestHeader   |   给当前请求添加一个请求头   |    `- AddRequestHeader=headerName,headerValue`     |
+| RemoveRequestHeader  |    移除请求中的一个请求头    |         `- RemoveRequestHeader=headerName`         |
+|  AddResponseHeader   |  给响应结果中添加一个响应头  |    `- AddResponseHeader=headerName,headerValue`    |
+| RemoveResponseHeader | 从响应结果中移除有一个响应头 |        `- RemoveResponseHeader=headerName`         |
+|     RewritePath      |         请求路径重写         | `- RewritePath=/red/?(?<segment>.\*), /${segment}` |
+|     StripPrefix      |  去除请求路径中的 N 段前缀   |    `- StripPrefix=1，则路径/a/b转发时只保留/b`     |
+|         ...          |
+
+### 自定义过滤器
+
+网关过滤器有两种，分别是:
+
+- GatewayFilter: 路由过滤器，作用于任意指定的路由；默认不生效，要配置到路由后生效
+  - 定义 GatewayFilter 需要实现 AbstractGatewayFilterFactory，同时需要进行配置
+
+- GlobalFilter: 全局过滤器，作用范围是所有路由；声明后自动生效
+  - 定义 GlobalFilter 需要实现 GlobalFilter 接口
+
+两种过滤器的过滤方法签名完全一致
+
+::code-group
+
+```java [MyGlobalFilter.java]
+@Component
+public class MyGlobalFilter implements GlobalFilter, Ordered {
+
+  @Override
+  public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+    ServerHttpRequest request = exchange.getRequest(); // 获取请求
+    HttpHeaders headers = request.getHeaders(); // 获取请求头
+    System.out.println("headers = " + headers);
+
+    return chain.filter(exchange); // 放行
+  }
+
+  @Override
+  public int getOrder() {
+    return 0; // 定义过滤器顺序，值越小，优先级越高
+  }
+}
+```
+
+```java [PrintAnyGatewayFilterFactory.java]
+// 类名称后缀必须为 GatewayFilterFactory，方便配置使用
+@Component
+public class PrintAnyGatewayFilterFactory extends AbstractGatewayFilterFactory<Object> {
+  @Override
+  public GatewayFilter apply(Object config) {
+    return new GatewayFilter() {
+      @Override
+      public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        System.out.println("print any filter running"); // 编写过滤器逻辑
+
+        return chain.filter(exchange); // 放行
+      }
+    }
+
+    // 编写带顺序的 filter
+    // return new OrderedGatewayFilter(new GatewayFilter() {
+    //   @Override
+    //   public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+    //     System.out.println("print any filter running");
+
+    //     return chain.filter(exchange); // 放行
+    //   }
+    // }, 1);
+  }
+}
+```
+
+```yml [application.yml]
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: xxx
+          uri: lb://xxx-service
+          predicates:
+            - Path=/xxx/**
+      default-filters:
+        - PrintAny
+```
+
+::
+
+::detail
+
+#title
+定义带参数的 GatewayFilter
+#default
+
+::code-group
+
+```java [PrintAnyGatewayFilterFactory.java]
+@Component
+public class PrintAnyGatewayFilterFactory extends AbstractGatewayFilterFactory<Config> {
+  @Override
+  public GatewayFilter apply(Config config) {
+    return new GatewayFilter() {
+      @Override
+      public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        String a = config.getA();
+        String b = config.getB();
+        String c = config.getC();
+
+        return chain.filter(exchange); // 放行
+      }
+    }
+  }
+
+  // 自定义配置属性，成员变量名称很重要
+  public static class Config {
+    private String a;
+    private String b;
+    private String c;
+  }
+
+  // 将变量名称依次返回，顺序很重要，将来读取参数时需要按顺序读取
+  @Override
+  public List<String> shortcutFieldOrder() {
+    return List.of("a", "b", "c");
+  }
+
+  // 将 Config 字节码传递给父类，父类负责帮我们读取 yml 配置
+  public PrintAnyGatewayFilterFactory() {
+    super(Config.class);
+  }
+}
+```
+
+```yml [application.yml]
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - PrintAny=1,2,3
+```
+
+::
+
+::
+
+### 登录校验
+
+::code-group
+
+```java [AuthProperties.java]
+// 在 xxx-gateway 网关服务下配置读取需要鉴权的路径与不需要鉴权的路径
+
+@Data
+@Component
+@ConfigurationProperties(prefix = "xxx.auth")
+public class AuthProperties {
+  private List<String> includePaths;
+  private List<String> excludePaths;
+}
+```
+
+```yml [application.yml]
+# 在 xxx-gateway 网关服务下配置需要排除的路径
+xxx:
+  auth:
+    excludePaths:
+      - /search/**
+      - /users/login
+      - /items/**
+```
+
+```java [AuthGlobalFilter.java]
+// xxx-gateway 网关服务下进行处理
+
+@Component
+@RequiredArgsConstructor
+public class AuthGlobalFilter implements GlobalFilter, Ordered {
+
+  private final AuthProperties authProperties; // 注入路径配置
+
+  private final JwtTool jwtTool; // jwt 工具类
+
+  private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+
+  @Override
+  public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+    // 获取 request
+    ServerHttpRequest request = exchange.getRequest(); // 获取请求
+
+
+    // 判断是否需要做登录拦截
+    if(isExclude(request.getPath().toString())) {
+      return chain.filter(exchange); // 放行
+    }
+
+    // 获取 token
+    String token = null;
+    List<String> headers = request.getHeaders().get("authorization"); // 获取请求头
+    if(headers != null && !headers.isEmpty()) {
+      token = headers.get(0);
+    }
+
+    // 校验并解析 token
+    Long userId = null;
+    try {
+      userId = jwtTool.parseToken(token);
+    } catch (UnauthorizedException e) {
+      // 拦截，设置响应状态码为 401
+      ServerHttpResponse response = exchange.getResponse();
+      response.setStatusCode(HttpStatus.UNAUTHORIZED);
+      return response.setComplete();
+    }
+
+    // 传递用户信息
+    String userInfo = userId.toString();
+    ServerWebExchange swe = exchange.mutate() // 对下游请求做更改
+      .request(builder -> builder.header("user-info", userInfo))
+      .build();
+
+    // 放行
+    return chain.filter(swe);
+  }
+
+  // 判断是否需要排除
+  private boolean isExclude(String path) {
+    for(String pathPattern : authProperties.getExcludePaths()) {
+      if (antPathMatcher.match(pathPattern, path)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public int getOrder() {
+    return 0;
+  }
+}
+```
+
+```java [UserContext.java]
+// 在 xxx-common 通用模块下定义线程上下文
+
+public class UserContext {
+  private static final ThreadLocal<Long> tl = new ThreadLocal<>();
+
+  public static void setUser(Long userId) {
+    tl.set(userId);
+  }
+
+  public static Long getUser() {
+    return tl.get();
+  }
+
+  public static void removeUser() {
+    tl.remove();
+  }
+}
+```
+
+```java [UserInfoInterceptor.java]
+// 在 xxx-common 通用模块下定义拦截器
+
+public class UserInfoInterceptor implements HandlerInterceptor {
+
+  @Override
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    String userInfo = request.getHeader("user-info") // 获取登录信息
+
+    // 判断是否获取了用户，如果有，存入 ThreadLocal
+    if(StrUtil.isNotBlank()) {
+      UserContext.setUser(Long.valueOf(userInfo))
+    }
+
+    return true; // 放行
+  }
+
+  @Override
+  public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    UserContext.removeUser(); // 清理用户
+  }
+}
+```
+
+```java [MvcConfig.java]
+// 在 xxx-common 通用模块下配置拦截器
+
+@Configuration
+@ConditionalOnClass(DispatcherServlet.class) // 判断是否存在 Spring Mvc 环境
+public class MvcConfig implements WebMmvcConfigurer {
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(new UserInfoInterceptor());
+  }
+}
+```
+
+```factories [spring.factories]
+# 在 xxx-common 通用模块下配置拦截器
+# /resources/META-INF/spring.factories
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.xxx.common.config.MvcConfig
+```
+
+::
+
+::detail
+
+#title
+使用 OpenFeign 在微服务之间传递用户信息
+#default
+
+OpenFeign 中提供了一个拦截器接口 `RequestInterceptor`，所有由 OpenFeign 发起的请求都会先调用拦截器处理请求
+
+::code-group
+
+```java [DefaultFeignConfig.java]
+// 在 xxx-api 的 OpenFeign 配置类中定义拦截器
+
+public class DefaultFeignConfig {
+  // 拦截器配置
+  @Bean
+  public RequestInterceptor userInfoRequestInterceptor() {
+    return new RequestInterceptor() {
+      @Override
+      public void apply(RequestTemplate template) {
+        Long userId = UserContext.getUser();
+        if (userId != null) {
+          template.header("user-info", userId.toString());
+        }
+      }
+    }
+  }
+}
+```
+
+::
+
+::
