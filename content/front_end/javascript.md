@@ -615,6 +615,101 @@ Object.freeze() 与 Object.seal() 都只是浅层操作：嵌套对象内部的�
 
 ::
 
+## Promise
+
+Promise是一门新的技术（ES6规范），用于进行异步编程。
+
+**使用方法：**
+
+```JavaScript
+new Promise((resolve, reject) => {
+    //代码片段
+    resolve(res)
+    reject(err)
+})
+    .then(res => {
+        //代码片段
+    }, err => {
+        //代码片段
+    })
+```
+
+`resolve` 调用该函数则代表执行成功，跳出 Promise ，以 res 为参数执行 `.then` 中的第一个函数
+
+`reject` 调用该函数则代表执行失败，跳出 Promise ，以 err 为参数执行 `.then` 中的第二个函数
+
+常规情况下 `resolve` 与 `reject` 最终只调用其中一个
+
+**多层 Promise 调用**
+
+```JavaScript
+new Promise((resolve, reject) => {
+    console.log('进入第一层')
+    setTimeout(() => {
+        resolve("进入第二层")
+    }, 1000)
+})
+    .then(res => {
+        console.log(res)
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve("进入第三层")
+            }, 1000)
+        })
+    }, err => { })
+    .then(res => {
+        console.log(res)
+    })
+```
+
+可以在最后使用 `.catch` 统一处理错误，而不用对每个 Promise 均编写处理错误的函数:
+
+```JavaScript
+new Promise((resolve, reject) => {
+    console.log('进入第一层')
+    setTimeout(() => {
+        //reject("err")
+        resolve("进入第二层")
+    }, 1000)
+})
+    .then(res => {
+        console.log(res)
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                reject("err")
+                //resolve("进入第三层")
+            }, 1000)
+        })
+    })
+    .then(res => {
+        console.log(res)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+```
+
+**并行 Promise 调用**
+
+```JavaScript
+Promise.all([
+    new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve('这是第一个请求')
+        }, 1000)
+    }),
+    new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve('这是第二个请求')
+        }, 1000)
+    })
+]).then(res => {
+    console.log(res)
+})
+```
+
+其中 res 的值为一个数组，其值分别代表不同 Promise 的 `resolve` 传递值
+
 ## Common JS 与 ES 模块
 
 CommonJS 和 ES 模块（ESM）是 JavaScript 的两种模块系统，它们在语法、加载时机、特性等方面有明显区别。
