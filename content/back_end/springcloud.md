@@ -4,8 +4,6 @@
 
 ## 微服务
 
-微服务
-
 微服务是一种软件架构风格，它是以专注于单一职责的很多小型项目为基础，组合出复杂的大型应用
 
 - **单一架构**: 将业务的所有功能集中在一个项目中开发，打成一个包部署
@@ -871,3 +869,156 @@ public class DefaultFeignConfig {
 ```
 
 ::
+
+## 微服务保护
+
+### 雪崩问题
+
+微服务调用链路中的某个服务故障，引起整个链路中所有的微服务都不可用，这就是雪崩
+
+当出现以下状况时容易产生雪崩问题:
+
+- 微服务相互调用，服务提供者出现故障或阻塞
+
+- 服务调用者没有做好异常处理，导致自身故障
+
+- 调用链中的所有服务级联失效，导致整个集群故障
+
+解决雪崩问题的常见方案:
+
+- 请求限流: 限制访问微服务的请求的并发量，避免服务因流量激增出现故障
+
+- 线程隔离: 也叫做舱壁模式，模拟船舱隔板的防水原理。通过限定每个业务能使用的线程数量而将故障业务隔离，避免故障扩散
+
+- 服务熔断: 由断路器统计请求的异常比例或慢调用比例，如果超出阈值则会熔断该业务，则拦截该接口的请求；熔断期间，所有请求快速失败，全都走 fallback 逻辑
+
+- 失败处理: 定义 fallback 逻辑，让业务失败时不再抛出异常，而是返回默认数据或友好提示
+
+### 服务保护技术
+
+|          |                    Sentinel                    |           Hystrix            |
+| :------: | :--------------------------------------------: | :--------------------------: |
+| 线程隔离 |                   信号量隔离                   |    线程池隔离/信号量隔离     |
+| 熔断策略 |              基于慢调用或异常比例              |         基于异常比率         |
+|   限流   |            基于 QPS ，支持流量整型             |          优先的支持          |
+| Fallback |                      支持                      |             支持             |
+|  控制台  | 开箱即用，可配置规则，查看秒级监控、机器发现等 |            不完善            |
+| 配置方式 |             基于控制台，重启后失效             | 基于注解或配置文件，永久生效 |
+
+## Sentinel
+
+Sentinel 是阿里巴巴开源的一款微服务流量控制组件，官网地址: https://sentinelguard.io/zh-cn/index.html
+
+启动控制台需要从官网中下载 jar 包并运行
+
+在 Spring 项目中整合 sentinel，需要引入 sentinel 依赖:
+
+```xml
+<dependency>
+    <groupId>com.alibaba.cloud</groupId>
+    <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+</dependency>
+```
+
+然后修改 application.yml 文件，添加以下内容:
+
+```yml
+spring:
+  cloud:
+    sentinel:
+      transport:
+        dashboard: localhost:8090 # sentinel 的控制台地址
+```
+
+### 簇点链路
+
+簇点链路，就是单机调用链路，是依次请求进入服务后经过的每一个被 Sentinel 监控的资源链。默认 Sentinel 会监控 SpringMVC 的每一个 EndPoint(http 接口)。限流、熔断等都是针对簇点链路中的资源设置的。而资源名默认就是按接口的请求路径
+
+Restful 风格的 API 请求路径一般都相同，这会导致簇点资源名称重复。因此我们要修改配置，把请求方式 + 请求路径作为簇点资源名称:
+
+```yml
+spring:
+  cloud:
+    sentinel:
+      transport:
+        dashboard: localhost:8090
+      http-method-specify: true # 开启请求方式前缀
+```
+
+### 请求限流
+
+在控制台的簇点链路后面点击流控按钮，即可对其做限流配置
+
+![请求限流](/images/content/back-end/springcloud/request-rate-limiting.png)
+
+### 线程隔离
+
+当商品服务出现阻塞或故障时，调用商品服务的购物车服务可能因此被拖慢，甚至资源耗尽。所以必须限制购物车服务中查询商品这个业务的可用线程数，实现线程隔离
+
+在 sentinel 控制台中，会出现 Feign 接口的簇点资源，点击后面的流控按钮，并设置阈值类型为并发线程数，即可配置线程隔离
+
+### Fallback
+
+1. 将 FeignClient 作为 Sentinel 的簇点资源
+
+```yml
+feign:
+  sentinel:
+    enabled: true
+```
+
+2. 配置 FeignClient 的 Fallback
+
+::code-group
+
+```java [ItemClientFallbackFactory.java]
+// 自定义类，实现 FallbackFactory，编写对某个 FeignClient 的 fallback 逻辑
+
+@Slf4j
+public class ItemClientFallbackFactory implements FallbackFactory<ItemClient> {
+  @Override
+  public ItemClient create(Throwable throwable) {
+    // 创建 UserClient 接口实现类，实现其中的方法，编写失败降级的处理逻辑
+    return new ItemClient() {
+      @Override
+      public List<ItemDTO> queryItemByIds(Collection<Long> ids) {
+        log.error("查询商品失败!", throwable)
+        return CollUtils.emptyList();
+      }
+
+      @Override
+      public void deductStock(List<OrderDetailDTO> items) {
+        log.error("扣减商品库存失败! ", cause);
+        throw new RuntimeException(cause);
+      }
+    }
+  }
+
+  // 将刚刚定义的 ItemClientFallbackFactory 注册为一个 Bean
+  @Bean
+  public ItemClientFallbackFactory itemClientFallbackFactory() {
+    return new ItemClientFallbackFactory()
+  }
+}
+```
+
+```java [ItemClient.java]
+// 在 ItemClient 接口中使用 ItemClientFallbackFactory
+
+@FeignClient(value = "item-service", fallbackFactory = ItemClientFallbackFactory.class)
+public interface ItemClient {
+  @GetMapping("/items")
+  List<ItemDTO> queryItemByIds(@RequestParam("ids") Collection<Long> ids);
+
+  @PutMapping("/items/stock/deduct")
+  void deductStock(@RequestBody List<OrderDetailDTO> items)
+}
+```
+
+::
+
+### 服务熔断
+
+思路是由断路器统计服务调用发异常比例、慢请求比例，如果超出阈值则会熔断该服务。即拦截访问该服务的一切请求；而当服务恢复时，断路器会放行访问该请求的服务
+
+在控制台中点击簇点资源后的熔断按钮，即可配置熔断策略
