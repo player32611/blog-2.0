@@ -1022,3 +1022,148 @@ public interface ItemClient {
 思路是由断路器统计服务调用发异常比例、慢请求比例，如果超出阈值则会熔断该服务。即拦截访问该服务的一切请求；而当服务恢复时，断路器会放行访问该请求的服务
 
 在控制台中点击簇点资源后的熔断按钮，即可配置熔断策略
+
+## 分布式事务
+
+在分布式系统中，如果一个业务需要多个服务合作完成，而且每一个服务都有事务，多个事务必须同时成功或 失败，这样的事务就是分布式事务。其中的每个服务的事务就是一个分支事务。整个业务称为全局事务
+
+解决分布式事务，各个子事务之间必须能感知到彼此的事务状态，才能保证状态一致
+
+官网地址: https://seata.apache.org/zh-cn/
+
+### Seata
+
+Seata 致力于提高性能和简单易用的分布式事务服务，为用户打造一站式的分布式解决方案
+
+Seata 事务管理中有三个重要的角色:
+
+- TC(Transcation Coordinator) 事务协调者: 维护全局和分支事务的状态，协调全局事务提交或回滚
+
+- TM(Transaction Manager) 事务管理器: 定义全局事务的范围，开始全局事务，提交或回滚全局事务
+
+- RM(Resource Manager) 资源管理器: 管理分支事务，与 TC 交谈以注册分支事务和报告分支事务的状态
+
+首先要在项目中引入 Seata 依赖:
+
+```xml
+<dependency>
+    <groupId>com.alibaba.cloud</groupId>
+    <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
+</dependency>
+```
+
+::tip
+
+所有需要使用 seata 进行分布式事务管理的微服务都需要引入依赖
+
+::
+
+然后，在 application.yml 中添加配置，让微服务找到 TC 服务地址
+
+```yml
+seata:
+  registry: # 注册中心的配置，微服务根据这些信息去注册中心获取 TC 服务地址
+    type: nacos # 注册中心类型
+    nacos:
+      application: seara-server # seata 服务名称
+      server-addr: nacos:8848 # nacos 地址
+      group: DEFAULT_GROUP
+      namespace: ""
+      username: nacos
+      password: nacos
+  tx-service-group: my_test_tx_group # 事务分组名称，非常重要，需与配置中心里的映射保持一致
+  service:
+    vgroup-mapping: # 事务组与 tc 集群的映射关系
+      my_test_tx_group: default
+```
+
+::tip
+
+所有需要使用 seata 进行分布式事务管理的微服务都需要进行以上配置，建议在 nacos 中共享配置
+
+::
+
+### XA 模式
+
+XA 规范是 X/Open 组织定义的分布式事务处理 (DTP, Distributed Transaction Processing) 标准，XA 规范描述了全局的 TM 与局部的 RM 之间的接口，几乎所有主流的关系型数据库都对 XA 规范提供了支持
+
+::tip
+
+XA 模式的优点
+
+- 事务的强一致性，满足 ACID 原则
+
+- 常用数据库都支持，实现简单，并且没有代码侵入
+
+::
+
+::warning
+
+XA 模式的缺点
+
+- 因为一阶段需要锁定数据库资源，等待二阶段结束才释放，性能较差
+
+- 依赖关系型数据库实现事务
+
+::
+
+1. 修改 application.yml 文件(每个参数事务的微服务)，开启 XA 模式
+
+```yml
+seata:
+  data-source-proxy-mode: XA
+```
+
+2. 给发起全局事务的入口方法添加 `@GlobalTransactional` 注解
+
+```java
+@Override
+@GlobalTransactional
+public Long createOrder(OrderFormDTO order) {
+  // 事务逻辑
+}
+```
+
+### AT 模式
+
+Seata 主推的是 AT 模式，AT 模式同样是分阶段提交的事务模型，不过弥补了 XA 模型中资源锁定周期过长的缺陷
+
+::tip
+
+AT 模式与 XA 模式最大的区别
+
+- XA 模式一阶段不提交事务，而是锁定资源；AT 模式一阶段直接提交，不锁定资源
+
+- XA 模式依赖数据库机制实现回滚；AT 模式利用数据快照实现数据回滚
+
+- XA 模式强一致；AT 模式最终一致
+
+::
+
+实现 AT 模式，需要先在**每个**参与事务的业务数据库中创建 undo_log 表
+
+```sql
+-- 注意此处0.3.0+ 增加唯一索引 ux_undo_log
+CREATE TABLE `undo_log` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `branch_id` bigint(20) NOT NULL,
+  `xid` varchar(100) NOT NULL,
+  `context` varchar(128) NOT NULL,
+  `rollback_info` longblob NOT NULL,
+  `log_status` int(11) NOT NULL,
+  `log_created` datetime NOT NULL,
+  `log_modified` datetime NOT NULL,
+  `ext` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ux_undo_log` (`xid`,`branch_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+```
+
+然后，对每个参数事务的微服务修改 application.yml 文件，将事务模式修改为 AT 模式
+
+```yml
+seata:
+  data-source-proxy-mode: AT
+```
+
+最后给发起全局事务的入口方法添加 `@GlobalTransactional` 注解
