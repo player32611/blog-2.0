@@ -1167,3 +1167,61 @@ seata:
 ```
 
 最后给发起全局事务的入口方法添加 `@GlobalTransactional` 注解
+
+## MQ
+
+MQ(MessageQueue) 消息队列，就是异步调用中的 Broker
+
+同步调用: 时效性强，等到结果后才返回；但扩展性差，性能下降，导致级联失败问题
+
+异步调用: 通常是基于消息通知的方式，包含三个角色:
+
+- 消息发送者: 投递消息的人，就是原来的调用者
+
+- 消息接收者: 接收和处理消息的人，就是原来的服务提供者
+
+- 消息代理: 管理、暂存、转发消息
+
+异步调用具有解除耦合、扩展性强，无需等待、性能好，故障隔离，缓存消息、流量削峰填谷的优势；但不能立即得到调用结果、时效性差，不确定下游业务执行是否成功，且业务安全依赖于 Broker 的可靠性
+
+### MQ 技术选型
+
+|            |        RabbitMQ         |             ActiveMQ              |  RocketMQ  |   Kafka    |
+| :--------: | :---------------------: | :-------------------------------: | :--------: | :--------: |
+| 公司/社区  |         Rabbit          |              Apache               |    阿里    |   Apache   |
+|  开发语言  |         Erlang          |               Java                |    Java    | Scala&Java |
+|  协议支持  | AMQP、XMPP、SMTP、STOMP | OpenWire、STOMP、REST、XMPP、AMQP | 自定义协议 | 自定义协议 |
+|   可用性   |           高            |               一般                |     高     |     高     |
+| 单机吞吐量 |          一般           |                差                 |     高     |   非常高   |
+|  消息延迟  |         微秒级          |              毫秒级               |   毫秒级   |  毫秒以内  |
+| 消息可靠性 |           高            |               一般                |     高     |    一般    |
+
+### RabbitMQ
+
+RabbitMQ 整体架构包含:
+
+- publisher: 消息发送者
+
+- consumer: 消息的消费者
+
+- queue: 队列，存储消息
+
+- exchange: 交换机，负责路由消息
+
+- virtual-host: 虚拟主机，起到数据隔离的作用
+
+官网地址: https://www.rabbitmq.com/
+
+本地开发可以使用 Docker 启动 RabbitMQ，并启用管理后台:
+
+```bash
+docker run -d \
+  --name rabbitmq \
+  -p 5672:5672 \
+  -p 15672:15672 \
+  rabbitmq:management
+```
+
+- 5672: 应用程序连接 RabbitMQ 的 AMQP 端口。
+
+- 15672: 管理后台端口。
