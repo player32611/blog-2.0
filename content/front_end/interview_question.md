@@ -838,7 +838,7 @@ console.log(b);
 > JS 判空不能简单使用 !value，因为 0、false、NaN 等也是 falsy，而空数组、空对象、空 Map、空 Set 都是 truthy。对于 null 和 undefined 可以使用 value == null；字符串判断 value === '' 或 trim() === ''；数组判断 length === 0；普通对象使用 Object.keys(value).length === 0；Map 和 Set 使用 size === 0。如果业务上 0 不是空值，就不能使用 !value 统一判断。
 
 ```javascript
-function isEmoty(val) {
+function isEmpty(val) {
 	// 基础空值
 	if (val === undefined || val === null) return true;
 
@@ -2867,7 +2867,7 @@ function App() {
 
 > JSX 是 JavaScript 的一种语法扩展，它允许我们在 JavaScript 中使用类似 HTML 的语法来描述 UI。JSX 本身不是 HTML，也不是浏览器原生支持的 JavaScript 语法，需要经过编译转换成 JavaScript。JavaScript 是一种完整的编程语言，而 JSX 只是 JavaScript 的语法扩展。React 中通常使用 JSX 来声明组件的 UI 结构，同时可以通过 {} 在 JSX 中嵌入 JavaScript 表达式
 
-**JSX（JavaScript XML）**是一种 JavaScript 的语法扩展(语法糖)，允许我们在 JavaScript 中使用类似 HTML 的语法描述 UI。需要通过 webpack、babel 编译后转化为 js 执行
+**JSX(JavaScript XML)** 是一种 JavaScript 的语法扩展(语法糖)，允许我们在 JavaScript 中使用类似 HTML 的语法描述 UI。需要通过 webpack、babel 编译后转化为 js 执行
 
 ::code-group
 
