@@ -1196,6 +1196,14 @@ MQ(MessageQueue) 消息队列，就是异步调用中的 Broker
 |  消息延迟  |         微秒级          |              毫秒级               |   毫秒级   |  毫秒以内  |
 | 消息可靠性 |           高            |               一般                |     高     |    一般    |
 
+::tip
+
+AMQP
+
+**AMQP(Advanced Message Queuing Protocol)**，是用于在应用程序之间传递业务消息的开放流程，该协议与语言和平台无关，更符合微服务中独立性的要求
+
+::
+
 ### RabbitMQ
 
 RabbitMQ 整体架构包含:
@@ -1206,7 +1214,10 @@ RabbitMQ 整体架构包含:
 
 - queue: 队列，存储消息
 
-- exchange: 交换机，负责路由消息
+- exchange: 交换机，主要是接收发送者发送的消息，并将消息路由到与其绑定的队列
+  - Fanout: 广播交换机，会将消息路由到每个绑定的队列
+  - Direct: 定向交换机，根据 RoutingKey 判断路由给哪个路由(如果多个队列具有相同 RoutingKey，则与 Fanout 功能类似)
+  - Topic: 话题交换机，RoutingKey 和 bindingKey 可以是多个单词，以 `.` 分割
 
 - virtual-host: 虚拟主机，起到数据隔离的作用
 
@@ -1225,3 +1236,322 @@ docker run -d \
 - 5672: 应用程序连接 RabbitMQ 的 AMQP 端口。
 
 - 15672: 管理后台端口。
+
+::tip
+
+消息发送的注意事项
+
+- 交换机只能路由消息，无法存储消息
+
+- 交换机只会路由消息给与其绑定的队列，因此队列必须与交换机绑定
+
+::
+
+### Spring AMQP
+
+Spring AMQP 是基于 AMQP 协议定义的一套 API 规范，提供了模板来发送和接收消息。包含两部分，其中 spring-amqp 是基础抽象，spring-rabbit 是底层的默认实现
+
+1. 引入 spring-amqp 依赖
+
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-amqp</artifactId>
+</dependency>
+```
+
+2. 在每个微服务中配置 RabbitMQ 服务端信息
+
+```yml
+spring:
+  rabbitmq:
+    host: 192.168.150.101 # 主机名
+    port: 5671 # 端口
+    virtual-host: /hmall # 虚拟主机名
+    username: hmall # 用户名
+    password: 123 # 密码
+```
+
+3. 使用 `RabbitTemplate` 工具类发送消息
+
+```java
+@Autowired
+private RabbitTemplate rabbitTemplate;
+
+@Test
+public void testSimpleQueue() {
+  String queueName = "simple.queue" // 队列名称
+  String message = "hello" // 消息内容
+  rabbitTemplate.convertAndSend(queueName, message) // 发送消息
+}
+```
+
+4. 通过注解在方法上声明要监听的队列名称来接收消息
+
+```java
+@Slf4j
+@Component
+public class SpringRabbitListener {
+
+  @RabbitListener(queues = "simple.queue")
+  public void listenSimpleQueueMessage(String msg) throws InterruptedException {
+    log.info("spring 消费者接收到消息: [" + msg + "]");
+  }
+}
+```
+
+::warning
+
+需先在控制台中创建队列 simple.queue
+
+::
+
+::warning
+
+同一条消息只会被一个消费者处理
+
+::
+
+### Work Queues
+
+Work Queues(任务模型) 就是让多个消费者绑定到一个队列，共同消费队列中的消息，可以加快消息处理速度
+
+::code-group
+
+```java [发送者]
+@Test
+public void testWorkQueue() {
+  String queueName = "work.queue" // 队列名称
+  for(int i = 1; i <= 50; i++) {
+      String message = "hello" + i // 消息内容
+        rabbitTemplate.convertAndSend(queueName, message) // 发送消息
+  }
+}
+```
+
+```java [消费者]
+@Slf4j
+@Component
+public class SpringRabbitListener {
+
+  @RabbitListener(queues = "work.queue")
+  public void listenWorkQueue1(String msg) throws InterruptedException {
+    log.info("spring 消费者 1 接收到消息: [" + msg + "]" + ", " + LocalTime.now());
+    Thread.sleep(25)
+  }
+
+  @RabbitListener(queues = "work.queue")
+  public void listenWorkQueue2(String msg) throws InterruptedException {
+    log.info("spring 消费者 2 接收到消息: [" + msg + "]" + ", " + LocalTime.now());
+    Thread.sleep(20)
+  }
+}
+```
+
+::
+
+默认情况下，RabbitMQ 会将消息一次轮询投递给绑定在队列上的每一个消费者。但这并没有考虑到消费者是否已经处理完消息，可能出现消息堆积
+
+因此我们需要修改 application.yml，设置 preFetch 值为 1，确保同一时刻最多投递给消费者 1 条消息
+
+```yml
+spring:
+  rabbitmq:
+    listener:
+      simple:
+        prefetch: 1 # 每次只能获取一条消息，处理完成才能获取下一个消息
+```
+
+::tip
+
+实际代码中只会编写一个消费者，当在不同服务器上部署时才会存在多个消费者
+
+::
+
+### Fanout 交换机
+
+Fanout Exchange 会将接收到的消息路由到每一个跟其绑定的 queue，所以也叫广播模式
+
+::code-group
+
+```java [发送者]
+@Test
+public void testFanoutQueue() {
+  String exchangeName = "hmall.fanout" // 交换机名称
+  String message = "hello" // 消息内容
+  rabbitTemplate.convertAndSend(exchangeName, null, message) // 发送消息，参数: 交换机名称、Routing Key、消息
+}
+```
+
+```java [消费者]
+@Slf4j
+@Component
+public class SpringRabbitListener {
+
+  @RabbitListener(queues = "fanout.queue1")
+  public void listenFanoutQueue1(String msg) throws InterruptedException {
+    log.info("spring 消费者 1 接收到消息: [" + msg + "]" + ", " + LocalTime.now());
+  }
+
+  @RabbitListener(queues = "fanout.queue2")
+  public void listenFanoutQueue2(String msg) throws InterruptedException {
+    log.info("spring 消费者 2 接收到消息: [" + msg + "]" + ", " + LocalTime.now());
+  }
+}
+```
+
+::
+
+::warning
+
+需先将 hmall.fanout 交换机与 fanout.queue1 和 fanout.queue2 队列绑定
+
+::
+
+### Direct 交换机
+
+Direct Exchange 会将接收到的消息根据规则路由到指定的 Queue，因此称为定向路由
+
+- 每一个 Queue 都与 Exchange 设置一个 BindingKey
+
+- 发布者发送消息时，指定消息的 RoutingKey
+
+- Exchange 将消息路由到 BindingKey 与消息 RoutingKey 一致的队列
+
+::code-group
+
+```java [发送者]
+@Test
+public void testDirectQueue() {
+  String exchangeName = "hmall.direct" // 交换机名称
+  String message = "hello" // 消息内容
+  rabbitTemplate.convertAndSend(exchangeName, "red", message) // 发送消息，参数: 交换机名称、Routing Key、消息
+}
+```
+
+```java [消费者]
+@Slf4j
+@Component
+public class SpringRabbitListener {
+
+  @RabbitListener(queues = "direct.queue1")
+  public void listenDirectQueue1(String msg) throws InterruptedException {
+    log.info("spring 消费者 1 接收到消息: [" + msg + "]" + ", " + LocalTime.now());
+  }
+
+  @RabbitListener(queues = "direct.queue2")
+  public void listenDirectQueue2(String msg) throws InterruptedException {
+    log.info("spring 消费者 2 接收到消息: [" + msg + "]" + ", " + LocalTime.now());
+  }
+}
+```
+
+::
+
+::warning
+
+需先将 hmall.direct 交换机与 direct.queue1 和 direct.queue2 队列绑定，并设置 Routing Key
+
+::
+
+### Topic 交换机
+
+Topic Exchange 也是基于 Routing Key 做消息路由，但是 Routing Key 通常是多个单词的组合，并且以 `.` 分割
+
+Queue 与 Exchange 指定 BindingKey 时可以使用通配符
+
+- `#`: 代指 0 个或多个单词
+
+- `*`: 代指一个单词
+
+::code-group
+
+```java [发送者]
+@Test
+public void testTopicQueue() {
+  String exchangeName = "hmall.topic" // 交换机名称
+  String message = "hello" // 消息内容
+  rabbitTemplate.convertAndSend(exchangeName, "china.news", message) // 发送消息，参数: 交换机名称、Routing Key、消息
+}
+```
+
+```java [消费者]
+@Slf4j
+@Component
+public class SpringRabbitListener {
+
+  @RabbitListener(queues = "topic.queue1")
+  public void listenTopicQueue1(String msg) throws InterruptedException {
+    log.info("spring 消费者 1 接收到消息: [" + msg + "]" + ", " + LocalTime.now());
+  }
+
+  @RabbitListener(queues = "topic.queue2")
+  public void listenTopicQueue2(String msg) throws InterruptedException {
+    log.info("spring 消费者 2 接收到消息: [" + msg + "]" + ", " + LocalTime.now());
+  }
+}
+```
+
+::
+
+::warning
+
+需先将 hmall.topic 交换机与 topic.queue1 和 topic.queue2 队列绑定，并设置 Routing Key (`chain.#`、`#.news`)
+
+::
+
+### 代码声明队列交换机
+
+Spring AMQP 提供了几个类，用来声明队列、交换机及其绑定关系:
+
+- Queue: 用于声明队列，可以用工厂类 QueueBuilder 构建
+
+- Exchange: 用于声明交换机，可以用工厂类 ExchangeBuilder 构建
+
+- Binding: 用于声明队列和交换机的绑定关系，可以用工厂类 BindingBuilder 构建
+
+```java
+@Configuration
+public class FanoutConfig {
+  // 声明 FanoutExchange 交换机
+  @Bean
+  public FanoutExchange fanoutExchange() {
+    // return ExchangeBuilder.fanoutExchange("hmall.fanout").build();
+    return new FanoutExchange("hmall.fanout");
+  }
+
+  // 声明队列
+  @Bean
+  public Queue fanoutQueue1() {
+    // return QueueBuilder.durable("hmall.fanout").build();
+    return new Queue("fanout.queue1");
+  }
+
+  // 绑定队列和交换机
+  @Bean
+  public Binding bindingQueue(Queue fanoutQueue, FanoutExchange fanoutExchange) {
+    return BindingBuilder.bind(fanoutQueue).to(fanoutExchange)
+  }
+}
+```
+
+::tip
+
+基于注解声明队列和交换机
+
+Spring AMQP 还提供了基于 `@RabbitListener` 注解来声明队列和交换机的方式
+
+```java
+@RabbitListener(bindings = @QueueBinding(
+  value = @Queue(name = "direct.queue1"),
+  exchange = @Exchange(name = "itcast.direct", type = ExchangeTypes.DIRECT),
+  key = {"red", "blue"}
+))
+public void listenDirectQueue1(String msg) {
+  System.out.println("消费者 1 接收到 Direct 消息: [" + msg + "]");
+}
+```
+
+::
+
+### 消息转换器
