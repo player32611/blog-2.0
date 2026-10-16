@@ -1581,11 +1581,53 @@ public void testSendObject() {
 </dependency>
 ```
 
-```java [MessageConverter.java]
-@Bean
-public MessageConverter messageConverter() {
-  return new Jackson2JsonMessageConverter();
+```java [MqConfig.java]
+@Configuration
+public class MqConfig {
+
+  @Bean
+  public MessageConverter messageConverter() {
+    return new Jackson2JsonMessageConverter();
+  }
 }
 ```
 
 ::
+
+### MQ 高级
+
+::danger
+
+该部分尚未完工
+
+::
+
+## Elasticsearch 与 Kibana
+
+Elasticsearch 是一个开源的、分布式的搜索和分析引擎，常用于对大规模文本数据进行全文搜索、结构化搜索和数据分析
+
+官网地址: https://www.elastic.co/cn/elasticsearch
+
+Kibana 是一个开源的数据可视化和探索工具，主要用于配合 Elasticsearch 使用
+
+::tip
+
+Lucene
+
+Lucene 是一个 Java 语言的搜索引擎类库，是 Apache 公司的顶级项目，是 Elasticsearch、Solr 等搜索系统的底层核心
+
+官网地址: https://lucene.apache.org/
+
+::
+
+::tip
+
+Elasticsearch 的优势
+
+- 支持分布式，可水平扩展
+
+- 提供 Restful 接口，可被任何语言调用
+
+::
+
+Elasticsearch 结合 kibana、Logstash、Beats，是一整套技术栈，被叫做 ELK。被广泛应用在日志数据分析、实时监控等领域
