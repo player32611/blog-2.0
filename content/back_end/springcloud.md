@@ -1555,3 +1555,37 @@ public void listenDirectQueue1(String msg) {
 ::
 
 ### 消息转换器
+
+Spring 对消息对象的处理是由 org.springframework.amqp.support.converter.MessageConverter 来处理的。而默认实现是 SimpleMessageConverter，基于 JDK 的 ObjectOutputStream 完成序列化。但存在安全风险，具有消息太大，可读性差的问题
+
+```java
+@Test
+public void testSendObject() {
+  // 准备消息
+  Map<String, Object> msg = new HashMap<>(2);
+  msg.put("name", "Jack");
+  msg.put("age", 21);
+
+  rabbitTemplate.converAndSend("object.queue", msg); // 发送消息
+}
+```
+
+建议采用 JSON 序列化代替默认的 JDK 序列化
+
+::code-group
+
+```xml [pom.xml]
+<dependency>
+  <groupId>com.fasterxml.jackson.core</groupId>
+  <artifactId>jackson-databind</artifactId>
+</dependency>
+```
+
+```java [MessageConverter.java]
+@Bean
+public MessageConverter messageConverter() {
+  return new Jackson2JsonMessageConverter();
+}
+```
+
+::
