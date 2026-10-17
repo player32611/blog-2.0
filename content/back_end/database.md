@@ -603,6 +603,234 @@ Redis 的通用命令是不分数据类型的，都可以使用的命令
 
 ::
 
+## Elasticsearch 与 Kibana
+
+Elasticsearch 是一个开源的、分布式的搜索和分析引擎，常用于对大规模文本数据进行全文搜索、结构化搜索和数据分析
+
+官网地址: https://www.elastic.co/cn/elasticsearch
+
+Kibana 是一个开源的数据可视化和探索工具，主要用于配合 Elasticsearch 使用
+
+::tip
+
+Lucene
+
+Lucene 是一个 Java 语言的搜索引擎类库，是 Apache 公司的顶级项目，是 Elasticsearch、Solr 等搜索系统的底层核心
+
+官网地址: https://lucene.apache.org/
+
+::
+
+::tip
+
+Elasticsearch 的优势
+
+- 支持分布式，可水平扩展
+
+- 提供 Restful 接口，可被任何语言调用
+
+::
+
+Elasticsearch 结合 kibana、Logstash、Beats，是一整套技术栈，被叫做 ELK。被广泛应用在日志数据分析、实时监控等领域
+
+### 倒排索引
+
+传统数据库(如 MySQL) 采用正向索引，Elasticsearch 采用倒排索引
+
+- 文档(document): 每条数据就是一个文档，对应 MySQL 的 Row(行)
+
+- 词条(term): 文档按照语义分成的词语
+
+::tip
+
+正向索引与倒排索引
+
+- 正向索引: 基于文档 id 创建索引。根据 id 查询快，但是查询词条时必须先找到文档，而后判断是否包含词条
+
+- 倒排索引: 对文档内容分词，对词条创建索引，并记录词条所在文档的 id。查询时先根据词条查询到文档 id，而后根据文档 id 查询文档
+
+::
+
+::detail
+
+#title
+具体示例
+#default
+
+| id  |     title      | price |
+| :-: | :------------: | :---: |
+|  1  |    小米手机    | 3499  |
+|  2  |    华为手机    | 4999  |
+|  3  | 华为小米充电器 |  49   |
+|  4  |    小米手机    |  299  |
+
+|  词条  | 文档id |
+| :----: | :----: |
+|  小米  | 1,3,4  |
+|  手机  |  1,2   |
+|  华为  |  2,3   |
+| 充电器 |   3    |
+|  手环  |   4    |
+
+::
+
+### IK 分词器
+
+中文分词往往需要根据语义分析，比较复杂，这就需要用到中文分词器，例如 IK 分词器
+
+在 Kibana 的 DevTools 中可以使用下面的语法来测试 IK 分词器
+
+::code-group
+
+```dsl [standard]
+POST /_analyze
+{
+  "analyzer": "standard",
+  "text": "专门用来快速查找和分析海量数据的数据库"
+}
+```
+
+```dsl [ik_smart]
+POST /_analyze
+{
+  "analyzer": "ik_smart",
+  "text": "专门用来快速查找和分析海量数据的数据库"
+}
+```
+
+```dsl [ik_smart]
+POST /_analyze
+{
+  "analyzer": "ik_max_word",
+  "text": "专门用来快速查找和分析海量数据的数据库"
+}
+```
+
+::
+
+- POST: 请求方式
+
+- `/_analyze`: 请求路径，省略了协议、IP 与端口号
+
+- 请求参数，json 风格
+  - analyzer: 分词器类型，standard 分词器分词英文，ik_smart 智能切分，ik_max_word 最细切分
+  - text: 要分词的内容
+
+::tip
+
+IK 分词器允许我们配置扩展词典来增加自定义的词库
+
+::
+
+### 基本概念
+
+Elasticsearch 中的文档数据会被序列化为 json 格式后存储在 Elasticsearch 中
+
+索引(index): 相同类型的文档的集合，对应 MsSQL 的 Table(表)
+
+映射(mapping): 索引中文档的字段约束信息，类似表的结构约束，对应 MySQL 的 Schema(表结构)
+
+文档(document): 每条数据就是一个文档，对应 MySQL 的 Row(行)
+
+字段(field): JSON 文档中的字段，类似 MySQL 中的 Column(列)
+
+DSL: 是 Elasticsearch 提供的 JSON 风格的请求语句，用来定义搜索条件，类似 MySQL 中的 SQL 语句
+
+### Mapping 映射属性
+
+mapping 是对索引库中文档的约束，常见的 mapping 属性包括:
+
+- type: 字段数据类型，常见的简单类型有:
+  - 字符串: text(可分词的文本)、keyword(精确值，例如: 品牌名、国家、ip 地址等不进行分词的文本)
+  - 数值: long、integer、short、byte、double、float
+  - 布尔: boolean
+  - 日期: date
+  - 对象: object
+- index: 是否创建索引，默认为 true
+- analyzer: 使用哪种分词器
+- properties: 该字段的子字段
+
+```json
+{
+	"age": 21, // byte
+	"weight": 52.1, // float
+	"isMarried": false, // boolean
+	"info": "高级程序员", // text
+	"email": "zy@xxx.cm", // keyword
+	"score": [99.1, 99.5, 98.9], // float
+	"name": {
+		"firstName": "云", // keyword
+		"lastName": "赵" // keyword
+	}
+}
+```
+
+::tip
+
+对于数组类型，只需指定数组元素类型
+
+::
+
+### 索引库操作
+
+Elasticsearch 提供的所有 API 都是 Restful 的接口，遵循 Restful 的基本规范。创建索引库和 mapping 的请求语法如下:
+
+::code-group
+
+```dsl [创建索引库]
+PUT /索引库名称
+{
+  "mappings": {
+    "properties": {
+      "字段名": {
+        "type": "text",
+        "analyzer": "ik_smart"
+      },
+      "字段名2": {
+        "type": "keyword",
+        "index": "false"
+      },
+      "字段名3": {
+        "type": "object",
+        "properties": {
+          "子字段": {
+            "type": "keyword"
+          }
+        }
+      },
+      // 略...
+    }
+  }
+}
+```
+
+```dsl [查询索引库]
+GET /索引库名称
+```
+
+```dsl [删除索引库]
+DELETE /索引库名称
+```
+
+```dsl [修改索引库]
+PUT /索引库名/_mapping
+{
+  "properties": {
+    "新字段名": {
+      "type": "integer"
+    }
+  }
+}
+```
+
+::
+
+::tip
+
+索引库和 mapping 一旦创建无法修改，但是可以添加新的字段
+
+::
+
 ## JDBC(java 数据库驱动)
 
 **JDBC**（Java DataBase Connectivity），就是使用 Java 语言操作关系型数据库的一套 API
