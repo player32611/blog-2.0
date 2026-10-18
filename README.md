@@ -8,7 +8,7 @@
 
 ## ✨ 项目亮点
 
-- **内容驱动架构** — 基于 Nuxt Content 3，Markdown 文件即内容，五大分类自动收集；提供提示框、代码组、折叠详情等自定义渲染组件，并支持 Shiki 代码高亮与目录（TOC）自动生成。
+- **内容驱动架构** — 基于 Nuxt Content 3，Markdown 文件即内容，五大分类自动收集；提供提示框、代码组、折叠详情等自定义渲染组件，并支持 Shiki 代码高亮、KaTeX 数学公式渲染与目录（TOC）自动生成。
 - **全局加载动画系统** — 每次路由切换都经过统一的加载过渡动画，由 `loadingStore` 状态机 + 全局中间件 + `usePageReady` 组合式函数 + `Loading` 组件协同完成，形成完整闭环。
 - **GSAP 动画体系** — 使用 ScrollSmoother 实现文章页平滑滚动、ScrollTrigger 驱动滚动触发动画，配合 timeline 编排，动画自然流畅。
 - **WebGL 着色器特效** — 通过 Three.js + 自定义 GLSL（VCR 扭曲、雪花飘落）实现实时 GPU 渲染的复古 CRT 故障效果。
@@ -38,6 +38,11 @@
 - [Vue 3](https://vuejs.org/) — Composition API + TypeScript
 - [Nuxt Content 3](https://content.nuxt.com/) — 内容管理系统
 - [Pinia 3](https://pinia.vuejs.org/) — 状态管理
+
+### 内容渲染
+
+- [Shiki](https://shiki.style/) — 代码语法高亮
+- [KaTeX](https://katex.org/) — 数学公式渲染（remark-math 解析 + rehype-katex 渲染）
 
 ### 动画与交互
 
@@ -198,9 +203,11 @@ content/
 
 若要新增分类，需同步修改 `content.config.ts`、`app/types/config.ts`、`app/utils/config.ts` 三处配置。
 
-### 代码高亮
+### 代码高亮与数学公式
 
-使用 Shiki 高亮，主题为 `github-dark`，支持语言包括：bash、c、cpp、css、html、http、java、javascript、json、jsx、markdown、properties、python、sql、tsx、typescript、vue、xml、yaml 等。
+使用 Shiki 高亮，主题为 `github-dark`，支持语言包括：bash、c、cpp、css、html、http、java、javascript、json、jsx、markdown、md、properties、python、sql、tsx、typescript、vue、xml、yaml、yml 等。
+
+数学公式通过 `remark-math`（解析 `$...$` 与 `$$...$$` 语法）配合 `rehype-katex` 渲染为 MathML，并由 KaTeX 样式负责排版。
 
 ### Markdown 自定义组件
 
