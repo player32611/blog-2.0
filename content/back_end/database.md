@@ -605,21 +605,11 @@ Redis 的通用命令是不分数据类型的，都可以使用的命令
 
 ## Elasticsearch 与 Kibana
 
-Elasticsearch 是一个开源的、分布式的搜索和分析引擎，常用于对大规模文本数据进行全文搜索、结构化搜索和数据分析
+Elasticsearch 结合 kibana、Logstash、Beats，是一整套技术栈，被叫做 ELK。被广泛应用在日志数据分析、实时监控等领域，是一个开源的、分布式的搜索和分析引擎，常用于对大规模文本数据进行全文搜索、结构化搜索和数据分析
 
 官网地址: https://www.elastic.co/cn/elasticsearch
 
 Kibana 是一个开源的数据可视化和探索工具，主要用于配合 Elasticsearch 使用
-
-::tip
-
-Lucene
-
-Lucene 是一个 Java 语言的搜索引擎类库，是 Apache 公司的顶级项目，是 Elasticsearch、Solr 等搜索系统的底层核心
-
-官网地址: https://lucene.apache.org/
-
-::
 
 ::tip
 
@@ -631,7 +621,25 @@ Elasticsearch 的优势
 
 ::
 
-Elasticsearch 结合 kibana、Logstash、Beats，是一整套技术栈，被叫做 ELK。被广泛应用在日志数据分析、实时监控等领域
+::tip
+
+默认端口
+
+Kibana: 5601
+
+Elasticsearch: 9200
+
+::
+
+::tip
+
+Lucene
+
+Lucene 是一个 Java 语言的搜索引擎类库，是 Apache 公司的顶级项目，是 Elasticsearch、Solr 等搜索系统的底层核心
+
+官网地址: https://lucene.apache.org/
+
+::
 
 ### 倒排索引
 
@@ -830,6 +838,70 @@ PUT /索引库名/_mapping
 索引库和 mapping 一旦创建无法修改，但是可以添加新的字段
 
 ::
+
+### 文档操作
+
+::code-group
+
+```dsl [新增文档]
+POST /索引库名/_doc/文档id
+{
+  "字段1": "值1",
+  "字段2": "值2",
+  "字段3": {
+    "子属性1": "值3",
+    "子属性2": "值4",
+  }
+}
+```
+
+```dsl [查询文档]
+GET /索引库名/_doc/文档id
+```
+
+```dsl [删除文档]
+DELETE /索引库名/_doc/文档id
+```
+
+```dsl [修改文档-全量修改]
+// 全量修改，会删除旧文档，添加新文档
+PUT /索引库名/_doc/文档id
+{
+  "字段1": "值1",
+  "字段2": "值2",
+  "字段3": {
+    "子属性1": "值3",
+    "子属性2": "值4",
+  }
+}
+```
+
+```dsl [修改文档-增量修改]
+// 增量修改，只修改指定字段值
+POST /索引库名/_update/文档id
+{
+  "doc": {
+    "字段名": "新的值"
+  }
+}
+```
+
+::
+
+Elasticsearch 中允许通过一次请求中携带多次文档操作，也就是批量处理
+
+```dsl
+POST /_bulk
+{ "index": { "_index": "索引库名", "_id": "文档id" } }
+{ "字段1": "值1", "字段2": "值2" } // 查询操作
+{ "index": { "_index": "索引库名", "_id": "文档id" } }
+{ "字段1": "值1", "字段2": "值2" } // 查询操作
+{ "index": { "_index": "索引库名", "_id": "文档id" } }
+{ "字段1": "值1", "字段2": "值2" } // 查询操作
+{ "delete": { "_index": "索引库名", "_id": "文档id" } } // 删除操作
+{ "update": { "_id": "文档id", "_index": "索引库名" } }
+{ "doc": { "字段1": "值1" } } // 修改操作，增量修改
+```
 
 ## JDBC(java 数据库驱动)
 
@@ -2835,3 +2907,181 @@ void testStringTemplate() throws JsonProcessingException {
 | `RedisTemplate.opsForList()`  | ListOperations  |   操作 List 类型数据    |
 |  `RedisTemplate.opsForSet()`  |  SetOperations  |    操作 Set 类型数据    |
 | `RedisTemplate.opsForZSet()`  | ZSetOperations  | 操作 SortedSet 类型数据 |
+
+## JavaRestClient(java 数据库驱动)
+
+参考文档: https://www.elastic.co/docs/reference/elasticsearch/clients/java/setup/installation
+
+1. 引入依赖
+
+::code-group
+
+```xml [7.x 版本]
+<dependency>
+    <groupId>org.elasticsearch.client</groupId>
+    <artifactId>elasticsearch-rest-high-level-client</artifactId>
+</dependency>
+```
+
+```xml [9.x 版本]
+<dependency>
+    <groupId>co.elastic.clients</groupId>
+    <artifactId>elasticsearch-java</artifactId>
+</dependency>
+```
+
+::
+
+2. 初始化:
+
+::code-group
+
+```java [7.x 版本]
+RestHighLevelClient client = new RestHignLevelClient(RestClient.builder(
+  HttpHost.create('http://localhost:9200')
+))
+```
+
+```java [9.x 版本]
+ElasticsearchClient esClient = ElasticsearchClient.of(b -> b
+    .host("https://localhost:9200")
+    .apiKey(apiKey)
+);
+```
+
+::
+
+::warning
+
+客户端版本必须与 Elasticsearch 服务端版本保持一致，否则可能出现兼容性问题
+
+::
+
+### 索引库操作
+
+::code-group
+
+```java [7.x 版本]
+private RestHighLevelClient client;
+
+// 创建索引库
+@Test
+void testCreateHotelIndex() throws IOException {
+  CreateIndexRequest request = new CreateIndexRequest("索引库名"); // 创建 Request 对象
+  request.source(MAPPING_TEMPLATE, XContentType.JSON); // 设置请求参数，构建请求体
+  client.indices().create(request, RequestOptions.DEFAULT); // 发起请求
+}
+
+// 查询索引库
+@Test
+void testGetHotelIndex() throws IOException {
+  GetIndexRequest request = new GetIndexRequest("索引库名"); // 创建 Request 对象
+  client.indices().exists(request, RequestOptions.DEFAULT); // 发起请求，判断是否存在
+
+  System.out.println("exists = " + exists);
+}
+
+// 删除索引库
+@Test
+void testDeleteHotelIndex() throws IOException {
+  DeleteIndexRequest request = new DeleteIndexRequest("索引库名"); // 创建 Request 对象
+  client.indices().delete(request, RequestOptions.DEFAULT); // 发起请求
+}
+
+// 查询索引库信息
+@Test
+voiod testExistsHotelIndex() throws IOException {
+  GetIndexRequest request = new GetIndexRequest("索引库名"); // 创建 Request 对象
+  client.indices().get(request, RequestOptions.DEFAULT); // 发起请求
+}
+
+// 构造 JSON
+private static final String MAPPING_TEMPLATE = "{\n" +
+  "  \"mappings\": {\n" +
+  // ...
+  "}"
+```
+
+::
+
+### 文档操作
+
+::code-group
+
+```java [7.x 版本]
+private RestHighLevelClient client;
+private ItemService itemService;
+
+// 新增文档 && 修改文档-全量更新
+@Test
+void testIndexDocument() throws IOException {
+  Item item = itemService.getById("数据库项id"); // 准备文档数据
+  ItemDoc itemDoc = BeanUtil.copyProperties(item, ItemDoc.class); // 拷贝到 es 实体类
+  IndexRequest request = new IndexRequest("索引库名").id(itemDoc.getId()); // 创建 request 对象
+  request.source(JSONUtil.toJsonStr(itemDoc), XContentType.JSON); // 准备请求参数
+  client.index(request, RequestOptions.DEFAULT); // 发送请求
+}
+
+// 查询文档
+@Test
+void testGetDocument() throws IOException {
+  GetRequest request = new GetRequest("索引库名", "文档id"); // 创建 request 对象
+  client.get(request, RequestOptions.DEFAULT); // 发送请求，得到结果
+  String json = response.getSourceAsString(); // 解析结果
+
+  System.out.println(json);
+  // ItemDoc doc = JSONUtil.toBean(json, ItemDoc.class); // 封装为实体类
+}
+
+// 删除文档
+@Test
+void testDeleteDocument() throws IOException {
+  DeleteRequest request = new DeleteRequest("索引库名", "文档id"); // 创建 request 对象
+  client.delete(request, RequestOptions.DEFAULT); // 发送请求
+}
+
+// 修改文档-局部更新
+@Test
+void testUpdateDocument() throws IOException {
+  UpdateRequest request = new UpdateRequest("索引库名", "文档id"); // 创建 request 对象
+  request.doc(
+    "age", 18,
+    "name", "Rose"
+  )
+  client.update(request, RequestOptions.DEFAULT); // 发送请求
+}
+
+// 批处理
+@Test
+void testUpdateDocument() throws IOException {
+  // 准备数据
+  // int pageNo = 1, pageSize = 500;
+  // while(true) {
+  // Page<Item> page = itemService.lambdaQuery()
+  //  .eq(Item::getStatus, 1)
+  //  .page(Page.of(pageNo, pageSize));
+  // List<Item> records = page.getRecords();
+  // if(records == null || records.isEmpty()) return;
+
+  BulkRequest request = new BulkRequest(); // 创建 request 对象
+
+  request.add(new IndexRequest("索引库名"))
+    .id("文档id").source("json数据", XContentType.JSON);
+  request.add(new IndexRequest("索引库名"))
+    .id("文档id").source("json数据", XContentType.JSON);
+
+  //  循环插入
+  // for(Item item : records) {
+  //   request.add(new IndexRequest("索引库名"))
+  //     .id(item.getId().toString())
+  //     .source(JSONUtil.toJsonStr(BeanUtil.copyProperties(item, ItemDoc.class)), XContentType.JSON);
+  // }
+
+  client.bulk(request, RequestOptions.DEFAULT); // 发送请求
+
+  // pageNo++; // 翻页
+  // }
+}
+```
+
+::
