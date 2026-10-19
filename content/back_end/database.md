@@ -3210,7 +3210,7 @@ void testCreateHotelIndex() throws IOException {
 @Test
 void testGetHotelIndex() throws IOException {
   GetIndexRequest request = new GetIndexRequest("索引库名"); // 创建 Request 对象
-  client.indices().exists(request, RequestOptions.DEFAULT); // 发起请求，判断是否存在
+  boolean exists = client.indices().exists(request, RequestOptions.DEFAULT); // 发起请求，判断是否存在
 
   System.out.println("exists = " + exists);
 }
@@ -3234,6 +3234,38 @@ private static final String MAPPING_TEMPLATE = "{\n" +
   "  \"mappings\": {\n" +
   // ...
   "}"
+```
+
+```java [9.x 版本]
+private ElasticsearchClient elasticsearchClient;
+
+// 创建索引库
+@Test
+void testCreateHotelIndex() throws IOException {
+   elasticsearchClient.indices().create(client -> client
+    .index("索引库名")
+      .mappings(m -> m
+        .properties("字段名", p->p
+          .text(t -> t // 指定字段类型为 text
+            .analyzer("standard") // 指定索引时使用的分析器
+          )
+        )
+        .properties("字段名", p->p
+          .integer(t -> t) // 指定字段类型为 integer
+      )
+    )
+  );
+}
+
+// 查询索引库
+@Test
+void testGetHotelIndex() throws IOException {
+  boolean exists = elasticsearchClient.indices()
+    .exists(e -> e.index("索引库名"))
+    .value();
+
+  System.out.println("exists = " + exists);
+}
 ```
 
 ::
@@ -3315,6 +3347,22 @@ void testUpdateDocument() throws IOException {
 
   // pageNo++; // 翻页
   // }
+}
+```
+
+```java [9.x 版本]
+private ElasticsearchClient clieelasticsearchClientnt;
+
+// 查询文档
+@Test
+void testGetDocument() throws IOException {
+  var json = elasticsearchClient.get(g -> g
+    .index("索引库名")
+    .id("文档id"),
+    JsonData.class
+  );
+
+  System.out.println(json.source());
 }
 ```
 
