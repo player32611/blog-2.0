@@ -1137,6 +1137,107 @@ GET /索引库名/_search
 }
 ```
 
+::tip
+
+不设置 `pre_tags` 与 `post_tags` 时，默认为 `<em>` 和 `</em>`
+
+::
+
+### 数据聚合
+
+**聚合(aggregations)** 可以实现队文档数据的统计、分析、运算。聚合常见的有三类:
+
+- 桶(Bucket)聚合: 用来对文档做分组
+  - TermAggregation: 按照文档字段值分组
+  - Date Histogram: 按照日期阶梯分组，例如一周为一组，或者一月为一组
+
+- 度量(Metric)聚合: 用以计算一些值
+  - Avg: 求平均值
+  - Max: 求最大值
+  - Min: 求最小值
+  - Stats: 同时求 max、min、avg、sum 等
+
+- 管道(pipeline)聚合: 其它聚合的结果为基础做聚合
+
+::code-group
+
+```dsl [对索引库的所有文档做分组聚合]
+GET /索引库名/_search
+{
+  "query": { "match_all": {} }, // 无搜索条件时可以省略
+  "size": 0, // 设置 size 为 0，结果中不包含文档，只包含聚合结果
+  "aggs": { // 定义聚合
+    "自定义聚合名": {
+      "terms": { // 聚合的类型
+        "field": "字段名", // 参与聚合的字段名称
+        "size": 希望获取的聚合结果数量
+      }
+    },
+    "自定义聚合名": {
+      "terms": {
+        "field": "字段名",
+        "size": 希望获取的聚合结果数量
+      }
+    }
+  }
+}
+```
+
+```dsl [对索引库的指定文档范围做分组聚合]
+GET /索引库名/_search
+{
+  "query": {
+    "bool": {
+      "filter": [
+        { "term": { "字段名": "搜索关键字" } },
+        { "range": { "字段名": { "gte": 最小值 } } }
+      ]
+    }
+  },
+  "size": 0,
+  "aggs": {
+    "自定义聚合名": {
+      "terms": {
+        "field": "字段名",
+        "size": 希望获取的聚合结果数量
+      }
+    }
+  }
+}
+```
+
+```dsl [对索引库的指定文档范围做分组并统计分组最值]
+GET /索引库名/_search
+{
+  "query": {
+    "term": { "字段名": "搜索关键字" }
+  },
+  "size": 0,
+  "aggs": {
+    "自定义聚合名": {
+      "terms": {
+        "field": "字段名",
+      },
+      "aggs": {
+        "自定义聚合名": {
+          "stats": {
+            "field": "字段名"
+          }
+        },
+      }
+    }
+  }
+}
+```
+
+::
+
+::warning
+
+参与聚合的字段必须是 keyword、数值、日期、布尔类型的字段
+
+::
+
 ## JDBC(java 数据库驱动)
 
 **JDBC**（Java DataBase Connectivity），就是使用 Java 语言操作关系型数据库的一套 API
@@ -3365,5 +3466,163 @@ void testGetDocument() throws IOException {
   System.out.println(json.source());
 }
 ```
+
+::
+
+### DSL 数据搜索
+
+::code-group
+
+```java [7.x 版本]
+// match_all 查询所有
+@Test
+void testMatchAll() throws IOException {
+  SearchRequest request = new SearchRequest("索引库名"); // 准备 Request
+  request.source().query(QueryBuilders.matchAllQuery()); // 组织 DSL 参数
+
+  SearchResponse response = client.search(request, RequestOptions.DEFAULT) // 发送请求，得到响应结果
+
+  SearchHits searchHits = response.getHits(); // 解析结果
+
+  long total = searchHits.getTotalHits().value; // 查询的总条数
+  SearchHits[] hits = searchHits.getHits(); // 查询的结果数组
+  for(SearchHit hit : hits) {
+    String json = hit.getSourceAsString(); // 得到单条数据
+    System.out.println(json);
+  }
+}
+
+// 全文检索查询
+@Test
+void testMatchQuery() throws IOException {
+  // ...
+
+  request.source().query(QueryBuilders.matchQuery("字段名", "搜索关键字"));
+  // request.source().query(QueryBuilders.multiMatchQuery("搜索关键字", "字段1", "字段2", ...));
+
+  // ...
+}
+
+// 精确查询
+@Test
+void testTermQuery() throws IOException {
+  // ...
+
+  request.source().query(QueryBuilders.termQuery("字段名", "搜索关键字"));
+  // request.source().query(QueryBuilders.rangeQuery("字段名").gte(最小值).lte(最大值));
+
+  // ...
+}
+
+// 复合查询
+@Test
+void testBoolQuery() throws IOException {
+  // ...
+
+  request.source().query(QueryBuilders.boolQuery()
+    .must(QueryBuilders.termQuery("字段名", "搜索关键字")) // 添加 must 查询
+    .filter(QueryBuilders.rangeQuery("字段名").lte(最大值)) // 添加 filter 查询
+  );
+
+  // ...
+}
+
+// 排序和分页
+@Test
+void testPageQuery() throws IOException {
+  // ...
+
+  request.source().query(QueryBuilders.matchAllQuery());
+  request.source().from(起始数据条数).size(单页数据条数); // 分页
+  request.source().sort("排序字段名", SortOrder.ASC).sort("次要排序字段名", SortOrder.DESC); // 排序
+
+  // ...
+}
+
+// 高亮显示
+@Test
+void testHighlighterQuery() throws IOException {
+  // ...
+
+  request.source().highlighter(
+    SearchSourceBuilder.highlight()
+      .field("字段名")
+      .preTags("前置标签")
+      .postTags("后置标签")
+  );
+
+  // ...
+
+  for(SearchHit hit : hits) {
+    String source = hit.getSourceAsString(); // 得到单条数据
+    ItemDoc item = JSONUtil.toBean(source, ItemDoc.class); // 反序列化到实体类
+    Map<String, HighlightField> hfs = hit.getHighlightFields(); // 获取高亮结果
+    if(CollUtils.isNotEmpty(hfs)) {
+      HighlightField hf = hfs.get("高亮字段名"); // 获取对应字段的高亮结果
+      if(hf != null) {
+        String hfName = hf.getFragments()[0].string(); // 获取第一个高亮结果片段，就是高亮值(长度较短时)
+        item.setName(hfName); // 重新设置高亮结果到实体类中
+      }
+    }
+  }
+}
+```
+
+```java [9.x 版本]
+// match_all 查询所有
+@Test
+void testMatchAll() throws IOException {
+  SearchResponse<JsonData> response = elasticsearchClient.search(s -> s
+      .index("索引库名")
+      .query(q -> q.matchAll(m -> m)),
+    JsonData.class
+  );
+
+  response.hits().hits().forEach(hit ->
+    System.out.println(hit.source())
+  );
+}
+```
+
+::
+
+### 数据聚合
+
+::code-group
+
+```java [7.x 版本]
+@Test
+void testMatchQuery() throws IOException {
+  // ...
+
+  request.source().size(0);
+  request.source().aggregation( // 构建聚合条件
+    AggregationBuilders
+      .terms("自定义聚合名")
+      .field("字段名")
+      .size(希望获取的聚合结果数量)
+  )
+
+  // ...
+
+  Aggregations aggregations = response.getAggregations(); // 解析聚合结果
+  Terms terms = aggregations.get("自定义的聚合名"); // 根据名称获取聚合结果
+  List<? extends Terms.Bucket> buckets = terms.getBuckets(); // 获取桶(只读)，即分组
+
+  for (Terms.Bucket bucket : buckets) { // 遍历
+    String key = bucket.getKeyAsString(); // 获取每个分组的 key，也就是分组名称
+    System.out.println(key);
+  }
+
+}
+```
+
+::
+
+::tip
+
+Aggregation 类: 各类聚合结果的父接口
+
+Terms 类: 分组聚合结果类
 
 ::
