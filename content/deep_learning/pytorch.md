@@ -1111,18 +1111,18 @@ if __name__ == '__main__':
 ### RNN 层
 
 - `nn.RNN(input_size, hidden_size, num_layers)`: 创建 RNN 层
-  - `input_size`: 输入数据的维度，一般设为词向量的维度
+  - `input_size`: 输入数据的维度，一般设为词向量的维度(特征数)
   - `hidden_size`: 隐藏层 h 的维度，也是当前层神经元的输出维度(隐藏状态向量的维度)，值越大，能存储的剧情记忆就越多
   - `num_layers`: 隐藏层 h 的层数，默认为 1
 
 将 RNN 实例化就可以将数据送入其中进行处理: `output, hn = RNN(x, h0)`
 
 - 输入数据: 输入主要包括词嵌入的 x、初始的隐藏层 $h_0$
-  - x 的表示形式为 `[seq_len, batch, input_size]`，即 `[句子的长度, batch 的大小, 词向量的维度]`
-  - $h_0$ 的表示形式为 `[num_layers, batch, hidden_size]`，即 `[隐藏层的层数, batch 的大小, 隐藏层 h 的维数]`
+  - x 的表示形式为 `[seq_len, batch, input_size]` 三维张量，即 `[序列的长度, batch 的大小, 词向量的维度]`
+  - $h_0$ 的表示形式为 `[num_layers, batch, hidden_size]` 三维张量，即 `[隐藏层的层数, batch 的大小, 隐藏层 h 的维数]`
 - 输出结果: 主要包括输出结果 output，最后一层的 $h_n$
-  - output 的表示形式与输入 x 类似，为 `[seq_len, batch, hidden_size]`，即 `[句子的长度, batch 的大小, 输出向量的维度]`
-  - $h_n$ 的表示形式与输入 $h_0$ 一样，为 `[num_layers, batch, hidden_size]`，即 `[隐藏层的层数, batch 的大小, 隐藏层 h 的维数]`
+  - output 的表示形式与输入 x 类似，为 `[seq_len, batch, hidden_size]` 三维张量，即 `[序列的长度, batch 的大小, 输出向量的维度]`
+  - $h_n$ 的表示形式与输入 $h_0$ 一样，为 `[num_layers, batch, hidden_size]` 三维张量，即 `[隐藏层的层数, batch 的大小, 隐藏层 h 的维数]`
 
 ```python
 import torch
@@ -1144,3 +1144,19 @@ if __name__ == '__main__':
     print(f'output: {output.shape}')
     print(f'h5: {h5.shape}')
 ```
+
+### LSTM 层
+
+- `nn.LSTM(input_size, hidden_size, num_layers, batch_first)`
+  - `input_size`: 每个时间步的特征数量
+  - `hidden_size`: 隐藏状态的特征维度
+  - `num_layers`: LSTM 堆叠层数
+  - `batch_first`: 输入是否以 batch 维度开头
+
+`output, (h_n, c_n) = model.lstm(x)`
+
+- 输入数据: $x$ 表示为 `[batch, seq_len, input_size]` 三维张量，即 `[batch 大小, 序列的长度, 词向量的维度]`
+- 输出结果:
+  - output 表示每个时间步的隐藏状态输出
+  - $h_n$ 表示每层最后一个时间步的隐藏状态
+  - $c_n$ 表示每层最后一个时间步的细胞状态
