@@ -5,10 +5,21 @@ import Ghost from "../exhibit/Ghost.vue";
 import ImageLoading from "../exhibit/ImageLoading.vue";
 import TextFlipLoading from "../exhibit/TextFlipLoading.vue";
 
+const scale = ref<number>(1);
 const imgRef = ref<HTMLImageElement | null>(null);
 const loadingState = ref<NetworkLoadingState>("loading");
 
+const resize = () => {
+	if (window.innerWidth < 576) scale.value = 0.6;
+	else if (window.innerWidth < 768) scale.value = 0.7;
+	else if (window.innerWidth < 991) scale.value = 0.8;
+	else if (window.innerWidth < 1199) scale.value = 0.9;
+	else scale.value = 1;
+};
+
 onMounted(() => {
+	resize();
+	window.addEventListener("resize", resize);
 	if (imgRef.value) {
 		onImageLoading(imgRef.value)
 			.then(() => {
@@ -18,6 +29,10 @@ onMounted(() => {
 				loadingState.value = "error";
 			});
 	}
+});
+
+onBeforeUnmount(() => {
+	window.removeEventListener("resize", resize);
 });
 
 defineProps<{
@@ -30,7 +45,7 @@ defineProps<{
 
 <template>
 	<!-- From Uiverse.io by gharsh11032000 -->
-	<div class="prose_image" :style="{ width: `${width}px` }">
+	<div class="prose_image" :style="{ width: width ? `${width * scale}px` : 'auto' }">
 		<img :src="`/blog-2.0${src}`" :alt="alt" ref="imgRef" v-show="loadingState === 'success'" />
 		<div class="loading_container" v-if="loadingState === 'loading'">
 			<ImageLoading />
@@ -144,7 +159,6 @@ defineProps<{
 	$base-size: 0.5;
 
 	.prose_image {
-		margin: 0 15px * $base-size;
 		width: calc(100% - 30px * $base-size - 0.4rem * $base-size);
 		border-radius: 10px * $base-size;
 		box-shadow: 0 0 0 5px * $base-size #ffffff80;
@@ -187,7 +201,6 @@ defineProps<{
 	$base-size: 0.75;
 
 	.prose_image {
-		margin: 0 15px * $base-size;
 		width: calc(100% - 30px * $base-size - 0.4rem * $base-size);
 		border-radius: 10px * $base-size;
 		box-shadow: 0 0 0 5px * $base-size #ffffff80;
@@ -230,7 +243,6 @@ defineProps<{
 	$base-size: 0.9;
 
 	.prose_image {
-		margin: 0 15px * $base-size;
 		width: calc(100% - 30px * $base-size - 0.4rem * $base-size);
 		border-radius: 10px * $base-size;
 		box-shadow: 0 0 0 5px * $base-size #ffffff80;
@@ -272,7 +284,6 @@ defineProps<{
 	$base-size: 1;
 
 	.prose_image {
-		margin: 0 15px * $base-size;
 		width: calc(100% - 30px * $base-size - 0.4rem * $base-size);
 		border-radius: 10px * $base-size;
 		box-shadow: 0 0 0 5px * $base-size #ffffff80;

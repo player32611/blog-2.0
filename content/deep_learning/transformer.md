@@ -290,9 +290,9 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 #default
 
 > 为了使示例相对简单，我们的编码器解码器的英语词汇只有三个字 "Let's"、"to"、"go"，实际应有大量的词汇
->
+
 > < EOS > 代表句子结束
->
+
 > 在此示例中，我们只是在创造每个 token 两个嵌入值，而不是数百或数千
 
 ![微型词嵌入](/images/content/deep-learning/transformer/word-embedding-small.png)
@@ -301,7 +301,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 现在我们有了输入的嵌入层词汇表，我们可以把它放在 LSTM 的输入前面
 
-![连接词嵌入与 LSTM](/images/content/deep-learning/transformer/word-embedding-to%20lstm.png)
+<img src="/images/content/deep-learning/transformer/word-embedding-to-lstm.png" alt="连接词嵌入与 LSTM" width="300" />
 
 现在当我们输入句子 "Let's go!"，我们在 "Let's" 输入中输入 1 且其他都为 0；然后我们展开 LSTM 和嵌入层，并在 "go" 的输入中输入 1 且其他都为 0
 
@@ -320,14 +320,14 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 ![两层 LSTM](/images/content/deep-learning/transformer/two-lstm.png)
 
 > 为了保持简单，我们只需在此阶段添加一个额外的 LSTM 单元
->
+
 > 这意味着两个单词的嵌入值用作两个不同 LSTM 单元的输入值，这两个 LSTM 单元有自己单独的权重和偏置集
 
 现在，添加更多的权重和偏置使模型适合我们的数据，人们经常添加额外的 LSTM 层。
 
 为了说明这是如何工作的，我们将在编码其中再添加一层 LSTM 层，这意味着第二层中展开的 LSTM 单元以第一层中展开的 LSTM 单元的输出值、短期记忆或隐藏层作为输入。
 
-![更多 LSTM](/images/content/deep-learning/transformer/more-lstm.png)
+<img src="/images/content/deep-learning/transformer/more-lstm.png" alt="更多 LSTM" width="300" />
 
 ::warning
 
@@ -339,9 +339,9 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 最后，唯一要做的就是初始化长期和短期记忆，cell 和隐藏状态。
 
-现在我们完成了创建编码器-解码器模型的**编码器**部分。
+现在我们完成了创建编码器-解码器模型的**编码器**部分
 
-![编码器](/images/content/deep-learning/transformer/encoder.png)
+<img src="/images/content/deep-learning/transformer/encoder.png" alt="编码器" width="400" />
 
 总结一下，在此示例中，我们有两层 LSTM，每层分别有两个 LSTM 单元。
 
@@ -353,9 +353,9 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 现在我们需要解码上下文向量。
 
-所以我们要做的第一件事是从上下文向量中连接出长期记忆和短期记忆（隐藏状态的细胞），使其传输到一组新的 LSTM。
+所以我们要做的第一件事是从上下文向量中连接出长期记忆和短期记忆（隐藏状态的细胞），使其传输到一组新的 LSTM
 
-![新的 LSTM](/images/content/deep-learning/transformer/new-lstm-layer.png)
+<img src="/images/content/deep-learning/transformer/new-lstm-layer.png" alt="新的 LSTM" width="300" />
 
 就像编码器一样，有两层，每层有两个单元。
 
@@ -379,7 +379,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 ![两个嵌入层](/images/content/deep-learning/transformer/two-embedding-layer.png)
 
 > 左边是我们在编码器中使用的嵌入层
->
+
 > 右边是我们在解码器中使用的嵌入层
 
 它们有不同的输入单词和样本或标记，以及不同的权重，从而导致每个标记不同的嵌入值。
@@ -434,11 +434,67 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 换句话说，如果第一个预测的标记时西班牙语单词 "y"，在英语中翻译为 "and"，是错误的词，那么在训练期间我们仍然会使用 "vamos" 将正确的西班牙语单词作为无规则 LSTM 的输入。
 
-![解码器的训练](/images/content/deep-learning/transformer/decoder-trainning-example.png)
+<img src="/images/content/deep-learning/transformer/decoder-trainning-example.png" alt="解码器的训练" width="300" />
 
-另外，在训练过程中，不仅仅是预测标记直到解码器预测出 EOS token，每个输出短语在已知短语结束的地方结束。
+另外，在训练过程中，不仅仅是预测标记直到解码器预测出 EOS token，每个输出短语在已知短语结束的地方结束
 
 换句话说，即使第 2 个预测标记是西班牙语单词 "ir" 而不是正确的标记 EOS，在训练期间，我们仍然会停止预测额外的 token。停在已知的短语长度，而不是将预测的 token 用于所有事情。
+
+### 自编码器
+
+自编码器（Autoencoder，简称 AE）是一种无监督学习或自监督学习中常见的神经网络，其核心思想是：先将输入数据压缩成一个低维表示，再根据这个表示尽可能还原原始数据
+
+<img src="/images/content/deep-learning/transformer/auto-encoder.png" alt="自编码器" width="300" />
+
+::tip
+
+最中间隐向量的大小一般为 $\frac{1}{10}$ 或 $\frac{1}{50}$
+
+::
+
+自编码器通常通过最小化原始数据与重建数据之间的误差来训练:
+
+$$loss = min(f(x, x'))$$
+
+- $x$: 原始输入
+
+- $x'$: 重建结果
+
+- $f$: 重建损失函数
+
+::tip
+
+常见的重建损失函数包括均方误差（MSE）和二元交叉熵（BCE）
+
+::
+
+不同类型的自编码器通过不同的结构或训练目标，解决不同的问题:
+
+- 降噪自编码器(DAE): 在原始数据中加入噪声，防止产生过拟合，适用于图像去噪、信号去噪
+
+- 稀疏自编码器(SAE): 在 AE 的基础上还要求潜在层中的神经元尽可能少地被激活，在损失函数的基础上引入正则化项
+
+- 变分自编码器(VAE): 将原始数据编码为一个概率分布(正态分布 $\mu$、$\sigma$)，再从这个分布中采样潜在向量，利用它重建输入适用于图像生成、数据生成
+
+- 收缩自编码器(BAE)
+
+::detail
+
+#title
+关于变分自编码器
+#default
+
+相同输入，原始自编码器可能编码为 $z=[0.2,\ 0.8,\ -0.3,\ 0.5]$
+
+VAE 则会先输出两个向量，例如：$\mu=[0.2,\ 0.8,\ -0.3,\ 0.5]$、$\sigma=[0.1,\ 0.2,\ 0.3,\ 0.1]$
+
+$\mu$: 表示潜在分布的均值
+
+$\sigma$: 表示各维度的标准差
+
+然后，再从对应的概率分布中采样： $z \sim \mathcal{N}(\mu,\operatorname{diag}(\sigma^2))$ (因此，即使输入相同，多次采样也可能得到不同的潜在向量)
+
+::
 
 ## 注意力机制
 
@@ -478,7 +534,7 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 <img src="/images/content/deep-learning/transformer/decoder-input-eos.png" alt="EOS 输入到嵌入层" width="200" />
 
 > 因为我们刚刚完成了对 "Let's go" 的编码
->
+
 > 并且一些早期的编码器-解码器加注意力论文就是这样做的
 
 现在我们讨论如何为模型添加注意力。

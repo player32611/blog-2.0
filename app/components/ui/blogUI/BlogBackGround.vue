@@ -19,13 +19,15 @@ const init = () => {
 
 const resize = () => {
 	if (containerRef.value) {
+		const rect = containerRef.value.getBoundingClientRect();
+
 		containerRef.value.innerHTML = "";
 		boxs.value = [];
 		boxsOriPos.value = [];
-		width.value = containerRef.value.getBoundingClientRect().width;
-		height.value = containerRef.value.getBoundingClientRect().height;
-		left.value = containerRef.value.getBoundingClientRect().left;
-		top.value = containerRef.value.getBoundingClientRect().top;
+		width.value = rect.width;
+		height.value = rect.height;
+		left.value = rect.left;
+		top.value = rect.top;
 	}
 };
 
@@ -46,6 +48,7 @@ const create = (side: number, margin: number) => {
 		}
 	}
 };
+
 const handleMouseMove = (e: MouseEvent) => {
 	boxs.value.forEach((box, idx) => {
 		if (box && boxsOriPos.value[idx]) {
@@ -108,7 +111,7 @@ onMounted(() => {
 onUnmounted(() => {
 	document.removeEventListener("mousemove", handleMouseMove);
 	document.removeEventListener("touchmove", handleTouchMove);
-	window.removeEventListener("resize", resize);
+	window.removeEventListener("resize", init);
 	if (containerRef.value) containerRef.value.innerHTML = "";
 });
 </script>
