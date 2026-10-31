@@ -8,10 +8,11 @@ import type {
 
 import DetailWorkBackground from "./DetailWorkBackground.vue";
 import DetailWorkFloatContainer from "./DetailWorkFloatContainer.vue";
-import DetailWorkGame from "./DetailWorkGame.vue/DetailWorkGame.vue";
+import DetailWorkGame from "./DetailWorkGame/DetailWorkGame.vue";
 import DetailWorkBlog from "./DetailWorkBlog/DetailWorkBlog.vue";
 import DetailWorkItemEmpty from "./DetailWorkItemEmpty.vue";
 import DetailWorkTransition from "./DetailWorkTransition.vue";
+import DetailWorkEdit from "./DetailWorkEdit/DetailWorkEdit.vue";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
@@ -23,16 +24,17 @@ const activeIndex = ref<number>(-1);
 const direction = ref<"forward" | "backward">("forward");
 
 onMounted(() => {
-	const triggerPoints: { start: number; end: number }[] = Array.from({ length: 3 }, (_, index) => {
+	const triggerPoints: { start: number; end: number }[] = Array.from({ length: 4 }, (_, index) => {
 		return {
 			start: index * window.innerHeight * 2,
 			end: (index + 1) * window.innerHeight * 2,
 		};
 	});
+
 	scrollAnim.value = ScrollTrigger.create({
 		trigger: containerRef.value, // 要固定的元素
 		start: "top top", // 元素顶部 触达 视口顶部时开始
-		end: `+=${5 * window.innerHeight}`,
+		end: `+=${7 * window.innerHeight}`,
 		pin: true, // 开启固定
 		onEnter: () => {
 			direction.value = "forward";
@@ -76,6 +78,7 @@ onMounted(() => {
 		<DetailWorkBackground v-if="activeIndex === -1" />
 		<DetailWorkGame v-else-if="activeIndex === 0" />
 		<DetailWorkBlog v-else-if="activeIndex === 1" />
+		<DetailWorkEdit v-else-if="activeIndex === 2" />
 		<DetailWorkItemEmpty v-else />
 		<DetailWorkFloatContainer ref="floatRef" :activeIndex="activeIndex" />
 		<DetailWorkTransition ref="maskRef" />

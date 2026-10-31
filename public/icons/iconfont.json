@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "43696502",
+      "name": "编辑",
+      "font_class": "bianji",
+      "unicode": "e77c",
+      "unicode_decimal": 59260
+    },
+    {
+      "icon_id": "43699574",
+      "name": "语音",
+      "font_class": "yuyin",
+      "unicode": "e7c2",
+      "unicode_decimal": 59330
+    },
+    {
       "icon_id": "11993026",
       "name": "markdown",
       "font_class": "markdown",

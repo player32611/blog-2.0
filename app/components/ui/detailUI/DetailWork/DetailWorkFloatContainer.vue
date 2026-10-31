@@ -15,7 +15,7 @@ const { activeIndex } = defineProps<DetailWorkFloatContainerParams>();
 const itemNum = ref<number>(10);
 const itemRefs = ref<HTMLDivElement[]>([]);
 
-const floatingSpeed = Array.from({ length: itemNum.value }, () => randomFloat(0.1, 0.2));
+const floatingSpeed = Array.from({ length: itemNum.value }, () => randomFloat(0.05, 0.1));
 const rotateAngle = Array.from({ length: itemNum.value }, () => Math.random() * 360);
 const rotateSpeed = Array.from({ length: itemNum.value }, () => randomSign() * randomFloat(0.5, 2));
 
@@ -70,11 +70,15 @@ defineExpose<DetailWorkFloatContainerInstance>({
 				<span v-else-if="activeIndex === 0" class="item_bullet"></span>
 				<Vial v-else-if="activeIndex === 1" :color="randomColor({ format: 'hex' })" />
 				<span
+					v-else-if="activeIndex === 2"
+					:style="{ color: randomChoose('#1677ff', '#000000', '#ffffff') }"
 					class="icon"
-					:style="{ color: randomChoose('#d5ad72', '#000000', '#ffffff') }"
-					v-else
-					>{{ randomChoose("&#xe7c0;", "&#xe7f2;", "&#xe858;") }}</span
 				>
+					{{ randomChoose("&#xea12;", "&#xe77c;", "&#xe7c2;") }}
+				</span>
+				<span v-else class="icon" :style="{ color: randomChoose('#d5ad72', '#000000', '#ffffff') }">
+					{{ randomChoose("&#xe7c0;", "&#xe7f2;", "&#xe858;") }}
+				</span>
 			</div>
 		</div>
 	</div>
