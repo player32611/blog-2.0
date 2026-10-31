@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import DetailWorkEditBackground from "./DetailWorkEditBackground.vue";
+import DetailWorkEditContainer from "./DetailWorkEditContainer.vue";
 import DetailWorkEditLink from "./DetailWorkEditLink.vue";
 import DetailWorkEditTitle from "./DetailWorkEditTitle.vue";
 </script>
@@ -8,6 +9,7 @@ import DetailWorkEditTitle from "./DetailWorkEditTitle.vue";
 	<div class="work_edit">
 		<DetailWorkEditBackground />
 		<DetailWorkEditTitle />
+		<DetailWorkEditContainer />
 		<DetailWorkEditLink />
 	</div>
 </template>

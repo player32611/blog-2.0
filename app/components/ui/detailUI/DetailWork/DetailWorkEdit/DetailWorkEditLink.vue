@@ -1,7 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const handleClick = (e: MouseEvent) => {
+	e.preventDefault();
+	window.open("https://github.com/player32611/audio-editing");
+};
+</script>
 
 <template>
-	<button class="work_edit_link">
+	<button class="work_edit_link" @click="handleClick">
 		<div class="txt">
 			<span class="letter" style="--i: 0">s</span>
 			<span class="letter" style="--i: 1">t</span>
@@ -11,11 +16,9 @@
 			<span class="letter" style="--i: 0">&nbsp;</span>
 			<span class="letter lighter" style="--i: 5">\</span>
 			<span class="letter" style="--i: 0">&nbsp;</span>
-			<span class="letter bold" style="--i: 6">t</span>
+			<span class="letter bold" style="--i: 6">n</span>
 			<span class="letter bold" style="--i: 7">o</span>
-			<span class="letter bold" style="--i: 8">d</span>
-			<span class="letter bold" style="--i: 9">a</span>
-			<span class="letter bold" style="--i: 10">y</span>
+			<span class="letter bold" style="--i: 8">w</span>
 		</div>
 		<svg
 			class="corner top left rot-270"
@@ -75,7 +78,7 @@
 	--corner-col: #000000;
 
 	position: relative;
-	cursor: pointer;
+	cursor: none;
 	padding: 0.75rem 1rem;
 
 	background-color: var(--button-col);

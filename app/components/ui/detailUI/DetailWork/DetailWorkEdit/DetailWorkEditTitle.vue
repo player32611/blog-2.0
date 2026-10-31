@@ -4,37 +4,86 @@ import { SplitText } from "gsap/all";
 
 gsap.registerPlugin(SplitText);
 
-const contentRefs = ref<HTMLParagraphElement[]>([]);
+const contentRef = ref<HTMLParagraphElement | null>(null);
+const hoverContentRef = ref<HTMLParagraphElement | null>(null);
 const contentSplit = ref<SplitText | null>(null);
-const mountAnim = ref<GSAPTween | null>(null);
+const hoverContentSplit = ref<SplitText | null>(null);
 
-const animDelay = 1;
+const containerMaxOffset = 300;
+const textMaxOffset = 150;
+const animDuration = 0.8;
+
+const mouseEnterAnim = () => {
+	if (!contentSplit.value) return;
+
+	gsap.to(contentRef.value, {
+		y: -containerMaxOffset,
+		duration: animDuration,
+	});
+	gsap.to(hoverContentRef.value, {
+		y: 0,
+		duration: animDuration,
+	});
+
+	contentSplit.value.chars.forEach(char => {
+		gsap.to(char, {
+			y: Math.random() * randomSign() * textMaxOffset,
+			duration: animDuration,
+		});
+	});
+	hoverContentSplit.value?.chars.forEach(char => {
+		gsap.to(char, {
+			y: 0,
+			duration: animDuration,
+		});
+	});
+};
+
+const mouseLeaveAnim = () => {
+	if (!contentSplit.value) return;
+
+	gsap.to(contentRef.value, {
+		y: 0,
+		duration: animDuration,
+	});
+	gsap.to(hoverContentRef.value, {
+		y: -containerMaxOffset,
+		duration: animDuration,
+	});
+
+	contentSplit.value.chars.forEach(char => {
+		gsap.to(char, {
+			y: 0,
+			duration: animDuration,
+		});
+	});
+	hoverContentSplit.value?.chars.forEach(char => {
+		gsap.to(char, {
+			y: Math.random() * randomSign() * textMaxOffset,
+			duration: animDuration,
+		});
+	});
+};
 
 onMounted(() => {
-	contentSplit.value = SplitText.create(contentRefs.value, { type: "chars" });
-	mountAnim.value = gsap.from(contentSplit.value.chars, {
-		duration: 1,
-		opacity: 0,
-		scale: 0,
-		y: 80,
-		rotationX: 180,
-		transformOrigin: "0% 50% -50",
-		ease: "back",
-		delay: animDelay,
-		stagger: 0.05,
+	contentSplit.value = SplitText.create(contentRef.value, { type: "chars" });
+	hoverContentSplit.value = SplitText.create(hoverContentRef.value, { type: "chars" });
+
+	gsap.set(hoverContentRef.value, { y: -containerMaxOffset });
+	hoverContentSplit.value?.chars.forEach(char => {
+		gsap.set(char, { y: Math.random() * randomSign() * textMaxOffset });
 	});
 });
 
 onUnmounted(() => {
 	contentSplit.value?.revert();
-	mountAnim.value?.kill();
 });
 </script>
 
 <template>
-	<div class="work_edit_title">
-		<p :ref="el => contentRefs.push(el as HTMLParagraphElement)">AUDIO</p>
-		<p :ref="el => contentRefs.push(el as HTMLParagraphElement)">EDITING</p>
+	<div class="work_edit_title" @mouseenter="mouseEnterAnim" @mouseleave="mouseLeaveAnim">
+		<p ref="contentRef">AUDIO EDITING</p>
+		<p class="work_edit_title_hover" ref="hoverContentRef">AUDIO EDITING</p>
 	</div>
 </template>
 
@@ -44,7 +93,9 @@ onUnmounted(() => {
 .work_edit_title {
 	position: relative;
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
+	align-items: center;
 	gap: 5rem;
 	width: 100%;
 	color: #1677ff;
@@ -55,6 +106,11 @@ onUnmounted(() => {
 
 	p {
 		margin: 0;
+
+		&.work_edit_title_hover {
+			position: absolute;
+			color: #000000;
+		}
 	}
 }
 
