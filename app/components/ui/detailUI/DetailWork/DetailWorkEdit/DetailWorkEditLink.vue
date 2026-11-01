@@ -6,6 +6,7 @@ const handleClick = (e: MouseEvent) => {
 </script>
 
 <template>
+	<!-- From Uiverse.io by dexter-st -->
 	<button class="work_edit_link" @click="handleClick">
 		<div class="txt">
 			<span class="letter" style="--i: 0">s</span>

@@ -8,7 +8,7 @@ export const BLOG_COLLECTIONS: BlogCollections[] = [
 	"gms2",
 	"algorithm",
 	"deep_learning",
-];
+] as const;
 
 export const DETAIL_NAME = "一颗没梦想的苹果";
 
@@ -28,7 +28,7 @@ export const DETAIL_SKILLS = [
 	"c++",
 	"gml",
 	"jsx",
-];
+] as const;
 
 export const DETAIL_TARGET = "致力于动画，交互与视觉体验";
 
@@ -75,11 +75,15 @@ export const DETAIL_WORK_BLOG_DATA: DetailWorkBlogCardParams[] = [
 		previewImage: "/images/components/mainPreview.png",
 		backgroundImage: "/images/components/mainPreview.png",
 	},
-];
+] as const;
 
-export const DETAIL_WORK_EDIT_DATA = ["/images/components/editPreview1.png"];
+export const DETAIL_WORK_EDIT_DATA = [
+	"/images/components/editPreview1.png",
+	"/images/components/editPreview2.png",
+	"/images/components/editPreview3.png",
+] as const;
 
-export const LOADING_TIPS: string[] = ["这里没有提示", "主页里有些隐蔽的链接"];
+export const LOADING_TIPS: string[] = ["这里没有提示", "主页里有些隐蔽的链接"] as const;
 
 export const IMAGE_DATAS: ImageInfo[] = [
 	{
@@ -197,7 +201,7 @@ export const IMAGE_DATAS: ImageInfo[] = [
 		path: "/images/collections/143665655_p0_master1200.jpg",
 		link: "https://www.pixiv.net/artworks/143665655",
 	},
-];
+] as const;
 
 export const IMAGE_EMPTY = "未知";
 
@@ -238,7 +242,7 @@ export const MAIN_LINKS: MainLinkConfig[] = [
 		content: "GML 函数参考",
 		target: "/blogs/common_functions",
 	},
-];
+] as const;
 
 export const MAIN_EMPTY = "暂无信息";
 
@@ -250,4 +254,4 @@ export const MUSIC_DATAS: MusicInfo[] = [
 		path: "/sounds/musics/UNDERTALE Soundtrack/toby fox - UNDERTALE Soundtrack - 15 sans..mp3",
 		folder: "UNDERTALE Soundtrack",
 	},
-];
+] as const;

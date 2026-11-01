@@ -4,30 +4,31 @@ import { SplitText } from "gsap/all";
 
 gsap.registerPlugin(SplitText);
 
-const contentRef = ref<HTMLParagraphElement | null>(null);
-const hoverContentRef = ref<HTMLParagraphElement | null>(null);
+const containerRef = ref<HTMLDivElement | null>(null);
+const contentRefs = ref<HTMLParagraphElement[]>([]);
+const hoverContentRefs = ref<HTMLParagraphElement[]>([]);
 const contentSplit = ref<SplitText | null>(null);
 const hoverContentSplit = ref<SplitText | null>(null);
 
-const containerMaxOffset = 300;
-const textMaxOffset = 150;
 const animDuration = 0.8;
 
 const mouseEnterAnim = () => {
-	if (!contentSplit.value) return;
+	if (!contentSplit.value || !containerRef.value) return;
 
-	gsap.to(contentRef.value, {
-		y: -containerMaxOffset,
+	const offset = containerRef.value.offsetTop + containerRef.value.offsetHeight;
+
+	gsap.to(contentRefs.value, {
+		y: -2 * offset,
 		duration: animDuration,
 	});
-	gsap.to(hoverContentRef.value, {
+	gsap.to(hoverContentRefs.value, {
 		y: 0,
 		duration: animDuration,
 	});
 
 	contentSplit.value.chars.forEach(char => {
 		gsap.to(char, {
-			y: Math.random() * randomSign() * textMaxOffset,
+			y: (Math.random() * randomSign() * offset) / 2,
 			duration: animDuration,
 		});
 	});
@@ -40,14 +41,16 @@ const mouseEnterAnim = () => {
 };
 
 const mouseLeaveAnim = () => {
-	if (!contentSplit.value) return;
+	if (!contentSplit.value || !containerRef.value) return;
 
-	gsap.to(contentRef.value, {
+	const offset = containerRef.value.offsetTop + containerRef.value.offsetHeight;
+
+	gsap.to(contentRefs.value, {
 		y: 0,
 		duration: animDuration,
 	});
-	gsap.to(hoverContentRef.value, {
-		y: -containerMaxOffset,
+	gsap.to(hoverContentRefs.value, {
+		y: -2 * offset,
 		duration: animDuration,
 	});
 
@@ -59,19 +62,23 @@ const mouseLeaveAnim = () => {
 	});
 	hoverContentSplit.value?.chars.forEach(char => {
 		gsap.to(char, {
-			y: Math.random() * randomSign() * textMaxOffset,
+			y: (Math.random() * randomSign() * offset) / 2,
 			duration: animDuration,
 		});
 	});
 };
 
 onMounted(() => {
-	contentSplit.value = SplitText.create(contentRef.value, { type: "chars" });
-	hoverContentSplit.value = SplitText.create(hoverContentRef.value, { type: "chars" });
+	contentSplit.value = SplitText.create(contentRefs.value, { type: "chars" });
+	hoverContentSplit.value = SplitText.create(hoverContentRefs.value, { type: "chars" });
 
-	gsap.set(hoverContentRef.value, { y: -containerMaxOffset });
+	if (!containerRef.value) return;
+
+	const offset = containerRef.value.offsetTop + containerRef.value.offsetHeight;
+
+	gsap.set(hoverContentRefs.value, { y: -2 * offset });
 	hoverContentSplit.value?.chars.forEach(char => {
-		gsap.set(char, { y: Math.random() * randomSign() * textMaxOffset });
+		gsap.set(char, { y: (Math.random() * randomSign() * offset) / 2 });
 	});
 });
 
@@ -81,9 +88,21 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="work_edit_title" @mouseenter="mouseEnterAnim" @mouseleave="mouseLeaveAnim">
-		<p ref="contentRef">AUDIO EDITING</p>
-		<p class="work_edit_title_hover" ref="hoverContentRef">AUDIO EDITING</p>
+	<div
+		class="work_edit_title"
+		@mouseenter="mouseEnterAnim"
+		@mouseleave="mouseLeaveAnim"
+		@mouseout="mouseLeaveAnim"
+		ref="containerRef"
+	>
+		<div>
+			<p :ref="el => contentRefs.push(el as HTMLParagraphElement)">AUDIO</p>
+			<p :ref="el => contentRefs.push(el as HTMLParagraphElement)">EDITING</p>
+		</div>
+		<div class="work_edit_title_hover">
+			<p :ref="el => hoverContentRefs.push(el as HTMLParagraphElement)">AUDIO</p>
+			<p :ref="el => hoverContentRefs.push(el as HTMLParagraphElement)">EDITING</p>
+		</div>
 	</div>
 </template>
 
@@ -104,13 +123,18 @@ onUnmounted(() => {
 	text-align: center;
 	z-index: variables.$float_zIndex;
 
+	div {
+		display: flex;
+		gap: 2rem;
+	}
+
+	.work_edit_title_hover {
+		position: absolute;
+		color: #000000;
+	}
+
 	p {
 		margin: 0;
-
-		&.work_edit_title_hover {
-			position: absolute;
-			color: #000000;
-		}
 	}
 }
 
@@ -122,6 +146,12 @@ onUnmounted(() => {
 		flex-direction: column;
 		gap: 0;
 		font-size: 5rem * $base-size;
+
+		div {
+			display: flex;
+			gap: 0;
+			flex-direction: column;
+		}
 	}
 }
 
