@@ -446,12 +446,6 @@ Word2Vec 包含两种方法： **连续词袋**（Context Bag of Words）和 **�
 
 <img src="/images/content/deep-learning/transformer/auto-encoder.png" alt="自编码器" width="300" />
 
-::tip
-
-最中间隐向量的大小一般为 $\frac{1}{10}$ 或 $\frac{1}{50}$
-
-::
-
 自编码器通常通过最小化原始数据与重建数据之间的误差来训练:
 
 $$loss = min(f(x, x'))$$
@@ -476,7 +470,7 @@ $$loss = min(f(x, x'))$$
 
 - 变分自编码器(VAE): 将原始数据编码为一个概率分布(正态分布 $\mu$、$\sigma$)，再从这个分布中采样潜在向量，利用它重建输入适用于图像生成、数据生成
 
-- 收缩自编码器(BAE)
+- 收缩自编码器(CAE): 让编码器对输入数据的微小变化不那么敏感，从而学习更加稳定、鲁棒的特征表示
 
 ::detail
 
