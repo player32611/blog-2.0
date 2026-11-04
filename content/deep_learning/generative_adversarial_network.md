@@ -50,8 +50,32 @@ GAN 的训练过程包括三个步骤:
 
 ## GAN 的改进与优化
 
-::danger
+### CGAN
 
-该部分尚未完工!
+**CGAN(Conditional Generative Adversarial Network) 条件生成对抗网络**在生成数据时加入额外的条件信息，让生成器按照指定的条件生成我们想要的数据
 
-::
+<img src="/images/content/deep-learning/generative-adversarial-network/CGAN.png" alt="GAN 与 CGAN" width="500" />
+
+生成器 $G$ 接受一个噪声向量 $z$ 和一个条件 $y$ (通常是一个标签)为输入
+
+CGAN 的目标函数如下:
+
+$$
+\begin{aligned}
+\min_G\max_D V(D,G)
+=&\mathbb{E}_{x\sim p_{data}(x)}
+[\log D(x|y)]\\
+&+\mathbb{E}_{z\sim p_z(z)}
+[\log(1-D(G(z|y)|y))]
+\end{aligned}
+$$
+
+- $\mathbb{E}_{x\sim p_{data}(x)}[\log D(x|y)]$: 表示在给定条件 $y$ 的情况下当样本采样自真实数据集时判别器能够准确判别其为真的期望
+
+- $\mathbb{E}_{z\sim p_z(z)}[\log(1-D(G(z|y)|y))]$: 表示在给定条件 $y$ 和输入噪声 $z$ 的情况下通过生成器生成的样本数据被判别器判别为假的期望
+
+因此，CGAN 在训练过程中可用于生成具有特定属性的图像
+
+### InfoGAN
+
+**InfoGAN(Information Maximizing Generative Adversarial Network) 信息最大化生成对抗网络**可以从生成的样本中理解和学习数据分布中的隐含变量并将其分解成独立的特征
