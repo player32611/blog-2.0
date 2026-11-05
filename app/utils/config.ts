@@ -78,9 +78,9 @@ export const DETAIL_WORK_BLOG_DATA: DetailWorkBlogCardParams[] = [
 ] as const;
 
 export const DETAIL_WORK_EDIT_DATA = [
-	"/images/components/editPreview1.png",
-	"/images/components/editPreview2.png",
-	"/images/components/editPreview3.png",
+	"/blog-2.0/images/components/editPreview1.png",
+	"/blog-2.0/images/components/editPreview2.png",
+	"/blog-2.0/images/components/editPreview3.png",
 ] as const;
 
 export const LOADING_TIPS: string[] = ["这里没有提示", "主页里有些隐蔽的链接"] as const;

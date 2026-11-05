@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import gsap from "gsap";
+import ImageLoading from "~/components/exhibit/ImageLoading.vue";
 import type { Point } from "~/types/common";
 
 const imageNums = 4;
@@ -17,7 +18,8 @@ const distanceOptions: Point[] = [
 	{ x: 100, y: -100 },
 ] as const;
 
-const imgRefs = ref<HTMLDivElement[]>([]);
+const imgContainerRefs = ref<HTMLDivElement[]>([]);
+const imgRefs = ref<HTMLImageElement[]>([]);
 const currentImage = ref<number>(0);
 const isAniming = ref<boolean>(false);
 
@@ -25,7 +27,7 @@ const onClick = () => {
 	if (isAniming.value) return;
 
 	isAniming.value = true;
-	imgRefs.value.forEach((img, idx) => {
+	imgContainerRefs.value.forEach((img, idx) => {
 		gsap.set(img, { clipPath: clipPathOptions[idx] });
 		gsap.to(img, {
 			x: distanceOptions[idx]?.x,
@@ -40,17 +42,24 @@ const onClick = () => {
 
 const onLoad = () => {
 	currentImage.value = (currentImage.value + 1) % DETAIL_WORK_EDIT_DATA.length;
-	imgRefs.value.forEach((img, idx) => {
-		gsap.to(img, {
-			x: 0,
-			y: 0,
-			"--opacity": 0,
-			duration: animDuration,
-			ease: "power2.in",
-			onComplete: () => {
-				isAniming.value = false;
-				gsap.set(img, { clipPath: "none" });
-			},
+
+	nextTick().then(() => {
+		if (!imgRefs.value[0]) return;
+
+		onImageLoading(imgRefs.value[0]).then(() => {
+			imgContainerRefs.value.forEach((img, idx) => {
+				gsap.to(img, {
+					x: 0,
+					y: 0,
+					"--opacity": 0,
+					duration: animDuration,
+					ease: "power2.in",
+					onComplete: () => {
+						isAniming.value = false;
+						gsap.set(img, { clipPath: "none" });
+					},
+				});
+			});
 		});
 	});
 };
@@ -61,12 +70,19 @@ const onLoad = () => {
 		<!-- From Uiverse.io by dhrux_8871 -->
 		<div class="card one"></div>
 		<div class="card two"></div>
+		<div class="card loading">
+			<ImageLoading />
+		</div>
 		<div
 			:class="'edit_img_container ' + (index === 0 ? 'first' : '')"
 			v-for="(_, index) in imageNums"
-			:ref="el => (imgRefs[index] = el as HTMLDivElement)"
+			:ref="el => (imgContainerRefs[index] = el as HTMLDivElement)"
 		>
-			<img draggable="false" :src="DETAIL_WORK_EDIT_DATA[currentImage]" />
+			<img
+				draggable="false"
+				:src="DETAIL_WORK_EDIT_DATA[currentImage]"
+				:ref="el => (imgRefs[index] = el as HTMLImageElement)"
+			/>
 			<div class="img_mask"></div>
 		</div>
 	</div>
@@ -112,6 +128,13 @@ $base-size: 0.9;
 		&.two {
 			background: linear-gradient(135deg, #ff6f91, #ff9671);
 			transform: rotate(8deg);
+		}
+
+		&.loading {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background-color: #1677ff;
 		}
 	}
 
