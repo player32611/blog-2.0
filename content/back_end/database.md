@@ -1238,7 +1238,7 @@ GET /索引库名/_search
 
 ::
 
-## JDBC(java 数据库驱动)
+## JDBC(Java 数据库驱动操作 MySQL)
 
 **JDBC**（Java DataBase Connectivity），就是使用 Java 语言操作关系型数据库的一套 API
 
@@ -1385,7 +1385,7 @@ SQL 注入：通过控制输入来修改事先定义好的 SQL 语句，以达�
 
 优势二：性能更高
 
-## MyBatis(java 数据库驱动)
+## MyBatis(Java 数据库 ORM 操作 MySQL)
 
 **MyBatis** 是一款优秀的**持久层**框架，用于简化 JDBC 的开发
 
@@ -1913,7 +1913,7 @@ mybatis:
     map-underscore-to-camel-case: true
 ```
 
-## MyBatis-Plus(java 数据库驱动)
+## MyBatis-Plus(Java 数据库 ORM 操作 MySQL)
 
 MyBatisPlus 官方提供了 starter，其中集成了 Mybatis 和 MybatisPlus 的所有功能，并且实现了自动装配效果
 
@@ -2668,7 +2668,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 ::
 
-## mysql 模块(javascript 数据库驱动)
+## mysql 模块(JavaScript 数据库 ORM 操作 MySQL)
 
 mysql 模块是托管于 npm 上的第三方模块。它提供了在 Node.js 项目中连接和操作 MySQL 数据库的能力。
 
@@ -2904,7 +2904,208 @@ db.query("UPDATE users SET status=1 WHERE id=?", 6, (err, result) => {
 
 ::
 
-## Jedis(java 数据库驱动)
+## SQLAlchemy(Python 数据库 ORM 操作 MySQL)
+
+SQLAlchemy 是 Python SQL 工具包和对象关系映射器 为应用开发者提供了SQL的全部功能和灵活性
+
+```bash
+pip install "sqlalchemy[asyncio]" aiomysql
+```
+
+### 创建数据表
+
+1. 使用 `create_async_engine` 创建异步引擎
+
+```python
+# URL 规范: "数据库名+数据库驱动://用户名:密码@数据库IP地址:端口/数据库名?字符编码=utf8"
+ASYNC_DATABASE_URL = "mysql+aiomysql://root:123456@localhost:3306/test?charset=utf8"
+
+# 创建异步引擎
+async_engine = create_async_engine(
+    ASYNC_DATABASE_URL,
+    echo=True, # 可选：输出 SQL 日志
+    pool_size=10, # 设置连接池中保持的持久连接数
+    max_overflow=5, # 设置连接池中允许创建的额外连接数
+)
+```
+
+2. 定义数据库表对应的模型类
+
+```python
+from sqlalchemy import DateTime, func, String, Float
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+# 定义基类
+class Base(DeclarativeBase):
+    create_time: Mapped[datetime.datetime] = mapped_column(DateTime, insert_default=func.now(), comment="创建时间")
+    update_time: Mapped[datetime.datetime] = mapped_column(DateTime, insert_default=func.now(), onupdate=func.now(), comment="修改时间")
+
+class Book(Base):
+    __tablename__ = "book"
+
+    id: Mapped[int] = mapped_column(primary_key=True, comment="书籍 id")
+    bookname: Mapped[str] = mapped_column(String(255), comment="书名")
+    author: Mapped[int] = mapped_column(String(255), comment="作者")
+    price: Mapped[float] = mapped_column(Float, comment="价格")
+    publisher: Mapped[str] = mapped_column(String(255), comment="出版社")
+```
+
+3. 在 FastAPI 应用启动时，创建数据库表
+
+```python
+from fastapi import FastAPI
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # 应用启动
+    async with async_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+    yield
+
+    # 应用关闭
+    await async_engine.dispose()
+
+# 绑定到生命周期
+app = FastAPI(lifespan=lifespan)
+```
+
+### 封装数据库连接
+
+::code-group
+
+```python [封装]
+# 创建异步会话工厂
+AsyncSessionLocal = async_sessionmaker(
+    bind=async_engine, # 绑定数据库引擎
+    class_=AsyncSession, # 指定会话类
+    expire_on_commit=False, # 会话对象不过期，不重新查询数据库
+)
+
+# 封装获取数据库会话
+async def get_database():
+    async with AsyncSessionLocal() as session:
+        try:
+            yield session # 返回数据库会话给外部处理
+            await session.commit() # 无异常，提交事务
+        except Exception:
+            await session.rollback() # 有异常则回滚
+            raise
+        finally:
+            await session.close() # 关闭会话
+```
+
+```python [使用]
+from fastapi import Depends
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+@app.get("/book/books")
+async def get_book_list(db: AsyncSession = Depends(get_database)):
+  # 查询
+  result = await db.execute(select(Book))
+  book = result.scalars().all()
+  return book
+```
+
+::
+
+### 查询操作
+
+核心思路: `select()` -> `db.execute()` -> 从 ORM 对象获取数据 -> 响应结果
+
+核心语句: `result = await db.execute(select(模型类))`，返回一个 ORM 对象
+
+- 根据主键查询: `await db.get(模型类, 主键值)`
+
+- 条件查询: `ORM对象.where(条件1, 条件2, ...)`
+  - 条件查询示例: `result = await db.execute(select(Book)).where(Book.id == 1)`
+  - 模糊查询示例: `result = await db.execute(select(Book)).where(Book.author.like("曹%"))`
+
+- 聚合查询: `result = await db.execute(select(func.聚合函数(模型类.属性)))` (`from sqlalchemy import func`)
+
+- 分页查询: `result = await db.execute(select(模型类).offset(跳过记录数).limit(返回记录数))`
+
+- 获取查询出的所有数据: `result.scalars().all()`
+
+- 获取查询出的第一条数据: `result.scalars().first()`
+
+- 提取一个或 null: `result.scalar_one_or_none()`
+
+- 提取标量值(配合聚合查询使用): `result.scalar()`
+
+### 新增操作
+
+核心步骤: 定义 ORM 对象 -> add 添加对象到事务 -> commit 提交到数据库
+
+```python
+from pydantic import BaseModel
+
+# BookDTO: 前端提交的 Book 实体
+class BookDTO(BaseModel):
+  id: int
+  bookname: str
+  author: str
+  price: float
+  publisher: str
+
+@app.post("/book/add_book")
+async def add_book(book: BookDTO, db: AsyncSession = Depends(get_database)):
+  book_obj = Book(**book.__dict__)
+  db.add(book_obj)
+  return book
+```
+
+### 更新操作
+
+核心步骤: get 查询 -> 属性重新赋值 -> commit 提交到数据库
+
+```python
+from pydantic import BaseModel
+from fastapi import HTTPException
+
+# BookUpdate: 前端提交的 Book 实体
+class BookUpdate(BaseModel):
+  bookname: str
+  author: str
+  price: float
+  publisher: str
+
+@app.post("/book/update_book/{book_id}")
+async def update_book(book_id: int, data: BookUpdate, db: AsyncSession = Depends(get_database)):
+  # 查询
+  book = await db.get(Book, book_id)
+  if book is None:
+    raise HTTPException(status_code=404, detail="Book not found")
+
+  # 修改属性
+  book.bookname = data.bookname
+  book.author = data.author
+  book.price = data.price
+  book.publisher = data.publisher
+
+  return book
+```
+
+### 删除操作
+
+核心步骤: get 查询 -> delete 删除 -> commit 提交到数据库
+
+```python
+@app.delete("/book/delete_book/{book_id}")
+async def delete_book(book_id: int, db: AsyncSession = Depends(get_database)):
+  # 查询
+  book = await db.get(Book, book_id)
+  if book is None:
+    raise HTTPException(status_code=404, detail="Book not found")
+
+  await db.delete(book)
+
+  return {"message": "Book deleted"}
+```
+
+## Jedis(Java 数据库 ORM 操作 Redis)
 
 Jedis 以 Redis 命令作为方法名称，学习成本第，简单使用，用于操作 Redis，但是 Jedis 示例是线程不安全的，多线程环境下需要基于连接池来使用
 
@@ -3012,7 +3213,7 @@ void testString() {
 
 ::
 
-## Spring Data Redis(java 数据库驱动)
+## Spring Data Redis(Java 数据库 ORM 操作 Redis)
 
 Spring Data Redis 是 Spring 的一部分，对 Redis 底层开发包进行了高度封装。在 Spring 项目中，可以使用 Spring Data Redis 来简化操作
 
@@ -3243,7 +3444,7 @@ void testStringTemplate() throws JsonProcessingException {
 |  `RedisTemplate.opsForSet()`  |  SetOperations  |    操作 Set 类型数据    |
 | `RedisTemplate.opsForZSet()`  | ZSetOperations  | 操作 SortedSet 类型数据 |
 
-## JavaRestClient(java 数据库驱动)
+## JavaRestClient(Java 数据库 ORM 操作 Elasticsearch)
 
 参考文档: https://www.elastic.co/docs/reference/elasticsearch/clients/java/setup/installation
 
