@@ -271,19 +271,21 @@ HTTP 状态码用来表示特定的 HTTP 请求是否已成功完成。响应分
 | 4xx  | 客户端处理 - 处理发生错误，责任在客户端。如：请求了不存在的资源、客户端未被授权、禁止访问等。 |
 | 5xx  |                 服务器错误 - 处理发生错误，责任在服务端。如：程序抛出异常等。                 |
 
-| Code |              Text               |       Information        |
-| :--: | :-----------------------------: | :----------------------: |
-| 200  |               OK                |           成功           |
-| 301  |        Moved Permanently        |        永久重定向        |
-| 302  |              Found              |        临时重定向        |
-| 400  |           Bad Request           |         语法错误         |
-| 403  |          Forbiddenext           |         禁止访问         |
-| 404  |            Not Found            |        找不到文件        |
-| 405  |       Method Not Allowed        |       请求方式有误       |
-| 428  |      Precondition Required      |  服务器要求有条件的请求  |
-| 431  | Request Header Fields Too Large |        请求头太大        |
-| 500  |      Internal Server Error      | 服务器发生不可预期的错误 |
-| 503  |       Service Unavailable       | 服务器尚未准备好处理请求 |
+| Code |              Text               |                Information                |
+| :--: | :-----------------------------: | :---------------------------------------: |
+| 200  |               OK                |                   成功                    |
+| 301  |        Moved Permanently        |                永久重定向                 |
+| 302  |              Found              |                临时重定向                 |
+| 400  |           Bad Request           |                 语法错误                  |
+| 401  |          Unauthorized           | 用户名或密码错误、Token 无效/过期、未登录 |
+| 403  |          Forbiddenext           |                 禁止访问                  |
+| 404  |            Not Found            |                找不到文件                 |
+| 405  |       Method Not Allowed        |               请求方式有误                |
+| 409  |            Conflict             |     注册时用户名/邮箱/手机号已被占用      |
+| 428  |      Precondition Required      |          服务器要求有条件的请求           |
+| 431  | Request Header Fields Too Large |                请求头太大                 |
+| 500  |      Internal Server Error      |         服务器发生不可预期的错误          |
+| 503  |       Service Unavailable       |         服务器尚未准备好处理请求          |
 
 通常来说，4 开头的状态码代表前端出现错误，5 开头的状态码代表后端出现错误。
 
